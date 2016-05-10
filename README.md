@@ -11,11 +11,6 @@ A Game-in-Progress!
 ## Directory Structure
 
 ```
-├── public/
-	├── js/
-	├── css/
-	├── img/
-	└── index.html
 ├── src/
 	├── html/
 	├── img/
