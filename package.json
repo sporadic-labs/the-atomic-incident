@@ -1,0 +1,34 @@
+{
+  "name": "Octo-Chainsaw",
+  "description": "Octo-Chainsaw, a Game-in-Progress",
+  "version": "1.0.0",
+  "authors": ["Rex Twedt", "Mike Hadley"],
+  "license": "MIT",
+  "main": "gulpfile.js",
+  "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.13.3",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-livereload": "^3.8.1",
+    "gulp-newer": "^1.1.0",
+    "gulp-open": "^1.0.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.1",
+    "merge-stream": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/retwedt/octo-chainsaw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/retwedt/octo-chainsaw.git/issues"
+  }
+}
