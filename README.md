@@ -1,6 +1,6 @@
 # Codename: Octo-Chainsaw
 
-## A Game-in-Progress!
+A Game-in-Progress!
 
 
 ## Development Tools:
@@ -9,7 +9,7 @@
 
 
 ## Directory Structure
--------------------
+
 ```
 ├── public/
 	├── js/
