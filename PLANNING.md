@@ -47,7 +47,29 @@
 - does player have health they can regen?  multiple lives?  can multiple players revive each other?
 
 #### Enemies
-- several different types of enemies
+- Several different types of enemies, generated using combinations of movement and attack patterns
+- Movement Patterns:
+  - Aggressive charge
+  - Slow follow
+  - Attack and retreat
+  - Follow from a distance (for ranged attackers)
+  - Slow follow in a random direction
+- Attack Patterns:
+  - Close range (sword)
+  - Mid range (fireball, mace/whip, spear, etc)
+  - Ranged attack (arrows)
+  - Suicide bomber
+  - Charge/body slam
+- Other ideas
+  - Shield
+  - Weakness/Resistance
+  - Boss only mechanics?
+- Tiers
+  - 1 - Mobs, low health low dammage, appear in large groups, 1 attack 1 movement
+  - 2 - Mob Leader, mid health mid damage, sometimes appear alongside mobs, 1 attack 2 movement
+  - 3 - Captain, boss, mid health high damage, 2 attack 2 movement
+  - 4 - Ultra, boss, high health high damage, 3 attack 3 movement
+- Generate capatains and ultras on the fly, with random trait combos for variation when replaying
 
 
 ### Initial Ideas
