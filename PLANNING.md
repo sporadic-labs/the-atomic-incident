@@ -71,7 +71,6 @@
   - 4 - Ultra, boss, high health high damage, 3 attack 3 movement
 - Generate capatains and ultras on the fly, with random trait combos for variation when replaying
 
-
 ### Initial Ideas
 
 - Character Classes
@@ -108,3 +107,14 @@
 - [StarDew Valley](http://stardewvalley.net/)
 - [Towerfall Ascension](http://www.towerfall-game.com/)
 - [Ninja Slash](http://www.kongregate.com/games/doopop/ninja-slash)
+- [Pixeljunk Monsters](http://pixeljunk.jp/library/Monsters/)
+- [Dungeon Defenders](https://dungeondefenders.com/2/about)
+- [Everyday Shooter](http://www.everydayshooter.com/)
+- [Tilt to Live](http://onemanleft.com/games/tilttolive/)
+
+
+### Tutorials
+
+- [Isometric Games in Unity](http://www.theappguruz.com/blog/create-isometric-games-like-clash-of-clans-crossy-roads-age-of-empire-etc)
+- [Enemy Follow Script in Unity](http://www.theappguruz.com/blog/enemy-follow-script-ai)
+- [Basic MMORPG Concepts](http://www.lucedigitale.com/blog/mmorpg-develop-basic-concepts/)
