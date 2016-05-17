@@ -1,5 +1,6 @@
 # Planning
 
+
 ### Game 0.0.0 - the first one
 
 #### Central Ideas
@@ -93,6 +94,7 @@
 	-	4 - Ultra, boss, high health high damage, 3 attack 3 movement
 -	Generate capatains and ultras on the fly, with random trait combos for variation when replaying
 
+
 ### Initial Ideas
 
 -	Character Classes
@@ -119,6 +121,7 @@
 	-	Minigore style hordes
 	-	Usurping mechanism
 
+
 ### Games for inspiration
 
 -	[Agar.io](https://agar.io/)
@@ -134,6 +137,7 @@
 -	[Tilt to Live](http://onemanleft.com/games/tilttolive/)
 -	[Wings.io](http://wings.io/)
 
+
 ### Tutorials
 
 -	[Isometric Games in Unity](http://www.theappguruz.com/blog/create-isometric-games-like-clash-of-clans-crossy-roads-age-of-empire-etc)
@@ -141,6 +145,7 @@
 -	[Basic MMORPG Concepts](http://www.lucedigitale.com/blog/mmorpg-develop-basic-concepts/)
 
 -	[Phaser - Space Shooter](http://phaser.io/tutorials/coding-tips-007)
--	[Phaser - State Management](http://phaser.io/news/2015/10/state-management-tutorial)
--	[Phaser - Procedural Dungeon](http://phaser.io/news/2016/03/procedural-dungeon-tutorial)
+-	[Phaser - Bullet Pooling](https://www.codecaptain.io/blog/game-development/shooting-bullets-using-phaser-groups/518)
+-	[Phaser - State Management](https://github.com/MattMcFarland/phaser-menu-system)
+-	[Phaser - Procedural Dungeon](https://gamedevacademy.org/how-to-procedurally-generate-a-dungeon-in-phaser-part-1/?a=13)
 -	[Phaser - High Scoreboard w/ Parse Server](http://www.html5gamedevs.com/topic/19277-js-high-score-and-leaderboard-system-based-on-parsecom/)
