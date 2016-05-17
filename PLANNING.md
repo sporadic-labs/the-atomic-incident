@@ -132,9 +132,15 @@
 -	[Dungeon Defenders](https://dungeondefenders.com/2/about)
 -	[Everyday Shooter](http://www.everydayshooter.com/)
 -	[Tilt to Live](http://onemanleft.com/games/tilttolive/)
+-	[Wings.io](http://wings.io/)
 
 ### Tutorials
 
 -	[Isometric Games in Unity](http://www.theappguruz.com/blog/create-isometric-games-like-clash-of-clans-crossy-roads-age-of-empire-etc)
 -	[Enemy Follow Script in Unity](http://www.theappguruz.com/blog/enemy-follow-script-ai)
 -	[Basic MMORPG Concepts](http://www.lucedigitale.com/blog/mmorpg-develop-basic-concepts/)
+
+-	[Phaser - Space Shooter](http://phaser.io/tutorials/coding-tips-007)
+-	[Phaser - State Management](http://phaser.io/news/2015/10/state-management-tutorial)
+-	[Phaser - Procedural Dungeon](http://phaser.io/news/2016/03/procedural-dungeon-tutorial)
+-	[Phaser - High Scoreboard w/ Parse Server](http://www.html5gamedevs.com/topic/19277-js-high-score-and-leaderboard-system-based-on-parsecom/)
