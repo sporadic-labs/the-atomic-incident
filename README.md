@@ -15,10 +15,13 @@ I used a simple command line script to start a node server and open a test page 
 
 ```
 ├── src/
+	├── _test/
 	├── html/
 	├── img/
 	├── js/
-	└── scss/
+	├── scss/
+	├── index.html
+	└── runServer.cmd
 ├── .gitignore
 ├── bower.json
 ├── package.json
