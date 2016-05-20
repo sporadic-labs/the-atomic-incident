@@ -151,4 +151,8 @@
 -	[Phaser - Procedural Dungeon](https://gamedevacademy.org/how-to-procedurally-generate-a-dungeon-in-phaser-part-1/?a=13)
 -	[Phaser - High Scoreboard w/ Parse Server](http://www.html5gamedevs.com/topic/19277-js-high-score-and-leaderboard-system-based-on-parsecom/)
 
-- [Phaser & Require.js](http://www.html5gamedevs.com/topic/2263-phaser-requirejs/)
+### Architecture
+
+- [1 - Phaser & Require.js](http://www.html5gamedevs.com/topic/2263-phaser-requirejs/)
+- [2 - Phaser & Require.js](https://www.sitepoint.com/javascript-game-programming-using-phaser/)
+- [3 - Phaser & Require.js](http://blog.romanliutikov.com/post/98094863603/organizing-phaser-project-with-requirejs)
