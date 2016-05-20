@@ -136,6 +136,7 @@
 -	[Everyday Shooter](http://www.everydayshooter.com/)
 -	[Tilt to Live](http://onemanleft.com/games/tilttolive/)
 -	[Wings.io](http://wings.io/)
+-	[Altitude](http://altitudegame.com/)
 
 
 ### Tutorials
@@ -149,3 +150,5 @@
 -	[Phaser - State Management](https://github.com/MattMcFarland/phaser-menu-system)
 -	[Phaser - Procedural Dungeon](https://gamedevacademy.org/how-to-procedurally-generate-a-dungeon-in-phaser-part-1/?a=13)
 -	[Phaser - High Scoreboard w/ Parse Server](http://www.html5gamedevs.com/topic/19277-js-high-score-and-leaderboard-system-based-on-parsecom/)
+
+- [Phaser & Require.js](http://www.html5gamedevs.com/topic/2263-phaser-requirejs/)
