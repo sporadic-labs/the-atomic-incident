@@ -1,6 +1,9 @@
 # Assets created during development
 _assets
 
+# Test project for running quick tests without gulp
+_test
+
 # Client and server-side dependencies
 node_modules
 bower_components
