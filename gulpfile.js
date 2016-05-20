@@ -8,7 +8,6 @@ var sourcemaps = require("gulp-sourcemaps");
 var liveReload = require("gulp-livereload");
 var merge = require("merge-stream");
 var open = require('gulp-open');
-var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
 var newer = require("gulp-newer");
 
@@ -68,22 +67,23 @@ gulp.task("sass", function () {
 		.pipe(liveReload());
 });
 
-// Copy bootstrap and jquery vendor libraries files into public/js folder
+// Copy vendor libraries files into public/js folder
 gulp.task("vendor-js", function() {
 	var jquery = gulp.src("bower_components/jquery/dist/jquery.min.js")
-		.pipe(gulp.dest("public/js"));
+		.pipe(gulp.dest("public/lib"));
 	var phaser = gulp.src("bower_components/phaser/build/phaser.min.js")
-		.pipe(gulp.dest("public/js"));
-	return merge(jquery, phaser);
+		.pipe(gulp.dest("public/lib"));
+	var require = gulp.src("node_modules/requirejs/require.js")
+		.pipe(gulp.dest("public/lib"));
+	return merge(jquery, phaser, require);
 });
 
 // Uglify and sourcemap custom JS for the project into public/js/all.js
 gulp.task("js", function() {
 	return gulp.src("src/js/*.js")
-		.pipe(sourcemaps.init())
-			// .pipe(concat("all.js")) Disabling so separate pages can have separate JS!
-			.pipe(uglify())
-		.pipe(sourcemaps.write("maps"))
+		// .pipe(sourcemaps.init())
+		// 	.pipe(uglify())
+		// .pipe(sourcemaps.write("maps"))
 		.pipe(gulp.dest("public/js"))
 		.pipe(liveReload());
 });
