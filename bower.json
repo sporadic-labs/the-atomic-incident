@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "phaser": "~2.4.7",
-    "jquery": "~2.2.3"
+    "jquery": "~2.2.3",
+    "requirejs": "^2.2.0"
   }
 }

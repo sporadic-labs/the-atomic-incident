@@ -73,7 +73,7 @@ gulp.task("vendor-js", function() {
 		.pipe(gulp.dest("public/lib"));
 	var phaser = gulp.src("bower_components/phaser/build/phaser.min.js")
 		.pipe(gulp.dest("public/lib"));
-	var require = gulp.src("node_modules/requirejs/require.js")
+	var require = gulp.src("bower_components/requirejs/require.js")
 		.pipe(gulp.dest("public/lib"));
 	return merge(jquery, phaser, require);
 });
