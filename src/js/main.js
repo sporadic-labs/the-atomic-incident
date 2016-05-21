@@ -1,5 +1,3 @@
-'use strict';
-
 var GameState = require("./states/game-state.js");
 var BootState = require("./states/boot-state.js");
 var LoadState = require("./states/load-state.js");
