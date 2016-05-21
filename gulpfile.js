@@ -1,4 +1,53 @@
-// SETUP
+/**
+ * Phaser Gulp Setup
+ * 
+ * The recipe provides:
+ * 
+ * - A local server
+ * - CommonJS modules via browserify
+ * - A LiveReload server to trigger browser refresh upon saving
+ * - A deploy task for uploading to GitHub Pages
+ *
+ * Run "gulp" to start the default task, which builds the site and serves it.
+ * Run with the command line flag "gulp -p" or "gulp --production" to enable
+ * uglification of JS code. It is helpful while developing to NOT uglify code. 
+ */
+
+
+// -- PATHS --------------------------------------------------------------------
+
+var dest = "public"
+var paths = {
+    html: {
+    	src: ["src/**/*.html"],
+    	dest: dest
+    },
+    sass: {
+    	src: ["src/**/*.{scss,sass}"],
+    	dest: dest
+    },
+    jsLibs: {
+    	src: ["src/js/libs/**/*.js"],
+    	outputFile: "libs.js",
+    	dest: dest + "/js"
+    },
+    js: {
+    	entry: "src/js/main.js",
+    	src: ["src/js/**/*.js", "!src/js/libs/**/*.js"],
+    	outputFile: "main.js",
+    	dest: dest + "/js"
+    },
+    images: {
+    	src: ["src/images/**/*.*"],
+    	dest: dest + "/images"
+    },
+    deploy: {
+    	src: ["public/**/*.*"]
+    }
+};
+
+
+// -- SETUP --------------------------------------------------------------------
 
 // Gulp & gulp plugins
 var gulp = require("gulp");
@@ -6,137 +55,193 @@ var sass = require("gulp-sass");
 var autoprefixer = require("gulp-autoprefixer");
 var sourcemaps = require("gulp-sourcemaps");
 var liveReload = require("gulp-livereload");
-var merge = require("merge-stream");
-var open = require('gulp-open');
+var order = require("gulp-order");
+var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
 var newer = require("gulp-newer");
-
-// for deploying to gh-pages
 var ghPages = require("gulp-gh-pages");
-
-// Other modules
+var open = require("gulp-open");
+var gutil = require("gulp-util");
+var jshint = require("gulp-jshint"); // Requires npm jshint
+var stylish = require("jshint-stylish");
+var browserify = require("browserify");
+var source = require("vinyl-source-stream");
+var buffer = require("vinyl-buffer");
+var del = require("del");
 var express = require("express");
 var path = require("path");
 var fs = require("fs");
+var runSequence = require("run-sequence");
+var gulpif = require("gulp-if");
+
+// Check the command line to see if this is a production build
+var isProduction = (gutil.env.p || gutil.env.production);
+console.log("Build environment: " + (isProduction ? "production" : "debug"));
 
 
-// BUILD TASKS
+// -- BUILD TASKS --------------------------------------------------------------
+// These gulp tasks take everything that is in src/, process them (e.g. turn
+// SASS into css) and output them into public/.
 
-gulp.task("html", function () {
-	return gulp.src("src/html/*.*")
-		.pipe(newer("public"))
-		.pipe(gulp.dest("public"));
+// Copy HTML (src/ -> build/).  Pipe changes to LiveReload to trigger a reload.
+gulp.task("copy-html", function () {
+    return gulp.src(paths.html.src)
+        .pipe(gulp.dest(paths.html.dest))
+        .pipe(liveReload());
 });
 
-gulp.task("img", function () {
-	return gulp.src("src/img/*.*")
-		.pipe(newer("public/img"))
-		.pipe(gulp.dest("public/img"));
-});
-
-
-// Convert from sass to css adding vendor prefixes along the way and generating
-// a source map to allow for easier debugging in chrome.
+// Turn SASS in src/ into css in build/, autoprefixing CSS vendor prefixes and
+// generating sourcemaps.  Pipe changes to LiveReload to trigger a reload.
 gulp.task("sass", function () {
-	// Configure a sass stream so that it logs errors properly
-	var sassStream = sass({
-		outputStyle: "expanded",
-		includePaths: []
-	});
-	sassStream.on("error", sass.logError);
-
-	return gulp.src("src/scss/*.scss")
-		.pipe(sourcemaps.init())
-			.pipe(sassStream)
-			.pipe(autoprefixer({
-				browsers: [
-					// https://github.com/twbs/bootstrap-sass#sass-autoprefixer
-					"Android 2.3",
-					"Android >= 4",
-					"Chrome >= 20",
-					"Firefox >= 24",
-					"Explorer >= 8",
-					"iOS >= 6",
-					"Opera >= 12",
-					"Safari >= 6"
-				],
-				cascade: true
-			}))
-		.pipe(sourcemaps.write("maps"))
-		.pipe(gulp.dest("public/css"))
-		.pipe(liveReload());
+    // Configure a sass stream so that it logs errors properly
+    var sassStream = sass({ outputStyle: "compressed" });
+    sassStream.on("error", sass.logError);
+    // Convert SASS
+    return gulp.src(paths.sass.src)
+        .pipe(sourcemaps.init())
+            .pipe(sassStream)
+            .pipe(autoprefixer({
+                browsers: ["last 2 versions"],
+                cascade: true
+            }))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.sass.dest))
+        .pipe(liveReload());
 });
 
-// Copy vendor libraries files into public/js folder
-gulp.task("vendor-js", function() {
-	var jquery = gulp.src("bower_components/jquery/dist/jquery.min.js")
-		.pipe(gulp.dest("public/lib"));
-	var phaser = gulp.src("bower_components/phaser/build/phaser.min.js")
-		.pipe(gulp.dest("public/lib"));
-	var require = gulp.src("bower_components/requirejs/require.js")
-		.pipe(gulp.dest("public/lib"));
-	return merge(jquery, phaser, require);
+// Combine, sourcemap and uglify vendor libraries (e.g. bootstrap, jquery, etc.)
+// into build/js/libs.js.  This supports adding the libs in a particular order.
+// Pipe changes to LiveReload to trigger a reload.
+gulp.task("js-libs", function() {
+    return gulp.src(paths.jsLibs.src)
+        .pipe(order([
+            // Order the files here, if necessary
+            "**/*.js" 
+        ]))
+        .pipe(sourcemaps.init())
+            .pipe(concat(paths.jsLibs.outputFile))
+            // Uglify only if we are in a production build
+            .pipe(gulpif(isProduction, uglify()))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.jsLibs.dest))
+        .pipe(liveReload());
 });
 
-// Uglify and sourcemap custom JS for the project into public/js/all.js
-gulp.task("js", function() {
-	return gulp.src("src/js/*.js")
-		// .pipe(sourcemaps.init())
-		// 	.pipe(uglify())
-		// .pipe(sourcemaps.write("maps"))
-		.pipe(gulp.dest("public/js"))
-		.pipe(liveReload());
+// Combine, sourcemap and uglify our JS libraries into main.js. This uses 
+// browserify (CommonJS-style modules). 
+gulp.task("js-browserify", function() {
+    var b = browserify({
+        entries: paths.js.entry,
+        debug: true // Allow debugger statements
+    })
+    return b.bundle()
+        .on("error", function (err) {
+            gutil.log(err);
+            // To prevent watch task from crashing when browserify hits an error
+            // we need this:
+            this.emit("end"); 
+        })
+        .pipe(source(paths.js.outputFile))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
+            // Uglify only if we are in a production build
+            .pipe(gulpif(isProduction, uglify()))
+            .on("error", gutil.log)
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.js.dest))
+        .pipe(liveReload());
 });
 
+// Lint only our custom JS.
+gulp.task("js-lint", function() {
+    return gulp.src(paths.js.src)
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish));
+});
+
+// Take any (new) images from src/images over to build/images.
+gulp.task("images", function () {
+    return gulp.src(paths.images.src)
+        .pipe(newer(paths.images.dest))
+        .pipe(gulp.dest(paths.images.dest));
+});
+
+// The build task will run all the individual build-related tasks above.
 gulp.task("build", [
-	"html",
-	"img",
-	"sass",
-	"vendor-js",
-	"js"
+    "copy-html",
+    "sass",
+    "js-lint",
+    "js-browserify",
+    "js-libs",
+    "images"
 ]);
 
 
-// RUN TASKS
+// -- RUNNING TASKS ------------------------------------------------------------
+// These gulp tasks handle everything related to running the site.  Starting a
+// local server, watching for changes to files, opening a browser, etc.
 
-// Watch for changes to HTML/SASS files and start a liveReload server
+// Watch for changes and then trigger the appropraite build task.  This also
+// starts a LiveReload server that can tell the browser to refresh the page.
 gulp.task("watch", function () {
-	liveReload.listen();
-	gulp.watch("src/js/*.js", ["js"]);
-	gulp.watch("src/scss/*.scss", ["sass"]);
+    liveReload.listen(); // Start the LiveReload server
+    gulp.watch(paths.html.src, ["copy-html"]);
+    gulp.watch(paths.jsLibs.src, ["js-libs"]);
+    gulp.watch(paths.js.src, ["js-lint", "js-browserify"]);
+    gulp.watch(paths.sass.src, ["sass"]);
+    gulp.watch(paths.images.src, ["images"]);
 });
 
-// Start an express server that serves public/ to localhost:8080
+// Start an express server that serves everything in build/ to localhost:8080/.
 gulp.task("express-server", function () {
-	var app = express();
-	app.use(express.static(path.join(__dirname, "public")));
-	app.listen(8080);
+    var app = express();
+    app.use(express.static(dest));
+    app.listen(8080);
 });
 
+// Automatically open localhost:8080/ in the browser using whatever the default
+// browser.
 gulp.task("open", function() {
-	return gulp.src(__filename)
-		.pipe(open({ uri: "http://127.0.0.1:8080" }));
+    return gulp.src(dest)
+        .pipe(open({uri: "http://127.0.0.1:8080"}));
 });
 
+// The build task will run all the individual run-related tasks above.
 gulp.task("run", [
-	"watch",
-	"express-server",
-	"open"
+    "watch",
+    "express-server",
+    "open"
 ]);
 
 
-// DEPLOY TASKS
+// -- DEPLOYING TASKS ----------------------------------------------------------
+// These gulp tasks handle everything related to deploying the site to live
+// server(s).
 
-// Default task is run when "gulp" is run from terminal
-gulp.task("default", [
-	"build",
-	"run"
-]);
+gulp.task("push:gh-pages", function () {
+    return gulp.src(paths.deploy.src)
+        .pipe(ghPages({
+            remoteUrl: "https://github.com/retwedt/octo-chainsaw.git"
+        }));
+});
 
-// Build & deploy the public/ folder to gh-pages
-gulp.task("gh-deploy", ["build"], function () {
-  return gulp.src("./public/**/*")
-	.pipe(ghPages({
-		remoteUrl: "https://github.com/retwedt/octo-chainsaw.git"
-	}));
+// Build, deploy build/ folder to gh-pages and then clean up
+gulp.task("deploy:gh-pages", function () {
+    return runSequence("build", "push:gh-pages", "clean:publish");
+});
+
+// -- CLEANING TASKS ----------------------------------------------------------
+// These gulp tasks handle deleting files.
+
+gulp.task("clean:publish", function () {
+    return del(["./.publish"]);
+});
+
+
+// -- DEFAULT TASK -------------------------------------------------------------
+// This gulp task runs automatically when you don't specify task.
+
+// Build and then run it.
+gulp.task("default", function(callback) {
+    runSequence("build", "run", callback);
 });
