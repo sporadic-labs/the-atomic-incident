@@ -1,5 +1,7 @@
 module.exports = Player;
 
+var Controller = require("../helpers/controller.js");
+
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player; // Make sure constructor reads properly
@@ -13,82 +15,44 @@ function Player(game, x, y, parentGroup) {
     if (parentGroup) parentGroup.add(this);
     else game.add.existing(this);
 
+    // Configure player physics
+    this._maxSpeed = 500;
+    this._maxAcceleration = 10000;
+    this._maxDrag = 4000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     this.body.setSize(36, 36);
+    this.body.drag.set(this._maxDrag, this._maxDrag);
 
     // Player controls
-    this.keys = this.game.input.keyboard.createCursorKeys();
-    this.upAlt = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
-    this.downAlt = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    this.rightAlt = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-    this.leftAlt = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+    this._controls = new Controller(this.game.input);
+    var Kb = Phaser.Keyboard;
+    this._controls.addKeyboardControl("up", [Kb.W, Kb.UP]);
+    this._controls.addKeyboardControl("left", [Kb.A, Kb.LEFT]);
+    this._controls.addKeyboardControl("right", [Kb.D, Kb.RIGHT]);
+    this._controls.addKeyboardControl("down", [Kb.S, Kb.DOWN]);
 }
 
 Player.prototype.update = function () {
+    // Calculate the player's new acceleration. It should be zero if no keys are
+    // pressed - allows for quick stopping.
+    var acceleration = new Phaser.Point(0, 0);
 
-    // Calculate the player heading
-    var heading = new Phaser.Point(0, 0);
-    if (this.keys.left.isDown || this.leftAlt.isDown) heading.x = -1;
-    else if (this.keys.right.isDown || this.rightAlt.isDown) heading.x = 1;
-    if (this.keys.up.isDown || this.upAlt.isDown) heading.y = -1;
-    else if (this.keys.down.isDown || this.downAlt.isDown) heading.y = 1;
+    if (this._controls.isControlActive("left")) acceleration.x = -1;
+    else if (this._controls.isControlActive("right")) acceleration.x = 1;
+    if (this._controls.isControlActive("up")) acceleration.y = -1;
+    else if (this._controls.isControlActive("down")) acceleration.y = 1;
 
-    // Normalize the heading and set the magnitude. This makes it so that the
-    // player moves in the same speed in all directions (even diagonals).
-    heading = heading.setMagnitude(250);
+    // Normalize the acceleration and set the magnitude. This makes it so that
+    // the player moves in the same speed in all directions.
+    acceleration = acceleration.setMagnitude(this._maxAcceleration);
+    this.body.acceleration.copyFrom(acceleration);
 
-    // Reset velocity to zero
-    this.body.velocity.copyFrom(heading);
+    // Cap the velocity. Phaser physics's max velocity caps the velocity in the
+    // x & y dimensions separately. This allows the sprite to move faster along
+    // a diagonal than it would along the x or y axis. To fix that, we need to
+    // cap the velocity based on it's magnitude.
+    if (this.body.velocity.getMagnitude() > this._maxSpeed) {
+        this.body.velocity.setMagnitude(this._maxSpeed);
+    }
 };
-
-//     // check for keyboard input and update player position
-//     updatePos: function() {
-//             // reset players velocity each frame
-//             this.player.body.velocity.x = 0;
-//             this.player.body.velocity.y = 0;
-
-//             // check for key input, update player position
-//             // vertical movement
-//             if (this.keys.left.isDown || this.leftAlt.isDown) {
-//                 // move left
-//                 this.player.body.velocity.x = -150;
-//                 // if the player is in the center of the screen, scroll the grid
-//                 if (this.player.worldPosition.x >= 298 && this.player.worldPosition.x <= 302) {
-//                     // scroll grid
-//                 this.grid.tilePosition.x += 2;
-//                 }
-//             } else if (this.keys.right.isDown || this.rightAlt.isDown) {
-//                 // move right
-//                 this.player.body.velocity.x = 150;
-//                 // if the player is in the center of the screen, scroll the grid
-//                 if (this.player.worldPosition.x >= 298 && this.player.worldPosition.x <= 302) {
-//                     // scroll grid
-//                 this.grid.tilePosition.x -= 2;
-//                 }
-//             }
-//             // horizontal movement
-//             if (this.keys.up.isDown || this.upAlt.isDown) {
-//                 // move up
-//                 this.player.body.velocity.y = -150;
-//                 // if the player is in the center of the screen, scroll the grid
-//                 if (this.player.worldPosition.y >= 298 && this.player.worldPosition.y <= 302) {
-//                     // scroll grid
-//                 this.grid.tilePosition.y += 2;
-//                 }
-//             } else if (this.keys.down.isDown || this.downAlt.isDown) {
-//                 // move down
-//                 this.player.body.velocity.y = 150;
-//                 // if the player is in the center of the screen, scroll the grid
-//                 if (this.player.worldPosition.y >= 298 && this.player.worldPosition.y <= 302) {
-//                     // scroll grid
-//                 this.grid.tilePosition.y -= 2;
-//                 }
-//             }
-//     }
-//   };
-
-//   // return module to give access to constructor and methods
-//   return Player;
-
-// });
