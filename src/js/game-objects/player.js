@@ -52,28 +52,17 @@ Player.prototype.update = function () {
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
 
-    // by default, set this._isMoving to false
-    // if the player is moving, it will be set to true,
-    // and then a check will be made to see if the idle animation should play
-    this._isMoving = false;
-    if (this._controls.isControlActive("left")) {
-        acceleration.x = -1;
-        this._isMoving = true;
-    } else if (this._controls.isControlActive("right")) {
-        acceleration.x = 1;
-        this._isMoving = true;
-    }
-    if (this._controls.isControlActive("up")) {
-        acceleration.y = -1;
-        this._isMoving = true;
-    } else if (this._controls.isControlActive("down")) {
-        acceleration.y = 1;
-        this._isMoving = true;
-    }
-    if (this._isMoving) {
-        this.animations.play('move');
-    } else {
-        this.animations.play('idle');
+    if (this._controls.isControlActive("left")) acceleration.x = -1;
+    else if (this._controls.isControlActive("right")) acceleration.x = 1;
+    if (this._controls.isControlActive("up")) acceleration.y = -1;
+    else if (this._controls.isControlActive("down")) acceleration.y = 1;
+
+    // Check whether player is moving in order to update its animation
+    var isIdle = acceleration.isZero(); 
+    if (isIdle && this.animations.name !== ANIM_NAMES.IDLE) {
+        this.animations.play(ANIM_NAMES.IDLE);
+    } else if (!isIdle && this.animations.name !== ANIM_NAMES.MOVE) {
+        this.animations.play(ANIM_NAMES.MOVE);
     }
 
     // Normalize the acceleration and set the magnitude. This makes it so that
