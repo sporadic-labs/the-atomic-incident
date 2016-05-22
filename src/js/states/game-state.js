@@ -19,9 +19,10 @@ GameState.prototype.create = function () {
 
     this.stage.backgroundColor = "#F9F9F9";
 
+    var tileSprite = this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid");
+
     var player = new Player(this.game, this.world.centerX, this.world.centerY);
     this.camera.follow(player);
 
-    var tileSprite = this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid");
 };
 
