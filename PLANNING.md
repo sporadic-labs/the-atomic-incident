@@ -137,6 +137,7 @@
 -	[Tilt to Live](http://onemanleft.com/games/tilttolive/)
 -	[Wings.io](http://wings.io/)
 -	[Altitude](http://altitudegame.com/)
+-	[Onslaught Arena](http://arcade.lostdecadegames.com/onslaught-arena/)
 
 
 ### Tutorials
@@ -144,6 +145,8 @@
 -	[Isometric Games in Unity](http://www.theappguruz.com/blog/create-isometric-games-like-clash-of-clans-crossy-roads-age-of-empire-etc)
 -	[Enemy Follow Script in Unity](http://www.theappguruz.com/blog/enemy-follow-script-ai)
 -	[Basic MMORPG Concepts](http://www.lucedigitale.com/blog/mmorpg-develop-basic-concepts/)
+-	[Onslaught Arena Source](https://github.com/lostdecade/onslaught_arena)
+-	[Simple HTML5 Canvas Game](http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/)
 
 -	[Phaser - Space Shooter](http://phaser.io/tutorials/coding-tips-007)
 -	[Phaser - Bullet Pooling](https://www.codecaptain.io/blog/game-development/shooting-bullets-using-phaser-groups/518)

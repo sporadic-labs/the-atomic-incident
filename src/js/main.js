@@ -1,28 +1,10 @@
-// main.js
+var GameState = require("./states/game-state.js");
+var BootState = require("./states/boot-state.js");
+var LoadState = require("./states/load-state.js");
 
-
-(function () {
-  'use strict';
-
-	// config require.js to find correct paths
-	// and load dependencies in the correct order
-    requirejs.config({
-    	// base url for dependecy location
-      // baseUrl: "src/",
-      
-      paths: {
-        phaser: '../lib/phaser.min'
-      },
-
-      shim: {
-        'phaser': {
-          exports: 'Phaser'
-        }
-      }
-    });
- 
-    require(['phaser', 'gameManager'], function (Phaser, GameManager) {
-      var game = new GameManager();
-      game.start();
-    });
-}());
+// var gameContainer = document.getElementById("game-container");
+var game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container");
+game.state.add("boot", BootState);
+game.state.add("load", LoadState);
+game.state.add("game", GameState);
+game.state.start("boot");
