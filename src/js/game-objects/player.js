@@ -9,16 +9,25 @@ Player.prototype.constructor = Player; // Make sure constructor reads properly
 function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
-    Phaser.Sprite.call(this, game, x, y, "assets", "player");
+
+//    Phaser.Sprite.call(this, game, x, y, "assets", "player");
+    Phaser.Sprite.call(this, game, x, y, "playerAnim");
+
     this.anchor.set(0.5);
+
+    // setup animations
+    this._isMoving = false;
+    this.animations.add('idle', [3, 4, 5, 6], 10, true);
+    this.animations.add('move', [0, 1, 2, 3], 10, true);
+
     
     // Add to parentGroup, if it is defined
     if (parentGroup) parentGroup.add(this);
     else game.add.existing(this);
 
     // Configure player physics
-    this._maxSpeed = 500;
-    this._maxAcceleration = 10000;
+    this._maxSpeed = 100;
+    this._maxAcceleration = 5000;
     this._maxDrag = 4000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
@@ -39,10 +48,29 @@ Player.prototype.update = function () {
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
 
-    if (this._controls.isControlActive("left")) acceleration.x = -1;
-    else if (this._controls.isControlActive("right")) acceleration.x = 1;
-    if (this._controls.isControlActive("up")) acceleration.y = -1;
-    else if (this._controls.isControlActive("down")) acceleration.y = 1;
+    // by default, set this._isMoving to false
+    // if the player is moving, it will be set to true,
+    // and then a check will be made to see if the idle animation should play
+    this._isMoving = false;
+    if (this._controls.isControlActive("left")) {
+        acceleration.x = -1;
+        this._isMoving = true;
+    } else if (this._controls.isControlActive("right")) {
+        acceleration.x = 1;
+        this._isMoving = true;
+    }
+    if (this._controls.isControlActive("up")) {
+        acceleration.y = -1;
+        this._isMoving = true;
+    } else if (this._controls.isControlActive("down")) {
+        acceleration.y = 1;
+        this._isMoving = true;
+    }
+    if (this._isMoving) {
+        this.animations.play('move');
+    } else {
+        this.animations.play('idle');
+    }
 
     // Normalize the acceleration and set the magnitude. This makes it so that
     // the player moves in the same speed in all directions.
