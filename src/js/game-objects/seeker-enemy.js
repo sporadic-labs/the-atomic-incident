@@ -5,7 +5,7 @@ SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy; // Make sure constructor reads properly
 
 function SeekerEnemy(game, x, y, target, parentGroup) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "player");
+    Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
     this.scale.set(0.75);
     this.anchor.set(0.5);
     

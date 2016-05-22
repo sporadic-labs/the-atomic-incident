@@ -1,6 +1,10 @@
 module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
+var ANIM_NAMES = {
+    IDLE: "idle",
+    MOVE: "move"
+};
 
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -9,18 +13,18 @@ Player.prototype.constructor = Player; // Make sure constructor reads properly
 function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
-
-//    Phaser.Sprite.call(this, game, x, y, "assets", "player");
-    Phaser.Sprite.call(this, game, x, y, "playerAnim");
-
+    Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
 
-    // setup animations
-    this._isMoving = false;
-    this.animations.add('idle', [3, 4, 5, 6], 10, true);
-    this.animations.add('move', [0, 1, 2, 3], 10, true);
+    // Setup animations
+    var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
+        "", 2);
+    var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, 
+        "", 2);
+    this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
+    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.play(ANIM_NAMES.IDLE);
 
-    
     // Add to parentGroup, if it is defined
     if (parentGroup) parentGroup.add(this);
     else game.add.existing(this);
