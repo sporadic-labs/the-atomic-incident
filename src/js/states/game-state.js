@@ -5,6 +5,7 @@
 module.exports = GameState;
 
 var Player = require("../game-objects/player.js");
+var Seeker = require("../game-objects/seeker-enemy.js");
 
 function GameState(game) {}
 
@@ -24,5 +25,9 @@ GameState.prototype.create = function () {
     var player = new Player(this.game, this.world.centerX, this.world.centerY);
     this.camera.follow(player);
 
+    for (var i = 0; i < 300; i += 1) {
+        var seeker = new Seeker(this.game, this.world.randomX, 
+            this.world.randomY, player);
+    }
 };
 
