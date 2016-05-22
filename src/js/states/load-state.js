@@ -11,6 +11,9 @@ LoadState.prototype.preload = function () {
     this.load.atlasJSONHash("assets", "images/atlases/assets.png", 
         "images/atlases/assets.json");
 
+    // test player animation
+    this.load.spritesheet('playerAnim', 'images/atlases/frames/playerAnimation.png', 36, 36);
+
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
         "0%", { 
