@@ -10,6 +10,7 @@ function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player");
+    this.anchor.set(0.5);
     
     // Add to parentGroup, if it is defined
     if (parentGroup) parentGroup.add(this);
