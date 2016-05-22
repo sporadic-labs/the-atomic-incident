@@ -7,7 +7,9 @@ module.exports = GameState;
 var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/seeker-enemy.js");
 
-function GameState(game) {}
+function GameState(game) {
+    this.reticule = null;
+}
 
 GameState.prototype.create = function () {
     this.stage.backgroundColor = "#AAA000";
@@ -22,6 +24,9 @@ GameState.prototype.create = function () {
 
     var tileSprite = this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid");
 
+    this.reticule = this.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "assets", "reticule");
+    this.reticule.anchor.set(0.5, 0.5);
+
     var player = new Player(this.game, this.world.centerX, this.world.centerY);
     this.camera.follow(player);
 
@@ -29,5 +34,11 @@ GameState.prototype.create = function () {
         var seeker = new Seeker(this.game, this.world.randomX, 
             this.world.randomY, player);
     }
+};
+
+GameState.prototype.update = function () {
+    this.reticule.position.x = this.camera.x + this.input.mousePointer.x;
+    this.reticule.position.y = this.camera.y + this.input.mousePointer.y;
+
 };
 
