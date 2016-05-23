@@ -45,7 +45,7 @@ Controller.prototype.update = function () {
 
     // Check for any registered mouse controls that have been activated
     var activePointer = this._input.activePointer;
-    for (buttonName in this._mouseMap) {
+    for (var buttonName in this._mouseMap) {
         var controls = this._mouseMap[buttonName];
         var buttonPropertyName = POINTER_BUTTONS_LOOKUP[buttonName];
         var pointerButton = activePointer[buttonPropertyName];
@@ -55,7 +55,7 @@ Controller.prototype.update = function () {
     }
 
     // Check for any registered keyboard controls that have been activated
-    for (keyCode in this._keyboardMap) {
+    for (var keyCode in this._keyboardMap) {
         var controls = this._keyboardMap[keyCode];
         if (this._input.keyboard.isDown(keyCode)) {
             this._activateControls(controls);
