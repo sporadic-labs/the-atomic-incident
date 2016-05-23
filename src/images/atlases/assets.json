@@ -18,11 +18,11 @@
 },
 "bullet":
 {
-	"frame": {"x":621,"y":307,"w":13,"h":18},
+	"frame": {"x":621,"y":307,"w":12,"h":29},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":13,"h":18},
-	"sourceSize": {"w":13,"h":18}
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":29},
+	"sourceSize": {"w":12,"h":29}
 },
 "diamond":
 {
@@ -127,6 +127,6 @@
 	"format": "RGBA8888",
 	"size": {"w":640,"h":602},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:2ca235fec95f14e707d84f55ce5197f1:83c924e7fbaf487dee691bfbae8336b7:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:51937749512e6b5eeaa29370aaebe09a:1fffecb842950bde9bd39834edf73593:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
