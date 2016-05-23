@@ -4,6 +4,16 @@
 module.exports = Controller;
 
 /**
+ * This object can be used to look up the mouse button property that corresponds
+ * with the button's numerical ID.
+ * @type {Object}
+ */
+var POINTER_BUTTONS_LOOKUP = {};
+POINTER_BUTTONS_LOOKUP[Phaser.Pointer.LEFT_BUTTON] = "leftButton";
+POINTER_BUTTONS_LOOKUP[Phaser.Pointer.MIDDLE_BUTTON] = "middleButton";
+POINTER_BUTTONS_LOOKUP[Phaser.Pointer.RIGHT_BUTTON] = "rightButton";
+    
+/**
  * A helper class for abstracting away a controller. This can register multiple
  * control keys to the same action, e.g. using both "left" and "w" for moving a
  * character left.
@@ -14,20 +24,54 @@ module.exports = Controller;
 function Controller(input) {
     this._input = input;
 
-    // An object for holding onto the current state of the controls. It holds on
-    // to how many keys are pressed for a specific control, e.g. if "left" and
-    // "w" are pressed, the state for the "left" key would be 2.
-    this._controlStates = {};
+    // Object containing the active control names. If a control is active, this
+    // will have a property (that control's name) set to true. Inactive controls
+    // are not stored in the object.
+    this._activeControls = {};
+
+    // Objects containing the mapping of: 
+    //  keyCode/mouseButton -> control name
+    this._keyboardMap = {};
+    this._mouseMap = {};
 }
 
 /**
+ * Check what controls are active. This must be called once per frame, before
+ * Controller.isControlActive.
+ */
+Controller.prototype.update = function () {
+    // Reset controls
+    this._activeControls = {};
+
+    // Check for any registered mouse controls that have been activated
+    var activePointer = this._input.activePointer;
+    for (buttonName in this._mouseMap) {
+        var controls = this._mouseMap[buttonName];
+        var buttonPropertyName = POINTER_BUTTONS_LOOKUP[buttonName];
+        var pointerButton = activePointer[buttonPropertyName];
+        if (pointerButton.isDown) {
+            this._activateControls(controls);
+        }
+    }
+
+    // Check for any registered keyboard controls that have been activated
+    for (keyCode in this._keyboardMap) {
+        var controls = this._keyboardMap[keyCode];
+        if (this._input.keyboard.isDown(keyCode)) {
+            this._activateControls(controls);
+        }
+        // TODO: isDown(...) only works in browsers. Make this mobile-friendly.
+    }
+};
+
+/**
  * Check whether a specified control is currently active.
- * @param  {string}  controlName The name of the control which was registered in 
+ * @param  {string}  controlName The name of the control which was registered in
  *                               Controller.addKey.
  * @return {Boolean}             Whether or not the control is active.
  */
 Controller.prototype.isControlActive = function (controlName) {
-    return (this._controlStates[controlName] !== 0);
+    return (this._activeControls[controlName] === true);
 };
 
 /**
@@ -35,33 +79,44 @@ Controller.prototype.isControlActive = function (controlName) {
  * @param {string}          controlName The name of the control, e.g. "jump" or
  *                                      "left".
  * @param {number[]|number} keyCodes    The key code or an array of key codes to
- *                                      register under a control name, e.g. 
- *                                      Phaser.Keyboard.SPACEBAR
+ *                                      register under the specified control 
+ *                                      name, e.g. Phaser.Keyboard.SPACEBAR
  */
 Controller.prototype.addKeyboardControl = function (controlName, keyCodes) {
-    if (this._controlStates[controlName] === undefined) {
-        this._controlStates[controlName] = 0;
-    }
     if (!Array.isArray(keyCodes)) keyCodes = [keyCodes];
     for (var i = 0; i < keyCodes.length; i += 1) {
-        var key = this._input.keyboard.addKey(keyCodes[i]);
-        key.onDown.add(this._onKeyDown, this, 0, controlName);
-        key.onUp.add(this._onKeyUp, this, 0, controlName);
+        var keyCode = keyCodes[i];
+        if (this._keyboardMap[keyCode]) {
+            this._keyboardMap[keyCode].push(controlName);
+        } else {
+            this._keyboardMap[keyCode] = [controlName];
+        }
     }
 };
 
 /**
- * Handle when a key associated with a control is pressed.
- * @private
+ * Register a mouse button under a control name.
+ * @param {string} controlName The name of the control, e.g. "jump" or "left".
+ * @param {number} mouseButton The phaser mouse button to register under the 
+ *                             specified control name, e.g. 
+ *                             Phaser.Pointer.LEFT_BUTTON.
  */
-Controller.prototype._onKeyDown = function (key, controlName) {
-    this._controlStates[controlName] += 1;
+Controller.prototype.addMouseDownControl = function (controlName, mouseButton) {
+    if (this._mouseMap[mouseButton]) {
+        this._mouseMap[mouseButton].push(controlName);
+    } else {
+        this._mouseMap[mouseButton] = [controlName];
+    }
 };
 
 /**
- * Handle when a key associated with a control is released.
+ * Activate the array of controls specified
+ * @param  {string[]} controls Array of controls to active
  * @private
  */
-Controller.prototype._onKeyUp = function (key, controlName) {
-    this._controlStates[controlName] -= 1;
+Controller.prototype._activateControls = function (controls) {
+    for (var i = 0; i < controls.length; i += 1) {
+        var controlName = controls[i];
+        this._activeControls[controlName] = true;
+    }
 };
