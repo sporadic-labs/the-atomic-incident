@@ -1,6 +1,8 @@
 module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
+var Gun = require("./gun.js");
+
 var ANIM_NAMES = {
     IDLE: "idle",
     MOVE: "move"
@@ -19,6 +21,8 @@ function Player(game, x, y, parentGroup, enemies, reticule) {
 
     this._reticule = reticule;
     this._enemies = enemies;
+
+    this._gun = new Gun(game, parentGroup, this, enemies);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -45,9 +49,13 @@ function Player(game, x, y, parentGroup, enemies, reticule) {
     this._controls.addKeyboardControl("left", [Kb.A, Kb.LEFT]);
     this._controls.addKeyboardControl("right", [Kb.D, Kb.RIGHT]);
     this._controls.addKeyboardControl("down", [Kb.S, Kb.DOWN]);
+    this._controls.addKeyboardControl("fire", [Kb.SPACEBAR]);
+    this._controls.addMouseDownControl("fire", Phaser.Pointer.LEFT_BUTTON);
 }
 
 Player.prototype.update = function () {
+    this._controls.update();
+
     // Calculate the player's new acceleration. It should be zero if no keys are
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
@@ -76,5 +84,10 @@ Player.prototype.update = function () {
     // cap the velocity based on it's magnitude.
     if (this.body.velocity.getMagnitude() > this._maxSpeed) {
         this.body.velocity.setMagnitude(this._maxSpeed);
+    }
+
+    // Firing logic
+    if (this._controls.isControlActive("fire")) {
+        this._gun.fire(this._reticule.position);
     }
 };
