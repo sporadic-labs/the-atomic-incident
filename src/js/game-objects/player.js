@@ -35,7 +35,7 @@ function Player(game, x, y, parentGroup, enemies, reticule) {
     this._maxDrag = 4000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setSize(36, 36);
+    this.body.setCircle(this.width / 2 * 0.5); // Fudge factor
     this.body.drag.set(this._maxDrag, this._maxDrag);
 
     // Player controls
