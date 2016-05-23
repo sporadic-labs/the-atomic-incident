@@ -192,9 +192,17 @@
             <key type="filename">frames/box.png</key>
             <key type="filename">frames/bullet.png</key>
             <key type="filename">frames/diamond.png</key>
+            <key type="filename">frames/enemy/idle-01.png</key>
             <key type="filename">frames/favicon.ico</key>
             <key type="filename">frames/grid.png</key>
-            <key type="filename">frames/player.png</key>
+            <key type="filename">frames/player/idle-01.png</key>
+            <key type="filename">frames/player/idle-02.png</key>
+            <key type="filename">frames/player/idle-03.png</key>
+            <key type="filename">frames/player/idle-04.png</key>
+            <key type="filename">frames/player/move-01.png</key>
+            <key type="filename">frames/player/move-02.png</key>
+            <key type="filename">frames/player/move-03.png</key>
+            <key type="filename">frames/player/move-04.png</key>
             <key type="filename">frames/reticule.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
