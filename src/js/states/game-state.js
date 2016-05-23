@@ -11,7 +11,8 @@ var Reticule = require("../game-objects/reticule.js");
 function GameState() {}
 
 GameState.prototype.create = function () {
-    this.stage.backgroundColor = "#AAA000";
+    // Initialize the world
+    this.stage.backgroundColor = "#F9F9F9";
     this.world.resize(2000, 2000);
 
     // Groups for z-index sorting and for collisions
@@ -24,20 +25,23 @@ GameState.prototype.create = function () {
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
-    this.physics.arcade.gravity.y = 0;
-    this.physics.arcade.gravity.x = 0;
+    this.physics.arcade.gravity.set(0);
 
-    this.stage.backgroundColor = "#F9F9F9";
+    this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid", 
+        this.groups.background);
 
-    var tileSprite = this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid");
+    this.reticule = new Reticule(this, this.groups.foreground);
 
-    var player = new Player(this.game, this.world.centerX, this.world.centerY);
-    this.camera.follow(player);
-
-    var reticule = new Reticule(this, player);
- 
+    this.player = new Player(this.game, this.world.centerX, this.world.centerY,
+        this.groups.foreground, this.enemies, this.reticule);
+    this.camera.follow(this.player);
+    
+    // Random enemies
     for (var i = 0; i < 300; i += 1) {
-        var seeker = new Seeker(this.game, this.world.randomX, 
-            this.world.randomY, player);
+        var pos;
+        do {
+            pos = new Phaser.Point(this.world.randomX, this.world.randomY);
+        } while (this.player.position.distance(pos) < 300);
+        new Seeker(this.game, pos.x, pos.y, this.enemies, this.player);
     }
 };
