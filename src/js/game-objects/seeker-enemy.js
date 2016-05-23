@@ -2,17 +2,13 @@ module.exports = SeekerEnemy;
 
 // Prototype chain - inherits from Sprite
 SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
-SeekerEnemy.prototype.constructor = SeekerEnemy; // Make sure constructor reads properly
+SeekerEnemy.prototype.constructor = SeekerEnemy;
 
-function SeekerEnemy(game, x, y, target, parentGroup) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
-    this.scale.set(0.75);
+function SeekerEnemy(game, x, y, parentGroup, target) {
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
     this.anchor.set(0.5);
+    parentGroup.add(this);
     
-    // Add to parentGroup, if it is defined
-    if (parentGroup) parentGroup.add(this);
-    else game.add.existing(this);
-
     // Give the sprite a random tint
     var randLightness = this.game.rnd.realInRange(0.4, 0.6);
     var rgb = Phaser.Color.HSLtoRGB(0.98, 1, randLightness);
@@ -26,8 +22,8 @@ function SeekerEnemy(game, x, y, target, parentGroup) {
     this._maxDrag = 4000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setSize(36, 36);
     this.body.drag.set(this._maxDrag, this._maxDrag);
+    this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
 }
 
 /**
