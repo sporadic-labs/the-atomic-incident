@@ -39,8 +39,8 @@ function Player(game, x, y, parentGroup, enemies, reticule) {
     this._maxDrag = 4000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setCircle(this.width / 2 * 0.5); // Fudge factor
     this.body.drag.set(this._maxDrag, this._maxDrag);
+    this.body.setCircle(this.width / 2 * 0.5); // Fudge factor
 
     // Player controls
     this._controls = new Controller(this.game.input);
@@ -90,4 +90,13 @@ Player.prototype.update = function () {
     if (this._controls.isControlActive("fire")) {
         this._gun.fire(this._reticule.position);
     }
+
+    // Enemy collisions
+    this.game.physics.arcade.overlap(this, this._enemies, 
+        this._onCollideWithEnemy, null, this);
+};
+
+Player.prototype._onCollideWithEnemy = function () {
+    // Hacky restart (for now)
+    this.game.state.restart();
 };
