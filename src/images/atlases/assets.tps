@@ -192,6 +192,7 @@
             <key type="filename">frames/box.png</key>
             <key type="filename">frames/bullet.png</key>
             <key type="filename">frames/diamond.png</key>
+            <key type="filename">frames/enemy/idle-01.png</key>
             <key type="filename">frames/favicon.ico</key>
             <key type="filename">frames/grid.png</key>
             <key type="filename">frames/player/idle-01.png</key>
