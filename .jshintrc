@@ -1,0 +1,15 @@
+{
+    "predef": [ "Phaser" ],
+    "undef": true,
+    "unused": true,
+    "eqeqeq": true,
+    "esversion": 5,
+    "freeze": true,
+    "futurehostile": true,
+    "newcap": true,
+    "quotmark": true,
+    "debug": true,
+    "browser": true,
+    "browserify": true,
+    "maxlen": 80
+}
