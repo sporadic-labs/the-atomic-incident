@@ -10,11 +10,15 @@ var ANIM_NAMES = {
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player; // Make sure constructor reads properly
 
-function Player(game, x, y, parentGroup) {
+function Player(game, x, y, parentGroup, enemies, reticule) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
+    parentGroup.add(this);
+
+    this._reticule = reticule;
+    this._enemies = enemies;
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -24,10 +28,6 @@ function Player(game, x, y, parentGroup) {
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.IDLE);
-
-    // Add to parentGroup, if it is defined
-    if (parentGroup) parentGroup.add(this);
-    else game.add.existing(this);
 
     // Configure player physics
     this._maxSpeed = 100;
