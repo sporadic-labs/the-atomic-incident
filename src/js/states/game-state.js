@@ -8,7 +8,7 @@ var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/seeker-enemy.js");
 var Reticule = require("../game-objects/reticule.js");
 
-function GameState(game) {}
+function GameState() {}
 
 GameState.prototype.create = function () {
     this.stage.backgroundColor = "#AAA000";

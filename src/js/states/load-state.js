@@ -4,7 +4,7 @@
 
 module.exports = LoadState;
 
-function LoadState(game) {}
+function LoadState() {}
 
 LoadState.prototype.preload = function () {    
     // Images

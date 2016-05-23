@@ -6,7 +6,7 @@
 
 module.exports = BootState;
 
-function BootState(game) {}
+function BootState() {}
 
 BootState.prototype.create = function () {
     // Take care of any global game settings that need to be set up
