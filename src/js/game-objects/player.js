@@ -2,6 +2,7 @@ module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
 var Gun = require("./gun.js");
+var Laser = require("./laser.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -12,7 +13,7 @@ var ANIM_NAMES = {
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player; // Make sure constructor reads properly
 
-function Player(game, x, y, parentGroup, enemies, reticule) {
+function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
@@ -21,8 +22,14 @@ function Player(game, x, y, parentGroup, enemies, reticule) {
 
     this._reticule = reticule;
     this._enemies = enemies;
+    this._pickups = pickups;
 
-    this._gun = new Gun(game, parentGroup, this, enemies);
+    // this._gun = new Gun(game, parentGroup, this, enemies);
+    this._allGuns = {
+        "gun": new Gun(game, parentGroup, this, enemies),
+        "laser": new Laser(game, parentGroup, this, enemies)
+    }
+    this._gunType = "gun";
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -88,15 +95,25 @@ Player.prototype.update = function () {
 
     // Firing logic
     if (this._controls.isControlActive("fire")) {
-        this._gun.fire(this._reticule.position);
+//        this._gun.fire(this._reticule.position);
+        this._allGuns[this._gunType].fire(this._reticule.position);
     }
 
     // Enemy collisions
     this.game.physics.arcade.overlap(this, this._enemies, 
         this._onCollideWithEnemy, null, this);
+
+    // Pickup collisions
+    this.game.physics.arcade.overlap(this, this._pickups, 
+        this._onCollideWithPickup, null, this);
 };
 
 Player.prototype._onCollideWithEnemy = function () {
     // Hacky restart (for now)
     this.game.state.restart();
+};
+
+Player.prototype._onCollideWithPickup = function (self, pickup) {
+    this._gunType = pickup._type;
+    pickup.destroy();
 };
