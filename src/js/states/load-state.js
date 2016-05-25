@@ -11,13 +11,6 @@ LoadState.prototype.preload = function () {
     this.load.atlasJSONHash("assets", "images/atlases/assets.png", 
         "images/atlases/assets.json");
 
-    // *** REMOVE FOR SPRITESHEET
-    this.load.spritesheet("enemyAnim",
-        "images/atlases/frames/enemyAnim.png", 24, 24);
-    this.load.spritesheet("enemyAnim2",
-        "images/atlases/frames/enemyAnim2.png", 48, 48);
-
-
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
         "0%", { 
