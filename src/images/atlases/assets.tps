@@ -193,6 +193,15 @@
             <key type="filename">frames/bullet.png</key>
             <key type="filename">frames/diamond.png</key>
             <key type="filename">frames/enemy/idle-01.png</key>
+            <key type="filename">frames/enemy/idle-02.png</key>
+            <key type="filename">frames/enemy/idle-03.png</key>
+            <key type="filename">frames/enemy/idle-04.png</key>
+            <key type="filename">frames/enemy/move-01.png</key>
+            <key type="filename">frames/enemy/move-02.png</key>
+            <key type="filename">frames/enemy/move-03.png</key>
+            <key type="filename">frames/enemy/move-04.png</key>
+            <key type="filename">frames/enemyAnim.png</key>
+            <key type="filename">frames/enemyAnim2.png</key>
             <key type="filename">frames/favicon.ico</key>
             <key type="filename">frames/grid.png</key>
             <key type="filename">frames/player/idle-01.png</key>

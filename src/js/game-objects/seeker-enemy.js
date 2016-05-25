@@ -10,9 +10,7 @@ SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy;
 
 function SeekerEnemy(game, x, y, parentGroup, target) {
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    Phaser.Sprite.call(this, game, x, y, "enemyAnim");
-    // Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
     
@@ -26,11 +24,8 @@ function SeekerEnemy(game, x, y, parentGroup, target) {
         "", 2);
     var moveFrames = Phaser.Animation.generateFrameNames("enemy/move-", 1, 4, 
         "", 2);
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    this.animations.add(ANIM_NAMES.IDLE, [0,1,2,3], 10, true);
-    this.animations.add(ANIM_NAMES.MOVE, [4,5,6,7], 10, true);
-    // this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
-    // this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
+    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.IDLE);
 
     this._target = target;

@@ -9,10 +9,9 @@ SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy;
 
 function SeekerEnemy(game, x, y, parentGroup, target) {
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    Phaser.Sprite.call(this, game, x, y, "enemyAnim2");
-    // Phaser.Sprite.call(this, game, x, y, "assets", "enemy-2/move-01");
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/move-01");
     this.anchor.set(0.5);
+    this.scale.set(2);
     parentGroup.add(this);
     
     // Give the sprite a random tint
@@ -21,11 +20,9 @@ function SeekerEnemy(game, x, y, parentGroup, target) {
     this.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 
     // Setup animations
-    var moveFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
+    var moveFrames = Phaser.Animation.generateFrameNames("enemy/idle-", 1, 4, 
         "", 2);
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    this.animations.add(ANIM_NAMES.MOVE, [0,1,2,3], 10, true);
-    // this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.MOVE);
 
     // variables for random movement toward player
