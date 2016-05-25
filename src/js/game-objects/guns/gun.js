@@ -1,11 +1,11 @@
-module.exports = Laser;
+module.exports = Gun;
 
-var Bolt = require("./bolt.js");
+var Bullet = require("../bullets/bullet.js");
 
-Laser.prototype = Object.create(Phaser.Group.prototype);
-Laser.prototype.constructor = Laser;
+Gun.prototype = Object.create(Phaser.Group.prototype);
+Gun.prototype.constructor = Gun;
 
-function Laser(game, parentGroup, player, enemies) {
+function Gun(game, parentGroup, player, enemies) {
     Phaser.Group.call(this, game, parentGroup, "bullet");
 
     this._player = player;
@@ -21,7 +21,7 @@ function Laser(game, parentGroup, player, enemies) {
     this.onDestroy.add(this._onDestroy, this);
 }
 
-Laser.prototype.fire = function (targetPos) {
+Gun.prototype.fire = function (targetPos) {
     if (this._ableToFire) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
@@ -30,21 +30,21 @@ Laser.prototype.fire = function (targetPos) {
         var bulletPos = this._player.position.clone();
         bulletPos.x += (0.75 * this._player.width) * Math.cos(angle);
         bulletPos.y += (0.75 * this._player.width) * Math.sin(angle);
-        new Bolt(this.game, bulletPos.x, bulletPos.y, this, angle, 
+        new Bullet(this.game, bulletPos.x, bulletPos.y, this, angle, 
             this._enemies);
         this._startCooldown();
     }
 };
 
-Laser.prototype._startCooldown = function () {
+Gun.prototype._startCooldown = function () {
     this._ableToFire = false;
     this._bulletCooldownTimer.add(this._bulletCooldownTime, function () {
         this._ableToFire = true;
     }, this);
 };
 
-Laser.prototype._onDestroy = function () {
+Gun.prototype._onDestroy = function () {
     // Since the timer doesn't destroy itself, we have to schedule its
-    // destruction or it will stick around after the Laser is destroyed.
+    // destruction or it will stick around after the Gun is destroyed.
     this._bulletCooldownTimer.destroy();
 };

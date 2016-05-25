@@ -5,9 +5,9 @@
 module.exports = GameState;
 
 var Player = require("../game-objects/player.js");
-var Seeker = require("../game-objects/seeker-enemy.js");
-var Wander = require("../game-objects/wander-enemy.js");
-var Pickup = require("../game-objects/base-pickup.js");
+var Seeker = require("../game-objects/enemies/seeker-enemy.js");
+var Wander = require("../game-objects/enemies/wander-enemy.js");
+var Pickup = require("../game-objects/pickups/base-pickup.js");
 var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 

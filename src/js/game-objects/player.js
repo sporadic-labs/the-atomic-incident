@@ -1,8 +1,8 @@
 module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
-var Gun = require("./gun.js");
-var Laser = require("./laser.js");
+var Gun = require("./guns/gun.js");
+var Laser = require("./guns/laser.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -24,12 +24,11 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
     this._enemies = enemies;
     this._pickups = pickups;
 
-    // this._gun = new Gun(game, parentGroup, this, enemies);
-    this._allGuns = {
-        "gun": new Gun(game, parentGroup, this, enemies),
-        "laser": new Laser(game, parentGroup, this, enemies)
-    }
     this._gunType = "gun";
+    this._allGuns = {
+        "gun": new Gun(game, parentGroup, this, this._enemies),
+        "laser": new Laser(game, parentGroup, this, this._enemies)
+    }
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
