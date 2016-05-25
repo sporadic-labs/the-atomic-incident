@@ -1,19 +1,20 @@
-module.exports = SeekerEnemy;
+module.exports = WanderEnemy;
 
 var ANIM_NAMES = {
     MOVE: "move"
 };
 
 // Prototype chain - inherits from Sprite
-SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
-SeekerEnemy.prototype.constructor = SeekerEnemy;
+WanderEnemy.prototype = Object.create(Phaser.Sprite.prototype);
+WanderEnemy.prototype.constructor = WanderEnemy;
 
-function SeekerEnemy(game, x, y, parentGroup, target) {
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    Phaser.Sprite.call(this, game, x, y, "enemyAnim2");
-    // Phaser.Sprite.call(this, game, x, y, "assets", "enemy-2/move-01");
+function WanderEnemy(game, x, y, parentGroup, target, signal) {
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/move-01");
     this.anchor.set(0.5);
+    this.scale.set(2);
     parentGroup.add(this);
+
+    this._signal = signal;
     
     // Give the sprite a random tint
     var randLightness = this.game.rnd.realInRange(0.4, 0.6);
@@ -21,11 +22,9 @@ function SeekerEnemy(game, x, y, parentGroup, target) {
     this.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 
     // Setup animations
-    var moveFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
+    var moveFrames = Phaser.Animation.generateFrameNames("enemy/idle-", 1, 4, 
         "", 2);
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    this.animations.add(ANIM_NAMES.MOVE, [0,1,2,3], 10, true);
-    // this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.MOVE);
 
     // variables for random movement toward player
@@ -52,9 +51,7 @@ function SeekerEnemy(game, x, y, parentGroup, target) {
  * so if the velocity updates happened AFTER that, the targeting would be off
  * by a frame.
  */
-SeekerEnemy.prototype.preUpdate = function () {
-    // this.body.velocity.set(0);
-
+WanderEnemy.prototype.preUpdate = function () {
     if ((this.game.time.now - this._moveStart) > this._moveDelay) {
         // when _moveDelay time has passed, generate new values for the 
         // enemies movement
@@ -63,7 +60,7 @@ SeekerEnemy.prototype.preUpdate = function () {
 
         var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * plusOrMinus;
         this._angle = this.position.angle(this._target.position) + rndAngle;
-        
+
         this._speed = this.game.rnd.integerInRange(100, 140);
         this._moveStart = this.game.time.now;
         this._moveDelay = 4000 + this.game.rnd.integerInRange(0, 2000);
@@ -72,8 +69,11 @@ SeekerEnemy.prototype.preUpdate = function () {
     this.body.velocity.x = this._speed * Math.cos(this._angle);
     this.body.velocity.y = this._speed * Math.sin(this._angle);
 
-
     // Call the parent's preUpdate and return the value. Something else in
     // Phaser might use it...
     return Phaser.Sprite.prototype.preUpdate.call(this);
+};
+
+WanderEnemy.prototype.deathCry = function () {
+    this._signal.dispatch();
 };
