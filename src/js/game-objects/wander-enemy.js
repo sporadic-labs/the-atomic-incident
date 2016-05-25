@@ -9,9 +9,8 @@ WanderEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 WanderEnemy.prototype.constructor = WanderEnemy;
 
 function WanderEnemy(game, x, y, parentGroup, target, signal) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/move-01");
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy2/move-01");
     this.anchor.set(0.5);
-    this.scale.set(2);
     parentGroup.add(this);
 
     this._signal = signal;
@@ -22,7 +21,7 @@ function WanderEnemy(game, x, y, parentGroup, target, signal) {
     this.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 
     // Setup animations
-    var moveFrames = Phaser.Animation.generateFrameNames("enemy/idle-", 1, 4, 
+    var moveFrames = Phaser.Animation.generateFrameNames("enemy2/move-", 1, 4, 
         "", 2);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.MOVE);
