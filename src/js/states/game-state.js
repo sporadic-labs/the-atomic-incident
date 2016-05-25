@@ -6,7 +6,9 @@ module.exports = GameState;
 
 var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/seeker-enemy.js");
+var Wander = require("../game-objects/wander-enemy.js");
 var Reticule = require("../game-objects/reticule.js");
+// var ScoreKeeper = require("../helpers/score-keeper.js");
 
 function GameState() {}
 
@@ -23,11 +25,14 @@ GameState.prototype.create = function () {
     };
     this.enemies = this.game.add.group(this.groups.midground, "enemies");
 
+    // Score
+    // this.scoreKeeper = new ScoreKeeper(this, this.groups.foreground);
+
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid", 
+    this.bg = this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid", 
         this.groups.background);
 
     this.reticule = new Reticule(this, this.groups.foreground);
@@ -44,4 +49,8 @@ GameState.prototype.create = function () {
         } while (this.player.position.distance(pos) < 300);
         new Seeker(this.game, pos.x, pos.y, this.enemies, this.player);
     }
+
+    // one wandering enemy
+    new Wander(this.game, 800, 800, this.enemies, this.player);
+
 };
