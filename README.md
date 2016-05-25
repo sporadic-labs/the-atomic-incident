@@ -5,7 +5,7 @@ A Game-in-Progress!
 ## Development Tools:
 
 -	[Phaser](http://phaser.io/)
-- [Require.js](http://requirejs.org/)
+- [Browserify](http://browserify.org/)
 
 
 ## Directory Structure
