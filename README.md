@@ -5,6 +5,7 @@ A Game-in-Progress!
 ## Development Tools:
 
 -	[Phaser](http://phaser.io/)
+- [Gulp](http://gulpjs.com/)
 - [Browserify](http://browserify.org/)
 
 
