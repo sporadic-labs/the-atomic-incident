@@ -13,12 +13,9 @@ A Game-in-Progress!
 
 ```
 ├── src/
-	├── html/
-	├── img/
-	├── js/
-	└── scss/
-├── .gitignore
-├── bower.json
+	├── css/
+	├── images/
+	└── js/
 ├── package.json
 ├── gulpfile.js
 ├── PLANNING.md
