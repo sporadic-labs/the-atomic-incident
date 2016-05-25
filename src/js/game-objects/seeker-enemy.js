@@ -9,12 +9,12 @@ var ANIM_NAMES = {
 SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy;
 
-function SeekerEnemy(game, x, y, parentGroup, target) {
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    Phaser.Sprite.call(this, game, x, y, "enemyAnim");
-    // Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
+function SeekerEnemy(game, x, y, parentGroup, target, signal) {
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
+
+    this._signal = signal;
     
     // Give the sprite a random tint
     var randLightness = this.game.rnd.realInRange(0.4, 0.6);
@@ -26,11 +26,8 @@ function SeekerEnemy(game, x, y, parentGroup, target) {
         "", 2);
     var moveFrames = Phaser.Animation.generateFrameNames("enemy/move-", 1, 4, 
         "", 2);
-    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
-    this.animations.add(ANIM_NAMES.IDLE, [0,1,2,3], 10, true);
-    this.animations.add(ANIM_NAMES.MOVE, [4,5,6,7], 10, true);
-    // this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
-    // this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
+    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.IDLE);
 
     this._target = target;
@@ -82,4 +79,8 @@ SeekerEnemy.prototype.preUpdate = function () {
     // Call the parent's preUpdate and return the value. Something else in
     // Phaser might use it...
     return Phaser.Sprite.prototype.preUpdate.call(this);
+};
+
+SeekerEnemy.prototype.deathCry = function () {
+    this._signal.dispatch();
 };
