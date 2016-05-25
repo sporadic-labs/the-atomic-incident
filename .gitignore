@@ -1,5 +1,5 @@
 # Ignore sublime workspace
-*.sublime-project
+*.sublime-workspace
 
 # Assets created during development
 _assets
