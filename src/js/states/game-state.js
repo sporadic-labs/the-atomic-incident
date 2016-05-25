@@ -8,7 +8,7 @@ var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/seeker-enemy.js");
 var Wander = require("../game-objects/wander-enemy.js");
 var Reticule = require("../game-objects/reticule.js");
-// var ScoreKeeper = require("../helpers/score-keeper.js");
+var ScoreKeeper = require("../helpers/score-keeper.js");
 
 function GameState() {}
 
@@ -25,9 +25,6 @@ GameState.prototype.create = function () {
     };
     this.enemies = this.game.add.group(this.groups.midground, "enemies");
 
-    // Score
-    // this.scoreKeeper = new ScoreKeeper(this, this.groups.foreground);
-
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
@@ -41,16 +38,37 @@ GameState.prototype.create = function () {
         this.groups.foreground, this.enemies, this.reticule);
     this.camera.follow(this.player);
     
+    // Signal
+    this._signal = new Phaser.Signal();
+
     // Random enemies
     for (var i = 0; i < 300; i += 1) {
         var pos;
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
-        new Seeker(this.game, pos.x, pos.y, this.enemies, this.player);
+        new Seeker(this.game, pos.x, pos.y, this.enemies,
+            this.player, this._signal);
     }
 
     // one wandering enemy
-    new Wander(this.game, 800, 800, this.enemies, this.player);
+    new Wander(this.game, 800, 800, this.enemies, this.player,
+        this._signal);
 
+    // Score
+    this.scoreKeeper = new ScoreKeeper(this, this.groups.foreground,
+        this._signal);
+    this.scoreText = this.add.text(400, 500,
+        "Score: 0", { 
+            font: "32px Arial", 
+            fill: "#000", 
+            align: "center" 
+        });
+    this.scoreText.fixedToCamera = true;
+    this.scoreText.cameraOffset.setTo(36, 24);
+    this.groups.foreground.add(this.scoreText);
+};
+
+GameState.prototype.update = function () {
+    this.scoreText.text = "Score: " + this.scoreKeeper.score;
 };
