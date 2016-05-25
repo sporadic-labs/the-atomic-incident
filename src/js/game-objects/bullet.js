@@ -13,6 +13,8 @@ function Bullet(game, x, y, parentGroup, angle, enemies) {
     this._range = 500;
     this._initialPos = this.position.clone();
 
+    this._remove = false; // check if bullet should be removed?
+
     // Rotate bullet to face in the right direction. The bullet image is saved
     // facing up (90 degrees), so we need to offset the angle
     this.rotation = angle + Math.PI / 2; // Radians
@@ -25,11 +27,15 @@ function Bullet(game, x, y, parentGroup, angle, enemies) {
 Bullet.prototype.update = function () {
     this.game.physics.arcade.overlap(this, this._enemies,
         this._onCollideWithEnemy, null, this);
-    if (this.position.distance(this._initialPos) > this._range) {
+    // if bullet has collided with an enemy, or is out of range, remove it
+    if ((this.position.distance(this._initialPos) > this._range) || this._remove) {
         this.destroy();
     }
 };
 
 Bullet.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.destroy();
+    // set this variable to true if the bullet has collided with an enemy
+    // the bullet can then be removed in the update function
+    this._remove = true;
 };
