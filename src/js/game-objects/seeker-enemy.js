@@ -1,11 +1,18 @@
 module.exports = SeekerEnemy;
 
+var ANIM_NAMES = {
+    IDLE: "idle",
+    MOVE: "move"
+};
+
 // Prototype chain - inherits from Sprite
 SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy;
 
 function SeekerEnemy(game, x, y, parentGroup, target) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
+    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
+    Phaser.Sprite.call(this, game, x, y, "enemyAnim");
+    // Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
     
@@ -13,6 +20,18 @@ function SeekerEnemy(game, x, y, parentGroup, target) {
     var randLightness = this.game.rnd.realInRange(0.4, 0.6);
     var rgb = Phaser.Color.HSLtoRGB(0.98, 1, randLightness);
     this.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
+
+    // Setup animations
+    var idleFrames = Phaser.Animation.generateFrameNames("enemy/idle-", 1, 4, 
+        "", 2);
+    var moveFrames = Phaser.Animation.generateFrameNames("enemy/move-", 1, 4, 
+        "", 2);
+    // *** REMOVE AND UNCOMMENT BELOW FOR SPRITESHEET
+    this.animations.add(ANIM_NAMES.IDLE, [0,1,2,3], 10, true);
+    this.animations.add(ANIM_NAMES.MOVE, [4,5,6,7], 10, true);
+    // this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
+    // this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.play(ANIM_NAMES.IDLE);
 
     this._target = target;
     this._visionRadius = 300;
@@ -44,6 +63,20 @@ SeekerEnemy.prototype.preUpdate = function () {
         var magnitude = Math.min(this._maxSpeed, targetSpeed);
         this.body.velocity.x = magnitude * Math.cos(angle);
         this.body.velocity.y = magnitude * Math.sin(angle);
+    }
+
+    // Check whether enemy is moving, update its animation
+    var isIdle;
+    if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
+        isIdle = true;
+    } else {
+        isIdle = false;
+    }
+
+    if (isIdle && this.animations.name !== ANIM_NAMES.IDLE) {
+        this.animations.play(ANIM_NAMES.IDLE);
+    } else if (!isIdle && this.animations.name !== ANIM_NAMES.MOVE) {
+        this.animations.play(ANIM_NAMES.MOVE);
     }
 
     // Call the parent's preUpdate and return the value. Something else in
