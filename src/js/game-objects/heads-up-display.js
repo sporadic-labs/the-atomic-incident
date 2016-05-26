@@ -19,5 +19,5 @@ function HeadsUpDisplay(game, parentGroup, scoreKeeper) {
 }
 
 HeadsUpDisplay.prototype.update = function () {
-    this._scoreKeeper.text = "Score: " + this._scoreKeeper.getScore();
+    this._scoreText.setText("Score: " + this._scoreKeeper.getScore());
 };
