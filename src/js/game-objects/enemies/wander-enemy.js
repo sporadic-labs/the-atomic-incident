@@ -29,8 +29,9 @@ function WanderEnemy(game, x, y, parentGroup, target, signal) {
     // variables for random movement toward player
     this._target = target;
     var plusOrMinus = this.game.rnd.integerInRange(0, 1);
-    plusOrMinus === 0 ? plusOrMinus = -1 : plusOrMinus = 1;
-    var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * plusOrMinus;
+    plusOrMinus = (plusOrMinus === 0) ? -1 : 1;
+    var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * 
+        plusOrMinus;
     this._angle = this.position.angle(this._target.position) + rndAngle;
     this._moveStart = this.game.time.now;
     this._moveDelay = 4000 + this.game.rnd.integerInRange(0, 2000);
@@ -55,9 +56,10 @@ WanderEnemy.prototype.preUpdate = function () {
         // when _moveDelay time has passed, generate new values for the 
         // enemies movement
         var plusOrMinus = this.game.rnd.integerInRange(0, 1);
-        plusOrMinus === 0 ? plusOrMinus = -1 : plusOrMinus = 1;
+        plusOrMinus = (plusOrMinus === 0) ? -1 : 1;
 
-        var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * plusOrMinus;
+        var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * 
+            plusOrMinus;
         this._angle = this.position.angle(this._target.position) + rndAngle;
 
         this._speed = this.game.rnd.integerInRange(100, 140);

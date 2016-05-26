@@ -42,7 +42,7 @@ function Controller(input) {
 Controller.prototype.update = function () {
     // Reset controls
     this._activeControls = {};
-
+    
     // Check for any registered mouse controls that have been activated
     var activePointer = this._input.activePointer;
     for (var buttonName in this._mouseMap) {

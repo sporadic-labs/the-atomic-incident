@@ -28,7 +28,8 @@ Bullet.prototype.update = function () {
     this.game.physics.arcade.overlap(this, this._enemies,
         this._onCollideWithEnemy, null, this);
     // if bullet has collided with an enemy, or is out of range, remove it
-    if ((this.position.distance(this._initialPos) > this._range) || this._remove) {
+    if ((this.position.distance(this._initialPos) > this._range) || 
+        this._remove) {
         this.destroy();
     }
 };

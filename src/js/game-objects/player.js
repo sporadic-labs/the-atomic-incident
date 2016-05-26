@@ -28,7 +28,7 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, this._enemies),
         "laser": new Laser(game, parentGroup, this, this._enemies)
-    }
+    };
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 

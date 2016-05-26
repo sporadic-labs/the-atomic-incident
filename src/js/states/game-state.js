@@ -44,7 +44,7 @@ GameState.prototype.create = function () {
     // Score
     var scoreSignal = new Phaser.Signal();
     var scoreKeeper = new ScoreKeeper(scoreSignal);
-    var hud = new HeadsUpDisplay(this.game, this.groups.foreground, 
+    this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
         scoreKeeper);
 
     // Random enemies
@@ -71,11 +71,10 @@ GameState.prototype.create = function () {
         var pos;
         var newType;
         var t = this.game.rnd.integerInRange(0,1);
-        t === 1 ? newType = "gun" : newType = "laser";
+        newType = (t === 1) ? "gun" : newType = "laser";
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
         new Pickup(this.game, pos.x, pos.y, this.pickups, newType);
     }
-
 };

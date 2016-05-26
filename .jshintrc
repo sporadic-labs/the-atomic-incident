@@ -11,5 +11,6 @@
     "debug": true,
     "browser": true,
     "browserify": true,
-    "maxlen": 80
+    "maxlen": 80,
+    "shadow": true
 }
