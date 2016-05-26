@@ -53,8 +53,8 @@ GameState.prototype.create = function () {
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
-        new Seeker(this.game, pos.x, pos.y, this.enemies,
-            this.player, scoreSignal);
+        new Seeker(this.game, pos.x, pos.y, this.enemies, this.player, 
+            scoreSignal);
     }
 
     for (var i = 0; i < 48; i += 1) {
@@ -70,7 +70,7 @@ GameState.prototype.create = function () {
     for (var i = 0; i < 32; i += 1) {
         var pos;
         var newType;
-        var t = this.game.rnd.integerInRange(0,1);
+        var t = this.game.rnd.integerInRange(0, 1);
         newType = (t === 1) ? "gun" : newType = "laser";
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
