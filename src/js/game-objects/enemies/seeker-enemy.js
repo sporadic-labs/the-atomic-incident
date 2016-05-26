@@ -1,25 +1,20 @@
 module.exports = SeekerEnemy;
 
+var BaseEnemy = require("./base-enemy.js");
+
 var ANIM_NAMES = {
     IDLE: "idle",
     MOVE: "move"
 };
 
-// Prototype chain - inherits from Sprite
-SeekerEnemy.prototype = Object.create(Phaser.Sprite.prototype);
+SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy;
 
-function SeekerEnemy(game, x, y, parentGroup, target, signal) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "enemy/idle-01");
-    this.anchor.set(0.5);
-    parentGroup.add(this);
-
-    this._signal = signal;
+function SeekerEnemy(game, x, y, parentGroup, target, scoreSignal) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy/idle-01", parentGroup,
+        target, scoreSignal, 1);
     
-    // Give the sprite a random tint
-    var randLightness = this.game.rnd.realInRange(0.4, 0.6);
-    var rgb = Phaser.Color.HSLtoRGB(0.98, 1, randLightness);
-    this.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
+    this._applyRandomLightnessTint(0.98, 1, 0.5);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("enemy/idle-", 1, 4, 
@@ -30,16 +25,7 @@ function SeekerEnemy(game, x, y, parentGroup, target, signal) {
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.IDLE);
 
-    this._target = target;
     this._visionRadius = 300;
-
-    // Configure player physics
-    this._maxSpeed = 200;
-    this._maxDrag = 4000;
-    game.physics.arcade.enable(this);
-    this.body.collideWorldBounds = true;
-    this.body.drag.set(this._maxDrag, this._maxDrag);
-    this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
 }
 
 /**
@@ -79,8 +65,4 @@ SeekerEnemy.prototype.preUpdate = function () {
     // Call the parent's preUpdate and return the value. Something else in
     // Phaser might use it...
     return Phaser.Sprite.prototype.preUpdate.call(this);
-};
-
-SeekerEnemy.prototype.deathCry = function () {
-    this._signal.dispatch();
 };
