@@ -10,6 +10,7 @@ var Wander = require("../game-objects/enemies/wander-enemy.js");
 var Pickup = require("../game-objects/pickups/base-pickup.js");
 var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
+var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 
 function GameState() {}
 
@@ -40,8 +41,11 @@ GameState.prototype.create = function () {
         this.groups.foreground, this.enemies, this.pickups, this.reticule);
     this.camera.follow(this.player);
     
-    // Signal
-    this._signal = new Phaser.Signal();
+    // Score
+    var scoreSignal = new Phaser.Signal();
+    var scoreKeeper = new ScoreKeeper(scoreSignal);
+    var hud = new HeadsUpDisplay(this.game, this.groups.foreground, 
+        scoreKeeper);
 
     // Random enemies
     for (var i = 0; i < 300; i += 1) {
@@ -50,7 +54,7 @@ GameState.prototype.create = function () {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
         new Seeker(this.game, pos.x, pos.y, this.enemies,
-            this.player, this._signal);
+            this.player, scoreSignal);
     }
 
     for (var i = 0; i < 48; i += 1) {
@@ -59,7 +63,7 @@ GameState.prototype.create = function () {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
         new Wander(this.game, pos.x, pos.y, this.enemies, this.player,
-            this._signal);
+            scoreSignal);
     }
 
     // Random pickups
@@ -74,20 +78,4 @@ GameState.prototype.create = function () {
         new Pickup(this.game, pos.x, pos.y, this.pickups, newType);
     }
 
-    // Score
-    this.scoreKeeper = new ScoreKeeper(this, this.groups.foreground,
-        this._signal);
-    this.scoreText = this.add.text(400, 500,
-        "Score: 0", { 
-            font: "32px Arial", 
-            fill: "#000", 
-            align: "center" 
-        });
-    this.scoreText.fixedToCamera = true;
-    this.scoreText.cameraOffset.setTo(36, 24);
-    this.groups.foreground.add(this.scoreText);
-};
-
-GameState.prototype.update = function () {
-    this.scoreText.text = "Score: " + this.scoreKeeper.score;
 };
