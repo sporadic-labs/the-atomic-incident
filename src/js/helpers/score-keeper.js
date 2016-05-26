@@ -1,14 +1,17 @@
 module.exports = ScoreKeeper;
 
-
-function ScoreKeeper(game, parentGroup, signal) {
-	// set initial this.score to 0, setup score text
-	this.score = 0;
+function ScoreKeeper(signal) {
+	this._score = 0;
 	this._signal = signal;
 
-	this._signal.add(function() {
-		this.score++;
-	}, this);
+	this._signal.add(this.updateScore, this);
 }
 
+ScoreKeeper.prototype.updateScore = function (points) {
+    if (points === undefined) return;
+    this._score += points;
+};
 
+ScoreKeeper.prototype.getScore = function () {
+    return this._score;
+};
