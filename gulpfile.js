@@ -73,11 +73,24 @@ var path = require("path");
 var fs = require("fs");
 var runSequence = require("run-sequence");
 var gulpif = require("gulp-if");
+var beep = require("beepbeep");
+var plumber = require("gulp-plumber");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
 console.log("Build environment: " + (isProduction ? "production" : "debug"));
 
+function beepLogError(err) {
+    beep();
+    var stringError = err.messageFormatted || err.message || err.toString();
+    var msg = [
+        gutil.colors.bgRed.bold("Gulp error in plugin: " + err.plugin),
+        gutil.colors.green(stringError),
+        ""
+    ].join("\n");
+    gutil.log(msg);
+    this.emit("end");
+}
 
 // -- BUILD TASKS --------------------------------------------------------------
 // These gulp tasks take everything that is in src/, process them (e.g. turn
@@ -93,13 +106,11 @@ gulp.task("copy-html", function () {
 // Turn SASS in src/ into css in build/, autoprefixing CSS vendor prefixes and
 // generating sourcemaps.  Pipe changes to LiveReload to trigger a reload.
 gulp.task("sass", function () {
-    // Configure a sass stream so that it logs errors properly
-    var sassStream = sass({ outputStyle: "compressed" });
-    sassStream.on("error", sass.logError);
     // Convert SASS
     return gulp.src(paths.sass.src)
+        .pipe(plumber({ errorHandler: beepLogError }))
         .pipe(sourcemaps.init())
-            .pipe(sassStream)
+            .pipe(sass({ outputStyle: "compressed" }))
             .pipe(autoprefixer({
                 browsers: ["last 2 versions"],
                 cascade: true
@@ -114,6 +125,7 @@ gulp.task("sass", function () {
 // Pipe changes to LiveReload to trigger a reload.
 gulp.task("js-libs", function() {
     return gulp.src(paths.jsLibs.src)
+        .pipe(plumber({ errorHandler: beepLogError }))
         .pipe(order([
             // Order the files here, if necessary
             "**/*.js" 
@@ -134,19 +146,17 @@ gulp.task("js-browserify", function() {
         entries: paths.js.entry,
         debug: true // Allow debugger statements
     })
-    return b.bundle()
-        .on("error", function (err) {
-            gutil.log(err);
-            // To prevent watch task from crashing when browserify hits an error
-            // we need this:
-            this.emit("end"); 
-        })
+    return b.bundle()    
+            .on("error", function (err) {
+                err.plugin = "Browserify";
+                beepLogError.call(this, err);
+            })
+        .pipe(plumber({ errorHandler: beepLogError }))
         .pipe(source(paths.js.outputFile))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
             // Uglify only if we are in a production build
             .pipe(gulpif(isProduction, uglify()))
-            .on("error", gutil.log)
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.js.dest))
         .pipe(liveReload());
@@ -154,7 +164,8 @@ gulp.task("js-browserify", function() {
 
 // Lint only our custom JS.
 gulp.task("js-lint", function() {
-    return gulp.src(paths.js.src)
+    return gulp.src(paths.js.src)    
+        .pipe(plumber({ errorHandler: beepLogError }))
         .pipe(jshint())
         .pipe(jshint.reporter(stylish));
 });
