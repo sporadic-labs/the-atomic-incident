@@ -1,8 +1,8 @@
 module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
-var Gun = require("./guns/gun.js");
-var Laser = require("./guns/laser.js");
+var Gun = require("./weapons/gun.js");
+var Laser = require("./weapons/laser.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
