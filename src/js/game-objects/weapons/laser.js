@@ -1,6 +1,6 @@
 module.exports = Laser;
 
-var Bolt = require("../bullets/bolt.js");
+var Bolt = require("../projectiles/bolt.js");
 
 Laser.prototype = Object.create(Phaser.Group.prototype);
 Laser.prototype.constructor = Laser;

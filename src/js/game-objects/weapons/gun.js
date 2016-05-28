@@ -1,6 +1,6 @@
 module.exports = Gun;
 
-var Bullet = require("../bullets/bullet.js");
+var Bullet = require("../projectiles/bullet.js");
 
 Gun.prototype = Object.create(Phaser.Group.prototype);
 Gun.prototype.constructor = Gun;
