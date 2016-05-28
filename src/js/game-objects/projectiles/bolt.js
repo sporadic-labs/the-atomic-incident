@@ -38,8 +38,7 @@ Bolt.prototype.update = function () {
 };
 
 Bolt.prototype._onCollideWithEnemy = function (self, enemy) {
-    enemy.deathCry();
-    enemy.destroy();
+    enemy.killByPlayer();
     // set this variable to true if the Bolt has collided with an enemy
     // the Bolt can then be removed in the update function
     this._remove = true;
