@@ -3,7 +3,7 @@ module.exports = Bullet;
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
 
-function Bullet(game, x, y, parentGroup, angle, enemies) {
+function Bullet(game, x, y, parentGroup, angle, enemies, comboTracker) {
     Phaser.Sprite.call(this, game, x, y, "assets", "weapons/slug");
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -12,6 +12,7 @@ function Bullet(game, x, y, parentGroup, angle, enemies) {
     this._speed = 300;
     this._range = 500;
     this._initialPos = this.position.clone();
+    this._comboTracker = comboTracker;
 
     this._remove = false; // check if bullet should be removed?
 
@@ -36,6 +37,7 @@ Bullet.prototype.update = function () {
 
 Bullet.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.killByPlayer();
+    this._comboTracker.incrementCombo(1);
     // set this variable to true if the bullet has collided with an enemy
     // the bullet can then be removed in the update function
     this._remove = true;

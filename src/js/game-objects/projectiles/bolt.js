@@ -3,7 +3,7 @@ module.exports = Bolt;
 Bolt.prototype = Object.create(Phaser.Sprite.prototype);
 Bolt.prototype.constructor = Bolt;
 
-function Bolt(game, x, y, parentGroup, angle, enemies) {
+function Bolt(game, x, y, parentGroup, angle, enemies, comboTracker) {
     Phaser.Sprite.call(this, game, x, y, "assets", "weapons/laser-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -15,6 +15,7 @@ function Bolt(game, x, y, parentGroup, angle, enemies) {
     this._speed = 300;
     this._range = 500;
     this._initialPos = this.position.clone();
+    this._comboTracker = comboTracker;
 
     this._remove = false; // check if Bolt should be removed?
 
@@ -39,6 +40,7 @@ Bolt.prototype.update = function () {
 
 Bolt.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.killByPlayer();
+    this._comboTracker.incrementCombo(1);
     // set this variable to true if the Bolt has collided with an enemy
     // the Bolt can then be removed in the update function
     this._remove = true;
