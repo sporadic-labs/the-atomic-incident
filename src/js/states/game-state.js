@@ -7,7 +7,8 @@ module.exports = GameState;
 var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/enemies/seeker-enemy.js");
 var Wander = require("../game-objects/enemies/wander-enemy.js");
-var Pickup = require("../game-objects/pickups/base-pickup.js");
+var ScorePickup = require("../game-objects/pickups/score-pickup.js");
+var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
 var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -16,6 +17,7 @@ function GameState() {}
 
 GameState.prototype.create = function () {
     // Initialize the world
+    this.game.canvas.style.cursor = "none";
     this.stage.backgroundColor = "#F9F9F9";
     this.world.resize(2000, 2000);
 
@@ -32,7 +34,7 @@ GameState.prototype.create = function () {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    this.bg = this.add.tileSprite(0, 0, 2000, 2000, "assets", "grid", 
+    this.bg = this.add.tileSprite(0, 0, 2000, 2000, "assets", "hud/grid", 
         this.groups.background);
 
     this.reticule = new Reticule(this, this.groups.foreground);
@@ -67,14 +69,29 @@ GameState.prototype.create = function () {
     }
 
     // Random pickups
-    for (var i = 0; i < 32; i += 1) {
-        var pos;
-        var newType;
-        var t = this.game.rnd.integerInRange(0, 1);
-        newType = (t === 1) ? "gun" : newType = "laser";
+    // score
+    for (var i = 0; i < 24; i += 1) {
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
-        new Pickup(this.game, pos.x, pos.y, this.pickups, newType);
+        new ScorePickup(this.game, pos.x, pos.y, this.pickups, "diamond", scoreSignal);
     }
+    // weapons
+    for (var i = 0; i < 36; i += 1) {
+        var pos;
+        var newType;
+        var t = this.game.rnd.integerInRange(0, 4);
+        if (t === 1 || t === 3) {
+            newType = "gun";
+        } else if (t === 2 || t === 4) {
+            newType = "laser";
+        } else {
+            newType = "sword";
+        }
+        do {
+            pos = new Phaser.Point(this.world.randomX, this.world.randomY);
+        } while (this.player.position.distance(pos) < 300);
+        new WeaponPickup(this.game, pos.x, pos.y, this.pickups, newType, scoreSignal);
+    }
+
 };
