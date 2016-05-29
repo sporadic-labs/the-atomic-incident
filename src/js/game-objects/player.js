@@ -6,7 +6,10 @@ var Laser = require("./weapons/laser.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
-    MOVE: "move"
+    MOVE: "move",
+    FIRE: "fire",
+    HIT: "hit",
+    DIE: "die"
 };
 
 // Prototype chain - inherits from Sprite
@@ -35,8 +38,17 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
         "", 2);
     var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, 
         "", 2);
+    var fireFrames = Phaser.Animation.generateFrameNames("player/fire-", 1, 4, 
+        "", 2);
+    var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, 
+        "", 2);
+    var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, 
+        "", 2);
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
+    this.animations.add(ANIM_NAMES.FIRE, fireFrames, 10, false);
+    this.animations.add(ANIM_NAMES.HIT, hitFrames, 10, false);
+    this.animations.add(ANIM_NAMES.DIE, dieFrames, 10, false);
     this.animations.play(ANIM_NAMES.IDLE);
 
     // Configure player physics
@@ -94,7 +106,6 @@ Player.prototype.update = function () {
 
     // Firing logic
     if (this._controls.isControlActive("fire")) {
-//        this._gun.fire(this._reticule.position);
         this._allGuns[this._gunType].fire(this._reticule.position);
     }
 
@@ -108,11 +119,21 @@ Player.prototype.update = function () {
 };
 
 Player.prototype._onCollideWithEnemy = function () {
-    // Hacky restart (for now)
+    // return to start screen
+    // *** this doesn't work, didn't look into it...
+    // this.game.state.start("start");
+
+    // for sandbox testing
     this.game.state.restart();
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
-    this._gunType = pickup._type;
+    if (pickup._category === "weapon") {
+        if (pickup.type === "sword") {
+            console.log("sword!");
+        } else {
+            this._gunType = pickup.type;   
+        }
+    }
     pickup.destroy();
 };
