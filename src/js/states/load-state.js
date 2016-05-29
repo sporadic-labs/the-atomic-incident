@@ -29,7 +29,7 @@ LoadState.prototype.create = function () {
     // Since load progress might not reach 100 in the load loop, manually do it
     this.loadingText.setText("100%");
 
-    this.game.state.start("game");
-    // this.game.state.start("start");
+    // this.game.state.start("start"); // start screen
+    this.game.state.start("sandbox"); // for testing
 
 };
