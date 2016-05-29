@@ -10,13 +10,13 @@ WanderEnemy.prototype = Object.create(BaseEnemy.prototype);
 WanderEnemy.prototype.constructor = WanderEnemy;
 
 function WanderEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy2/move-01", parentGroup,
+    BaseEnemy.call(this, game, x, y, "assets", "enemy02/move-01", parentGroup,
         target, scoreSignal, 1, { maxSpeed: 140 });
     
     this._applyRandomLightnessTint(0.33, 1, 0.5);
 
     // Setup animations
-    var moveFrames = Phaser.Animation.generateFrameNames("enemy2/move-", 1, 4, 
+    var moveFrames = Phaser.Animation.generateFrameNames("enemy02/move-", 1, 4, 
         "", 2);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.MOVE);

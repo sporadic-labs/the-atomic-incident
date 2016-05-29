@@ -4,9 +4,9 @@ Reticule.prototype = Object.create(Phaser.Sprite.prototype);
 Reticule.prototype.constructor = Reticule;
 
 function Reticule(game, parentGroup) {
-    Phaser.Sprite.call(this, game, 0, 0, "assets", "reticule");
+    Phaser.Sprite.call(this, game, 0, 0, "assets", "hud/reticule");
     this.anchor.set(0.5);
-    parentGroup.add(this);
+	  parentGroup.add(this);
     
     this._updatePosition();
 }

@@ -4,7 +4,7 @@ Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
 
 function Bullet(game, x, y, parentGroup, angle, enemies) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "bullet");
+    Phaser.Sprite.call(this, game, x, y, "assets", "weapons/slug");
     this.anchor.set(0.5);
     parentGroup.add(this);
 

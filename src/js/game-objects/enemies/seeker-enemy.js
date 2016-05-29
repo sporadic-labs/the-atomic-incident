@@ -11,15 +11,15 @@ SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
 SeekerEnemy.prototype.constructor = SeekerEnemy;
 
 function SeekerEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy/idle-01", parentGroup,
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup,
         target, scoreSignal, 1);
     
     this._applyRandomLightnessTint(0.98, 1, 0.5);
 
     // Setup animations
-    var idleFrames = Phaser.Animation.generateFrameNames("enemy/idle-", 1, 4, 
+    var idleFrames = Phaser.Animation.generateFrameNames("enemy01/idle-", 1, 4, 
         "", 2);
-    var moveFrames = Phaser.Animation.generateFrameNames("enemy/move-", 1, 4, 
+    var moveFrames = Phaser.Animation.generateFrameNames("enemy01/move-", 1, 4, 
         "", 2);
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);

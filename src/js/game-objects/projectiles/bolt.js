@@ -4,7 +4,7 @@ Bolt.prototype = Object.create(Phaser.Sprite.prototype);
 Bolt.prototype.constructor = Bolt;
 
 function Bolt(game, x, y, parentGroup, angle, enemies) {
-    Phaser.Sprite.call(this, game, x, y, "assets", "bullet");
+    Phaser.Sprite.call(this, game, x, y, "assets", "weapons/laser-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
 
