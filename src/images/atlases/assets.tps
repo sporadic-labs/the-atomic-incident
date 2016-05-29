@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.2.0</string>
+        <string>4.2.1</string>
         <key>fileName</key>
-        <string>C:/Users/micha/Documents/GitHub/octo-chainsaw/src/images/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/images/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -188,30 +188,83 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">frames/arrow.png</key>
-            <key type="filename">frames/box.png</key>
-            <key type="filename">frames/bullet.png</key>
-            <key type="filename">frames/diamond.png</key>
-            <key type="filename">frames/enemy/idle-01.png</key>
-            <key type="filename">frames/enemy/idle-02.png</key>
-            <key type="filename">frames/enemy/idle-03.png</key>
-            <key type="filename">frames/enemy/idle-04.png</key>
-            <key type="filename">frames/enemy/move-01.png</key>
-            <key type="filename">frames/enemy/move-02.png</key>
-            <key type="filename">frames/enemy/move-03.png</key>
-            <key type="filename">frames/enemy/move-04.png</key>
-            <key type="filename">frames/enemy2/move-01.png</key>
-            <key type="filename">frames/enemy2/move-02.png</key>
-            <key type="filename">frames/enemy2/move-03.png</key>
-            <key type="filename">frames/enemy2/move-04.png</key>
-            <key type="filename">frames/enemy3/move-01.png</key>
-            <key type="filename">frames/enemy3/move-02.png</key>
-            <key type="filename">frames/enemy3/move-03.png</key>
-            <key type="filename">frames/enemy3/move-04.png</key>
-            <key type="filename">frames/favicon.ico</key>
-            <key type="filename">frames/grid.png</key>
+            <key type="filename">frames/enemy01/die-01.png</key>
+            <key type="filename">frames/enemy01/die-02.png</key>
+            <key type="filename">frames/enemy01/die-03.png</key>
+            <key type="filename">frames/enemy01/die-04.png</key>
+            <key type="filename">frames/enemy01/idle-01.png</key>
+            <key type="filename">frames/enemy01/idle-02.png</key>
+            <key type="filename">frames/enemy01/idle-03.png</key>
+            <key type="filename">frames/enemy01/idle-04.png</key>
+            <key type="filename">frames/enemy01/move-01.png</key>
+            <key type="filename">frames/enemy01/move-02.png</key>
+            <key type="filename">frames/enemy01/move-03.png</key>
+            <key type="filename">frames/enemy01/move-04.png</key>
+            <key type="filename">frames/enemy02/die-01.png</key>
+            <key type="filename">frames/enemy02/die-02.png</key>
+            <key type="filename">frames/enemy02/die-03.png</key>
+            <key type="filename">frames/enemy02/die-04.png</key>
+            <key type="filename">frames/enemy02/fire-01.png</key>
+            <key type="filename">frames/enemy02/fire-02.png</key>
+            <key type="filename">frames/enemy02/fire-03.png</key>
+            <key type="filename">frames/enemy02/fire-04.png</key>
+            <key type="filename">frames/enemy02/move-01.png</key>
+            <key type="filename">frames/enemy02/move-02.png</key>
+            <key type="filename">frames/enemy02/move-03.png</key>
+            <key type="filename">frames/enemy02/move-04.png</key>
+            <key type="filename">frames/enemy03/die-01.png</key>
+            <key type="filename">frames/enemy03/die-02.png</key>
+            <key type="filename">frames/enemy03/die-03.png</key>
+            <key type="filename">frames/enemy03/die-04.png</key>
+            <key type="filename">frames/enemy03/fire-01.png</key>
+            <key type="filename">frames/enemy03/fire-02.png</key>
+            <key type="filename">frames/enemy03/fire-03.png</key>
+            <key type="filename">frames/enemy03/fire-04.png</key>
+            <key type="filename">frames/enemy03/hit-01.png</key>
+            <key type="filename">frames/enemy03/hit-02.png</key>
+            <key type="filename">frames/enemy03/hit-03.png</key>
+            <key type="filename">frames/enemy03/hit-04.png</key>
+            <key type="filename">frames/enemy03/move-01.png</key>
+            <key type="filename">frames/enemy03/move-02.png</key>
+            <key type="filename">frames/enemy03/move-03.png</key>
+            <key type="filename">frames/enemy03/move-04.png</key>
+            <key type="filename">frames/fx/hit-01.png</key>
+            <key type="filename">frames/fx/hit-02.png</key>
+            <key type="filename">frames/fx/hit-03.png</key>
+            <key type="filename">frames/fx/hit-04.png</key>
+            <key type="filename">frames/fx/hit-05.png</key>
+            <key type="filename">frames/fx/hit-06.png</key>
+            <key type="filename">frames/fx/swoosh-01.png</key>
+            <key type="filename">frames/fx/swoosh-02.png</key>
+            <key type="filename">frames/fx/swoosh-03.png</key>
+            <key type="filename">frames/fx/trail-01.png</key>
+            <key type="filename">frames/fx/trail-02.png</key>
+            <key type="filename">frames/fx/trail-03.png</key>
+            <key type="filename">frames/hud/grid.png</key>
+            <key type="filename">frames/hud/health-bar-frame.png</key>
+            <key type="filename">frames/hud/health-bar.png</key>
+            <key type="filename">frames/hud/reticule.png</key>
+            <key type="filename">frames/hud/targeting-arrow.png</key>
+            <key type="filename">frames/pickups/box-01.png</key>
+            <key type="filename">frames/pickups/box-02.png</key>
+            <key type="filename">frames/pickups/box-03.png</key>
+            <key type="filename">frames/pickups/box-04.png</key>
+            <key type="filename">frames/pickups/diamond-01.png</key>
+            <key type="filename">frames/pickups/diamond-02.png</key>
+            <key type="filename">frames/pickups/diamond-03.png</key>
+            <key type="filename">frames/pickups/diamond-04.png</key>
+            <key type="filename">frames/player/die-01.png</key>
+            <key type="filename">frames/player/die-02.png</key>
+            <key type="filename">frames/player/die-03.png</key>
+            <key type="filename">frames/player/die-04.png</key>
             <key type="filename">frames/player/fire-01.png</key>
             <key type="filename">frames/player/fire-02.png</key>
+            <key type="filename">frames/player/fire-03.png</key>
+            <key type="filename">frames/player/fire-04.png</key>
+            <key type="filename">frames/player/hit-01.png</key>
+            <key type="filename">frames/player/hit-02.png</key>
+            <key type="filename">frames/player/hit-03.png</key>
+            <key type="filename">frames/player/hit-04.png</key>
             <key type="filename">frames/player/idle-01.png</key>
             <key type="filename">frames/player/idle-02.png</key>
             <key type="filename">frames/player/idle-03.png</key>
@@ -220,7 +273,32 @@
             <key type="filename">frames/player/move-02.png</key>
             <key type="filename">frames/player/move-03.png</key>
             <key type="filename">frames/player/move-04.png</key>
-            <key type="filename">frames/reticule.png</key>
+            <key type="filename">frames/startScreen/logo.png</key>
+            <key type="filename">frames/startScreen/options-down.png</key>
+            <key type="filename">frames/startScreen/options-up.png</key>
+            <key type="filename">frames/startScreen/play-down.png</key>
+            <key type="filename">frames/startScreen/play-up.png</key>
+            <key type="filename">frames/test/box.png</key>
+            <key type="filename">frames/test/bullet.png</key>
+            <key type="filename">frames/test/diamond.png</key>
+            <key type="filename">frames/weapons/arrow.png</key>
+            <key type="filename">frames/weapons/e-blade-01.png</key>
+            <key type="filename">frames/weapons/e-blade-02.png</key>
+            <key type="filename">frames/weapons/e-burst-01.png</key>
+            <key type="filename">frames/weapons/e-burst-02.png</key>
+            <key type="filename">frames/weapons/e-saw-01.png</key>
+            <key type="filename">frames/weapons/e-saw-02.png</key>
+            <key type="filename">frames/weapons/e-star-01.png</key>
+            <key type="filename">frames/weapons/e-star-02.png</key>
+            <key type="filename">frames/weapons/fireball-01.png</key>
+            <key type="filename">frames/weapons/fireball-02.png</key>
+            <key type="filename">frames/weapons/fireball-03.png</key>
+            <key type="filename">frames/weapons/hammer.png</key>
+            <key type="filename">frames/weapons/laser-01.png</key>
+            <key type="filename">frames/weapons/laser-02.png</key>
+            <key type="filename">frames/weapons/laser-03.png</key>
+            <key type="filename">frames/weapons/slug.png</key>
+            <key type="filename">frames/weapons/sword.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
