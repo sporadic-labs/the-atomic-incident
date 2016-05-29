@@ -7,6 +7,7 @@ A Game-in-Progress!
 -	[Phaser](http://phaser.io/)
 - [Gulp](http://gulpjs.com/)
 - [Browserify](http://browserify.org/)
+- [TexturePacker](https://www.codeandweb.com/texturepacker)
 
 
 ## Directory Structure
@@ -15,7 +16,12 @@ A Game-in-Progress!
 ├── src/
 	├── css/
 	├── images/
+		└── atlases/
 	└── js/
+		├── game-objects/
+		├── helpers/
+		├── libs/
+		└── states/
 ├── package.json
 ├── gulpfile.js
 ├── PLANNING.md
