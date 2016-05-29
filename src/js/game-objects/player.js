@@ -33,8 +33,10 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     this._gunType = "gun";
     this._allGuns = {
-        "gun": new Gun(game, parentGroup, this, this._enemies),
-        "laser": new Laser(game, parentGroup, this, this._enemies)
+        "gun": new Gun(game, parentGroup, this, this._enemies, 150, 
+            this._comboTracker),
+        "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
+            this._comboTracker)
     };
 
     // Setup animations
