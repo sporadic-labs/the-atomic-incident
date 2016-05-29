@@ -4,44 +4,41 @@
 
 module.exports = StartScreen;
 
+var Reticule = require("../game-objects/reticule.js");
+
 function StartScreen() {}
 
-StartScreen.prototype.init = function () {    
-    this.titleText = this.add.text(this.world.centerX, this.world.centerY, 
-        "Octo-Chainsaw", { 
-            font: "60px Arial", 
-            fill: "#000", 
-            align: "center" 
-        });
-    this.titleText.anchor.set(0.5);
-    this.titleText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
-    this.titleText.anchor.set(0.5);
-};
-
-
 StartScreen.prototype.create = function () {
-    // this.stage.disableVisibilityChange = true;
-    // this.add.sprite(0, 0, 'menu-bg');
-    // this.add.existing(this.titleText);
+    // Groups for z-index sorting and for collisions
+    this.groups = {
+        background: this.game.add.group(this.world, "background"),
+        midground: this.game.add.group(this.world, "midground"),
+        foreground: this.game.add.group(this.world, "foreground")
+    };
 
-    var gameTitle = this.game.add.sprite(160,160,"gametitle");
-    gameTitle.anchor.setTo(0.5,0.5);
-    var playButton = this.game.add.button(160,320,"play",this.playTheGame,this);
-    playButton.anchor.setTo(0.5,0.5);
+    this.bg = this.add.tileSprite(0, 0, 2000, 2000, "assets", "hud/grid", 
+        this.groups.background);
 
+    var logo = this.game.add.sprite(this.world.centerX, this.world.centerY-160,
+        "assets", "startScreen/logo");
+    logo.anchor.setTo(0.5,0.5);
+    this.groups.midground.add(logo);
+    var playBtn = this.game.add.button(this.world.centerX, this.world.centerY+20,
+        "assets", this._playTheGame, this, "startScreen/play-down", "startScreen/play-up");
+    playBtn.anchor.setTo(0.5,0.5);
+    this.groups.midground.add(playBtn);
+    var optionsBtn = this.game.add.button(this.world.centerX, this.world.centerY+140,
+        "assets", this._options, this, "startScreen/options-down", "startScreen/options-up");
+    optionsBtn.anchor.setTo(0.5,0.5);
+    this.groups.midground.add(optionsBtn);
+
+    this.reticule = new Reticule(this, this.groups.foreground);
 };
 
-StartScreen.prototype.playTheGame = function () {
-    this.game.state.start("TheGame");
+StartScreen.prototype._playTheGame = function () {
+    this.game.state.start("game");
 };
 
-
-    // create: function(){
-    //     var gameTitle = this.game.add.sprite(160,160,"gametitle");
-    //     gameTitle.anchor.setTo(0.5,0.5);
-    //     var playButton = this.game.add.button(160,320,"play",this.playTheGame,this);
-    //     playButton.anchor.setTo(0.5,0.5);
-    // },
-    // playTheGame: function(){
-    //     this.game.state.start("TheGame");
-    // }
+StartScreen.prototype._options = function () {
+    console.log("trick!");
+};
