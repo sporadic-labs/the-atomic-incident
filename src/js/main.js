@@ -1,3 +1,4 @@
+var Sandbox = require("./states/sandbox.js");
 var GameState = require("./states/game-state.js");
 var BootState = require("./states/boot-state.js");
 var LoadState = require("./states/load-state.js");
@@ -8,4 +9,5 @@ game.state.add("boot", BootState);
 game.state.add("load", LoadState);
 game.state.add("start", StartScreen);
 game.state.add("game", GameState);
+game.state.add("sandbox", Sandbox);
 game.state.start("boot");
