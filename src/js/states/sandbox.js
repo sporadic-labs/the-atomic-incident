@@ -12,11 +12,13 @@ var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
 var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
+var ComboTracker = require("../helpers/combo-tracker.js");
 
 function GameState() {}
 
 GameState.prototype.create = function () {
     // Initialize the world
+    this.game.canvas.style.cursor = "none";
     this.stage.backgroundColor = "#F9F9F9";
     this.world.resize(2000, 2000);
 
@@ -38,15 +40,18 @@ GameState.prototype.create = function () {
 
     this.reticule = new Reticule(this, this.groups.foreground);
 
+    this.comboTracker = new ComboTracker(this.game, 2500);
+
     this.player = new Player(this.game, this.world.centerX, this.world.centerY,
-        this.groups.foreground, this.enemies, this.pickups, this.reticule);
+        this.groups.foreground, this.enemies, this.pickups, this.reticule,
+        this.comboTracker);
     this.camera.follow(this.player);
     
     // Score
     var scoreSignal = new Phaser.Signal();
     var scoreKeeper = new ScoreKeeper(scoreSignal);
     this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
-        scoreKeeper);
+        scoreKeeper, this.comboTracker);
 
     // Random enemies
     for (var i = 0; i < 300; i += 1) {

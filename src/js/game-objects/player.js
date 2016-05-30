@@ -16,7 +16,8 @@ var ANIM_NAMES = {
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player; // Make sure constructor reads properly
 
-function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
+function Player(game, x, y, parentGroup, enemies, pickups, reticule, 
+    comboTracker) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
@@ -27,10 +28,15 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
     this._enemies = enemies;
     this._pickups = pickups;
 
+    this._comboTracker = comboTracker;
+    this._comboTracker.addListener(this._onComboUpdate, this);
+
     this._gunType = "gun";
     this._allGuns = {
-        "gun": new Gun(game, parentGroup, this, this._enemies),
-        "laser": new Laser(game, parentGroup, this, this._enemies)
+        "gun": new Gun(game, parentGroup, this, this._enemies, 150, 
+            this._comboTracker),
+        "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
+            this._comboTracker)
     };
 
     // Setup animations
@@ -52,7 +58,7 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule) {
     this.animations.play(ANIM_NAMES.IDLE);
 
     // Configure player physics
-    this._maxSpeed = 100;
+    this._maxSpeed = 50;
     this._maxAcceleration = 5000;
     this._maxDrag = 4000;
     game.physics.arcade.enable(this);
@@ -136,4 +142,10 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
         }
     }
     pickup.destroy();
+};
+
+Player.prototype._onComboUpdate = function (combo) {
+    var newSpeed = Phaser.Math.mapLinear(combo, 0, 50, 50, 500);
+    newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
+    this._maxSpeed = newSpeed; 
 };
