@@ -39,6 +39,7 @@ Bullet.prototype.update = function () {
 Bullet.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.killByPlayer();
     this._comboTracker.incrementCombo(1);
+
     // set this variable to true if the bullet has collided with an enemy
     // the bullet can then be removed in the update function
     this._remove = true;
