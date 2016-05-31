@@ -147,7 +147,8 @@ Player.prototype.update = function () {
 
     // Check whether player is moving in order to update its animation
     var isIdle = acceleration.isZero();
-    if ((isShooting || isShootingSpecial) && this.animations.name !== ANIM_NAMES.ATTACK) {
+    if ((isShooting || isShootingSpecial) &&
+        (this.animations.name !== ANIM_NAMES.ATTACK)) {
         this.animations.play(ANIM_NAMES.ATTACK);
     } else if (!isShooting && !isShootingSpecial && isIdle &&
         this.animations.name !== ANIM_NAMES.IDLE) {
@@ -158,12 +159,10 @@ Player.prototype.update = function () {
     }
 
     // Enemy collisions
-    this.game.physics.arcade.overlap(this, this._enemies, 
-        this._onCollideWithEnemy, null, this);
+    this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
 
     // Pickup collisions
-    this.game.physics.arcade.overlap(this, this._pickups, 
-        this._onCollideWithPickup, null, this);
+    this._checkOverlapWithGroup(this._pickups, this._onCollideWithPickup, this);
 
     // if (this._isDead) {
     //     console.log("dead!");
@@ -204,4 +203,17 @@ Player.prototype._onComboUpdate = function (combo) {
     var newSpeed = Phaser.Math.mapLinear(combo, 0, 50, 50, 500);
     newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
     this._maxSpeed = newSpeed; 
+};
+
+Player.prototype._checkOverlapWithGroup = function (group, callback, 
+    callbackContext) {
+    for (var i = 0; i < group.children.length; i += 1) {
+        var child = group.children[i];
+        if (child instanceof Phaser.Group) {
+            this._checkOverlapWithGroup(child, callback, callbackContext);
+        } else {
+            this.game.physics.arcade.overlap(this, group, callback, null, 
+                callbackContext);
+        }
+    }
 };

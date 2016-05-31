@@ -18,12 +18,12 @@ function FlockingGroup(game, numToSpawn, x, y, enemiesGroup, target,
     for (var i = 0; i < numToSpawn; i += 1) {
         var enemyX = x + game.rnd.realInRange(-randSpread, randSpread);        
         var enemyY = y + game.rnd.realInRange(-randSpread, randSpread);
-        new FlockingEnemy(game, enemyX, enemyY, this, i, target);
+        new FlockingEnemy(game, enemyX, enemyY, this, i, target, scoreSignal);
     }
 
     this._distances = {};
     this._calculateDistances();
-};
+}
 
 FlockingGroup.prototype.countNeighborsInRange = function (enemy, range) {
     var numInRange = 0;
@@ -91,7 +91,7 @@ FlockingGroup.prototype._getDistanceKey = function (enemy1, enemy2) {
 FlockingGroup.prototype.update = function () {
     this._calculateDistances();
     Phaser.Group.prototype.update.call(this);
-}
+};
 
 
 // -- FLOCKING INDIVIDUAL ------------------------------------------------------
