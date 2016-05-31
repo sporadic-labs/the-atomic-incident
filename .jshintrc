@@ -1,5 +1,6 @@
 {
     "predef": [ "Phaser" ],
+    "devel": true,
     "undef": true,
     "unused": true,
     "eqeqeq": true,
