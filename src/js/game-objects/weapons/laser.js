@@ -1,7 +1,7 @@
 module.exports = Laser;
 
 var BaseWeapon = require("./base-weapon.js");
-var Bolt = require("../projectiles/bolt.js");
+var Projectile = require("../projectiles/base-projectile.js");
 
 Laser.prototype = Object.create(BaseWeapon.prototype);
 Laser.prototype.constructor = Laser;
@@ -27,10 +27,15 @@ Laser.prototype.fire = function (targetPos) {
             (10 * Math.sin(angle));
         bulletPosL.y += (0.75 * this._player.width) * Math.sin(angle) -
             (10 * Math.cos(angle));
-        new Bolt(this.game, bulletPosR.x, bulletPosR.y, this, angle, 
-            this._enemies, this._comboTracker);
-        new Bolt(this.game, bulletPosL.x, bulletPosL.y, this, angle, 
-            this._enemies, this._comboTracker);
+        this._createProjectile(bulletPosR.x, bulletPosR.y, angle);
+        this._createProjectile(bulletPosL.x, bulletPosL.y, angle);
         this._startCooldown();
     }
+};
+
+Laser.prototype._createProjectile = function (x, y, angle) {
+    var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this, 
+        angle, 300, 500, this._enemies, this._comboTracker);
+    var rgb = Phaser.Color.HSLtoRGB(0.52, 0.5, 0.64);
+    p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 };
