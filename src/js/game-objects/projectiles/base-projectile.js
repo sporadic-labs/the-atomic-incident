@@ -41,7 +41,7 @@ BaseProjectile.prototype._checkOverlapWithGroup = function (group, callback,
 
 BaseProjectile.prototype.update = function () {
     this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
-    // if BaseProjectile has collided with an enemy, or is out of range, remove it
+    // If projectile has collided with an enemy, or is out of range, remove it
     if ((this.position.distance(this._initialPos) > this._range) || 
         this._remove) {
         this.destroy();

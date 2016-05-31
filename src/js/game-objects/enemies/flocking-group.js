@@ -23,7 +23,7 @@ function FlockingGroup(game, numToSpawn, x, y, enemiesGroup, target,
 
     this._distances = {};
     this._calculateDistances();
-};
+}
 
 FlockingGroup.prototype.countNeighborsInRange = function (enemy, range) {
     var numInRange = 0;
@@ -91,7 +91,7 @@ FlockingGroup.prototype._getDistanceKey = function (enemy1, enemy2) {
 FlockingGroup.prototype.update = function () {
     this._calculateDistances();
     Phaser.Group.prototype.update.call(this);
-}
+};
 
 
 // -- FLOCKING INDIVIDUAL ------------------------------------------------------

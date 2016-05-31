@@ -21,7 +21,7 @@ function SpiralGroup(game, numToSpawn, x, y, enemiesGroup, target,
         var enemyY = y + (radius * Math.sin(angle));        
         new SpiralEnemy(game, enemyX, enemyY, this, i, target, scoreSignal);
     }
-};
+}
 
 
 // -- FLOCKING INDIVIDUAL ------------------------------------------------------

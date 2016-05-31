@@ -147,7 +147,8 @@ Player.prototype.update = function () {
 
     // Check whether player is moving in order to update its animation
     var isIdle = acceleration.isZero();
-    if ((isShooting || isShootingSpecial) && this.animations.name !== ANIM_NAMES.ATTACK) {
+    if ((isShooting || isShootingSpecial) &&
+        (this.animations.name !== ANIM_NAMES.ATTACK)) {
         this.animations.play(ANIM_NAMES.ATTACK);
     } else if (!isShooting && !isShootingSpecial && isIdle &&
         this.animations.name !== ANIM_NAMES.IDLE) {

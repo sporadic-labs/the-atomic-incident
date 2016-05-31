@@ -6,7 +6,7 @@ var Projectile = require("../projectiles/base-projectile.js");
 Laser.prototype = Object.create(BaseWeapon.prototype);
 Laser.prototype.constructor = Laser;
 
-function Laser(game, parentGroup, player, enemies, cooldownTime, comboTracker) {    
+function Laser(game, parentGroup, player, enemies, cooldownTime, comboTracker) {
     BaseWeapon.call(this, game, parentGroup, "Laser", player, enemies, 
         cooldownTime, comboTracker);
 }

@@ -75,6 +75,7 @@ GameState.prototype.create = function () {
     // Random pickups
     // score
     for (var i = 0; i < 24; i += 1) {
+        var pos;
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
