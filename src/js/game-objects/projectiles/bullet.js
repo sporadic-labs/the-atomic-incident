@@ -26,6 +26,7 @@ function Bullet(game, x, y, parentGroup, angle, enemies, comboTracker) {
 }
 
 Bullet.prototype.update = function () {
+    // TODO: Make this recursively check overlap
     this.game.physics.arcade.overlap(this, this._enemies,
         this._onCollideWithEnemy, null, this);
     // if bullet has collided with an enemy, or is out of range, remove it
