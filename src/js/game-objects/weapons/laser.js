@@ -19,10 +19,14 @@ Laser.prototype.fire = function (targetPos) {
         // player
         var bulletPosR = this._player.position.clone();
         var bulletPosL = this._player.position.clone();
-        bulletPosR.x += (0.75 * this._player.width) * Math.cos(angle) + (10 * Math.sin(angle));
-        bulletPosR.y += (0.75 * this._player.width) * Math.sin(angle) + (10 * Math.cos(angle));
-        bulletPosL.x += (0.75 * this._player.width) * Math.cos(angle) - (10 * Math.sin(angle));
-        bulletPosL.y += (0.75 * this._player.width) * Math.sin(angle) - (10 * Math.cos(angle));
+        bulletPosR.x += (0.75 * this._player.width) * Math.cos(angle) +
+            (10 * Math.sin(angle));
+        bulletPosR.y += (0.75 * this._player.width) * Math.sin(angle) +
+            (10 * Math.cos(angle));
+        bulletPosL.x += (0.75 * this._player.width) * Math.cos(angle) -
+            (10 * Math.sin(angle));
+        bulletPosL.y += (0.75 * this._player.width) * Math.sin(angle) -
+            (10 * Math.cos(angle));
         new Bolt(this.game, bulletPosR.x, bulletPosR.y, this, angle, 
             this._enemies, this._comboTracker);
         new Bolt(this.game, bulletPosL.x, bulletPosL.y, this, angle, 

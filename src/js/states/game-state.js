@@ -78,7 +78,8 @@ GameState.prototype.create = function () {
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
-        new ScorePickup(this.game, pos.x, pos.y, this.pickups, "diamond", scoreSignal);
+        new ScorePickup(this.game, pos.x, pos.y, this.pickups, "diamond",
+            scoreSignal);
     }
     // weapons
     for (var i = 0; i < 36; i += 1) {
@@ -95,7 +96,8 @@ GameState.prototype.create = function () {
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
-        new WeaponPickup(this.game, pos.x, pos.y, this.pickups, newType, scoreSignal);
+        new WeaponPickup(this.game, pos.x, pos.y, this.pickups, newType,
+            scoreSignal);
     }
 
 };

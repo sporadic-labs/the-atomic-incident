@@ -7,7 +7,7 @@ var Laser = require("./weapons/laser.js");
 var ANIM_NAMES = {
     IDLE: "idle",
     MOVE: "move",
-    FIRE: "fire",
+    ATTACK: "attack",
     HIT: "hit",
     DIE: "die"
 };
@@ -24,6 +24,8 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this.anchor.set(0.5);
     parentGroup.add(this);
 
+    this._isShooting = false;
+    this._isDead = false;
     this._reticule = reticule;
     this._enemies = enemies;
     this._pickups = pickups;
@@ -44,15 +46,15 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
         "", 2);
     var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, 
         "", 2);
-    var fireFrames = Phaser.Animation.generateFrameNames("player/fire-", 1, 4, 
-        "", 2);
+    var attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2,
+        4, "", 2);
     var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, 
         "", 2);
     var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, 
         "", 2);
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
-    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
-    this.animations.add(ANIM_NAMES.FIRE, fireFrames, 10, false);
+    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 4, true);
+    this.animations.add(ANIM_NAMES.ATTACK, attackFrames, 10, true);
     this.animations.add(ANIM_NAMES.HIT, hitFrames, 10, false);
     this.animations.add(ANIM_NAMES.DIE, dieFrames, 10, false);
     this.animations.play(ANIM_NAMES.IDLE);
@@ -69,12 +71,22 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
-    this._controls.addKeyboardControl("up", [Kb.W, Kb.UP]);
-    this._controls.addKeyboardControl("left", [Kb.A, Kb.LEFT]);
-    this._controls.addKeyboardControl("right", [Kb.D, Kb.RIGHT]);
-    this._controls.addKeyboardControl("down", [Kb.S, Kb.DOWN]);
-    this._controls.addKeyboardControl("fire", [Kb.SPACEBAR]);
-    this._controls.addMouseDownControl("fire", Phaser.Pointer.LEFT_BUTTON);
+    // movement
+    this._controls.addKeyboardControl("move-up", [Kb.W]);
+    this._controls.addKeyboardControl("move-left", [Kb.A]);
+    this._controls.addKeyboardControl("move-right", [Kb.D]);
+    this._controls.addKeyboardControl("move-down", [Kb.S]);
+    // primary attack
+    this._controls.addKeyboardControl("attack-up", [Kb.UP]);
+    this._controls.addKeyboardControl("attack-left", [Kb.LEFT]);
+    this._controls.addKeyboardControl("attack-right", [Kb.RIGHT]);
+    this._controls.addKeyboardControl("attack-down", [Kb.DOWN]);
+    this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
+    // special attack
+    this._controls.addKeyboardControl("attack-special", [Kb.SPACEBAR]);
+    this._controls.addMouseDownControl("attack-special",
+        Phaser.Pointer.RIGHT_BUTTON);
+
 }
 
 Player.prototype.update = function () {
@@ -84,18 +96,10 @@ Player.prototype.update = function () {
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
 
-    if (this._controls.isControlActive("left")) acceleration.x = -1;
-    else if (this._controls.isControlActive("right")) acceleration.x = 1;
-    if (this._controls.isControlActive("up")) acceleration.y = -1;
-    else if (this._controls.isControlActive("down")) acceleration.y = 1;
-
-    // Check whether player is moving in order to update its animation
-    var isIdle = acceleration.isZero(); 
-    if (isIdle && this.animations.name !== ANIM_NAMES.IDLE) {
-        this.animations.play(ANIM_NAMES.IDLE);
-    } else if (!isIdle && this.animations.name !== ANIM_NAMES.MOVE) {
-        this.animations.play(ANIM_NAMES.MOVE);
-    }
+    if (this._controls.isControlActive("move-left")) acceleration.x = -1;
+    else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
+    if (this._controls.isControlActive("move-up")) acceleration.y = -1;
+    else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
 
     // Normalize the acceleration and set the magnitude. This makes it so that
     // the player moves in the same speed in all directions.
@@ -111,8 +115,40 @@ Player.prototype.update = function () {
     }
 
     // Firing logic
-    if (this._controls.isControlActive("fire")) {
-        this._allGuns[this._gunType].fire(this._reticule.position);
+    var isShooting = false;
+    var attackDir = this.position.clone();
+    if (this._controls.isControlActive("attack")) {
+        isShooting = true;
+        attackDir = this._reticule.position.clone();
+    }
+    if (this._controls.isControlActive("attack-left")) {
+        isShooting = true;
+        attackDir.x += -1;
+    } else if (this._controls.isControlActive("attack-right")) {
+        isShooting = true;
+        attackDir.x += 1;
+    }
+    if (this._controls.isControlActive("attack-up")) {
+        isShooting = true;
+        attackDir.y += -1;
+    } else if (this._controls.isControlActive("attack-down")) {
+        isShooting = true;
+        attackDir.y += 1;
+    }
+    if (isShooting) {
+        this._allGuns[this._gunType].fire(attackDir);
+    }
+
+    // Check whether player is moving in order to update its animation
+    var isIdle = acceleration.isZero();
+    if (isShooting && this.animations.name !== ANIM_NAMES.ATTACK) {
+        this.animations.play(ANIM_NAMES.ATTACK);
+    } else if (!isShooting && isIdle &&
+        this.animations.name !== ANIM_NAMES.IDLE) {
+        this.animations.play(ANIM_NAMES.IDLE);
+    } else if (!isShooting && !isIdle &&
+        this.animations.name !== ANIM_NAMES.MOVE) {
+        this.animations.play(ANIM_NAMES.MOVE);
     }
 
     // Enemy collisions
@@ -122,6 +158,16 @@ Player.prototype.update = function () {
     // Pickup collisions
     this.game.physics.arcade.overlap(this, this._pickups, 
         this._onCollideWithPickup, null, this);
+
+    // if (this._isDead) {
+    //     console.log("dead!");
+    //     this.animations.play(ANIM_NAMES.DIE);
+    //     this.animations.onComplete.add(function() {
+    //         this._isDead = false;
+    //         this.destroy();
+    //         this.game.state.restart();
+    //     }, this);
+    // }
 };
 
 Player.prototype._onCollideWithEnemy = function () {
@@ -130,6 +176,10 @@ Player.prototype._onCollideWithEnemy = function () {
     // this.game.state.start("start");
 
     // for sandbox testing
+    // console.log("died!");
+    // this.body.enable = false;
+    // this._isDead = true;
+
     this.game.state.restart();
 };
 

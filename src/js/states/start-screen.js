@@ -23,12 +23,14 @@ StartScreen.prototype.create = function () {
         "assets", "startScreen/logo");
     logo.anchor.setTo(0.5,0.5);
     this.groups.midground.add(logo);
-    var playBtn = this.game.add.button(this.world.centerX, this.world.centerY+20,
-        "assets", this._playTheGame, this, "startScreen/play-down", "startScreen/play-up");
+    var playBtn = this.game.add.button(this.world.centerX,
+        this.world.centerY+20, "assets", this._playTheGame, this,
+        "startScreen/play-down", "startScreen/play-up");
     playBtn.anchor.setTo(0.5,0.5);
     this.groups.midground.add(playBtn);
-    var optionsBtn = this.game.add.button(this.world.centerX, this.world.centerY+140,
-        "assets", this._options, this, "startScreen/options-down", "startScreen/options-up");
+    var optionsBtn = this.game.add.button(this.world.centerX,
+        this.world.centerY+140, "assets", this._options, this,
+        "startScreen/options-down", "startScreen/options-up");
     optionsBtn.anchor.setTo(0.5,0.5);
     this.groups.midground.add(optionsBtn);
 
