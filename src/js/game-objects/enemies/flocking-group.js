@@ -18,7 +18,7 @@ function FlockingGroup(game, numToSpawn, x, y, enemiesGroup, target,
     for (var i = 0; i < numToSpawn; i += 1) {
         var enemyX = x + game.rnd.realInRange(-randSpread, randSpread);        
         var enemyY = y + game.rnd.realInRange(-randSpread, randSpread);
-        new FlockingEnemy(game, enemyX, enemyY, this, i, target);
+        new FlockingEnemy(game, enemyX, enemyY, this, i, target, scoreSignal);
     }
 
     this._distances = {};

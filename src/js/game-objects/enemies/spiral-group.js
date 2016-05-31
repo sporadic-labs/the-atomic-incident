@@ -19,7 +19,7 @@ function SpiralGroup(game, numToSpawn, x, y, enemiesGroup, target,
         var angle = (i / numToSpawn) * (2 * Math.PI);
         var enemyX = x + (radius * Math.cos(angle));        
         var enemyY = y + (radius * Math.sin(angle));        
-        new SpiralEnemy(game, enemyX, enemyY, this, i, target);
+        new SpiralEnemy(game, enemyX, enemyY, this, i, target, scoreSignal);
     }
 };
 
