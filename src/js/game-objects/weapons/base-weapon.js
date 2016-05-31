@@ -4,7 +4,7 @@ BaseWeapon.prototype = Object.create(Phaser.Group.prototype);
 BaseWeapon.prototype.constructor = BaseWeapon;
 
 function BaseWeapon(game, parentGroup, weaponName, player, enemies, 
-    cooldownTime, comboTracker) {
+    cooldownTime, specialCooldownTime, comboTracker) {
     Phaser.Group.call(this, game, parentGroup, weaponName);
 
     this._name = weaponName;
@@ -17,6 +17,11 @@ function BaseWeapon(game, parentGroup, weaponName, player, enemies,
     this._cooldownTimer.start();
     this._cooldownTime = cooldownTime; // Milliseconds 
     this._ableToAttack = true;
+
+    this._specialCooldownTimer = this.game.time.create(false);
+    this._specialCooldownTimer.start();
+    this._specialCooldownTime = specialCooldownTime; // Milliseconds 
+    this._ableToAttackSpecial = true;
 }
 
 BaseWeapon.prototype.isAbleToAttack = function () {
@@ -31,8 +36,21 @@ BaseWeapon.prototype._startCooldown = function () {
     }, this);
 };
 
+BaseWeapon.prototype.isAbleToAttackSpecial = function () {
+    return this._ableToAttackSpecial;
+};
+
+BaseWeapon.prototype._startSpecialCooldown = function () {
+    if (!this._ableToAttackSpecial) return;
+    this._ableToAttackSpecial = false;
+    this._specialCooldownTimer.add(this._specialCooldownTime, function () {
+        this._ableToAttackSpecial = true;
+    }, this);
+};
+
 BaseWeapon.prototype.destroy = function () {
     this._cooldownTimer.destroy();
+    this._specialCooldownTimer.destroy();
 
     // Call the super class and pass along any arugments
     Phaser.Group.prototype.destroy.apply(this, arguments);

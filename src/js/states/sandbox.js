@@ -21,6 +21,9 @@ function GameState() {}
 GameState.prototype.create = function () {
     // Initialize the world
     this.game.canvas.style.cursor = "none";
+    this.game.canvas.addEventListener("contextmenu", function(e) {
+        e.preventDefault();
+    });
     this.stage.backgroundColor = "#F9F9F9";
     this.world.resize(2000, 2000);
 
@@ -57,14 +60,6 @@ GameState.prototype.create = function () {
 
 
     // Random enemies
-    // for (var i = 0; i < 24; i += 1) {
-    //     var pos;
-    //     do {
-    //         pos = new Phaser.Point(this.world.randomX, this.world.randomY);
-    //     } while (this.player.position.distance(pos) < 300);
-    //     new Dash(this.game, pos.x, pos.y, this.enemies, this.player,
-    //         scoreSignal);
-    // }
     new Dash(this.game, 800, 800, this.enemies, this.player,
         scoreSignal);
 

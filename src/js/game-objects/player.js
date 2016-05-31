@@ -35,7 +35,7 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     this._gunType = "gun";
     this._allGuns = {
-        "gun": new Gun(game, parentGroup, this, this._enemies, 150, 
+        "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
             this._comboTracker),
         "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
             this._comboTracker)
@@ -138,15 +138,21 @@ Player.prototype.update = function () {
     if (isShooting) {
         this._allGuns[this._gunType].fire(attackDir);
     }
+    // special weapons logic
+    var isShootingSpecial = false;
+    if (this._controls.isControlActive("attack-special")) {
+        isShootingSpecial = true;
+        this._allGuns[this._gunType].specialFire();
+    }
 
     // Check whether player is moving in order to update its animation
     var isIdle = acceleration.isZero();
-    if (isShooting && this.animations.name !== ANIM_NAMES.ATTACK) {
+    if ((isShooting || isShootingSpecial) && this.animations.name !== ANIM_NAMES.ATTACK) {
         this.animations.play(ANIM_NAMES.ATTACK);
-    } else if (!isShooting && isIdle &&
+    } else if (!isShooting && !isShootingSpecial && isIdle &&
         this.animations.name !== ANIM_NAMES.IDLE) {
         this.animations.play(ANIM_NAMES.IDLE);
-    } else if (!isShooting && !isIdle &&
+    } else if (!isShooting && !isShootingSpecial && !isIdle &&
         this.animations.name !== ANIM_NAMES.MOVE) {
         this.animations.play(ANIM_NAMES.MOVE);
     }
