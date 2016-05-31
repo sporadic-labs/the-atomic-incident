@@ -34,7 +34,7 @@ WanderEnemy.prototype.update = function () {
     if ((this.game.time.now - this._moveStart) > this._moveDelay) {
         // when _moveDelay time has passed, generate new values for the 
         // enemies movement
-        var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * 
+        var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/8) * 
             this.game.rnd.sign();
         this._angle = this.position.angle(this._target.position) + rndAngle;
 
