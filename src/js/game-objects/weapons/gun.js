@@ -1,10 +1,18 @@
 module.exports = Gun;
 
 var BaseWeapon = require("./base-weapon.js");
-var Projectile = require("../projectiles/base-projectile.js");
+var Projectile = require("./base-projectile.js");
 
 Gun.prototype = Object.create(BaseWeapon.prototype);
 Gun.prototype.constructor = Gun;
+
+// optional settings for projectiles
+var projectileOptions = {
+    isDestructible: true,
+    rotateOnSetup: true,
+    canBounce: false,
+    hiddenOnSetup: false
+};
 
 function Gun(game, parentGroup, player, enemies, cooldownTime, 
     specialCooldownTime, comboTracker) {
@@ -27,11 +35,6 @@ Gun.prototype.fire = function (targetPos) {
     }
 };
 
-Gun.prototype._createProjectile = function (x, y, angle) {
-    new Projectile(this.game, x, y, "assets", "weapons/slug", this, angle, 300,
-        500, this._enemies, this._comboTracker);
-};
-
 Gun.prototype.specialFire = function () {
     if (this.isAbleToAttackSpecial()) {
         // create 8 bullets evenly distributed in a circle
@@ -49,4 +52,9 @@ Gun.prototype.specialFire = function () {
         }
         this._startSpecialCooldown();
     }
+};
+
+Gun.prototype._createProjectile = function (x, y, angle) {
+    new Projectile(this.game, x, y, "assets", "weapons/slug", this, angle, 300,
+        500, this._enemies, this._comboTracker, projectileOptions);
 };

@@ -1,10 +1,18 @@
 module.exports = Laser;
 
 var BaseWeapon = require("./base-weapon.js");
-var Projectile = require("../projectiles/base-projectile.js");
+var Projectile = require("./base-projectile.js");
 
 Laser.prototype = Object.create(BaseWeapon.prototype);
 Laser.prototype.constructor = Laser;
+
+// optional settings for projectiles
+var projectileOptions = {
+    isDestructible: true,
+    rotateOnSetup: true,
+    canBounce: false,
+    hiddenOnSetup: false
+};
 
 function Laser(game, parentGroup, player, enemies, cooldownTime, comboTracker) {
     BaseWeapon.call(this, game, parentGroup, "Laser", player, enemies, 
@@ -35,7 +43,7 @@ Laser.prototype.fire = function (targetPos) {
 
 Laser.prototype._createProjectile = function (x, y, angle) {
     var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this, 
-        angle, 300, 500, this._enemies, this._comboTracker);
+        angle, 300, 500, this._enemies, this._comboTracker, projectileOptions);
     var rgb = Phaser.Color.HSLtoRGB(0.52, 0.5, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 };
