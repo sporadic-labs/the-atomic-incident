@@ -61,11 +61,10 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     // Configure player physics
     this._maxSpeed = 50;
+    this._customDrag = 1000;
     this._maxAcceleration = 5000;
-    this._maxDrag = 4000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.drag.set(this._maxDrag, this._maxDrag);
     this.body.setCircle(this.width / 2 * 0.5); // Fudge factor
 
     // Player controls
@@ -86,7 +85,6 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._controls.addKeyboardControl("attack-special", [Kb.SPACEBAR]);
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
-
 }
 
 Player.prototype.update = function () {
@@ -112,6 +110,26 @@ Player.prototype.update = function () {
     // cap the velocity based on it's magnitude.
     if (this.body.velocity.getMagnitude() > this._maxSpeed) {
         this.body.velocity.setMagnitude(this._maxSpeed);
+    }
+
+    // Custom drag. Arcade drag runs the calculation on each axis separately. 
+    // This leads to more drag in the diagonal than in other directions.  To fix
+    // that, we need to apply drag ourselves.
+    /* jshint ignore:start */
+    // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
+    /* jshint ignore:end */
+    if (acceleration.isZero() && !this.body.velocity.isZero()) {
+        var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
+        if (this.body.velocity.getMagnitude() < dragMagnitude) {
+            // Snap to 0 velocity so that we avoid the drag causing the velocity
+            // to flip directions and end up oscillating
+            this.body.velocity.set(0);
+        } else {
+            // Apply drag in opposite direction of velocity
+            var drag = this.body.velocity.clone()
+                .setMagnitude(-1 * dragMagnitude); 
+            this.body.velocity.add(drag.x, drag.y);
+        }
     }
 
     // Firing logic

@@ -42,6 +42,7 @@ function DashEnemy(game, x, y, parentGroup, target, scoreSignal) {
     this._cooldownTime = 2000 + this.game.rnd.integerInRange(0, 1000); // ms
 
     this._moveState = MOVE_STATES.IDLE;
+    this._customDrag = 1000;
     this._changeState = true;
     this._maxSpeed = 200;
     this._maxAcceleration = 5000;
@@ -72,6 +73,26 @@ DashEnemy.prototype.preUpdate = function() {
     var magnitude = Math.min(this._maxSpeed, targetSpeed);
     this.body.velocity.x = magnitude * Math.cos(this._angle);
     this.body.velocity.y = magnitude * Math.sin(this._angle);
+
+    // Custom drag. Arcade drag runs the calculation on each axis separately. 
+    // This leads to more drag in the diagonal than in other directions.  To fix
+    // that, we need to apply drag ourselves.
+    /* jshint ignore:start */
+    // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
+    /* jshint ignore:end */
+    if (!this.body.velocity.isZero()) {
+        var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
+        if (this.body.velocity.getMagnitude() < dragMagnitude) {
+            // Snap to 0 velocity so that we avoid the drag causing the velocity
+            // to flip directions and end up oscillating
+            this.body.velocity.set(0);
+        } else {
+            // Apply drag in opposite direction of velocity
+            var drag = this.body.velocity.clone()
+                .setMagnitude(-1 * dragMagnitude); 
+            this.body.velocity.add(drag.x, drag.y);
+        }
+    }
 
     this._startCooldown();
 
