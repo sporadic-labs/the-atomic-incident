@@ -212,7 +212,7 @@ Player.prototype._checkOverlapWithGroup = function (group, callback,
         if (child instanceof Phaser.Group) {
             this._checkOverlapWithGroup(child, callback, callbackContext);
         } else {
-            this.game.physics.arcade.overlap(this, group, callback, null, 
+            this.game.physics.arcade.overlap(this, child, callback, null, 
                 callbackContext);
         }
     }
