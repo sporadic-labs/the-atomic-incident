@@ -17,6 +17,9 @@ var ComboTracker = require("../helpers/combo-tracker.js");
 function GameState() {}
 
 GameState.prototype.create = function () {
+    // Debugging FPS
+    this.game.time.advancedTiming = true;
+
     // Initialize the world
     this.game.canvas.style.cursor = "none";
     this.stage.backgroundColor = "#F9F9F9";
@@ -101,4 +104,8 @@ GameState.prototype.create = function () {
             scoreSignal);
     }
 
+};
+
+GameState.prototype.render = function () {
+    this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
 };

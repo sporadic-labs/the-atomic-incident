@@ -16,11 +16,9 @@ function BaseEnemy(game, x, y, key, frame, parentGroup, target, scoreSignal,
 
     // Configure player physics
     physicsConfig = physicsConfig || {};
-    this._maxSpeed = physicsConfig.maxSpeed || 200;
-    this._maxDrag = physicsConfig.maxDrag || 4000;
+    this._maxSpeed = physicsConfig.maxSpeed || 100;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.drag.set(this._maxDrag, this._maxDrag);
     this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
 }
 
