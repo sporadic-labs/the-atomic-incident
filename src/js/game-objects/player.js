@@ -3,6 +3,7 @@ module.exports = Player;
 var Controller = require("../helpers/controller.js");
 var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
+var Sword = require("./weapons/sword.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -33,11 +34,13 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._comboTracker = comboTracker;
     this._comboTracker.addListener(this._onComboUpdate, this);
 
-    this._gunType = "gun";
+    this._gunType = "sword";
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
             this._comboTracker),
         "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
+            this._comboTracker),
+        "sword": new Sword(game, parentGroup, this, this._enemies, 200, 450, 
             this._comboTracker)
     };
 
@@ -137,6 +140,13 @@ Player.prototype.update = function () {
     }
     if (isShooting) {
         this._allGuns[this._gunType].fire(attackDir);
+        if (this._gunType === "sword") {
+            this._allGuns[this._gunType]._isDrawn = true;
+        }
+    } else {
+        if (this._gunType === "sword") {
+            this._allGuns[this._gunType]._isDrawn = false;
+        }
     }
     // special weapons logic
     var isShootingSpecial = false;
