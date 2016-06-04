@@ -18,7 +18,7 @@ function ScorePickup(game, x, y, parentGroup, type, scoreSignal) {
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("pickups/diamond-",
-        1, 4, "", 2);
+        1, 6, "", 2);
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 4, true);
     this.animations.play(ANIM_NAMES.IDLE);
 }
