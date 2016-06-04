@@ -1,8 +1,8 @@
 /**
- * GameState - this is the main level for now
+ * Sandbox - sandbox level for testing features
  */
 
-module.exports = GameState;
+module.exports = Sandbox;
 
 var Player = require("../game-objects/player.js");
 // var Seeker = require("../game-objects/enemies/seeker-enemy.js");
@@ -11,14 +11,15 @@ var Player = require("../game-objects/player.js");
 // var SpiralGroup = require("../game-objects/enemies/spiral-group.js");
 var ScorePickup = require("../game-objects/pickups/score-pickup.js");
 // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
+// var Projectile = require("../game-objects/weapons/base-projectile.js");
 var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 
-function GameState() {}
+function Sandbox() {}
 
-GameState.prototype.create = function () {
+Sandbox.prototype.create = function () {
     // Debugging FPS
     this.game.time.advancedTiming = true;
     
@@ -62,26 +63,31 @@ GameState.prototype.create = function () {
         scoreKeeper, this.comboTracker);
 
 
-    // Random enemies
-    // new Seeker(this.game, 800, 800, this.enemies, this.player,
+    // populate map
+    // new Dash(this.game, 800, 800, this.enemies, this.player,
     //     scoreSignal);
 
     // new SpiralGroup(this.game, 20, this.world.centerX, this.world.centerY,
     //     this.enemies, this.player, scoreSignal);
 
-    // Random pickups
-    // score
     for (var i = 0; i < 24; i += 1) {
         var pos;
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
         } while (this.player.position.distance(pos) < 300);
+
         new ScorePickup(this.game, pos.x, pos.y, this.pickups, "diamond",
             scoreSignal);
+
+        // new Dash(this.game, 800, 800, this.enemies, this.player,
+        // scoreSignal);
     }
 
 };
 
-GameState.prototype.render = function () {
+Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
+    // draw hitboxes
+    // this.game.debug.body(this.player._allGuns[this.player._gunType]);
+    // this.game.debug.body(this.player);
 };
