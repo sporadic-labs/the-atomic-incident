@@ -23,19 +23,19 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, angle, speed,
     this._remove = false; // check if BaseProjectile should be removed?
 
     // projectile options
-    if (options.isDestructible !== null)
+    if (options !== undefined && options.isDestructible !== undefined)
         this._isDestructable = options.isDestructible;
     else
         this._isDestructable = true;
-    if (options.rotateOnSetup !== null)
+    if (options !== undefined && options.rotateOnSetup !== undefined)
         this._rotateOnSetup = options.rotateOnSetup;
     else
         this._rotateOnSetup = true;
-    if (options.canBounce !== null)
+    if (options !== undefined && options.canBounce !== undefined)
         this._canBounce = options.canBounce;
     else
         this._canBounce = true;
-    if (options.hiddenOnSetup !== null)
+    if (options !== undefined && options.hiddenOnSetup !== undefined)
         this._hiddenOnSetup = options.hiddenOnSetup;
     else
         this._hiddenOnSetup = false;
