@@ -253,6 +253,8 @@
             <key type="filename">frames/pickups/diamond-02.png</key>
             <key type="filename">frames/pickups/diamond-03.png</key>
             <key type="filename">frames/pickups/diamond-04.png</key>
+            <key type="filename">frames/pickups/diamond-05.png</key>
+            <key type="filename">frames/pickups/diamond-06.png</key>
             <key type="filename">frames/player/attack-01.png</key>
             <key type="filename">frames/player/attack-02.png</key>
             <key type="filename">frames/player/attack-03.png</key>
