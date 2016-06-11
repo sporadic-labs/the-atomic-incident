@@ -55,6 +55,8 @@ GameState.prototype.create = function () {
     this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
         scoreKeeper, this.comboTracker);
 
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(this.game, this.enemies, this.player, scoreSignal);
 };
 
 GameState.prototype.render = function () {
