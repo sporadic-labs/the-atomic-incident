@@ -34,7 +34,7 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._comboTracker = comboTracker;
     this._comboTracker.addListener(this._onComboUpdate, this);
 
-    this._gunType = "sword";
+    this._gunType = "gun";
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
             this._comboTracker),
