@@ -5,12 +5,6 @@
 module.exports = GameState;
 
 var Player = require("../game-objects/player.js");
-// var Seeker = require("../game-objects/enemies/seeker-enemy.js");
-// var Wander = require("../game-objects/enemies/wander-enemy.js");
-// var Dash = require("../game-objects/enemies/dash-enemy.js");
-// var SpiralGroup = require("../game-objects/enemies/spiral-group.js");
-var ScorePickup = require("../game-objects/pickups/score-pickup.js");
-// var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
 var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -60,25 +54,6 @@ GameState.prototype.create = function () {
     var scoreKeeper = new ScoreKeeper(scoreSignal);
     this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
         scoreKeeper, this.comboTracker);
-
-
-    // Random enemies
-    // new Seeker(this.game, 800, 800, this.enemies, this.player,
-    //     scoreSignal);
-
-    // new SpiralGroup(this.game, 20, this.world.centerX, this.world.centerY,
-    //     this.enemies, this.player, scoreSignal);
-
-    // Random pickups
-    // score
-    for (var i = 0; i < 24; i += 1) {
-        var pos;
-        do {
-            pos = new Phaser.Point(this.world.randomX, this.world.randomY);
-        } while (this.player.position.distance(pos) < 300);
-        new ScorePickup(this.game, pos.x, pos.y, this.pickups, "diamond",
-            scoreSignal);
-    }
 
 };
 
