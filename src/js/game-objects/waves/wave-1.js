@@ -9,12 +9,9 @@ Wave1.prototype.constructor = Wave1;
 function Wave1(game, parentGroup, player, scoreSignal, spawnDelay) {
     Phaser.Group.call(this, game, parentGroup, "wave-1");
 
-    utils.defaultProperties(this, {
-        _player: { default: player },
-        _scoreSignal: { default: scoreSignal },
-        _spawnDelay: { value: spawnDelay, default: 3000 },
-        _other: { value: undefined, default: "hi" }
-    });
+    this._player = player;
+    this._scoreSignal = scoreSignal;
+    this._spawnDelay = utils.default(spawnDelay, 3000);
 
     this._spawnTimer = this.game.time.create(false);
     this._spawnTimer.start();
