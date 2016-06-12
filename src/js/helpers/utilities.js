@@ -17,6 +17,11 @@ exports.randomBoolean = function () {
     return Boolean(Math.floor(Math.random() * 2));
 };
 
+exports.pointFromAngle = function (angle, isDegrees) {
+    var radians = isDegrees ? (angle * Math.PI / 180) : angle;
+    return new Phaser.Point(Math.cos(radians), Math.sin(radians));
+};
+
 exports.map = function (num, min1, max1, min2, max2, options) {
     var mapped = (num - min1) / (max1 - min1) * (max2 - min2) + min2;
     if (!options) return mapped;
