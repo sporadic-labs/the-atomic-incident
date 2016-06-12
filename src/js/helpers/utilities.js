@@ -13,6 +13,10 @@ exports.defaultProperties = function defaultProperties (object, properties) {
     return object;
 };
 
+exports.randomBoolean = function () {
+    return Boolean(Math.floor(Math.random() * 2));
+};
+
 exports.map = function (num, min1, max1, min2, max2, options) {
     var mapped = (num - min1) / (max1 - min1) * (max2 - min2) + min2;
     if (!options) return mapped;
