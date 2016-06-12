@@ -15,7 +15,7 @@ WallGroup.prototype = Object.create(Phaser.Group.prototype);
 WallGroup.prototype.constructor = WallGroup;
 
 function WallGroup(game, numToSpawn, enemiesGroup, player, scoreSignal) {
-    Phaser.Group.call(this, game, enemiesGroup, "flocking-group");
+    Phaser.Group.call(this, game, enemiesGroup, "wall-group");
     
     this._player = player;
     this._scoreSignal = scoreSignal;
