@@ -64,6 +64,10 @@ GameState.prototype.create = function () {
 
     // var WallGroup = require("../game-objects/enemies/wall-group.js");
     // new WallGroup(this.game, 15, this.enemies, this.player, scoreSignal);
+    
+    // var SineGroup = require("../game-objects/enemies/sine-wave-group.js");
+    // new SineGroup(this.game, 45, this.enemies, this.player, scoreSignal);
+
 };
 
 GameState.prototype.render = function () {
