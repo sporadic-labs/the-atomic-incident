@@ -1,6 +1,7 @@
 module.exports = Wave1;
 
 var SpiralGroup = require("../enemies/spiral-group.js");
+var WallGroup = require("../enemies/wall-group.js");
 var utils = require("../../helpers/utilities.js");
 
 Wave1.prototype = Object.create(Phaser.Group.prototype);
@@ -20,8 +21,12 @@ function Wave1(game, parentGroup, player, scoreSignal, spawnDelay) {
 }
 
 Wave1.prototype._spawn = function () {
-    new SpiralGroup(this.game, 15, this._player.x, this._player.y,
-        this, this._player, this._scoreSignal);
+    if (utils.randomBoolean()) {
+        new SpiralGroup(this.game, 15, this._player.x, this._player.y,
+            this, this._player, this._scoreSignal);
+    } else {
+        new WallGroup(this.game, 15, this, this._player, this._scoreSignal);        
+    }
 
     // Schedule next spawn
     this._spawnTimer.add(this._spawnDelay, this._spawn.bind(this));

@@ -1,6 +1,6 @@
 module.exports = ComboTracker;
 
-var utils = require("../../helpers/utilities.js");
+var utils = require("../helpers/utilities.js");
 
 function ComboTracker(game, comboTimeout) {
     this._combo = 0;

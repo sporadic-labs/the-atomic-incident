@@ -2,7 +2,7 @@ exports.default = function (value, defaultValue) {
     return (value !== undefined) ? value : defaultValue;
 };
 
-exports.defaultProperties = function defaultProperties (object, properties) {
+exports.defaultProperties = function (object, properties) {
     for (var key in properties) {
         if (properties.hasOwnProperty(key)) {
             var value = exports.default(properties[key].value, 
@@ -11,6 +11,15 @@ exports.defaultProperties = function defaultProperties (object, properties) {
         }
     }
     return object;
+};
+
+exports.randomBoolean = function () {
+    return Boolean(Math.floor(Math.random() * 2));
+};
+
+exports.pointFromAngle = function (angle, isDegrees) {
+    var radians = isDegrees ? (angle * Math.PI / 180) : angle;
+    return new Phaser.Point(Math.cos(radians), Math.sin(radians));
 };
 
 exports.map = function (num, min1, max1, min2, max2, options) {
