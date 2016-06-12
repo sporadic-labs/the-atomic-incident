@@ -1,5 +1,7 @@
 module.exports = BaseEnemy;
 
+var utils = require("../../helpers/utilities.js");
+
 // Prototype chain - inherits from Sprite
 BaseEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 BaseEnemy.prototype.constructor = BaseEnemy;
@@ -12,11 +14,11 @@ function BaseEnemy(game, x, y, key, frame, parentGroup, target, scoreSignal,
 
     this._target = target;
     this._scoreSignal = scoreSignal;
-    this._pointValue = (pointValue === undefined) ? pointValue : 1;
+    this._pointValue = utils.default(pointValue, 1);
 
     // Configure player physics
-    physicsConfig = physicsConfig || {};
-    this._maxSpeed = physicsConfig.maxSpeed || 100;
+    physicsConfig = utils.default(physicsConfig, {});
+    this._maxSpeed = utils.default(physicsConfig.maxSpeed, 100);
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     this.body.setCircle(this.width / 2 * 0.8); // Fudge factor

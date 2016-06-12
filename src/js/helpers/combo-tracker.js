@@ -1,8 +1,11 @@
 module.exports = ComboTracker;
 
+var utils = require("../../helpers/utilities.js");
+
 function ComboTracker(game, comboTimeout) {
     this._combo = 0;
-    this._comboTimeout = (comboTimeout !== undefined) ? comboTimeout : 2000;
+
+    this._comboTimeout = utils.default(comboTimeout, 2000);
     this._comboTimer = game.time.create(false); // Doesn't autodestroy
     this._comboTimer.start();
     this._signal = new Phaser.Signal();
@@ -18,7 +21,7 @@ ComboTracker.prototype.getCombo = function () {
 
 ComboTracker.prototype.incrementCombo = function (increment) {
     // Update the combo
-    increment = (increment !== undefined) ? increment : 1;
+    increment = utils.default(increment, 1);
     this._setCombo(this._combo + increment);
     
     // Reset the timer events and schedule an event to reset the combo to zero
