@@ -2,7 +2,7 @@ exports.default = function (value, defaultValue) {
     return (value !== undefined) ? value : defaultValue;
 };
 
-exports.defaultProperties = function defaultProperties (object, properties) {
+exports.defaultProperties = function (object, properties) {
     for (var key in properties) {
         if (properties.hasOwnProperty(key)) {
             var value = exports.default(properties[key].value, 
