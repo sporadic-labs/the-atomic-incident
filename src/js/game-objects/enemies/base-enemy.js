@@ -20,7 +20,7 @@ function BaseEnemy(game, x, y, key, frame, parentGroup, target, scoreSignal,
     physicsConfig = utils.default(physicsConfig, {});
     this._maxSpeed = utils.default(physicsConfig.maxSpeed, 100);
     game.physics.arcade.enable(this);
-    this.body.collideWorldBounds = true;
+    this.body.collideWorldBounds = false;
     this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
 }
 
