@@ -32,6 +32,8 @@ GameState.prototype.create = function () {
     };
     this.enemies = this.game.add.group(this.groups.midground, "enemies");
     this.pickups = this.game.add.group(this.groups.midground, "pickups");
+    this.nonCollidingGroup = this.game.add.group(this.groups.midground, 
+        "non-colliding");
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -56,7 +58,8 @@ GameState.prototype.create = function () {
         scoreKeeper, this.comboTracker);
 
     var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(this.game, this.enemies, this.player, scoreSignal);
+    new Wave1(this.game, this.enemies, this.nonCollidingGroup, this.player, 
+        scoreSignal);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
     // new FlockingGroup(this.game, 15, this.player.x, this.player.y + 200, 
