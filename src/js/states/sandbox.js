@@ -68,6 +68,9 @@ GameState.prototype.create = function () {
     // var SineGroup = require("../game-objects/enemies/sine-wave-group.js");
     // new SineGroup(this.game, 45, this.enemies, this.player, scoreSignal);
 
+    // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
+    // new SpawnerGroup(this.game, 4, this.enemies, this.player, scoreSignal);
+
 };
 
 GameState.prototype.render = function () {
