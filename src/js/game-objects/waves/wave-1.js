@@ -3,6 +3,7 @@ module.exports = Wave1;
 var SpiralGroup = require("../enemies/spiral-group.js");
 var WallGroup = require("../enemies/wall-group.js");
 var SineGroup = require("../enemies/sine-wave-group.js");
+var SpawnerGroup = require("../enemies/spawner-group.js");
 var utils = require("../../helpers/utilities.js");
 
 Wave1.prototype = Object.create(Phaser.Group.prototype);
@@ -22,14 +23,16 @@ function Wave1(game, parentGroup, player, scoreSignal, spawnDelay) {
 }
 
 Wave1.prototype._spawn = function () {
-    var r = this.game.rnd.between(0, 2);
+    var r = this.game.rnd.between(0, 3);
     if (r === 0) {
         new SpiralGroup(this.game, 15, this._player.x, this._player.y,
             this, this._player, this._scoreSignal);
     } else if (r === 1) {
         new WallGroup(this.game, 15, this, this._player, this._scoreSignal);        
-    } else {
+    } else if (r === 2) {
         new SineGroup(this.game, 45, this, this._player, this._scoreSignal);
+    } else if (r === 3) {
+        new SpawnerGroup(this.game, 5, this, this._player, this._scoreSignal);
     }
 
     // Schedule next spawn
