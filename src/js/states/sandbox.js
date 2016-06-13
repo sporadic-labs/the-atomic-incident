@@ -22,7 +22,7 @@ GameState.prototype.create = function () {
         e.preventDefault();
     });
     this.stage.backgroundColor = "#F9F9F9";
-    this.world.resize(2000, 2000);
+    this.world.resize(1300, 1300);
 
     // Groups for z-index sorting and for collisions
     this.groups = {
@@ -39,8 +39,8 @@ GameState.prototype.create = function () {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    this.bg = this.add.tileSprite(0, 0, 2000, 2000, "assets", "hud/grid", 
-        this.groups.background);
+    this.bg = this.add.tileSprite(0, 0, this.world.width, this.world.height, 
+        "assets", "hud/grid", this.groups.background);
 
     this.reticule = new Reticule(this, this.groups.foreground);
 
