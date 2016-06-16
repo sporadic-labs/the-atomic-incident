@@ -57,9 +57,13 @@ GameState.prototype.create = function () {
     this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
         scoreKeeper, this.comboTracker);
 
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(this.game, this.enemies, this.nonCollidingGroup, this.player, 
-        scoreSignal);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(this.game, this.enemies, this.nonCollidingGroup, this.player, 
+    //     scoreSignal);
+
+    var AmbientDartingGroup = require("../game-objects/enemies/ambient-darting-group.js");
+    var dartingGroup = new AmbientDartingGroup(this.game, 20, this.enemies, 
+        this.player, scoreSignal);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
     // new FlockingGroup(this.game, 15, this.player.x, this.player.y + 200, 
