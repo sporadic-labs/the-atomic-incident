@@ -63,22 +63,22 @@ GameState.prototype.create = function () {
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
     var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(this.game, this.enemies, this.nonCollidingGroup, this.player, 
-        scoreSignal);
+    new Wave1(game);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
-    // new FlockingGroup(this.game, 15, this.player.x, this.player.y + 200, 
-    //     this.enemies, this.player, scoreSignal);
+    // new FlockingGroup(game, 15, player.x, player.y + 200);
 
     // var WallGroup = require("../game-objects/enemies/wall-group.js");
-    // new WallGroup(this.game, 15, this.enemies, this.player, scoreSignal);
+    // new WallGroup(game, 15);
     
     // var SineGroup = require("../game-objects/enemies/sine-wave-group.js");
-    // new SineGroup(this.game, 45, this.enemies, this.player, scoreSignal);
+    // new SineGroup(game, 45);
 
     // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
-    // new SpawnerGroup(this.game, 4, this.enemies, this.player, scoreSignal);
+    // new SpawnerGroup(game, 4);
 
+    // var SprialGroup = require("../game-objects/enemies/spiral-group.js");
+    // new SprialGroup(game, 10, player.x, player.y);
 };
 
 GameState.prototype.render = function () {
