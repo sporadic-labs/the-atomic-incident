@@ -17,10 +17,8 @@ var ANIM_NAMES = {
 
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);
-Player.prototype.constructor = Player; // Make sure constructor reads properly
 
-function Player(game, x, y, parentGroup, enemies, pickups, reticule, 
-    comboTracker) {
+function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
@@ -29,11 +27,11 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     this._isShooting = false;
     this._isDead = false;
-    this._enemies = enemies;
-    this._pickups = pickups;
 
-    this._comboTracker = comboTracker;
-    this._comboTracker.addListener(this._onComboUpdate, this);
+    // Shorthand
+    var globals = this.game.globals;
+    this._enemies = globals.groups.enemies;
+    this._pickups = globals.groups.pickups;
 
     // Combo
     this._comboTracker = new ComboTracker(game, 2000);
@@ -241,12 +239,6 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
         }
     }
     pickup.destroy();
-};
-
-Player.prototype._onComboUpdate = function (combo) {
-    var newSpeed = Phaser.Math.mapLinear(combo, 0, 50, 50, 500);
-    newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
-    this._maxSpeed = newSpeed; 
 };
 
 Player.prototype._checkOverlapWithGroup = function (group, callback, 
