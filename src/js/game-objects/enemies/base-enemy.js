@@ -2,18 +2,15 @@ module.exports = BaseEnemy;
 
 var utils = require("../../helpers/utilities.js");
 
-// Prototype chain - inherits from Sprite
 BaseEnemy.prototype = Object.create(Phaser.Sprite.prototype);
-BaseEnemy.prototype.constructor = BaseEnemy;
 
-function BaseEnemy(game, x, y, key, frame, parentGroup, target, scoreSignal, 
-    pointValue, physicsConfig) {
+function BaseEnemy(game, x, y, key, frame, parentGroup, pointValue) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.set(0.5);
     parentGroup.add(this);
 
-    this._target = target;
-    this._scoreSignal = scoreSignal;
+    this._player = this.game.globals.player;
+    this._scoreKeepter = this.game.globals.scoreKeeper;
     this._pointValue = utils.default(pointValue, 1);
 
     // Configure simple physics
@@ -29,6 +26,6 @@ BaseEnemy.prototype._applyRandomLightnessTint = function (h, s, l) {
 };
 
 BaseEnemy.prototype.killByPlayer = function () {
-    this._scoreSignal.dispatch(this._pointValue);
+    this._scoreKeepter.incrementScore(this._pointValue);
     this.destroy();
 };
