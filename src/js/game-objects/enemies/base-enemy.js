@@ -16,9 +16,7 @@ function BaseEnemy(game, x, y, key, frame, parentGroup, target, scoreSignal,
     this._scoreSignal = scoreSignal;
     this._pointValue = utils.default(pointValue, 1);
 
-    // Configure player physics
-    physicsConfig = utils.default(physicsConfig, {});
-    this._maxSpeed = utils.default(physicsConfig.maxSpeed, 100);
+    // Configure simple physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = false;
     this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
