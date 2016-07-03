@@ -5,6 +5,7 @@ var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
 var Sword = require("./weapons/sword.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
+var Reticule = require("./reticule.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -28,7 +29,6 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     this._isShooting = false;
     this._isDead = false;
-    this._reticule = reticule;
     this._enemies = enemies;
     this._pickups = pickups;
 
@@ -37,6 +37,10 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     // Combo
     this._comboTracker = new ComboTracker(game, 2000);
+
+    // Reticle
+    this._reticule = new Reticule(game, globals.groups.foreground);
+
     // Weapons
     this._gunType = "gun";
     this._allGuns = {
@@ -259,6 +263,7 @@ Player.prototype._checkOverlapWithGroup = function (group, callback,
 };
 
 Player.prototype.destroy = function () {
+    this._reticule.destroy();
     this._comboTracker.destroy();
     Phaser.Sprite.prototype.destroy.call(this, arguments);
 };
