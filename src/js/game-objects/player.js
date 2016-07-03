@@ -45,9 +45,9 @@ function Player(game, x, y, parentGroup) {
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, 150, 450),
         "laser": new Laser(game, parentGroup, this, 200, 500),
-        "sword": new Sword(game, parentGroup, this, 600, 1200),
-        "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
-            "weapons/hammer", 600, 1200)
+        // "sword": new Sword(game, parentGroup, this, 600, 1200),
+        // "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
+        //     "weapons/hammer", 600, 1200)
     };
 
     // Setup animations
