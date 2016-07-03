@@ -3,10 +3,8 @@ module.exports = BasePickup;
 var utils = require("../../helpers/utilities.js");
 
 BasePickup.prototype = Object.create(Phaser.Sprite.prototype);
-BasePickup.prototype.constructor = BasePickup;
 
-function BasePickup(game, x, y, key, frame, parentGroup, category, scoreSignal, 
-    pointValue) {
+function BasePickup(game, x, y, key, frame, parentGroup, category, pointValue) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -14,7 +12,6 @@ function BasePickup(game, x, y, key, frame, parentGroup, category, scoreSignal,
     this._category = category;
     this._initialPos = this.position.clone();
     this._startTime = this.game.time.now;
-    this._scoreSignal = scoreSignal;
     this._pointValue = utils.default(pointValue, 0);
 
     // Configure physics
