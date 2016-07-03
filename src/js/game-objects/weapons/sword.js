@@ -4,7 +4,6 @@ var BaseWeapon = require("./base-weapon.js");
 var Projectile = require("./base-projectile.js");
 
 Sword.prototype = Object.create(BaseWeapon.prototype);
-Sword.prototype.constructor = Sword;
 
 // optional settings for projectiles
 var projectileOptions = {
@@ -14,11 +13,9 @@ var projectileOptions = {
     hiddenOnSetup: true
 };
 
-function Sword(game, parentGroup, player, enemies, cooldownTime, 
-    specialCooldownTime, comboTracker) {
-
-    BaseWeapon.call(this, game, parentGroup, "Sword", player, enemies, 
-        cooldownTime, specialCooldownTime, comboTracker);
+function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
+    BaseWeapon.call(this, game, parentGroup, "Sword", player, cooldownTime, 
+        specialCooldownTime);
 
     this._endAngle = (Math.PI/2);
     this._angle = this._endAngle - (Math.PI/2); // Radians
@@ -27,8 +24,8 @@ function Sword(game, parentGroup, player, enemies, cooldownTime,
     this._swingSpeed = 0.12;
     
     this._weapon = new Projectile(this.game, this._player.position.x,
-        this._player.position.y, "assets", "weapons/sword", this, this._angle,
-        0, 10000, this._enemies, this._comboTracker, projectileOptions);
+        this._player.position.y, "assets", "weapons/sword", this, player, 
+        this._angle, 0, 10000, projectileOptions);
 }
 
 Sword.prototype.update = function() {

@@ -37,14 +37,12 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     // Combo
     this._comboTracker = new ComboTracker(game, 2000);
+    // Weapons
     this._gunType = "gun";
     this._allGuns = {
-        "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
-            this._comboTracker),
-        "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
-            this._comboTracker),
-        "sword": new Sword(game, parentGroup, this, this._enemies, 200, 450, 
-            this._comboTracker)
+        "gun": new Gun(game, parentGroup, this, 150, 450),
+        "laser": new Laser(game, parentGroup, this, 200, 500),
+        "sword": new Sword(game, parentGroup, this, 200, 450)
     };
 
     // Setup animations
