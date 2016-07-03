@@ -6,6 +6,7 @@ var Laser = require("./weapons/laser.js");
 var Sword = require("./weapons/sword.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
+var MeleeWeapon = require("./weapons/melee-weapon.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -44,7 +45,9 @@ function Player(game, x, y, parentGroup) {
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, 150, 450),
         "laser": new Laser(game, parentGroup, this, 200, 500),
-        "sword": new Sword(game, parentGroup, this, 200, 450)
+        "sword": new Sword(game, parentGroup, this, 600, 1200),
+        "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
+            "weapons/hammer", 600, 1200)
     };
 
     // Setup animations
@@ -71,7 +74,7 @@ function Player(game, x, y, parentGroup) {
     this._maxAcceleration = 5000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setCircle(this.width / 2 * 0.5); // Fudge factor
+    this.body.setCircle(this.width/2); // Fudge factor
 
     // Player controls
     this._controls = new Controller(this.game.input);
@@ -88,7 +91,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("attack-down", [Kb.DOWN]);
     this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
     // special attack
-    this._controls.addKeyboardControl("attack-special", [Kb.SPACEBAR]);
+    this._controls.addKeyboardControl("attack-space", [Kb.SPACEBAR]);
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
 }
@@ -172,19 +175,22 @@ Player.prototype.update = function () {
     }
     if (isShooting) {
         this._allGuns[this._gunType].fire(attackDir);
-        if (this._gunType === "sword") {
-            this._allGuns[this._gunType]._isDrawn = true;
-        }
-    } else {
-        if (this._gunType === "sword") {
-            this._allGuns[this._gunType]._isDrawn = false;
-        }
     }
+
     // special weapons logic
     var isShootingSpecial = false;
+    var specialAttackDir = this.position.clone();
     if (this._controls.isControlActive("attack-special")) {
         isShootingSpecial = true;
-        this._allGuns[this._gunType].specialFire();
+        specialAttackDir = this._reticule.position.clone();
+    }
+    if (this._controls.isControlActive("attack-space")) {
+        isShootingSpecial = true;
+        specialAttackDir.x += 0;
+        specialAttackDir.y -= 1;
+    }
+    if (isShootingSpecial) {
+        this._allGuns[this._gunType].specialFire(specialAttackDir);
     }
 
     // Check whether player is moving in order to update its animation
@@ -215,6 +221,11 @@ Player.prototype.update = function () {
     //         this.game.state.restart();
     //     }, this);
     // }
+
+    // Call the parent's preUpdate and return the value. Something else in
+    // Phaser might use it...
+    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
+
 };
 
 Player.prototype._onCollideWithEnemy = function () {
@@ -257,5 +268,8 @@ Player.prototype._checkOverlapWithGroup = function (group, callback,
 Player.prototype.destroy = function () {
     this._reticule.destroy();
     this._comboTracker.destroy();
-    Phaser.Sprite.prototype.destroy.call(this, arguments);
+    for (var gun in this._allGuns) {
+        this._allGuns[gun].destroy();
+    }
+    Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

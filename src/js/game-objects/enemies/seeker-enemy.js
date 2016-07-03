@@ -63,5 +63,5 @@ SeekerEnemy.prototype.preUpdate = function () {
 
     // Call the parent's preUpdate and return the value. Something else in
     // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.call(this);
+    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 };

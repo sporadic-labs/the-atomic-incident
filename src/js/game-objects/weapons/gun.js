@@ -22,19 +22,19 @@ Gun.prototype.fire = function (targetPos) {
     if (this.isAbleToAttack()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
-        // Start bullet in a position along that trajectory, but in front of the
-        // player
+        // Start bullet in a position along that trajectory, but in front of 
+        // the player
         var x = this._player.position.x + (0.75 * this._player.width) * 
             Math.cos(angle);
         var y = this._player.position.y + (0.75 * this._player.width) * 
             Math.sin(angle);
         this._createProjectile(x, y, angle);
-        this._startCooldown();
+        this._startCooldown(this._cooldownTime);
     }
 };
 
 Gun.prototype.specialFire = function () {
-    if (this.isAbleToAttackSpecial()) {
+    if (this.isAbleToAttack()) {
         // create 8 bullets evenly distributed in a circle
         for (var i=0; i<=7; i++) {
             // Start bullet in a position along that trajectory, but in front
@@ -45,10 +45,8 @@ Gun.prototype.specialFire = function () {
             var y = this._player.position.y + (0.75 * this._player.width) * 
                 Math.sin(angle);
             this._createProjectile(x, y, angle);
-            this._startCooldown();
-            
         }
-        this._startSpecialCooldown();
+        this._startCooldown(this._specialCooldownTime);
     }
 };
 

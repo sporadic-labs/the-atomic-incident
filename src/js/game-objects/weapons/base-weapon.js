@@ -14,41 +14,24 @@ function BaseWeapon(game, parentGroup, weaponName, player, cooldownTime,
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
     this._cooldownTime = cooldownTime; // Milliseconds 
-    this._ableToAttack = true;
-
-    this._specialCooldownTimer = this.game.time.create(false);
-    this._specialCooldownTimer.start();
     this._specialCooldownTime = specialCooldownTime; // Milliseconds 
-    this._ableToAttackSpecial = true;
+    this._ableToAttack = true;
 }
 
 BaseWeapon.prototype.isAbleToAttack = function () {
     return this._ableToAttack;
 };
 
-BaseWeapon.prototype._startCooldown = function () {
+BaseWeapon.prototype._startCooldown = function (time) {
     if (!this._ableToAttack) return;
     this._ableToAttack = false;
-    this._cooldownTimer.add(this._cooldownTime, function () {
+    this._cooldownTimer.add(time, function () {
         this._ableToAttack = true;
-    }, this);
-};
-
-BaseWeapon.prototype.isAbleToAttackSpecial = function () {
-    return this._ableToAttackSpecial;
-};
-
-BaseWeapon.prototype._startSpecialCooldown = function () {
-    if (!this._ableToAttackSpecial) return;
-    this._ableToAttackSpecial = false;
-    this._specialCooldownTimer.add(this._specialCooldownTime, function () {
-        this._ableToAttackSpecial = true;
     }, this);
 };
 
 BaseWeapon.prototype.destroy = function () {
     this._cooldownTimer.destroy();
-    this._specialCooldownTimer.destroy();
 
     // Call the super class and pass along any arugments
     Phaser.Group.prototype.destroy.apply(this, arguments);

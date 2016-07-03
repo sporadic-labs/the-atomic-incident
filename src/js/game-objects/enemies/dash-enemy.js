@@ -94,7 +94,7 @@ DashEnemy.prototype.preUpdate = function() {
 
     this._startCooldown();
 
-    return Phaser.Sprite.prototype.preUpdate.call(this);
+    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 };
 
 DashEnemy.prototype._startCooldown = function() {
@@ -127,5 +127,5 @@ DashEnemy.prototype.destroy = function() {
     this._cooldownTimer.destroy();
 
     // Call the super class and pass along any arugments
-    Phaser.Sprite.prototype.destroy.call(this);
+    Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };
