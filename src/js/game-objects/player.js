@@ -35,10 +35,12 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._comboTracker = comboTracker;
     this._comboTracker.addListener(this._onComboUpdate, this);
 
-    this._gunType = "gun";
+    this._gunType = "default";
     this._allGuns = {
+        "default": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
+            this._comboTracker, -1),
         "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
-            this._comboTracker),
+            this._comboTracker, 40),
         "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
             this._comboTracker),
         "sword": new Sword(game, parentGroup, this, "assets",
@@ -139,6 +141,11 @@ Player.prototype.preUpdate = function () {
         }
     }
 
+    // ammo check
+    if (this._allGuns[this._gunType]._currentAmmo <= 0) {
+        this._gunType = "default";
+    }
+
     // Firing logic
     var isShooting = false;
     var attackDir = this.position.clone();
@@ -230,7 +237,9 @@ Player.prototype._onCollideWithEnemy = function () {
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     if (pickup._category === "weapon") {
-        if (pickup.type === "sword") {
+        if (pickup.type === this._gunType) {
+            this._allGuns[this._gunType]._currentAmmo += pickup._pointValue;
+        } else if (pickup.type === "sword") {
             console.log("sword!");
         } else {
             this._gunType = pickup.type;   

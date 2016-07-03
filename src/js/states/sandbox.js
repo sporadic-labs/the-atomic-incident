@@ -1,8 +1,8 @@
 /**
- * GameState - this is the main level for now
+ * Sandbox - this is the main level for now
  */
 
-module.exports = GameState;
+module.exports = Sandbox;
 
 var Player = require("../game-objects/player.js");
 var Reticule = require("../game-objects/reticule.js");
@@ -10,9 +10,10 @@ var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 
-function GameState() {}
 
-GameState.prototype.create = function () {
+function Sandbox() {}
+
+Sandbox.prototype.create = function () {
     // Debugging FPS
     this.game.time.advancedTiming = true;
     
@@ -55,11 +56,11 @@ GameState.prototype.create = function () {
     var scoreSignal = new Phaser.Signal();
     var scoreKeeper = new ScoreKeeper(scoreSignal);
     this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
-        scoreKeeper, this.comboTracker);
+        scoreKeeper, this.comboTracker, this.player);
 
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(this.game, this.enemies, this.nonCollidingGroup, this.player, 
-        scoreSignal);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(this.game, this.enemies, this.nonCollidingGroup, this.player, 
+    //     scoreSignal);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
     // new FlockingGroup(this.game, 15, this.player.x, this.player.y + 200, 
@@ -74,8 +75,13 @@ GameState.prototype.create = function () {
     // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
     // new SpawnerGroup(this.game, 4, this.enemies, this.player, scoreSignal);
 
+    var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
+    for (var i=0; i<50; i++) {
+        new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), this.game.rnd.integerInRange(0, 1300), this.pickups, "gun", scoreSignal, 5)
+    }
+
 };
 
-GameState.prototype.render = function () {
+Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
 };

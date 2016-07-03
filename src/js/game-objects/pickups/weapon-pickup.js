@@ -9,9 +9,9 @@ var ANIM_NAMES = {
 WeaponPickup.prototype = Object.create(BasePickup.prototype);
 WeaponPickup.prototype.constructor = WeaponPickup;
 
-function WeaponPickup(game, x, y, parentGroup, type, scoreSignal) {
+function WeaponPickup(game, x, y, parentGroup, type, scoreSignal, ammoAmount) {
     BasePickup.call(this, game, x, y, "assets", "pickups/box-01", parentGroup,
-        "weapon", scoreSignal, 0);
+        "weapon", scoreSignal, ammoAmount);
 
     this.type = type;
     if (this.type === "gun") {
