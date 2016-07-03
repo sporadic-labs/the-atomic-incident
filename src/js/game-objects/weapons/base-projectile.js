@@ -80,7 +80,7 @@ BaseProjectile.prototype.update = function () {
 
 BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.killByPlayer();
-    this._comboTracker.incrementCombo(1);
+    this._player.incrementCombo(1);
 
     if (this._isDestructable) {
         this._remove = true;

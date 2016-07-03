@@ -4,6 +4,7 @@ var Controller = require("../helpers/controller.js");
 var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
 var Sword = require("./weapons/sword.js");
+var ComboTracker = require("../helpers/combo-tracker.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -34,6 +35,8 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._comboTracker = comboTracker;
     this._comboTracker.addListener(this._onComboUpdate, this);
 
+    // Combo
+    this._comboTracker = new ComboTracker(game, 2000);
     this._gunType = "gun";
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
@@ -89,6 +92,17 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
 }
+
+Player.prototype.getCombo = function () {
+    return this._comboTracker.getCombo();
+};
+
+Player.prototype.incrementCombo = function (increment) {
+    this._comboTracker.incrementCombo(increment);
+    var newSpeed = Phaser.Math.mapLinear(this.getCombo(), 0, 50, 50, 500);
+    newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
+    this._maxSpeed = newSpeed; 
+};
 
 Player.prototype.update = function () {
     this._controls.update();
@@ -244,4 +258,9 @@ Player.prototype._checkOverlapWithGroup = function (group, callback,
                 callbackContext);
         }
     }
+};
+
+Player.prototype.destroy = function () {
+    this._comboTracker.destroy();
+    Phaser.Sprite.prototype.destroy.call(this, arguments);
 };
