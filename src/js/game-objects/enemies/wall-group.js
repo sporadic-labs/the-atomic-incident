@@ -117,7 +117,8 @@ WallGroup.prototype.destroy = function() {
 WallEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function WallEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", 100,
+        parentGroup);
 
     spriteUtils.applyRandomLightnessTint(this, 175/360, 1.0, 0.6);
 }

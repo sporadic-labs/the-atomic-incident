@@ -32,7 +32,8 @@ function SpiralGroup(game, numToSpawn) {
 SpiralEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function SpiralEnemy(game, x, y, parentGroup, id) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", 100,
+        parentGroup);
     
     spriteUtils.applyRandomLightnessTint(this, 280/360, 1.0, 0.6);
 

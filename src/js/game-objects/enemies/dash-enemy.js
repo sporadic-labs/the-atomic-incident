@@ -18,7 +18,8 @@ var MOVE_STATES = {
 DashEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function DashEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy03/move-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy03/move-01", 100,
+        parentGroup);
     // this.scale.setTo(0.5);
     
     spriteUtils.applyRandomLightnessTint(this, 0.33, 1, 0.5);

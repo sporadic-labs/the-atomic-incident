@@ -40,7 +40,8 @@ function SpawnerGroup(game, numToSpawn) {
 SpawnerEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function SpawnerEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", 100,
+        parentGroup);
     
     this.scale.set(1.2);
     this._spawnCooldown = 3000;
@@ -70,7 +71,8 @@ SpawnerEnemy.prototype.destroy = function () {
 SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function SeekerEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", 100,
+        parentGroup);
 
     this.scale.set(0.8);
     

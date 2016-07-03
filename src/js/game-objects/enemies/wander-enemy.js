@@ -10,7 +10,8 @@ var ANIM_NAMES = {
 WanderEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function WanderEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy02/move-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy02/move-01", 100,
+        parentGroup);
     
     spriteUtils.applyRandomLightnessTint(this, 0.33, 1, 0.5);
 
