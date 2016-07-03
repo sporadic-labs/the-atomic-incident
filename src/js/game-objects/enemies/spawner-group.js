@@ -7,12 +7,12 @@ var utils = require("../../helpers/utilities.js");
 // -- GROUP --------------------------------------------------------------------
 
 SpawnerGroup.prototype = Object.create(Phaser.Group.prototype);
-SpawnerGroup.prototype.constructor = SpawnerGroup;
 
-function SpawnerGroup(game, numToSpawn, enemiesGroup, player, scoreSignal) {
-    Phaser.Group.call(this, game, enemiesGroup, "spawner-group");
+function SpawnerGroup(game, numToSpawn) {
+    var enemies = game.globals.groups.enemies;
+    Phaser.Group.call(this, game, enemies, "spawner-group");
 
-    this._player = player;
+    this._player = this.game.globals.player;
 
     // Parameters for randomly placing spawners
     var left = this._player.x - (this.game.camera.width / 2);
@@ -30,19 +30,16 @@ function SpawnerGroup(game, numToSpawn, enemiesGroup, player, scoreSignal) {
             );
             playerDist = this._player.position.distance(point);
         } while (playerDist < playerRadius);
-        new SpawnerEnemy(game, point.x, point.y, this, this._player, 
-            scoreSignal);
+        new SpawnerEnemy(game, point.x, point.y, this);
     }
 }
 
 // -- SPAWNER INDIVIDUAL -------------------------------------------------------
 
 SpawnerEnemy.prototype = Object.create(BaseEnemy.prototype);
-SpawnerEnemy.prototype.constructor = SpawnerEnemy;
 
-function SpawnerEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup,
-        target, scoreSignal, 1);
+function SpawnerEnemy(game, x, y, parentGroup) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
     
     this.scale.set(1.2);
     this._spawnCooldown = 3000;
@@ -57,8 +54,7 @@ function SpawnerEnemy(game, x, y, parentGroup, target, scoreSignal) {
 }
 
 SpawnerEnemy.prototype._spawn = function () {
-    new SeekerEnemy(this.game, this.x, this.y, this.parent, this._target, 
-        this._scoreSignal);
+    new SeekerEnemy(this.game, this.x, this.y, this.parent);
     this._timer.add(this._spawnCooldown, this._spawn, this);
 };
 
@@ -71,11 +67,9 @@ SpawnerEnemy.prototype.destroy = function () {
 // -- SEEKER INDIVIDUAL --------------------------------------------------------
 
 SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
-SeekerEnemy.prototype.constructor = SeekerEnemy;
 
-function SeekerEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup,
-        target, scoreSignal, 1);
+function SeekerEnemy(game, x, y, parentGroup) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
 
     this.scale.set(0.8);
     
@@ -91,8 +85,8 @@ function SeekerEnemy(game, x, y, parentGroup, target, scoreSignal) {
 SeekerEnemy.prototype.preUpdate = function () {
     this.body.velocity.set(0);
 
-    var distance = this.position.distance(this._target.position);
-    var angle = this.position.angle(this._target.position);
+    var distance = this.position.distance(this._player.position);
+    var angle = this.position.angle(this._player.position);
     var targetSpeed = distance / this.game.time.physicsElapsed;
     var magnitude = Math.min(this._maxSpeed, targetSpeed);
     this.body.velocity.x = magnitude * Math.cos(angle);

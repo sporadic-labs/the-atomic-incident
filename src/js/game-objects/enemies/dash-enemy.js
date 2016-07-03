@@ -15,11 +15,9 @@ var MOVE_STATES = {
 };
 
 DashEnemy.prototype = Object.create(BaseEnemy.prototype);
-DashEnemy.prototype.constructor = DashEnemy;
 
-function DashEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy03/move-01", parentGroup,
-        target, scoreSignal, 1);
+function DashEnemy(game, x, y, parentGroup) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy03/move-01", parentGroup);
     // this.scale.setTo(0.5);
     
     this._applyRandomLightnessTint(0.33, 1, 0.5);
@@ -64,8 +62,8 @@ DashEnemy.prototype.preUpdate = function() {
         this._angle = 0.0;
         this.animations.play(ANIM_NAMES.AIM);
     } else if (this._moveState === MOVE_STATES.DASH) {
-        this._dist = this.position.distance(this._target.position);
-        this._angle = this.position.angle(this._target.position);
+        this._dist = this.position.distance(this._player.position);
+        this._angle = this.position.angle(this._player.position);
         this.animations.play(ANIM_NAMES.ATTACK);
     }
 

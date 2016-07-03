@@ -8,11 +8,9 @@ var ANIM_NAMES = {
 };
 
 SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
-SeekerEnemy.prototype.constructor = SeekerEnemy;
 
-function SeekerEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup,
-        target, scoreSignal, 1);
+function SeekerEnemy(game, x, y, parentGroup) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
     
     this._applyRandomLightnessTint(0.98, 1, 0.5);
 
@@ -26,6 +24,7 @@ function SeekerEnemy(game, x, y, parentGroup, target, scoreSignal) {
     this.animations.play(ANIM_NAMES.IDLE);
 
     this._visionRadius = 300;
+    this._maxSpeed = 100;
 }
 
 /**
@@ -37,11 +36,11 @@ SeekerEnemy.prototype.preUpdate = function () {
     this.body.velocity.set(0);
 
     // Check if target is within visual range
-    var distance = this.position.distance(this._target.position);
+    var distance = this.position.distance(this._player.position);
     if (distance <= this._visionRadius) {
         // If target is in range, calculate the acceleration based on the 
         // direction this sprite needs to travel to hit the target
-        var angle = this.position.angle(this._target.position);
+        var angle = this.position.angle(this._player.position);
         var targetSpeed = distance / this.game.time.physicsElapsed;
         var magnitude = Math.min(this._maxSpeed, targetSpeed);
         this.body.velocity.x = magnitude * Math.cos(angle);

@@ -6,11 +6,10 @@ var BaseEnemy = require("./base-enemy.js");
 // -- FLOCKING GROUP -----------------------------------------------------------
 
 FlockingGroup.prototype = Object.create(Phaser.Group.prototype);
-FlockingGroup.prototype.constructor = FlockingGroup;
 
-function FlockingGroup(game, numToSpawn, x, y, enemiesGroup, target, 
-    scoreSignal) {
-    Phaser.Group.call(this, game, enemiesGroup, "flocking-group");
+function FlockingGroup(game, numToSpawn, x, y) {
+    var enemies = game.globals.groups.enemies;
+    Phaser.Group.call(this, game, enemies, "flocking-group");
     // Group is positioned at (0, 0) to make coordinate system between groups
     // match. This could be changed later.
 
@@ -18,7 +17,7 @@ function FlockingGroup(game, numToSpawn, x, y, enemiesGroup, target,
     for (var i = 0; i < numToSpawn; i += 1) {
         var enemyX = x + game.rnd.realInRange(-randSpread, randSpread);        
         var enemyY = y + game.rnd.realInRange(-randSpread, randSpread);
-        new FlockingEnemy(game, enemyX, enemyY, this, i, target, scoreSignal);
+        new FlockingEnemy(game, enemyX, enemyY, this, i);
     }
 
     this._distances = {};
@@ -55,7 +54,7 @@ FlockingGroup.prototype.getNearestCentroid = function (enemy, numEnemies) {
         else return 0;
     });
     var centroid = new Phaser.Point(0, 0);
-    var numEnemies = Math.min(this.children.length, numEnemies);
+    var numEnemies = Math.min(distances.length, numEnemies);
     for (var i = 0; i < numEnemies; i += 1) {
         // centroid.add(distances[i].position); <- Broken
         centroid.x += distances[i].position.x;
@@ -97,17 +96,16 @@ FlockingGroup.prototype.update = function () {
 // -- FLOCKING INDIVIDUAL ------------------------------------------------------
 
 FlockingEnemy.prototype = Object.create(BaseEnemy.prototype);
-FlockingEnemy.prototype.constructor = FlockingEnemy;
 
-function FlockingEnemy(game, x, y, parentGroup, id, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup,
-        target, scoreSignal, 1);
+function FlockingEnemy(game, x, y, parentGroup, id) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
     
     this._applyRandomLightnessTint(280/360, 1.0, 0.6);
 
     this._id = id;
     this._flockingRadius = 100;
     this._flockingThreshold = 10;
+    this._maxSpeed = 100;
 }
 
 FlockingEnemy.prototype.getId = function () {
@@ -126,8 +124,8 @@ FlockingEnemy.prototype.preUpdate = function () {
         this._flockingRadius);
     if (numNeighbors >= this._flockingThreshold) {
         // Enemy is safely in a flock - head towards target
-        var distance = this.position.distance(this._target.position);
-        var angle = this.position.angle(this._target.position);
+        var distance = this.position.distance(this._player.position);
+        var angle = this.position.angle(this._player.position);
         var targetSpeed = distance / this.game.time.physicsElapsed;
         var magnitude = Math.min(this._maxSpeed, targetSpeed);
         this.body.velocity.x = magnitude * Math.cos(angle);

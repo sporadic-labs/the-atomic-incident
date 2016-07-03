@@ -7,11 +7,9 @@ var ANIM_NAMES = {
 };
 
 WanderEnemy.prototype = Object.create(BaseEnemy.prototype);
-WanderEnemy.prototype.constructor = WanderEnemy;
 
-function WanderEnemy(game, x, y, parentGroup, target, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy02/move-01", parentGroup,
-        target, scoreSignal, 1, { maxSpeed: 140 });
+function WanderEnemy(game, x, y, parentGroup) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy02/move-01", parentGroup);
     
     this._applyRandomLightnessTint(0.33, 1, 0.5);
 
@@ -24,9 +22,10 @@ function WanderEnemy(game, x, y, parentGroup, target, scoreSignal) {
     // Variables for random movement toward player
     var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/2) * 
         this.game.rnd.sign();
-    this._angle = this.position.angle(this._target.position) + rndAngle;
+    this._angle = this.position.angle(this._player.position) + rndAngle;
     this._moveStart = this.game.time.now;
     this._moveDelay = 4000 + this.game.rnd.integerInRange(0, 2000);
+    this._maxSpeed = 140;
     this._speed = this.game.rnd.integerInRange(100, 140);
 }
 
@@ -36,7 +35,7 @@ WanderEnemy.prototype.update = function () {
         // enemies movement
         var rndAngle = this.game.rnd.realInRange(0.0, 1.0) * (Math.PI/8) * 
             this.game.rnd.sign();
-        this._angle = this.position.angle(this._target.position) + rndAngle;
+        this._angle = this.position.angle(this._player.position) + rndAngle;
 
         this._speed = this.game.rnd.integerInRange(100, 140);
         this._moveStart = this.game.time.now;
