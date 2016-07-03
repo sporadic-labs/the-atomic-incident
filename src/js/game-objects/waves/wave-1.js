@@ -7,16 +7,14 @@ var SpawnerGroup = require("../enemies/spawner-group.js");
 var utils = require("../../helpers/utilities.js");
 
 Wave1.prototype = Object.create(Phaser.Group.prototype);
-Wave1.prototype.constructor = Wave1;
 
-function Wave1(game, enemyGroup, nonCollidingGroup, player, scoreSignal, 
-    spawnDelay, spawnActivationDelay) {
-    Phaser.Group.call(this, game, enemyGroup, "wave-1");
+function Wave1(game, spawnDelay, spawnActivationDelay) {
+    var enemies = game.globals.groups.enemies;
+    Phaser.Group.call(this, game, enemies, "wave-1");
 
-    this._player = player;
-    this._scoreSignal = scoreSignal;
-    this._nonCollidingGroup = nonCollidingGroup;
-    this._enemyGroup = enemyGroup;
+    this._player = this.game.globals.player;
+    this._enemiesGroup = enemies;
+    this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
     this._spawnDelay = utils.default(spawnDelay, 3000);
     this._spawnActivationDelay = utils.default(spawnActivationDelay, 500);
 
@@ -32,20 +30,16 @@ Wave1.prototype._spawn = function () {
     var newGroup;
     switch (rand) {
         case 0:
-            newGroup = new SpiralGroup(this.game, 15, this._player.x, 
-                this._player.y, this, this._player, this._scoreSignal);
+            newGroup = new SpiralGroup(this.game, 15);
             break;
         case 1:
-            newGroup = new WallGroup(this.game, 15, this, this._player, 
-                this._scoreSignal);
+            newGroup = new WallGroup(this.game, 15, this);
             break;
         case 2:
-            newGroup = new SineGroup(this.game, 45, this, this._player, 
-                this._scoreSignal);
+            newGroup = new SineGroup(this.game, 45, this);
             break;
         case 3:
-            newGroup = new SpawnerGroup(this.game, 5, this, this._player,
-                this._scoreSignal);
+            newGroup = new SpawnerGroup(this.game, 5, this);
             break;
     }
 
