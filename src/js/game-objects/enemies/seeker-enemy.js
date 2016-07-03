@@ -1,6 +1,7 @@
 module.exports = SeekerEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -12,7 +13,7 @@ SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
 function SeekerEnemy(game, x, y, parentGroup) {
     BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
     
-    this._applyRandomLightnessTint(0.98, 1, 0.5);
+    spriteUtils.applyRandomLightnessTint(this, 0.98, 1, 0.5);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("enemy01/idle-", 1, 4, 

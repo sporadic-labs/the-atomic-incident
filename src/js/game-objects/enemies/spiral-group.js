@@ -1,6 +1,7 @@
 module.exports = SpiralGroup;
 
 var BaseEnemy = require("./base-enemy.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 
 // -- FLOCKING GROUP -----------------------------------------------------------
@@ -33,7 +34,7 @@ SpiralEnemy.prototype = Object.create(BaseEnemy.prototype);
 function SpiralEnemy(game, x, y, parentGroup, id) {
     BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
     
-    this._applyRandomLightnessTint(280/360, 1.0, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 280/360, 1.0, 0.6);
 
     this._id = id;
     this._flockingRadius = 100;

@@ -2,6 +2,7 @@ module.exports = WallGroup;
 
 var BaseEnemy = require("./base-enemy.js");
 var utils = require("../../helpers/utilities.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 
 // -- GROUP --------------------------------------------------------------------
@@ -118,5 +119,5 @@ WallEnemy.prototype = Object.create(BaseEnemy.prototype);
 function WallEnemy(game, x, y, parentGroup) {
     BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
 
-    this._applyRandomLightnessTint(175/360, 1.0, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 175/360, 1.0, 0.6);
 }

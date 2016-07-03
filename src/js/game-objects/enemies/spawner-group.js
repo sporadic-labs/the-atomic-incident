@@ -2,6 +2,7 @@ module.exports = SpawnerGroup;
 
 var BaseEnemy = require("./base-enemy.js");
 var utils = require("../../helpers/utilities.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 
 // -- GROUP --------------------------------------------------------------------
@@ -44,7 +45,7 @@ function SpawnerEnemy(game, x, y, parentGroup) {
     this.scale.set(1.2);
     this._spawnCooldown = 3000;
 
-    this._applyRandomLightnessTint(320/360, 1.0, 0.3);
+    spriteUtils.applyRandomLightnessTint(this, 320/360, 1.0, 0.3);
 
     this._timer = this.game.time.create(false);
     this._timer.start();
@@ -73,7 +74,7 @@ function SeekerEnemy(game, x, y, parentGroup) {
 
     this.scale.set(0.8);
     
-    this._applyRandomLightnessTint(320/360, 1.0, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 320/360, 1.0, 0.6);
     this._maxSpeed = 100;
 }
 

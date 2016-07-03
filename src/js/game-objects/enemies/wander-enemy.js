@@ -1,6 +1,7 @@
 module.exports = WanderEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 var ANIM_NAMES = {
     MOVE: "move"
@@ -11,7 +12,7 @@ WanderEnemy.prototype = Object.create(BaseEnemy.prototype);
 function WanderEnemy(game, x, y, parentGroup) {
     BaseEnemy.call(this, game, x, y, "assets", "enemy02/move-01", parentGroup);
     
-    this._applyRandomLightnessTint(0.33, 1, 0.5);
+    spriteUtils.applyRandomLightnessTint(this, 0.33, 1, 0.5);
 
     // Setup animations
     var moveFrames = Phaser.Animation.generateFrameNames("enemy02/move-", 1, 4, 

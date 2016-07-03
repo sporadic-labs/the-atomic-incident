@@ -1,6 +1,7 @@
 module.exports = ScorePickup;
 
 var BasePickup = require("./base-pickup.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 var ANIM_NAMES = {
     IDLE: "idle"
@@ -14,7 +15,7 @@ function ScorePickup(game, x, y, parentGroup, type, scoreSignal) {
         parentGroup, "score", scoreSignal, 5);
 
     this.type = type;
-    this._applyRandomLightnessTint(0.52, 1, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 0.52, 1, 0.6);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("pickups/diamond-",

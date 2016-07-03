@@ -2,6 +2,7 @@ module.exports = SineWaveGroup;
 
 var BaseEnemy = require("./base-enemy.js");
 var utils = require("../../helpers/utilities.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 
 // -- GROUP --------------------------------------------------------------------
@@ -88,7 +89,7 @@ function SineEnemy(game, parentGroup, angle, angularSpeed, linePoint,
     this._sinDirection = sinDirection;
     this._amplitude = amplitude;
 
-    this._applyRandomLightnessTint(140/360, 1.0, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 140/360, 1.0, 0.6);
     this._calculateSinePosition();
 }
 

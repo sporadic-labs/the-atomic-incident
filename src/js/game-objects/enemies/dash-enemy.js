@@ -1,6 +1,7 @@
 module.exports = DashEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 var ANIM_NAMES = {
     MOVE: "move",
@@ -20,7 +21,7 @@ function DashEnemy(game, x, y, parentGroup) {
     BaseEnemy.call(this, game, x, y, "assets", "enemy03/move-01", parentGroup);
     // this.scale.setTo(0.5);
     
-    this._applyRandomLightnessTint(0.33, 1, 0.5);
+    spriteUtils.applyRandomLightnessTint(this, 0.33, 1, 0.5);
 
     // Setup animations
     var moveFrames = Phaser.Animation.generateFrameNames("enemy03/move-", 1, 4, 

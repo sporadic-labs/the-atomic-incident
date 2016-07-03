@@ -19,12 +19,6 @@ function BaseEnemy(game, x, y, key, frame, parentGroup, pointValue) {
     this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
 }
 
-BaseEnemy.prototype._applyRandomLightnessTint = function (h, s, l) {
-    l += this.game.rnd.realInRange(-0.1, 0.1);
-    var rgb = Phaser.Color.HSLtoRGB(h, s, l);
-    this.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
-};
-
 BaseEnemy.prototype.killByPlayer = function () {
     this._scoreKeepter.incrementScore(this._pointValue);
     this.destroy();
