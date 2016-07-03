@@ -13,7 +13,7 @@ var projectileOptions = {
     hiddenOnSetup: false
 };
 
-function Laser(game, parentGroup,  player, cooldownTime, specialCooldownTime) {
+function Laser(game, parentGroup, player, cooldownTime, specialCooldownTime) {
     BaseWeapon.call(this, game, parentGroup, "Laser", player, cooldownTime, 
         specialCooldownTime);
 }
@@ -43,6 +43,8 @@ Laser.prototype.fire = function (targetPos) {
 Laser.prototype._createProjectile = function (x, y, angle) {
     var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this, 
         this._player, angle, 300, 500, projectileOptions);
+    var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this,
+        this._player, 34, angle, 750, 500, projectileOptions);
     var rgb = Phaser.Color.HSLtoRGB(0.52, 0.5, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 };

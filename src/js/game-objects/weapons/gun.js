@@ -52,5 +52,5 @@ Gun.prototype.specialFire = function () {
 
 Gun.prototype._createProjectile = function (x, y, angle) {
     new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, angle, 300, 500, projectileOptions);
+        this._player, 100, angle, 300, 500, projectileOptions);
 };
