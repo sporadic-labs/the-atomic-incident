@@ -94,6 +94,9 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("attack-space", [Kb.SPACEBAR]);
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
+    // Cycling weapons
+    this._controls.addKeyboardControl("weapon-gun", [Kb.ONE]);
+    this._controls.addKeyboardControl("weapon-laser", [Kb.TWO]);
 }
 
 Player.prototype.getCombo = function () {
@@ -150,6 +153,13 @@ Player.prototype.update = function () {
                 .setMagnitude(-1 * dragMagnitude); 
             this.body.velocity.add(drag.x, drag.y);
         }
+    }
+
+    // Swapping weapons
+    if (this._controls.isControlActive("weapon-gun")) {
+        this._gunType = "gun";
+    } else if (this._controls.isControlActive("weapon-laser")) {
+        this._gunType = "laser";
     }
 
     // Firing logic
