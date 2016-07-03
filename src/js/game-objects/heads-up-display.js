@@ -1,12 +1,11 @@
 module.exports = HeadsUpDisplay;
 
 HeadsUpDisplay.prototype = Object.create(Phaser.Group.prototype);
-HeadsUpDisplay.prototype.constructor = HeadsUpDisplay;
 
-function HeadsUpDisplay(game, parentGroup, scoreKeeper, comboTracker) {
+function HeadsUpDisplay(game, parentGroup) {
     Phaser.Group.call(this, game, parentGroup, "heads-up-display");
     
-    this._scoreKeeper = scoreKeeper;
+    this._scoreKeeper = this.game.globals.scoreKeeper;
     this._player = this.game.globals.player;
 
     this.fixedToCamera = true;
@@ -24,6 +23,5 @@ function HeadsUpDisplay(game, parentGroup, scoreKeeper, comboTracker) {
 
 HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText("Score: " + this._scoreKeeper.getScore());
-    this._comboText.setText("Combo: " + this._comboTracker.getCombo());
     this._comboText.setText("Combo: " + this._player.getCombo());
 };
