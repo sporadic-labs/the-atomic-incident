@@ -5,7 +5,6 @@
 module.exports = GameState;
 
 var Player = require("../game-objects/player.js");
-var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 

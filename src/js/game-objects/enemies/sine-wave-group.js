@@ -63,7 +63,7 @@ SineWaveGroup.prototype._spawnSineEnemies = function (numToSpawn, rotation) {
         var linePoint = startPoint.clone().add(
             lineDirection.x * (fraction * this._lineLength),
             lineDirection.y * (fraction * this._lineLength)
-        )
+        );
         // Find the sine wave displacement
         var angle = fraction * (this._cycles * 2 * Math.PI) + this._phaseOffset;
         // Create the enemy
@@ -95,7 +95,7 @@ function SineEnemy(game, parentGroup, angle, angularSpeed, linePoint,
 }
 
 SineEnemy.prototype._calculateSinePosition = function () {
-    var height = this._amplitude * Math.sin(this._angle)
+    var height = this._amplitude * Math.sin(this._angle);
     this.position = this._linePoint.clone().add(
         this._sinDirection.x * height, 
         this._sinDirection.y * height

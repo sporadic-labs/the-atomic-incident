@@ -63,7 +63,7 @@ WallGroup.prototype._spawnWall = function (numToSpawn, attackAngle) {
         var point = startPoint.clone().add(
             wallDirection.x * (fraction * this._wallLength),
             wallDirection.y * (fraction * this._wallLength)
-        )  
+        );
         // Create the enemy
         var wallEnemy = new WallEnemy(this.game, point.x, point.y, this);
         // Set it's rotation so sprite is facing in the attack direction

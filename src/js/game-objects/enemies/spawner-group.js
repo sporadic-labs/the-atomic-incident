@@ -1,7 +1,6 @@
 module.exports = SpawnerGroup;
 
 var BaseEnemy = require("./base-enemy.js");
-var utils = require("../../helpers/utilities.js");
 var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 

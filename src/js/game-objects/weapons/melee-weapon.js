@@ -30,7 +30,7 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
 
 
     this.game.physics.arcade.enable(this);
-    this.body.setSize(8*this.width/10, 8*this.height/10, -12, 12); // Fudge factor
+    this.body.setSize(0.8 * this.width, 0.8 * this.height, -12, 12);
 
 }
 
@@ -47,14 +47,15 @@ MeleeWeapon.prototype.update = function () {
 MeleeWeapon.prototype.fire = function (targetPos) {
     if (this._ableToAttack) {
         // start angle
-        this.rotation = this._player.position.angle(targetPos) - (this._swingDir * Math.PI/2) + (Math.PI/2);
+        this.rotation = this._player.position.angle(targetPos) - 
+            (this._swingDir * Math.PI/2) + (Math.PI/2);
         var pos = this._player.position.angle(targetPos) * (180/Math.PI);
-        var endAngle = pos + (this._swingDir * 180); // for some reason tweens take degrees
+        var endAngle = pos + (this._swingDir * 180); // tweens take degrees
 
         console.log(pos);
 
-        this._swing = this.game.add.tween(this).to({angle: endAngle}, this._cooldownTime,
-            Phaser.Easing.Quadratic.InOut, false, 0, 0, false);
+        this._swing = this.game.add.tween(this).to({angle: endAngle}, 
+            this._cooldownTime, "Quad.easeInOut", false, 0, 0, false);
         this._swing.onComplete.add(function() {
             this.visible = false;
             this.body.enable = false;
@@ -62,7 +63,9 @@ MeleeWeapon.prototype.fire = function (targetPos) {
 
         this.visible = true;
         this.body.enable = true;
-        this.body.setSize(8*this.width/10, 8*this.height/10, 10*Math.cos(this._player.position.angle(targetPos)), 10*Math.sin(this._player.position.angle(targetPos))); // Fudge factor
+        this.body.setSize(0.8 * this.width, 0.8 * this.height, 
+            10 * Math.cos(this._player.position.angle(targetPos)), 
+            10 * Math.sin(this._player.position.angle(targetPos)));
 
         this._swing.start();
 
@@ -74,13 +77,14 @@ MeleeWeapon.prototype.specialFire = function (targetPos) {
     if (this._ableToAttack) {
         // start angle
         this.rotation = this._player.position.angle(targetPos) + (Math.PI/2);
-        var pos = (this._player.position.angle(targetPos) + (Math.PI/2)) * (180/Math.PI);
+        var pos = (this._player.position.angle(targetPos) + (Math.PI/2)) * 
+            (180/Math.PI);
         var endAngle = pos + 720; // for some reason tweens take degrees
 
         console.log(pos);
 
-        this._swing = this.game.add.tween(this).to({angle: endAngle}, this._specialCooldownTime,
-            Phaser.Easing.Quadratic.InOut, false, 0, 0, false);
+        this._swing = this.game.add.tween(this).to({angle: endAngle}, 
+            this._specialCooldownTime, "Quad.easeInOut", false, 0, 0, false);
         this._swing.onComplete.add(function() {
             this.visible = false;
             this.body.enable = false;
@@ -88,8 +92,9 @@ MeleeWeapon.prototype.specialFire = function (targetPos) {
 
         this.visible = true;
         this.body.enable = true;
-        this.body.setSize(8*this.width/10, 8*this.height/10, 10*Math.cos(this._player.position.angle(targetPos)), 10*Math.sin(this._player.position.angle(targetPos))); // Fudge factor
-
+        this.body.setSize(0.8 * this.width, 0.8 * this.height, 
+            10 * Math.cos(this._player.position.angle(targetPos)), 
+            10 * Math.sin(this._player.position.angle(targetPos)));
         this._swing.start();
 
         this._startCooldown(this._cooldownTime);

@@ -1,6 +1,6 @@
 module.exports = ScoreKeeper;
 
-function ScoreKeeper(signal) {
+function ScoreKeeper() {
 	this._score = 0;
 }
 

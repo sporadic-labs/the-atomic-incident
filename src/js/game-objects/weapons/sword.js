@@ -40,11 +40,12 @@ Sword.prototype.update = function () {
     }
 
     if (this._isSwinging) {
-        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
+        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, 
+            this);
 
-        this.position.x = this._player.position.x + (0.5 * this._player.width) * 
+        this.position.x = this._player.position.x + (0.5 * this._player.width) *
             Math.cos(this._angle);
-        this.position.y = this._player.position.y + (0.5 * this._player.width) * 
+        this.position.y = this._player.position.y + (0.5 * this._player.width) *
             Math.sin(this._angle);
         this.rotation = this._angle+(Math.PI/2);
         
@@ -62,8 +63,10 @@ Sword.prototype.fire = function (targetPos) {
     if (this._ableToAttack) {
         // Find angle
         this._isSwinging = true;
-        this._startAngle = this._player.position.angle(targetPos) - (this._swingDir * Math.PI/2); // Radians
-        this._endAngle = this._player.position.angle(targetPos) + (this._swingDir * Math.PI/2); // Radians
+        this._startAngle = this._player.position.angle(targetPos) - 
+            (this._swingDir * Math.PI/2); // Radians
+        this._endAngle = this._player.position.angle(targetPos) + 
+            (this._swingDir * Math.PI/2); // Radians
         this._angle = this._startAngle;
 
         this._startCooldown(this._cooldownTime);
@@ -75,7 +78,8 @@ Sword.prototype.specialFire = function (targetPos) {
         // Find angle
         this._isSwinging = true;
         this._startAngle = this._player.position.angle(targetPos); // Radians
-        this._endAngle = this._player.position.angle(targetPos) + (4*Math.PI); // Radians
+        this._endAngle = this._player.position.angle(targetPos) + 
+            (4*Math.PI); // Radians
         this._angle = this._startAngle;
 
         this._startCooldown(this._specialCooldownTime);
