@@ -32,7 +32,8 @@ function SpiralGroup(game, numToSpawn) {
 SpiralEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function SpiralEnemy(game, x, y, parentGroup, id) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", 100,
+        parentGroup);
     
     spriteUtils.applyRandomLightnessTint(this, 280/360, 1.0, 0.6);
 
@@ -50,8 +51,9 @@ SpiralEnemy.prototype.getId = function () {
  * Override preUpdate to update velocity. Physics updates happen in preUpdate,
  * so if the velocity updates happened AFTER that, the targeting would be off
  * by a frame.
+ * Note: Changed to update - I don't think this breaks anything?
  */
-SpiralEnemy.prototype.preUpdate = function () {
+SpiralEnemy.prototype.update = function () {
     this.body.velocity.set(0);
 
     var distance = this.position.distance(this._player.position);
@@ -60,8 +62,4 @@ SpiralEnemy.prototype.preUpdate = function () {
     var magnitude = Math.min(this._maxSpeed, targetSpeed);
     this.body.velocity.x = magnitude * Math.cos(angle);
     this.body.velocity.y = magnitude * Math.sin(angle);
-
-    // Call the parent's preUpdate and return the value. Something else in
-    // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 };

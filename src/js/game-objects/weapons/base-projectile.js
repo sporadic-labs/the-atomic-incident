@@ -8,14 +8,15 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - rotateOnSetup - bool
 // - canBounce - bool
 // - hiddenOnSetup
-function BaseProjectile(game, x, y, key, frame, parentGroup, player, angle, 
-    speed, range, options) {
+function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
+    angle, speed, range, options) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.set(0.5);
     parentGroup.add(this);
 
     this._player = player;
     this._enemies = game.globals.groups.enemies;
+    this._damage = damage;
     this._speed = speed;
     this._range = range;
     this._initialPos = this.position.clone();
@@ -78,10 +79,10 @@ BaseProjectile.prototype.update = function () {
 };
 
 BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
-    enemy.killByPlayer();
-    this._player.incrementCombo(1);
-
+    var isKilled = enemy.takeDamage(this._damage);
+    if (isKilled) this._player.incrementCombo(1);
     if (this._isDestructable) {
         this._remove = true;
     }
+
 };

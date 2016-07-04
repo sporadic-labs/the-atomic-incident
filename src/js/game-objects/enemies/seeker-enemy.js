@@ -11,7 +11,8 @@ var ANIM_NAMES = {
 SeekerEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function SeekerEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", 100,
+        parentGroup);
     
     spriteUtils.applyRandomLightnessTint(this, 0.98, 1, 0.5);
 

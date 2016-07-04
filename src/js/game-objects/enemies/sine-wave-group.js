@@ -81,7 +81,8 @@ SineEnemy.prototype = Object.create(BaseEnemy.prototype);
 
 function SineEnemy(game, parentGroup, angle, angularSpeed, linePoint, 
     sinDirection, amplitude) {
-    BaseEnemy.call(this, game, 0, 0, "assets", "enemy01/idle-01", parentGroup);
+    BaseEnemy.call(this, game, 0, 0, "assets", "enemy01/idle-01", 100,
+        parentGroup);
 
     this._angle = angle;
     this._angularSpeed = angularSpeed;
