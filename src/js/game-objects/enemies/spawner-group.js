@@ -62,7 +62,7 @@ SpawnerEnemy.prototype._spawn = function () {
 
 SpawnerEnemy.prototype.destroy = function () {
     this._timer.destroy();
-    Phaser.Sprite.prototype.destroy.apply(this, arguments);
+    BaseEnemy.prototype.destroy.apply(this, arguments);
 };
 
 
