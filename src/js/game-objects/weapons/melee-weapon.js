@@ -21,9 +21,9 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
     this._cooldownTime = cooldownTime; // Milliseconds 
     this._specialCooldownTime = specialCooldownTime; // Milliseconds 
 
-
     this._ableToAttack = true;
     this._swingDir = 1;
+    this._damage = 50;
 
     this.visible = false;
     this._swing = null; 
@@ -34,18 +34,14 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
 
 }
 
-MeleeWeapon.prototype.preUpdate = function () {
+MeleeWeapon.prototype.update = function () {
+    if (this.visible) {
+        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, 
+            this);
 
-    this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
-
-    this.position.x = this._player.position.x;
-    this.position.y = this._player.position.y;
-
-
-    // Call the parent's preUpdate and return the value. Something else in
-    // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
-
+        this.position.x = this._player.position.x;
+        this.position.y = this._player.position.y;
+    }
 };
 
 MeleeWeapon.prototype.fire = function (targetPos) {
@@ -130,8 +126,8 @@ MeleeWeapon.prototype._checkOverlapWithGroup = function (group, callback,
 };
 
 MeleeWeapon.prototype._onCollideWithEnemy = function (self, enemy) {
-    enemy.killByPlayer();
-    this._player.incrementCombo(1);
+    var isKilled = enemy.takeDamage(this._damage);
+    if (isKilled) this._player.incrementCombo(1);
 };
 
 MeleeWeapon.prototype.destroy = function () {

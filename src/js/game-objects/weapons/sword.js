@@ -22,6 +22,7 @@ function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
     this._angle = 0;
     this._endAngle = 0;
     this._swingDir = 1;
+    this._damage = 25;
 
     this.visible = false;
     
@@ -29,7 +30,7 @@ function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
     this.body.setSize(64, 64); // Fudge factor
 }
 
-Sword.prototype.preUpdate = function () {
+Sword.prototype.update = function () {
 
     if ((this._angle < this._endAngle && this._swingDir < 0) || 
         (this._angle > this._endAngle && this._swingDir > 0)) {
@@ -39,7 +40,6 @@ Sword.prototype.preUpdate = function () {
     }
 
     if (this._isSwinging) {
-
         this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
 
         this.position.x = this._player.position.x + (0.5 * this._player.width) * 
@@ -54,12 +54,7 @@ Sword.prototype.preUpdate = function () {
             this._angle -= this._swingSpeed;
 
         this.visible = true;
-
     }
-
-    // Call the parent's preUpdate and return the value. Something else in
-    // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 
 };
 
@@ -102,8 +97,8 @@ Sword.prototype._checkOverlapWithGroup = function (group, callback,
 };
 
 Sword.prototype._onCollideWithEnemy = function (self, enemy) {
-    enemy.killByPlayer();
-    this._player.incrementCombo(1);
+    var isKilled = enemy.takeDamage(this._damage);
+    if (isKilled) this._player.incrementCombo(1);
 };
 
 Sword.prototype._startCooldown = function (time) {

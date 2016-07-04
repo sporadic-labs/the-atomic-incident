@@ -45,9 +45,9 @@ function Player(game, x, y, parentGroup) {
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, 150, 450),
         "laser": new Laser(game, parentGroup, this, 200, 500),
-        // "sword": new Sword(game, parentGroup, this, 600, 1200),
-        // "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
-        //     "weapons/hammer", 600, 1200)
+        "sword": new Sword(game, parentGroup, this, 600, 1200),
+        "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
+            "weapons/hammer", 600, 1200)
     };
 
     // Setup animations
@@ -97,6 +97,8 @@ function Player(game, x, y, parentGroup) {
     // Cycling weapons
     this._controls.addKeyboardControl("weapon-gun", [Kb.ONE]);
     this._controls.addKeyboardControl("weapon-laser", [Kb.TWO]);
+    this._controls.addKeyboardControl("weapon-sword", [Kb.THREE]);
+    this._controls.addKeyboardControl("weapon-hammer", [Kb.FOUR]);
 }
 
 Player.prototype.getCombo = function () {
@@ -160,7 +162,12 @@ Player.prototype.update = function () {
         this._gunType = "gun";
     } else if (this._controls.isControlActive("weapon-laser")) {
         this._gunType = "laser";
+    } else if (this._controls.isControlActive("weapon-sword")) {
+        this._gunType = "sword";
+    } else if (this._controls.isControlActive("weapon-hammer")) {
+        this._gunType = "hammer";
     }
+
 
     // Firing logic
     var isShooting = false;
