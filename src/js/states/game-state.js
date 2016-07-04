@@ -7,89 +7,97 @@ module.exports = GameState;
 var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/enemies/seeker-enemy.js");
 var Wander = require("../game-objects/enemies/wander-enemy.js");
-var ScorePickup = require("../game-objects/pickups/score-pickup.js");
 var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
-var Reticule = require("../game-objects/reticule.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
-var ComboTracker = require("../helpers/combo-tracker.js");
 
 function GameState() {}
 
 GameState.prototype.create = function () {
-    // Debugging FPS
-    this.game.time.advancedTiming = true;
+    // Create the space for globals on the game object
+    this.game.globals = {};
 
-    // Initialize the world
-    this.game.canvas.style.cursor = "none";
-    this.stage.backgroundColor = "#F9F9F9";
-    this.world.resize(2000, 2000);
+    // Shorthands
+    var game = this.game;
+    var globals = game.globals;
+    
+    // Debugging FPS
+    game.time.advancedTiming = true;
+    
+    // Canvas styling
+    game.canvas.style.cursor = "none";
+    game.canvas.addEventListener("contextmenu", function(e) {
+        e.preventDefault();
+    });
 
     // Groups for z-index sorting and for collisions
-    this.groups = {
-        background: this.game.add.group(this.world, "background"),
-        midground: this.game.add.group(this.world, "midground"),
-        foreground: this.game.add.group(this.world, "foreground")
+    var groups = {
+        background: game.add.group(this.world, "background"),
+        midground: game.add.group(this.world, "midground"),
+        foreground: game.add.group(this.world, "foreground")
     };
-    this.enemies = this.game.add.group(this.groups.midground, "enemies");
-    this.pickups = this.game.add.group(this.groups.midground, "pickups");
+    groups.enemies = game.add.group(groups.midground, "enemies");
+    groups.pickups = game.add.group(groups.midground, "pickups");
+    groups.nonCollidingGroup = game.add.group(groups.midground, 
+        "non-colliding");
+    globals.groups = groups;
+
+    // Initializing the world
+    this.stage.backgroundColor = "#F9F9F9";
+    this.world.resize(1300, 1300);
+    this.add.tileSprite(0, 0, this.world.width, this.world.height, "assets", 
+        "hud/grid", groups.background);
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    this.bg = this.add.tileSprite(0, 0, 2000, 2000, "assets", "hud/grid", 
-        this.groups.background);
-
-    this.reticule = new Reticule(this, this.groups.foreground);
-
-    this.comboTracker = new ComboTracker(this.game, 2500);
-
-    this.player = new Player(this.game, this.world.centerX, this.world.centerY,
-        this.groups.foreground, this.enemies, this.pickups, this.reticule,
-        this.comboTracker);
-    this.camera.follow(this.player);
+    // Player
+    var player = new Player(game, this.world.centerX, this.world.centerY, 
+        groups.midground);
+    this.camera.follow(player);
+    globals.player = player;
     
     // Score
-    var scoreSignal = new Phaser.Signal();
-    var scoreKeeper = new ScoreKeeper(scoreSignal);
-    this.hud = new HeadsUpDisplay(this.game, this.groups.foreground,
-        scoreKeeper, this.comboTracker);
+    globals.scoreKeeper = new ScoreKeeper();
+
+    // HUD
+    globals.hud = new HeadsUpDisplay(game, groups.foreground);
 
     // Random enemies
-    for (var i = 0; i < 300; i += 1) {
+    for (var i = 0; i < 150; i += 1) {
         var pos;
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
-        } while (this.player.position.distance(pos) < 300);
-        new Seeker(this.game, pos.x, pos.y, this.enemies, this.player, 
-            scoreSignal);
+        } while (player.position.distance(pos) < 300);
+        new Seeker(game, pos.x, pos.y, groups.enemies);
     }
 
-    for (var i = 0; i < 48; i += 1) {
+    for (var i = 0; i < 20; i += 1) {
         var pos;
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
-        } while (this.player.position.distance(pos) < 300);
-        new Wander(this.game, pos.x, pos.y, this.enemies, this.player,
-            scoreSignal);
+        } while (player.position.distance(pos) < 300);
+        new Wander(game, pos.x, pos.y, groups.enemies);
     }
 
+    // Broken in reorganization, but not really necessary to fix at this point:
     // Random pickups
     // score
-    for (var i = 0; i < 24; i += 1) {
-        var pos;
-        do {
-            pos = new Phaser.Point(this.world.randomX, this.world.randomY);
-        } while (this.player.position.distance(pos) < 300);
-        new ScorePickup(this.game, pos.x, pos.y, this.pickups, "diamond",
-            scoreSignal);
-    }
-    // weapons
+    // for (var i = 0; i < 24; i += 1) {
+    //     var pos;
+    //     do {
+    //         pos = new Phaser.Point(this.world.randomX, this.world.randomY);
+    //     } while (player.position.distance(pos) < 300);
+    //     new ScorePickup(game, pos.x, pos.y, this.pickups, "diamond",
+    //         scoreSignal);
+    // }
+    
+    // Weapons
     for (var i = 0; i < 36; i += 1) {
         var pos;
         var newType;
-        var t = this.game.rnd.integerInRange(0, 4);
+        var t = game.rnd.integerInRange(0, 4);
         if (t === 1 || t === 3) {
             newType = "gun";
         } else if (t === 2 || t === 4) {
@@ -99,9 +107,8 @@ GameState.prototype.create = function () {
         }
         do {
             pos = new Phaser.Point(this.world.randomX, this.world.randomY);
-        } while (this.player.position.distance(pos) < 300);
-        new WeaponPickup(this.game, pos.x, pos.y, this.pickups, newType,
-            scoreSignal);
+        } while (player.position.distance(pos) < 300);
+        new WeaponPickup(game, pos.x, pos.y, groups.pickups, newType);
     }
 
 };

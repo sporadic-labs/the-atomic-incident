@@ -10,9 +10,7 @@ function BootState() {}
 
 BootState.prototype.create = function () {
     // Take care of any global game settings that need to be set up
-    // Make sure that sprites are drawn at integer positions - to avoid 
-    // sub-pixel position blurring
-    this.game.renderer.renderSession.roundPixels = true;
+    this.game.renderer.renderSession.roundPixels = false;
     // Disable cursor
     this.game.canvas.style.cursor = "none";
     // Disable the built-in pausing. This is useful for debugging, but may also

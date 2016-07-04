@@ -1,25 +1,26 @@
 module.exports = WeaponPickup;
 
 var BasePickup = require("./base-pickup.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 var ANIM_NAMES = {
     IDLE: "idle"
 };
 
 WeaponPickup.prototype = Object.create(BasePickup.prototype);
-WeaponPickup.prototype.constructor = WeaponPickup;
 
-function WeaponPickup(game, x, y, parentGroup, type, scoreSignal, ammoAmount) {
-    BasePickup.call(this, game, x, y, "assets", "pickups/box-01", parentGroup,
-        "weapon", scoreSignal, ammoAmount);
+function WeaponPickup(game, x, y, type, ammoAmount) {
+    var picksups = game.globals.groups.pickups;
+    BasePickup.call(this, game, x, y, "assets", "pickups/box-01", picksups,
+        "weapon", 0);
 
     this.type = type;
     if (this.type === "gun") {
-        this._applyRandomLightnessTint(0.98, 1, 0.6);
+        spriteUtils.applyRandomLightnessTint(this, 0.98, 1, 0.6);
     } else if (this.type === "laser") {
-        this._applyRandomLightnessTint(0.67, 1, 0.6);
+        spriteUtils.applyRandomLightnessTint(this, 0.67, 1, 0.6);
     } else if (this.type === "sword") {
-        this._applyRandomLightnessTint(0.16, 1, 0.6);
+        spriteUtils.applyRandomLightnessTint(this, 0.16, 1, 0.6);
     }
 
     // Setup animations

@@ -4,6 +4,8 @@ var Controller = require("../helpers/controller.js");
 var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
 var Sword = require("./weapons/sword.js");
+var ComboTracker = require("../helpers/combo-tracker.js");
+var Reticule = require("./reticule.js");
 var MeleeWeapon = require("./weapons/melee-weapon.js");
 
 var ANIM_NAMES = {
@@ -16,10 +18,8 @@ var ANIM_NAMES = {
 
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);
-Player.prototype.constructor = Player; // Make sure constructor reads properly
 
-function Player(game, x, y, parentGroup, enemies, pickups, reticule, 
-    comboTracker) {
+function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
@@ -28,26 +28,27 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
 
     this._isShooting = false;
     this._isDead = false;
-    this._reticule = reticule;
-    this._enemies = enemies;
-    this._pickups = pickups;
 
-    this._comboTracker = comboTracker;
-    this._comboTracker.addListener(this._onComboUpdate, this);
+    // Shorthand
+    var globals = this.game.globals;
+    this._enemies = globals.groups.enemies;
+    this._pickups = globals.groups.pickups;
 
-    this._gunType = "default";
+    // Combo
+    this._comboTracker = new ComboTracker(game, 2000);
+
+    // Reticle
+    this._reticule = new Reticule(game, globals.groups.foreground);
+
+    // Weapons
+    this._gunType = "gun";
     this._allGuns = {
-        "default": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
-            this._comboTracker, -1),
-        "gun": new Gun(game, parentGroup, this, this._enemies, 150, 450, 
-            this._comboTracker, 40),
-        "laser": new Laser(game, parentGroup, this, this._enemies, 200, 
-            this._comboTracker),
-        "sword": new Sword(game, parentGroup, this, "assets",
-            "weapons/sword", this._enemies, 600, 1200, this._comboTracker),
+        "default": new Gun(game, parentGroup, this, 150, 450, -1),
+        "gun": new Gun(game, parentGroup, this, 150, 450, 40),
+        "laser": new Laser(game, parentGroup, this, 200, 500),
+        "sword": new Sword(game, parentGroup, this, 600, 1200),
         "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
-            "weapons/hammer", this._enemies, 600, 1200, this._comboTracker)
-
+            "weapons/hammer", 600, 1200)
     };
 
     // Setup animations
@@ -94,9 +95,25 @@ function Player(game, x, y, parentGroup, enemies, pickups, reticule,
     this._controls.addKeyboardControl("attack-space", [Kb.SPACEBAR]);
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
+    // Cycling weapons
+    this._controls.addKeyboardControl("weapon-gun", [Kb.ONE]);
+    this._controls.addKeyboardControl("weapon-laser", [Kb.TWO]);
+    this._controls.addKeyboardControl("weapon-sword", [Kb.THREE]);
+    this._controls.addKeyboardControl("weapon-hammer", [Kb.FOUR]);
 }
 
-Player.prototype.preUpdate = function () {
+Player.prototype.getCombo = function () {
+    return this._comboTracker.getCombo();
+};
+
+Player.prototype.incrementCombo = function (increment) {
+    this._comboTracker.incrementCombo(increment);
+    var newSpeed = Phaser.Math.mapLinear(this.getCombo(), 0, 50, 50, 500);
+    newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
+    this._maxSpeed = newSpeed; 
+};
+
+Player.prototype.update = function () {
     this._controls.update();
 
     // Calculate the player's new acceleration. It should be zero if no keys are
@@ -144,6 +161,17 @@ Player.prototype.preUpdate = function () {
     // ammo check
     if (this._allGuns[this._gunType]._currentAmmo <= 0) {
         this._gunType = "default";
+    }
+
+    // Swapping weapons
+    if (this._controls.isControlActive("weapon-gun")) {
+        this._gunType = "gun";
+    } else if (this._controls.isControlActive("weapon-laser")) {
+        this._gunType = "laser";
+    } else if (this._controls.isControlActive("weapon-sword")) {
+        this._gunType = "sword";
+    } else if (this._controls.isControlActive("weapon-hammer")) {
+        this._gunType = "hammer";
     }
 
     // Firing logic
@@ -218,7 +246,7 @@ Player.prototype.preUpdate = function () {
 
     // Call the parent's preUpdate and return the value. Something else in
     // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.call(this);
+    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 
 };
 
@@ -248,12 +276,6 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
     pickup.destroy();
 };
 
-Player.prototype._onComboUpdate = function (combo) {
-    var newSpeed = Phaser.Math.mapLinear(combo, 0, 50, 50, 500);
-    newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
-    this._maxSpeed = newSpeed; 
-};
-
 Player.prototype._checkOverlapWithGroup = function (group, callback, 
     callbackContext) {
     for (var i = 0; i < group.children.length; i += 1) {
@@ -268,10 +290,10 @@ Player.prototype._checkOverlapWithGroup = function (group, callback,
 };
 
 Player.prototype.destroy = function () {
+    this._reticule.destroy();
+    this._comboTracker.destroy();
     for (var gun in this._allGuns) {
         this._allGuns[gun].destroy();
     }
-
-    // Call the super class and pass along any arugments
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

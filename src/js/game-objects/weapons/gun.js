@@ -4,7 +4,6 @@ var BaseWeapon = require("./base-weapon.js");
 var Projectile = require("./base-projectile.js");
 
 Gun.prototype = Object.create(BaseWeapon.prototype);
-Gun.prototype.constructor = Gun;
 
 // optional settings for projectiles
 var projectileOptions = {
@@ -14,12 +13,11 @@ var projectileOptions = {
     hiddenOnSetup: false
 };
 
-function Gun(game, parentGroup, player, enemies, cooldownTime, 
-    specialCooldownTime, comboTracker, totalAmmo) {
-    BaseWeapon.call(this, game, parentGroup, "Gun", player, enemies, 
-        cooldownTime, specialCooldownTime, comboTracker, totalAmmo);
-
-    this._currentAmmo = this._totalAmmo;
+function Gun(game, parentGroup, player, cooldownTime, specialCooldownTime,
+    totalAmmo) {
+    BaseWeapon.call(this, game, parentGroup, "Gun", player, cooldownTime, 
+        specialCooldownTime, totalAmmo);
+    this._currentAmmo = totalAmmo;
 }
 
 Gun.prototype.fire = function (targetPos) {
@@ -56,6 +54,6 @@ Gun.prototype.specialFire = function () {
 };
 
 Gun.prototype._createProjectile = function (x, y, angle) {
-    new Projectile(this.game, x, y, "assets", "weapons/slug", this, angle, 300,
-        500, this._enemies, this._comboTracker, projectileOptions);
+    new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
+        this._player, 100, angle, 300, 500, projectileOptions);
 };

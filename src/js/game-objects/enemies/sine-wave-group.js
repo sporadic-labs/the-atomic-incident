@@ -2,18 +2,18 @@ module.exports = SineWaveGroup;
 
 var BaseEnemy = require("./base-enemy.js");
 var utils = require("../../helpers/utilities.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 
 // -- GROUP --------------------------------------------------------------------
 
 SineWaveGroup.prototype = Object.create(Phaser.Group.prototype);
-SineWaveGroup.prototype.constructor = SineWaveGroup;
 
-function SineWaveGroup(game, numToSpawn, enemiesGroup, player, scoreSignal) {
-    Phaser.Group.call(this, game, enemiesGroup, "sine-wave-group");
+function SineWaveGroup(game, numToSpawn) {
+    var enemies = game.globals.groups.enemies;
+    Phaser.Group.call(this, game, enemies, "sine-wave-group");
     
-    this._player = player;
-    this._scoreSignal = scoreSignal;
+    this._player = this.game.globals.player;
     this._lineLength = 650;
 
     // Place the group directly over the player
@@ -63,13 +63,12 @@ SineWaveGroup.prototype._spawnSineEnemies = function (numToSpawn, rotation) {
         var linePoint = startPoint.clone().add(
             lineDirection.x * (fraction * this._lineLength),
             lineDirection.y * (fraction * this._lineLength)
-        )
+        );
         // Find the sine wave displacement
         var angle = fraction * (this._cycles * 2 * Math.PI) + this._phaseOffset;
         // Create the enemy
         var sineEnemy = new SineEnemy(this.game, this, angle, this._speed, 
-            linePoint, sinDirection, this._amplitude, this._player, 
-            this._scoreSignal);
+            linePoint, sinDirection, this._amplitude);
         // Set it's rotation so sprite is facing in the attack direction
         sineEnemy.rotation = rotation;
     }
@@ -79,12 +78,11 @@ SineWaveGroup.prototype._spawnSineEnemies = function (numToSpawn, rotation) {
 // -- INDIVIDUAL ---------------------------------------------------------------
 
 SineEnemy.prototype = Object.create(BaseEnemy.prototype);
-SineEnemy.prototype.constructor = SineEnemy;
 
 function SineEnemy(game, parentGroup, angle, angularSpeed, linePoint, 
-    sinDirection, amplitude, player, scoreSignal) {
-    BaseEnemy.call(this, game, 0, 0, "assets", "enemy01/idle-01", parentGroup,
-        player, scoreSignal, 1);
+    sinDirection, amplitude) {
+    BaseEnemy.call(this, game, 0, 0, "assets", "enemy01/idle-01", 100,
+        parentGroup);
 
     this._angle = angle;
     this._angularSpeed = angularSpeed;
@@ -92,12 +90,12 @@ function SineEnemy(game, parentGroup, angle, angularSpeed, linePoint,
     this._sinDirection = sinDirection;
     this._amplitude = amplitude;
 
-    this._applyRandomLightnessTint(140/360, 1.0, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 140/360, 1.0, 0.6);
     this._calculateSinePosition();
 }
 
 SineEnemy.prototype._calculateSinePosition = function () {
-    var height = this._amplitude * Math.sin(this._angle)
+    var height = this._amplitude * Math.sin(this._angle);
     this.position = this._linePoint.clone().add(
         this._sinDirection.x * height, 
         this._sinDirection.y * height

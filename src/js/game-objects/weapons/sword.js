@@ -1,19 +1,14 @@
 module.exports = Sword;
 
 Sword.prototype = Object.create(Phaser.Sprite.prototype);
-Sword.prototype.constructor = Sword;
 
-function Sword(game, parentGroup, player, key, frame, enemies,
-    cooldownTime, specialCooldownTime, comboTracker) {
-    Phaser.Sprite.call(this, game, player.x, player.y, key, frame);
+function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
+    Phaser.Sprite.call(this, game, 0, 0, "assets", "weapons/sword");
     this.anchor.set(0.5, 1.0);
     parentGroup.add(this);
 
-
     this._player = player;
-    this._enemies = enemies;
-    this._comboTracker = comboTracker;
-
+    this._enemies = this.game.globals.groups.enemies;
 
     // Set up a timer that doesn't autodestroy itself
     this._cooldownTimer = this.game.time.create(false);
@@ -21,22 +16,21 @@ function Sword(game, parentGroup, player, key, frame, enemies,
     this._cooldownTime = cooldownTime; // Milliseconds 
     this._specialCooldownTime = specialCooldownTime; // Milliseconds 
 
-
     this._isSwinging = false;
     this._ableToAttack = true;
     this._swingSpeed = 0.1;
     this._angle = 0;
     this._endAngle = 0;
     this._swingDir = 1;
+    this._damage = 25;
 
     this.visible = false;
     
     this.game.physics.arcade.enable(this);
     this.body.setSize(64, 64); // Fudge factor
-
 }
 
-Sword.prototype.preUpdate = function () {
+Sword.prototype.update = function () {
 
     if ((this._angle < this._endAngle && this._swingDir < 0) || 
         (this._angle > this._endAngle && this._swingDir > 0)) {
@@ -46,12 +40,12 @@ Sword.prototype.preUpdate = function () {
     }
 
     if (this._isSwinging) {
+        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, 
+            this);
 
-        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
-
-        this.position.x = this._player.position.x + (0.5 * this._player.width) * 
+        this.position.x = this._player.position.x + (0.5 * this._player.width) *
             Math.cos(this._angle);
-        this.position.y = this._player.position.y + (0.5 * this._player.width) * 
+        this.position.y = this._player.position.y + (0.5 * this._player.width) *
             Math.sin(this._angle);
         this.rotation = this._angle+(Math.PI/2);
         
@@ -61,12 +55,7 @@ Sword.prototype.preUpdate = function () {
             this._angle -= this._swingSpeed;
 
         this.visible = true;
-
     }
-
-    // Call the parent's preUpdate and return the value. Something else in
-    // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.call(this);
 
 };
 
@@ -74,8 +63,10 @@ Sword.prototype.fire = function (targetPos) {
     if (this._ableToAttack) {
         // Find angle
         this._isSwinging = true;
-        this._startAngle = this._player.position.angle(targetPos) - (this._swingDir * Math.PI/2); // Radians
-        this._endAngle = this._player.position.angle(targetPos) + (this._swingDir * Math.PI/2); // Radians
+        this._startAngle = this._player.position.angle(targetPos) - 
+            (this._swingDir * Math.PI/2); // Radians
+        this._endAngle = this._player.position.angle(targetPos) + 
+            (this._swingDir * Math.PI/2); // Radians
         this._angle = this._startAngle;
 
         this._startCooldown(this._cooldownTime);
@@ -87,7 +78,8 @@ Sword.prototype.specialFire = function (targetPos) {
         // Find angle
         this._isSwinging = true;
         this._startAngle = this._player.position.angle(targetPos); // Radians
-        this._endAngle = this._player.position.angle(targetPos) + (4*Math.PI); // Radians
+        this._endAngle = this._player.position.angle(targetPos) + 
+            (4*Math.PI); // Radians
         this._angle = this._startAngle;
 
         this._startCooldown(this._specialCooldownTime);
@@ -109,8 +101,8 @@ Sword.prototype._checkOverlapWithGroup = function (group, callback,
 };
 
 Sword.prototype._onCollideWithEnemy = function (self, enemy) {
-    enemy.killByPlayer();
-    this._comboTracker.incrementCombo(1);
+    var isKilled = enemy.takeDamage(this._damage);
+    if (isKilled) this._player.incrementCombo(1);
 };
 
 Sword.prototype._startCooldown = function (time) {
