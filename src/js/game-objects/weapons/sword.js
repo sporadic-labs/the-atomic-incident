@@ -1,26 +1,20 @@
 module.exports = Sword;
 
 Sword.prototype = Object.create(Phaser.Sprite.prototype);
-Sword.prototype.constructor = Sword;
 
-function Sword(game, parentGroup, player, key, frame, enemies,
-    cooldownTime, specialCooldownTime, comboTracker) {
-    Phaser.Sprite.call(this, game, player.x, player.y, key, frame);
+function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
+    Phaser.Sprite.call(this, game, 0, 0, "assets", "weapons/sword");
     this.anchor.set(0.5, 1.0);
     parentGroup.add(this);
 
-
     this._player = player;
-    this._enemies = enemies;
-    this._comboTracker = comboTracker;
-
+    this._enemies = this.game.globals.groups.enemies;
 
     // Set up a timer that doesn't autodestroy itself
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
     this._cooldownTime = cooldownTime; // Milliseconds 
     this._specialCooldownTime = specialCooldownTime; // Milliseconds 
-
 
     this._isSwinging = false;
     this._ableToAttack = true;
@@ -33,7 +27,6 @@ function Sword(game, parentGroup, player, key, frame, enemies,
     
     this.game.physics.arcade.enable(this);
     this.body.setSize(64, 64); // Fudge factor
-
 }
 
 Sword.prototype.preUpdate = function () {
@@ -66,7 +59,7 @@ Sword.prototype.preUpdate = function () {
 
     // Call the parent's preUpdate and return the value. Something else in
     // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.call(this);
+    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 
 };
 
@@ -110,7 +103,7 @@ Sword.prototype._checkOverlapWithGroup = function (group, callback,
 
 Sword.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.killByPlayer();
-    this._comboTracker.incrementCombo(1);
+    this._player.incrementCombo(1);
 };
 
 Sword.prototype._startCooldown = function (time) {

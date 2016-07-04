@@ -2,6 +2,7 @@ module.exports = WallGroup;
 
 var BaseEnemy = require("./base-enemy.js");
 var utils = require("../../helpers/utilities.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 
 // -- GROUP --------------------------------------------------------------------
@@ -12,13 +13,12 @@ var WALL_STATES = {
 };
 
 WallGroup.prototype = Object.create(Phaser.Group.prototype);
-WallGroup.prototype.constructor = WallGroup;
 
-function WallGroup(game, numToSpawn, enemiesGroup, player, scoreSignal) {
-    Phaser.Group.call(this, game, enemiesGroup, "wall-group");
+function WallGroup(game, numToSpawn) {
+    var enemies = game.globals.groups.enemies;
+    Phaser.Group.call(this, game, enemies, "wall-group");
     
-    this._player = player;
-    this._scoreSignal = scoreSignal;
+    this._player = this.game.globals.player;
     this._wallLength = 350;
     this._radius = 250; // Distance from player
     this._state = WALL_STATES.CHARGING;
@@ -65,8 +65,7 @@ WallGroup.prototype._spawnWall = function (numToSpawn, attackAngle) {
             wallDirection.y * (fraction * this._wallLength)
         )  
         // Create the enemy
-        var wallEnemy = new WallEnemy(this.game, point.x, point.y, this, 
-            this._player, this._scoreSignal);
+        var wallEnemy = new WallEnemy(this.game, point.x, point.y, this);
         // Set it's rotation so sprite is facing in the attack direction
         wallEnemy.rotation = attackAngle;
     }
@@ -116,11 +115,9 @@ WallGroup.prototype.destroy = function() {
 // -- INDIVIDUAL ---------------------------------------------------------------
 
 WallEnemy.prototype = Object.create(BaseEnemy.prototype);
-WallEnemy.prototype.constructor = WallEnemy;
 
-function WallEnemy(game, x, y, parentGroup, player, scoreSignal) {
-    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup,
-        player, scoreSignal, 1);
+function WallEnemy(game, x, y, parentGroup) {
+    BaseEnemy.call(this, game, x, y, "assets", "enemy01/idle-01", parentGroup);
 
-    this._applyRandomLightnessTint(175/360, 1.0, 0.6);
+    spriteUtils.applyRandomLightnessTint(this, 175/360, 1.0, 0.6);
 }

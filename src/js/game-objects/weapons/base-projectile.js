@@ -1,7 +1,6 @@
 module.exports = BaseProjectile;
 
 BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
-BaseProjectile.prototype.constructor = BaseProjectile;
 
 // options is an object containing some optional settings for the
 // base projectile class
@@ -9,17 +8,17 @@ BaseProjectile.prototype.constructor = BaseProjectile;
 // - rotateOnSetup - bool
 // - canBounce - bool
 // - hiddenOnSetup
-function BaseProjectile(game, x, y, key, frame, parentGroup, angle, speed, 
-    range, enemies, comboTracker, options) {
+function BaseProjectile(game, x, y, key, frame, parentGroup, player, angle, 
+    speed, range, options) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.set(0.5);
     parentGroup.add(this);
 
-    this._enemies = enemies;
+    this._player = player;
+    this._enemies = game.globals.groups.enemies;
     this._speed = speed;
     this._range = range;
     this._initialPos = this.position.clone();
-    this._comboTracker = comboTracker;
     this._remove = false; // check if BaseProjectile should be removed?
 
     // projectile options
@@ -80,7 +79,7 @@ BaseProjectile.prototype.update = function () {
 
 BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     enemy.killByPlayer();
-    this._comboTracker.incrementCombo(1);
+    this._player.incrementCombo(1);
 
     if (this._isDestructable) {
         this._remove = true;
