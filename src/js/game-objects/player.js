@@ -44,8 +44,10 @@ function Player(game, x, y, parentGroup) {
     // Weapons
     this._gunType = "gun";
     this._allGuns = {
+        "default": new Gun(game, parentGroup, this, 150, 450, -1),
         "gun": new Gun(game, parentGroup, this, 150, 450),
         "beam": new Beam(game, parentGroup, this),
+        "gun": new Gun(game, parentGroup, this, 150, 450, 40),
         "laser": new Laser(game, parentGroup, this, 200, 500),
         "sword": new Sword(game, parentGroup, this, 600, 1200),
         "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
@@ -160,6 +162,11 @@ Player.prototype.update = function () {
         }
     }
 
+    // ammo check
+    if (this._allGuns[this._gunType]._currentAmmo <= 0) {
+        this._gunType = "default";
+    }
+
     // Swapping weapons
     if (this._controls.isControlActive("weapon-gun")) {
         this._gunType = "gun";
@@ -172,7 +179,6 @@ Player.prototype.update = function () {
     } else if (this._controls.isControlActive("weapon-hammer")) {
         this._gunType = "hammer";
     }
-
 
     // Firing logic
     var isShooting = false;
@@ -265,7 +271,9 @@ Player.prototype._onCollideWithEnemy = function () {
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     if (pickup._category === "weapon") {
-        if (pickup.type === "sword") {
+        if (pickup.type === this._gunType) {
+            this._allGuns[this._gunType]._currentAmmo += pickup._pointValue;
+        } else if (pickup.type === "sword") {
             console.log("sword!");
         } else {
             this._gunType = pickup.type;   

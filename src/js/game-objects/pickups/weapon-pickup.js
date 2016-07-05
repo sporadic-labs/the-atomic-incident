@@ -9,8 +9,9 @@ var ANIM_NAMES = {
 
 WeaponPickup.prototype = Object.create(BasePickup.prototype);
 
-function WeaponPickup(game, x, y, parentGroup, type) {
-    BasePickup.call(this, game, x, y, "assets", "pickups/box-01", parentGroup,
+function WeaponPickup(game, x, y, type, ammoAmount) {
+    var picksups = game.globals.groups.pickups;
+    BasePickup.call(this, game, x, y, "assets", "pickups/box-01", picksups,
         "weapon", 0);
 
     this.type = type;
