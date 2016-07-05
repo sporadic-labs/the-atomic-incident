@@ -7,6 +7,7 @@ var Sword = require("./weapons/sword.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
 var MeleeWeapon = require("./weapons/melee-weapon.js");
+var Beam = require("./weapons/beam.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -44,6 +45,7 @@ function Player(game, x, y, parentGroup) {
     this._gunType = "gun";
     this._allGuns = {
         "gun": new Gun(game, parentGroup, this, 150, 450),
+        "beam": new Beam(game, parentGroup, this),
         "laser": new Laser(game, parentGroup, this, 200, 500),
         "sword": new Sword(game, parentGroup, this, 600, 1200),
         "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
@@ -96,9 +98,10 @@ function Player(game, x, y, parentGroup) {
         Phaser.Pointer.RIGHT_BUTTON);
     // Cycling weapons
     this._controls.addKeyboardControl("weapon-gun", [Kb.ONE]);
-    this._controls.addKeyboardControl("weapon-laser", [Kb.TWO]);
-    this._controls.addKeyboardControl("weapon-sword", [Kb.THREE]);
-    this._controls.addKeyboardControl("weapon-hammer", [Kb.FOUR]);
+    this._controls.addKeyboardControl("weapon-beam", [Kb.TWO]);
+    this._controls.addKeyboardControl("weapon-laser", [Kb.THREE]);
+    this._controls.addKeyboardControl("weapon-sword", [Kb.FOUR]);
+    this._controls.addKeyboardControl("weapon-hammer", [Kb.FIVE]);
 }
 
 Player.prototype.getCombo = function () {
@@ -160,6 +163,8 @@ Player.prototype.update = function () {
     // Swapping weapons
     if (this._controls.isControlActive("weapon-gun")) {
         this._gunType = "gun";
+    } else if (this._controls.isControlActive("weapon-beam")) {
+        this._gunType = "beam";
     } else if (this._controls.isControlActive("weapon-laser")) {
         this._gunType = "laser";
     } else if (this._controls.isControlActive("weapon-sword")) {
