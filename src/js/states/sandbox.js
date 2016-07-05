@@ -1,16 +1,16 @@
 /**
- * GameState - this is the main level for now
+ * Sandbox - this is the main level for now
  */
 
-module.exports = GameState;
+module.exports = Sandbox;
 
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 
-function GameState() {}
+function Sandbox() {}
 
-GameState.prototype.create = function () {
+Sandbox.prototype.create = function () {
     // Create the space for globals on the game object
     this.game.globals = {};
 
@@ -76,10 +76,16 @@ GameState.prototype.create = function () {
     // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
     // new SpawnerGroup(game, 4);
 
+    var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
+    for (var i=0; i<50; i++) {
+        new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
+            this.game.rnd.integerInRange(0, 1300), "gun", 5)
+    }
+
     // var SprialGroup = require("../game-objects/enemies/spiral-group.js");
     // new SprialGroup(game, 10, player.x, player.y);
 };
 
-GameState.prototype.render = function () {
+Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
 };
