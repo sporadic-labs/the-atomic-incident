@@ -25,7 +25,7 @@ function Beam(game, parentGroup, player) {
     this._beamSize = this.height;
     this._range = this.width;
 
-    this._collidingBox = game.make.sprite(0, 0, "assets", "beam");
+    this._collidingBox = game.make.sprite(0, 0);
     this._collidingBox.width = this._beamSize;
     this._collidingBox.height = this._beamSize;
     this._collidingBox.anchor.set(0, 0.5);
