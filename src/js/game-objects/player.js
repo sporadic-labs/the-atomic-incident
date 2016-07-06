@@ -4,10 +4,12 @@ var Controller = require("../helpers/controller.js");
 var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
 var Sword = require("./weapons/sword.js");
+var Rock = require("./weapons/rock.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
 var MeleeWeapon = require("./weapons/melee-weapon.js");
 var Beam = require("./weapons/beam.js");
+var spriteUtils = require("../helpers/sprite-utilities.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -44,11 +46,10 @@ function Player(game, x, y, parentGroup) {
     // Weapons
     this._gunType = "gun";
     this._allGuns = {
-        "default": new Gun(game, parentGroup, this, 150, 450, -1),
-        "gun": new Gun(game, parentGroup, this, 150, 450),
+        "default": new Rock(game, parentGroup, this, 250, 0, -1),
         "beam": new Beam(game, parentGroup, this),
-        "gun": new Gun(game, parentGroup, this, 150, 450, 40),
-        "laser": new Laser(game, parentGroup, this, 200, 500),
+        "gun": new Gun(game, parentGroup, this, 150, 450, 32),
+        "laser": new Laser(game, parentGroup, this, 200, 500, 60),
         "sword": new Sword(game, parentGroup, this, 600, 1200),
         "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
             "weapons/hammer", 600, 1200)
@@ -163,17 +164,20 @@ Player.prototype.update = function () {
     }
 
     // ammo check
-    if (this._allGuns[this._gunType]._currentAmmo <= 0) {
+    if (this.getAmmo() <= 0 && this._gunType != "default") {
+        this.getGun().emptyAmmo();
         this._gunType = "default";
     }
 
     // Swapping weapons
     if (this._controls.isControlActive("weapon-gun")) {
         this._gunType = "gun";
+        this.getGun().fillAmmo();
     } else if (this._controls.isControlActive("weapon-beam")) {
         this._gunType = "beam";
     } else if (this._controls.isControlActive("weapon-laser")) {
         this._gunType = "laser";
+        this.getGun().fillAmmo();
     } else if (this._controls.isControlActive("weapon-sword")) {
         this._gunType = "sword";
     } else if (this._controls.isControlActive("weapon-hammer")) {
@@ -202,7 +206,7 @@ Player.prototype.update = function () {
         attackDir.y += 1;
     }
     if (isShooting) {
-        this._allGuns[this._gunType].fire(attackDir);
+        this.getGun().fire(attackDir);
     }
 
     // special weapons logic
@@ -217,8 +221,8 @@ Player.prototype.update = function () {
         specialAttackDir.x += 0;
         specialAttackDir.y -= 1;
     }
-    if (isShootingSpecial) {
-        this._allGuns[this._gunType].specialFire(specialAttackDir);
+    if (isShootingSpecial && this.getGun().specialFire) {
+        this.getGun().specialFire(specialAttackDir);
     }
 
     // Check whether player is moving in order to update its animation
@@ -235,10 +239,10 @@ Player.prototype.update = function () {
     }
 
     // Enemy collisions
-    this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
+    spriteUtils.checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
 
     // Pickup collisions
-    this._checkOverlapWithGroup(this._pickups, this._onCollideWithPickup, this);
+    spriteUtils.checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
 
     // if (this._isDead) {
     //     console.log("dead!");
@@ -272,28 +276,15 @@ Player.prototype._onCollideWithEnemy = function () {
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     if (pickup._category === "weapon") {
         if (pickup.type === this._gunType) {
-            this._allGuns[this._gunType]._currentAmmo += pickup._pointValue;
-        } else if (pickup.type === "sword") {
-            console.log("sword!");
+            this.getGun().incrementAmmo(pickup.ammoAmount);
         } else {
-            this._gunType = pickup.type;   
+            this._gunType = pickup.type;
+            this.getGun().fillAmmo();
         }
     }
     pickup.destroy();
 };
 
-Player.prototype._checkOverlapWithGroup = function (group, callback, 
-    callbackContext) {
-    for (var i = 0; i < group.children.length; i += 1) {
-        var child = group.children[i];
-        if (child instanceof Phaser.Group) {
-            this._checkOverlapWithGroup(child, callback, callbackContext);
-        } else {
-            this.game.physics.arcade.overlap(this, child, callback, null, 
-                callbackContext);
-        }
-    }
-};
 
 Player.prototype.destroy = function () {
     this._reticule.destroy();
@@ -302,4 +293,14 @@ Player.prototype.destroy = function () {
         this._allGuns[gun].destroy();
     }
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
+};
+
+
+Player.prototype.getGun = function() {
+    return this._allGuns[this._gunType];
+};
+
+Player.prototype.getAmmo = function() {
+    if (this.getGun().getAmmo)
+        return this.getGun().getAmmo();
 };
