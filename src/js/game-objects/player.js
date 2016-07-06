@@ -42,9 +42,9 @@ function Player(game, x, y, parentGroup) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Weapons
-    this._gunType = "gun";
+    this._gunType = "default";
     this._allGuns = {
-        "default": new Gun(game, parentGroup, this, 150, 450, -1),
+        "default": new Beam(game, parentGroup, this),
         "gun": new Gun(game, parentGroup, this, 150, 450),
         "beam": new Beam(game, parentGroup, this),
         "gun": new Gun(game, parentGroup, this, 150, 450, 40),
