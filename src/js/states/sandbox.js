@@ -61,8 +61,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
     // new FlockingGroup(game, 15, player.x, player.y + 200);
@@ -80,6 +80,8 @@ Sandbox.prototype.create = function () {
     for (var i=0; i<50; i++) {
         new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
             this.game.rnd.integerInRange(0, 1300), "gun", 5)
+        new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
+            this.game.rnd.integerInRange(0, 1300), "laser", 9)
     }
 
     // var SprialGroup = require("../game-objects/enemies/spiral-group.js");
