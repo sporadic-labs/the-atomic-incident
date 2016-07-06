@@ -9,7 +9,7 @@ function Beam(game, parentGroup, player) {
     this._attackDuration = 200000;
     this._isAttacking = false;
     this._ableToAttack = true;
-    this._damage = 20;
+    this._damage = 0.1;
     this._player = player;
     this._enemies = game.globals.groups.enemies;
     this.visible = false;
@@ -40,8 +40,7 @@ function Beam(game, parentGroup, player) {
       new SAT.Vector(0, this.height / 2)
     ]);
 
-    this._graphics = game.make.graphics(0, 0);
-    parentGroup.add(this._graphics);
+    this.alpha = 0.1;
 }
 
 Beam.prototype.fire = function (targetPos) {
@@ -58,8 +57,6 @@ Beam.prototype.update = function () {
         this.position.copyFrom(this._player.position);
         this._checkCollisions();
     }
-    this._graphics.x = this.x;
-    this._graphics.y = this.y;
 };
 
 Beam.prototype.destroy = function () {
@@ -75,11 +72,6 @@ Beam.prototype._checkCollisions = function () {
       new SAT.Vector(this.width, this.height / 2).rotate(this.rotation),
       new SAT.Vector(0, this.height / 2).rotate(this.rotation)
     ];
-
-    // Render the points to the graphics for visualizing hitbox
-    this._graphics.clear();
-    this._graphics.beginFill(0x000, 0.5);
-    this._graphics.drawPolygon(points)
     
     // Update SAT polygon and check for collision
     this._satBody.setPoints(points);

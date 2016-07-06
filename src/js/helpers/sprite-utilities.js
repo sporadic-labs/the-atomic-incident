@@ -33,7 +33,7 @@ exports.satOverlapWithArcadeGroup = function (satPolygon, self, group, callback,
             // that way for now...
             var w = body.width;
             var h = body.height;
-            var pos = new SAT.Vector(body.x - (w / 2), body.y - (h / 2));  
+            var pos = new SAT.Vector(body.x, body.y);  
             var satOtherPolygon = new SAT.Box(pos, w, h).toPolygon();
             var collided = SAT.testPolygonPolygon(satPolygon, satOtherPolygon);
             if (collided) callback.call(context, self, child);

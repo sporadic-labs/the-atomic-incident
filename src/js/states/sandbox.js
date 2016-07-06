@@ -91,9 +91,10 @@ Sandbox.prototype.render = function () {
 
     var enemies = this.game.globals.groups.enemies;
     renderBodies(enemies);
+    renderBeam(this.game);
 };
 
-function renderBodies (element) {
+function renderBodies(element) {
     if (element instanceof Phaser.Sprite) {
         var body = element.body;
         if (body) {
@@ -101,8 +102,8 @@ function renderBodies (element) {
                 // Draw exactly what SpriteUtils.satOverlapWithArcadeGroup is 
                 // using for collisions...
                 element.game.debug.geom(new Phaser.Rectangle(
-                    body.x - body.halfWidth, 
-                    body.y - body.halfHeight, 
+                    body.x, 
+                    body.y, 
                     body.width, 
                     body.height
                 ));
@@ -112,5 +113,20 @@ function renderBodies (element) {
         }
     } else if (element instanceof Phaser.Group) {
         element.forEach(renderBodies);
+    }
+}
+
+function renderBeam(game) {
+    var beam = game.globals.player._allGuns.default;
+    var beamPoints = beam._satBody.calcPoints;
+
+    // Debug doesn't draw polygons, instead draw lines
+    var lastPoint = beamPoints[beamPoints.length - 1];
+    for (var i = 0; i < beamPoints.length; i += 1) {
+        var point = beamPoints[i];
+        game.debug.geom(new Phaser.Line(
+            lastPoint.x, lastPoint.y, point.x, point.y
+        )); 
+        lastPoint = point;
     }
 }
