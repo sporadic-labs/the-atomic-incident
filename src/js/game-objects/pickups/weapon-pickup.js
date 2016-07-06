@@ -14,6 +14,8 @@ function WeaponPickup(game, x, y, type, ammoAmount) {
     BasePickup.call(this, game, x, y, "assets", "pickups/box-01", picksups,
         "weapon", 0);
 
+    this.ammoAmount = ammoAmount;
+
     this.type = type;
     if (this.type === "gun") {
         spriteUtils.applyRandomLightnessTint(this, 0.98, 1, 0.6);
