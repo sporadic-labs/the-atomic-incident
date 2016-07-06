@@ -23,7 +23,7 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue) {
     // Configure simple physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = false;
-    this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
+    this.body.setCircle(this.width / 2); // Fudge factor
 }
 
 BaseEnemy.prototype.takeDamage = function (damage) {
