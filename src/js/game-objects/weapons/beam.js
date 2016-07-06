@@ -32,6 +32,16 @@ function Beam(game, parentGroup, player) {
     this.addChild(this._collidingBox);
     game.physics.arcade.enable(this);
     this._collidingBox.body.setSize(this._beamSize, this._beamSize);
+
+    this._satBody = new SAT.Polygon(new SAT.Vector(0, this.height / 2), [
+      new SAT.Vector(0, -this.height / 2),
+      new SAT.Vector(this.width, -this.height / 2),
+      new SAT.Vector(this.width, this.height / 2),
+      new SAT.Vector(0, this.height / 2)
+    ]);
+
+    this._graphics = game.make.graphics(0, 0);
+    parentGroup.add(this._graphics);
 }
 
 Beam.prototype.fire = function (targetPos) {
@@ -48,6 +58,8 @@ Beam.prototype.update = function () {
         this.position.copyFrom(this._player.position);
         this._checkCollisions();
     }
+    this._graphics.x = this.x;
+    this._graphics.y = this.y;
 };
 
 Beam.prototype.destroy = function () {
@@ -56,18 +68,24 @@ Beam.prototype.destroy = function () {
 };
 
 Beam.prototype._checkCollisions = function () {
-    // Hack: move a collision box along the beam's path in steps. This is likely
-    // way more expensive than a proper solution
-    var steps = Math.floor(this._range / this._beamSize);
-    var dx = Math.cos(this.rotation);
-    var dy = Math.sin(this.rotation);
-    for (var i = 0; i < steps; i += 1) {
-        var dist = i * this._beamSize;
-        this._collidingBox.body.x = this.x + dist * dx;
-        this._collidingBox.body.y = this.y + dist * dy;
-        SpriteUtils.checkOverlapWithGroup(this._collidingBox, this._enemies, 
-            this._onCollideWithEnemy, this);
-    }
+    // Calculate the points of the hitbox
+    var points = [
+      new SAT.Vector(0, -this.height / 2).rotate(this.rotation),
+      new SAT.Vector(this.width, -this.height / 2).rotate(this.rotation),
+      new SAT.Vector(this.width, this.height / 2).rotate(this.rotation),
+      new SAT.Vector(0, this.height / 2).rotate(this.rotation)
+    ];
+
+    // Render the points to the graphics for visualizing hitbox
+    this._graphics.clear();
+    this._graphics.beginFill(0x000, 0.5);
+    this._graphics.drawPolygon(points)
+    
+    // Update SAT polygon and check for collision
+    this._satBody.setPoints(points);
+    this._satBody.setOffset(new SAT.Vector(this.x, this.y));
+    SpriteUtils.satOverlapWithArcadeGroup(this._satBody, this, this._enemies, 
+        this._onCollideWithEnemy, this);
 };
 
 Beam.prototype._startAttack = function (targetPos) {
