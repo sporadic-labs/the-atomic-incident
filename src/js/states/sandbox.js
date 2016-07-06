@@ -61,8 +61,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
     // new FlockingGroup(game, 15, player.x, player.y + 200);
@@ -82,10 +82,35 @@ Sandbox.prototype.create = function () {
             this.game.rnd.integerInRange(0, 1300), "gun", 5)
     }
 
-    // var SprialGroup = require("../game-objects/enemies/spiral-group.js");
-    // new SprialGroup(game, 10, player.x, player.y);
+    var SprialGroup = require("../game-objects/enemies/spiral-group.js");
+    new SprialGroup(game, 50, player.x, player.y);
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
+
+    var enemies = this.game.globals.groups.enemies;
+    renderBodies(enemies);
 };
+
+function renderBodies (element) {
+    if (element instanceof Phaser.Sprite) {
+        var body = element.body;
+        if (body) {
+            if (body.isCircle) {
+                // Draw exactly what SpriteUtils.satOverlapWithArcadeGroup is 
+                // using for collisions...
+                element.game.debug.geom(new Phaser.Rectangle(
+                    body.x - body.halfWidth, 
+                    body.y - body.halfHeight, 
+                    body.width, 
+                    body.height
+                ));
+            } else {
+                element.game.debug.body(element);                
+            }
+        }
+    } else if (element instanceof Phaser.Group) {
+        element.forEach(renderBodies);
+    }
+}
