@@ -34,9 +34,6 @@ function SatBody(sprite, isDebug) {
     this._sprite = sprite;
     this._game = sprite.game;
 
-    // Debug graphics
-    this._debugGraphics = this._game.add.graphics(0, 0);
-    sprite.parent.add(this._debugGraphics);
     isDebug ? this.enableDebug(0x00FF00) : this.disableDebug();
 }
 
@@ -104,7 +101,7 @@ SatBody.prototype.update = function () {
 };
 
 SatBody.prototype.destroy = function () {
-    this._debugGraphics.destroy();
+    if (this._debugGraphics) this._debugGraphics.destroy();
 };
 
 SatBody.prototype.setDebugColor = function (debugColor) {
@@ -112,12 +109,20 @@ SatBody.prototype.setDebugColor = function (debugColor) {
 };
 
 SatBody.prototype.enableDebug = function (debugColor) {
-    this._isDebug = this._debugGraphics.visible = true;    
+    this._isDebug = true;
+    if (!this._debugGraphics) {
+        // Only create debug graphics if it is needed, for performance reasons
+        this._debugGraphics = this._game.add.graphics(0, 0);
+        this._sprite.parent.add(this._debugGraphics);
+    } 
+    this._debugGraphics.visible = true
     if (debugColor) this.setDebugColor(debugColor);
 };
 
 SatBody.prototype.disableDebug = function () {    
-    this._isDebug = this._debugGraphics.visible = false;
+    this._isDebug = false;
+    if (this._debugGraphics) this._debugGraphics.visible = false;
+
 };
 
 SatBody.prototype._updateDebug = function () {
