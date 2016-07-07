@@ -10,7 +10,7 @@ function Beam(game, parentGroup, player) {
     this._attackDuration = 200000;
     this._isAttacking = false;
     this._ableToAttack = true;
-    this._damage = 25;
+    this._damage = 10;
     this._player = player;
     this._enemies = game.globals.groups.enemies;
     this.visible = false;

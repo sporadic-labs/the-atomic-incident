@@ -4,7 +4,8 @@
  *   collisions? If so, overlap should happen with world coordinates.
  * - Do we need the option for a SAT body to be composed of multiple shapes, 
  *   e.g. a box plus a circle?
- * - Do we need 
+ * - Do we need there to be a possible offset between the sprite's anchor and 
+ *   this SatBody? If so, we need to track that.
  */
 
 module.exports = SatBody;
@@ -72,8 +73,10 @@ SatBody.prototype.update = function () {
         this._body.pos.x = this._sprite.x;
         this._body.pos.y = this._sprite.y;
     } else if (this._body instanceof SAT.Polygon) {
-        this._body.pos.x = this._sprite.x;
-        this._body.pos.y = this._sprite.y;        
+        // Fix for now - position is based on world, but something similar 
+        // should probably be happening for the rotation
+        this._body.pos.x = this._sprite.worldPosition.x;
+        this._body.pos.y = this._sprite.worldPosition.y;
         this._body.setAngle(this._sprite.rotation);
     }
 
