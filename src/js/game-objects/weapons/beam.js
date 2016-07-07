@@ -1,6 +1,7 @@
 module.exports = Beam;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
+var SatBody = require("../sat-body.js");
 
 Beam.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -9,7 +10,7 @@ function Beam(game, parentGroup, player) {
     this._attackDuration = 200000;
     this._isAttacking = false;
     this._ableToAttack = true;
-    this._damage = 0.1;
+    this._damage = 25;
     this._player = player;
     this._enemies = game.globals.groups.enemies;
     this.visible = false;
@@ -25,22 +26,8 @@ function Beam(game, parentGroup, player) {
     this._beamSize = this.height;
     this._range = this.width;
 
-    this._collidingBox = game.make.sprite(0, 0);
-    this._collidingBox.width = this._beamSize;
-    this._collidingBox.height = this._beamSize;
-    this._collidingBox.anchor.set(0, 0.5);
-    this.addChild(this._collidingBox);
-    game.physics.arcade.enable(this);
-    this._collidingBox.body.setSize(this._beamSize, this._beamSize);
-
-    this._satBody = new SAT.Polygon(new SAT.Vector(0, this.height / 2), [
-      new SAT.Vector(0, -this.height / 2),
-      new SAT.Vector(this.width, -this.height / 2),
-      new SAT.Vector(this.width, this.height / 2),
-      new SAT.Vector(0, this.height / 2)
-    ]);
-
-    this.alpha = 0.1;
+    this.satBody = new SatBody(this, true);
+    this.satBody.initBox(this.anchor);
 }
 
 Beam.prototype.fire = function (targetPos) {
@@ -54,30 +41,17 @@ Beam.prototype.fire = function (targetPos) {
 
 Beam.prototype.update = function () {
     if (this._isAttacking) {
+        this.satBody.update(); 
         this.position.copyFrom(this._player.position);
-        this._checkCollisions();
+        SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
+            this._onCollideWithEnemy, this);
     }
 };
 
 Beam.prototype.destroy = function () {
+    this.satBody.destroy();
     this._timer.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
-};
-
-Beam.prototype._checkCollisions = function () {
-    // Calculate the points of the hitbox
-    var points = [
-      new SAT.Vector(0, -this.height / 2).rotate(this.rotation),
-      new SAT.Vector(this.width, -this.height / 2).rotate(this.rotation),
-      new SAT.Vector(this.width, this.height / 2).rotate(this.rotation),
-      new SAT.Vector(0, this.height / 2).rotate(this.rotation)
-    ];
-    
-    // Update SAT polygon and check for collision
-    this._satBody.setPoints(points);
-    this._satBody.setOffset(new SAT.Vector(this.x, this.y));
-    SpriteUtils.satOverlapWithArcadeGroup(this._satBody, this, this._enemies, 
-        this._onCollideWithEnemy, this);
 };
 
 Beam.prototype._startAttack = function (targetPos) {
