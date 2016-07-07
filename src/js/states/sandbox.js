@@ -61,8 +61,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    // var Wave1 = require("../game-objects/waves/wave-1.js");
-    // new Wave1(game);
+    var Wave1 = require("../game-objects/waves/wave-1.js");
+    new Wave1(game);
     
     // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
     // new FlockingGroup(game, 15, player.x, player.y + 200);
@@ -76,57 +76,13 @@ Sandbox.prototype.create = function () {
     // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
     // new SpawnerGroup(game, 4);
 
-    var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
-    for (var i=0; i<50; i++) {
-        new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
-            this.game.rnd.integerInRange(0, 1300), "gun", 5)
-    }
-
-    var SprialGroup = require("../game-objects/enemies/spiral-group.js");
-    new SprialGroup(game, 50, player.x, player.y);
+    // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
+    // for (var i=0; i<50; i++) {
+    //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
+    //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
+    // }
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
-
-    var enemies = this.game.globals.groups.enemies;
-    renderBodies(enemies);
-    renderBeam(this.game);
 };
-
-function renderBodies(element) {
-    if (element instanceof Phaser.Sprite) {
-        var body = element.body;
-        if (body) {
-            if (body.isCircle) {
-                // Draw exactly what SpriteUtils.satOverlapWithArcadeGroup is 
-                // using for collisions...
-                element.game.debug.geom(new Phaser.Rectangle(
-                    body.x, 
-                    body.y, 
-                    body.width, 
-                    body.height
-                ));
-            } else {
-                element.game.debug.body(element);                
-            }
-        }
-    } else if (element instanceof Phaser.Group) {
-        element.forEach(renderBodies);
-    }
-}
-
-function renderBeam(game) {
-    var beam = game.globals.player._allGuns.default;
-    var beamPoints = beam._satBody.calcPoints;
-
-    // Debug doesn't draw polygons, instead draw lines
-    var lastPoint = beamPoints[beamPoints.length - 1];
-    for (var i = 0; i < beamPoints.length; i += 1) {
-        var point = beamPoints[i];
-        game.debug.geom(new Phaser.Line(
-            lastPoint.x, lastPoint.y, point.x, point.y
-        )); 
-        lastPoint = point;
-    }
-}
