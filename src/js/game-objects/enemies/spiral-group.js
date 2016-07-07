@@ -40,7 +40,7 @@ function SpiralEnemy(game, x, y, parentGroup, id) {
     this._id = id;
     this._flockingRadius = 100;
     this._flockingThreshold = 10;
-    this._maxSpeed = 1;
+    this._maxSpeed = 100;
 }
 
 SpiralEnemy.prototype.getId = function () {
