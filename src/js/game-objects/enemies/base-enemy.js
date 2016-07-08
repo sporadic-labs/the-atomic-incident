@@ -25,7 +25,7 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue) {
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = false;
     
-    this.satBody = new SatBody(this, true);
+    this.satBody = new SatBody(this);
     this.satBody.initBox(this.anchor);
 }
 

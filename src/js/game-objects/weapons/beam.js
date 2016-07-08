@@ -26,7 +26,7 @@ function Beam(game, parentGroup, player) {
     this._beamSize = this.height;
     this._range = this.width;
 
-    this.satBody = new SatBody(this, true);
+    this.satBody = new SatBody(this);
     this.satBody.initBox(this.anchor);
 }
 
