@@ -97,6 +97,8 @@ SatBody.prototype.update = function () {
         // Rotation should probably be world rotation...or something?
     }
 
+    if (SatBody._isDebug && !this._isDebug) this.enableDebug();
+    if (!SatBody._isDebug && this._isDebug) this.disableDebug();
     if (this._isDebug) this._updateDebug();
 };
 
@@ -109,6 +111,7 @@ SatBody.prototype.setDebugColor = function (debugColor) {
 };
 
 SatBody.prototype.enableDebug = function (debugColor) {
+    debugColor = (debugColor !== undefined) ? debugColor : 0x00FF00;
     this._isDebug = true;
     if (!this._debugGraphics) {
         // Only create debug graphics if it is needed, for performance reasons
@@ -137,4 +140,19 @@ SatBody.prototype._updateDebug = function () {
         this._debugGraphics.drawPolygon(this._body.calcPoints);
     }
     this._debugGraphics.endFill();
+};
+
+
+// -- STATIC METHODS -----------------------------------------------------------
+
+SatBody.isDebugAllEnabled = function () {
+    return (SatBody._isDebug === true);
+};
+
+SatBody.enableDebugAll = function () {
+    SatBody._isDebug = true;
+};
+
+SatBody.disableDebugAll = function () {
+    SatBody._isDebug = false;
 };

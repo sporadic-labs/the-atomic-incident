@@ -81,6 +81,14 @@ Sandbox.prototype.create = function () {
     //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
     //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
     // }
+    
+    var SatBody = require("../game-objects/sat-body.js");
+    var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
+    debugToggleKey.onDown.add(function () {
+        if (SatBody.isDebugAllEnabled()) SatBody.disableDebugAll();
+        else SatBody.enableDebugAll();
+    }, this);
+
 };
 
 Sandbox.prototype.render = function () {
