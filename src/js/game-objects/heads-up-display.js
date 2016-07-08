@@ -2,6 +2,8 @@ module.exports = HeadsUpDisplay;
 
 HeadsUpDisplay.prototype = Object.create(Phaser.Group.prototype);
 
+var SatBody = require("../game-objects/sat-body.js");
+
 function HeadsUpDisplay(game, parentGroup) {
     Phaser.Group.call(this, game, parentGroup, "heads-up-display");
     
@@ -21,6 +23,10 @@ function HeadsUpDisplay(game, parentGroup) {
     this.add(this._comboText);
     this._ammoText = game.make.text(30, 100, "Ammo: 0", textStyle);
     this.add(this._ammoText);
+    this._debugText = game.make.text(30, game.height - 40, 
+        "Debug ('E' key): false", textStyle);
+    this._debugText.fontSize = 14;
+    this.add(this._debugText);
 }
 
 HeadsUpDisplay.prototype.update = function () {
@@ -32,4 +38,5 @@ HeadsUpDisplay.prototype.update = function () {
             this._player._allGuns[this._player._gunType]._currentAmmo);
     }
     this._comboText.setText("Combo: " + this._player.getCombo());
+    this._debugText.setText("Debug ('E' key): " + SatBody.isDebugAllEnabled());
 };
