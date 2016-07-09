@@ -1,5 +1,8 @@
 module.exports = Sword;
 
+var SpriteUtils = require("../../helpers/sprite-utilities.js");
+var SatBody = require("../sat-body.js");
+
 Sword.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
@@ -26,12 +29,11 @@ function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
 
     this.visible = false;
     
-    this.game.physics.arcade.enable(this);
-    this.body.setSize(64, 64); // Fudge factor
+    this.satBody = new SatBody(this);
+    this.satBody.initBox(this.anchor, 26, this.height);
 }
 
 Sword.prototype.update = function () {
-
     if ((this._angle < this._endAngle && this._swingDir < 0) || 
         (this._angle > this._endAngle && this._swingDir > 0)) {
         this._isSwinging = false;
@@ -40,8 +42,8 @@ Sword.prototype.update = function () {
     }
 
     if (this._isSwinging) {
-        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, 
-            this);
+        SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
+            this._onCollideWithEnemy, this);
 
         this.position.x = this._player.position.x + (0.5 * this._player.width) *
             Math.cos(this._angle);
@@ -57,6 +59,7 @@ Sword.prototype.update = function () {
         this.visible = true;
     }
 
+    this.satBody.update();
 };
 
 Sword.prototype.fire = function (targetPos) {
@@ -87,19 +90,6 @@ Sword.prototype.specialFire = function (targetPos) {
     }
 };
 
-Sword.prototype._checkOverlapWithGroup = function (group, callback, 
-    callbackContext) {
-    for (var i = 0; i < group.children.length; i += 1) {
-        var child = group.children[i];
-        if (child instanceof Phaser.Group) {
-            this._checkOverlapWithGroup(child, callback, callbackContext);
-        } else {
-            this.game.physics.arcade.overlap(this, child, callback, null, 
-                callbackContext);
-        }
-    }
-};
-
 Sword.prototype._onCollideWithEnemy = function (self, enemy) {
     var isKilled = enemy.takeDamage(this._damage);
     if (isKilled) this._player.incrementCombo(1);
@@ -116,6 +106,7 @@ Sword.prototype._startCooldown = function (time) {
 
 Sword.prototype.destroy = function () {
     this._cooldownTimer.destroy();
+    this.satBody.destroy();
 
     // Call the super class and pass along any arugments
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
