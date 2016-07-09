@@ -39,10 +39,16 @@ Beam.prototype.fire = function (targetPos) {
     }
 };
 
-Beam.prototype.update = function () {
+Beam.prototype.postUpdate = function () {
+    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
     if (this._isAttacking) {
-        this.satBody.update(); 
+        // Update graphics to player position. Note: this seems fragile. It the
+        // player postUpdates AFTER this sprite, this sprite will be off by a
+        // frame's worth of physics.
         this.position.copyFrom(this._player.position);
+        // Update SAT to match physics
+        this.satBody.update();
+        // Check overlapd
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
     }
