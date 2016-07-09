@@ -1,7 +1,9 @@
 module.exports = MeleeWeapon;
 
+var SpriteUtils = require("../../helpers/sprite-utilities.js");
+var SatBody = require("../sat-body.js");
+
 MeleeWeapon.prototype = Object.create(Phaser.Sprite.prototype);
-MeleeWeapon.prototype.constructor = MeleeWeapon;
 
 function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime, 
     specialCooldownTime) {
@@ -28,19 +30,18 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
     this.visible = false;
     this._swing = null; 
 
-
-    this.game.physics.arcade.enable(this);
-    this.body.setSize(0.8 * this.width, 0.8 * this.height, -12, 12);
-
+    this.satBody = new SatBody(this);
+    this.satBody.initBox(this.anchor, 38, this.height + this.pivot.y);
 }
 
 MeleeWeapon.prototype.update = function () {
     if (this.visible) {
-        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, 
-            this);
-
         this.position.x = this._player.position.x;
         this.position.y = this._player.position.y;
+        this.satBody.update();
+
+        SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
+            this._onCollideWithEnemy, this);
     }
 };
 
@@ -52,20 +53,13 @@ MeleeWeapon.prototype.fire = function (targetPos) {
         var pos = this._player.position.angle(targetPos) * (180/Math.PI);
         var endAngle = pos + (this._swingDir * 180); // tweens take degrees
 
-        console.log(pos);
-
         this._swing = this.game.add.tween(this).to({angle: endAngle}, 
             this._cooldownTime, "Quad.easeInOut", false, 0, 0, false);
         this._swing.onComplete.add(function() {
             this.visible = false;
-            this.body.enable = false;
         }, this);
 
         this.visible = true;
-        this.body.enable = true;
-        this.body.setSize(0.8 * this.width, 0.8 * this.height, 
-            10 * Math.cos(this._player.position.angle(targetPos)), 
-            10 * Math.sin(this._player.position.angle(targetPos)));
 
         this._swing.start();
 
@@ -81,20 +75,13 @@ MeleeWeapon.prototype.specialFire = function (targetPos) {
             (180/Math.PI);
         var endAngle = pos + 720; // for some reason tweens take degrees
 
-        console.log(pos);
-
         this._swing = this.game.add.tween(this).to({angle: endAngle}, 
             this._specialCooldownTime, "Quad.easeInOut", false, 0, 0, false);
         this._swing.onComplete.add(function() {
             this.visible = false;
-            this.body.enable = false;
         }, this);
 
         this.visible = true;
-        this.body.enable = true;
-        this.body.setSize(0.8 * this.width, 0.8 * this.height, 
-            10 * Math.cos(this._player.position.angle(targetPos)), 
-            10 * Math.sin(this._player.position.angle(targetPos)));
         this._swing.start();
 
         this._startCooldown(this._cooldownTime);
@@ -137,6 +124,7 @@ MeleeWeapon.prototype._onCollideWithEnemy = function (self, enemy) {
 
 MeleeWeapon.prototype.destroy = function () {
     this._cooldownTimer.destroy();
+    this.satBody.destroy();
 
     // Call the super class and pass along any arugments
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
