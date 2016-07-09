@@ -1,5 +1,8 @@
 module.exports = BaseProjectile;
 
+var SpriteUtils = require("../../helpers/sprite-utilities.js");
+var SatBody = require("../sat-body.js");
+
 BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 
 // options is an object containing some optional settings for the
@@ -54,23 +57,19 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
+
+    this.satBody = new SatBody(this);
+    this.satBody.initBox(this.anchor);
 }
 
-BaseProjectile.prototype._checkOverlapWithGroup = function (group, callback, 
-    callbackContext) {
-    for (var i = 0; i < group.children.length; i += 1) {
-        var child = group.children[i];
-        if (child instanceof Phaser.Group) {
-            this._checkOverlapWithGroup(child, callback, callbackContext);
-        } else {
-            this.game.physics.arcade.overlap(this, child, callback, null, 
-                callbackContext);
-        }
-    }
-};
-
-BaseProjectile.prototype.update = function () {
-    this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, this);
+BaseProjectile.prototype.postUpdate = function () {
+    // Update arcade physics
+    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
+    // Update SAT to match physics
+    this.satBody.update();
+    // Check overlapd
+    SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
+        this._onCollideWithEnemy, this);
     // If projectile has collided with an enemy, or is out of range, remove it
     if ((this.position.distance(this._initialPos) >
         this._range) || (this._isDestructable && this._remove)) {
@@ -84,5 +83,9 @@ BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     if (this._isDestructable) {
         this._remove = true;
     }
+};
 
+BaseProjectile.prototype.destroy = function () {
+    this.satBody.destroy();
+    Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };
