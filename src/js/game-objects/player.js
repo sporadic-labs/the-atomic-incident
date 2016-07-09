@@ -44,8 +44,7 @@ function Player(game, x, y, parentGroup) {
     // Weapons
     this._gunType = "default";
     this._allGuns = {
-        "default": new Beam(game, parentGroup, this),
-        "gun": new Gun(game, parentGroup, this, 150, 450),
+        "default": new Gun(game, parentGroup, this, 150, 450, -1),
         "beam": new Beam(game, parentGroup, this),
         "gun": new Gun(game, parentGroup, this, 150, 450, 40),
         "laser": new Laser(game, parentGroup, this, 200, 500),
