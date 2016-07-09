@@ -11,6 +11,8 @@
 
 module.exports = SatBody;
 
+var utils = require("../helpers/utilities.js");
+
 var BODY_TYPE = {
     CIRCLE: "circle",
     POLYGON: "polygon"
@@ -37,11 +39,13 @@ function SatBody(sprite, isDebug) {
     isDebug ? this.enableDebug(0x00FF00) : this.disableDebug();
 }
 
-SatBody.prototype.initBox = function (anchor) {
-    this._bodyType = BODY_TYPE.POLYGON;
+SatBody.prototype.initBox = function (anchor, width, height) {
     var s = this._sprite;
-    this._body = Box(Vec(s.x, s.y), s.width, s.height).toPolygon();
-    this._body.translate(-anchor.x * s.width, -anchor.y * s.height);
+    width = utils.default(width, s.width);
+    height = utils.default(height, s.height);
+    this._bodyType = BODY_TYPE.POLYGON;
+    this._body = Box(Vec(s.x, s.y), width, height).toPolygon();
+    this._body.translate(-anchor.x * width, -anchor.y * height);
 };
 
 SatBody.prototype.initCircle = function (r) {
