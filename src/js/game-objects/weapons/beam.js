@@ -6,6 +6,14 @@ var SatBody = require("../sat-body.js");
 Beam.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Beam(game, parentGroup, player) {
+    Phaser.Sprite.call(this, game, 0, 0, "assets", "weapons/beam");
+    this.anchor.set(0, 0.5);
+    parentGroup.add(this);
+    this.sendToBack(); // Underneath player
+    
+    this._timer = game.time.create(false);
+    this._timer.start();
+    
     this._cooldownTime = 1000;
     this._attackDuration = 200000;
     this._isAttacking = false;
@@ -13,16 +21,8 @@ function Beam(game, parentGroup, player) {
     this._damage = 10;
     this._player = player;
     this._enemies = game.globals.groups.enemies;
+
     this.visible = false;
-
-    this._timer = game.time.create(false);
-    this._timer.start();
-
-    Phaser.Sprite.call(this, game, 0, 0, "assets", "weapons/beam");
-    this.anchor.set(0, 0.5);
-    parentGroup.add(this);
-    this.sendToBack(); // Underneath player
-
     this._beamSize = this.height;
     this._range = this.width;
 
