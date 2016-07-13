@@ -2,7 +2,6 @@ module.exports = BaseEnemy;
 
 var utils = require("../../helpers/utilities.js");
 var HealthBar = require("./health-bar.js");
-var SatBody = require("../sat-body.js");
 
 BaseEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -25,8 +24,7 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue) {
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = false;
     
-    this.satBody = new SatBody(this);
-    this.satBody.initBox(this.anchor);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
 BaseEnemy.prototype.takeDamage = function (damage) {
@@ -45,11 +43,9 @@ BaseEnemy.prototype.postUpdate = function () {
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
     // Now extract sprite position and apply it to the group
     this._healthBar.updatePosition();
-    this.satBody.update();
 };
 
 BaseEnemy.prototype.destroy = function () {
     this._healthBar.destroy();
-    this.satBody.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

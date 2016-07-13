@@ -1,7 +1,6 @@
 module.exports = MeleeWeapon;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
-var SatBody = require("../sat-body.js");
 
 MeleeWeapon.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -30,15 +29,14 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
     this.visible = false;
     this._swing = null; 
 
-    this.satBody = new SatBody(this);
-    this.satBody.initBox(this.anchor, 38, this.height + this.pivot.y);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this, 38, 
+        this.height + this.pivot.y);
 }
 
 MeleeWeapon.prototype.update = function () {
     if (this.visible) {
         this.position.x = this._player.position.x;
         this.position.y = this._player.position.y;
-        this.satBody.update();
 
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
@@ -124,8 +122,6 @@ MeleeWeapon.prototype._onCollideWithEnemy = function (self, enemy) {
 
 MeleeWeapon.prototype.destroy = function () {
     this._cooldownTimer.destroy();
-    this.satBody.destroy();
-
     // Call the super class and pass along any arugments
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

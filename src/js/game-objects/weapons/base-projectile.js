@@ -1,7 +1,6 @@
 module.exports = BaseProjectile;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
-var SatBody = require("../sat-body.js");
 
 BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -58,15 +57,12 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
 
-    this.satBody = new SatBody(this);
-    this.satBody.initBox(this.anchor);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
 BaseProjectile.prototype.postUpdate = function () {
     // Update arcade physics
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
-    // Update SAT to match physics
-    this.satBody.update();
     // Check overlapd
     SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
         this._onCollideWithEnemy, this);
@@ -83,9 +79,4 @@ BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     if (this._isDestructable) {
         this._remove = true;
     }
-};
-
-BaseProjectile.prototype.destroy = function () {
-    this.satBody.destroy();
-    Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

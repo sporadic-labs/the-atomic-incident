@@ -1,7 +1,6 @@
 module.exports = Beam;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
-var SatBody = require("../sat-body.js");
 
 Beam.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -26,8 +25,7 @@ function Beam(game, parentGroup, player) {
     this._beamSize = this.height;
     this._range = this.width;
 
-    this.satBody = new SatBody(this);
-    this.satBody.initBox(this.anchor);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
 Beam.prototype.fire = function (targetPos) {
@@ -46,8 +44,6 @@ Beam.prototype.postUpdate = function () {
         // player postUpdates AFTER this sprite, this sprite will be off by a
         // frame's worth of physics.
         this.position.copyFrom(this._player.position);
-        // Update SAT to match physics
-        this.satBody.update();
         // Check overlapd
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
@@ -55,7 +51,6 @@ Beam.prototype.postUpdate = function () {
 };
 
 Beam.prototype.destroy = function () {
-    this.satBody.destroy();
     this._timer.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

@@ -1,7 +1,6 @@
 module.exports = Sword;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
-var SatBody = require("../sat-body.js");
 
 Sword.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -29,8 +28,8 @@ function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
 
     this.visible = false;
     
-    this.satBody = new SatBody(this);
-    this.satBody.initBox(this.anchor, 26, this.height);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this, 26, 
+        this.height);
 }
 
 Sword.prototype.update = function () {
@@ -58,8 +57,6 @@ Sword.prototype.update = function () {
 
         this.visible = true;
     }
-
-    this.satBody.update();
 };
 
 Sword.prototype.fire = function (targetPos) {
@@ -106,7 +103,6 @@ Sword.prototype._startCooldown = function (time) {
 
 Sword.prototype.destroy = function () {
     this._cooldownTimer.destroy();
-    this.satBody.destroy();
 
     // Call the super class and pass along any arugments
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
