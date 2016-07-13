@@ -4,6 +4,7 @@
 
 module.exports = Sandbox;
 
+var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -26,6 +27,11 @@ Sandbox.prototype.create = function () {
     game.canvas.addEventListener("contextmenu", function(e) {
         e.preventDefault();
     });
+
+    // Plugins
+    globals.plugins = {
+        satBody: game.plugins.add(SatBodyPlugin)
+    };
 
     // Groups for z-index sorting and for collisions
     var groups = {
