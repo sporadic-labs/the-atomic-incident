@@ -11,7 +11,8 @@
 
 module.exports = SatBody;
 
-var utils = require("../helpers/utilities.js");
+var utils = require("../../helpers/utilities.js");
+var SAT = require("sat");
 
 var BODY_TYPE = {
     CIRCLE: "circle",
@@ -19,32 +20,35 @@ var BODY_TYPE = {
 };
 
 // Helper Object Factories
-var Vec = function (x, y) {
+var vec = function (x, y) {
     return new SAT.Vector(x, y);
 };
-var Box = function (pos, w, h) {
+var box = function (pos, w, h) {
     return new SAT.Box(pos, w, h);
 };
-var Circle = function (pos, r) {
+var circle = function (pos, r) {
     return new SAT.Circle(pos, r);
 };
-var Polygon = function (pos, points) {
+var polygon = function (pos, points) {
     return new SAT.Polygon(pos, points);
 };
 
-function SatBody(sprite, isDebug) {
+function SatBody(sprite) {
+    this.game = sprite.game;
     this._sprite = sprite;
-    this._game = sprite.game;
+    this.disableDebug();
 
-    isDebug ? this.enableDebug(0x00FF00) : this.disableDebug();
+    // Schedule clean up when parent sprite owner is destroyed
+    this._sprite.events.onDestroy.add(this.destroy.bind(this));
 }
 
-SatBody.prototype.initBox = function (anchor, width, height) {
+SatBody.prototype.initBox = function (width, height) {
     var s = this._sprite;
+    var anchor = this._sprite.anchor;
     width = utils.default(width, s.width);
     height = utils.default(height, s.height);
     this._bodyType = BODY_TYPE.POLYGON;
-    this._body = Box(Vec(s.x, s.y), width, height).toPolygon();
+    this._body = box(vec(s.x, s.y), width, height).toPolygon();
     this._body.translate(-anchor.x * width, -anchor.y * height);
 };
 
@@ -52,7 +56,7 @@ SatBody.prototype.initCircle = function (r) {
     this._bodyType = BODY_TYPE.CIRCLE;
     var s = this._sprite;
     if (!r) r = s.width / 2;
-    this._body = Circle(Vec(s.x, s.y), r);
+    this._body = circle(vec(s.x, s.y), r);
 };
 
 SatBody.prototype.initPolygon = function (points) {
@@ -61,7 +65,7 @@ SatBody.prototype.initPolygon = function (points) {
     // arguments variable to construct the points
     this._bodyType = BODY_TYPE.POLYGON;
     var s = this._sprite;
-    this._body = Polygon(Vec(s.x, s.y), points);
+    this._body = polygon(vec(s.x, s.y), points);
 };
 
 SatBody.prototype.getBody = function () {
@@ -89,7 +93,7 @@ SatBody.prototype.testOverlap = function (otherBody) {
     }
 };
 
-SatBody.prototype.update = function () {
+SatBody.prototype.postUpdate = function () {
     // Update the position of the colliding body
     if (this._bodyType === BODY_TYPE.CIRCLE) {
         this._body.pos.x = this._sprite.worldPosition.x;
@@ -101,13 +105,12 @@ SatBody.prototype.update = function () {
         // Rotation should probably be world rotation...or something?
     }
 
-    if (SatBody._isDebug && !this._isDebug) this.enableDebug();
-    if (!SatBody._isDebug && this._isDebug) this.disableDebug();
     if (this._isDebug) this._updateDebug();
 };
 
 SatBody.prototype.destroy = function () {
     if (this._debugGraphics) this._debugGraphics.destroy();
+    this.game.globals.plugins.satBody.removeBody(this);
 };
 
 SatBody.prototype.setDebugColor = function (debugColor) {
@@ -119,17 +122,16 @@ SatBody.prototype.enableDebug = function (debugColor) {
     this._isDebug = true;
     if (!this._debugGraphics) {
         // Only create debug graphics if it is needed, for performance reasons
-        this._debugGraphics = this._game.add.graphics(0, 0);
+        this._debugGraphics = this.game.add.graphics(0, 0);
         this._sprite.parent.add(this._debugGraphics);
     } 
-    this._debugGraphics.visible = true
+    this._debugGraphics.visible = true;
     if (debugColor) this.setDebugColor(debugColor);
 };
 
 SatBody.prototype.disableDebug = function () {    
     this._isDebug = false;
     if (this._debugGraphics) this._debugGraphics.visible = false;
-
 };
 
 SatBody.prototype._updateDebug = function () {
@@ -144,19 +146,4 @@ SatBody.prototype._updateDebug = function () {
         this._debugGraphics.drawPolygon(this._body.calcPoints);
     }
     this._debugGraphics.endFill();
-};
-
-
-// -- STATIC METHODS -----------------------------------------------------------
-
-SatBody.isDebugAllEnabled = function () {
-    return (SatBody._isDebug === true);
-};
-
-SatBody.enableDebugAll = function () {
-    SatBody._isDebug = true;
-};
-
-SatBody.disableDebugAll = function () {
-    SatBody._isDebug = false;
 };
