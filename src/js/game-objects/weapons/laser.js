@@ -16,6 +16,7 @@ var projectileOptions = {
 function Laser(game, parentGroup, player, cooldownTime, specialCooldownTime) {
     BaseWeapon.call(this, game, parentGroup, "Laser", player, cooldownTime, 
         specialCooldownTime);
+    this._currentAmmo = 100;
 }
 
 Laser.prototype.fire = function (targetPos) {
