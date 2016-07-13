@@ -21,7 +21,8 @@ function Gun(game, parentGroup, player, cooldownTime, specialCooldownTime,
 }
 
 Gun.prototype.fire = function (targetPos) {
-    if (this.isAbleToAttack() && (this._currentAmmo > 0 || this._totalAmmo < 0)) {
+    if (this.isAbleToAttack() && 
+        (this._currentAmmo > 0 || this._totalAmmo < 0)) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
         // Start bullet in a position along that trajectory, but in front of 
