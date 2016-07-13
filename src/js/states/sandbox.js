@@ -88,11 +88,14 @@ Sandbox.prototype.create = function () {
     //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
     // }
     
-    var SatBody = require("../game-objects/sat-body.js");
+    // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
     debugToggleKey.onDown.add(function () {
-        if (SatBody.isDebugAllEnabled()) SatBody.disableDebugAll();
-        else SatBody.enableDebugAll();
+        if (globals.plugins.satBody.isDebugAllEnabled()) {
+            globals.plugins.satBody.disableDebugAll();
+        } else {
+            globals.plugins.satBody.enableDebugAll();
+        }
     }, this);
 
 };
