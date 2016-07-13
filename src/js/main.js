@@ -1,5 +1,3 @@
-window.SAT = require("sat");
-
 var Sandbox = require("./states/sandbox.js");
 var GameState = require("./states/game-state.js");
 var BootState = require("./states/boot-state.js");
