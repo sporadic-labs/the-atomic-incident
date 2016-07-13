@@ -33,7 +33,7 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
         this.height + this.pivot.y);
 }
 
-MeleeWeapon.prototype.update = function () {
+MeleeWeapon.prototype.postUpdate = function () {
     if (this.visible) {
         this.position.x = this._player.position.x;
         this.position.y = this._player.position.y;
@@ -41,6 +41,7 @@ MeleeWeapon.prototype.update = function () {
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
     }
+    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
 };
 
 MeleeWeapon.prototype.fire = function (targetPos) {
