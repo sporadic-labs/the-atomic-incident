@@ -63,7 +63,7 @@ Sandbox.prototype.create = function () {
     
     // Score
     globals.scoreKeeper = new ScoreKeeper();
-
+    
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
