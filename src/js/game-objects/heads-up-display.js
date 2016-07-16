@@ -34,7 +34,7 @@ HeadsUpDisplay.prototype.update = function () {
         this._ammoText.setText("Ammo: -");
     } else {
         this._ammoText.setText("Ammo: " + 
-            this._player._allGuns[this._player._gunType]._currentAmmo);
+            this._player.getAmmo() + " / " + this._player.getGun()._totalAmmo);
     }
     this._comboText.setText("Combo: " + this._player.getCombo());
     this._debugText.setText("Debug ('E' key): " + 

@@ -33,6 +33,29 @@ BaseWeapon.prototype._startCooldown = function (time) {
     }, this);
 };
 
+
+BaseWeapon.prototype.getAmmo = function() {
+    return this._currentAmmo;
+};
+
+BaseWeapon.prototype.incrementAmmo = function(amt) {
+    if (this._totalAmmo > (this._currentAmmo + amt)) {
+        this._currentAmmo += amt;
+    } else {
+        this._currentAmmo = this._totalAmmo;
+        console.log("too much ammo!");
+    }
+};
+
+BaseWeapon.prototype.fillAmmo = function() {
+    this._currentAmmo = this._totalAmmo;
+}
+
+BaseWeapon.prototype.emptyAmmo = function() {
+    this._currentAmmo = 0;
+}
+
+
 BaseWeapon.prototype.destroy = function () {
     this._cooldownTimer.destroy();
 
