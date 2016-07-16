@@ -1,5 +1,7 @@
 module.exports = Sword;
 
+var SpriteUtils = require("../../helpers/sprite-utilities.js");
+
 Sword.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
@@ -26,12 +28,11 @@ function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
 
     this.visible = false;
     
-    this.game.physics.arcade.enable(this);
-    this.body.setSize(64, 64); // Fudge factor
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this, 26, 
+        this.height);
 }
 
 Sword.prototype.update = function () {
-
     if ((this._angle < this._endAngle && this._swingDir < 0) || 
         (this._angle > this._endAngle && this._swingDir > 0)) {
         this._isSwinging = false;
@@ -40,8 +41,8 @@ Sword.prototype.update = function () {
     }
 
     if (this._isSwinging) {
-        this._checkOverlapWithGroup(this._enemies, this._onCollideWithEnemy, 
-            this);
+        SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
+            this._onCollideWithEnemy, this);
 
         this.position.x = this._player.position.x + (0.5 * this._player.width) *
             Math.cos(this._angle);
@@ -56,7 +57,6 @@ Sword.prototype.update = function () {
 
         this.visible = true;
     }
-
 };
 
 Sword.prototype.fire = function (targetPos) {
@@ -84,19 +84,6 @@ Sword.prototype.specialFire = function (targetPos) {
 
         this._startCooldown(this._specialCooldownTime);
 
-    }
-};
-
-Sword.prototype._checkOverlapWithGroup = function (group, callback, 
-    callbackContext) {
-    for (var i = 0; i < group.children.length; i += 1) {
-        var child = group.children[i];
-        if (child instanceof Phaser.Group) {
-            this._checkOverlapWithGroup(child, callback, callbackContext);
-        } else {
-            this.game.physics.arcade.overlap(this, child, callback, null, 
-                callbackContext);
-        }
     }
 };
 

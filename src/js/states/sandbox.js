@@ -4,6 +4,7 @@
 
 module.exports = Sandbox;
 
+var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -26,6 +27,11 @@ Sandbox.prototype.create = function () {
     game.canvas.addEventListener("contextmenu", function(e) {
         e.preventDefault();
     });
+
+    // Plugins
+    globals.plugins = {
+        satBody: game.plugins.add(SatBodyPlugin)
+    };
 
     // Groups for z-index sorting and for collisions
     var groups = {
@@ -76,16 +82,21 @@ Sandbox.prototype.create = function () {
     // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
     // new SpawnerGroup(game, 4);
 
-    var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
-    for (var i=0; i<50; i++) {
-        new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
-            this.game.rnd.integerInRange(0, 1300), "gun", 5)
-        new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
-            this.game.rnd.integerInRange(0, 1300), "laser", 9)
-    }
-
-    // var SprialGroup = require("../game-objects/enemies/spiral-group.js");
-    // new SprialGroup(game, 10, player.x, player.y);
+    // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
+    // for (var i=0; i<50; i++) {
+    //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
+    //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
+    // }
+    
+    // Toggle debugging SAT bodies
+    var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
+    debugToggleKey.onDown.add(function () {
+        if (globals.plugins.satBody.isDebugAllEnabled()) {
+            globals.plugins.satBody.disableDebugAll();
+        } else {
+            globals.plugins.satBody.enableDebugAll();
+        }
+    }, this);
 };
 
 Sandbox.prototype.render = function () {

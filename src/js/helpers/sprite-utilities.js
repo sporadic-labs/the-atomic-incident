@@ -4,14 +4,19 @@ exports.applyRandomLightnessTint = function (sprite, h, s, l) {
     sprite.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 };
 
-exports.checkOverlapWithGroup = function (self, group, callback, context) {
+exports.checkOverlapWithGroup = function (sprite, group, callback, context) {
+    // Loop through children in group
     for (var i = 0; i < group.children.length; i += 1) {
         var child = group.children[i];
         if (child instanceof Phaser.Group) {
-            exports.checkOverlapWithGroup(self, child, callback, context);
+            // If child is a group, recursion time
+            exports.checkOverlapWithGroup(sprite, child, callback, context);
         } else {
-            self.game.physics.arcade.overlap(self, child, callback, null, 
-                context);
+            // If child is not a group, make sure it has a SAT body
+            if (!child.satBody) continue;
+            // Check overlap
+            var isOverlap = sprite.satBody.testOverlap(child.satBody);
+            if (isOverlap) callback.call(context, sprite, child);
         }
     }
 };
