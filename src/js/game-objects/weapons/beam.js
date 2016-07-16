@@ -14,7 +14,7 @@ function Beam(game, parentGroup, player) {
     this._timer.start();
     
     this._cooldownTime = 1000;
-    this._attackDuration = 200000;
+    this._attackDuration = 2000;
     this._isAttacking = false;
     this._ableToAttack = true;
     this._damage = 10;
