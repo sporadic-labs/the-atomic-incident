@@ -5,33 +5,27 @@ var SpriteUtils = require("../../helpers/sprite-utilities.js");
 Beam.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Beam(game, parentGroup, player) {
-    this._cooldownTime = 1000;
-    this._attackDuration = 2000;
-    this._isAttacking = false;
-    this._ableToAttack = true;
-    this._damage = 20;
-    this._player = player;
-    this._enemies = game.globals.groups.enemies;
-    this.visible = false;
-
-    this._timer = game.time.create(false);
-    this._timer.start();
-
     Phaser.Sprite.call(this, game, 0, 0, "assets", "weapons/beam");
     this.anchor.set(0, 0.5);
     parentGroup.add(this);
     this.sendToBack(); // Underneath player
+    
+    this._timer = game.time.create(false);
+    this._timer.start();
+    
+    this._cooldownTime = 1000;
+    this._attackDuration = 200000;
+    this._isAttacking = false;
+    this._ableToAttack = true;
+    this._damage = 10;
+    this._player = player;
+    this._enemies = game.globals.groups.enemies;
 
+    this.visible = false;
     this._beamSize = this.height;
     this._range = this.width;
 
-    this._collidingBox = game.make.sprite(0, 0);
-    this._collidingBox.width = this._beamSize;
-    this._collidingBox.height = this._beamSize;
-    this._collidingBox.anchor.set(0, 0.5);
-    this.addChild(this._collidingBox);
-    game.physics.arcade.enable(this);
-    this._collidingBox.body.setSize(this._beamSize, this._beamSize);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
 Beam.prototype.fire = function (targetPos) {
@@ -43,31 +37,22 @@ Beam.prototype.fire = function (targetPos) {
     }
 };
 
-Beam.prototype.update = function () {
+Beam.prototype.postUpdate = function () {
+    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
     if (this._isAttacking) {
+        // Update graphics to player position. Note: this seems fragile. It the
+        // player postUpdates AFTER this sprite, this sprite will be off by a
+        // frame's worth of physics.
         this.position.copyFrom(this._player.position);
-        this._checkCollisions();
+        // Check overlapd
+        SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
+            this._onCollideWithEnemy, this);
     }
 };
 
 Beam.prototype.destroy = function () {
     this._timer.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
-};
-
-Beam.prototype._checkCollisions = function () {
-    // Hack: move a collision box along the beam's path in steps. This is likely
-    // way more expensive than a proper solution
-    var steps = Math.floor(this._range / this._beamSize);
-    var dx = Math.cos(this.rotation);
-    var dy = Math.sin(this.rotation);
-    for (var i = 0; i < steps; i += 1) {
-        var dist = i * this._beamSize;
-        this._collidingBox.body.x = this.x + dist * dx;
-        this._collidingBox.body.y = this.y + dist * dy;
-        SpriteUtils.checkOverlapWithGroup(this._collidingBox, this._enemies, 
-            this._onCollideWithEnemy, this);
-    }
 };
 
 Beam.prototype._startAttack = function (targetPos) {

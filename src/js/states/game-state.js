@@ -4,6 +4,7 @@
 
 module.exports = GameState;
 
+var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var Player = require("../game-objects/player.js");
 var Seeker = require("../game-objects/enemies/seeker-enemy.js");
 var Wander = require("../game-objects/enemies/wander-enemy.js");
@@ -29,6 +30,11 @@ GameState.prototype.create = function () {
     game.canvas.addEventListener("contextmenu", function(e) {
         e.preventDefault();
     });
+
+    // Plugins
+    globals.plugins = {
+        satBody: game.plugins.add(SatBodyPlugin)
+    };
 
     // Groups for z-index sorting and for collisions
     var groups = {
@@ -111,6 +117,15 @@ GameState.prototype.create = function () {
         new WeaponPickup(game, pos.x, pos.y, groups.pickups, newType);
     }
 
+    // Toggle debugging SAT bodies
+    var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
+    debugToggleKey.onDown.add(function () {
+        if (globals.plugins.satBody.isDebugAllEnabled()) {
+            globals.plugins.satBody.disableDebugAll();
+        } else {
+            globals.plugins.satBody.enableDebugAll();
+        }
+    }, this);
 };
 
 GameState.prototype.render = function () {
