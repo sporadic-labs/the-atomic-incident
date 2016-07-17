@@ -44,15 +44,15 @@ function Player(game, x, y, parentGroup) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Weapons
+    this._defaultGun = 
     this._gunType = "default";
     this._allGuns = {
-        "default": new Rock(game, parentGroup, this, 250, 0, -1),
+        "default": new Rock(game, parentGroup, this),
         "beam": new Beam(game, parentGroup, this),
-        "gun": new Gun(game, parentGroup, this, 150, 450, 32),
-        "laser": new Laser(game, parentGroup, this, 200, 500, 60),
-        "sword": new Sword(game, parentGroup, this, 600, 1200),
-        "hammer": new MeleeWeapon(game, parentGroup, this, "assets",
-            "weapons/hammer", 600, 1200)
+        "gun": new Gun(game, parentGroup, this),
+        "laser": new Laser(game, parentGroup, this),
+        "sword": new Sword(game, parentGroup, this),
+        "hammer": new MeleeWeapon(game, parentGroup, this)
     };
 
     // Setup animations

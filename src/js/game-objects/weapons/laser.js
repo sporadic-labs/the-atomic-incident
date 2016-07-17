@@ -13,16 +13,14 @@ var projectileOptions = {
     hiddenOnSetup: false
 };
 
-function Laser(game, parentGroup, player, cooldownTime, specialCooldownTime,
-    totalAmmo) {
-    BaseWeapon.call(this, game, parentGroup, "Laser", player, cooldownTime, 
-        specialCooldownTime, totalAmmo);
-
-    this._currentAmmo = totalAmmo;
+function Laser(game, parentGroup, player) {
+    BaseWeapon.call(this, game, parentGroup, "Laser", player);
+    this.initAmmo(60);
+    this.initCooldown(200, 500);
 }
 
 Laser.prototype.fire = function (targetPos) {
-    if (this.isAbleToAttack() && (this.getAmmo() > 0 || this._totalAmmo < 0)) {
+    if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
         var spacing = 0.5 * this._player.width;

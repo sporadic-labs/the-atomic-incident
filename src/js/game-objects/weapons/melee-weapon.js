@@ -4,10 +4,9 @@ var SpriteUtils = require("../../helpers/sprite-utilities.js");
 
 MeleeWeapon.prototype = Object.create(Phaser.Sprite.prototype);
 
-function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime, 
-    specialCooldownTime) {
-    
-    Phaser.Sprite.call(this, game, player.x, player.y, key, frame);
+function MeleeWeapon(game, parentGroup, player) {    
+    Phaser.Sprite.call(this, game, player.x, player.y, "assets", 
+        "weapons/hammer");
 
     this.anchor.set(0.5, 1.0);
     this.pivot.y = 18;
@@ -19,8 +18,8 @@ function MeleeWeapon(game, parentGroup, player, key, frame, cooldownTime,
     // Set up a timer that doesn't autodestroy itself
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
-    this._cooldownTime = cooldownTime; // Milliseconds 
-    this._specialCooldownTime = specialCooldownTime; // Milliseconds 
+    this._cooldownTime = 600; // Milliseconds 
+    this._specialCooldownTime = 1200; // Milliseconds 
 
     this._ableToAttack = true;
     this._swingDir = 1;

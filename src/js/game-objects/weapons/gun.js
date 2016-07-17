@@ -13,16 +13,14 @@ var projectileOptions = {
     hiddenOnSetup: false
 };
 
-function Gun(game, parentGroup, player, cooldownTime, specialCooldownTime,
-    totalAmmo) {
-    BaseWeapon.call(this, game, parentGroup, "Gun", player, cooldownTime, 
-        specialCooldownTime, totalAmmo);
-
-    this._currentAmmo = totalAmmo;
+function Gun(game, parentGroup, player) {
+    BaseWeapon.call(this, game, parentGroup, "Gun", player);
+    this.initAmmo(32);
+    this.initCooldown(150, 450);
 }
 
 Gun.prototype.fire = function (targetPos) {
-    if (this.isAbleToAttack() && this.getAmmo() > 0) {
+    if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
         // Start bullet in a position along that trajectory, but in front of 
