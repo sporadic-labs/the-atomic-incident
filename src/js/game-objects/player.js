@@ -72,6 +72,8 @@ function Player(game, x, y, parentGroup) {
     this.body.collideWorldBounds = true;
     this.body.setCircle(this.width/2); // Fudge factor
 
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
