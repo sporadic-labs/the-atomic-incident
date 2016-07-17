@@ -114,6 +114,9 @@ Player.prototype.incrementCombo = function (increment) {
 Player.prototype.update = function () {
     this._controls.update();
 
+    // Collisions with the tilemap
+    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+
     // Calculate the player's new acceleration. It should be zero if no keys are
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);

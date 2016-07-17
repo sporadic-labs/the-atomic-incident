@@ -47,9 +47,31 @@ Sandbox.prototype.create = function () {
 
     // Initializing the world
     this.stage.backgroundColor = "#F9F9F9";
-    this.world.resize(1300, 1300);
+
+    // Tile map for level creation and pathfinding
+    // Creates a blank tilemap
+    var map = game.add.tilemap();
+    // Add an image to the map
+    map.addTilesetImage("tiles", null, 36, 36);
+    // Create a new layer
+    var layer1 = map.create('level1', 10, 10, 36, 36);
+    layer1.resizeWorld();
+    map.putTile(0, 2, 3, layer1);
+    map.putTile(0, 3, 3, layer1);
+    map.putTile(0, 2, 2, layer1);
+
+    map.setCollision(0);
+    layer1.debug = true;
+
+    this.game.globals.tileMap = map;
+    this.game.globals.tileMapLayer = layer1;
+
+
+    // This world is 36 tiles wide and high, each tile is 36px
+//    this.world.resize(1296, 1296);
     this.add.tileSprite(0, 0, this.world.width, this.world.height, "assets", 
         "hud/grid", groups.background);
+
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
