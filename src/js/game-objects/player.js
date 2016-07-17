@@ -44,16 +44,7 @@ function Player(game, x, y, parentGroup) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Weapons
-    this._defaultGun = 
-    this._gunType = "default";
-    this._allGuns = {
-        "default": new Rock(game, parentGroup, this),
-        "beam": new Beam(game, parentGroup, this),
-        "gun": new Gun(game, parentGroup, this),
-        "laser": new Laser(game, parentGroup, this),
-        "sword": new Sword(game, parentGroup, this),
-        "hammer": new MeleeWeapon(game, parentGroup, this)
-    };
+    this._gun = new Rock(game, parentGroup, this);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -164,24 +155,27 @@ Player.prototype.update = function () {
     }
 
     // ammo check
-    if (this.getAmmo() <= 0 && this._gunType != "default") {
-        this.getGun().emptyAmmo();
-        this._gunType = "default";
+    if (this._gun.isAmmoEmpty && this._gun.isAmmoEmpty()) {
+        this._gun.destroy();
+        this._gun = new Rock(this.game, this.parent, this);        
     }
 
     // Swapping weapons
     if (this._controls.isControlActive("weapon-gun")) {
-        this._gunType = "gun";
-        this.getGun().fillAmmo();
+        this._gun.destroy();
+        this._gun = new Gun(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-beam")) {
-        this._gunType = "beam";
+        this._gun.destroy();
+        this._gun = new Beam(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-laser")) {
-        this._gunType = "laser";
-        this.getGun().fillAmmo();
+        this._gun.destroy();
+        this._gun = new Laser(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-sword")) {
-        this._gunType = "sword";
+        this._gun.destroy();
+        this._gun = new Sword(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-hammer")) {
-        this._gunType = "hammer";
+        this._gun.destroy();
+        this._gun = new MeleeWeapon(this.game, this.parent, this);
     }
 
     // Firing logic
@@ -206,7 +200,7 @@ Player.prototype.update = function () {
         attackDir.y += 1;
     }
     if (isShooting) {
-        this.getGun().fire(attackDir);
+        this._gun.fire(attackDir);
     }
 
     // special weapons logic
@@ -222,7 +216,7 @@ Player.prototype.update = function () {
         specialAttackDir.y -= 1;
     }
     if (isShootingSpecial && this.getGun().specialFire) {
-        this.getGun().specialFire(specialAttackDir);
+        this._gun.specialFire(specialAttackDir);
     }
 
     // Check whether player is moving in order to update its animation
@@ -295,12 +289,10 @@ Player.prototype.destroy = function () {
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };
 
-
 Player.prototype.getGun = function() {
-    return this._allGuns[this._gunType];
+    return this._gun;
 };
 
 Player.prototype.getAmmo = function() {
-    if (this.getGun().getAmmo)
-        return this.getGun().getAmmo();
+    if (this._gun.getAmmo) return this._gun.getAmmo();
 };
