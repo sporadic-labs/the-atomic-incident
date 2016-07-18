@@ -52,26 +52,42 @@ Sandbox.prototype.create = function () {
     // Creates a blank tilemap
     var map = game.add.tilemap();
     // Add an image to the map
-    map.addTilesetImage("tiles", null, 36, 36);
-    // Create a new layer
-    var layer1 = map.create('level1', 10, 10, 36, 36);
-    layer1.resizeWorld();
-    map.putTile(0, 2, 3, layer1);
-    map.putTile(0, 3, 3, layer1);
-    map.putTile(0, 2, 2, layer1);
-
+    map.addTilesetImage("tiles", "tiles", 36, 36, null, null, 0);
     map.setCollision(0);
-    layer1.debug = true;
+    // Create a new layer
+    var layer1 = map.create('level1', 30, 20, 36, 36);
+    layer1.resizeWorld();
+
+    // Fill whole level with colliding tiles
+    for (var i = 0; i < map.width; i += 1) {
+        for (var j = 0; j < map.height; j += 1) {
+            map.putTile(0, i, j, layer1);
+        }
+    }
+    // Remove collinding tiles via drunken walk
+    var drunkWalk = function (x, y, steps) {
+        map.putTile(null, x, y, layer1);
+        for (var i = 0; i < steps; i += 1) {
+            if (this.rnd.integerInRange(0, 1)) {
+                x += this.rnd.sign();
+                x = Math.max(x, 0);
+                x = Math.min(x, map.width - 1);
+            } else {            
+                y += this.rnd.sign();
+                y = Math.max(y, 0);
+                y = Math.min(y, map.width - 1);
+            }
+            map.putTile(null, x, y, layer1);
+        }        
+    }.bind(this);
+    var x = Math.floor(map.width / 2);
+    var y = Math.floor(map.height / 2);
+    drunkWalk(x, y, 100);
+    drunkWalk(x, y, 200);
+    drunkWalk(x, y, 300);
 
     this.game.globals.tileMap = map;
     this.game.globals.tileMapLayer = layer1;
-
-
-    // This world is 36 tiles wide and high, each tile is 36px
-//    this.world.resize(1296, 1296);
-    this.add.tileSprite(0, 0, this.world.width, this.world.height, "assets", 
-        "hud/grid", groups.background);
-
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
