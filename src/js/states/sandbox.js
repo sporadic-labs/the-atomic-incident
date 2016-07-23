@@ -48,54 +48,39 @@ Sandbox.prototype.create = function () {
     // Initializing the world
     this.stage.backgroundColor = "#F9F9F9";
 
-    // Tile map for level creation and pathfinding
-    // Creates a blank tilemap
-    var map = game.add.tilemap();
-    // Add an image to the map
-    map.addTilesetImage("tiles", "tiles", 36, 36, null, null, 0);
-    map.setCollision(0);
-    // Create a new layer
-    var layer1 = map.create('level1', 30, 20, 36, 36);
-    layer1.resizeWorld();
-
-    // Fill whole level with colliding tiles
-    for (var i = 0; i < map.width; i += 1) {
-        for (var j = 0; j < map.height; j += 1) {
-            map.putTile(0, i, j, layer1);
-        }
-    }
-    // Remove collinding tiles via drunken walk
-    var drunkWalk = function (x, y, steps) {
-        map.putTile(null, x, y, layer1);
-        for (var i = 0; i < steps; i += 1) {
-            if (this.rnd.integerInRange(0, 1)) {
-                x += this.rnd.sign();
-                x = Math.max(x, 0);
-                x = Math.min(x, map.width - 1);
-            } else {            
-                y += this.rnd.sign();
-                y = Math.max(y, 0);
-                y = Math.min(y, map.width - 1);
-            }
-            map.putTile(null, x, y, layer1);
-        }        
-    }.bind(this);
-    var x = Math.floor(map.width / 2);
-    var y = Math.floor(map.height / 2);
-    drunkWalk(x, y, 100);
-    drunkWalk(x, y, 200);
-    drunkWalk(x, y, 300);
+    // Loading the tilemap
+    var map = game.add.tilemap("tilemap");
+    // Set up the tilesets. First parameter is name of tileset in Tiled and 
+    // second paramter is name of tileset image in Phaser's cache
+    map.addTilesetImage("colors", "coloredTiles");
+    // Create a layer for each 
+    var backgroundLayer = map.createLayer("Background", this.game.width, 
+        this.game.height, groups.background);
+    backgroundLayer.resizeWorld();
+    var blockingLayer = map.createLayer("BlockingLayer", this.game.width, 
+        this.game.height, groups.background);
+    map.setCollisionBetween(0, 3, true, "BlockingLayer");
 
     this.game.globals.tileMap = map;
-    this.game.globals.tileMapLayer = layer1;
+    this.game.globals.tileMapLayer = blockingLayer;
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
     // Player
-    var player = new Player(game, this.world.centerX, this.world.centerY, 
-        groups.midground);
+    var px = 0;
+    var py = 0;
+    if (map.objects["Objects"]) {
+        var objects = map.objects["Objects"];
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name === "player") {
+                px = objects[i].x;
+                py = objects[i].y;
+            }
+        }
+    }
+    var player = new Player(game, px, py, groups.midground);
     this.camera.follow(player);
     globals.player = player;
     

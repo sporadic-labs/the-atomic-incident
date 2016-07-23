@@ -12,9 +12,9 @@ LoadState.prototype.preload = function () {
         "images/atlases/assets.json");
 
     // Tilemap
-    // this.load.tilemap("map", "resources/blank_map.json", null,
-    //     Phaser.Tilemap.TILED_JSON);
-    this.load.image("tiles", "images/atlases/frames/tiles/outline-tile.png");
+    this.load.tilemap("tilemap", "images/tilemaps/tilemap.json", null, 
+        Phaser.Tilemap.TILED_JSON);
+    this.load.image("coloredTiles", "images/tilemaps/tiles.png");
 
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
