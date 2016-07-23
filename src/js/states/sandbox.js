@@ -69,8 +69,18 @@ Sandbox.prototype.create = function () {
     this.physics.arcade.gravity.set(0);
 
     // Player
-    var player = new Player(game, this.world.centerX, this.world.centerY, 
-        groups.midground);
+    var px = 0;
+    var py = 0;
+    if (map.objects["Objects"]) {
+        var objects = map.objects["Objects"];
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name === "player") {
+                px = objects[i].x;
+                py = objects[i].y;
+            }
+        }
+    }
+    var player = new Player(game, px, py, groups.midground);
     this.camera.follow(player);
     globals.player = player;
     
