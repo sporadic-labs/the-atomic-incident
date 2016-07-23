@@ -67,3 +67,8 @@ SeekerEnemy.prototype.preUpdate = function () {
     // Phaser might use it...
     return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 };
+
+SeekerEnemy.prototype.update = function() {
+    // Collisions with the tilemap
+    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+};
