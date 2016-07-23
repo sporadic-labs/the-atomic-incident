@@ -1,9 +1,6 @@
 module.exports = Wave1;
 
-var SpiralGroup = require("../enemies/spiral-group.js");
-var WallGroup = require("../enemies/wall-group.js");
-var SineGroup = require("../enemies/sine-wave-group.js");
-var SpawnerGroup = require("../enemies/spawner-group.js");
+var SeekerGroup = require("../enemies/seeker-group.js");
 var utils = require("../../helpers/utilities.js");
 
 Wave1.prototype = Object.create(Phaser.Group.prototype);
@@ -15,7 +12,7 @@ function Wave1(game, spawnDelay, spawnActivationDelay) {
     this._player = this.game.globals.player;
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
-    this._spawnDelay = utils.default(spawnDelay, 3000);
+    this._spawnDelay = utils.default(spawnDelay, 6000);
     this._spawnActivationDelay = utils.default(spawnActivationDelay, 500);
 
     this._timer = this.game.time.create(false);
@@ -25,23 +22,7 @@ function Wave1(game, spawnDelay, spawnActivationDelay) {
 }
 
 Wave1.prototype._spawn = function () {
-    // Generate a random group
-    var rand = this.game.rnd.between(0, 3);
-    var newGroup;
-    switch (rand) {
-        case 0:
-            newGroup = new SpiralGroup(this.game, 15);
-            break;
-        case 1:
-            newGroup = new WallGroup(this.game, 15, this);
-            break;
-        case 2:
-            newGroup = new SineGroup(this.game, 45, this);
-            break;
-        case 3:
-            newGroup = new SpawnerGroup(this.game, 5, this);
-            break;
-    }
+    var newGroup = new SeekerGroup(this.game, 5);
 
     // Control how it gets added to the wave - delayed activation
     this._scheduleGroupActivation(newGroup);

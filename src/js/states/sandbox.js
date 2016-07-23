@@ -47,40 +47,51 @@ Sandbox.prototype.create = function () {
 
     // Initializing the world
     this.stage.backgroundColor = "#F9F9F9";
-    this.world.resize(1300, 1300);
-    this.add.tileSprite(0, 0, this.world.width, this.world.height, "assets", 
-        "hud/grid", groups.background);
+
+    // Loading the tilemap
+    var map = game.add.tilemap("tilemap");
+    // Set up the tilesets. First parameter is name of tileset in Tiled and 
+    // second paramter is name of tileset image in Phaser's cache
+    map.addTilesetImage("colors", "coloredTiles");
+    // Create a layer for each 
+    var backgroundLayer = map.createLayer("Background", this.game.width, 
+        this.game.height, groups.background);
+    backgroundLayer.resizeWorld();
+    var blockingLayer = map.createLayer("BlockingLayer", this.game.width, 
+        this.game.height, groups.background);
+    map.setCollisionBetween(0, 3, true, "BlockingLayer");
+
+    this.game.globals.tileMap = map;
+    this.game.globals.tileMapLayer = blockingLayer;
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
     // Player
-    var player = new Player(game, this.world.centerX, this.world.centerY, 
-        groups.midground);
+    var px = 0;
+    var py = 0;
+    if (map.objects["Objects"]) {
+        var objects = map.objects["Objects"];
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name === "player") {
+                px = objects[i].x;
+                py = objects[i].y;
+            }
+        }
+    }
+    var player = new Player(game, px, py, groups.midground);
     this.camera.follow(player);
     globals.player = player;
     
     // Score
     globals.scoreKeeper = new ScoreKeeper();
-    
+
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    // var Wave1 = require("../game-objects/waves/wave-1.js");
-    // new Wave1(game);
-    
-    // var FlockingGroup = require("../game-objects/enemies/flocking-group.js");
-    // new FlockingGroup(game, 15, player.x, player.y + 200);
-
-    // var WallGroup = require("../game-objects/enemies/wall-group.js");
-    // new WallGroup(game, 15);
-    
-    // var SineGroup = require("../game-objects/enemies/sine-wave-group.js");
-    // new SineGroup(game, 45);
-
-    // var SpawnerGroup = require("../game-objects/enemies/spawner-group.js");
-    // new SpawnerGroup(game, 4);
+    var Wave1 = require("../game-objects/waves/wave-1.js");
+    new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {

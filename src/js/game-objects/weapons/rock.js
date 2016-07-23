@@ -13,14 +13,14 @@ var projectileOptions = {
     hiddenOnSetup: false
 };
 
-function Rock(game, parentGroup, player, cooldownTime, specialCooldownTime,
-    totalAmmo) {
-    BaseWeapon.call(this, game, parentGroup, "Rock", player, cooldownTime, 
-        specialCooldownTime, totalAmmo);
+function Rock(game, parentGroup, player) {
+    BaseWeapon.call(this, game, parentGroup, "Rock", player);
+    this.initAmmo(-1);
+    this.initCooldown(250);
 }
 
 Rock.prototype.fire = function (targetPos) {
-    if (this.isAbleToAttack()) {
+    if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
         // Start bullet in a position along that trajectory, but in front of 

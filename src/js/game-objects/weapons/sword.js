@@ -4,7 +4,7 @@ var SpriteUtils = require("../../helpers/sprite-utilities.js");
 
 Sword.prototype = Object.create(Phaser.Sprite.prototype);
 
-function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
+function Sword(game, parentGroup, player) {
     Phaser.Sprite.call(this, game, 0, 0, "assets", "weapons/sword");
     this.anchor.set(0.5, 1.0);
     parentGroup.add(this);
@@ -15,8 +15,8 @@ function Sword(game, parentGroup, player, cooldownTime, specialCooldownTime) {
     // Set up a timer that doesn't autodestroy itself
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
-    this._cooldownTime = cooldownTime; // Milliseconds 
-    this._specialCooldownTime = specialCooldownTime; // Milliseconds 
+    this._cooldownTime = 600; // Milliseconds 
+    this._specialCooldownTime = 1200; // Milliseconds 
 
     this._isSwinging = false;
     this._ableToAttack = true;
