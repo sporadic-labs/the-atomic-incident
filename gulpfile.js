@@ -37,6 +37,10 @@ var paths = {
     	outputFile: "main.js",
     	dest: dest + "/js"
     },
+    resources: {
+        src: ["src/resources/**.*"],
+        dest: dest + "/resources"
+    },
     images: {
     	src: ["src/images/**/*.*"],
     	dest: dest + "/images"
@@ -177,6 +181,13 @@ gulp.task("images", function () {
         .pipe(gulp.dest(paths.images.dest));
 });
 
+// Take any (new) resources from src/resources over to build/resources.
+gulp.task("resources", function () {
+    return gulp.src(paths.resources.src)
+        .pipe(newer(paths.resources.dest))
+        .pipe(gulp.dest(paths.resources.dest));
+});
+
 // The build task will run all the individual build-related tasks above.
 gulp.task("build", [
     "copy-html",
@@ -184,6 +195,7 @@ gulp.task("build", [
     "js-lint",
     "js-browserify",
     "js-libs",
+    "resources",
     "images"
 ]);
 

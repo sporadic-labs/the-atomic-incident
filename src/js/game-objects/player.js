@@ -113,6 +113,9 @@ Player.prototype.incrementCombo = function (increment) {
 
 Player.prototype.update = function () {
     this._controls.update();
+    
+    // Collisions with the tilemap
+    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
     // Calculate the player's new acceleration. It should be zero if no keys are
     // pressed - allows for quick stopping.
@@ -249,11 +252,6 @@ Player.prototype.update = function () {
     //         this.game.state.restart();
     //     }, this);
     // }
-
-    // Call the parent's preUpdate and return the value. Something else in
-    // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
-
 };
 
 Player.prototype._onCollideWithEnemy = function () {
