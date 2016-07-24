@@ -5,6 +5,7 @@
 module.exports = Sandbox;
 
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
+var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -30,7 +31,8 @@ Sandbox.prototype.create = function () {
 
     // Plugins
     globals.plugins = {
-        satBody: game.plugins.add(SatBodyPlugin)
+        satBody: game.plugins.add(SatBodyPlugin),
+        astar: game.plugins.add(Phaser.Plugin.AStar)
     };
 
     // Groups for z-index sorting and for collisions
@@ -61,8 +63,11 @@ Sandbox.prototype.create = function () {
         this.game.height, groups.background);
     map.setCollisionBetween(0, 3, true, "BlockingLayer");
 
-    this.game.globals.tileMap = map;
-    this.game.globals.tileMapLayer = blockingLayer;
+    // AStar plugin
+    globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
+
+    globals.tileMap = map;
+    globals.tileMapLayer = blockingLayer;
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -90,8 +95,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -108,8 +113,34 @@ Sandbox.prototype.create = function () {
             globals.plugins.satBody.enableDebugAll();
         }
     }, this);
+
+    // AStar test
+    game.input.onDown.add(find, this);
+
+
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
+    this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#A8A8A8");
 };
+
+/**
+ * Find a path from the turtle to the click event position.
+ * From:
+ *   http://rafarel-design.com/phaser/examples/
+ *      _site/view_full.html?d=plugins&f=astar.js&t=astar
+ * And:
+ *   http://www.html5gamedevs.com/topic/
+ *      3526-discuss-about-phaserplugin-development/
+ */
+function find(e)
+{
+    console.log("this is a test...");
+    var start = this.game.globals.tileMapLayer.getTileXY(this.game.globals.player.x,
+        this.game.globals.player.y + this.game.camera.view.y, {});
+    var goal = this.game.globals.tileMapLayer.getTileXY(e.positionDown.x +
+        this.game.camera.view.x, e.positionDown.y + this.game.camera.view.y, {});
+
+    var path = this.game.globals.plugins.astar.findPath(start, goal);
+}
