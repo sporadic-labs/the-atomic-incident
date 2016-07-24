@@ -122,7 +122,7 @@ Sandbox.prototype.create = function () {
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
-    this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#A8A8A8");
+    this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
 };
 
 /**

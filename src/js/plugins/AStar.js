@@ -39,9 +39,10 @@
 * @constructor
 * @param {Any} parent - The object that owns this plugin, usually Phaser.PluginManager.
 */
-Phaser.Plugin.AStar = function (parent)
-{
 
+Phaser.Plugin.AStar = function (game, parent)
+{
+    this.game = game;
     /**
     * @property {Any} parent - The parent of this plugin. If added to the PluginManager the parent will be set to that, otherwise it will be null.
     */
@@ -160,19 +161,12 @@ Phaser.Plugin.AStar.prototype.setAStarMap = function(map, layerName, tilesetName
         for(var x=0; x < this._tilemap.width; x++)
         {
             tile = this._tilemap.layers[this._layerIndex].data[y][x];
-            debugger
-            console.log(this._tilemap)
-            debugger
-            console.log(this._tilemap.tilesets[this._tilesetIndex])
-            debugger
-            console.log(this._tilemap.tilesets[this._tilesetIndex].properties)
-            console.log(this._tilemap.tilesets[this._tilesetIndex].properties[tile.index])
-            console.log(this._tilemap.tilesets[this._tilesetIndex].tileProperties[tile.index - 1])
-            debugger
-            console.log(this._tilemap.tilesets[this._tilesetIndex].tileProperties[tile.index - 1][this._walkablePropName])
-            debugger
 
-            walkable = this._tilemap.tilesets[this._tilesetIndex].tileProperties[tile.index - 1][this._walkablePropName] !== "false" ? true : false;
+            // If tile is undefined or tile doesn't have collisions set up, then
+            // it's walkable
+            walkable = !tile.collides;
+            // walkable = this._tilemap.tilesets[this._tilesetIndex].tileProperties[tile.index - 1][this._walkablePropName] !== "false" ? true : false;
+            
             tile.properties.astarNode = new Phaser.Plugin.AStar.AStarNode(x, y, walkable);
         }
     }
@@ -604,7 +598,7 @@ Phaser.Utils.Debug.prototype.AStar = function(astar, x, y, color, showVisited)
 
     color = color || 'rgb(255,255,255)';
 
-    game.debug.start(x, y, color);
+    this.game.debug.start(x, y, color);
 
 
     if(pathLength > 0)
@@ -612,15 +606,15 @@ Phaser.Utils.Debug.prototype.AStar = function(astar, x, y, color, showVisited)
         var node = astar._lastPath.nodes[0];
         this.context.strokeStyle = color;
         this.context.beginPath();
-        this.context.moveTo((node.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - game.camera.view.x, (node.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - game.camera.view.y);
+        this.context.moveTo((node.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - this.game.camera.view.x, (node.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - this.game.camera.view.y);
 
         for(var i=0; i<pathLength; i++)
         {
             node = astar._lastPath.nodes[i];
-            this.context.lineTo((node.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - game.camera.view.x, (node.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - game.camera.view.y);
+            this.context.lineTo((node.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - this.game.camera.view.x, (node.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - this.game.camera.view.y);
         }
 
-        this.context.lineTo((astar._lastPath.start.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - game.camera.view.x, (astar._lastPath.start.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - game.camera.view.y);
+        this.context.lineTo((astar._lastPath.start.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - this.game.camera.view.x, (astar._lastPath.start.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - this.game.camera.view.y);
 
         this.context.stroke(); 
 
@@ -632,7 +626,7 @@ Phaser.Utils.Debug.prototype.AStar = function(astar, x, y, color, showVisited)
             {
                 visitedNode = astar._lastPath.visited[j];
                 this.context.beginPath();
-                this.context.arc((visitedNode.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - game.camera.view.x, (visitedNode.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - game.camera.view.y, 2, 0, Math.PI*2, true);
+                this.context.arc((visitedNode.x * astar._tilemap.tileWidth) + (astar._tilemap.tileWidth/2) - this.game.camera.view.x, (visitedNode.y * astar._tilemap.tileHeight) + (astar._tilemap.tileHeight/2) - this.game.camera.view.y, 2, 0, Math.PI*2, true);
                 this.context.stroke(); 
             }
         }
@@ -643,7 +637,7 @@ Phaser.Utils.Debug.prototype.AStar = function(astar, x, y, color, showVisited)
     this.line('Use diagonal: ' + astar._useDiagonal);
     this.line('Find Closest: ' + astar._findClosest);
 
-    game.debug.stop();
+    this.game.debug.stop();
 };
 
 
