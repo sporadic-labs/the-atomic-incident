@@ -38,13 +38,14 @@ var paths = {
     	dest: dest + "/js"
     },
     resources: {
-        src: ["src/resources/**.*"],
+        // src: ["src/resources/**/**.*{json, jpg, jpeg, png, ico, tmx, tps}"],
+        src: ["src/resources/**/*.*"],
         dest: dest + "/resources"
     },
-    images: {
-    	src: ["src/images/**/*.*"],
-    	dest: dest + "/images"
-    },
+    // images: {
+    // 	src: ["src/images/**/*.*"],
+    // 	dest: dest + "/images"
+    // },
     deploy: {
     	src: ["public/**/*.*"]
     }
@@ -174,12 +175,12 @@ gulp.task("js-lint", function() {
         .pipe(jshint.reporter(stylish));
 });
 
-// Take any (new) images from src/images over to build/images.
-gulp.task("images", function () {
-    return gulp.src(paths.images.src)
-        .pipe(newer(paths.images.dest))
-        .pipe(gulp.dest(paths.images.dest));
-});
+// // Take any (new) images from src/images over to build/images.
+// gulp.task("images", function () {
+//     return gulp.src(paths.images.src)
+//         .pipe(newer(paths.images.dest))
+//         .pipe(gulp.dest(paths.images.dest));
+// });
 
 // Take any (new) resources from src/resources over to build/resources.
 gulp.task("resources", function () {
@@ -195,8 +196,8 @@ gulp.task("build", [
     "js-lint",
     "js-browserify",
     "js-libs",
-    "resources",
-    "images"
+    // "images",
+    "resources"
 ]);
 
 
@@ -212,7 +213,8 @@ gulp.task("watch", function () {
     gulp.watch(paths.jsLibs.src, ["js-libs"]);
     gulp.watch(paths.js.src, ["js-lint", "js-browserify"]);
     gulp.watch(paths.sass.src, ["sass"]);
-    gulp.watch(paths.images.src, ["images"]);
+    // gulp.watch(paths.images.src, ["images"]);
+    gulp.watch(paths.resources.src, ["resources"]);
 });
 
 // Start an express server that serves everything in build/ to localhost:8080/.
