@@ -12,8 +12,6 @@ LoadState.prototype.preload = function () {
         "resources/atlases/assets.json");
 
     // Tilemap
-    // this.load.tilemap("tilemap", "resources/tilemaps/tilemap.json", null, 
-    //     Phaser.Tilemap.TILED_JSON);
     this.load.tilemap("tilemap", "resources/tilemaps/small-tilemap.json", null, 
         Phaser.Tilemap.TILED_JSON);
     this.load.image("coloredTiles", "resources/tilemaps/tiles.png");
