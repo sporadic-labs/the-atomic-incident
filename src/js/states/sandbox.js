@@ -118,7 +118,7 @@ Sandbox.prototype.create = function () {
     }, this);
 
     // AStar test
-    game.input.onDown.add(find, this);
+    // game.input.onDown.add(find, this);
 
 
 };
