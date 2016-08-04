@@ -184,10 +184,17 @@ Phaser.Plugin.AStar.prototype.setAStarMap = function(map, layerName, tilesetName
  */
 Phaser.Plugin.AStar.prototype.findPath = function(startPoint, goalPoint)
 {
+    // console.log("enemy: (" + startPoint.x + ", " + startPoint.y + ").");
+    // console.log("player: (" + goalPoint.x + ", " + goalPoint.y + ").");
     var path = new Phaser.Plugin.AStar.AStarPath();
 
+    // NOTE(rex): There is some problem here, I'm not exactly sure what it is,
+    // and I have side stepped it for the moment.  Come back to this though...
+    // debugger
     var start = this._tilemap.layers[this._layerIndex].data[startPoint.y][startPoint.x].properties.astarNode; //:AStarNode;
+    // debugger
     var goal = this._tilemap.layers[this._layerIndex].data[goalPoint.y][goalPoint.x].properties.astarNode
+    // debugger
 
     path.start = start;
     path.goal = goal;

@@ -71,4 +71,20 @@ SeekerEnemy.prototype.preUpdate = function () {
 SeekerEnemy.prototype.update = function() {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+
+
+
+    var start = this.game.globals.tileMapLayer.getTileXY(this.x +
+        this.game.camera.view.x, this.y + this.game.camera.view.y, {});
+    var goal = this.game.globals.tileMapLayer.getTileXY(this.game.globals.player.x,
+        this.game.globals.player.y + this.game.camera.view.y, {});
+
+
+    // NOTE(rex): There is some problem here, I'm not exactly sure what it is,
+    // and I have side stepped it for the moment.  Come back to this though...
+    var path = this.game.globals.plugins.astar.findPath(start, goal);
+
+    // console.log(path);
+    // debugger
+
 };
