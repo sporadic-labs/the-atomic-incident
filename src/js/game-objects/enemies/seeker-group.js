@@ -13,12 +13,15 @@ function SeekerGroup(game, numToSpawn) {
     var minDistance = 300;
     var maxDistance = 500;
 
-    var radius = 300;    
     for (var i = 0; i < numToSpawn; i += 1) {
-        var radius = this.game.rnd.integerInRange(300, 500);
+        var radius = this.game.rnd.integerInRange(minDistance, maxDistance);
         var angle = this.game.rnd.integerInRange(0, (2*Math.PI));
-        var enemyX = px + (radius * Math.cos(angle));        
+        var enemyX = px + (radius * Math.cos(angle));
+        // enemyX = enemyX % 36;
+        // console.log("X : " + enemyX);
         var enemyY = py + (radius * Math.sin(angle));
+        // enemyY = enemyY % 36;
+        // console.log("Y : " + enemyY);
 
         // Check if there is a tile at the current location
         // if not, create a new enemy and place it,

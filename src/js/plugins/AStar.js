@@ -184,7 +184,7 @@ Phaser.Plugin.AStar.prototype.setAStarMap = function(map, layerName, tilesetName
  */
 Phaser.Plugin.AStar.prototype.findPath = function(startPoint, goalPoint)
 {
-    // console.log("enemy: (" + startPoint.x + ", " + startPoint.y + ").");
+    console.log("enemy: (" + startPoint.x + ", " + startPoint.y + ").");
     // console.log("player: (" + goalPoint.x + ", " + goalPoint.y + ").");
     var path = new Phaser.Plugin.AStar.AStarPath();
 
