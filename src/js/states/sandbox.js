@@ -95,11 +95,11 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    // var Wave1 = require("../game-objects/waves/wave-1.js");
-    // new Wave1(game);
+    var Wave1 = require("../game-objects/waves/wave-1.js");
+    new Wave1(game);
 
-    var SeekerEnemy = require("../game-objects/enemies/seeker-enemy.js");
-    new SeekerEnemy(game, 560, 620, groups.enemies);
+    // var SeekerEnemy = require("../game-objects/enemies/seeker-enemy.js");
+    // new SeekerEnemy(game, 560, 620, groups.enemies);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -117,33 +117,9 @@ Sandbox.prototype.create = function () {
         }
     }, this);
 
-    // AStar test
-    // game.input.onDown.add(find, this);
-
-
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
 };
-
-/**
- * Find a path from the turtle to the click event position.
- * From:
- *   http://rafarel-design.com/phaser/examples/
- *      _site/view_full.html?d=plugins&f=astar.js&t=astar
- * And:
- *   http://www.html5gamedevs.com/topic/
- *      3526-discuss-about-phaserplugin-development/
- */
-function find(e)
-{
-    console.log("this is a test...");
-    var start = this.game.globals.tileMapLayer.getTileXY(this.game.globals.player.x,
-        this.game.globals.player.y + this.game.camera.view.y, {});
-    var goal = this.game.globals.tileMapLayer.getTileXY(e.positionDown.x +
-        this.game.camera.view.x, e.positionDown.y + this.game.camera.view.y, {});
-
-    var path = this.game.globals.plugins.astar.findPath(start, goal);
-}
