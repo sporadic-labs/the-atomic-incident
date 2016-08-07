@@ -98,9 +98,6 @@ Sandbox.prototype.create = function () {
     var Wave1 = require("../game-objects/waves/wave-1.js");
     new Wave1(game);
 
-    // var SeekerEnemy = require("../game-objects/enemies/seeker-enemy.js");
-    // new SeekerEnemy(game, 560, 620, groups.enemies);
-
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
     //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
@@ -121,5 +118,5 @@ Sandbox.prototype.create = function () {
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
-    this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
+    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
 };

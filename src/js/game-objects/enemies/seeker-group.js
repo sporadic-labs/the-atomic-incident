@@ -17,11 +17,16 @@ function SeekerGroup(game, numToSpawn) {
         var radius = this.game.rnd.integerInRange(minDistance, maxDistance);
         var angle = this.game.rnd.integerInRange(0, (2*Math.PI));
         var enemyX = px + (radius * Math.cos(angle));
-        // enemyX = enemyX % 36;
-        // console.log("X : " + enemyX);
         var enemyY = py + (radius * Math.sin(angle));
-        // enemyY = enemyY % 36;
-        // console.log("Y : " + enemyY);
+        // NOTE(rex): Manually cap the location of new enemies,
+        // place them between Tile (1, 1) and (24, 19)
+        var min = 1 * this.game.globals.tileMap.tileWidth;
+        var maxX = (this.game.globals.tileMap.width - 1) * this.game.globals.tileMap.tileWidth;
+        var maxY = (this.game.globals.tileMap.height - 1) * this.game.globals.tileMap.tileHeight;
+        if (enemyX < min) enemyX = min;
+        if (enemyX > maxX) enemyX = maxX;
+        if (enemyY < min) enemyY = min;
+        if (enemyY > maxY) enemyY = maxY;
 
         // Check if there is a tile at the current location
         // if not, create a new enemy and place it,
