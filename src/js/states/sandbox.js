@@ -5,6 +5,7 @@
 module.exports = Sandbox;
 
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
+var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -30,7 +31,8 @@ Sandbox.prototype.create = function () {
 
     // Plugins
     globals.plugins = {
-        satBody: game.plugins.add(SatBodyPlugin)
+        satBody: game.plugins.add(SatBodyPlugin),
+        astar: game.plugins.add(Phaser.Plugin.AStar)
     };
 
     // Groups for z-index sorting and for collisions
@@ -61,8 +63,11 @@ Sandbox.prototype.create = function () {
         this.game.height, groups.background);
     map.setCollisionBetween(0, 3, true, "BlockingLayer");
 
-    this.game.globals.tileMap = map;
-    this.game.globals.tileMapLayer = blockingLayer;
+    // AStar plugin
+    globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
+
+    globals.tileMap = map;
+    globals.tileMapLayer = blockingLayer;
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -108,8 +113,10 @@ Sandbox.prototype.create = function () {
             globals.plugins.satBody.enableDebugAll();
         }
     }, this);
+
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
+    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
 };

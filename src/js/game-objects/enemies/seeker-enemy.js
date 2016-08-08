@@ -29,25 +29,36 @@ function SeekerEnemy(game, x, y, parentGroup) {
     this._maxSpeed = 100;
 }
 
-/**
- * Override preUpdate to update velocity. Physics updates happen in preUpdate,
- * so if the velocity updates happened AFTER that, the targeting would be off
- * by a frame.
- */
-SeekerEnemy.prototype.preUpdate = function () {
+SeekerEnemy.prototype.update = function() {
+    // Collisions with the tilemap
+    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+
     this.body.velocity.set(0);
 
-    // Check if target is within visual range
+    // Check if player is within visual range
     var distance = this.position.distance(this._player.position);
     if (distance <= this._visionRadius) {
-        // If target is in range, calculate the acceleration based on the 
-        // direction this sprite needs to travel to hit the target
-        var angle = this.position.angle(this._player.position);
-        var targetSpeed = distance / this.game.time.physicsElapsed;
-        var magnitude = Math.min(this._maxSpeed, targetSpeed);
-        this.body.velocity.x = magnitude * Math.cos(angle);
-        this.body.velocity.y = magnitude * Math.sin(angle);
-    }
+
+        var start = this.game.globals.tileMapLayer.getTileXY(this.x, this.y, 
+            {});
+        var goal = this.game.globals.tileMapLayer.getTileXY(this._player.x,
+            this._player.y, {});
+
+        var path = this.game.globals.plugins.astar.findPath(start, goal);
+
+        // If there is an a* path to the player, move to the next node in the 
+        // path
+        if (path.nodes.length) {
+            var tileHeight = this.game.globals.tileMap.tileHeight;
+            var tileWidth = this.game.globals.tileMap.tileWidth;
+            var nextNode = path.nodes[path.nodes.length - 1];
+            var target = new Phaser.Point(
+                nextNode.x * tileWidth + tileWidth / 2, 
+                nextNode.y * tileHeight + tileHeight / 2
+            );
+            this.moveTowards(target);
+        }
+    }    
 
     // Check whether enemy is moving, update its animation
     var isIdle;
@@ -62,13 +73,18 @@ SeekerEnemy.prototype.preUpdate = function () {
     } else if (!isIdle && this.animations.name !== ANIM_NAMES.MOVE) {
         this.animations.play(ANIM_NAMES.MOVE);
     }
-
-    // Call the parent's preUpdate and return the value. Something else in
-    // Phaser might use it...
-    return Phaser.Sprite.prototype.preUpdate.apply(this, arguments);
 };
 
-SeekerEnemy.prototype.update = function() {
-    // Collisions with the tilemap
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+SeekerEnemy.prototype.moveTowards = function(target) {
+    // Check if target is within visual range
+    var distance = this.position.distance(target);
+    // If target is in range, calculate the acceleration based on the 
+    // direction this sprite needs to travel to hit the target
+    var angle = this.position.angle(target);
+    var targetSpeed = distance / this.game.time.physicsElapsed;
+    var magnitude = Math.min(this._maxSpeed, targetSpeed);
+    this.body.velocity.x = magnitude * Math.cos(angle);
+    this.body.velocity.y = magnitude * Math.sin(angle);
 };
+
+
