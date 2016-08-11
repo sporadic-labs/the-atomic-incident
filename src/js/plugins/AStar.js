@@ -186,6 +186,8 @@ Phaser.Plugin.AStar.prototype.findPath = function(startPoint, goalPoint)
 {
     var path = new Phaser.Plugin.AStar.AStarPath();
 
+
+    // NOTE(rex): This is where things break if the enemy is outside of the tile range.
     var start = this._tilemap.layers[this._layerIndex].data[startPoint.y][startPoint.x].properties.astarNode; //:AStarNode;
     var goal = this._tilemap.layers[this._layerIndex].data[goalPoint.y][goalPoint.x].properties.astarNode
 
