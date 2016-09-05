@@ -76,8 +76,8 @@ Sandbox.prototype.create = function () {
     // Player
     var px = 0;
     var py = 0;
-    if (map.objects["Objects"]) {
-        var objects = map.objects["Objects"];
+    if (map.objects["player"]) {
+        var objects = map.objects["player"];
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].name === "player") {
                 px = objects[i].x;
