@@ -25,7 +25,9 @@ function SeekerEnemy(game, x, y, parentGroup) {
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.IDLE);
 
-    this._visionRadius = 300;
+    // this._visionRadius = 300;
+    // NOTE(rex): If the _visionRadius is -1, track the player wherever you are at on the page
+    this._visionRadius = -1;
     this._maxSpeed = 100;
 }
 
@@ -37,7 +39,7 @@ SeekerEnemy.prototype.update = function() {
 
     // Check if player is within visual range
     var distance = this.position.distance(this._player.position);
-    if (distance <= this._visionRadius) {
+    if (distance <= this._visionRadius || this._visionRadius === -1) {
 
         var start = this.game.globals.tileMapLayer.getTileXY(this.x, this.y, 
             {});
