@@ -9,6 +9,10 @@ function HeadsUpDisplay(game, parentGroup) {
     this._player = this.game.globals.player;
     this._satBodyPlugin = this.game.globals.plugins.satBody;
 
+    this._fogMask = game.make.sprite(0, 0, "fogMask");
+    this.add(this._fogMask);
+    this._fogMask.inputEnabled = false;
+
     this.fixedToCamera = true;
 
     var textStyle = {

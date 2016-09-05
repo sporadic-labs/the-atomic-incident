@@ -113,7 +113,6 @@ Sandbox.prototype.create = function () {
             globals.plugins.satBody.enableDebugAll();
         }
     }, this);
-
 };
 
 Sandbox.prototype.render = function () {
