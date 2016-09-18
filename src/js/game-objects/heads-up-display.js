@@ -12,12 +12,17 @@ function HeadsUpDisplay(game, parentGroup) {
     this._fogMask = game.make.sprite(0, 0, "fogMask");
     this.add(this._fogMask);
     this._fogMask.inputEnabled = false;
+    /**
+     * NOTE(rex): Use a flag to check if fog has been setup, this fixes
+     * an issue with the fog not locking to player first time around.
+     */
+    this._fogSetup = false;
 
     this.fixedToCamera = true;
 
     var textStyle = {
         font: "32px Arial",
-        fill: "#000",
+        fill: "#eee",
         align: "left"
     };
     this._scoreText = game.make.text(30, 20, "Score: 0", textStyle);
@@ -43,4 +48,17 @@ HeadsUpDisplay.prototype.update = function () {
     this._comboText.setText("Combo: " + this._player.getCombo());
     this._debugText.setText("Debug ('E' key): " + 
         this._satBodyPlugin.isDebugAllEnabled());
+
+    var pOffsetX = Math.floor(-1 * (400 + (this.game.camera.x - this._player.x)));
+    var pOffsetY = Math.floor(-1 * (300 + (this.game.camera.y - this._player.y)));
+
+    if ((pOffsetY != 0 || pOffsetX != 0) && this._fogSetup) {
+        this._fogMask.x = pOffsetX;
+        this._fogMask.y = pOffsetY;
+    }
+    if (!this._fogSetup) {
+        this._fogMask.x = 0;
+        this._fogMask.y = 0;
+        this._fogSetup = true;
+    }
 };
