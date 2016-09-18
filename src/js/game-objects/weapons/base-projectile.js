@@ -60,6 +60,15 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
+BaseProjectile.prototype.update = function() {
+    // Collisions with the tilemap
+    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer, this._onCollideWithMap);
+}
+
+BaseProjectile.prototype.destroy = function () {
+    Phaser.Sprite.prototype.destroy.apply(this, arguments);
+};
+
 BaseProjectile.prototype.postUpdate = function () {
     // Update arcade physics
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
@@ -73,10 +82,17 @@ BaseProjectile.prototype.postUpdate = function () {
     }
 };
 
+BaseProjectile.prototype._onCollideWithMap = function (self, map) {
+    console.log("why isn't this working??")
+    if (self._isDestructable) {
+        self._remove = true;
+    }
+};
+
 BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     var isKilled = enemy.takeDamage(this._damage);
     if (isKilled) this._player.incrementCombo(1);
-    if (this._isDestructable) {
-        this._remove = true;
+    if (self._isDestructable) {
+        self._remove = true;
     }
 };
