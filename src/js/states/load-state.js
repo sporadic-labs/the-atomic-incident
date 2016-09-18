@@ -10,7 +10,7 @@ LoadState.prototype.preload = function () {
     // Images
     this.load.atlasJSONHash("assets", "resources/atlases/assets.png", 
         "resources/atlases/assets.json");
-    this.load.image("fogMask", "resources/images/fog-mask.png")
+    this.load.image("fogMask", "resources/images/fog-mask-2.png")
 
     // Tilemap
     this.load.tilemap("tilemap", "resources/tilemaps/open-tilemap.json", null, 
