@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.2.2</string>
         <key>fileName</key>
-        <string>C:/Users/micha/Documents/GitHub/octo-chainsaw/src/images/atlases/assets.tps</string>
+        <string>C:/Users/Rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -283,11 +283,10 @@
             <key type="filename">frames/test/box.png</key>
             <key type="filename">frames/test/bullet.png</key>
             <key type="filename">frames/test/diamond.png</key>
-            <key type="filename">frames/tiles/tiles.png</key>
-            <key type="filename">frames/tiles/tiles.psd</key>
             <key type="filename">frames/weapons/arrow.png</key>
             <key type="filename">frames/weapons/beam.png</key>
             <key type="filename">frames/weapons/beam.psd</key>
+            <key type="filename">frames/weapons/death-beam.png</key>
             <key type="filename">frames/weapons/e-blade-01.png</key>
             <key type="filename">frames/weapons/e-blade-02.png</key>
             <key type="filename">frames/weapons/e-burst-01.png</key>
