@@ -109,7 +109,6 @@ BaseProjectile.prototype.explode = function () {
     this._graphics.drawCircle(0, 0, this._range);
     this._graphics.endFill();
     // Check explosion overlap
-    console.log("Checking overlap");
     SpriteUtils.checkOverlapWithGroup(this, this._enemies, this._onExplodeEnemy,
         this);
 };
@@ -135,7 +134,6 @@ BaseProjectile.prototype.postUpdate = function () {
 };
 
 BaseProjectile.prototype._onCollideWithMap = function (self, map) {
-    console.log("why isn't this working??")
     if (self._isDestructable) {
         self._remove = true;
     }
@@ -147,7 +145,6 @@ BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
 };
 
 BaseProjectile.prototype._onExplodeEnemy = function (self, enemy) {
-    console.log(this._damage)
     var isKilled = enemy.takeDamage(this._damage);
     if (self._isDestructable) self._remove = true;
     self.explode();
