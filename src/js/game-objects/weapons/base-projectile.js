@@ -10,6 +10,7 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - rotateOnSetup - bool
 // - canBounce - bool
 // - hiddenOnSetup
+// - canBurn - bool
 function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     angle, speed, range, options) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -41,6 +42,10 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
         this._hiddenOnSetup = options.hiddenOnSetup;
     else
         this._hiddenOnSetup = false;
+    if (options !== undefined && options.canBurn !== undefined)
+        this._canBurn = options.canBurn;
+    else
+        this._canBurn = false;
 
     // If rotateOnSetup option is true, rotate projectile to face in the
     // right direction. Sprites are saved facing up (90 degrees), so we
@@ -62,12 +67,16 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
 
 BaseProjectile.prototype.update = function() {
     // Collisions with the tilemap
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer, this._onCollideWithMap);
-}
+    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer,
+        this._onCollideWithMap);
 
-BaseProjectile.prototype.destroy = function () {
-    Phaser.Sprite.prototype.destroy.apply(this, arguments);
-};
+    // If the projectile can burn, check each tile for a fire.
+    // If one exists, ignore the tile and keep moving.  If there is no fire,
+    // destroy the projectile and create a fire.
+    if (this._canBurn) {
+        console.log('burning!')
+    }
+}
 
 BaseProjectile.prototype.postUpdate = function () {
     // Update arcade physics
@@ -82,8 +91,11 @@ BaseProjectile.prototype.postUpdate = function () {
     }
 };
 
+BaseProjectile.prototype.destroy = function () {
+    Phaser.Sprite.prototype.destroy.apply(this, arguments);
+};
+
 BaseProjectile.prototype._onCollideWithMap = function (self, map) {
-    console.log("why isn't this working??")
     if (self._isDestructable) {
         self._remove = true;
     }
