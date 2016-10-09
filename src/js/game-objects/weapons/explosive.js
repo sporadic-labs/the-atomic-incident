@@ -6,7 +6,7 @@ Explosive.prototype = Object.create(BaseWeapon.prototype);
 
 function Explosive(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Explosive", player);
-    this.initAmmo(12);
+    this.initAmmo(30);
     this.initCooldown(150);
 }
 
@@ -77,8 +77,7 @@ function BaseProjectile(game, x, y, parentGroup, player, angle) {
     this._hasExploded = false;
     this._damage = 100;
     this._range = 400;
-    this._fuseTime = 1500;
-    this._speed = 100;
+    this._speed = 200;
 
     this._player = player;
     this._enemies = game.globals.groups.enemies;
@@ -87,7 +86,7 @@ function BaseProjectile(game, x, y, parentGroup, player, angle) {
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
 
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this, 5);
 }
 
 BaseProjectile.prototype.update = function() {
@@ -96,11 +95,12 @@ BaseProjectile.prototype.update = function() {
         this._onCollideWithMap);
 }
 
-BaseProjectile.prototype.explode = function () {
+BaseProjectile.prototype.explode = function () {    
     this._hasExploded = true;
     // Switch to explosion circle SAT body 
     this.game.globals.plugins.satBody.removeBody(this.satBody);
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this, this._range / 2);
+    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this, 
+        this._range / 2);
     // Stop moving
     this.body.velocity.set(0);
     // Draw explosion circle
@@ -111,6 +111,8 @@ BaseProjectile.prototype.explode = function () {
     // Check explosion overlap
     SpriteUtils.checkOverlapWithGroup(this, this._enemies, this._onExplodeEnemy,
         this);
+    // Scheduled destruction slightly in the future
+    this._timer.add(100, this.destroy, this);
 };
 
 BaseProjectile.prototype.destroy = function () {
