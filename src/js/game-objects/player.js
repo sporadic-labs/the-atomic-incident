@@ -10,6 +10,7 @@ var Reticule = require("./reticule.js");
 var MeleeWeapon = require("./weapons/melee-weapon.js");
 var Beam = require("./weapons/beam.js");
 var DeathBeam = require("./weapons/death-beam.js");
+var Explosive = require("./weapons/explosive.js");
 var Scattershot = require("./weapons/scattershot.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 
@@ -102,6 +103,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("weapon-hammer", [Kb.FIVE]);
     this._controls.addKeyboardControl("weapon-death-beam", [Kb.SIX]);
     this._controls.addKeyboardControl("weapon-scattershot", [Kb.SEVEN]);
+    this._controls.addKeyboardControl("explosive", [Kb.EIGHT]);
 }
 
 Player.prototype.getCombo = function () {
@@ -191,6 +193,9 @@ Player.prototype.update = function () {
     } else if (this._controls.isControlActive("weapon-scattershot")) {
         this._gun.destroy();
         this._gun = new Scattershot(this.game, this.parent, this);
+    } else if (this._controls.isControlActive("explosive")) {
+        this._gun.destroy();
+        this._gun = new Explosive(this.game, this.parent, this);
     }
 
     // Firing logic

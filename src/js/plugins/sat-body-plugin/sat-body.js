@@ -96,11 +96,11 @@ SatBody.prototype.testOverlap = function (otherBody) {
 SatBody.prototype.postUpdate = function () {
     // Update the position of the colliding body
     if (this._bodyType === BODY_TYPE.CIRCLE) {
-        this._body.pos.x = this._sprite.worldPosition.x;
-        this._body.pos.y = this._sprite.worldPosition.y;
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
     } else if (this._bodyType === BODY_TYPE.POLYGON) {
-        this._body.pos.x = this._sprite.worldPosition.x;
-        this._body.pos.y = this._sprite.worldPosition.y;
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
         this._body.setAngle(this._sprite.rotation);
         // Rotation should probably be world rotation...or something?
     }
