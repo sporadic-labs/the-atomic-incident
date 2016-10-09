@@ -54,14 +54,10 @@ HeadsUpDisplay.prototype.update = function () {
     var pOffsetY = Math.floor(-1 * (600 + (this.game.camera.y - this._player.y)));
 
     if ((pOffsetY != 0 || pOffsetX != 0) && this._fogSetup) {
-        console.log("hey?????");
-        console.log(pOffsetX + ", " + pOffsetY)
         this._fogMask.x = pOffsetX;
         this._fogMask.y = pOffsetY;
     }
     if (!this._fogSetup) {
-        console.log("check it?");
-        console.log(pOffsetX + ", " + pOffsetY)
         this._fogMask.x = -200;
         this._fogMask.y = -150;
         this._fogSetup = true;
