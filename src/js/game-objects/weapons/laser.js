@@ -10,7 +10,9 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: false,
-    hiddenOnSetup: false
+    hiddenOnSetup: false,
+    tracking: true,
+    trackingRadius: 120,
 };
 
 function Laser(game, parentGroup, player) {

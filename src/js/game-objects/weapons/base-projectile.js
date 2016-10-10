@@ -14,6 +14,7 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - canBurn - bool
 // - decayRate - range (0 - 1.0)
 // - grow - bool // ok seriously i'm not sure about this one...
+// - tracking - bool
 function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     angle, speed, range, options) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -50,7 +51,13 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (options !== undefined && options.grow !== undefined)
         this._grow = options.grow;
     else this._grow = false;
-
+    if (options !== undefined && options.tracking !== undefined && options.trackingRadius !== undefined) {
+        this._tracking = options.tracking;
+        this._trackingRadius = options.trackingRadius;
+    } else {
+        this._tracking = false;
+        this._trackingRadius = 0;
+    }
     // If rotateOnSetup option is true, rotate projectile to face in the
     // right direction. Sprites are saved facing up (90 degrees), so we
     // need to offset the angle
@@ -66,6 +73,10 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (this._grow) {
         this.scale.setTo(0.25, 0.25);
     }
+
+    // Tracking target
+    this._trackingTarget = null;
+    this._trackingCheckDelay = 12; // Delay bullet tracking check
 
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
@@ -100,6 +111,14 @@ BaseProjectile.prototype.update = function() {
     if (this._canBurn && this.checkTileMapLocation(this.position.x,
         this.position.y)) {
         // this isn't working yet...
+    }
+
+    // If the projectile tracks, check if target is within the tracking radius.
+    // If it is, begin tracking.  Otherwise, continue on the initiail trajectory.
+    // NOTE(rex): HMMMM This isn't quite working...
+    if (this._tracking) {
+        SpriteUtils.getClosestInGroup(this, this._enemies,
+            this._trackingRadius, this.trackTarget, this);
     }
 }
 
@@ -140,4 +159,15 @@ BaseProjectile.prototype.checkTileMapLocation = function(x, y) {
 
     if (checkTile === null || checkTile === undefined) return true;
     else return false;
+}
+
+BaseProjectile.prototype.trackTarget = function(self, target) {
+    // If target is in range, calculate the acceleration based on the 
+    // direction this sprite needs to travel to hit the target
+    var distance = this.position.distance(target.position);
+    var angle = this.position.angle(target.position);
+    var targetSpeed = distance / this.game.time.physicsElapsed;
+    var magnitude = Math.min(15, targetSpeed);
+    this.body.velocity.x = targetSpeed * Math.cos(angle);
+    this.body.velocity.y = targetSpeed * Math.sin(angle);
 }
