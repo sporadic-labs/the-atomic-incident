@@ -1,17 +1,17 @@
 module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
-var Gun = require("./weapons/gun.js");
-var Laser = require("./weapons/laser.js");
-var Arrow = require("./weapons/arrow.js");
+var spriteUtils = require("../helpers/sprite-utilities.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
-var MeleeWeapon = require("./weapons/melee-weapon.js");
+var Gun = require("./weapons/gun.js");
+var MachineGun = require("./weapons/machine-gun.js");
+var Laser = require("./weapons/laser.js");
+var Arrow = require("./weapons/arrow.js");
 var Beam = require("./weapons/beam.js");
-var DeathBeam = require("./weapons/death-beam.js");
-var Flamethrower = require("./weapons/flamethrower.js");
+var MeleeWeapon = require("./weapons/melee-weapon.js");
 var Scattershot = require("./weapons/scattershot.js");
-var spriteUtils = require("../helpers/sprite-utilities.js");
+var Flamethrower = require("./weapons/flamethrower.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -95,13 +95,13 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
     // Cycling weapons
-    this._controls.addKeyboardControl("weapon-arrow", [Kb.ONE]);
-    this._controls.addKeyboardControl("weapon-beam", [Kb.TWO]);
-    this._controls.addKeyboardControl("weapon-laser", [Kb.THREE]);
-    this._controls.addKeyboardControl("weapon-sword", [Kb.FOUR]);
-    this._controls.addKeyboardControl("weapon-death-beam", [Kb.SIX]);
-    this._controls.addKeyboardControl("weapon-scattershot", [Kb.SEVEN]);
-    this._controls.addKeyboardControl("weapon-flamethrower", [Kb.NINE]);
+    this._controls.addKeyboardControl("weapon-machine-gun", [Kb.ONE]);
+    this._controls.addKeyboardControl("weapon-laser", [Kb.TWO]);
+    this._controls.addKeyboardControl("weapon-beam", [Kb.THREE]);
+    this._controls.addKeyboardControl("weapon-arrow", [Kb.FOUR]);
+    this._controls.addKeyboardControl("weapon-sword", [Kb.FIVE]);
+    this._controls.addKeyboardControl("weapon-scattershot", [Kb.SIX]);
+    this._controls.addKeyboardControl("weapon-flamethrower", [Kb.SEVEN]);
 }
 
 Player.prototype.getCombo = function () {
@@ -170,27 +170,27 @@ Player.prototype.update = function () {
     }
 
     // Swapping weapons
-    if (this._controls.isControlActive("weapon-arrow")) {
+    if (this._controls.isControlActive("weapon-machine-gun")) {
         this._gun.destroy();
-        this._gun = new Arrow(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-beam")) {
-        this._gun.destroy();
-        this._gun = new Beam(this.game, this.parent, this);
+        this._gun = new MachineGun(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-laser")) {
         this._gun.destroy();
         this._gun = new Laser(this.game, this.parent, this);
+    } else if (this._controls.isControlActive("weapon-beam")) {
+        this._gun.destroy();
+        this._gun = new Beam(this.game, this.parent, this);
+    } else if (this._controls.isControlActive("weapon-arrow")) {
+        this._gun.destroy();
+        this._gun = new Arrow(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-sword")) {
         this._gun.destroy();
         this._gun = new MeleeWeapon(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-death-beam")) {
-        this._gun.destroy();
-        this._gun = new DeathBeam(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-flamethrower")) {
-        this._gun.destroy();
-        this._gun = new Flamethrower(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-scattershot")) {
         this._gun.destroy();
         this._gun = new Scattershot(this.game, this.parent, this);
+    } else if (this._controls.isControlActive("weapon-flamethrower")) {
+        this._gun.destroy();
+        this._gun = new Flamethrower(this.game, this.parent, this);
     }
 
     // Firing logic
