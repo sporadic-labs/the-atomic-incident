@@ -3,7 +3,6 @@ module.exports = Player;
 var Controller = require("../helpers/controller.js");
 var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
-var Sword = require("./weapons/sword.js");
 var Arrow = require("./weapons/arrow.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
@@ -100,7 +99,6 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("weapon-beam", [Kb.TWO]);
     this._controls.addKeyboardControl("weapon-laser", [Kb.THREE]);
     this._controls.addKeyboardControl("weapon-sword", [Kb.FOUR]);
-    this._controls.addKeyboardControl("weapon-hammer", [Kb.FIVE]);
     this._controls.addKeyboardControl("weapon-death-beam", [Kb.SIX]);
     this._controls.addKeyboardControl("weapon-scattershot", [Kb.SEVEN]);
     this._controls.addKeyboardControl("weapon-flamethrower", [Kb.NINE]);
@@ -182,9 +180,6 @@ Player.prototype.update = function () {
         this._gun.destroy();
         this._gun = new Laser(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-sword")) {
-        this._gun.destroy();
-        this._gun = new Sword(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-hammer")) {
         this._gun.destroy();
         this._gun = new MeleeWeapon(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-death-beam")) {
