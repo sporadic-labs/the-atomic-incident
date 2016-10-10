@@ -1,6 +1,7 @@
 module.exports = BaseProjectile;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
+var Fire = require("./fire.js");
 
 BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -88,16 +89,17 @@ BaseProjectile.prototype.update = function() {
     // This might be a hack, but if it applicable elsewhere we can figure
     // something more generic out.
     if (this._grow) {
-        var x = this.scale.x * 1.0268;
-        var y = this.scale.y * 1.0268;
+        var x = this.scale.x * 1.0264;
+        var y = this.scale.y * 1.0264;
         this.scale.setTo(x, y);
     }
 
     // If the projectile can burn, check each tile for a fire.
     // If one exists, ignore the tile and keep moving.  If there is no fire,
     // destroy the projectile and create a fire.
-    if (this._canBurn) {
-        // console.log('burning!')
+    if (this._canBurn && this.checkTileMapLocation(this.position.x,
+        this.position.y)) {
+        // this isn't working yet...
     }
 }
 
@@ -131,3 +133,11 @@ BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
         self._remove = true;
     }
 };
+
+BaseProjectile.prototype.checkTileMapLocation = function(x, y) {
+    var checkTile = this.game.globals.tileMap.getTileWorldXY(x, y, 36, 36,
+        this.game.globals.tileMapLayer);
+
+    if (checkTile === null || checkTile === undefined) return true;
+    else return false;
+}

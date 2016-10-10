@@ -32,7 +32,7 @@ Flamethrower.prototype.fire = function (targetPos) {
                   this.game.rnd.sign();
         var angle = angleToPlayer + mod;
         var speed = this.game.rnd.integerInRange(164,184)
-        var range = this.game.rnd.integerInRange(64,74)
+        var range = this.game.rnd.integerInRange(64,72)
         // Start bullet in a position along that trajectory, but in front of 
         // the player
         var x = this._player.position.x + (0.75 * this._player.width) * 
@@ -52,17 +52,6 @@ Flamethrower.prototype._createProjectile = function (x, y, angle, speed, range) 
         this._player, 100, angle, speed, range, projectileOptions);
     p.rotation += 135;
     // // Randomize the color of each flame.
-    // // The random hue for Red, Yellow, Orange is in the 0-10 and 90-100 range.
-    // // A use the .sign() method to figure out if we are going
-    // // high or low in the range.
-    // var hMod = this.game.rnd.sign() > 0 ? 1 : 0;
-    // var h = (this.game.rnd.integerInRange(0, 6) + (94 * hMod)) / 100;
-    // var s = this.game.rnd.integerInRange(90, 100) / 100;
-    // var l = this.game.rnd.integerInRange(45, 80) / 100;
-    // var rgb = Phaser.Color.HSLtoRGB(h, s, l);
-    // p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
-
-    // Randomize the rgb tint
     var g = this.game.rnd.integerInRange(0, 255);
     p.tint = Phaser.Color.getColor(240, g, 24);
 };

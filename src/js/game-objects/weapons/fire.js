@@ -1,17 +1,12 @@
 module.exports = Fire;
 
-var utils = require("../../helpers/utilities.js");
-
 Fire.prototype = Object.create(Phaser.Sprite.prototype);
 
-function Fire(game, x, y, key, frame, parentGroup, category, pointValue) {
-    Phaser.Sprite.call(this, game, x, y, key, frame);
+function Fire(game, x, y) {
+    Phaser.Sprite.call(this, game, x, y, "assets", "enemy01/die-02");
     this.anchor.set(0.5);
-    parentGroup.add(this);
 
-    this._category = category;
     this._initialPos = this.position.clone();
-    this._pointValue = utils.default(pointValue, 0);
 
     // Configure physics
     game.physics.arcade.enable(this);
