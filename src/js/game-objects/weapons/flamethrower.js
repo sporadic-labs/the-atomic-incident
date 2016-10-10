@@ -18,8 +18,8 @@ var projectileOptions = {
 
 function Flamethrower(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Flamethrower", player);
-    this.initAmmo(120);
-    this.initCooldown(24);
+    this.initAmmo(320);
+    this.initCooldown(12);
 }
 
 Flamethrower.prototype.fire = function (targetPos) {
@@ -31,7 +31,7 @@ Flamethrower.prototype.fire = function (targetPos) {
         var mod = (this.game.rnd.integerInRange(0, 15) * (Math.PI / 180)) *
                   this.game.rnd.sign();
         var angle = angleToPlayer + mod;
-        var speed = this.game.rnd.integerInRange(160,184)
+        var speed = this.game.rnd.integerInRange(164,184)
         var range = this.game.rnd.integerInRange(64,74)
         // Start bullet in a position along that trajectory, but in front of 
         // the player
@@ -48,9 +48,9 @@ Flamethrower.prototype.fire = function (targetPos) {
 };
 
 Flamethrower.prototype._createProjectile = function (x, y, angle, speed, range) {
-    var p = new Projectile(this.game, x, y, "assets", `enemy03/aim-03`, this, 
+    var p = new Projectile(this.game, x, y, "assets", `weapons/e-burst-01`, this, 
         this._player, 100, angle, speed, range, projectileOptions);
-
+    p.rotation += 135;
     // // Randomize the color of each flame.
     // // The random hue for Red, Yellow, Orange is in the 0-10 and 90-100 range.
     // // A use the .sign() method to figure out if we are going

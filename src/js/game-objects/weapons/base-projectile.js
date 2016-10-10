@@ -78,14 +78,18 @@ BaseProjectile.prototype.update = function() {
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer,
         this._onCollideWithMap);
 
+    // If a decate rate was set, apply it to the velocity.
     if (this._decayRate) {
         this.body.velocity.x = this.body.velocity.x * this._decayRate;
         this.body.velocity.y = this.body.velocity.y * this._decayRate;
     }
 
+    // If the grow flag was set, increase the scale of the projectile every frame.
+    // This might be a hack, but if it applicable elsewhere we can figure
+    // something more generic out.
     if (this._grow) {
-        var x = this.scale.x * 1.02;
-        var y = this.scale.y * 1.02;
+        var x = this.scale.x * 1.0272;
+        var y = this.scale.y * 1.0272;
         this.scale.setTo(x, y);
     }
 
