@@ -4,7 +4,7 @@ var Controller = require("../helpers/controller.js");
 var Gun = require("./weapons/gun.js");
 var Laser = require("./weapons/laser.js");
 var Sword = require("./weapons/sword.js");
-var Rock = require("./weapons/rock.js");
+var Arrow = require("./weapons/arrow.js");
 var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
 var MeleeWeapon = require("./weapons/melee-weapon.js");
@@ -47,7 +47,7 @@ function Player(game, x, y, parentGroup) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Weapons
-    this._gun = new Rock(game, parentGroup, this);
+    this._gun = new Gun(game, parentGroup, this);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -96,7 +96,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
     // Cycling weapons
-    this._controls.addKeyboardControl("weapon-gun", [Kb.ONE]);
+    this._controls.addKeyboardControl("weapon-arrow", [Kb.ONE]);
     this._controls.addKeyboardControl("weapon-beam", [Kb.TWO]);
     this._controls.addKeyboardControl("weapon-laser", [Kb.THREE]);
     this._controls.addKeyboardControl("weapon-sword", [Kb.FOUR]);
@@ -168,13 +168,13 @@ Player.prototype.update = function () {
     // ammo check
     if (this._gun.isAmmoEmpty && this._gun.isAmmoEmpty()) {
         this._gun.destroy();
-        this._gun = new Rock(this.game, this.parent, this);        
+        this._gun = new Gun(this.game, this.parent, this);
     }
 
     // Swapping weapons
-    if (this._controls.isControlActive("weapon-gun")) {
+    if (this._controls.isControlActive("weapon-arrow")) {
         this._gun.destroy();
-        this._gun = new Gun(this.game, this.parent, this);
+        this._gun = new Arrow(this.game, this.parent, this);
     } else if (this._controls.isControlActive("weapon-beam")) {
         this._gun.destroy();
         this._gun = new Beam(this.game, this.parent, this);
