@@ -1,41 +1,44 @@
-module.exports = Rock;
+module.exports = Arrow;
 
 var BaseWeapon = require("./base-weapon.js");
 var Projectile = require("./base-projectile.js");
 
-Rock.prototype = Object.create(BaseWeapon.prototype);
+Arrow.prototype = Object.create(BaseWeapon.prototype);
 
 // optional settings for projectiles
 var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
-    canBounce: false,
+    canBounce: true,
     hiddenOnSetup: false
 };
 
-function Rock(game, parentGroup, player) {
-    BaseWeapon.call(this, game, parentGroup, "Rock", player);
-    this.initAmmo(-1);
-    this.initCooldown(250);
+function Arrow(game, parentGroup, player) {
+    BaseWeapon.call(this, game, parentGroup, "Arrow", player);
+    this.initAmmo(40);
+    this.initCooldown(360);
 }
 
-Rock.prototype.fire = function (targetPos) {
+Arrow.prototype.fire = function (targetPos) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
         // Start bullet in a position along that trajectory, but in front of 
         // the player
-        var x = this._player.position.x + (0.75 * this._player.width) * 
+        var x = this._player.position.x + (0.96 * this._player.width) * 
             Math.cos(angle);
-        var y = this._player.position.y + (0.75 * this._player.width) * 
+        var y = this._player.position.y + (0.96 * this._player.width) * 
             Math.sin(angle);
+
+        this.incrementAmmo(-1);
 
         this._createProjectile(x, y, angle);
         this._startCooldown(this._cooldownTime);
     }
 };
 
-Rock.prototype._createProjectile = function (x, y, angle) {
-    new Projectile(this.game, x, y, "assets", "test/bullet", this, 
+Arrow.prototype._createProjectile = function (x, y, angle) {
+    var p = new Projectile(this.game, x, y, "assets", "weapons/arrow", this, 
         this._player, 100, angle, 300, 500, projectileOptions);
+    p.scale.setTo(1.72, 1.72);
 };

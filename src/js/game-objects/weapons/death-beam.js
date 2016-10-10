@@ -38,6 +38,6 @@ DeathBeam.prototype.fire = function (targetPos) {
 };
 
 DeathBeam.prototype._createProjectile = function (x, y, angle) {
-    new Projectile(this.game, x, y, "assets", "weapons/death-beam", this, 
+    var p = new Projectile(this.game, x, y, "assets", "weapons/death-beam", this, 
         this._player, 100, angle, 300, 500, projectileOptions);
 };

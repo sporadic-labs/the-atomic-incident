@@ -6,7 +6,7 @@ MeleeWeapon.prototype = Object.create(Phaser.Sprite.prototype);
 
 function MeleeWeapon(game, parentGroup, player) {    
     Phaser.Sprite.call(this, game, player.x, player.y, "assets", 
-        "weapons/hammer");
+        "weapons/sword");
 
     this.anchor.set(0.5, 1.0);
     this.pivot.y = 18;
@@ -18,8 +18,8 @@ function MeleeWeapon(game, parentGroup, player) {
     // Set up a timer that doesn't autodestroy itself
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
-    this._cooldownTime = 600; // Milliseconds 
-    this._specialCooldownTime = 1200; // Milliseconds 
+    this._cooldownTime = 350; // Milliseconds 
+    this._specialCooldownTime = 960; // Milliseconds 
 
     this._ableToAttack = true;
     this._swingDir = 1;
@@ -47,9 +47,14 @@ MeleeWeapon.prototype.fire = function (targetPos) {
     if (this._ableToAttack) {
         // start angle
         this.rotation = this._player.position.angle(targetPos) - 
-            (this._swingDir * Math.PI/2) + (Math.PI/2);
+            (this._swingDir * Math.PI/4) + (Math.PI/4);
         var pos = this._player.position.angle(targetPos) * (180/Math.PI);
+
         var endAngle = pos + (this._swingDir * 180); // tweens take degrees
+        if (endAngle === 360) {
+            endAngle = 0;
+        }
+        console.log(endAngle);
 
         this._swing = this.game.add.tween(this).to({angle: endAngle}, 
             this._cooldownTime, "Quad.easeInOut", false, 0, 0, false);

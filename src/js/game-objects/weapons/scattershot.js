@@ -24,17 +24,16 @@ Scattershot.prototype.fire = function (targetPos) {
         // Find trajectory
         var pelletNum = this.game.rnd.integerInRange(16, 24);
 
+        // randomize the trajectory of every bullet in the shotgun blast
         for (var i=0; i<pelletNum; i++) {
             var angleToPlayer = this._player.position.angle(targetPos); // Rads
             var mod = (this.game.rnd.integerInRange(0, 30) * (Math.PI / 180)) *
                       this.game.rnd.sign();
             var angle = angleToPlayer + mod;
-            var dist = this.game.rnd.integerInRange(0,10)
             var speed = this.game.rnd.integerInRange(160,240)
             var range = this.game.rnd.integerInRange(48,96)
             var perpendicularOffset = this.game.rnd.integerInRange(-5,5)
-            this._createProjectile(angle, 5, perpendicularOffset, speed, range);
-
+            this._createProjectile(angle, 24, perpendicularOffset, speed, range);
         }
 
         this.incrementAmmo(-1);
@@ -49,9 +48,11 @@ Scattershot.prototype._createProjectile = function (angle, playerDistance,
     var x = this._player.x + (playerDistance * Math.cos(angle)) - 
         (perpendicularOffset * Math.cos(perpAngle));
     var y = this._player.y + (playerDistance * Math.sin(angle)) - 
-        (perpendicularOffset * Math.sin(perpAngle));    
-    var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this,
+        (perpendicularOffset * Math.sin(perpAngle));
+    // shotgun blast is made up of a bunch of slugs at half size.
+    var p = new Projectile(this.game, x, y, "assets", "weapons/slug", this,
         this._player, 36, angle, speed, range, projectileOptions);
+    p.scale.setTo(0.5, 0.5);
     var rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 };

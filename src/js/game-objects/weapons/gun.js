@@ -15,8 +15,8 @@ var projectileOptions = {
 
 function Gun(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Gun", player);
-    this.initAmmo(32);
-    this.initCooldown(150, 450);
+    this.initAmmo(-1);
+    this.initCooldown(320, 480);
 }
 
 Gun.prototype.fire = function (targetPos) {
@@ -31,9 +31,6 @@ Gun.prototype.fire = function (targetPos) {
             Math.sin(angle);
 
         this._createProjectile(x, y, angle);
-
-        this.incrementAmmo(-1);
-
         this._startCooldown(this._cooldownTime);
     }
 };
@@ -60,5 +57,5 @@ Gun.prototype.specialFire = function () {
 
 Gun.prototype._createProjectile = function (x, y, angle) {
     new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, 100, angle, 300, 500, projectileOptions);
+        this._player, 100, angle, 300, 180, projectileOptions);
 };

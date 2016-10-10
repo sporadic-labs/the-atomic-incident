@@ -24,3 +24,7 @@ BasePickup.prototype.killByPlayer = function () {
     this._scoreSignal.dispatch(this._pointValue);
     this.destroy();
 };
+
+BasePickup.prototype.destroy = function () {
+    Phaser.Sprite.prototype.destroy.apply(this, arguments);
+};
