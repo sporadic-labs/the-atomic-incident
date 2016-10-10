@@ -32,7 +32,6 @@ Arrow.prototype.fire = function (targetPos) {
 
         this.incrementAmmo(-1);
 
-
         this._createProjectile(x, y, angle);
         this._startCooldown(this._cooldownTime);
     }
@@ -41,5 +40,5 @@ Arrow.prototype.fire = function (targetPos) {
 Arrow.prototype._createProjectile = function (x, y, angle) {
     var p = new Projectile(this.game, x, y, "assets", "weapons/arrow", this, 
         this._player, 100, angle, 300, 500, projectileOptions);
-    p.scale.setTo(1.8, 1.8);
+    p.scale.setTo(1.72, 1.72);
 };
