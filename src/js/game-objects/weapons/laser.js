@@ -23,13 +23,13 @@ Laser.prototype.fire = function (targetPos) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
-        var spacing = 0.25 * this._player.width;
-        var spacing2 = 0.5 * this._player.width;
-        this._createProjectile(angle, 5, spacing);
-        this._createProjectile(angle, 5, -spacing);
-        this._createProjectile(angle, 12, 0);
-        this._createProjectile(angle, -12, spacing2);
-        this._createProjectile(angle, -12, -spacing2);
+        var spacing = 0.36 * this._player.width;
+        var spacing2 = 0.72 * this._player.width;
+        this._createProjectile(angle, 12, spacing);
+        this._createProjectile(angle, 12, -spacing);
+        this._createProjectile(angle, 16, 0);
+        this._createProjectile(angle, 6, spacing2);
+        this._createProjectile(angle, 6, -spacing2);
 
         this.incrementAmmo(-5);
 
