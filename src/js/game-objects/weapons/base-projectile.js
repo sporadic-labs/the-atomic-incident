@@ -11,6 +11,8 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - canBounce - bool
 // - hiddenOnSetup
 // - canBurn - bool
+// - decayRate - range (0 - 1.0)
+// - grow - bool // ok seriously i'm not sure about this one...
 function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     angle, speed, range, options) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -28,24 +30,25 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     // projectile options
     if (options !== undefined && options.isDestructible !== undefined)
         this._isDestructable = options.isDestructible;
-    else
-        this._isDestructable = true;
+    else this._isDestructable = true;
     if (options !== undefined && options.rotateOnSetup !== undefined)
         this._rotateOnSetup = options.rotateOnSetup;
-    else
-        this._rotateOnSetup = true;
+    else this._rotateOnSetup = true;
     if (options !== undefined && options.canBounce !== undefined)
         this._canBounce = options.canBounce;
-    else
-        this._canBounce = true;
+    else this._canBounce = true;
     if (options !== undefined && options.hiddenOnSetup !== undefined)
         this._hiddenOnSetup = options.hiddenOnSetup;
-    else
-        this._hiddenOnSetup = false;
+    else this._hiddenOnSetup = false;
     if (options !== undefined && options.canBurn !== undefined)
         this._canBurn = options.canBurn;
-    else
-        this._canBurn = false;
+    else this._canBurn = false;
+    if (options !== undefined && options.decayRate !== undefined)
+        this._decayRate = options.decayRate;
+    else this._decayRate = 1.0;
+    if (options !== undefined && options.grow !== undefined)
+        this._grow = options.grow;
+    else this._grow = false;
 
     // If rotateOnSetup option is true, rotate projectile to face in the
     // right direction. Sprites are saved facing up (90 degrees), so we
@@ -58,6 +61,11 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (this._hiddenOnSetup)
         this.visible = false;
     
+    // If grow, the bullet grows from size 0 to 100
+    if (this._grow) {
+        this.scale.setTo(0.25, 0.25);
+    }
+
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
@@ -70,11 +78,22 @@ BaseProjectile.prototype.update = function() {
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer,
         this._onCollideWithMap);
 
+    if (this._decayRate) {
+        this.body.velocity.x = this.body.velocity.x * this._decayRate;
+        this.body.velocity.y = this.body.velocity.y * this._decayRate;
+    }
+
+    if (this._grow) {
+        var x = this.scale.x * 1.02;
+        var y = this.scale.y * 1.02;
+        this.scale.setTo(x, y);
+    }
+
     // If the projectile can burn, check each tile for a fire.
     // If one exists, ignore the tile and keep moving.  If there is no fire,
     // destroy the projectile and create a fire.
     if (this._canBurn) {
-        console.log('burning!')
+        // console.log('burning!')
     }
 }
 
