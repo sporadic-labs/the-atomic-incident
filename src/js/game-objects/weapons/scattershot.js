@@ -30,12 +30,10 @@ Scattershot.prototype.fire = function (targetPos) {
             var mod = (this.game.rnd.integerInRange(0, 30) * (Math.PI / 180)) *
                       this.game.rnd.sign();
             var angle = angleToPlayer + mod;
-            var dist = this.game.rnd.integerInRange(0,10)
             var speed = this.game.rnd.integerInRange(160,240)
             var range = this.game.rnd.integerInRange(48,96)
             var perpendicularOffset = this.game.rnd.integerInRange(-5,5)
-            this._createProjectile(angle, 5, perpendicularOffset, speed, range);
-
+            this._createProjectile(angle, 24, perpendicularOffset, speed, range);
         }
 
         this.incrementAmmo(-1);

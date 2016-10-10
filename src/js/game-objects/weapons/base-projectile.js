@@ -88,8 +88,8 @@ BaseProjectile.prototype.update = function() {
     // This might be a hack, but if it applicable elsewhere we can figure
     // something more generic out.
     if (this._grow) {
-        var x = this.scale.x * 1.0272;
-        var y = this.scale.y * 1.0272;
+        var x = this.scale.x * 1.0268;
+        var y = this.scale.y * 1.0268;
         this.scale.setTo(x, y);
     }
 

@@ -9,7 +9,7 @@ Arrow.prototype = Object.create(BaseWeapon.prototype);
 var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
-    canBounce: false,
+    canBounce: true,
     hiddenOnSetup: false
 };
 
@@ -25,9 +25,9 @@ Arrow.prototype.fire = function (targetPos) {
         var angle = this._player.position.angle(targetPos); // Radians
         // Start bullet in a position along that trajectory, but in front of 
         // the player
-        var x = this._player.position.x + (0.75 * this._player.width) * 
+        var x = this._player.position.x + (0.96 * this._player.width) * 
             Math.cos(angle);
-        var y = this._player.position.y + (0.75 * this._player.width) * 
+        var y = this._player.position.y + (0.96 * this._player.width) * 
             Math.sin(angle);
 
         this.incrementAmmo(-1);
