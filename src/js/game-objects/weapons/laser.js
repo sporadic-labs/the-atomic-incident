@@ -23,16 +23,15 @@ Laser.prototype.fire = function (targetPos) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
-        var spacing = 0.36 * this._player.width;
-        var spacing2 = 0.72 * this._player.width;
-        this._createProjectile(angle, 12, spacing);
-        this._createProjectile(angle, 12, -spacing);
-        this._createProjectile(angle, 16, 0);
-        this._createProjectile(angle, 6, spacing2);
-        this._createProjectile(angle, 6, -spacing2);
+        var spacing = 0.16 * this._player.width;
+        var spacing2 = 0.36 * this._player.width;
+        this._createProjectile(angle, 48, 0);
+        this._createProjectile(angle, 16, spacing2);
+        this._createProjectile(angle, 16, -spacing2);
+        this._createProjectile(angle, 24, spacing);
+        this._createProjectile(angle, 24, -spacing);
 
         this.incrementAmmo(-5);
-
         this._startCooldown(this._cooldownTime);
     }
 };
@@ -45,7 +44,8 @@ Laser.prototype._createProjectile = function (angle, playerDistance,
     var y = this._player.y + (playerDistance * Math.sin(angle)) - 
         (perpendicularOffset * Math.sin(perpAngle));    
     var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this,
-        this._player, 24, angle, 800, 500, projectileOptions);
+        this._player, 24, angle, 640, 360, projectileOptions);
+    p.scale.setTo(0.72, 0.72);
     var rgb = Phaser.Color.HSLtoRGB(0.52, 0.5, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
 };
