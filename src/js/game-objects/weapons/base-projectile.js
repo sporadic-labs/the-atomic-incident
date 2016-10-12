@@ -10,6 +10,7 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - isDestructible - bool
 // - rotateOnSetup - bool
 // - canBounce - bool
+// - canPierce - bool // bullets go through enemies
 // - canBurn - bool
 // - decayRate - range (0 - 1.0)
 // - grow - bool // ok seriously i'm not sure about this one...
@@ -36,6 +37,9 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (options !== undefined && options.rotateOnSetup !== undefined)
         this._rotateOnSetup = options.rotateOnSetup;
     else this._rotateOnSetup = true;
+    if (options !== undefined && options.canPierce !== undefined)
+        this._canPierce = options.canPierce;
+    else this._canPierce = false;
     if (options !== undefined && options.canBounce !== undefined)
         this._canBounce = options.canBounce;
     else this._canBounce = true;
@@ -120,7 +124,7 @@ BaseProjectile.prototype.update = function() {
 BaseProjectile.prototype.postUpdate = function () {
     // Update arcade physics
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
-    // Check overlapd
+    // Check overlap
     SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
         this._onCollideWithEnemy, this);
     // If projectile has collided with an enemy, or is out of range, remove it
@@ -143,7 +147,7 @@ BaseProjectile.prototype._onCollideWithMap = function (self, map) {
 BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     var isKilled = enemy.takeDamage(this._damage);
     if (isKilled) this._player.incrementCombo(1);
-    if (self._isDestructable) {
+    if (self._isDestructable && !self._canPierce) {
         self._remove = true;
     }
 };

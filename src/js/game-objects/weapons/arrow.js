@@ -10,6 +10,7 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: true,
+    canPierce: true,
 };
 
 function Arrow(game, parentGroup, player) {
