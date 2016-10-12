@@ -10,7 +10,7 @@ function HeadsUpDisplay(game, parentGroup) {
     this._satBodyPlugin = this.game.globals.plugins.satBody;
 
     this._fogMask = game.make.sprite(-200, -150, "fogMask");
-    this._fogMask.alpha = 0.96;
+    this._fogMask.alpha = 0.92;
     this.add(this._fogMask);
     this._fogMask.inputEnabled = false;
     /**

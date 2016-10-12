@@ -10,7 +10,6 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: false,
-    hiddenOnSetup: false,
     canBurn: true,
     decayRate: 0.965,
     grow: true,
@@ -49,7 +48,7 @@ Flamethrower.prototype.fire = function (targetPos) {
 
 Flamethrower.prototype._createProjectile = function (x, y, angle, speed, range) {
     var p = new Projectile(this.game, x, y, "assets", `weapons/e-burst-01`, this, 
-        this._player, 100, angle, speed, range, projectileOptions);
+        this._player, 6, angle, speed, range, projectileOptions);
     p.rotation += 135;
     // // Randomize the color of each flame.
     var g = this.game.rnd.integerInRange(0, 255);

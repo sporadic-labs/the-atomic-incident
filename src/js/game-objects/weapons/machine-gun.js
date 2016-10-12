@@ -10,7 +10,6 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: false,
-    hiddenOnSetup: false
 };
 
 function MachineGun(game, parentGroup, player) {
@@ -39,7 +38,7 @@ MachineGun.prototype.fire = function (targetPos) {
 
 MachineGun.prototype._createProjectile = function (x, y, angle) {
     var p = new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, 32, angle, 300, 500, projectileOptions);
+        this._player, 16, angle, 300, 160, projectileOptions);
     p.scale.setTo(0.75, 0.75);
     // // Randomize the color of each flame.
     var r = this.game.rnd.integerInRange(120, 160);

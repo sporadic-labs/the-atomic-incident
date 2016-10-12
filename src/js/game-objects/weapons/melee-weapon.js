@@ -23,7 +23,7 @@ function MeleeWeapon(game, parentGroup, player) {
 
     this._ableToAttack = true;
     this._swingDir = 1;
-    this._damage = 50;
+    this._damage = 35;
 
     this.visible = false;
     this._swing = null; 
@@ -54,7 +54,6 @@ MeleeWeapon.prototype.fire = function (targetPos) {
         if (endAngle === 360) {
             endAngle = 0;
         }
-        console.log(endAngle);
 
         this._swing = this.game.add.tween(this).to({angle: endAngle}, 
             this._cooldownTime, "Quad.easeInOut", false, 0, 0, false);

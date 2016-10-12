@@ -10,7 +10,6 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: false,
-    hiddenOnSetup: false
 };
 
 function Gun(game, parentGroup, player) {
@@ -57,5 +56,5 @@ Gun.prototype.specialFire = function () {
 
 Gun.prototype._createProjectile = function (x, y, angle) {
     new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, 100, angle, 300, 180, projectileOptions);
+        this._player, 50, angle, 300, 160, projectileOptions);
 };

@@ -10,11 +10,11 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - isDestructible - bool
 // - rotateOnSetup - bool
 // - canBounce - bool
-// - hiddenOnSetup
 // - canBurn - bool
 // - decayRate - range (0 - 1.0)
 // - grow - bool // ok seriously i'm not sure about this one...
 // - tracking - bool
+// - trackingTarget - (x, y) (or an object maybe, i don't really know...)
 function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     angle, speed, range, options) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -39,9 +39,6 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (options !== undefined && options.canBounce !== undefined)
         this._canBounce = options.canBounce;
     else this._canBounce = true;
-    if (options !== undefined && options.hiddenOnSetup !== undefined)
-        this._hiddenOnSetup = options.hiddenOnSetup;
-    else this._hiddenOnSetup = false;
     if (options !== undefined && options.canBurn !== undefined)
         this._canBurn = options.canBurn;
     else this._canBurn = false;
@@ -54,9 +51,11 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (options !== undefined && options.tracking !== undefined && options.trackingRadius !== undefined) {
         this._tracking = options.tracking;
         this._trackingRadius = options.trackingRadius;
+        this._trackingTarget = options.trackingTarget;
     } else {
         this._tracking = false;
         this._trackingRadius = 0;
+        this._trackingTarget = null;
     }
     // If rotateOnSetup option is true, rotate projectile to face in the
     // right direction. Sprites are saved facing up (90 degrees), so we
@@ -65,11 +64,8 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
         this.rotation = angle + (Math.PI / 2); // Radians
     else
         this.rotation = angle;
-    // If hiddenOnSetup option is true, hide the object
-    if (this._hiddenOnSetup)
-        this.visible = false;
-    
-    // If grow, the bullet grows from size 0 to 100
+
+    // If grow, the bullet grows from size 0.25 to 1.00
     if (this._grow) {
         this.scale.setTo(0.25, 0.25);
     }
@@ -117,8 +113,7 @@ BaseProjectile.prototype.update = function() {
     // If it is, begin tracking.  Otherwise, continue on the initiail trajectory.
     // NOTE(rex): HMMMM This isn't quite working...
     if (this._tracking) {
-        SpriteUtils.getClosestInGroup(this, this._enemies,
-            this._trackingRadius, this.trackTarget, this);
+
     }
 }
 

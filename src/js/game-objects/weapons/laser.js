@@ -10,8 +10,8 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: false,
-    hiddenOnSetup: false,
     tracking: true,
+    trackingTarget: null,
     trackingRadius: 120,
 };
 
@@ -46,7 +46,7 @@ Laser.prototype._createProjectile = function (angle, playerDistance,
     var y = this._player.y + (playerDistance * Math.sin(angle)) - 
         (perpendicularOffset * Math.sin(perpAngle));    
     var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this,
-        this._player, 24, angle, 640, 360, projectileOptions);
+        this._player, 10, angle, 640, 240, projectileOptions);
     p.scale.setTo(0.72, 0.72);
     var rgb = Phaser.Color.HSLtoRGB(0.52, 0.5, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);

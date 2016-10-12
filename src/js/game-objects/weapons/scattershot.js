@@ -10,7 +10,6 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: false,
-    hiddenOnSetup: false
 };
 
 function Scattershot(game, parentGroup, player) {
@@ -30,7 +29,7 @@ Scattershot.prototype.fire = function (targetPos) {
             var mod = (this.game.rnd.integerInRange(0, 30) * (Math.PI / 180)) *
                       this.game.rnd.sign();
             var angle = angleToPlayer + mod;
-            var speed = this.game.rnd.integerInRange(160,240)
+            var speed = this.game.rnd.integerInRange(364,376)
             var range = this.game.rnd.integerInRange(48,96)
             var perpendicularOffset = this.game.rnd.integerInRange(-5,5)
             this._createProjectile(angle, 24, perpendicularOffset, speed, range);
@@ -51,7 +50,7 @@ Scattershot.prototype._createProjectile = function (angle, playerDistance,
         (perpendicularOffset * Math.sin(perpAngle));
     // shotgun blast is made up of a bunch of slugs at half size.
     var p = new Projectile(this.game, x, y, "assets", "weapons/slug", this,
-        this._player, 36, angle, speed, range, projectileOptions);
+        this._player, 12, angle, speed, range, projectileOptions);
     p.scale.setTo(0.5, 0.5);
     var rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);

@@ -10,7 +10,6 @@ var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
     canBounce: true,
-    hiddenOnSetup: false
 };
 
 function Arrow(game, parentGroup, player) {
@@ -40,5 +39,5 @@ Arrow.prototype.fire = function (targetPos) {
 Arrow.prototype._createProjectile = function (x, y, angle) {
     var p = new Projectile(this.game, x, y, "assets", "weapons/arrow", this, 
         this._player, 100, angle, 300, 500, projectileOptions);
-    p.scale.setTo(1.72, 1.72);
+    p.scale.setTo(1.4, 1.4);
 };

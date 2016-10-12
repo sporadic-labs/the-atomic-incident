@@ -20,19 +20,3 @@ exports.checkOverlapWithGroup = function (sprite, group, callback, context) {
         }
     }
 };
-
-exports.getClosestInGroup = function (sprite, group, range, callback, context) {
-    // Loop through children in group
-    for (var i = 0; i < group.children.length; i += 1) {
-        var child = group.children[i];
-        if (child instanceof Phaser.Group) {
-            // If child is a group, recursion time
-            exports.getClosestInGroup(sprite, child, range, callback, context);
-        } else {
-            var distance = sprite.position.distance(child.position);
-            if (distance <= range) {
-                callback.call(context, sprite, child);
-            }
-        }
-    }
-};

@@ -96,14 +96,13 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
     // Cycling weapons
-    this._controls.addKeyboardControl("weapon-machine-gun", [Kb.ONE]);
-    this._controls.addKeyboardControl("weapon-laser", [Kb.TWO]);
-    this._controls.addKeyboardControl("weapon-beam", [Kb.THREE]);
-    this._controls.addKeyboardControl("weapon-arrow", [Kb.FOUR]);
-    this._controls.addKeyboardControl("weapon-sword", [Kb.FIVE]);
-    this._controls.addKeyboardControl("weapon-scattershot", [Kb.SIX]);
-    this._controls.addKeyboardControl("weapon-flamethrower", [Kb.SEVEN]);
-    this._controls.addKeyboardControl("explosive", [Kb.EIGHT]);
+    this._controls.addKeyboardControl("weapon-sword", [Kb.ONE]);
+    this._controls.addKeyboardControl("weapon-scattershot", [Kb.TWO]);
+    this._controls.addKeyboardControl("weapon-flamethrower", [Kb.THREE]);
+    this._controls.addKeyboardControl("weapon-machine-gun", [Kb.FOUR]);
+    this._controls.addKeyboardControl("weapon-laser", [Kb.FIVE]);
+    this._controls.addKeyboardControl("weapon-beam", [Kb.SIX]);
+    this._controls.addKeyboardControl("weapon-arrow", [Kb.SEVEN]);
 }
 
 Player.prototype.getCombo = function () {
