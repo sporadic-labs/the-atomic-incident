@@ -103,6 +103,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("weapon-laser", [Kb.FIVE]);
     this._controls.addKeyboardControl("weapon-beam", [Kb.SIX]);
     this._controls.addKeyboardControl("weapon-arrow", [Kb.SEVEN]);
+    this._controls.addKeyboardControl("explosive", [Kb.EIGHT]);
 }
 
 Player.prototype.getCombo = function () {
