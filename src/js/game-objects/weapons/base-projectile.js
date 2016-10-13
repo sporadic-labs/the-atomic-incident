@@ -54,11 +54,9 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     else this._grow = false;
     if (options !== undefined && options.tracking !== undefined && options.trackingRadius !== undefined) {
         this._tracking = options.tracking;
-        this._trackingRadius = options.trackingRadius;
         this._trackingTarget = options.trackingTarget;
     } else {
         this._tracking = false;
-        this._trackingRadius = 0;
         this._trackingTarget = null;
     }
     // If rotateOnSetup option is true, rotate projectile to face in the
@@ -73,10 +71,6 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (this._grow) {
         this.scale.setTo(0.25, 0.25);
     }
-
-    // Tracking target
-    this._trackingTarget = null;
-    this._trackingCheckDelay = 12; // Delay bullet tracking check
 
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
