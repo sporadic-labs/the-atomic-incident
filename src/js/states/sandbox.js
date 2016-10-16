@@ -135,6 +135,39 @@ Sandbox.prototype.create = function () {
     }, this);
 };
 
+Sandbox.prototype.update = function () {
+    var deltaAngle = Math.PI / 360;
+    var points = [];
+    for(var a = 0; a < Math.PI * 2; a += deltaAngle) {
+        // Create a ray from the light to a point on the circle
+        var ray = new Phaser.Line(this.light.x, this.light.y,
+            this.light.x + Math.cos(a) * 1000, this.light.y + Math.sin(a) * 1000);
+
+        // Check if the ray intersected any walls
+        var intersect = this.getWallIntersection(ray);
+
+        // Save the intersection or the end of the ray
+        if (intersect) {
+            points.push(intersect);
+        } else {
+            points.push(ray.end);
+        }
+    }
+
+    globals.bitmap.fill(0, 0, 0, 1);
+    globals.bitmap.ctx.beginPath();
+    globals.bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
+    globals.bitmap.ctx.moveTo(points[0].x, points[0].y);
+    for(var i = 0; i < points.length; i++) {
+        globals.bitmap.ctx.lineTo(points[i].x, points[i].y);
+    }
+    globals.bitmap.ctx.closePath();
+    globals.bitmap.ctx.fill();
+
+    // This just tells the engine it should update the texture cache
+    globals.bitmap.dirty = true;
+};
+
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
