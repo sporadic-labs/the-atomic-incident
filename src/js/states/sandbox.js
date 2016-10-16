@@ -67,7 +67,7 @@ Sandbox.prototype.create = function () {
     var bitmap = this.game.add.bitmapData(game.width, game.height);
     var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
     image.blendMode = Phaser.blendModes.MULTIPLY;
-    // image.fixedToCamera = true; <- Not right...yet
+    image.fixedToCamera = true;
     bitmap.fill(0, 0, 0, 1);
     bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
     bitmap.ctx.strokeStyle = 'rgb(255, 255, 255)';
@@ -118,8 +118,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -161,9 +161,9 @@ Sandbox.prototype.update = function () {
     globals.lighting.bitmap.fill(0, 0, 0, 1);
     globals.lighting.bitmap.ctx.beginPath();
     globals.lighting.bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
-    globals.lighting.bitmap.ctx.moveTo(points[0].x, points[0].y);
+    globals.lighting.bitmap.ctx.moveTo(points[0].x - globals.player.x + this.game.width/2, points[0].y - globals.player.y + this.game.height/2);
     for(var i = 0; i < points.length; i++) {
-        globals.lighting.bitmap.ctx.lineTo(points[i].x, points[i].y);
+        globals.lighting.bitmap.ctx.lineTo(points[i].x - globals.player.x + this.game.width/2, points[i].y - globals.player.y + this.game.height/2);
     }
     globals.lighting.bitmap.ctx.closePath();
     globals.lighting.bitmap.ctx.fill();
