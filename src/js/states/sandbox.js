@@ -73,6 +73,9 @@ Sandbox.prototype.create = function () {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
+    this.walls = this.getWallsFromTiles();
+    console.log(this.walls);
+
     // Player
     var px = 0;
     var py = 0;
@@ -113,6 +116,59 @@ Sandbox.prototype.create = function () {
             globals.plugins.satBody.enableDebugAll();
         }
     }, this);
+};
+
+// Dynamic lighting/Raycasting.
+// Thanks, yafd!
+// http://gamemechanicexplorer.com/#raycasting-2
+Sandbox.prototype.getWallIntersection = function(ray) {
+    var distanceToWall = Number.POSITIVE_INFINITY;
+    var closestIntersection = null;
+
+    for (var i = 0; i < this.walls.length; i++) {
+        // Test each of the edges in this wall against the ray.
+        // If the ray intersects any of the edges then the wall must be in the way.
+        for(var i = 0; i < walls.length; i++) {
+            var intersect = Phaser.Line.intersects(ray, walls[i]);
+            if (intersect) {
+                // Find the closest intersection
+                var distance = this.game.math.distance(ray.start.x, ray.start.y,
+                    intersect.x, intersect.y);
+                if (distance < distanceToWall) {
+                    distanceToWall = distance;
+                    closestIntersection = intersect;
+                }
+            }
+        }
+    }
+
+    return closestIntersection;
+};
+
+// Build an array of all of the collidable walls
+Sandbox.prototype.getWallsFromTiles = function() {
+    var lines = [];
+
+    // For each tile in the tileMap, 
+    this.game.globals.tileMap.forEach(function(tile) {
+        // If the tile can collide, create an array of lines that represent
+        // the four edges of the tile.
+        if (tile.collides) {
+            // top
+            lines.push(Phaser.Line(tile.top, tile.left, tile.top, tile.right));
+            // right
+            lines.push(Phaser.Line(tile.top, tile.right, tile.bottom,
+                tile.right));
+            // bottom
+            lines.push(Phaser.Line(tile.bottom, tile.left, tile.bottom,
+                tile.right));
+            // left
+            lines.push(Phaser.Line(tile.top, tile.left, tile.bottom,
+                tile.left));
+        }
+    }, this);
+
+    return lines;
 };
 
 Sandbox.prototype.render = function () {
