@@ -63,6 +63,26 @@ Sandbox.prototype.create = function () {
         this.game.height, groups.background);
     map.setCollisionBetween(0, 3, true, "BlockingLayer");
 
+    // Create a bitmap and image that can be used for dynamic lighting
+    var bitmap = this.game.add.bitmapData(game.width, game.height);
+    var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
+    image.blendMode = Phaser.blendModes.MULTIPLY;
+    image.fixedToCamera = true;
+    bitmap.fill(0, 0, 0, 1);
+    bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
+    bitmap.ctx.strokeStyle = 'rgb(255, 255, 255)';
+    bitmap.ctx.beginPath();
+    bitmap.ctx.moveTo(game.width/2 + 0, game.height/2 + 0);
+    bitmap.ctx.lineTo(game.width/2 + 100, game.height/2 + 0);
+    bitmap.ctx.lineTo(game.width/2 + 100, game.height/2 + 100);
+    bitmap.ctx.lineTo(game.width/2 + 0, game.height/2 + 100); 
+    bitmap.ctx.closePath();
+    bitmap.ctx.fill();
+    globals.lighting = {
+        bitmap: bitmap,
+        image: image
+    }
+
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
 
