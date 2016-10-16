@@ -67,6 +67,7 @@ Sandbox.prototype.create = function () {
     var bitmap = this.game.add.bitmapData(game.width, game.height);
     var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
     image.blendMode = Phaser.blendModes.MULTIPLY;
+    // image.fixedToCamera = true; <- Not right...yet
     bitmap.fill(0, 0, 0, 1);
     bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
     bitmap.ctx.strokeStyle = 'rgb(255, 255, 255)';
