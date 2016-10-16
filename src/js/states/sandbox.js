@@ -173,20 +173,17 @@ Sandbox.prototype.getWallsFromTiles = function() {
     this.game.globals.tileMap.forEach(function(tile) {
         // If the tile can collide, create an array of lines that represent
         // the four edges of the tile.
-        if (tile.collides) {
-            // top
-            lines.push(Phaser.Line(tile.top, tile.left, tile.top, tile.right));
-            // right
-            lines.push(Phaser.Line(tile.top, tile.right, tile.bottom,
-                tile.right));
-            // bottom
-            lines.push(Phaser.Line(tile.bottom, tile.left, tile.bottom,
-                tile.right));
-            // left
-            lines.push(Phaser.Line(tile.top, tile.left, tile.bottom,
-                tile.left));
+        if (tile.canCollide) {
+            var top = new Phaser.Line(tile.top, tile.left, tile.top, tile.right);
+            lines.push(top);
+            var right = new Phaser.Line(tile.top, tile.left, tile.top, tile.right);
+            lines.push(right);
+            var bottom = new Phaser.Line(tile.top, tile.left, tile.top, tile.right);
+            lines.push(bottom);
+            var left = new Phaser.Line(tile.top, tile.left, tile.top, tile.right);
+            lines.push(left);
         }
-    }, this);
+    }, this, 0, 0, 30, 20, 'BlockingLayer');
 
     return lines;
 };
