@@ -221,7 +221,7 @@ Sandbox.prototype.getWallsFromTiles = function() {
                 tile.left));
         }
 
-    }, this, 0, 0, this.game.globals.tileMap.width, this.game.globals.tileMap.height, 1);
+    }, this, 0, 0, this.game.globals.tileMap.width, this.game.globals.tileMap.height, 'BlockingLayer');
 
     return lines;
 };
