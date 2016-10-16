@@ -67,7 +67,6 @@ Sandbox.prototype.create = function () {
     var bitmap = this.game.add.bitmapData(game.width, game.height);
     var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
     image.blendMode = Phaser.blendModes.MULTIPLY;
-    image.fixedToCamera = true;
     bitmap.fill(0, 0, 0, 1);
     bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
     bitmap.ctx.strokeStyle = 'rgb(255, 255, 255)';
@@ -141,10 +140,11 @@ Sandbox.prototype.create = function () {
 Sandbox.prototype.update = function () {
     var deltaAngle = Math.PI / 360;
     var points = [];
+    var globals = this.game.globals;
     for(var a = 0; a < Math.PI * 2; a += deltaAngle) {
         // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(this.light.x, this.light.y,
-            this.light.x + Math.cos(a) * 1000, this.light.y + Math.sin(a) * 1000);
+        var ray = new Phaser.Line(globals.player.x, globals.player.y,
+            globals.player.x + Math.cos(a) * 1000, globals.player.y + Math.sin(a) * 1000);
 
         // Check if the ray intersected any walls
         var intersect = this.getWallIntersection(ray);
@@ -157,18 +157,18 @@ Sandbox.prototype.update = function () {
         }
     }
 
-    globals.bitmap.fill(0, 0, 0, 1);
-    globals.bitmap.ctx.beginPath();
-    globals.bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
-    globals.bitmap.ctx.moveTo(points[0].x, points[0].y);
+    globals.lighting.bitmap.fill(0, 0, 0, 1);
+    globals.lighting.bitmap.ctx.beginPath();
+    globals.lighting.bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
+    globals.lighting.bitmap.ctx.moveTo(points[0].x, points[0].y);
     for(var i = 0; i < points.length; i++) {
-        globals.bitmap.ctx.lineTo(points[i].x, points[i].y);
+        globals.lighting.bitmap.ctx.lineTo(points[i].x, points[i].y);
     }
-    globals.bitmap.ctx.closePath();
-    globals.bitmap.ctx.fill();
+    globals.lighting.bitmap.ctx.closePath();
+    globals.lighting.bitmap.ctx.fill();
 
     // This just tells the engine it should update the texture cache
-    globals.bitmap.dirty = true;
+    globals.lighting.bitmap.dirty = true;
 };
 
 // Dynamic lighting/Raycasting.
@@ -181,8 +181,8 @@ Sandbox.prototype.getWallIntersection = function(ray) {
     for (var i = 0; i < this.walls.length; i++) {
         // Test each of the edges in this wall against the ray.
         // If the ray intersects any of the edges then the wall must be in the way.
-        for(var i = 0; i < walls.length; i++) {
-            var intersect = Phaser.Line.intersects(ray, walls[i]);
+        for(var i = 0; i < this.walls.length; i++) {
+            var intersect = Phaser.Line.intersects(ray, this.walls[i]);
             if (intersect) {
                 // Find the closest intersection
                 var distance = this.game.math.distance(ray.start.x, ray.start.y,
@@ -208,18 +208,19 @@ Sandbox.prototype.getWallsFromTiles = function() {
         // the four edges of the tile.
         if (tile.collides) {
             // top
-            lines.push(Phaser.Line(tile.top, tile.left, tile.top, tile.right));
+            lines.push(new Phaser.Line(tile.top, tile.left, tile.top, tile.right));
             // right
-            lines.push(Phaser.Line(tile.top, tile.right, tile.bottom,
+            lines.push(new Phaser.Line(tile.top, tile.right, tile.bottom,
                 tile.right));
             // bottom
-            lines.push(Phaser.Line(tile.bottom, tile.left, tile.bottom,
+            lines.push(new Phaser.Line(tile.bottom, tile.left, tile.bottom,
                 tile.right));
             // left
-            lines.push(Phaser.Line(tile.top, tile.left, tile.bottom,
+            lines.push(new Phaser.Line(tile.top, tile.left, tile.bottom,
                 tile.left));
         }
-    }, this);
+
+    }, this, 0, 0, this.game.globals.tileMap.width, this.game.globals.tileMap.height, 1);
 
     return lines;
 };
