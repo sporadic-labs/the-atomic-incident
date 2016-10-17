@@ -86,8 +86,6 @@ Sandbox.prototype.create = function () {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    this.walls = this.getWallsFromTiles();
-
     // Player
     var px = 0;
     var py = 0;
@@ -134,13 +132,16 @@ Sandbox.prototype.update = function () {
     var deltaAngle = Math.PI / 360;
     var points = [];
     var globals = this.game.globals;
+    
+    var walls = this.getWallsOnScreen();
+
     for(var a = 0; a < Math.PI * 2; a += deltaAngle) {
         // Create a ray from the light to a point on the circle
         var ray = new Phaser.Line(globals.player.x, globals.player.y,
             globals.player.x + Math.cos(a) * 1000, globals.player.y + Math.sin(a) * 1000);
 
         // Check if the ray intersected any walls
-        var intersect = this.getWallIntersection(ray);
+        var intersect = this.getWallIntersection(ray, walls);
 
         // Save the intersection or the end of the ray
         if (intersect) {
@@ -175,17 +176,39 @@ Sandbox.prototype.update = function () {
     bitmap.dirty = true;
 };
 
+Sandbox.prototype.getWallsOnScreen = function () {
+    var player = this.game.globals.player;
+    var layer = this.game.globals.tileMapLayer;
+    var screenTileLeft = layer.getTileX(player.x - (this.game.width / 2));
+    var screenTileRight = layer.getTileX(player.x + (this.game.width / 2));
+    var screenTileTop = layer.getTileY(player.y - (this.game.height / 2));
+    var screenTileBottom = layer.getTileY(player.y + (this.game.height / 2));
+
+    var walls = [];
+    var tileMap = this.game.globals.tileMap
+    tileMap.forEach(function(t) {
+        walls.push(
+            new Phaser.Line(t.left, t.top, t.right, t.top),
+            new Phaser.Line(t.right, t.top, t.right, t.bottom),
+            new Phaser.Line(t.left, t.bottom, t.right, t.bottom),
+            new Phaser.Line(t.left, t.top, t.left, t.bottom)
+        );
+    }, this, screenTileLeft, screenTileTop, 
+    screenTileRight - screenTileLeft, screenTileBottom - screenTileTop, 
+    "BlockingLayer");
+
+    return walls;
+}
+
 // Dynamic lighting/Raycasting.
 // Thanks, yafd!
 // http://gamemechanicexplorer.com/#raycasting-2
-Sandbox.prototype.getWallIntersection = function(ray) {
+Sandbox.prototype.getWallIntersection = function(ray, walls) {
     var distanceToWall = Number.POSITIVE_INFINITY;
     var closestIntersection = null;
 
-    // Test each of the edges in this wall against the ray.
-    // If the ray intersects any of the edges then the wall must be in the way.
-    for(var i = 0; i < this.walls.length; i++) {
-        var intersect = Phaser.Line.intersects(ray, this.walls[i]);
+    for (var i = 0; i < walls.length; i++) {
+        var intersect = Phaser.Line.intersects(ray, walls[i]);
         if (intersect) {
             // Find the closest intersection
             var distance = this.game.math.distance(ray.start.x, ray.start.y,
@@ -198,33 +221,6 @@ Sandbox.prototype.getWallIntersection = function(ray) {
     }
 
     return closestIntersection;
-};
-
-// Build an array of all of the collidable walls
-Sandbox.prototype.getWallsFromTiles = function() {
-    var lines = [];
-
-    // For each tile in the tileMap, 
-    this.game.globals.tileMap.forEach(function(tile) {
-        // If the tile can collide, create an array of lines that represent
-        // the four edges of the tile.
-        if (tile.canCollide) {
-            // top
-            lines.push(new Phaser.Line(tile.left, tile.top, tile.right, tile.top));
-            // right
-            lines.push(new Phaser.Line(tile.right, tile.top, tile.right,
-                tile.bottom));
-            // bottom
-            lines.push(new Phaser.Line(tile.left, tile.bottom, tile.right,
-                tile.bottom));
-            // left
-            lines.push(new Phaser.Line(tile.left, tile.top, tile.left,
-                tile.bottom));
-        }
-
-    }, this, 0, 0, this.game.globals.tileMap.width, this.game.globals.tileMap.height, 'BlockingLayer');
-
-    return lines;
 };
 
 Sandbox.prototype.render = function () {
