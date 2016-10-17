@@ -70,8 +70,10 @@ Sandbox.prototype.create = function () {
     image.fixedToCamera = true;
     globals.lighting = {
         bitmap: bitmap,
-        image: image
+        image: image,
+        opacity: 0.5
     }
+    bitmap.fill(0, 0, 0, globals.lighting.opacity);
 
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
