@@ -170,19 +170,17 @@ Sandbox.prototype.getWallIntersection = function(ray) {
     var distanceToWall = Number.POSITIVE_INFINITY;
     var closestIntersection = null;
 
-    for (var i = 0; i < this.walls.length; i++) {
-        // Test each of the edges in this wall against the ray.
-        // If the ray intersects any of the edges then the wall must be in the way.
-        for(var i = 0; i < this.walls.length; i++) {
-            var intersect = Phaser.Line.intersects(ray, this.walls[i]);
-            if (intersect) {
-                // Find the closest intersection
-                var distance = this.game.math.distance(ray.start.x, ray.start.y,
-                    intersect.x, intersect.y);
-                if (distance < distanceToWall) {
-                    distanceToWall = distance;
-                    closestIntersection = intersect;
-                }
+    // Test each of the edges in this wall against the ray.
+    // If the ray intersects any of the edges then the wall must be in the way.
+    for(var i = 0; i < this.walls.length; i++) {
+        var intersect = Phaser.Line.intersects(ray, this.walls[i]);
+        if (intersect) {
+            // Find the closest intersection
+            var distance = this.game.math.distance(ray.start.x, ray.start.y,
+                intersect.x, intersect.y);
+            if (distance < distanceToWall) {
+                distanceToWall = distance;
+                closestIntersection = intersect;
             }
         }
     }
