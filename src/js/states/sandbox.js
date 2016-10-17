@@ -160,9 +160,9 @@ Sandbox.prototype.update = function () {
     globals.lighting.bitmap.fill(0, 0, 0, 1);
     globals.lighting.bitmap.ctx.beginPath();
     globals.lighting.bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
-    globals.lighting.bitmap.ctx.moveTo(points[0].x - globals.player.x + this.game.width/2, points[0].y - globals.player.y + this.game.height/2);
+    globals.lighting.bitmap.ctx.moveTo(points[0].x, points[0].y);
     for(var i = 0; i < points.length; i++) {
-        globals.lighting.bitmap.ctx.lineTo(points[i].x - globals.player.x + this.game.width/2, points[i].y - globals.player.y + this.game.height/2);
+        globals.lighting.bitmap.ctx.lineTo(points[i].x, points[i].y);
     }
     globals.lighting.bitmap.ctx.closePath();
     globals.lighting.bitmap.ctx.fill();
