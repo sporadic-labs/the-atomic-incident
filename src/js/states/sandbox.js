@@ -66,12 +66,13 @@ Sandbox.prototype.create = function () {
     // Create a bitmap and image that can be used for dynamic lighting
     var bitmap = this.game.add.bitmapData(game.width, game.height);
     var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
+    groups.midground.addChild(image);
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
     globals.lighting = {
         bitmap: bitmap,
         image: image,
-        opacity: 0.5
+        opacity: 1
     }
     bitmap.fill(0, 0, 0, globals.lighting.opacity);
 
