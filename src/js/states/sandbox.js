@@ -64,8 +64,8 @@ Sandbox.prototype.create = function () {
     map.setCollisionBetween(0, 3, true, "BlockingLayer");
 
     // Create a bitmap and image that can be used for dynamic lighting
-    var bitmap = this.game.add.bitmapData(game.world.width, game.world.height);
-    var image = bitmap.addToWorld(game.world.width/2, game.world.height/2, 0.5, 0.5, 1, 1);
+    var bitmap = this.game.add.bitmapData(game.width, game.height);
+    var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
     globals.lighting = {
@@ -149,18 +149,29 @@ Sandbox.prototype.update = function () {
         }
     }
 
-    globals.lighting.bitmap.fill(0, 0, 0, 1);
-    globals.lighting.bitmap.ctx.beginPath();
-    globals.lighting.bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
-    globals.lighting.bitmap.ctx.moveTo(points[0].x, points[0].y);
+    var bitmap = globals.lighting.bitmap;
+    // Clear and draw a shadow everywhere
+    bitmap.clear();
+    bitmap.update();
+    bitmap.fill(0, 0, 0, globals.lighting.opacity);
+    // Draw the "light" areas
+    bitmap.ctx.beginPath();
+    bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
+    bitmap.ctx.strokeStyle = 'rgb(255, 255, 255)';
+    // Note: xOffset and yOffset convert from world coordinates to coordinates 
+    // inside of the bitmap mask. There might be a more elegant way to do this
+    // when we optimize.
+    var xOffset = globals.player.x + this.game.width / 2;
+    var yOffset = globals.player.y + this.game.height / 2;
+    bitmap.ctx.moveTo(points[0].x - xOffset, points[0].y - yOffset);
     for(var i = 0; i < points.length; i++) {
-        globals.lighting.bitmap.ctx.lineTo(points[i].x, points[i].y);
+        bitmap.ctx.lineTo(points[i].x - xOffset, points[i].y - yOffset);
     }
-    globals.lighting.bitmap.ctx.closePath();
-    globals.lighting.bitmap.ctx.fill();
+    bitmap.ctx.closePath();
+    bitmap.ctx.fill();
 
     // This just tells the engine it should update the texture cache
-    globals.lighting.bitmap.dirty = true;
+    bitmap.dirty = true;
 };
 
 // Dynamic lighting/Raycasting.
