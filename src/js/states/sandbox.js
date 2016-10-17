@@ -64,8 +64,8 @@ Sandbox.prototype.create = function () {
     map.setCollisionBetween(0, 3, true, "BlockingLayer");
 
     // Create a bitmap and image that can be used for dynamic lighting
-    var bitmap = this.game.add.bitmapData(game.width, game.height);
-    var image = bitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
+    var bitmap = this.game.add.bitmapData(game.world.width, game.world.height);
+    var image = bitmap.addToWorld(game.world.width/2, game.world.height/2, 0.5, 0.5, 1, 1);
     image.blendMode = Phaser.blendModes.MULTIPLY;
     // image.fixedToCamera = true; <- Not right...yet
     bitmap.fill(0, 0, 0, 1);
@@ -94,7 +94,6 @@ Sandbox.prototype.create = function () {
     this.physics.arcade.gravity.set(0);
 
     this.walls = this.getWallsFromTiles();
-    console.log(this.walls);
 
     // Player
     var px = 0;
@@ -207,18 +206,18 @@ Sandbox.prototype.getWallsFromTiles = function() {
     this.game.globals.tileMap.forEach(function(tile) {
         // If the tile can collide, create an array of lines that represent
         // the four edges of the tile.
-        if (tile.collides) {
+        if (tile.canCollide) {
             // top
-            lines.push(new Phaser.Line(tile.top, tile.left, tile.top, tile.right));
+            lines.push(new Phaser.Line(tile.left, tile.top, tile.right, tile.top));
             // right
-            lines.push(new Phaser.Line(tile.top, tile.right, tile.bottom,
-                tile.right));
+            lines.push(new Phaser.Line(tile.right, tile.top, tile.right,
+                tile.bottom));
             // bottom
-            lines.push(new Phaser.Line(tile.bottom, tile.left, tile.bottom,
-                tile.right));
+            lines.push(new Phaser.Line(tile.left, tile.bottom, tile.right,
+                tile.bottom));
             // left
-            lines.push(new Phaser.Line(tile.top, tile.left, tile.bottom,
-                tile.left));
+            lines.push(new Phaser.Line(tile.left, tile.top, tile.left,
+                tile.bottom));
         }
 
     }, this, 0, 0, this.game.globals.tileMap.width, this.game.globals.tileMap.height, 'BlockingLayer');
@@ -229,4 +228,8 @@ Sandbox.prototype.getWallsFromTiles = function() {
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
+
+    // for (var i = 0; i < this.walls.length; i++) {
+    //     this.game.debug.geom(this.walls[i]);
+    // }
 };
