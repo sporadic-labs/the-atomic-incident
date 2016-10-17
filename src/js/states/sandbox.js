@@ -187,12 +187,14 @@ Sandbox.prototype.getWallsOnScreen = function () {
     var walls = [];
     var tileMap = this.game.globals.tileMap
     tileMap.forEach(function(t) {
-        walls.push(
-            new Phaser.Line(t.left, t.top, t.right, t.top),
-            new Phaser.Line(t.right, t.top, t.right, t.bottom),
-            new Phaser.Line(t.left, t.bottom, t.right, t.bottom),
-            new Phaser.Line(t.left, t.top, t.left, t.bottom)
-        );
+        if (t && t.collides) {
+            walls.push(
+                new Phaser.Line(t.left, t.top, t.right, t.top),
+                new Phaser.Line(t.right, t.top, t.right, t.bottom),
+                new Phaser.Line(t.left, t.bottom, t.right, t.bottom),
+                new Phaser.Line(t.left, t.top, t.left, t.bottom)
+            );
+        }
     }, this, screenTileLeft, screenTileTop, 
     screenTileRight - screenTileLeft, screenTileBottom - screenTileTop, 
     "BlockingLayer");
