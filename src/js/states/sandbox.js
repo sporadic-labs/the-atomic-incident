@@ -184,8 +184,14 @@ Sandbox.prototype.getWallsOnScreen = function () {
     var screenTileTop = layer.getTileY(player.y - (this.game.height / 2));
     var screenTileBottom = layer.getTileY(player.y + (this.game.height / 2));
 
+    // Constrain the left/right/top/bottom to be valid tile coords
+    var tileMap = this.game.globals.tileMap;
+    if (screenTileLeft < 0) screenTileLeft = 0;
+    if (screenTileRight > tileMap.width) screenTileRight = tileMap.width;
+    if (screenTileTop < 0) screenTileTop = 0;
+    if (screenTileBottom > tileMap.height) screenTileBottom = tileMap.height; 
+
     var walls = [];
-    var tileMap = this.game.globals.tileMap
     tileMap.forEach(function(t) {
         if (t && t.collides) {
             walls.push(
