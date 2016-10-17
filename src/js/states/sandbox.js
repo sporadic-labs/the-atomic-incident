@@ -161,8 +161,8 @@ Sandbox.prototype.update = function () {
     // Note: xOffset and yOffset convert from world coordinates to coordinates 
     // inside of the bitmap mask. There might be a more elegant way to do this
     // when we optimize.
-    var xOffset = globals.player.x + this.game.width / 2;
-    var yOffset = globals.player.y + this.game.height / 2;
+    var xOffset = globals.player.x - this.game.width / 2;
+    var yOffset = globals.player.y - this.game.height / 2;
     bitmap.ctx.moveTo(points[0].x - xOffset, points[0].y - yOffset);
     for(var i = 0; i < points.length; i++) {
         bitmap.ctx.lineTo(points[i].x - xOffset, points[i].y - yOffset);
