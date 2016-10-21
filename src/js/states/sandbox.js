@@ -242,8 +242,23 @@ Sandbox.prototype.update = function () {
     // Note: xOffset and yOffset convert from world coordinates to coordinates 
     // inside of the bitmap mask. There might be a more elegant way to do this
     // when we optimize.
-    var xOffset = globals.player.x - this.game.width / 2;
-    var yOffset = globals.player.y - this.game.height / 2;
+    // When the camera stops moving, fix the offset.
+    var xOffset;
+    if (globals.player.x > 400 && globals.player.x < 1400) {
+        xOffset = globals.player.x - this.game.width / 2;
+    } else if (globals.player.x > 1400) {
+        xOffset = 1400 - this.game.width / 2;
+    } else {
+        xOffset = 0;
+    }
+    var yOffset;
+    if (globals.player.y > 300 && globals.player.y < 1140) {
+        yOffset = globals.player.y - this.game.height / 2;
+    } else if (globals.player.y > 1140) {
+        yOffset = 1140 - this.game.height / 2;;
+    } else {
+        yOffset = 0;
+    }
     bitmap.ctx.moveTo(points[0].x - xOffset, points[0].y - yOffset);
     for(var i = 0; i < points.length; i++) {
         bitmap.ctx.lineTo(points[i].x - xOffset, points[i].y - yOffset);
