@@ -216,6 +216,21 @@ Sandbox.prototype.calculateHulls = function (clusters) {
     return polygons;
 };
 
+Sandbox.prototype.getVisibleWalls = function () {
+    var camRect = this.camera.view;
+    var visibleWalls = [];
+
+    for (var i = 0; i < this.lightWalls.length; i++) {
+        for (var j = 0; j < this.lightWalls[i].length; j++) {
+            var line = this.lightWalls[i][j];
+            if (camRect.intersectsRaw(line.left, line.right, line.top, line.bottom)) {
+                visibleWalls.push(line);
+            }
+        }
+    }
+    return visibleWalls;
+};
+
 Sandbox.prototype.update = function () {
     var deltaAngle = Math.PI / 360;
     var points = [];
@@ -364,10 +379,10 @@ Sandbox.prototype.render = function () {
     // for (var i = 0; i < this.walls.length; i++) {
     //     this.game.debug.geom(this.walls[i]);
     // }
-    
-    for (var i = 0; i < this.lightWalls.length; i++) {
-        for (var j = 0; j < this.lightWalls[i].length; j++) {
-            this.game.debug.geom(this.lightWalls[i][j]);
-        }
-    }
+
+    // Draw only the visible walls from the tilemap polygons
+    // var visisbleWalls = this.getVisibleWalls();
+    // for (var i = 0; i < visisbleWalls.length; i++) {
+    //     this.game.debug.geom(visisbleWalls[i]);
+    // }
 };
