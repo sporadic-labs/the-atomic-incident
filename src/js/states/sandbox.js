@@ -252,7 +252,7 @@ Sandbox.prototype.update = function () {
     points.push(intersectBottomLeft);
 
     console.log(points[0]);
-    points = this.sortPoints(points, globals.player.position);
+    this.sortPoints(points, globals.player.position);
     console.log(points[0]);
 
     // Create an arbitrarily long ray, starting at the player position, through the
