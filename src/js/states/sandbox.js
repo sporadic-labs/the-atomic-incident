@@ -227,7 +227,8 @@ Sandbox.prototype.update = function () {
     var points = [];
     var globals = this.game.globals;
     
-    var walls = this.getWallsOnScreen();
+    var walls = this.getVisibleWalls();
+
     var playerPoint = globals.player.position;
     for (var w = 0; w < walls.length; w++) {
         // Get start and end point for each wall.
