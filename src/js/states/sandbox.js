@@ -222,11 +222,12 @@ Sandbox.prototype.update = function () {
     var globals = this.game.globals;
     
     var walls = this.getWallsOnScreen();
+    var playerPoint = globals.player.position;
 
     for(var a = 0; a < Math.PI * 2; a += deltaAngle) {
         // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(globals.player.x, globals.player.y,
-            globals.player.x + Math.cos(a) * 1000, globals.player.y + Math.sin(a) * 1000);
+        var ray = new Phaser.Line(playerPoint.x, playerPoint.y,
+            playerPoint.x + Math.cos(a) * 1000, playerPoint.y + Math.sin(a) * 1000);
 
         // Check if the ray intersected any walls
         var intersect = this.getWallIntersection(ray, walls);
@@ -238,6 +239,8 @@ Sandbox.prototype.update = function () {
             points.push(ray.end);
         }
     }
+
+    this.sortPoints(points, playerPoint);
 
     var bitmap = globals.lighting.bitmap;
     // Clear and draw a shadow everywhere
@@ -277,6 +280,16 @@ Sandbox.prototype.update = function () {
 
     // This just tells the engine it should update the texture cache
     bitmap.dirty = true;
+};
+
+Sandbox.prototype.sortPoints = function (points, light) {
+    // TODO: make more efficient by sorting and caching the angle calculations
+    var sortedPoints = [];
+    points.sort(function (p1, p2) {
+        var angle1 = Phaser.Point.angle(light, p1);
+        var angle2 = Phaser.Point.angle(light, p2);
+        return angle1 - angle2;
+    });
 };
 
 Sandbox.prototype.getWallsOnScreen = function () {
