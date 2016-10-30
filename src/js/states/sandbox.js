@@ -83,15 +83,6 @@ Sandbox.prototype.create = function () {
     var clusters = this.calculateClusters();
     this.lightWalls = this.calculateHulls(clusters);
 
-    // For Shadow Debugging!
-    // Create a bitmap for drawing rays
-    this.rayBitmap = this.game.add.bitmapData(this.game.width, this.game.height);
-    this.rayBitmapImage = this.game.add.image(0, 0, this.rayBitmap);
-    this.rayBitmapImage.visible = false;
-    // Setup function for hiding or showing rays
-    this.game.input.onTap.add(this.toggleRays, this);
-
-
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
 
@@ -121,8 +112,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -238,20 +229,60 @@ Sandbox.prototype.update = function () {
     
     var walls = this.getWallsOnScreen();
     var playerPoint = globals.player.position;
+    for (var w = 0; w < walls.length; w++) {
+        // Get start and end point for each wall.
+        var wall = walls[w];
+        var startAngle = globals.player.position.angle(wall.start);
+        var endAngle = globals.player.position.angle(wall.end);
 
-    for(var a = 0; a < Math.PI * 2; a += deltaAngle) {
+        // Check for an intersection at each angle, and +/- 0.001
+        // Add the intersection to the points array.
+        points.push(checkRayIntersection(this, startAngle-0.001));
+        points.push(checkRayIntersection(this, startAngle));
+        points.push(checkRayIntersection(this, startAngle+0.001));
+        points.push(checkRayIntersection(this, endAngle-0.001));
+        points.push(checkRayIntersection(this, endAngle));
+        points.push(checkRayIntersection(this, endAngle+0.001));
+    }
+
+    // Calculate position and angle to each stage corner.  Use this angle
+    // to find an intersection point, and add it to the list of points.
+    // TODO(rex): This could probably be a loop...
+    var stageTopRight = new Phaser.Point(this.camera.view.x + this.camera.view.width, this.camera.view.y);
+    var angleTopRight = globals.player.position.angle(stageTopRight);
+    var intersectTopRight = checkRayIntersection(this, angleTopRight);
+    points.push(intersectTopRight);
+    var stageTopLeft = new Phaser.Point(this.camera.view.x, this.camera.view.y);
+    var angleTopLeft = globals.player.position.angle(stageTopLeft);
+    var intersectTopLeft = checkRayIntersection(this, angleTopLeft);
+    points.push(intersectTopLeft);
+    var stageBottomRight = new Phaser.Point(this.camera.view.x + this.camera.view.width, this.camera.view.y + this.camera.view.height);
+    var angleBottomRight = globals.player.position.angle(stageBottomRight);
+    var intersectBottomRight = checkRayIntersection(this, angleBottomRight);
+    points.push(intersectBottomRight);
+    var stageBottomLeft = new Phaser.Point(this.camera.view.x, this.camera.view.y + this.camera.view.height);
+    var angleBottomLeft = globals.player.position.angle(stageBottomLeft);
+    var intersectBottomLeft = checkRayIntersection(this, angleBottomLeft);
+    points.push(intersectBottomLeft);
+
+    this.sortPoints(points, globals.player.position);
+
+    // Create an arbitrarily long ray, starting at the player position, through the
+    // specified angle.  Check if this ray intersets any walls.  If it does, return
+    // the point at which it intersects the closest wall.  Otherwise, return the point
+    // at which it intersects the edge of the stage.
+    function checkRayIntersection(ctx, angle) {
         // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(playerPoint.x, playerPoint.y,
-            playerPoint.x + Math.cos(a) * 1000, playerPoint.y + Math.sin(a) * 1000);
-
+        var ray = new Phaser.Line(globals.player.x, globals.player.y,
+            globals.player.x + Math.cos(angle) * 1000,
+            globals.player.y + Math.sin(angle) * 1000);
         // Check if the ray intersected any walls
-        var intersect = this.getWallIntersection(ray, walls);
-
+        var intersect = ctx.getWallIntersection(ray, walls);
         // Save the intersection or the end of the ray
         if (intersect) {
-            points.push(intersect);
+            return intersect;
         } else {
-            points.push(ray.end);
+            return ray.end;
         }
     }
 
@@ -297,12 +328,11 @@ Sandbox.prototype.update = function () {
     bitmap.dirty = true;
 };
 
-Sandbox.prototype.sortPoints = function (points, light) {
+Sandbox.prototype.sortPoints = function (points, target) {
     // TODO: make more efficient by sorting and caching the angle calculations
-    var sortedPoints = [];
     points.sort(function (p1, p2) {
-        var angle1 = Phaser.Point.angle(light, p1);
-        var angle2 = Phaser.Point.angle(light, p2);
+        var angle1 = Phaser.Point.angle(target, p1);
+        var angle2 = Phaser.Point.angle(target, p2);
         return angle1 - angle2;
     });
 };
@@ -375,10 +405,6 @@ Sandbox.prototype.toggleRays = function() {
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
-
-    // for (var i = 0; i < this.walls.length; i++) {
-    //     this.game.debug.geom(this.walls[i]);
-    // }
 
     // Draw only the visible walls from the tilemap polygons
     // var visisbleWalls = this.getVisibleWalls();
