@@ -213,6 +213,7 @@ Sandbox.prototype.update = function () {
     var globals = this.game.globals;
     
     var walls = this.getWallsOnScreen();
+    var playerPoint = globals.player.position;
 
     for (var w = 0; w < walls.length; w++) {
         // Get start and end point for each wall.
@@ -250,6 +251,10 @@ Sandbox.prototype.update = function () {
     var intersectBottomLeft = checkRayIntersection(this, angleBottomLeft);
     points.push(intersectBottomLeft);
 
+    console.log(points[0]);
+    points = this.sortPoints(points, globals.player.position);
+    console.log(points[0]);
+
     // Create an arbitrarily long ray, starting at the player position, through the
     // specified angle.  Check if this ray intersets any walls.  If it does, return
     // the point at which it intersects the closest wall.  Otherwise, return the point
@@ -268,6 +273,8 @@ Sandbox.prototype.update = function () {
             return ray.end;
         }
     }
+
+    this.sortPoints(points, playerPoint);
 
     var bitmap = globals.lighting.bitmap;
     // Clear and draw a shadow everywhere
@@ -307,6 +314,15 @@ Sandbox.prototype.update = function () {
 
     // This just tells the engine it should update the texture cache
     bitmap.dirty = true;
+};
+
+Sandbox.prototype.sortPoints = function (points, target) {
+    // TODO: make more efficient by sorting and caching the angle calculations
+    points.sort(function (p1, p2) {
+        var angle1 = Phaser.Point.angle(target, p1);
+        var angle2 = Phaser.Point.angle(target, p2);
+        return angle1 - angle2;
+    });
 };
 
 Sandbox.prototype.getWallsOnScreen = function () {
