@@ -83,6 +83,15 @@ Sandbox.prototype.create = function () {
     var clusters = this.calculateClusters();
     this.lightWalls = this.calculateHulls(clusters);
 
+    // For Shadow Debugging!
+    // Create a bitmap for drawing rays
+    this.rayBitmap = this.game.add.bitmapData(this.game.width, this.game.height);
+    this.rayBitmapImage = this.game.add.image(0, 0, this.rayBitmap);
+    this.rayBitmapImage.visible = false;
+    // Setup function for hiding or showing rays
+    this.game.input.onTap.add(this.toggleRays, this);
+
+
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
 
@@ -112,8 +121,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    // var Wave1 = require("../game-objects/waves/wave-1.js");
-    // new Wave1(game);
+    var Wave1 = require("../game-objects/waves/wave-1.js");
+    new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -205,7 +214,7 @@ Sandbox.prototype.calculateHulls = function (clusters) {
         polygons.push(lines);
     }
     return polygons;
-}
+};
 
 Sandbox.prototype.update = function () {
     var deltaAngle = Math.PI / 360;
@@ -300,7 +309,7 @@ Sandbox.prototype.getWallsOnScreen = function () {
     "BlockingLayer");
 
     return walls;
-}
+};
 
 // Dynamic lighting/Raycasting.
 // Thanks, yafd!
@@ -321,10 +330,19 @@ Sandbox.prototype.getWallIntersection = function(ray, walls) {
             }
         }
     }
-    
-
     return closestIntersection;
 };
+
+
+Sandbox.prototype.toggleRays = function() {
+    // Toggle the visibility of the rays when the pointer is clicked
+    if (this.rayBitmapImage.visible) {
+        this.rayBitmapImage.visible = false;
+    } else {
+        this.rayBitmapImage.visible = true;
+    }
+};
+
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
