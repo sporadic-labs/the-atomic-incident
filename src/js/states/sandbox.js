@@ -83,6 +83,13 @@ Sandbox.prototype.create = function () {
     var clusters = this.calculateClusters();
     this.lightWalls = this.calculateHulls(clusters);
 
+    // Create a bitmap for drawing rays
+    this.rayBitmap = this.game.add.bitmapData(game.width, game.height);
+    this.rayBitmapImage = this.rayBitmap.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1, 1);
+    groups.midground.addChild(this.rayBitmapImage);
+    this.rayBitmapImage.fixedToCamera = true;
+    this.rayBitmapImage.visible = false;
+
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
 
@@ -126,8 +133,10 @@ Sandbox.prototype.create = function () {
     debugToggleKey.onDown.add(function () {
         if (globals.plugins.satBody.isDebugAllEnabled()) {
             globals.plugins.satBody.disableDebugAll();
+            this.rayBitmapImage.visible = false;
         } else {
             globals.plugins.satBody.enableDebugAll();
+            this.rayBitmapImage.visible = true;
         }
     }, this);
 };
@@ -325,8 +334,27 @@ Sandbox.prototype.update = function () {
     bitmap.ctx.closePath();
     bitmap.ctx.fill();
 
+    // Draw each of the rays on the rayBitmap
+    this.rayBitmap.context.clearRect(0, 0, this.game.width, this.game.height);
+    this.rayBitmap.context.beginPath();
+    this.rayBitmap.context.strokeStyle = 'rgb(255, 0, 0)';
+    this.rayBitmap.context.fillStyle = 'rgb(255, 0, 0)';
+    this.rayBitmap.context.moveTo(points[0].x - xOffset, points[0].y - yOffset);
+    for(var k = 0; k < points.length; k++) {
+        // console.log(globals.player.x + ", " + globals.player.y);
+        this.rayBitmap.context.moveTo(globals.player.x - xOffset, globals.player.y - yOffset);
+
+        this.rayBitmap.context.lineTo(points[k].x - xOffset, points[k].y - yOffset);
+        this.rayBitmap.context.fillRect(points[k].x - xOffset -2,
+            points[k].y - yOffset - 2, 4, 4);
+    }
+    this.rayBitmap.context.stroke();
+
+
+
     // This just tells the engine it should update the texture cache
     bitmap.dirty = true;
+    this.rayBitmap.dirty = true;
 };
 
 Sandbox.prototype.sortPoints = function (points, target) {
