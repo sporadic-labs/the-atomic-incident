@@ -75,7 +75,7 @@ Sandbox.prototype.create = function () {
     globals.lighting = {
         bitmap: bitmap,
         image: image,
-        opacity: 1
+        opacity: 0.8
     }
     bitmap.fill(0, 0, 0, globals.lighting.opacity);
 
@@ -220,6 +220,16 @@ Sandbox.prototype.getVisibleWalls = function () {
     var camRect = this.camera.view;
     var visibleWalls = [];
 
+    // Create walls for each corner of the stage, and add them to the walls array.
+    var leftWall = new Phaser.Line(camRect.x, camRect.y + camRect.height, camRect.x, camRect.y);
+    var topWall = new Phaser.Line(camRect.x, camRect.y, camRect.x + camRect.width, camRect.y);
+    var rightWall = new Phaser.Line(camRect.x + camRect.width, camRect.y, camRect.x + camRect.width, camRect.y + camRect.height);
+    var bottomWall = new Phaser.Line(camRect.x + camRect.width, camRect.y + camRect.height, camRect.x, camRect.y + camRect.height);
+    visibleWalls.push(bottomWall);
+    visibleWalls.push(rightWall);
+    visibleWalls.push(topWall);
+    visibleWalls.push(leftWall);
+
     for (var i = 0; i < this.lightWalls.length; i++) {
         for (var j = 0; j < this.lightWalls[i].length; j++) {
             var line = this.lightWalls[i][j];
@@ -235,47 +245,49 @@ Sandbox.prototype.update = function () {
     var deltaAngle = Math.PI / 360;
     var points = [];
     var globals = this.game.globals;
-    
+
     var walls = this.getVisibleWalls();
+    var closestWall = walls[0];
 
     var playerPoint = globals.player.position;
-    for (var w = 0; w < walls.length; w++) {
-        // Get start and end point for each wall.
-        var wall = walls[w];
-        var startAngle = globals.player.position.angle(wall.start);
-        var endAngle = globals.player.position.angle(wall.end);
 
-        // Check for an intersection at each angle, and +/- 0.001
-        // Add the intersection to the points array.
-        points.push(checkRayIntersection(this, startAngle-0.001));
-        points.push(checkRayIntersection(this, startAngle));
-        points.push(checkRayIntersection(this, startAngle+0.001));
-        points.push(checkRayIntersection(this, endAngle-0.001));
-        points.push(checkRayIntersection(this, endAngle));
-        points.push(checkRayIntersection(this, endAngle+0.001));
+    // Collect the start point for every visible wall.
+    var allPoints = [];
+    for (var b = 0; b < walls.length; b++) {
+        allPoints.push(walls[b].start);
     }
+    // Sort em!
+    this.sortPoints(allPoints, playerPoint);
 
-    // Calculate position and angle to each stage corner.  Use this angle
-    // to find an intersection point, and add it to the list of points.
-    // TODO(rex): This could probably be a loop...
-    var stageTopRight = new Phaser.Point(this.camera.view.x + this.camera.view.width, this.camera.view.y);
-    var angleTopRight = globals.player.position.angle(stageTopRight);
-    var intersectTopRight = checkRayIntersection(this, angleTopRight);
-    points.push(intersectTopRight);
-    var stageTopLeft = new Phaser.Point(this.camera.view.x, this.camera.view.y);
-    var angleTopLeft = globals.player.position.angle(stageTopLeft);
-    var intersectTopLeft = checkRayIntersection(this, angleTopLeft);
-    points.push(intersectTopLeft);
-    var stageBottomRight = new Phaser.Point(this.camera.view.x + this.camera.view.width, this.camera.view.y + this.camera.view.height);
-    var angleBottomRight = globals.player.position.angle(stageBottomRight);
-    var intersectBottomRight = checkRayIntersection(this, angleBottomRight);
-    points.push(intersectBottomRight);
-    var stageBottomLeft = new Phaser.Point(this.camera.view.x, this.camera.view.y + this.camera.view.height);
-    var angleBottomLeft = globals.player.position.angle(stageBottomLeft);
-    var intersectBottomLeft = checkRayIntersection(this, angleBottomLeft);
-    points.push(intersectBottomLeft);
+    for (var w = 0; w < allPoints.length; w++) {
+        // Get angle to each point.
+        var startAngle = globals.player.position.angle(allPoints[w]);
+        // If the closest wall has changed, update the wall and
+        // push the intersection point to the points array.
+        var wallCheck = checkClosestWall(this, startAngle, closestWall);
+        if (wallCheck) {
+            closestWall = wallCheck;
+            // Check for an intersection at each angle, and +/- 0.001
+            // Add the intersection to the points array.
+            points.push(checkRayIntersection(this, startAngle-0.001));
+            points.push(checkRayIntersection(this, startAngle));
+            points.push(checkRayIntersection(this, startAngle+0.001));
+        }
+        // If the intersection point is at a corner of the closest wall,
+        // add it to the points array.
+        var intersectionPoint = checkRayIntersection(this, startAngle);
+        if ((closestWall.start.x === intersectionPoint.x &&
+             closestWall.start.y === intersectionPoint.y) ||
+            (closestWall.end.x === intersectionPoint.x &&
+             closestWall.end.y === intersectionPoint.y)) {
 
-    this.sortPoints(points, globals.player.position);
+            // Check for an intersection at each angle, and +/- 0.001
+            // Add the intersection to the points array.
+            points.push(checkRayIntersection(this, startAngle-0.001));
+            points.push(checkRayIntersection(this, startAngle));
+            points.push(checkRayIntersection(this, startAngle+0.001));
+        }
+    }
 
     // Create an arbitrarily long ray, starting at the player position, through the
     // specified angle.  Check if this ray intersets any walls.  If it does, return
@@ -295,8 +307,22 @@ Sandbox.prototype.update = function () {
             return ray.end;
         }
     }
-
-    this.sortPoints(points, playerPoint);
+    // If the closest wall is the same as the one provided, return false.
+    // Otherwise, return the new wall.
+    function checkClosestWall(ctx, angle, closestWall) {
+        // Create a ray from the light to a point on the circle
+        var ray = new Phaser.Line(globals.player.x, globals.player.y,
+            globals.player.x + Math.cos(angle) * 1000,
+            globals.player.y + Math.sin(angle) * 1000);
+        // Check if the ray intersected any walls
+        var newWall = ctx.getClosestWall(ray, walls);
+        // Save the intersection or the end of the ray
+        if (newWall === closestWall) {
+            return false;
+        } else {
+            return newWall;
+        }
+    }
 
     var bitmap = globals.lighting.bitmap;
     // Clear and draw a shadow everywhere
@@ -341,16 +367,12 @@ Sandbox.prototype.update = function () {
     this.rayBitmap.context.fillStyle = 'rgb(255, 0, 0)';
     this.rayBitmap.context.moveTo(points[0].x - xOffset, points[0].y - yOffset);
     for(var k = 0; k < points.length; k++) {
-        // console.log(globals.player.x + ", " + globals.player.y);
         this.rayBitmap.context.moveTo(globals.player.x - xOffset, globals.player.y - yOffset);
-
         this.rayBitmap.context.lineTo(points[k].x - xOffset, points[k].y - yOffset);
         this.rayBitmap.context.fillRect(points[k].x - xOffset -2,
             points[k].y - yOffset - 2, 4, 4);
     }
     this.rayBitmap.context.stroke();
-
-
 
     // This just tells the engine it should update the texture cache
     bitmap.dirty = true;
@@ -418,6 +440,25 @@ Sandbox.prototype.getWallIntersection = function(ray, walls) {
         }
     }
     return closestIntersection;
+};
+// Return the closest wall that this ray intersects.
+Sandbox.prototype.getClosestWall = function(ray, walls) {
+    var distanceToWall = Number.POSITIVE_INFINITY;
+    var closestWall = null;
+
+    for (var i = 0; i < walls.length; i++) {
+        var intersect = Phaser.Line.intersects(ray, walls[i]);
+        if (intersect) {
+            // Find the closest intersection
+            var distance = this.game.math.distance(ray.start.x, ray.start.y,
+                intersect.x, intersect.y);
+            if (distance < distanceToWall) {
+                distanceToWall = distance;
+                closestWall = walls[i]
+            }
+        }
+    }
+    return closestWall;
 };
 
 
