@@ -387,6 +387,16 @@ Sandbox.prototype.update = function () {
     }
     this.rayBitmap.context.stroke();
 
+    this.rayBitmap.context.beginPath();
+    this.rayBitmap.context.strokeStyle = 'rgb(0, 255, 0)';
+    this.rayBitmap.context.fillStyle = 'rgb(0, 255, 0)';
+    this.rayBitmap.context.moveTo(allPoints[0].x - xOffset, allPoints[0].y - yOffset);
+    for(var k = 0; k < allPoints.length; k++) {
+        this.rayBitmap.context.fillRect(allPoints[k].x - xOffset -2,
+            allPoints[k].y - yOffset - 2, 4, 4);
+    }
+    this.rayBitmap.context.stroke();
+
     // This just tells the engine it should update the texture cache
     bitmap.dirty = true;
     this.rayBitmap.dirty = true;
