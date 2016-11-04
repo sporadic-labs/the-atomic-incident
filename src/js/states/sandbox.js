@@ -276,16 +276,21 @@ Sandbox.prototype.update = function () {
         // If the intersection point is at a corner of the closest wall,
         // add it to the points array.
         var intersectionPoint = checkRayIntersection(this, startAngle);
-        if ((closestWall.start.x === intersectionPoint.x &&
-             closestWall.start.y === intersectionPoint.y) ||
-            (closestWall.end.x === intersectionPoint.x &&
-             closestWall.end.y === intersectionPoint.y)) {
+        if ((intersectionPoint.x <= closestWall.start.x + 3 &&
+             intersectionPoint.x >= closestWall.start.x - 3 &&
+             intersectionPoint.y <= closestWall.start.y + 3 &&
+             intersectionPoint.y >= closestWall.start.y - 3) ||
+            (intersectionPoint.x <= closestWall.end.x + 3 &&
+             intersectionPoint.x >= closestWall.end.x - 3 &&
+             intersectionPoint.y <= closestWall.end.y + 3 &&
+             intersectionPoint.y >= closestWall.end.y - 3)) {
 
             // Check for an intersection at each angle, and +/- 0.001
             // Add the intersection to the points array.
             points.push(checkRayIntersection(this, startAngle-0.001));
             points.push(checkRayIntersection(this, startAngle));
             points.push(checkRayIntersection(this, startAngle+0.001));
+
         }
     }
 
@@ -317,7 +322,15 @@ Sandbox.prototype.update = function () {
         // Check if the ray intersected any walls
         var newWall = ctx.getClosestWall(ray, walls);
         // Save the intersection or the end of the ray
-        if (newWall === closestWall) {
+        if (!newWall || !closestWall) { return false; }
+        if (newWall.start.x <= closestWall.start.x + 3 &&
+            newWall.start.x >= closestWall.start.x - 3 &&
+            newWall.start.y <= closestWall.start.y + 3 &&
+            newWall.start.y >= closestWall.start.y - 3 &&
+            newWall.end.x <= closestWall.end.x + 3 &&
+            newWall.end.x >= closestWall.end.x - 3 &&
+            newWall.end.y <= closestWall.end.y + 3 &&
+            newWall.end.y >= closestWall.end.y - 3) {
             return false;
         } else {
             return newWall;
