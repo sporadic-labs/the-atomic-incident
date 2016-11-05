@@ -9,7 +9,7 @@ var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
-var hull = require("hull.js");
+var calculateHullsFromTiles = require("../helpers/hull-from-tiles.js")
 
 function Sandbox() {}
 
@@ -80,8 +80,7 @@ Sandbox.prototype.create = function () {
     bitmap.fill(0, 0, 0, globals.lighting.opacity);
 
     // Calculate lighting walls
-    var clusters = this.calculateClusters();
-    this.lightWalls = this.calculateHulls(clusters);
+    this.lightWalls = calculateHullsFromTiles(map);
 
     // Create a bitmap for drawing rays
     this.rayBitmap = this.game.add.bitmapData(game.width, game.height);
@@ -141,81 +140,6 @@ Sandbox.prototype.create = function () {
     }, this);
 };
 
-Sandbox.prototype.calculateClusters = function () {
-    var tileMap = this.game.globals.tileMap;
-    var clusters = [];
-    for (var x = 0; x < tileMap.width; x++) {
-        for (var y = 0; y < tileMap.height; y++) {
-            var tile = getCollidingTile(x, y);
-            if (tile && !findTileInClusters(tile)) {
-                cluster = [];
-                recursivelySearchNeighbors(x, y, cluster);
-                clusters.push(cluster);
-            }
-        }
-    }
-
-    function getCollidingTile(x, y) {
-        var tile = tileMap.getTile(x, y, "BlockingLayer");
-        if (tile && tile.collides) return tile;
-        else return null;
-    }
-
-    function recursivelySearchNeighbors(x, y, cluster) {
-        var tile = getCollidingTile(x, y);
-        if (tile && (cluster.indexOf(tile) === -1)) {
-            // Add the current tile
-            cluster.push(tile);
-            // Search the neighbors   
-            recursivelySearchNeighbors(x, y - 1, cluster);
-            recursivelySearchNeighbors(x, y + 1, cluster);
-            recursivelySearchNeighbors(x + 1, y, cluster);
-            recursivelySearchNeighbors(x - 1, y, cluster);
-        }
-    }
-
-    function findTileInClusters(tile) {
-        for (var i = 0; i < clusters.length; i++) {
-            cluster = clusters[i];
-            for (var j = 0; j < cluster.length; j++) {
-                if (tile === cluster[j]) return cluster;
-            }
-        }
-        return null;
-    }
-
-    return clusters;
-};
-
-Sandbox.prototype.calculateHulls = function (clusters) {
-    var polygons = [];
-    for (var i = 0; i < clusters.length; i++) {
-        var cluster = clusters[i];
-        var tilePoints = [];
-        for (var t = 0; t < cluster.length; t++) {
-            var tile = cluster[t];
-            tilePoints.push(
-                [tile.left, tile.top],
-                [tile.right, tile.top],                
-                [tile.left, tile.bottom],                
-                [tile.right, tile.bottom]
-            );
-        }
-        var points = hull(tilePoints, 1);
-        var lines = [];
-        for (var p = 1; p < points.length; p++) {
-            var line = new Phaser.Line(points[p-1][0], points[p-1][1], 
-                points[p][0], points[p][1]);
-            lines.push(line);
-        }
-        // Connect last point to first point
-        lines.push(new Phaser.Line(points[points.length-1][0], 
-            points[points.length-1][1], points[0][0], points[0][1]));
-        polygons.push(lines);
-    }
-    return polygons;
-};
-
 Sandbox.prototype.getVisibleWalls = function () {
     var camRect = this.camera.view;
     var visibleWalls = [];
@@ -263,6 +187,7 @@ Sandbox.prototype.update = function () {
         // Get angle to each point.
         var startAngle = globals.player.position.angle(allPoints[w]);
         // If the closest wall has changed, update the wall and
+        // 
         // push the intersection point to the points array.
         var wallCheck = checkClosestWall(this, startAngle, closestWall);
         if (wallCheck) {
@@ -504,4 +429,11 @@ Sandbox.prototype.render = function () {
     // for (var i = 0; i < visisbleWalls.length; i++) {
     //     this.game.debug.geom(visisbleWalls[i]);
     // }
+
+    for (var i = 0; i < this.lightWalls.length; i++) {
+        for (var j = 0; j < this.lightWalls[i].length; j++) {
+            var line = this.lightWalls[i][j];
+            this.game.debug.geom(line, "rgba(255,0,255,0.75)");
+        }
+    }
 };
