@@ -171,53 +171,25 @@ Sandbox.prototype.update = function () {
     var globals = this.game.globals;
 
     var walls = this.getVisibleWalls();
-    var closestWall = walls[0];
 
     var playerPoint = globals.player.position;
+    for (var w = 0; w < walls.length; w++) {
+        // Get start and end point for each wall.
+        var wall = walls[w];
+        var startAngle = globals.player.position.angle(wall.start);
+        var endAngle = globals.player.position.angle(wall.end);
 
-    // Collect the start point for every visible wall.
-    var allPoints = [];
-    for (var b = 0; b < walls.length; b++) {
-        allPoints.push(walls[b].start);
+        // Check for an intersection at each angle, and +/- 0.001
+        // Add the intersection to the points array.
+        points.push(checkRayIntersection(this, startAngle-0.001));
+        points.push(checkRayIntersection(this, startAngle));
+        points.push(checkRayIntersection(this, startAngle+0.001));
+        points.push(checkRayIntersection(this, endAngle-0.001));
+        points.push(checkRayIntersection(this, endAngle));
+        points.push(checkRayIntersection(this, endAngle+0.001));
     }
-    // Sort em!
-    this.sortPoints(allPoints, playerPoint);
 
-    for (var w = 0; w < allPoints.length; w++) {
-        // Get angle to each point.
-        var startAngle = globals.player.position.angle(allPoints[w]);
-        // If the closest wall has changed, update the wall and
-        // 
-        // push the intersection point to the points array.
-        var wallCheck = checkClosestWall(this, startAngle, closestWall);
-        if (wallCheck) {
-            closestWall = wallCheck;
-            // Check for an intersection at each angle, and +/- 0.001
-            // Add the intersection to the points array.
-            points.push(checkRayIntersection(this, startAngle-0.001));
-            points.push(checkRayIntersection(this, startAngle));
-            points.push(checkRayIntersection(this, startAngle+0.001));
-        }
-        // If the intersection point is at a corner of the closest wall,
-        // add it to the points array.
-        var intersectionPoint = checkRayIntersection(this, startAngle);
-        if ((intersectionPoint.x <= closestWall.start.x + 3 &&
-             intersectionPoint.x >= closestWall.start.x - 3 &&
-             intersectionPoint.y <= closestWall.start.y + 3 &&
-             intersectionPoint.y >= closestWall.start.y - 3) ||
-            (intersectionPoint.x <= closestWall.end.x + 3 &&
-             intersectionPoint.x >= closestWall.end.x - 3 &&
-             intersectionPoint.y <= closestWall.end.y + 3 &&
-             intersectionPoint.y >= closestWall.end.y - 3)) {
-
-            // Check for an intersection at each angle, and +/- 0.001
-            // Add the intersection to the points array.
-            points.push(checkRayIntersection(this, startAngle-0.001));
-            points.push(checkRayIntersection(this, startAngle));
-            points.push(checkRayIntersection(this, startAngle+0.001));
-
-        }
-    }
+    this.sortPoints(points, globals.player.position);
 
     // Create an arbitrarily long ray, starting at the player position, through the
     // specified angle.  Check if this ray intersets any walls.  If it does, return
@@ -312,15 +284,15 @@ Sandbox.prototype.update = function () {
     }
     this.rayBitmap.context.stroke();
 
-    this.rayBitmap.context.beginPath();
-    this.rayBitmap.context.strokeStyle = 'rgb(0, 255, 0)';
-    this.rayBitmap.context.fillStyle = 'rgb(0, 255, 0)';
-    this.rayBitmap.context.moveTo(allPoints[0].x - xOffset, allPoints[0].y - yOffset);
-    for(var k = 0; k < allPoints.length; k++) {
-        this.rayBitmap.context.fillRect(allPoints[k].x - xOffset -2,
-            allPoints[k].y - yOffset - 2, 4, 4);
-    }
-    this.rayBitmap.context.stroke();
+    // this.rayBitmap.context.beginPath();
+    // this.rayBitmap.context.strokeStyle = 'rgb(0, 255, 0)';
+    // this.rayBitmap.context.fillStyle = 'rgb(0, 255, 0)';
+    // this.rayBitmap.context.moveTo(points[0].x - xOffset, points[0].y - yOffset);
+    // for(var k = 0; k < points.length; k++) {
+    //     this.rayBitmap.context.fillRect(points[k].x - xOffset -2,
+    //         points[k].y - yOffset - 2, 4, 4);
+    // }
+    // this.rayBitmap.context.stroke();
 
     // This just tells the engine it should update the texture cache
     bitmap.dirty = true;
