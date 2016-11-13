@@ -232,8 +232,8 @@ gulp.task("run", [
 gulp.task("push:gh-pages", function () {
     return gulp.src(paths.deploy.src)
         .pipe(ghPages({
-            // remoteUrl: "https://github.com/retwedt/octo-chainsaw.git"
-            remoteUrl: "git@github.com:retwedt/octo-chainsaw.git"
+            remoteUrl: "https://github.com/retwedt/octo-chainsaw.git"
+            // remoteUrl: "git@github.com:retwedt/octo-chainsaw.git"
         }));
 });
 
