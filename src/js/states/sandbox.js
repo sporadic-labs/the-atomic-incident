@@ -145,22 +145,59 @@ Sandbox.prototype.getVisibleWalls = function () {
     var visibleWalls = [];
 
     // Create walls for each corner of the stage, and add them to the walls array.
-    var leftWall = new Phaser.Line(camRect.x, camRect.y + camRect.height, camRect.x, camRect.y);
-    var topWall = new Phaser.Line(camRect.x, camRect.y, camRect.x + camRect.width, camRect.y);
-    var rightWall = new Phaser.Line(camRect.x + camRect.width, camRect.y, camRect.x + camRect.width, camRect.y + camRect.height);
-    var bottomWall = new Phaser.Line(camRect.x + camRect.width, camRect.y + camRect.height, camRect.x, camRect.y + camRect.height);
-    visibleWalls.push(bottomWall);
-    visibleWalls.push(rightWall);
-    visibleWalls.push(topWall);
-    visibleWalls.push(leftWall);
+    var camLeft = new Phaser.Line(camRect.x, camRect.y + camRect.height, camRect.x, camRect.y);
+    var camTop = new Phaser.Line(camRect.x, camRect.y, camRect.x + camRect.width, camRect.y);
+    var camRight = new Phaser.Line(camRect.x + camRect.width, camRect.y, camRect.x + camRect.width, camRect.y + camRect.height);
+    var camBottom = new Phaser.Line(camRect.x + camRect.width, camRect.y + camRect.height, camRect.x, camRect.y + camRect.height);
+    visibleWalls.push(camLeft, camRight, camTop, camBottom);
 
     for (var i = 0; i < this.lightWalls.length; i++) {
         for (var j = 0; j < this.lightWalls[i].length; j++) {
             var line = this.lightWalls[i][j];
             if (camRect.intersectsRaw(line.left, line.right, line.top, line.bottom)) {
+                line = getVisibleSegment(line);
                 visibleWalls.push(line);
             }
         }
+    }
+
+    function getVisibleSegment(line) {
+        // TODO: if we want this to work for diagonal lines in the tilemap, we
+        // need to update this code to account for the possibility that a line
+        // can intersect multiple edges of the camera 
+        var p = line.intersects(camLeft, true);
+        if (p) {
+            if (line.start.x < line.end.x) {
+                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
+            } else {
+                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
+            }
+        }
+        var p = line.intersects(camRight, true);
+        if (p) {
+            if (line.start.x < line.end.x) {
+                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
+            } else {
+                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
+            }
+        }
+        var p = line.intersects(camTop, true);
+        if (p) {
+            if (line.start.y < line.end.y) {
+                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
+            } else {
+                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
+            }
+        }
+        var p = line.intersects(camBottom, true);
+        if (p) {
+            if (line.start.y < line.end.y) {
+                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
+            } else {
+                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
+            }
+        }
+        return line;
     }
     return visibleWalls;
 };
