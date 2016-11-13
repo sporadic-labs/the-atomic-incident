@@ -76,20 +76,19 @@ Sandbox.prototype.create = function () {
     this.physics.arcade.gravity.set(0);
 
     // Player
-    var px = 0;
-    var py = 0;
-    if (map.objects["player"]) {
-        var objects = map.objects["player"];
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].name === "player") {
-                px = objects[i].x;
-                py = objects[i].y;
-            }
-        }
-    }
-    var player = new Player(game, px, py, groups.midground);
+    // Get the Spawn Point(s) for the player from the tile map.
+    var playerStartPoint = this.getMapPoints("player")[0]; // only one for the moment...
+    // Setup a new player, and attach it to the global variabls object.
+    var player = new Player(game, playerStartPoint.x, playerStartPoint.y, groups.midground);
     this.camera.follow(player);
     globals.player = player;
+
+    // Spawn Point Testing
+    // Get the Spawn Point(s) for the lights (these were orignally set up for the weapons...)
+    var lightSpawnPoints = this.getMapPoints("weapon");
+    // Pick a random Point for the light to spawn at.
+    globals.lightPoint = new Phaser.Point(lightSpawnPoints[0].x, lightSpawnPoints[0].y);
+
     
     // Score
     globals.scoreKeeper = new ScoreKeeper();
@@ -117,6 +116,25 @@ Sandbox.prototype.create = function () {
             globals.shadowMask.toggleRays();
         }
     }, this);
+};
+
+Sandbox.prototype.getMapPoints = function(key) {
+    // There could be more than 1 map point per type...
+    var mapPoints = [];
+    // We are searching the current tile map layer.
+    var map = this.game.globals.tileMap;
+    // If the current key exists...
+    if (map.objects[key]) {
+        // For each object with the current key.
+        var objects = map.objects[key];
+        for (var i = 0; i < objects.length; i++) {
+            mapPoints.push({
+                x: objects[i].x,
+                y: objects[i].y
+            })
+        }
+    }
+    return mapPoints;
 };
 
 Sandbox.prototype.update = function () {
