@@ -162,11 +162,15 @@ Sandbox.prototype.getVisibleWalls = function () {
     }
 
     function getVisibleSegment(line) {
+        // This function checks the given line against the edges of the camera. 
+        // If it intersects with an edge, then we need to only get the visible
+        // portion of the line.
         // TODO: if we want this to work for diagonal lines in the tilemap, we
         // need to update this code to account for the possibility that a line
         // can intersect multiple edges of the camera 
         var p = line.intersects(camLeft, true);
         if (p) {
+            // Find which point on the line is visible
             if (line.start.x < line.end.x) {
                 return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
             } else {
@@ -175,6 +179,7 @@ Sandbox.prototype.getVisibleWalls = function () {
         }
         var p = line.intersects(camRight, true);
         if (p) {
+            // Find which point on the line is visible
             if (line.start.x < line.end.x) {
                 return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
             } else {
@@ -183,6 +188,7 @@ Sandbox.prototype.getVisibleWalls = function () {
         }
         var p = line.intersects(camTop, true);
         if (p) {
+            // Find which point on the line is visible
             if (line.start.y < line.end.y) {
                 return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
             } else {
@@ -191,6 +197,7 @@ Sandbox.prototype.getVisibleWalls = function () {
         }
         var p = line.intersects(camBottom, true);
         if (p) {
+            // Find which point on the line is visible
             if (line.start.y < line.end.y) {
                 return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
             } else {
