@@ -5,11 +5,11 @@
 module.exports = Sandbox;
 
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
+var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
-var ShadowMask = require("../game-objects/shadow-mask.js");
 
 function Sandbox() {}
 
@@ -29,12 +29,6 @@ Sandbox.prototype.create = function () {
     game.canvas.addEventListener("contextmenu", function(e) {
         e.preventDefault();
     });
-
-    // Plugins
-    globals.plugins = {
-        satBody: game.plugins.add(SatBodyPlugin),
-        astar: game.plugins.add(Phaser.Plugin.AStar)
-    };
 
     // Groups for z-index sorting and for collisions
     var groups = {
@@ -66,7 +60,12 @@ Sandbox.prototype.create = function () {
     globals.tileMap = map;
     globals.tileMapLayer = blockingLayer;
 
-    globals.shadowMask = new ShadowMask(game, 0.8, map, groups.midground);
+    // Plugins
+    globals.plugins = {
+        satBody: game.plugins.add(SatBodyPlugin),
+        astar: game.plugins.add(Phaser.Plugin.AStar),
+        lighting: game.plugins.add(LightingPlugin, groups.midground, map, 0.8)
+    };
 
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
@@ -89,7 +88,6 @@ Sandbox.prototype.create = function () {
     // Pick a random Point for the light to spawn at.
     globals.lightPoint = new Phaser.Point(lightSpawnPoints[0].x, lightSpawnPoints[0].y);
 
-    
     // Score
     globals.scoreKeeper = new ScoreKeeper();
 
@@ -110,10 +108,10 @@ Sandbox.prototype.create = function () {
     debugToggleKey.onDown.add(function () {
         if (globals.plugins.satBody.isDebugAllEnabled()) {
             globals.plugins.satBody.disableDebugAll();
-            globals.shadowMask.toggleRays();
+            globals.plugins.lighting.toggleDebug();
         } else {
             globals.plugins.satBody.enableDebugAll();
-            globals.shadowMask.toggleRays();
+            globals.plugins.lighting.toggleDebug();
         }
     }, this);
 };
@@ -138,12 +136,10 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    this.game.globals.shadowMask.update();
+    // this.game.globals.shadowMask.update();
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
-
-    this.game.globals.shadowMask.drawWalls();
 };

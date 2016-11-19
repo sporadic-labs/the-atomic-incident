@@ -1,22 +1,42 @@
-module.exports = ShadowMask;
+var calculateHullsFromTiles = require("./hull-from-tiles.js");
 
-var calculateHullsFromTiles = require("../helpers/hull-from-tiles.js");
-
-// Prototype chain - inherits from ???
-function ShadowMask(game, opacity, tilemap, parentGroup) {
+module.exports = Phaser.Plugin.Lighting = function (game, parent) {
     this.game = game;
-    this.shadowOpacity = opacity;
     this.camera = this.game.camera;
-    this.parent = parentGroup;
+    this._debugEnabled = false;
+    // Parent is the plugin manager
+};
 
+Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
+
+Phaser.Plugin.Lighting.prototype.setOpacity = function (opacity) {
+    this.shadowOpacity = opacity;
+};
+
+Phaser.Plugin.Lighting.prototype.toggleDebug = function() {
+    this._debugEnabled = !this._debugEnabled;
+    this._rayBitmapImage.visible = this._debugEnabled;
+};
+
+Phaser.Plugin.Lighting.prototype.destroy = function () {
+    // TODO: implement a destroy that kills the two bitmaps and their associated
+    // image objects
+    console.log("Not implemented...");
+};
+
+Phaser.Plugin.Lighting.prototype.init = function (spriteParent, tilemap, 
+    shadowOpacity) {
+    this.shadowOpacity = (shadowOpacity !== undefined) ? shadowOpacity : 1;
+
+    var game = this.game;
     // Create a bitmap and image that can be used for dynamic lighting
     var bitmap = game.add.bitmapData(game.width, game.height);
-    bitmap.fill(0, 0, 0, opacity);
+    bitmap.fill(0, 0, 0, this.shadowOpacity);
     var image = bitmap.addToWorld(game.width / 2, game.height / 2, 0.5, 0.5, 1, 
         1);
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
-    parentGroup.addChild(image);
+    spriteParent.addChild(image);
 
     this._bitmap = bitmap;
     this._image = image;
@@ -25,90 +45,22 @@ function ShadowMask(game, opacity, tilemap, parentGroup) {
     this._rayBitmap = this.game.add.bitmapData(game.width, game.height);
     this._rayBitmapImage = this._rayBitmap.addToWorld(game.width / 2, 
         game.height / 2, 0.5, 0.5, 1, 1);
-    parentGroup.addChild(this._rayBitmapImage);
+    spriteParent.addChild(this._rayBitmapImage);
     this._rayBitmapImage.fixedToCamera = true;
     this._rayBitmapImage.visible = false;
-}
+};
 
-ShadowMask.prototype._getVisibleWalls = function () {
-    var camRect = this.camera.view;
-    var visibleWalls = [];
-
-    // Create walls for each corner of the stage, and add them to the walls array.
-    var camLeft = new Phaser.Line(camRect.x, camRect.y + camRect.height, camRect.x, camRect.y);
-    var camTop = new Phaser.Line(camRect.x, camRect.y, camRect.x + camRect.width, camRect.y);
-    var camRight = new Phaser.Line(camRect.x + camRect.width, camRect.y, camRect.x + camRect.width, camRect.y + camRect.height);
-    var camBottom = new Phaser.Line(camRect.x + camRect.width, camRect.y + camRect.height, camRect.x, camRect.y + camRect.height);
-    visibleWalls.push(camLeft, camRight, camTop, camBottom);
-
+Phaser.Plugin.Lighting.prototype.render = function () {
+    if (!this._debugEnabled) return;
     for (var i = 0; i < this._lightWalls.length; i++) {
         for (var j = 0; j < this._lightWalls[i].length; j++) {
             var line = this._lightWalls[i][j];
-            if (camRect.intersectsRaw(line.left, line.right, line.top, line.bottom)) {
-                line = getVisibleSegment(line);
-                visibleWalls.push(line);
-            }
+            this.game.debug.geom(line, "rgba(255,0,255,0.75)");
         }
     }
-
-    function getVisibleSegment(line) {
-        // This function checks the given line against the edges of the camera. 
-        // If it intersects with an edge, then we need to only get the visible
-        // portion of the line.
-        // TODO: if we want this to work for diagonal lines in the tilemap, we
-        // need to update this code to account for the possibility that a line
-        // can intersect multiple edges of the camera 
-        var p = line.intersects(camLeft, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.x < line.end.x) {
-                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
-            } else {
-                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
-            }
-        }
-        var p = line.intersects(camRight, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.x < line.end.x) {
-                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
-            } else {
-                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
-            }
-        }
-        var p = line.intersects(camTop, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.y < line.end.y) {
-                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
-            } else {
-                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
-            }
-        }
-        var p = line.intersects(camBottom, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.y < line.end.y) {
-                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
-            } else {
-                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
-            }
-        }
-        return line;
-    }
-    return visibleWalls;
 };
 
-ShadowMask.prototype._sortPoints = function (points, target) {
-    // TODO: make more efficient by sorting and caching the angle calculations
-    points.sort(function (p1, p2) {
-        var angle1 = Phaser.Point.angle(target, p1);
-        var angle2 = Phaser.Point.angle(target, p2);
-        return angle1 - angle2;
-    });
-};
-
-ShadowMask.prototype.update = function () {
+Phaser.Plugin.Lighting.prototype.update = function () {
     var points = [];
     var globals = this.game.globals;
 
@@ -143,7 +95,7 @@ ShadowMask.prototype.update = function () {
             globals.player.x + Math.cos(angle) * 1000,
             globals.player.y + Math.sin(angle) * 1000);
         // Check if the ray intersected any walls
-        var intersect = ctx.getWallIntersection(ray, walls);
+        var intersect = ctx._getWallIntersection(ray, walls);
         // Save the intersection or the end of the ray
         if (intersect) {
             return intersect;
@@ -159,7 +111,7 @@ ShadowMask.prototype.update = function () {
             globals.player.x + Math.cos(angle) * 1000,
             globals.player.y + Math.sin(angle) * 1000);
         // Check if the ray intersected any walls
-        var newWall = ctx.getClosestWall(ray, walls);
+        var newWall = ctx._getClosestWall(ray, walls);
         // Save the intersection or the end of the ray
         if (!newWall || !closestWall) { return false; }
         if (newWall.start.x <= closestWall.start.x + 3 &&
@@ -230,11 +182,88 @@ ShadowMask.prototype.update = function () {
     this._rayBitmap.dirty = true;
 };
 
+Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
+    var camRect = this.camera.view;
+    var visibleWalls = [];
+
+    // Create walls for each corner of the stage, and add them to the walls array.
+    var camLeft = new Phaser.Line(camRect.x, camRect.y + camRect.height, camRect.x, camRect.y);
+    var camTop = new Phaser.Line(camRect.x, camRect.y, camRect.x + camRect.width, camRect.y);
+    var camRight = new Phaser.Line(camRect.x + camRect.width, camRect.y, camRect.x + camRect.width, camRect.y + camRect.height);
+    var camBottom = new Phaser.Line(camRect.x + camRect.width, camRect.y + camRect.height, camRect.x, camRect.y + camRect.height);
+    visibleWalls.push(camLeft, camRight, camTop, camBottom);
+
+    for (var i = 0; i < this._lightWalls.length; i++) {
+        for (var j = 0; j < this._lightWalls[i].length; j++) {
+            var line = this._lightWalls[i][j];
+            if (camRect.intersectsRaw(line.left, line.right, line.top, line.bottom)) {
+                line = getVisibleSegment(line);
+                visibleWalls.push(line);
+            }
+        }
+    }
+
+    function getVisibleSegment(line) {
+        // This function checks the given line against the edges of the camera. 
+        // If it intersects with an edge, then we need to only get the visible
+        // portion of the line.
+        // TODO: if we want this to work for diagonal lines in the tilemap, we
+        // need to update this code to account for the possibility that a line
+        // can intersect multiple edges of the camera 
+        var p = line.intersects(camLeft, true);
+        if (p) {
+            // Find which point on the line is visible
+            if (line.start.x < line.end.x) {
+                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
+            } else {
+                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
+            }
+        }
+        var p = line.intersects(camRight, true);
+        if (p) {
+            // Find which point on the line is visible
+            if (line.start.x < line.end.x) {
+                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
+            } else {
+                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
+            }
+        }
+        var p = line.intersects(camTop, true);
+        if (p) {
+            // Find which point on the line is visible
+            if (line.start.y < line.end.y) {
+                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
+            } else {
+                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
+            }
+        }
+        var p = line.intersects(camBottom, true);
+        if (p) {
+            // Find which point on the line is visible
+            if (line.start.y < line.end.y) {
+                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
+            } else {
+                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
+            }
+        }
+        return line;
+    }
+    return visibleWalls;
+};
+
+Phaser.Plugin.Lighting.prototype._sortPoints = function (points, target) {
+    // TODO: make more efficient by sorting and caching the angle calculations
+    points.sort(function (p1, p2) {
+        var angle1 = Phaser.Point.angle(target, p1);
+        var angle2 = Phaser.Point.angle(target, p2);
+        return angle1 - angle2;
+    });
+};
 
 // Dynamic lighting/Raycasting.
 // Thanks, yafd!
 // http://gamemechanicexplorer.com/#raycasting-2
-ShadowMask.prototype.getWallIntersection = function(ray, walls) {
+Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls) {
     var distanceToWall = Number.POSITIVE_INFINITY;
     var closestIntersection = null;
 
@@ -254,7 +283,7 @@ ShadowMask.prototype.getWallIntersection = function(ray, walls) {
 };
 
 // Return the closest wall that this ray intersects.
-ShadowMask.prototype.getClosestWall = function(ray, walls) {
+Phaser.Plugin.Lighting.prototype._getClosestWall = function(ray, walls) {
     var distanceToWall = Number.POSITIVE_INFINITY;
     var closestWall = null;
 
@@ -271,27 +300,4 @@ ShadowMask.prototype.getClosestWall = function(ray, walls) {
         }
     }
     return closestWall;
-};
-
-ShadowMask.prototype.toggleRays = function() {
-    // Toggle the visibility of the rays when the pointer is clicked
-    if (this._rayBitmapImage.visible) {
-        this._rayBitmapImage.visible = false;
-    } else {
-        this._rayBitmapImage.visible = true;
-    }
-};
-
-ShadowMask.prototype.drawWalls = function () {
-    for (var i = 0; i < this._lightWalls.length; i++) {
-        for (var j = 0; j < this._lightWalls[i].length; j++) {
-            var line = this._lightWalls[i][j];
-            this.game.debug.geom(line, "rgba(255,0,255,0.75)");
-        }
-    }
-};
-
-ShadowMask.prototype.destroy = function () {
-    // TODO: implement a destroy that kills the two bitmaps and their associated
-    // image objects
 };
