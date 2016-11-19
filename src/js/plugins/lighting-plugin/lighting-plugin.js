@@ -13,9 +13,21 @@ Phaser.Plugin.Lighting.prototype.setOpacity = function (opacity) {
     this.shadowOpacity = opacity;
 };
 
-Phaser.Plugin.Lighting.prototype.toggleDebug = function() {
+Phaser.Plugin.Lighting.prototype.toggleDebug = function () {
     this._debugEnabled = !this._debugEnabled;
     this._rayBitmapImage.visible = this._debugEnabled;
+};
+
+Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
+    var localPoint = this._convertWorldPointToLocal(worldPoint);
+    if ((localPoint.x < 0) || (localPoint.x > this._bitmap.width) ||
+        (localPoint.y < 0) || (localPoint.y > this._bitmap.height)) {
+        // Returns false if outside of bitmap bounds...
+        return false;
+    }
+    var color = this._bitmap.getPixel(localPoint.x, localPoint.y);
+    if (color.r !== 255) return true;
+    return false;
 };
 
 Phaser.Plugin.Lighting.prototype.destroy = function () {
@@ -32,8 +44,7 @@ Phaser.Plugin.Lighting.prototype.init = function (spriteParent, tilemap,
     // Create a bitmap and image that can be used for dynamic lighting
     var bitmap = game.add.bitmapData(game.width, game.height);
     bitmap.fill(0, 0, 0, this.shadowOpacity);
-    var image = bitmap.addToWorld(game.width / 2, game.height / 2, 0.5, 0.5, 1, 
-        1);
+    var image = bitmap.addToWorld(0, 0);
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
     spriteParent.addChild(image);
@@ -112,29 +123,13 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._bitmap.ctx.beginPath();
     this._bitmap.ctx.fillStyle = "rgb(255, 255, 255)";
     this._bitmap.ctx.strokeStyle = "rgb(255, 255, 255)";
-    // Note: xOffset and yOffset convert from world coordinates to coordinates 
-    // inside of the bitmap mask. There might be a more elegant way to do this
-    // when we optimize.
-    // When the camera stops moving, fix the offset.
-    var xOffset;
-    if (globals.player.x > 400 && globals.player.x < 1400) {
-        xOffset = globals.player.x - this.game.width / 2;
-    } else if (globals.player.x > 1400) {
-        xOffset = 1400 - this.game.width / 2;
-    } else {
-        xOffset = 0;
-    }
-    var yOffset;
-    if (globals.player.y > 300 && globals.player.y < 1140) {
-        yOffset = globals.player.y - this.game.height / 2;
-    } else if (globals.player.y > 1140) {
-        yOffset = 1140 - this.game.height / 2;
-    } else {
-        yOffset = 0;
-    }
-    this._bitmap.ctx.moveTo(points[0].x - xOffset, points[0].y - yOffset);
-    for(var i = 0; i < points.length; i++) {
-        this._bitmap.ctx.lineTo(points[i].x - xOffset, points[i].y - yOffset);
+
+    // Convert the world positions of the light points to local coordinates 
+    // within the bitmap
+    var localPoints = points.map(this._convertWorldPointToLocal, this);
+    this._bitmap.ctx.moveTo(localPoints[0].x, localPoints[0].y);
+    for(var i = 0; i < localPoints.length; i++) {
+        this._bitmap.ctx.lineTo(localPoints[i].x, localPoints[i].y);
     }
     this._bitmap.ctx.closePath();
     this._bitmap.ctx.fill();
@@ -144,21 +139,22 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._rayBitmap.context.beginPath();
     this._rayBitmap.context.strokeStyle = "rgb(255, 0, 0)";
     this._rayBitmap.context.fillStyle = "rgb(255, 0, 0)";
-    this._rayBitmap.context.moveTo(points[0].x - xOffset, 
-        points[0].y - yOffset);
-    for(var k = 0; k < points.length; k++) {
-        var p = points[k];
-        this._rayBitmap.context.moveTo(globals.player.x - xOffset, 
-            globals.player.y - yOffset);
-        this._rayBitmap.context.lineTo(p.x - xOffset, p.y - yOffset);
-        this._rayBitmap.context.fillRect(p.x - xOffset -2, p.y - yOffset - 2, 
-            4, 4);
+    this._rayBitmap.context.moveTo(localPoints[0].x, localPoints[0].y);
+    var lightPoint = this._convertWorldPointToLocal(playerPoint);
+    for(var k = 0; k < localPoints.length; k++) {
+        var p = localPoints[k];
+        this._rayBitmap.context.moveTo(lightPoint.x, lightPoint.y);
+        this._rayBitmap.context.lineTo(p.x, p.y);
+        this._rayBitmap.context.fillRect(p.x - 2, p.y - 2, 4, 4);
     }
     this._rayBitmap.context.stroke();
 
     // This just tells the engine it should update the texture cache
     this._bitmap.dirty = true;
     this._rayBitmap.dirty = true;
+
+    // Update the bitmap so that pixels are available
+    this._bitmap.update();
 };
 
 Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
@@ -233,6 +229,14 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
         return line;
     }
     return visibleWalls;
+};
+
+Phaser.Plugin.Lighting.prototype._convertWorldPointToLocal = function (point) {
+    // image.world is the position of the top left of the image (and hence the 
+    // lighting bitmap) in world coordinates. To get from a world coordinate to
+    // a coordinate relative to the bitmap's top left, just subract the 
+    // image.world.
+    return Phaser.Point.subtract(point, this._image.world);
 };
 
 Phaser.Plugin.Lighting.prototype._sortPoints = function (points, target) {
