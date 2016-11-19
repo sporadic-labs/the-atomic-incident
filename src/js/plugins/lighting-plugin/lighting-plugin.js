@@ -1,10 +1,10 @@
 var calculateHullsFromTiles = require("./hull-from-tiles.js");
 
-module.exports = Phaser.Plugin.Lighting = function (game, parent) {
+module.exports = Phaser.Plugin.Lighting = function (game, manager) {
     this.game = game;
     this.camera = this.game.camera;
     this._debugEnabled = false;
-    // Parent is the plugin manager
+    this._pluginManager = manager;
 };
 
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
@@ -70,8 +70,8 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     for (var w = 0; w < walls.length; w++) {
         // Get start and end point for each wall.
         var wall = walls[w];
-        var startAngle = globals.player.position.angle(wall.start);
-        var endAngle = globals.player.position.angle(wall.end);
+        var startAngle = playerPoint.angle(wall.start);
+        var endAngle = playerPoint.angle(wall.end);
 
         // Check for an intersection at each angle, and +/- 0.001
         // Add the intersection to the points array.
@@ -83,12 +83,12 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         points.push(checkRayIntersection(this, endAngle+0.001));
     }
 
-    this._sortPoints(points, globals.player.position);
+    this._sortPoints(points, playerPoint);
 
-    // Create an arbitrarily long ray, starting at the player position, through the
-    // specified angle.  Check if this ray intersets any walls.  If it does, return
-    // the point at which it intersects the closest wall.  Otherwise, return the point
-    // at which it intersects the edge of the stage.
+    // Create an arbitrarily long ray, starting at the player position, through
+    // the specified angle.  Check if this ray intersets any walls.  If it does,
+    // return the point at which it intersects the closest wall.  Otherwise,
+    // return the point at which it intersects the edge of the stage.
     function checkRayIntersection(ctx, angle) {
         // Create a ray from the light to a point on the circle
         var ray = new Phaser.Line(globals.player.x, globals.player.y,
@@ -103,30 +103,6 @@ Phaser.Plugin.Lighting.prototype.update = function () {
             return ray.end;
         }
     }
-    // If the closest wall is the same as the one provided, return false.
-    // Otherwise, return the new wall.
-    function checkClosestWall(ctx, angle, closestWall) {
-        // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(globals.player.x, globals.player.y,
-            globals.player.x + Math.cos(angle) * 1000,
-            globals.player.y + Math.sin(angle) * 1000);
-        // Check if the ray intersected any walls
-        var newWall = ctx._getClosestWall(ray, walls);
-        // Save the intersection or the end of the ray
-        if (!newWall || !closestWall) { return false; }
-        if (newWall.start.x <= closestWall.start.x + 3 &&
-            newWall.start.x >= closestWall.start.x - 3 &&
-            newWall.start.y <= closestWall.start.y + 3 &&
-            newWall.start.y >= closestWall.start.y - 3 &&
-            newWall.end.x <= closestWall.end.x + 3 &&
-            newWall.end.x >= closestWall.end.x - 3 &&
-            newWall.end.y <= closestWall.end.y + 3 &&
-            newWall.end.y >= closestWall.end.y - 3) {
-            return false;
-        } else {
-            return newWall;
-        }
-    }
 
     // Clear and draw a shadow everywhere
     this._bitmap.clear();
@@ -134,8 +110,8 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
     // Draw the "light" areas
     this._bitmap.ctx.beginPath();
-    this._bitmap.ctx.fillStyle = 'rgb(255, 255, 255)';
-    this._bitmap.ctx.strokeStyle = 'rgb(255, 255, 255)';
+    this._bitmap.ctx.fillStyle = "rgb(255, 255, 255)";
+    this._bitmap.ctx.strokeStyle = "rgb(255, 255, 255)";
     // Note: xOffset and yOffset convert from world coordinates to coordinates 
     // inside of the bitmap mask. There might be a more elegant way to do this
     // when we optimize.
@@ -152,7 +128,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     if (globals.player.y > 300 && globals.player.y < 1140) {
         yOffset = globals.player.y - this.game.height / 2;
     } else if (globals.player.y > 1140) {
-        yOffset = 1140 - this.game.height / 2;;
+        yOffset = 1140 - this.game.height / 2;
     } else {
         yOffset = 0;
     }
@@ -166,14 +142,17 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     // Draw each of the rays on the rayBitmap
     this._rayBitmap.context.clearRect(0, 0, this.game.width, this.game.height);
     this._rayBitmap.context.beginPath();
-    this._rayBitmap.context.strokeStyle = 'rgb(255, 0, 0)';
-    this._rayBitmap.context.fillStyle = 'rgb(255, 0, 0)';
-    this._rayBitmap.context.moveTo(points[0].x - xOffset, points[0].y - yOffset);
+    this._rayBitmap.context.strokeStyle = "rgb(255, 0, 0)";
+    this._rayBitmap.context.fillStyle = "rgb(255, 0, 0)";
+    this._rayBitmap.context.moveTo(points[0].x - xOffset, 
+        points[0].y - yOffset);
     for(var k = 0; k < points.length; k++) {
-        this._rayBitmap.context.moveTo(globals.player.x - xOffset, globals.player.y - yOffset);
-        this._rayBitmap.context.lineTo(points[k].x - xOffset, points[k].y - yOffset);
-        this._rayBitmap.context.fillRect(points[k].x - xOffset -2,
-            points[k].y - yOffset - 2, 4, 4);
+        var p = points[k];
+        this._rayBitmap.context.moveTo(globals.player.x - xOffset, 
+            globals.player.y - yOffset);
+        this._rayBitmap.context.lineTo(p.x - xOffset, p.y - yOffset);
+        this._rayBitmap.context.fillRect(p.x - xOffset -2, p.y - yOffset - 2, 
+            4, 4);
     }
     this._rayBitmap.context.stroke();
 
@@ -186,17 +165,22 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
     var camRect = this.camera.view;
     var visibleWalls = [];
 
-    // Create walls for each corner of the stage, and add them to the walls array.
-    var camLeft = new Phaser.Line(camRect.x, camRect.y + camRect.height, camRect.x, camRect.y);
-    var camTop = new Phaser.Line(camRect.x, camRect.y, camRect.x + camRect.width, camRect.y);
-    var camRight = new Phaser.Line(camRect.x + camRect.width, camRect.y, camRect.x + camRect.width, camRect.y + camRect.height);
-    var camBottom = new Phaser.Line(camRect.x + camRect.width, camRect.y + camRect.height, camRect.x, camRect.y + camRect.height);
+    // Create walls for each corner of the stage & add them to the walls array
+    var x = camRect.x;
+    var y = camRect.y;
+    var w = camRect.width;
+    var h = camRect.height;
+    var camLeft = new Phaser.Line(x, y + h, x, y);
+    var camTop = new Phaser.Line(x, y, x + w, y);
+    var camRight = new Phaser.Line(x + w, y, x + w, y + h);
+    var camBottom = new Phaser.Line(x + w, y + h, x, y + h);
     visibleWalls.push(camLeft, camRight, camTop, camBottom);
 
     for (var i = 0; i < this._lightWalls.length; i++) {
         for (var j = 0; j < this._lightWalls[i].length; j++) {
             var line = this._lightWalls[i][j];
-            if (camRect.intersectsRaw(line.left, line.right, line.top, line.bottom)) {
+            if (camRect.intersectsRaw(line.left, line.right, line.top, 
+                line.bottom)) {
                 line = getVisibleSegment(line);
                 visibleWalls.push(line);
             }
@@ -295,7 +279,7 @@ Phaser.Plugin.Lighting.prototype._getClosestWall = function(ray, walls) {
                 intersect.x, intersect.y);
             if (distance < distanceToWall) {
                 distanceToWall = distance;
-                closestWall = walls[i]
+                closestWall = walls[i];
             }
         }
     }
