@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="60" tilewidth="10" tileheight="10" nextobjectid="1">
+ <tileset firstgid="1" name="tiles_v2" tilewidth="10" tileheight="10" tilecount="6">
+  <image source="tiles_v2.png" width="60" height="10"/>
+ </tileset>
+ <layer name="bg" width="80" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMBKGb3r/kuugECaumqqqqqqqqqqqqqqqqqqqqqqqqTw/jRHCB
+  </data>
+ </layer>
+ <layer name="walls" width="80" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt2jEOg0AAxED4/6dTRPsCE2ISj0SLfFtdcceRJMk9zm8HPNwT9jM3mtvG3GhuG3OjuW3Mjea2MTea28bcaG4bc6O5bcyN5rYxN54XfZ9utDK3jbnR3DbmRnPbmBvNbWNuNLeNudHcNubGO+4e9vsRYW4bc6O5bZ7QaNZ+TPsx7ce0H9N+TPsx/7bf1edtP9f/7P7tvFdrP6b9mPZj2o9pP6b9mPZj2o9pP6b9mPZj2o9pP6b9mPZj2u/tqrc/T3wXlCRJkt/3AsNJAH8=
+  </data>
+ </layer>
+ <layer name="lights" width="80" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt2TENAAAIA0GCf9EYYGAjgTsFvzaNAAAAACZyOwAAAIAzbEwAAAAAAACg40sEAAAAPik/TwAH
+  </data>
+ </layer>
+ <layer name="player" width="80" height="60" opacity="0.6">
+  <data encoding="base64" compression="zlib">
+   eJztzkEJAAAIBLAD+3c2wb0F2RIsAQAAAAAAAAAA4KO5DgAAAAAAAAAAABQLuaAABA==
+  </data>
+ </layer>
+ <layer name="enemies" width="80" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt2kENACAMBME+8K8ZA4TwKtdkRsEK2Cros34HPJjQeDK1GwAAAAAAAADodXsM/AcAAAAAAAAAAKSb9r8kNkGKDQqrACE=
+  </data>
+ </layer>
+</map>
