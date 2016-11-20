@@ -30,6 +30,7 @@ function SeekerEnemy(game, x, y, parentGroup) {
     this._visionRadius = -1;
     this._maxSpeed = 100;
     this._growth = 0;
+    this._growthRate = 1;
 }
 
 SeekerEnemy.prototype.update = function() {
@@ -43,11 +44,11 @@ SeekerEnemy.prototype.update = function() {
     // If the enemy is in light, it should shrink until it is the normal size.
     var inShadow = this.game.globals.plugins.lighting.isPointInShadow(this.world);
     if (inShadow && this._growth < 100) {
-        this._growth += 0.5;
+        this._growth += this._growthRate;
         var scale = 1 + (this._growth/100);
         this.scale.setTo(scale);
     } else if (this._growth > 1) {
-        this._growth -= 0.5;
+        this._growth -= this._growthRate;
         var scale = 1 + (this._growth/100);
         this.scale.setTo(scale);
     }
