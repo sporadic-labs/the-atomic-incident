@@ -105,7 +105,6 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 
     // Clear and draw a shadow everywhere
     this._bitmap.clear();
-    this._bitmap.update();
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
 
     for (var i = 0; i < this.lights.length; i++) {

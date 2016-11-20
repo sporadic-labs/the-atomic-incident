@@ -65,7 +65,6 @@ Tracker.prototype = Object.create(Phaser.Sprite.prototype);
  * @param {Projectile} bullets - Array of bullets associated with a specific tracker.
  */
 function Tracker(game, x, y, bullets) {
-    console.log('tracker!');
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
     this.scale.setTo(1.2, 1.2);
