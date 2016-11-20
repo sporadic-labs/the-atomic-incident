@@ -1,21 +1,48 @@
 var calculateHullsFromTiles = require("./hull-from-tiles.js");
+var Light = require("./light.js");
 
 module.exports = Phaser.Plugin.Lighting = function (game, manager) {
     this.game = game;
     this.camera = this.game.camera;
+    this.lights = [];
     this._debugEnabled = false;
     this._pluginManager = manager;
 };
 
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
 
+Phaser.Plugin.Lighting.prototype.addLight = function (position, radius, color, 
+    opacity) {
+    var light = new Light(this.game, this.parent, position, radius, color, 
+        opacity);
+    this.lights.push(light);
+    if (this._debugEnabled) light.enableDebug();
+    return light;
+};
+
+Phaser.Plugin.Lighting.prototype.removeLight = function (light) {
+    var i = this.lights.indexOf(light);
+    if (i !== -1) this.lights.splice(i, 1);
+};
+
 Phaser.Plugin.Lighting.prototype.setOpacity = function (opacity) {
     this.shadowOpacity = opacity;
 };
 
-Phaser.Plugin.Lighting.prototype.toggleDebug = function () {
-    this._debugEnabled = !this._debugEnabled;
-    this._rayBitmapImage.visible = this._debugEnabled;
+Phaser.Plugin.Lighting.prototype.enableDebug = function () {
+    this._debugEnabled = true;
+    this._rayBitmapImage.visible = true;
+    for (var i = 0; i < this.lights.length; i++) {
+        this.lights[i].enableDebug();
+    }
+};
+
+Phaser.Plugin.Lighting.prototype.disableDebug = function () {
+    this._debugEnabled = false;
+    this._rayBitmapImage.visible = false;
+    for (var i = 0; i < this.lights.length; i++) {
+        this.lights[i].disableDebug();
+    }
 };
 
 Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
@@ -36,8 +63,9 @@ Phaser.Plugin.Lighting.prototype.destroy = function () {
     console.log("Not implemented...");
 };
 
-Phaser.Plugin.Lighting.prototype.init = function (spriteParent, tilemap, 
+Phaser.Plugin.Lighting.prototype.init = function (parent, tilemap, 
     shadowOpacity) {
+    this.parent = parent; 
     this.shadowOpacity = (shadowOpacity !== undefined) ? shadowOpacity : 1;
 
     var game = this.game;
@@ -47,7 +75,7 @@ Phaser.Plugin.Lighting.prototype.init = function (spriteParent, tilemap,
     var image = bitmap.addToWorld(0, 0);
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
-    spriteParent.addChild(image);
+    parent.addChild(image);
 
     this._bitmap = bitmap;
     this._image = image;
@@ -56,7 +84,7 @@ Phaser.Plugin.Lighting.prototype.init = function (spriteParent, tilemap,
     this._rayBitmap = this.game.add.bitmapData(game.width, game.height);
     this._rayBitmapImage = this._rayBitmap.addToWorld(game.width / 2, 
         game.height / 2, 0.5, 0.5, 1, 1);
-    spriteParent.addChild(this._rayBitmapImage);
+    parent.addChild(this._rayBitmapImage);
     this._rayBitmapImage.fixedToCamera = true;
     this._rayBitmapImage.visible = false;
 };
@@ -72,17 +100,37 @@ Phaser.Plugin.Lighting.prototype.render = function () {
 };
 
 Phaser.Plugin.Lighting.prototype.update = function () {
-    var points = [];
     var globals = this.game.globals;
-
     var walls = this._getVisibleWalls();
 
-    var playerPoint = globals.player.position;
+    // Clear and draw a shadow everywhere
+    this._bitmap.clear();
+    this._bitmap.update();
+    this._bitmap.fill(0, 0, 0, this.shadowOpacity);
+
+    for (var i = 0; i < this.lights.length; i++) {
+        var light = this.lights[i];
+        light.update();
+        var points = this._castLight(light, walls);
+        this._drawLight(light, points);
+    }
+
+    // This just tells the engine it should update the texture cache
+    this._bitmap.dirty = true;
+    if (this._debugEnabled) this._rayBitmap.dirty = true;
+
+    // Update the bitmap so that pixels are available
+    this._bitmap.update();
+};
+
+Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
+    var points = [];
+
     for (var w = 0; w < walls.length; w++) {
         // Get start and end point for each wall.
         var wall = walls[w];
-        var startAngle = playerPoint.angle(wall.start);
-        var endAngle = playerPoint.angle(wall.end);
+        var startAngle = light.position.angle(wall.start);
+        var endAngle = light.position.angle(wall.end);
 
         // Check for an intersection at each angle, and +/- 0.001
         // Add the intersection to the points array.
@@ -94,31 +142,27 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         points.push(checkRayIntersection(this, endAngle+0.001));
     }
 
-    this._sortPoints(points, playerPoint);
-
-    // Create an arbitrarily long ray, starting at the player position, through
-    // the specified angle.  Check if this ray intersets any walls.  If it does,
-    // return the point at which it intersects the closest wall.  Otherwise,
-    // return the point at which it intersects the edge of the stage.
+    // Cast a ray starting at the light position through the specified angle.
+    // Check if this ray intersets any walls. If it does, return the point at
+    // which it intersects the closest wall. Otherwise, return the point at
+    // which it intersects the edge of the stage.
     function checkRayIntersection(ctx, angle) {
         // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(globals.player.x, globals.player.y,
-            globals.player.x + Math.cos(angle) * 1000,
-            globals.player.y + Math.sin(angle) * 1000);
+        var ray = new Phaser.Line(light.position.x, light.position.y,
+            light.position.x + Math.cos(angle) * light.radius,
+            light.position.y + Math.sin(angle) * light.radius);
         // Check if the ray intersected any walls
         var intersect = ctx._getWallIntersection(ray, walls);
         // Save the intersection or the end of the ray
-        if (intersect) {
-            return intersect;
-        } else {
-            return ray.end;
-        }
+        if (intersect) return intersect;
+        else return ray.end;
     }
 
-    // Clear and draw a shadow everywhere
-    this._bitmap.clear();
-    this._bitmap.update();
-    this._bitmap.fill(0, 0, 0, this.shadowOpacity);
+    this._sortPoints(points, light.position);
+    return points;
+};
+
+Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
     // Draw the "light" areas
     this._bitmap.ctx.beginPath();
     this._bitmap.ctx.fillStyle = "rgb(255, 255, 255)";
@@ -135,26 +179,22 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._bitmap.ctx.fill();
 
     // Draw each of the rays on the rayBitmap
-    this._rayBitmap.context.clearRect(0, 0, this.game.width, this.game.height);
-    this._rayBitmap.context.beginPath();
-    this._rayBitmap.context.strokeStyle = "rgb(255, 0, 0)";
-    this._rayBitmap.context.fillStyle = "rgb(255, 0, 0)";
-    this._rayBitmap.context.moveTo(localPoints[0].x, localPoints[0].y);
-    var lightPoint = this._convertWorldPointToLocal(playerPoint);
-    for(var k = 0; k < localPoints.length; k++) {
-        var p = localPoints[k];
-        this._rayBitmap.context.moveTo(lightPoint.x, lightPoint.y);
-        this._rayBitmap.context.lineTo(p.x, p.y);
-        this._rayBitmap.context.fillRect(p.x - 2, p.y - 2, 4, 4);
+    if (this._debugEnabled) {
+        this._rayBitmap.context.clearRect(0, 0, this.game.width, 
+            this.game.height);
+        this._rayBitmap.context.beginPath();
+        this._rayBitmap.context.strokeStyle = "rgb(255, 0, 0)";
+        this._rayBitmap.context.fillStyle = "rgb(255, 0, 0)";
+        this._rayBitmap.context.moveTo(localPoints[0].x, localPoints[0].y);
+        var lightPoint = this._convertWorldPointToLocal(light.position);
+        for(var k = 0; k < localPoints.length; k++) {
+            var p = localPoints[k];
+            this._rayBitmap.context.moveTo(lightPoint.x, lightPoint.y);
+            this._rayBitmap.context.lineTo(p.x, p.y);
+            this._rayBitmap.context.fillRect(p.x - 2, p.y - 2, 4, 4);
+        }
+        this._rayBitmap.context.stroke();
     }
-    this._rayBitmap.context.stroke();
-
-    // This just tells the engine it should update the texture cache
-    this._bitmap.dirty = true;
-    this._rayBitmap.dirty = true;
-
-    // Update the bitmap so that pixels are available
-    this._bitmap.update();
 };
 
 Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
