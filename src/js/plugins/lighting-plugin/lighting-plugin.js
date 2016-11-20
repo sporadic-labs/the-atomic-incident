@@ -47,6 +47,9 @@ Phaser.Plugin.Lighting.prototype.disableDebug = function () {
 
 Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
     var localPoint = this._convertWorldPointToLocal(worldPoint);
+    // BitmapData.getPixel doesn't seem to work right with floats, so round:
+    localPoint.x = Math.round(localPoint.x);
+    localPoint.y = Math.round(localPoint.y);
     if ((localPoint.x < 0) || (localPoint.x > this._bitmap.width) ||
         (localPoint.y < 0) || (localPoint.y > this._bitmap.height)) {
         // Returns false if outside of bitmap bounds...
