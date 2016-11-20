@@ -22,7 +22,7 @@ function Wave1(game, spawnDelay, spawnActivationDelay) {
 }
 
 Wave1.prototype._spawn = function () {
-    var newGroup = new SeekerGroup(this.game, 1);
+    var newGroup = new SeekerGroup(this.game, 5);
 
     // Control how it gets added to the wave - delayed activation
     this._scheduleGroupActivation(newGroup);

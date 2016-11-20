@@ -95,8 +95,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    // var Wave1 = require("../game-objects/waves/wave-1.js");
-    // new Wave1(game);
+    var Wave1 = require("../game-objects/waves/wave-1.js");
+    new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
