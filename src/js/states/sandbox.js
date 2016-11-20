@@ -67,6 +67,7 @@ Sandbox.prototype.create = function () {
         lighting: game.plugins.add(LightingPlugin, groups.midground, map, 0.8)
     };
     this.lighting = globals.plugins.lighting;
+    this.testLight = this.lighting.addLight(new Phaser.Point(0, 0), 300);
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
 
@@ -108,10 +109,10 @@ Sandbox.prototype.create = function () {
     debugToggleKey.onDown.add(function () {
         if (globals.plugins.satBody.isDebugAllEnabled()) {
             globals.plugins.satBody.disableDebugAll();
-            globals.plugins.lighting.toggleDebug();
+            globals.plugins.lighting.disableDebug();
         } else {
             globals.plugins.satBody.enableDebugAll();
-            globals.plugins.lighting.toggleDebug();
+            globals.plugins.lighting.enableDebug();
         }
     }, this);
 };
@@ -136,10 +137,8 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    // Debugging the shadow mask checker
     var mousePoint = new Phaser.Point(this.input.worldX, this.input.worldY);
-    var isCursorInShadow = this.lighting.isPointInShadow(mousePoint);
-    console.log(`Mouse cursor (${mousePoint.x}, ${mousePoint.y}) in shadow: ${isCursorInShadow}`);
+    this.testLight.position = mousePoint;
 };
 
 Sandbox.prototype.render = function () {
