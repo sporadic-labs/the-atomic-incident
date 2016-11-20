@@ -58,9 +58,11 @@ Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
 };
 
 Phaser.Plugin.Lighting.prototype.destroy = function () {
-    // TODO: implement a destroy that kills the two bitmaps and their associated
-    // image objects
-    console.log("Not implemented...");
+    this._bitmap.destroy();
+    this._image.destroy();
+    this._rayBitmap.destroy();
+    this._rayBitmapImage.destroy();
+    Phaser.Plugin.prototype.destroy.apply(this, arguments);
 };
 
 Phaser.Plugin.Lighting.prototype.init = function (parent, tilemap, 
