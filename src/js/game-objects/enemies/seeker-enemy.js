@@ -37,6 +37,9 @@ SeekerEnemy.prototype.update = function() {
 
     this.body.velocity.set(0);
 
+    // var inShadow = this.game.globals.plugins.lighting.isPointInShadow(this.world);
+    // console.log(inShadow);
+
     // Check if player is within visual range
     var distance = this.position.distance(this._player.position);
     if (distance <= this._visionRadius || this._visionRadius === -1) {
