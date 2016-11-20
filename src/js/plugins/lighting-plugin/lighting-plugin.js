@@ -145,6 +145,14 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
         points.push(checkRayIntersection(this, endAngle+0.001));
     }
 
+    // Hack for now: add additional samples to better approximate a circular 
+    // radius of light
+    var samples = 60;
+    var delta = Phaser.Math.PI2 / samples;
+    for (var a = 0; a < Phaser.Math.PI2; a += delta) {
+        points.push(checkRayIntersection(this, a));
+    }
+
     // Cast a ray starting at the light position through the specified angle.
     // Check if this ray intersets any walls. If it does, return the point at
     // which it intersects the closest wall. Otherwise, return the point at
