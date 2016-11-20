@@ -49,14 +49,14 @@ Sandbox.prototype.create = function () {
     var map = game.add.tilemap("tilemap");
     // Set up the tilesets. First parameter is name of tileset in Tiled and 
     // second paramter is name of tileset image in Phaser's cache
-    map.addTilesetImage("colors", "coloredTiles");
+    map.addTilesetImage("tiles_v2", "coloredTiles");
     // Create a layer for each 
-    var backgroundLayer = map.createLayer("Background", this.game.width, 
+    var backgroundLayer = map.createLayer("bg", this.game.width, 
         this.game.height, groups.background);
     backgroundLayer.resizeWorld();
-    var blockingLayer = map.createLayer("BlockingLayer", this.game.width, 
+    var blockingLayer = map.createLayer("walls", this.game.width, 
         this.game.height, groups.background);
-    map.setCollisionBetween(0, 3, true, "BlockingLayer");
+    map.setCollisionBetween(0, 3, true, "walls");
     globals.tileMap = map;
     globals.tileMapLayer = blockingLayer;
 
@@ -69,7 +69,7 @@ Sandbox.prototype.create = function () {
     this.lighting = globals.plugins.lighting;
     this.testLight = this.lighting.addLight(new Phaser.Point(0, 0), 300);
     // AStar plugin
-    globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
+    globals.plugins.astar.setAStarMap(map, "walls", "tiles_v2");
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -85,9 +85,9 @@ Sandbox.prototype.create = function () {
 
     // Spawn Point Testing
     // Get the Spawn Point(s) for the lights (these were orignally set up for the weapons...)
-    var lightSpawnPoints = this.getMapPoints("weapon");
+    // var lightSpawnPoints = this.getMapPoints("weapon");
     // Pick a random Point for the light to spawn at.
-    globals.lightPoint = new Phaser.Point(lightSpawnPoints[0].x, lightSpawnPoints[0].y);
+    // globals.lightPoint = new Phaser.Point(lightSpawnPoints[0].x, lightSpawnPoints[0].y);
 
     // Score
     globals.scoreKeeper = new ScoreKeeper();
@@ -95,8 +95,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {

@@ -20,7 +20,7 @@ function calculateClusters(tileMap) {
     }
 
     function getCollidingTile(x, y) {
-        var tile = tileMap.getTile(x, y, "BlockingLayer");
+        var tile = tileMap.getTile(x, y, "walls");
         if (tile && tile.collides) return tile;
         else return null;
     }
