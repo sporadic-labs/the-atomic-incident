@@ -50,7 +50,7 @@ Sandbox.prototype.create = function () {
     var map = game.add.tilemap("tilemap");
     // Set up the tilesets. First parameter is name of tileset in Tiled and 
     // second paramter is name of tileset image in Phaser's cache
-    map.addTilesetImage("tiles_v2", "coloredTiles");
+    map.addTilesetImage("tiles_25", "coloredTiles");
     // Create a layer for each 
     var backgroundLayer = map.createLayer("bg", this.game.width, 
         this.game.height, groups.background);
@@ -65,11 +65,11 @@ Sandbox.prototype.create = function () {
     globals.plugins = {
         satBody: game.plugins.add(SatBodyPlugin),
         astar: game.plugins.add(Phaser.Plugin.AStar),
-        lighting: game.plugins.add(LightingPlugin, groups.midground, map, 1.0)
+        lighting: game.plugins.add(LightingPlugin, groups.foreground, map, 1.0)
     };
     this.lighting = globals.plugins.lighting;
     // AStar plugin
-    globals.plugins.astar.setAStarMap(map, "walls", "tiles_v2");
+    globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
