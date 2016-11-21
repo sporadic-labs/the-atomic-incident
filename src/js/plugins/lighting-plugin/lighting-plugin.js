@@ -11,10 +11,8 @@ module.exports = Phaser.Plugin.Lighting = function (game, manager) {
 
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
 
-Phaser.Plugin.Lighting.prototype.addLight = function (position, radius, color, 
-    opacity) {
-    var light = new Light(this.game, this.parent, position, radius, color, 
-        opacity);
+Phaser.Plugin.Lighting.prototype.addLight = function (position, radius, color) {
+    var light = new Light(this.game, this.parent, position, radius, color);
     this.lights.push(light);
     if (this._debugEnabled) light.enableDebug();
     return light;
@@ -108,8 +106,10 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     var walls = this._getVisibleWalls();
 
     // Clear and draw a shadow everywhere
+    this._bitmap.blendSourceOver();
     this._bitmap.clear();
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
+    this._bitmap.blendAdd();
 
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
@@ -176,8 +176,8 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
 Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
     // Draw the "light" areas
     this._bitmap.ctx.beginPath();
-    this._bitmap.ctx.fillStyle = "rgb(255, 255, 255)";
-    this._bitmap.ctx.strokeStyle = "rgb(255, 255, 255)";
+    this._bitmap.ctx.fillStyle = Phaser.Color.getWebRGB(light.color);
+    this._bitmap.ctx.strokeStyle = Phaser.Color.getWebRGB(light.color);
 
     // Convert the world positions of the light points to local coordinates 
     // within the bitmap
