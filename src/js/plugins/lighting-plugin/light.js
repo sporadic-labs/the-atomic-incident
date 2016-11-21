@@ -1,13 +1,11 @@
 module.exports = Light;
 
-function Light(game, parent, position, radius, color, 
-	opacity) {
+function Light(game, parent, position, radius, color) {
 	this.game = game;
 	this.parent = parent;
 	this.position = position.clone();
 	this.radius = radius;
-	this.color = (color !== undefined) ? color : 0xFFFFFF;
-	this.opacity = (opacity !== undefined) ? opacity : 1;
+	this.color = (color !== undefined) ? color : 0xFFFFFFFF;
     this._isDebug = false;
     this._debugGraphics = null;
 }
@@ -39,8 +37,6 @@ Light.prototype.destroy = function () {
 Light.prototype._updateDebug = function () {
     this._debugGraphics.position.copyFrom(this.position);
     this._debugGraphics.clear();
-    this._debugGraphics.lineStyle(1, 0xFF00FF, 0.6);
-    this._debugGraphics.beginFill(this.color, 0.4);
-    this._debugGraphics.drawCircle(0, 0, this.radius);
-    this._debugGraphics.endFill();
+    this._debugGraphics.lineStyle(5, 0xFF00FF, 0.6);
+    this._debugGraphics.drawCircle(0, 0, 2 * this.radius);
 };
