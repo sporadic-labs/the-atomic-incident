@@ -4,6 +4,7 @@
 
 module.exports = Sandbox;
 
+var utils = require("../helpers/utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var AStar = require("../plugins/AStar.js");
@@ -67,7 +68,6 @@ Sandbox.prototype.create = function () {
         lighting: game.plugins.add(LightingPlugin, groups.midground, map, 1.0)
     };
     this.lighting = globals.plugins.lighting;
-    this.testLight = this.lighting.addLight(new Phaser.Point(0, 0), 300);
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_v2");
 
@@ -83,11 +83,17 @@ Sandbox.prototype.create = function () {
     this.camera.follow(player);
     globals.player = player;
 
-    // Spawn Point Testing
-    // Get the Spawn Point(s) for the lights (these were orignally set up for the weapons...)
-    // var lightSpawnPoints = this.getMapPoints("weapon");
-    // Pick a random Point for the light to spawn at.
-    // globals.lightPoint = new Phaser.Point(lightSpawnPoints[0].x, lightSpawnPoints[0].y);
+    // Create lights
+    var lights = utils.default(map.objects["lights"], []); // Default to empty list
+    lights.forEach(function (light) {
+        var point = new Phaser.Point(light.x, light.y);
+        var p = light.properties || {};
+        var radius = utils.default(p.radius, 300);
+        var color = p.color ? utils.tiledColorToRgb(p.color) : 0xFFFFFFFF;
+        this.lighting.addLight(point, radius, color);
+    }, this);   
+    this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
+        Phaser.Color.getColor32(255, 255, 217, 0));
 
     // Score
     globals.scoreKeeper = new ScoreKeeper();
@@ -138,7 +144,7 @@ Sandbox.prototype.getMapPoints = function(key) {
 
 Sandbox.prototype.update = function () {
     var mousePoint = new Phaser.Point(this.input.worldX, this.input.worldY);
-    this.testLight.position = mousePoint;
+    this.mouseLight.position = mousePoint;
 
     var inShadow = this.lighting.isPointInShadow(this.game.globals.player.world);
     // console.log(inShadow);
