@@ -73,7 +73,9 @@ function Player(game, x, y, parentGroup) {
     this._maxAcceleration = 5000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setCircle(this.width/2); // Fudge factor
+    var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
+    this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
+        (this.height - diameter) / 2);
 
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 
