@@ -67,7 +67,7 @@ Sandbox.prototype.create = function () {
     globals.plugins = {
         satBody: game.plugins.add(SatBodyPlugin),
         astar: game.plugins.add(Phaser.Plugin.AStar),
-        lighting: game.plugins.add(LightingPlugin, groups.foreground, map, 1.0)
+        lighting: game.plugins.add(LightingPlugin, groups.foreground, wallLayer)
     };
     this.lighting = globals.plugins.lighting;
     // AStar plugin

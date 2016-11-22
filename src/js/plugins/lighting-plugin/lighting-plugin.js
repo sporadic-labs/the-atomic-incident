@@ -65,7 +65,7 @@ Phaser.Plugin.Lighting.prototype.destroy = function () {
     Phaser.Plugin.prototype.destroy.apply(this, arguments);
 };
 
-Phaser.Plugin.Lighting.prototype.init = function (parent, tilemap, 
+Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     shadowOpacity) {
     this.parent = parent; 
     this.shadowOpacity = (shadowOpacity !== undefined) ? shadowOpacity : 1;
@@ -81,7 +81,7 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemap,
 
     this._bitmap = bitmap;
     this._image = image;
-    this._lightWalls = calculateHullsFromTiles(tilemap);
+    this._lightWalls = calculateHullsFromTiles(tilemapLayer);
 
     this._rayBitmap = this.game.add.bitmapData(game.width, game.height);
     this._rayBitmapImage = this._rayBitmap.addToWorld(game.width / 2, 

@@ -1,15 +1,16 @@
 var hull = require("hull.js");
 
-module.exports = function calculateHullsFromTiles(tileMap) {
-	var clusters = calculateClusters(tileMap);
+module.exports = function calculateHullsFromTiles(tilemapLayer) {
+	var clusters = calculateClusters(tilemapLayer);
 	var hulls = calculateHulls(clusters);
 	return hulls;
 };
 
-function calculateClusters(tileMap) {
+function calculateClusters(tilemapLayer) {
+    var tilemap = tilemapLayer.map;
     var clusters = [];
-    for (var x = 0; x < tileMap.width; x++) {
-        for (var y = 0; y < tileMap.height; y++) {
+    for (var x = 0; x < tilemap.width; x++) {
+        for (var y = 0; y < tilemap.height; y++) {
             var tile = getCollidingTile(x, y);
             if (tile && !findTileInClusters(tile)) {
                 var cluster = [];
@@ -20,7 +21,7 @@ function calculateClusters(tileMap) {
     }
 
     function getCollidingTile(x, y) {
-        var tile = tileMap.getTile(x, y, "walls");
+        var tile = tilemap.getTile(x, y, tilemapLayer.index);
         if (tile && tile.collides) return tile;
         else return null;
     }
