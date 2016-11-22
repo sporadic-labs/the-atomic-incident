@@ -51,15 +51,17 @@ Sandbox.prototype.create = function () {
     // Set up the tilesets. First parameter is name of tileset in Tiled and 
     // second paramter is name of tileset image in Phaser's cache
     map.addTilesetImage("tiles_25", "coloredTiles");
+    var wallTileset = map.addTilesetImage("wall-tiles", "wallTiles");
     // Create a layer for each 
     var backgroundLayer = map.createLayer("bg", this.game.width, 
         this.game.height, groups.background);
     backgroundLayer.resizeWorld();
-    var blockingLayer = map.createLayer("walls", this.game.width, 
-        this.game.height, groups.background);
-    map.setCollisionBetween(0, 3, true, "walls");
+    var wallLayer = map.createLayer("walls", this.game.width, this.game.height, 
+        groups.foreground);
+    map.setCollisionBetween(wallTileset.firstgid, wallTileset.firstgid + 
+        wallTileset.total, true, wallLayer);
     globals.tileMap = map;
-    globals.tileMapLayer = blockingLayer;
+    globals.tileMapLayer = wallLayer;
 
     // Plugins
     globals.plugins = {
@@ -94,6 +96,9 @@ Sandbox.prototype.create = function () {
     }, this);   
     this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
         Phaser.Color.getColor32(255, 255, 217, 0));
+
+    // Temporary fix: make walls appear on top of lights
+    groups.foreground.bringToTop(wallLayer);
 
     // Score
     globals.scoreKeeper = new ScoreKeeper();
