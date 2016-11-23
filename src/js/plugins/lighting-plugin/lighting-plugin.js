@@ -79,6 +79,11 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     image.fixedToCamera = true;
     parent.addChild(image);
 
+    // Offscreen bitmap for blending light with gradient
+    var offscreenBitmap = game.add.bitmapData(game.width, game.height);
+    offscreenBitmap.cls();
+    this._offscreenBitmap = offscreenBitmap;
+
     this._bitmap = bitmap;
     this._image = image;
     this._lightWalls = calculateHullsFromTiles(tilemapLayer);
@@ -109,7 +114,6 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._bitmap.blendSourceOver();
     this._bitmap.clear();
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
-    this._bitmap.blendAdd();
 
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
@@ -174,20 +178,40 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
 };
 
 Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
+    this._offscreenBitmap.cls();
+    this._offscreenBitmap.blendSourceOver();
+
+    var localLight = this._convertWorldPointToLocal(light.position);
+    var gradient = this._offscreenBitmap.ctx.createRadialGradient(
+        localLight.x, localLight.y, light.radius, 
+        localLight.x, localLight.y, 0
+    );
+    gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+    gradient.addColorStop(0.75, Phaser.Color.getWebRGB(light.color));
+    this._offscreenBitmap.circle(localLight.x, localLight.y, Math.round(light.radius), gradient);
+
+    this._offscreenBitmap.blendSourceIn();
+
     // Draw the "light" areas
-    this._bitmap.ctx.beginPath();
-    this._bitmap.ctx.fillStyle = Phaser.Color.getWebRGB(light.color);
-    this._bitmap.ctx.strokeStyle = Phaser.Color.getWebRGB(light.color);
+    this._offscreenBitmap.ctx.beginPath();
+    this._offscreenBitmap.ctx.fillStyle = Phaser.Color.getWebRGB(light.color);
+    this._offscreenBitmap.ctx.strokeStyle = Phaser.Color.getWebRGB(light.color);
 
     // Convert the world positions of the light points to local coordinates 
     // within the bitmap
     var localPoints = points.map(this._convertWorldPointToLocal, this);
-    this._bitmap.ctx.moveTo(localPoints[0].x, localPoints[0].y);
+    this._offscreenBitmap.ctx.moveTo(localPoints[0].x, localPoints[0].y);
     for(var i = 0; i < localPoints.length; i++) {
-        this._bitmap.ctx.lineTo(localPoints[i].x, localPoints[i].y);
+        this._offscreenBitmap.ctx.lineTo(localPoints[i].x, localPoints[i].y);
     }
-    this._bitmap.ctx.closePath();
-    this._bitmap.ctx.fill();
+    this._offscreenBitmap.ctx.closePath();
+    this._offscreenBitmap.ctx.fill();
+
+    this._bitmap.copyRect(
+        this._offscreenBitmap, 
+        new Phaser.Rectangle(0, 0, this.game.width, this.game.height), 
+        0, 0,
+        "lighter");
 
     // Draw each of the rays on the rayBitmap
     if (this._debugEnabled) {
