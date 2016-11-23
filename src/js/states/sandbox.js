@@ -88,9 +88,10 @@ Sandbox.prototype.create = function () {
     // Create lights
     var lights = utils.default(map.objects["lights"], []); // Default to empty list
     lights.forEach(function (light) {
-        var point = new Phaser.Point(light.x, light.y);
+        var point = new Phaser.Point(light.x + map.tileWidth / 2, 
+            light.y - map.tileHeight / 2);
         var p = light.properties || {};
-        var radius = utils.default(p.radius, 300);
+        var radius = p.radius ? Number(p.radius) : 300;
         var color = p.color ? utils.tiledColorToRgb(p.color) : 0xFFFFFFFF;
         this.lighting.addLight(point, radius, color);
     }, this);   
