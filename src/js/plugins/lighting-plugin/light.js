@@ -10,8 +10,8 @@ function Light(game, parent, position, radius, color) {
     this._isDebug = false;
     this._debugGraphics = null;
     this._noise = Simple1DNoise();
-    this._noise.setScale(0.15);
-    this._noise.setAmplitude(20);
+    this._noise.setScale(0.25);
+    this._noise.setAmplitude(10);
     this._frameCount = 0;
 }
 
