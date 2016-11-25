@@ -155,8 +155,7 @@ Sandbox.prototype.getMapPoints = function(key) {
 Sandbox.prototype.update = function () {
     // var mousePoint = new Phaser.Point(this.input.worldX, this.input.worldY);
     // this.mouseLight.position = mousePoint;
-
-    // var inShadow = this.lighting.isPointInShadow(this.game.globals.player.world);
+    // var inShadow = this.lighting.isPointInShadow(mousePoint);
     // console.log(inShadow);
 };
 

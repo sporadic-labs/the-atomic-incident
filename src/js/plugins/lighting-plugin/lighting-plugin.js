@@ -56,8 +56,8 @@ Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
         return true;
     }
     var color = this._bitmap.getPixel(localPoint.x, localPoint.y);
-    if (color.r !== 255) return true;
-    return false;
+    if (color.r !== 0 || color.g !== 0 || color.b !== 0) return false;
+    return true;
 };
 
 Phaser.Plugin.Lighting.prototype.destroy = function () {
