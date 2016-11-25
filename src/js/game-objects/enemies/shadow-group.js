@@ -67,7 +67,7 @@ ShadowEnemy.prototype.update = function () {
     // Stop moving
     this.body.velocity.set(0);
     // Update target
-    if (!this._target) this._findTarget();
+    if (!this._target || (this._target.health <= 0)) this._findTarget();
     
     // Calculate path
     var tilemapLayer = this.game.globals.tileMapLayer;
