@@ -58,17 +58,31 @@ Light.prototype.redrawLight = function () {
     // Draw the circular gradient for the light. This is the light without
     // factoring in shadows
     this._bitmap.blendSourceOver(); // Default blend mode
-    var gradient = this._bitmap.ctx.createRadialGradient(
-        this.radius, this.radius, this.radius, 
-        this.radius, this.radius, 0
-    );
-    var c1 = Phaser.Color.getRGB(this.color);
-    c1.a = 0;
-    var c2 = Phaser.Color.getRGB(this.color);
-    gradient.addColorStop(0, Phaser.Color.getWebRGB(c1));
-    gradient.addColorStop(0.75, Phaser.Color.getWebRGB(c2));
-    this._bitmap.circle(this.radius, this.radius, 
-        Math.round(this.radius), gradient);
+
+    // Option 1: Smooth gradient approach
+    // var gradient = this._bitmap.ctx.createRadialGradient(
+    //     this.radius, this.radius, this.radius, 
+    //     this.radius, this.radius, 0
+    // );
+    // var c1 = Phaser.Color.getRGB(this.color);
+    // c1.a = 0;
+    // var c2 = Phaser.Color.getRGB(this.color);
+    // gradient.addColorStop(0, Phaser.Color.getWebRGB(c1));
+    // gradient.addColorStop(0.75, Phaser.Color.getWebRGB(c2));
+    // this._bitmap.circle(this.radius, this.radius, 
+    //     Math.round(this.radius), gradient);
+    
+    // Option 2: Discrete rings of light, fading in transparency with distance 
+    // from center 
+    var c = Phaser.Color.getRGB(this.color);
+    var c1 = Phaser.Color.getWebRGB(c);
+    c.a = 175;
+    var c2 = Phaser.Color.getWebRGB(c);
+    c.a = 100;
+    var c3 = Phaser.Color.getWebRGB(c);   
+    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.9), c3);
+    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.8), c2);
+    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.5), c1);
 };
 
 Light.prototype.redrawShadow = function (points) {
