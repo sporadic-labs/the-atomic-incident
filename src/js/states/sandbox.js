@@ -72,7 +72,6 @@ Sandbox.prototype.create = function () {
         lighting: game.plugins.add(LightingPlugin, groups.foreground, wallLayer)
     };
     this.lighting = globals.plugins.lighting;
-    this.lighting.setOpacity(0.8);
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
 

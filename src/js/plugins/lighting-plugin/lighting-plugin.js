@@ -33,6 +33,8 @@ Phaser.Plugin.Lighting.prototype.enableDebug = function () {
     for (var i = 0; i < this.lights.length; i++) {
         this.lights[i].enableDebug();
     }
+    this._originalShadowOpacity = this.shadowOpacity;
+    this.shadowOpacity = 0.8;
 };
 
 Phaser.Plugin.Lighting.prototype.disableDebug = function () {
@@ -41,6 +43,7 @@ Phaser.Plugin.Lighting.prototype.disableDebug = function () {
     for (var i = 0; i < this.lights.length; i++) {
         this.lights[i].disableDebug();
     }
+    this.shadowOpacity = this._originalShadowOpacity;
 };
 
 Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
