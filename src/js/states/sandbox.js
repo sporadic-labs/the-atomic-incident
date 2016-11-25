@@ -11,6 +11,7 @@ var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
+var DestructableLight = require("../game-objects/destructable-light.js");
 
 function Sandbox() {}
 
@@ -41,6 +42,7 @@ Sandbox.prototype.create = function () {
     groups.pickups = game.add.group(groups.midground, "pickups");
     groups.nonCollidingGroup = game.add.group(groups.midground, 
         "non-colliding");
+    groups.lights = game.add.group(groups.foreground, "lights");
     globals.groups = groups;
 
     // Initializing the world
@@ -88,15 +90,17 @@ Sandbox.prototype.create = function () {
     // Create lights
     var lights = utils.default(map.objects["lights"], []); // Default to empty list
     lights.forEach(function (light) {
-        var point = new Phaser.Point(light.x + map.tileWidth / 2, 
-            light.y - map.tileHeight / 2);
+        var x = light.x + map.tileWidth / 2;
+        var y = light.y - map.tileHeight / 2;
         var p = light.properties || {};
         var radius = p.radius ? Number(p.radius) : 300;
         var color = p.color ? utils.tiledColorToRgb(p.color) : 0xFFFFFFFF;
-        this.lighting.addLight(point, radius, color);
+        var health = p.health ? Number(p.health) : 100;
+        new DestructableLight(game, x, y, groups.lights, radius, color, 
+            health);
     }, this);   
-    this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
-        Phaser.Color.getColor32(255, 255, 217, 0));
+    // this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
+    //     Phaser.Color.getColor32(255, 255, 217, 0));
 
     // Temporary fix: make walls appear on top of lights
     groups.foreground.bringToTop(wallLayer);
@@ -107,8 +111,8 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    // var Wave1 = require("../game-objects/waves/wave-1.js");
-    // new Wave1(game);
+    var Wave1 = require("../game-objects/waves/wave-1.js");
+    new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -149,10 +153,9 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    var mousePoint = new Phaser.Point(this.input.worldX, this.input.worldY);
-    this.mouseLight.position = mousePoint;
-
-    var inShadow = this.lighting.isPointInShadow(this.game.globals.player.world);
+    // var mousePoint = new Phaser.Point(this.input.worldX, this.input.worldY);
+    // this.mouseLight.position = mousePoint;
+    // var inShadow = this.lighting.isPointInShadow(mousePoint);
     // console.log(inShadow);
 };
 

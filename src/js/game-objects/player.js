@@ -39,6 +39,7 @@ function Player(game, x, y, parentGroup) {
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
+    this._lights = globals.groups.lights;
 
     // Combo
     this._comboTracker = new ComboTracker(game, 2000);
@@ -259,6 +260,9 @@ Player.prototype.update = function () {
 
     // Pickup collisions
     spriteUtils.checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+
+    // Light collisions
+    this.game.physics.arcade.collide(this, this._lights);
 
     // if (this._isDead) {
     //     console.log("dead!");
