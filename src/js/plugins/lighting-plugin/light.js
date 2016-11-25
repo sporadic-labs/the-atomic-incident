@@ -13,6 +13,9 @@ function Light(game, parent, position, radius, color) {
     this._noise.setScale(0.25);
     this._noise.setAmplitude(10);
     this._frameCount = 0;
+
+    this._bitmap = game.add.bitmapData(2 * this.radius, 2 * this.radius);
+    this._needsRedraw = true;
 }
 
 Light.prototype.enableDebug = function () {
@@ -31,8 +34,65 @@ Light.prototype.disableDebug = function () {
 };
 
 Light.prototype.update = function () {
-    this.radius = this.originalRadius + this._noise.getVal(this._frameCount++);
+    // this.radius = this.originalRadius + this._noise.getVal(this._frameCount++);
+    if (this._lastRadius !== this.radius || 
+            !this._lastPosition.equals(this.position)) {
+        this._needsRedraw = true;
+    }
+    this._lastRadius = this.radius;
+    this._lastPosition = this.position.clone();
     if (this._debugGraphics) this._updateDebug();
+};
+
+Light.prototype.redraw = function (points) {
+    if (this._needsRedraw) {
+        // Clear offscreen buffer
+        this._bitmap.cls();
+        this.redrawLight();
+        this.redrawShadow(points);      
+        this._needsRedraw = false;  
+    }
+};
+
+Light.prototype.redrawLight = function () {
+    // Draw the circular gradient for the light. This is the light without
+    // factoring in shadows
+    this._bitmap.blendSourceOver(); // Default blend mode
+    var gradient = this._bitmap.ctx.createRadialGradient(
+        this.radius, this.radius, this.radius, 
+        this.radius, this.radius, 0
+    );
+    var c1 = Phaser.Color.getRGB(this.color);
+    c1.a = 0;
+    var c2 = Phaser.Color.getRGB(this.color);
+    gradient.addColorStop(0, Phaser.Color.getWebRGB(c1));
+    gradient.addColorStop(0.75, Phaser.Color.getWebRGB(c2));
+    this._bitmap.circle(this.radius, this.radius, 
+        Math.round(this.radius), gradient);
+};
+
+Light.prototype.redrawShadow = function (points) {
+    // Destination in blend mode - the next thing drawn acts as a mask for the
+    // existing canvas content
+    this._bitmap.blendDestinationIn();
+
+    // Draw the "light rays"
+    this._bitmap.ctx.beginPath();
+    this._bitmap.ctx.fillStyle = "white";
+    this._bitmap.ctx.strokeStyle = "white";
+
+    // Convert the world positions of the light points to local coordinates 
+    // within the bitmap
+    points.forEach(function (point) {
+        point.subtract(this.position.x - this.radius, 
+            this.position.y - this.radius);
+    }, this);
+    this._bitmap.ctx.moveTo(points[0].x, points[0].y);
+    for(var i = 0; i < points.length; i++) {
+        this._bitmap.ctx.lineTo(points[i].x, points[i].y);
+    }
+    this._bitmap.ctx.closePath();
+    this._bitmap.ctx.fill();
 };
 
 Light.prototype.destroy = function () {

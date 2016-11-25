@@ -78,12 +78,7 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
     parent.addChild(image);
-
-    // Offscreen bitmap for blending light with gradient
-    var offscreenBitmap = game.add.bitmapData(game.width, game.height);
-    offscreenBitmap.cls();
-    this._offscreenBitmap = offscreenBitmap;
-
+    
     this._bitmap = bitmap;
     this._image = image;
     this._lightWalls = calculateHullsFromTiles(tilemapLayer);
@@ -177,75 +172,13 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
     return points;
 };
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
-    // Clear offscreen buffer
-    this._offscreenBitmap.cls();
-
-    // Draw the circular gradient for the light. This is the light without
-    // factoring in shadows
-    this._offscreenBitmap.blendSourceOver(); // Default blend mode
-    var localLight = this._convertWorldPointToLocal(light.position);
-    var gradient = this._offscreenBitmap.ctx.createRadialGradient(
-        localLight.x, localLight.y, light.radius, 
-        localLight.x, localLight.y, 0
-    );
-    var c1 = Phaser.Color.getRGB(light.color);
-    c1.a = 0;
-    var c2 = Phaser.Color.getRGB(light.color);
-    gradient.addColorStop(0, Phaser.Color.getWebRGB(c1));
-    gradient.addColorStop(0.75, Phaser.Color.getWebRGB(c2));
-    this._offscreenBitmap.circle(localLight.x, localLight.y, 
-        Math.round(light.radius), gradient);
-
-    // Alternate: instead of gradients, draw concentric, solid circles that
-    // increase in transparency with distance from light's center 
-    // this._offscreenBitmap.blendSourceOver(); // Default blend mode
-    // var localLight = this._convertWorldPointToLocal(light.position);
-    // var c = Phaser.Color.getRGB(light.color);
-    // var c1 = Phaser.Color.getWebRGB(c);
-    // c.a = 175;
-    // var c2 = Phaser.Color.getWebRGB(c);
-    // c.a = 100;
-    // var c3 = Phaser.Color.getWebRGB(c);   
-    // this._offscreenBitmap.circle(localLight.x, localLight.y, Math.round(light.radius * 0.9), c3);
-    // this._offscreenBitmap.circle(localLight.x, localLight.y, Math.round(light.radius * 0.8), c2);
-    // this._offscreenBitmap.circle(localLight.x, localLight.y, Math.round(light.radius * 0.5), c1);
-
-    // Destination in blend mode - the next thing drawn acts as a mask for the
-    // existing canvas content
-    this._offscreenBitmap.blendDestinationIn();
-
-    // Draw the "light rays"
-    this._offscreenBitmap.ctx.beginPath();
-    this._offscreenBitmap.ctx.fillStyle = "white";
-    this._offscreenBitmap.ctx.strokeStyle = "white";
-
-    // Convert the world positions of the light points to local coordinates 
-    // within the bitmap
+Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {    
     var localPoints = points.map(this._convertWorldPointToLocal, this);
-    this._offscreenBitmap.ctx.moveTo(localPoints[0].x, localPoints[0].y);
-    for(var i = 0; i < localPoints.length; i++) {
-        this._offscreenBitmap.ctx.lineTo(localPoints[i].x, localPoints[i].y);
-    }
-    this._offscreenBitmap.ctx.closePath();
-    this._offscreenBitmap.ctx.fill();
-
-    // Copy the offscreen buffer to the on-screen bitmap
-    var left = Phaser.Math.clamp(Math.floor(localLight.x - light.radius), 0, 
-        this._offscreenBitmap.width);
-    var right = Phaser.Math.clamp(Math.ceil(localLight.x + light.radius), 0, 
-        this._offscreenBitmap.width);
-    var top = Phaser.Math.clamp(Math.floor(localLight.y - light.radius), 0, 
-        this._offscreenBitmap.height);
-    var bottom = Phaser.Math.clamp(Math.ceil(localLight.y + light.radius), 0, 
-        this._offscreenBitmap.height);
-    var r = new Phaser.Rectangle(
-        left, top, right - left, bottom - top
-    );
-    r.x = Phaser.Math.clamp(r.x, 0, this._offscreenBitmap.width);
-    r.y = Phaser.Math.clamp(r.y, 0, this._offscreenBitmap.height);
-    // this._bitmap.blendAdd();
-    this._bitmap.copyRect(this._offscreenBitmap, r, r.x, r.y);
+    light.redraw(localPoints);
+    var r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
+    var dx = light.position.x - light.radius;
+    var dy = light.position.y - light.radius;
+    this._bitmap.copyRect(light._bitmap, r, dx, dy);
 
     // Draw each of the rays on the rayBitmap
     if (this._debugEnabled) {
