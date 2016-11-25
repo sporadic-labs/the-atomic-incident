@@ -107,6 +107,7 @@ Phaser.Plugin.Lighting.prototype.render = function () {
 Phaser.Plugin.Lighting.prototype.update = function () {
     var globals = this.game.globals;
     var walls = this._getVisibleWalls();
+    // walls = walls.concat(this._getPlayerLines());
 
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
@@ -209,6 +210,22 @@ Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
         }
         this._rayBitmap.context.stroke();
     }
+};
+
+Phaser.Plugin.Lighting.prototype._getPlayerLines = function () {
+    // Player "walls"
+    var playerLines = [];
+    var player = this.game.globals.player;
+    var lastX = player.x + player.body.radius;
+    var lastY = player.y;
+    for (var a = 0; a <= Phaser.Math.PI2; a += Phaser.Math.PI2 / 10) {
+        var x = player.x + Math.cos(a) * player.body.radius;
+        var y = player.y + Math.sin(a) * player.body.radius;
+        playerLines.push(new Phaser.Line(lastX, lastY, x, y));
+        lastX = x;
+        lastY = y;
+    }
+    return playerLines;
 };
 
 Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
