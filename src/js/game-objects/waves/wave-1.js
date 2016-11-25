@@ -23,7 +23,7 @@ function Wave1(game, spawnDelay, spawnActivationDelay) {
 }
 
 Wave1.prototype._spawn = function () {
-    var newGroup = new ShadowGroup(this.game, 5);
+    var newGroup = new ShadowGroup(this.game, 3);
 
     // Control how it gets added to the wave - delayed activation
     this._scheduleGroupActivation(newGroup);
