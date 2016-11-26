@@ -72,15 +72,16 @@ function AmbientDartingGroup(game, numToSpawn, enemiesGroup, player,
 AmbientDartingGroup.prototype.update = function () {
     var numAttacking = 0;
     var indicesNotAttacking = [];
+    var child;
     for (var i = 0; i < this.children.length; i += 1) {
-        var child = this.children[i];
+        child = this.children[i];
         if (child.isAttacking()) numAttacking += 1;
         else indicesNotAttacking.push(i);        
     }
 
     if (numAttacking === 0) {
         var index = this.game.rnd.pick(indicesNotAttacking);
-        var child = this.children[index];
+        child = this.children[index];
         child.startAttack();
     }
 
@@ -136,7 +137,7 @@ AmbientDarter.prototype.update = function () {
     switch (this._state) {
         case DARTER_STATES.ROTATING:
             this._angle += this._rotationSpeed * elapsedSeconds;
-            this.x = this._player.x + (this._radius * Math.cos(this._angle));        
+            this.x = this._player.x + (this._radius * Math.cos(this._angle));
             this.y = this._player.y + (this._radius * Math.sin(this._angle));
             break;
         case DARTER_STATES.CHARGING:
@@ -207,7 +208,8 @@ function TargetingEnemy(game, x, y, parentGroup, id, target, scoreSignal) {
     this._changeState = true;
 
     // Variables for random movement toward player
-    this._speed = this.game.rnd.realInRange((this._maxSpeed*0.2), (this._maxSpeed*0.26));
+    this._speed = this.game.rnd.realInRange((this._maxSpeed*0.2), 
+        (this._maxSpeed*0.26));
     this._angle = this.game.rnd.realInRange(0.0, 1.0) * (2*Math.PI);
 
     this._id = id;
@@ -269,7 +271,8 @@ TargetingEnemy.prototype._nextState = function() {
             // setup dash state
             this._cooldownTime = 2000 + this.game.rnd.integerInRange(0, 1000);
             this._moveState = MOVE_STATES.DASH;
-            this._speed = this.game.rnd.realInRange((this._maxSpeed*0.8), this._maxSpeed);
+            this._speed = this.game.rnd.realInRange((this._maxSpeed*0.8), 
+                this._maxSpeed);
             this._angle = this.position.angle(this._target.position);
             this.animations.play(ANIM_NAMES.ATTACK);
             break;
@@ -285,7 +288,8 @@ TargetingEnemy.prototype._nextState = function() {
             // setup idle state
             this._cooldownTime = 1000 + this.game.rnd.integerInRange(0, 500);
             this._moveState = MOVE_STATES.IDLE;
-            this._speed = this.game.rnd.realInRange((this._maxSpeed*0.2), (this._maxSpeed*0.26));
+            this._speed = this.game.rnd.realInRange((this._maxSpeed*0.2), 
+                (this._maxSpeed*0.26));
             this._angle = this.game.rnd.realInRange(0.0, 1.0) * (2*Math.PI);
             this.animations.play(ANIM_NAMES.MOVE);
             break;

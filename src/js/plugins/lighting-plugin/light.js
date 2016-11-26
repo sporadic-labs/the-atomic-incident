@@ -1,12 +1,12 @@
 module.exports = Light;
 
 function Light(game, parent, position, radius, color) {
-	this.game = game;
-	this.parent = parent;
-	this.position = position.clone();
-	this.radius = radius;
+    this.game = game;
+    this.parent = parent;
+    this.position = position.clone();
+    this.radius = radius;
     this.originalRadius = radius;
-	this.color = (color !== undefined) ? color : 0xFFFFFFFF;
+    this.color = (color !== undefined) ? color : 0xFFFFFFFF;
     this._isDebug = false;
     this._debugGraphics = null;
     this._noise = Simple1DNoise();
@@ -34,7 +34,8 @@ Light.prototype.disableDebug = function () {
 };
 
 Light.prototype.update = function () {
-    // this.radius = this.originalRadius + this._noise.getVal(this._frameCount++);
+    // this.radius = this.originalRadius + 
+    //  this._noise.getVal(this._frameCount++);
     if (this._lastRadius !== this.radius || 
             !this._lastPosition.equals(this.position)) {
         this._needsRedraw = true;
@@ -80,9 +81,12 @@ Light.prototype.redrawLight = function () {
     var c2 = Phaser.Color.getWebRGB(c);
     c.a = 100;
     var c3 = Phaser.Color.getWebRGB(c);   
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.9), c3);
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.8), c2);
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.5), c1);
+    this._bitmap.circle(this.radius, this.radius, 
+        Math.round(this.radius * 0.9), c3);
+    this._bitmap.circle(this.radius, this.radius, 
+        Math.round(this.radius * 0.8), c2);
+    this._bitmap.circle(this.radius, this.radius, 
+        Math.round(this.radius * 0.5), c1);
 };
 
 Light.prototype.redrawShadow = function (points) {
