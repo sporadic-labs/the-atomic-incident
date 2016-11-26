@@ -46,19 +46,19 @@ Controller.prototype.update = function () {
     // Check for any registered mouse controls that have been activated
     var activePointer = this._input.activePointer;
     for (var buttonName in this._mouseMap) {
-        var mouseControls = this._mouseMap[buttonName];
+        var controls = this._mouseMap[buttonName];
         var buttonPropertyName = POINTER_BUTTONS_LOOKUP[buttonName];
         var pointerButton = activePointer[buttonPropertyName];
         if (pointerButton.isDown) {
-            this._activateControls(mouseControls);
+            this._activateControls(controls);
         }
     }
 
     // Check for any registered keyboard controls that have been activated
     for (var keyCode in this._keyboardMap) {
-        var keyboardControls = this._keyboardMap[keyCode];
+        var controls = this._keyboardMap[keyCode];
         if (this._input.keyboard.isDown(keyCode)) {
-            this._activateControls(keyboardControls);
+            this._activateControls(controls);
         }
         // TODO: isDown(...) only works in browsers. Make this mobile-friendly.
     }
