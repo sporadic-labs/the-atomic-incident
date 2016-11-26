@@ -34,6 +34,7 @@
     "hull.js": "^0.2.10",
     "jshint": "^2.9.2",
     "jshint-stylish": "^2.2.0",
+    "phaser-ce": "^2.7.0",
     "run-sequence": "^1.2.0",
     "sat": "^0.6.0",
     "vinyl-buffer": "^1.0.0",
