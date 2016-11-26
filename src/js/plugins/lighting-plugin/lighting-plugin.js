@@ -112,7 +112,6 @@ Phaser.Plugin.Lighting.prototype.render = function () {
 };
 
 Phaser.Plugin.Lighting.prototype.update = function () {
-    var globals = this.game.globals;
     var walls = this._getVisibleWalls();
     // walls = walls.concat(this._getPlayerLines());
 
@@ -318,7 +317,7 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
                 return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
             }
         }
-        var p = line.intersects(camRight, true);
+        p = line.intersects(camRight, true);
         if (p) {
             // Find which point on the line is visible
             if (line.start.x < line.end.x) {
@@ -327,7 +326,7 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
                 return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
             }
         }
-        var p = line.intersects(camTop, true);
+        p = line.intersects(camTop, true);
         if (p) {
             // Find which point on the line is visible
             if (line.start.y < line.end.y) {
@@ -336,7 +335,7 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
                 return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
             }
         }
-        var p = line.intersects(camBottom, true);
+        p = line.intersects(camBottom, true);
         if (p) {
             // Find which point on the line is visible
             if (line.start.y < line.end.y) {

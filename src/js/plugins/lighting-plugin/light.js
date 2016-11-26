@@ -1,12 +1,12 @@
 module.exports = Light;
 
 function Light(game, parent, position, radius, color) {
-	this.game = game;
-	this.parent = parent;
-	this.position = position.clone();
-	this.radius = radius;
+    this.game = game;
+    this.parent = parent;
+    this.position = position.clone();
+    this.radius = radius;
     this.originalRadius = radius;
-	this.color = (color !== undefined) ? color : 0xFFFFFFFF;
+    this.color = (color !== undefined) ? color : 0xFFFFFFFF;
     this._isDebug = false;
     this._debugGraphics = null;
     this._noise = Simple1DNoise();
