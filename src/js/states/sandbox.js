@@ -4,10 +4,11 @@
 
 module.exports = Sandbox;
 
+require("../plugins/AStar.js");
+
 var utils = require("../helpers/utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
-var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -81,14 +82,15 @@ Sandbox.prototype.create = function () {
 
     // Player
     // Get the Spawn Point(s) for the player from the tile map.
-    var playerStartPoint = this.getMapPoints("player")[0]; // only one for the moment...
+    var playerStartPoint = this.getMapPoints("player")[0]; // temp fix
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, playerStartPoint.x, playerStartPoint.y, groups.midground);
+    var player = new Player(game, playerStartPoint.x, playerStartPoint.y, 
+        groups.midground);
     this.camera.follow(player);
     globals.player = player;
 
     // Create lights
-    var lights = utils.default(map.objects["lights"], []); // Default to empty list
+    var lights = utils.default(map.objects["lights"], []); // Default to empty
     lights.forEach(function (light) {
         var x = light.x + map.tileWidth / 2;
         var y = light.y - map.tileHeight / 2;
@@ -171,7 +173,8 @@ Sandbox.prototype.update = function () {
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
-    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
+    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, 
+    //  "#ff0000");
 };
 
 Sandbox.prototype.shutdown = function () {

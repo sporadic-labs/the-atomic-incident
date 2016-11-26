@@ -1,9 +1,9 @@
 var hull = require("hull.js");
 
 module.exports = function calculateHullsFromTiles(tilemapLayer) {
-	var clusters = calculateClusters(tilemapLayer);
-	var hulls = calculateHulls(clusters);
-	return hulls;
+    var clusters = calculateClusters(tilemapLayer);
+    var hulls = calculateHulls(clusters);
+    return hulls;
 };
 
 function calculateClusters(tilemapLayer) {
@@ -91,37 +91,37 @@ function calculateHulls(clusters) {
             if (checkIfCollinear(line, nextSegment)) {
                 // Extend the current line
                 line = new Phaser.Line(line.start.x, line.start.y, 
-            		nextSegment.end.x, nextSegment.end.y);
+                    nextSegment.end.x, nextSegment.end.y);
             } else {
                 // End the current line and start a new one
                 lines.push(line);
-                line = nextSegment.clone();            	
+                line = nextSegment.clone();             
             }
         }
         
         // Process the last line segment - connecting the last point in the 
         // array back around to the first point
         // TODO: there's a cleaner way to do this...
-        var nextSegment = new Phaser.Line(points[p-1][0], points[p-1][1], 
+        var lastSegment = new Phaser.Line(points[p-1][0], points[p-1][1], 
             points[0][0], points[0][1]);   
-        if (checkIfCollinear(line, nextSegment)) {
+        if (checkIfCollinear(line, lastSegment)) {
             // Extend the current line and add it
             line = new Phaser.Line(line.start.x, line.start.y, 
-        		nextSegment.end.x, nextSegment.end.y);
+                lastSegment.end.x, lastSegment.end.y);
             lines.push(line);
         } else {
             // Add the line and the next segment
             lines.push(line);
-            lines.push(nextSegment);         	
+            lines.push(lastSegment);            
         }
 
         // Determine whether the last line and the first line need to be merged
         if (checkIfCollinear(lines[0], lines[lines.length - 1])) {
-        	var firstLine = lines.shift();
-        	var lastLine = lines.pop();
-        	var combinedLine = new Phaser.Line(firstLine.start.x, 
-        		firstLine.start.y, 
-        		lastLine.end.x, lastLine.end.y);
+            var firstLine = lines.shift();
+            var lastLine = lines.pop();
+            var combinedLine = new Phaser.Line(firstLine.start.x, 
+                firstLine.start.y, 
+                lastLine.end.x, lastLine.end.y);
             lines.push(combinedLine);
         }
 
@@ -140,9 +140,9 @@ function checkIfCollinear(line1, line2) {
     //  lineDeltaY / lineDeltaX = segmentDeltaY / segmentDeltaX
     // But to avoid dividing by zero:
     //  (lineDeltaX * segmentDeltaY) - (lineDeltaY * segmentDeltaX) = 0
-	var dx1 = line1.end.x - line1.start.x;
-	var dy1 = line1.end.y - line1.start.y;
-	var dx2 = line2.end.x - line2.start.x;
-	var dy2 = line2.end.y - line2.start.y;
-	return ((dx1 * dy2) - (dy1 * dx2)) === 0;
+    var dx1 = line1.end.x - line1.start.x;
+    var dy1 = line1.end.y - line1.start.y;
+    var dx2 = line2.end.x - line2.start.x;
+    var dy2 = line2.end.y - line2.start.y;
+    return ((dx1 * dy2) - (dy1 * dx2)) === 0;
 }
