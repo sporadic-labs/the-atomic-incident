@@ -25,9 +25,8 @@ function SeekerEnemy(game, x, y, parentGroup) {
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 10, true);
     this.animations.play(ANIM_NAMES.IDLE);
 
-    // this._visionRadius = 300; 
-    // NOTE(rex): If the _visionRadius is -1, track the player wherever you are
-    // at on the page
+    // this._visionRadius = 300;
+    // NOTE(rex): If the _visionRadius is -1, track the player wherever you are at on the page
     this._visionRadius = -1;
     this._maxSpeed = 100;
     this._growth = 0;
@@ -44,16 +43,14 @@ SeekerEnemy.prototype.update = function() {
     // Use the lighting plugin to determine if this enemy is in Shadow.
     // If it is, the enemy should grow until it is a max 2x size.
     // If the enemy is in light, it should shrink until it is the normal size.
-    var lighting = this.game.globals.plugins.lighting;
-    var inShadow = lighting.isPointInShadow(this.world);
-    var scale;
+    var inShadow = this.game.globals.plugins.lighting.isPointInShadow(this.world);
     if (inShadow && this._growth < 100) {
         this._growth += this._growthRate;
-        scale = 1 + (this._growth/100);
+        var scale = 1 + (this._growth/100);
         this.scale.setTo(scale);
     } else if (this._growth > 1) {
         this._growth -= this._decayRate;
-        scale = 1 + (this._growth/100);
+        var scale = 1 + (this._growth/100);
         this.scale.setTo(scale);
     }
 

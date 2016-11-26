@@ -27,7 +27,7 @@ ShadowGroup.prototype.spawnInShadow = function(numToSpawn) {
     }
 
     if (attempts >= maxAttempts) {
-        console.warn("Not enough places found to spawn enemies.");
+        console.log("Not enough places found to spawn enemies.");
     }
 }
 
@@ -39,6 +39,7 @@ ShadowGroup.prototype._isTileEmpty = function (x, y) {
 }
 
 var BaseEnemy = require("./base-enemy.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 

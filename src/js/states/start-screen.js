@@ -42,5 +42,5 @@ StartScreen.prototype._playTheGame = function () {
 };
 
 StartScreen.prototype._options = function () {
-    
+    console.log("trick!");
 };

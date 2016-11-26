@@ -81,7 +81,7 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
     parent.addChild(image);
-    
+
     this._bitmap = bitmap;
     this._image = image;
     this._lightWalls = calculateHullsFromTiles(tilemapLayer);
@@ -105,6 +105,7 @@ Phaser.Plugin.Lighting.prototype.render = function () {
 };
 
 Phaser.Plugin.Lighting.prototype.update = function () {
+    var globals = this.game.globals;
     var walls = this._getVisibleWalls();
     // walls = walls.concat(this._getPlayerLines());
 
@@ -112,6 +113,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._bitmap.blendSourceOver();
     this._bitmap.clear();
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
+    this._bitmap.blendAdd();
 
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
@@ -175,14 +177,21 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
     return points;
 };
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {    
+Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
+    // Draw the "light" areas
+    this._bitmap.ctx.beginPath();
+    this._bitmap.ctx.fillStyle = Phaser.Color.getWebRGB(light.color);
+    this._bitmap.ctx.strokeStyle = Phaser.Color.getWebRGB(light.color);
+
+    // Convert the world positions of the light points to local coordinates 
+    // within the bitmap
     var localPoints = points.map(this._convertWorldPointToLocal, this);
-    light.redraw(localPoints);
-    var r = new Phaser.Rectangle(0, 0, light._bitmap.width, 
-        light._bitmap.height);
-    var dx = light.position.x - light.radius;
-    var dy = light.position.y - light.radius;
-    this._bitmap.copyRect(light._bitmap, r, dx, dy);
+    this._bitmap.ctx.moveTo(localPoints[0].x, localPoints[0].y);
+    for(var i = 0; i < localPoints.length; i++) {
+        this._bitmap.ctx.lineTo(localPoints[i].x, localPoints[i].y);
+    }
+    this._bitmap.ctx.closePath();
+    this._bitmap.ctx.fill();
 
     // Draw each of the rays on the rayBitmap
     if (this._debugEnabled) {
@@ -261,7 +270,7 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
                 return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
             }
         }
-        p = line.intersects(camRight, true);
+        var p = line.intersects(camRight, true);
         if (p) {
             // Find which point on the line is visible
             if (line.start.x < line.end.x) {
@@ -270,7 +279,7 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
                 return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
             }
         }
-        p = line.intersects(camTop, true);
+        var p = line.intersects(camTop, true);
         if (p) {
             // Find which point on the line is visible
             if (line.start.y < line.end.y) {
@@ -279,7 +288,7 @@ Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
                 return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
             }
         }
-        p = line.intersects(camBottom, true);
+        var p = line.intersects(camBottom, true);
         if (p) {
             // Find which point on the line is visible
             if (line.start.y < line.end.y) {
