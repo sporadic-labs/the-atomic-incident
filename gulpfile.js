@@ -11,6 +11,10 @@
  * Run "gulp" to start the default task, which builds the site and serves it.
  * Run with the command line flag "gulp -p" or "gulp --production" to enable
  * uglification of JS code. It is helpful while developing to NOT uglify code. 
+ *
+ * Note: An the environment variable is needed to get colored output in git bash
+ * on windows. Add "export FORCE_COLOR=1" to the .bashrc file. Source: 
+ *     https://github.com/MarkTiedemann/supports-color-bug
  */
 
 
@@ -33,7 +37,7 @@ var paths = {
     },
     js: {
     	entry: "src/js/main.js",
-    	src: ["src/js/**/*.js", "!src/js/libs/**/*.js"],
+    	src: ["src/js/**/*.js"],
     	outputFile: "main.js",
     	dest: dest + "/js"
     },
@@ -62,8 +66,6 @@ var newer = require("gulp-newer");
 var ghPages = require("gulp-gh-pages");
 var open = require("gulp-open");
 var gutil = require("gulp-util");
-var jshint = require("gulp-jshint"); // Requires npm jshint
-var stylish = require("jshint-stylish");
 var browserify = require("browserify");
 var source = require("vinyl-source-stream");
 var buffer = require("vinyl-buffer");
@@ -75,6 +77,7 @@ var runSequence = require("run-sequence");
 var gulpif = require("gulp-if");
 var beep = require("beepbeep");
 var plumber = require("gulp-plumber");
+var eslint = require("gulp-eslint");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
@@ -91,6 +94,7 @@ function beepLogError(err) {
     gutil.log(msg);
     this.emit("end");
 }
+
 
 // -- BUILD TASKS --------------------------------------------------------------
 // These gulp tasks take everything that is in src/, process them (e.g. turn
@@ -140,12 +144,19 @@ gulp.task("js-libs", function() {
 });
 
 // Combine, sourcemap and uglify our JS libraries into main.js. This uses 
-// browserify (CommonJS-style modules). 
-gulp.task("js-browserify", function() {
+// browserify (CommonJS-style modules).
+gulp.task("js-browserify", function () {
     var b = browserify({
         entries: paths.js.entry,
-        debug: true // Allow debugger statements
-    })
+        noParse: [
+            // Don't parse the phaser libraries - seriously slows the build
+            // process. These are builds, so they don't need to be browsified.
+            require.resolve("phaser-ce/build/custom/phaser-split"),
+            require.resolve("phaser-ce/build/custom/p2"),
+            require.resolve("phaser-ce/build/custom/pixi")
+        ],
+        debug: true, // Allow debugger statements
+    });
     return b.bundle()    
             .on("error", function (err) {
                 err.plugin = "Browserify";
@@ -166,8 +177,8 @@ gulp.task("js-browserify", function() {
 gulp.task("js-lint", function() {
     return gulp.src(paths.js.src)    
         .pipe(plumber({ errorHandler: beepLogError }))
-        .pipe(jshint())
-        .pipe(jshint.reporter(stylish));
+        .pipe(eslint())
+        .pipe(eslint.format());
 });
 
 // Take any (new) resources from src/resources over to build/resources.
