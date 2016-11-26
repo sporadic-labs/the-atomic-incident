@@ -151,9 +151,7 @@ Player.prototype.update = function () {
     // Custom drag. Arcade drag runs the calculation on each axis separately. 
     // This leads to more drag in the diagonal than in other directions.  To fix
     // that, we need to apply drag ourselves.
-    /* jshint ignore:start */
     // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
-    /* jshint ignore:end */
     if (acceleration.isZero() && !this.body.velocity.isZero()) {
         var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
         if (this.body.velocity.getMagnitude() < dragMagnitude) {
@@ -256,10 +254,12 @@ Player.prototype.update = function () {
     }
 
     // Enemy collisions
-    spriteUtils.checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
+    spriteUtils.checkOverlapWithGroup(this, this._enemies, 
+        this._onCollideWithEnemy, this);
 
     // Pickup collisions
-    spriteUtils.checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+    spriteUtils.checkOverlapWithGroup(this, this._pickups, 
+        this._onCollideWithPickup, this);
 
     // Light collisions
     this.game.physics.arcade.collide(this, this._lights);

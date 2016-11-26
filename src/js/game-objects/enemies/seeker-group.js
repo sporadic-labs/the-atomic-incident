@@ -21,8 +21,10 @@ function SeekerGroup(game, numToSpawn) {
         // NOTE(rex): Manually cap the location of new enemies,
         // place them between Tile (1, 1) and (24, 19)
         var min = 1 * this.game.globals.tileMap.tileWidth;
-        var maxX = (this.game.globals.tileMap.width - 1) * this.game.globals.tileMap.tileWidth;
-        var maxY = (this.game.globals.tileMap.height - 1) * this.game.globals.tileMap.tileHeight;
+        var maxX = (this.game.globals.tileMap.width - 1) * 
+            this.game.globals.tileMap.tileWidth;
+        var maxY = (this.game.globals.tileMap.height - 1) * 
+            this.game.globals.tileMap.tileHeight;
         if (enemyX < min) enemyX = min;
         if (enemyX > maxX) enemyX = maxX;
         if (enemyY < min) enemyY = min;

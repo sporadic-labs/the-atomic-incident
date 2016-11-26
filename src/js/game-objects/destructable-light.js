@@ -1,7 +1,5 @@
 module.exports = DesctructableLight;
 
-var Controller = require("../helpers/controller.js");
-var spriteUtils = require("../helpers/sprite-utilities.js");
 var utils = require("../helpers/utilities.js");
 
 // Prototype chain - inherits from Sprite
