@@ -140,12 +140,19 @@ gulp.task("js-libs", function() {
 });
 
 // Combine, sourcemap and uglify our JS libraries into main.js. This uses 
-// browserify (CommonJS-style modules). 
-gulp.task("js-browserify", function() {
+// browserify (CommonJS-style modules).
+gulp.task("js-browserify", function () {
     var b = browserify({
         entries: paths.js.entry,
-        debug: true // Allow debugger statements
-    })
+        noParse: [
+            // Don't parse the phaser libraries - seriously slows the build
+            // process. These are builds, so they don't need to be browsified.
+            require.resolve("phaser-ce/build/custom/phaser-split"),
+            require.resolve("phaser-ce/build/custom/p2"),
+            require.resolve("phaser-ce/build/custom/pixi")
+        ],
+        debug: true, // Allow debugger statements
+    });
     return b.bundle()    
             .on("error", function (err) {
                 err.plugin = "Browserify";
