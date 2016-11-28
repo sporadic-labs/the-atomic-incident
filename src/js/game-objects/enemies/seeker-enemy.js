@@ -29,6 +29,9 @@ function SeekerEnemy(game, x, y, parentGroup) {
     // NOTE(rex): If the _visionRadius is -1, track the player wherever you are at on the page
     this._visionRadius = -1;
     this._maxSpeed = 100;
+    this._growth = 0;
+    this._growthRate = 0.5;
+    this._decayRate = 0.2;
 }
 
 SeekerEnemy.prototype.update = function() {
@@ -36,6 +39,20 @@ SeekerEnemy.prototype.update = function() {
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
     this.body.velocity.set(0);
+
+    // Use the lighting plugin to determine if this enemy is in Shadow.
+    // If it is, the enemy should grow until it is a max 2x size.
+    // If the enemy is in light, it should shrink until it is the normal size.
+    var inShadow = this.game.globals.plugins.lighting.isPointInShadow(this.world);
+    if (inShadow && this._growth < 100) {
+        this._growth += this._growthRate;
+        var scale = 1 + (this._growth/100);
+        this.scale.setTo(scale);
+    } else if (this._growth > 1) {
+        this._growth -= this._decayRate;
+        var scale = 1 + (this._growth/100);
+        this.scale.setTo(scale);
+    }
 
     // Check if player is within visual range
     var distance = this.position.distance(this._player.position);
