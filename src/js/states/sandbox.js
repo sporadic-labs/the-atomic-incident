@@ -121,7 +121,20 @@ Sandbox.prototype.create = function () {
     //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
     //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
     // }
-    
+
+    // Menu for switching tile maps
+    var menu = []
+    menu[0] = game.add.button(game.width - 36, 4, 'button', function() {
+        this.game.state.start('load', true, true, 'resources/tilemaps/multilight-test.json');
+    }, this);
+    menu[1] = game.add.button(game.width - 36, 38, 'button', function() {
+        this.game.state.start('load', true, true, 'resources/tilemaps/level_03.json');
+    }, this);
+    menu[2] = game.add.button(game.width - 36, 72, 'button', function() {
+        this.game.state.start('load', true, true, 'resources/tilemaps/multilight-test.json');
+    }, this);
+    this.menu = menu
+
     // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
     debugToggleKey.onDown.add(function () {

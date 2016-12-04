@@ -6,6 +6,12 @@ module.exports = LoadState;
 
 function LoadState() {}
 
+// Set the 'current map' to be loaded by the game
+// Default to level_03 until we have some actual maps...
+LoadState.prototype.init = function (map) {
+    this.currentMap = map ? map : 'resources/tilemaps/level_03.json'
+};
+
 LoadState.prototype.preload = function () {    
     // Images
     this.load.atlasJSONHash("assets", "resources/atlases/assets.png", 
@@ -13,7 +19,7 @@ LoadState.prototype.preload = function () {
     this.load.image("fogMask", "resources/images/fog-mask-2.png")
 
     // Tilemap
-    this.load.tilemap("tilemap", "resources/tilemaps/level_04.json", null, 
+    this.load.tilemap("tilemap", this.currentMap, null, 
         Phaser.Tilemap.TILED_JSON);
     this.load.image("coloredTiles", "resources/tilemaps/tiles_25.png");
     this.load.image("wallTiles", "resources/tilemaps/wall-tiles.png");
