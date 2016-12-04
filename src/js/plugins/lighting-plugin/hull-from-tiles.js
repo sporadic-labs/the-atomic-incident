@@ -22,8 +22,16 @@ function calculateClusters(tilemapLayer) {
 
     function getCollidingTile(x, y) {
         var tile = tilemap.getTile(x, y, tilemapLayer.index);
-        if (tile && tile.collides) return tile;
-        else return null;
+        // No tile, ignore
+        if (!tile) return null;
+        // Support tilemaps created before we added isOpaque to tiles
+        if (tile.properties.isOpaque === undefined) {
+            tile.properties.isOpaque = true;
+        }
+        // Colliding opaque tiles should end up in the hull
+        if (tile.collides && tile.properties.isOpaque) return tile;
+        // Non-colliding tiles or transparent tiles should be ignored
+        return null;
     }
 
     function recursivelySearchNeighbors(x, y, cluster) {
