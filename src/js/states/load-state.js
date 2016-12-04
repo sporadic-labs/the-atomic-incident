@@ -13,10 +13,9 @@ LoadState.prototype.preload = function () {
     this.load.image("fogMask", "resources/images/fog-mask-2.png")
 
     // Tilemap
-    this.load.tilemap("tilemap", "resources/tilemaps/level_03.json", null, 
+    this.load.tilemap("tilemap", "resources/tilemaps/open-tilemap.json", null, 
         Phaser.Tilemap.TILED_JSON);
-    this.load.image("coloredTiles", "resources/tilemaps/tiles_25.png");
-    this.load.image("wallTiles", "resources/tilemaps/wall-tiles.png");
+    this.load.image("coloredTiles", "resources/tilemaps/tiles.png");
 
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 

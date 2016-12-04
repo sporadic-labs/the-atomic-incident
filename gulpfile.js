@@ -174,8 +174,7 @@ gulp.task("js-lint", function() {
 gulp.task("resources", function () {
     return gulp.src(paths.resources.src)
         .pipe(newer(paths.resources.dest))
-        .pipe(gulp.dest(paths.resources.dest))
-        .pipe(liveReload());
+        .pipe(gulp.dest(paths.resources.dest));
 });
 
 // The build task will run all the individual build-related tasks above.

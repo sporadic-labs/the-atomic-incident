@@ -1,19 +1,18 @@
 var hull = require("hull.js");
 
-module.exports = function calculateHullsFromTiles(tilemapLayer) {
-	var clusters = calculateClusters(tilemapLayer);
+module.exports = function calculateHullsFromTiles(tileMap) {
+	var clusters = calculateClusters(tileMap);
 	var hulls = calculateHulls(clusters);
 	return hulls;
 };
 
-function calculateClusters(tilemapLayer) {
-    var tilemap = tilemapLayer.map;
+function calculateClusters(tileMap) {
     var clusters = [];
-    for (var x = 0; x < tilemap.width; x++) {
-        for (var y = 0; y < tilemap.height; y++) {
+    for (var x = 0; x < tileMap.width; x++) {
+        for (var y = 0; y < tileMap.height; y++) {
             var tile = getCollidingTile(x, y);
             if (tile && !findTileInClusters(tile)) {
-                var cluster = [];
+                cluster = [];
                 recursivelySearchNeighbors(x, y, cluster);
                 clusters.push(cluster);
             }
@@ -21,7 +20,7 @@ function calculateClusters(tilemapLayer) {
     }
 
     function getCollidingTile(x, y) {
-        var tile = tilemap.getTile(x, y, tilemapLayer.index);
+        var tile = tileMap.getTile(x, y, "BlockingLayer");
         if (tile && tile.collides) return tile;
         else return null;
     }
@@ -50,7 +49,7 @@ function calculateClusters(tilemapLayer) {
     }
 
     return clusters;
-}
+};
 
 function getHullPoints(cluster) {
     var tilePoints = [];
@@ -75,6 +74,8 @@ function calculateHulls(clusters) {
 
         var line = new Phaser.Line(points[0][0], points[0][1], 
             points[1][0], points[1][1]);
+        lineDeltaX = line.start.x - line.end.x;
+        lineDeltaY = line.start.y - line.end.y;
 
         for (var p = 2; p < points.length; p++) {
             var nextSegment = new Phaser.Line(points[p-1][0], points[p-1][1], 
@@ -114,7 +115,6 @@ function calculateHulls(clusters) {
         	var combinedLine = new Phaser.Line(firstLine.start.x, 
         		firstLine.start.y, 
         		lastLine.end.x, lastLine.end.y);
-            lines.push(combinedLine);
         }
 
         // TODO: the first and last line may need to be merged! This works right
@@ -132,9 +132,9 @@ function checkIfCollinear(line1, line2) {
     //  lineDeltaY / lineDeltaX = segmentDeltaY / segmentDeltaX
     // But to avoid dividing by zero:
     //  (lineDeltaX * segmentDeltaY) - (lineDeltaY * segmentDeltaX) = 0
-	var dx1 = line1.end.x - line1.start.x;
-	var dy1 = line1.end.y - line1.start.y;
-	var dx2 = line2.end.x - line2.start.x;
-	var dy2 = line2.end.y - line2.start.y;
+	dx1 = line1.end.x - line1.start.x;
+	dy1 = line1.end.y - line1.start.y;
+	dx2 = line2.end.x - line2.start.x;
+	dy2 = line2.end.y - line2.start.y;
 	return ((dx1 * dy2) - (dy1 * dx2)) === 0;
 }
