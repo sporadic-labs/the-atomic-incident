@@ -131,7 +131,7 @@ Sandbox.prototype.create = function () {
         this.game.state.start('load', true, true, 'resources/tilemaps/level_03.json');
     }, this);
     menu[2] = game.add.button(game.width - 36, 72, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/multilight-test.json');
+        this.game.state.start('load', true, true, 'resources/tilemaps/level_04.json');
     }, this);
     this.menu = menu
 
