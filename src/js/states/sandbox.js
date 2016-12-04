@@ -4,14 +4,12 @@
 
 module.exports = Sandbox;
 
-var utils = require("../helpers/utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
-var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
-var DestructableLight = require("../game-objects/destructable-light.js");
+var ShadowMask = require("../game-objects/shadow-mask.js");
 
 function Sandbox() {}
 
@@ -32,6 +30,12 @@ Sandbox.prototype.create = function () {
         e.preventDefault();
     });
 
+    // Plugins
+    globals.plugins = {
+        satBody: game.plugins.add(SatBodyPlugin),
+        astar: game.plugins.add(Phaser.Plugin.AStar)
+    };
+
     // Groups for z-index sorting and for collisions
     var groups = {
         background: game.add.group(this.world, "background"),
@@ -42,7 +46,6 @@ Sandbox.prototype.create = function () {
     groups.pickups = game.add.group(groups.midground, "pickups");
     groups.nonCollidingGroup = game.add.group(groups.midground, 
         "non-colliding");
-    groups.lights = game.add.group(groups.foreground, "lights");
     globals.groups = groups;
 
     // Initializing the world
@@ -52,28 +55,21 @@ Sandbox.prototype.create = function () {
     var map = game.add.tilemap("tilemap");
     // Set up the tilesets. First parameter is name of tileset in Tiled and 
     // second paramter is name of tileset image in Phaser's cache
-    map.addTilesetImage("tiles_25", "coloredTiles");
-    var wallTileset = map.addTilesetImage("wall-tiles", "wallTiles");
+    map.addTilesetImage("colors", "coloredTiles");
     // Create a layer for each 
-    var backgroundLayer = map.createLayer("bg", this.game.width, 
+    var backgroundLayer = map.createLayer("Background", this.game.width, 
         this.game.height, groups.background);
     backgroundLayer.resizeWorld();
-    var wallLayer = map.createLayer("walls", this.game.width, this.game.height, 
-        groups.foreground);
-    map.setCollisionBetween(wallTileset.firstgid, wallTileset.firstgid + 
-        wallTileset.total, true, wallLayer);
+    var blockingLayer = map.createLayer("BlockingLayer", this.game.width, 
+        this.game.height, groups.background);
+    map.setCollisionBetween(0, 3, true, "BlockingLayer");
     globals.tileMap = map;
-    globals.tileMapLayer = wallLayer;
+    globals.tileMapLayer = blockingLayer;
 
-    // Plugins
-    globals.plugins = {
-        satBody: game.plugins.add(SatBodyPlugin),
-        astar: game.plugins.add(Phaser.Plugin.AStar),
-        lighting: game.plugins.add(LightingPlugin, groups.foreground, wallLayer)
-    };
-    this.lighting = globals.plugins.lighting;
+    globals.shadowMask = new ShadowMask(game, 0.8, map, groups.midground);
+
     // AStar plugin
-    globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
+    globals.plugins.astar.setAStarMap(map, "BlockingLayer", "colors");
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -87,32 +83,21 @@ Sandbox.prototype.create = function () {
     this.camera.follow(player);
     globals.player = player;
 
-    // Create lights
-    var lights = utils.default(map.objects["lights"], []); // Default to empty list
-    lights.forEach(function (light) {
-        var x = light.x + map.tileWidth / 2;
-        var y = light.y - map.tileHeight / 2;
-        var p = light.properties || {};
-        var radius = p.radius ? Number(p.radius) : 300;
-        var color = p.color ? utils.tiledColorToRgb(p.color) : 0xFFFFFFFF;
-        var health = p.health ? Number(p.health) : 100;
-        new DestructableLight(game, x, y, groups.lights, radius, color, 
-            health);
-    }, this);   
-    // this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
-    //     Phaser.Color.getColor32(255, 255, 217, 0));
+    // Spawn Point Testing
+    // Get the Spawn Point(s) for the lights (these were orignally set up for the weapons...)
+    var lightSpawnPoints = this.getMapPoints("weapon");
+    // Pick a random Point for the light to spawn at.
+    globals.lightPoint = new Phaser.Point(lightSpawnPoints[0].x, lightSpawnPoints[0].y);
 
-    // Temporary fix: make walls appear on top of lights
-    groups.foreground.bringToTop(wallLayer);
-
+    
     // Score
     globals.scoreKeeper = new ScoreKeeper();
 
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
 
     // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
     // for (var i=0; i<50; i++) {
@@ -125,10 +110,10 @@ Sandbox.prototype.create = function () {
     debugToggleKey.onDown.add(function () {
         if (globals.plugins.satBody.isDebugAllEnabled()) {
             globals.plugins.satBody.disableDebugAll();
-            globals.plugins.lighting.disableDebug();
+            globals.shadowMask.toggleRays();
         } else {
             globals.plugins.satBody.enableDebugAll();
-            globals.plugins.lighting.enableDebug();
+            globals.shadowMask.toggleRays();
         }
     }, this);
 };
@@ -153,19 +138,12 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    // var mousePoint = new Phaser.Point(this.input.worldX, this.input.worldY);
-    // this.mouseLight.position = mousePoint;
-    // var inShadow = this.lighting.isPointInShadow(mousePoint);
-    // console.log(inShadow);
+    this.game.globals.shadowMask.update();
 };
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
-};
 
-Sandbox.prototype.shutdown = function () {
-    // Destroy all plugins (MH: should we be doing this or more selectively
-    // removing plugins?)
-    this.game.plugins.removeAll();
+    this.game.globals.shadowMask.drawWalls();
 };

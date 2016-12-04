@@ -40,12 +40,3 @@ exports.map = function (num, min1, max1, min2, max2, options) {
     }
     return mapped;
 };
-
-exports.tiledColorToRgb = function (hexColor) {
-    // Tiled colors are in the format #AARRGGBB
-    var a = parseInt(hexColor.substring(1, 3), 16);
-    var r = parseInt(hexColor.substring(3, 5), 16);
-    var g = parseInt(hexColor.substring(5, 7), 16);
-    var b = parseInt(hexColor.substring(7), 16);
-    return Phaser.Color.getColor32(a, r, g, b);
-}

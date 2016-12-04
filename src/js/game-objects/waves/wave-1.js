@@ -1,6 +1,6 @@
 module.exports = Wave1;
 
-var ShadowGroup = require("../enemies/shadow-group.js");
+var SeekerGroup = require("../enemies/seeker-group.js");
 var utils = require("../../helpers/utilities.js");
 
 Wave1.prototype = Object.create(Phaser.Group.prototype);
@@ -18,12 +18,11 @@ function Wave1(game, spawnDelay, spawnActivationDelay) {
     this._timer = this.game.time.create(false);
     this._timer.start();
 
-    // Spawn after the lighting system has had a chance to update once
-    setTimeout(this._spawn.bind(this), 0);
+    this._spawn();
 }
 
 Wave1.prototype._spawn = function () {
-    var newGroup = new ShadowGroup(this.game, 3);
+    var newGroup = new SeekerGroup(this.game, 5);
 
     // Control how it gets added to the wave - delayed activation
     this._scheduleGroupActivation(newGroup);
