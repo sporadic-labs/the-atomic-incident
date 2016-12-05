@@ -32,8 +32,7 @@ Scattershot.prototype.fire = function (targetPos) {
             var speed = this.game.rnd.integerInRange(364,376)
             var range = this.game.rnd.integerInRange(48,96)
             var perpendicularOffset = this.game.rnd.integerInRange(-5,5)
-            this._createProjectile(angle, 24, perpendicularOffset, speed, 
-                range);
+            this._createProjectile(angle, 24, perpendicularOffset, speed, range);
         }
 
         this.incrementAmmo(-1);

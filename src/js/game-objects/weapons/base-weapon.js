@@ -56,6 +56,7 @@ BaseWeapon.prototype.incrementAmmo = function(amt) {
         this._currentAmmo += amt;
     } else {
         this._currentAmmo = this._totalAmmo;
+        console.log("too much ammo!");
     }
 };
 

@@ -135,7 +135,6 @@ BaseProjectile.prototype.postUpdate = function () {
     }
 };
 
-// eslint-disable-next-line no-unused-vars
 BaseProjectile.prototype._onCollideWithMap = function (self, map) {
     if (self._isDestructable) {
         self._remove = true;
@@ -143,13 +142,12 @@ BaseProjectile.prototype._onCollideWithMap = function (self, map) {
     self.explode();
 };
 
-// eslint-disable-next-line no-unused-vars
-BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) { 
+BaseProjectile.prototype._onCollideWithEnemy = function (self, enemy) {
     self.explode();
 };
 
 BaseProjectile.prototype._onExplodeEnemy = function (self, enemy) {
-    enemy.takeDamage(this._damage);
+    var isKilled = enemy.takeDamage(this._damage);
     if (self._isDestructable) self._remove = true;
     self.explode();
 };

@@ -1,7 +1,7 @@
 module.exports = ScoreKeeper;
 
 function ScoreKeeper() {
-    this._score = 0;
+	this._score = 0;
 }
 
 ScoreKeeper.prototype.incrementScore = function (points) {
