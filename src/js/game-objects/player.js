@@ -39,6 +39,7 @@ function Player(game, x, y, parentGroup) {
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
+    this._lights = globals.groups.lights;
 
     // Combo
     this._comboTracker = new ComboTracker(game, 2000);
@@ -73,7 +74,9 @@ function Player(game, x, y, parentGroup) {
     this._maxAcceleration = 5000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setCircle(this.width/2); // Fudge factor
+    var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
+    this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
+        (this.height - diameter) / 2);
 
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 
@@ -257,6 +260,9 @@ Player.prototype.update = function () {
 
     // Pickup collisions
     spriteUtils.checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+
+    // Light collisions
+    this.game.physics.arcade.collide(this, this._lights);
 
     // if (this._isDead) {
     //     console.log("dead!");
