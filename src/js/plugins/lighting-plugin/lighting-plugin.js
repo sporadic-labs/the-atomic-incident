@@ -87,8 +87,7 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     this._lightWalls = calculateHullsFromTiles(tilemapLayer);
 
     this._rayBitmap = this.game.add.bitmapData(game.width, game.height);
-    this._rayBitmapImage = this._rayBitmap.addToWorld(game.width / 2, 
-        game.height / 2, 0.5, 0.5, 1, 1);
+    this._rayBitmapImage = this._rayBitmap.addToWorld(0, 0);
     parent.addChild(this._rayBitmapImage);
     this._rayBitmapImage.fixedToCamera = true;
     this._rayBitmapImage.visible = false;
