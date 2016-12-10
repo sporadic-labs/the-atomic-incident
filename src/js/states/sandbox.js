@@ -102,9 +102,6 @@ Sandbox.prototype.create = function () {
     // this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
     //     Phaser.Color.getColor32(255, 255, 217, 0));
 
-    // Temporary fix: make walls appear on top of lights
-    groups.foreground.bringToTop(wallLayer);
-
     // Score
     globals.scoreKeeper = new ScoreKeeper();
 
