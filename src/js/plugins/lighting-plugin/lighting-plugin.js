@@ -131,9 +131,27 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
     var points = [];
 
-    for (var w = 0; w < walls.length; w++) {
-        // Get start and end point for each wall.
+    // Determine which walls have normals that face away the light and only cast
+    // light at them. This avoids having shadows "inside" of the walls.
+    var backWalls = walls.slice(0, 4); // Copy the camera walls
+    for (var w = 3; w < walls.length; w++) {
         var wall = walls[w];
+        var normal = this._getOutwardNormal(wall);
+        // Shift the light so that its origin is at the wall endpoint, then 
+        // calculate the dot of the that and the normal. This way both vectors
+        // have the same origin point.
+        var dot = normal.dot(Phaser.Point.subtract(light.position, wall.end));
+        if (dot < 0) {
+            // If the dot between the normal and the light point in negative,
+            // the wall faces away from the light source
+            backWalls.push(wall);
+        }
+    }
+
+    for (var w = 0; w < backWalls.length; w++) {
+        // Get start and end point for each wall.
+        var wall = backWalls[w];
+
         var startAngle = light.position.angle(wall.start);
         var endAngle = light.position.angle(wall.end);
 
@@ -165,7 +183,7 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
             light.position.x + Math.cos(angle) * light.radius,
             light.position.y + Math.sin(angle) * light.radius);
         // Check if the ray intersected any walls
-        var intersect = ctx._getWallIntersection(ray, walls);
+        var intersect = ctx._getWallIntersection(ray, backWalls);
         // Save the intersection or the end of the ray
         if (intersect) return intersect;
         else return ray.end;
@@ -175,7 +193,17 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
     return points;
 };
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {    
+Phaser.Plugin.Lighting.prototype._getOutwardNormal = function (line) {
+    // The wall lines are returned from hull.js in clockwise order, so the 
+    // outward facing normal should be the following. MH: there are two 
+    // possible normals - figured it was this one via trial and error 
+    return new Phaser.Point(
+        (line.end.y - line.start.y),
+        -(line.end.x - line.start.x)
+    );
+}
+
+Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {  
     var localPoints = points.map(this._convertWorldPointToLocal, this);
     light.redraw(localPoints);
     var r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
