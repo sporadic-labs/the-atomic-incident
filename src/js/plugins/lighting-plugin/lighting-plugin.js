@@ -192,6 +192,10 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
         }
     }
 
+    // Only cast light at the walls that face away from the light. MH: this 
+    // appears to work well when it comes to our current, single screen design.
+    // We'll need to do some testing to see if this breaks moving lights and/or
+    // maps larger than the screen.
     for (var w = 0; w < backWalls.length; w++) {
         // Get start and end point for each wall.
         var wall = backWalls[w];
