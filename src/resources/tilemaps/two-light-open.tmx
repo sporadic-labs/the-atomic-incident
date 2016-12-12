@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="25" tileheight="25" nextobjectid="13">
- <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="25" tileheight="25" nextobjectid="38">
+ <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6" columns="6">
   <image source="tiles_25.png" width="150" height="25"/>
+ </tileset>
+ <tileset firstgid="7" name="wall-tiles" tilewidth="25" tileheight="25" tilecount="24" columns="8">
+  <image source="wall-tiles.png" width="200" height="75"/>
+  <tile id="7">
+   <objectgroup draworder="index">
+    <object id="1" x="8" y="8" width="10" height="10"/>
+   </objectgroup>
+  </tile>
  </tileset>
  <layer name="bg" width="32" height="24">
   <data encoding="csv">
@@ -38,19 +46,19 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,10,12,8,0,0,0,10,12,8,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,10,12,8,0,0,0,10,12,8,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -60,36 +68,20 @@
 </data>
  </layer>
  <objectgroup name="player">
-  <object id="1" gid="3" x="377.333" y="300" width="25" height="25"/>
+  <object id="1" gid="3" x="375" y="290" width="25" height="25"/>
  </objectgroup>
  <objectgroup name="lights">
-  <object id="2" gid="2" x="378.667" y="298.667" width="25" height="25">
+  <object id="30" name="light" type="light" gid="2" x="375" y="200" width="25" height="25">
    <properties>
-    <property name="color" value="#ff00aeff"/>
-    <property name="radius" value="240"/>
+    <property name="color" type="color" value="#ff00ddff"/>
+    <property name="radius" value="300"/>
    </properties>
   </object>
-  <object id="3" gid="2" x="686.667" y="302.667" width="25" height="25">
+  <object id="37" name="light" type="light" gid="2" x="375" y="400" width="30" height="30">
    <properties>
-    <property name="color" value="#F5BB1D"/>
-    <property name="radius" value="224"/>
+    <property name="color" type="color" value="#ffffbf00"/>
+    <property name="radius" value="300"/>
    </properties>
   </object>
-  <object id="4" gid="2" x="69.3333" y="298.667" width="25" height="25">
-   <properties>
-    <property name="color" value="#63FF70"/>
-    <property name="radius" value="180"/>
-   </properties>
-  </object>
- </objectgroup>
- <objectgroup name="enemies">
-  <object id="5" gid="4" x="742.667" y="53.3333" width="25" height="25"/>
-  <object id="6" gid="4" x="385.333" y="41.3333" width="25" height="25"/>
-  <object id="7" gid="4" x="18.6667" y="38.6667" width="25" height="25"/>
-  <object id="8" gid="4" x="18.6667" y="580" width="25" height="25"/>
-  <object id="9" gid="4" x="8" y="301.333" width="25" height="25"/>
-  <object id="10" gid="4" x="405.333" y="589.333" width="25" height="25"/>
-  <object id="11" gid="4" x="752" y="586.667" width="25" height="25"/>
-  <object id="12" gid="4" x="749.333" y="301.333" width="25" height="25"/>
  </objectgroup>
 </map>
