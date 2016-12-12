@@ -34,8 +34,13 @@ ShadowGroup.prototype.spawnInShadow = function(numToSpawn) {
 ShadowGroup.prototype._isTileEmpty = function (x, y) {
     var map = this.game.globals.tileMap;
     var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
-        this.game.globals.tileMapLayer);
-    if (checkTile === null || checkTile === undefined) return true;
+        this.game.globals.tileMapLayer, true);
+    // Check if location was out of bounds or invalid (getTileWorldXY returns 
+    // null for invalid locations when nonNull param is true)
+    if (checkTile === null) return false;
+    // Check if tile is empty (getTileWorldXY returns a tile with an index of 
+    // -1 when the nonNull param is true)
+    if (checkTile.index === -1) return true;
     else return false;
 }
 
