@@ -32,7 +32,8 @@ ShadowGroup.prototype.spawnInShadow = function(numToSpawn) {
 }
 
 ShadowGroup.prototype._isTileEmpty = function (x, y) {
-    var checkTile = this.game.globals.tileMap.getTileWorldXY(x, y, 36, 36,
+    var map = this.game.globals.tileMap;
+    var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
         this.game.globals.tileMapLayer);
     if (checkTile === null || checkTile === undefined) return true;
     else return false;
