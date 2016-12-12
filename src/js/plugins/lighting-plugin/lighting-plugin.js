@@ -250,12 +250,12 @@ Phaser.Plugin.Lighting.prototype._getOutwardNormal = function (line) {
     );
 }
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {  
-    var localPoints = points.map(this._convertWorldPointToLocal, this);
-    light.redraw(localPoints);
+Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
+    light.redraw(points); // World coordinates
     var r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
-    var dx = light.position.x - light.radius;
-    var dy = light.position.y - light.radius;
+    var lightPoint = this._convertWorldPointToLocal(light.position);
+    var dx = lightPoint.x - light.radius;
+    var dy = lightPoint.y - light.radius;
     this._bitmap.copyRect(light._bitmap, r, dx, dy);
 };
 

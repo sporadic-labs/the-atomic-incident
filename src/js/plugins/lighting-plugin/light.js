@@ -45,6 +45,8 @@ Light.prototype.update = function () {
 };
 
 Light.prototype.redraw = function (points) {
+    // Light is expecting these points to be in world coordinates, since its own
+    // position is in world coordinates
     if (this._needsRedraw) {
         // Clear offscreen buffer
         this._bitmap.cls();
