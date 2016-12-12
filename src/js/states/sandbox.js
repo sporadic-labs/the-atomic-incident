@@ -120,17 +120,20 @@ Sandbox.prototype.create = function () {
     // }
 
     // Menu for switching tile maps
-    var menu = []
-    menu[0] = game.add.button(game.width - 36, 4, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/multilight-test.json');
-    }, this);
-    menu[1] = game.add.button(game.width - 36, 38, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/level_03.json');
-    }, this);
-    menu[2] = game.add.button(game.width - 36, 72, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/level_04.json');
-    }, this);
-    this.menu = menu
+    var menu = [];
+    var tilemapFiles = ["pacman.json", "maze-one-light.json", 
+        "multilight-test.json", "two-light-open.json"];
+    var x = game.width - 36;
+    for (var i = 0; i < tilemapFiles.length; i++) {
+        // The callback needs a reference to the value of i on each iteration,
+        // so create a callback with binding
+        var cb = game.state.start.bind(game.state, "load", true, true, 
+            "resources/tilemaps/" + tilemapFiles[i]);
+        var b = game.add.button(x, (36 * i) + 4, "button", cb);
+        b.fixedToCamera = true;
+        menu.push(b);
+    }
+    this.menu = menu;
 
     // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
