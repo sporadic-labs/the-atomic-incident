@@ -92,7 +92,14 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     
     this._bitmap = bitmap;
     this._image = image;
-    this._lightWalls = calculateHullsFromTiles(tilemapLayer);
+    this._tileSize = tilemapLayer.map.tileWidth;
+    this._wallClusters = calculateHullsFromTiles(tilemapLayer);
+    this._walls = [];
+    for (var i = 0; i < this._wallClusters.length; i++) {
+        for (var j = 0; j < this._wallClusters[i].length; j++) {
+            this._walls.push(this._wallClusters[i][j]);
+        }
+    }
 
     this._debugBitmap = this.game.add.bitmapData(game.width, game.height);
     this._debugImage = this._debugBitmap.addToWorld(0, 0);
@@ -103,16 +110,14 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
 
 Phaser.Plugin.Lighting.prototype.render = function () {
     if (!this._debugEnabled) return;
-    for (var i = 0; i < this._lightWalls.length; i++) {
-        for (var j = 0; j < this._lightWalls[i].length; j++) {
-            var line = this._lightWalls[i][j];
-            this.game.debug.geom(line, "rgba(255,0,255,0.75)");
-        }
+    for (var i = 0; i < this._walls.length; i++) {
+        var line = this._walls[i];
+        this.game.debug.geom(line, "rgba(255,0,255,0.75)");
     }
 };
 
-Phaser.Plugin.Lighting.prototype.update = function () {
-    var walls = this._getVisibleWalls();
+Phaser.Plugin.Lighting.prototype.update = function () {    
+    var walls = this._walls;
     // walls = walls.concat(this._getPlayerLines());
 
     // Clear and draw a shadow everywhere
@@ -176,9 +181,17 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
 
     // Determine which walls have normals that face away the light and only cast
     // light at them. This avoids having shadows "inside" of the walls.
-    var backWalls = walls.slice(0, 4); // Copy the camera walls
-    for (var w = 3; w < walls.length; w++) {
+    var backWalls = [];
+    for (var w = 0; w < walls.length; w++) {
         var wall = walls[w];
+        
+        // Ignore walls that are not within range of the light. MH: including 
+        // this for performance reasons on larger maps with many walls. Quick &
+        // dirty check by checking starting position of line with a fudge factor
+        // of the map's tile size.
+        var d = wall.start.distance(light.position);
+        if (d > (light.radius + this._tileSize)) continue;
+
         var normal = this._getOutwardNormal(wall);
         // Shift the light so that its origin is at the wall endpoint, then 
         // calculate the dot of the that and the normal. This way both vectors
@@ -273,80 +286,6 @@ Phaser.Plugin.Lighting.prototype._getPlayerLines = function () {
         lastY = y;
     }
     return playerLines;
-};
-
-Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
-    var camRect = this.camera.view;
-    var visibleWalls = [];
-
-    // Create walls for each corner of the stage & add them to the walls array
-    var x = camRect.x;
-    var y = camRect.y;
-    var w = camRect.width;
-    var h = camRect.height;
-    var camLeft = new Phaser.Line(x, y + h, x, y);
-    var camTop = new Phaser.Line(x, y, x + w, y);
-    var camRight = new Phaser.Line(x + w, y, x + w, y + h);
-    var camBottom = new Phaser.Line(x + w, y + h, x, y + h);
-    visibleWalls.push(camLeft, camRight, camTop, camBottom);
-
-    for (var i = 0; i < this._lightWalls.length; i++) {
-        for (var j = 0; j < this._lightWalls[i].length; j++) {
-            var line = this._lightWalls[i][j];
-            if (camRect.intersectsRaw(line.left, line.right, line.top, 
-                line.bottom)) {
-                line = getVisibleSegment(line);
-                visibleWalls.push(line);
-            }
-        }
-    }
-
-    function getVisibleSegment(line) {
-        // This function checks the given line against the edges of the camera. 
-        // If it intersects with an edge, then we need to only get the visible
-        // portion of the line.
-        // TODO: if we want this to work for diagonal lines in the tilemap, we
-        // need to update this code to account for the possibility that a line
-        // can intersect multiple edges of the camera 
-        var p = line.intersects(camLeft, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.x < line.end.x) {
-                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
-            } else {
-                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
-            }
-        }
-        p = line.intersects(camRight, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.x < line.end.x) {
-                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
-            } else {
-                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
-            }
-        }
-        p = line.intersects(camTop, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.y < line.end.y) {
-                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
-            } else {
-                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
-            }
-        }
-        p = line.intersects(camBottom, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.y < line.end.y) {
-                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
-            } else {
-                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
-            }
-        }
-        return line;
-    }
-    return visibleWalls;
 };
 
 Phaser.Plugin.Lighting.prototype._convertWorldPointToLocal = function (point) {
