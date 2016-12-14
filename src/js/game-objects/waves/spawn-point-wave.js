@@ -20,9 +20,7 @@ function SpawnPointWave(game) {
     this._timer.start();
 
     // Spawn after the lighting system has had a chance to update once
-    setTimeout(function () {
-        this._spawnCluster();
-    }.bind(this), 0);
+    this._timer.add(0, this._spawnCluster.bind(this));
 }
 
 SpawnPointWave.prototype._spawnCluster = function () {
