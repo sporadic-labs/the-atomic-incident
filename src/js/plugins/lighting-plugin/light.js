@@ -91,15 +91,13 @@ Light.prototype.redrawShadow = function (points) {
     this._bitmap.ctx.fillStyle = "white";
     this._bitmap.ctx.strokeStyle = "white";
 
-    // Convert the world positions of the light points to local coordinates 
-    // within the bitmap
-    points.forEach(function (point) {
-        point.subtract(this.position.x - this.radius, 
-            this.position.y - this.radius);
-    }, this);
-    this._bitmap.ctx.moveTo(points[0].x, points[0].y);
+    // Figure out the offset needed to convert the world positions of the light
+    // points to local coordinates within the bitmap
+    var xOff = this.position.x - this.radius;
+    var yOff = this.position.y - this.radius;
+    this._bitmap.ctx.moveTo(points[0].x - xOff, points[0].y - yOff);
     for(var i = 0; i < points.length; i++) {
-        this._bitmap.ctx.lineTo(points[i].x, points[i].y);
+        this._bitmap.ctx.lineTo(points[i].x - xOff, points[i].y - yOff);
     }
     this._bitmap.ctx.closePath();
     this._bitmap.ctx.fill();
