@@ -79,9 +79,9 @@ Light.prototype.redrawLight = function () {
     var c2 = Phaser.Color.getWebRGB(c);
     c.a = 100;
     var c3 = Phaser.Color.getWebRGB(c);   
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.9), c3);
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.8), c2);
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.5), c1);
+    this._bitmap.circle(this.radius, this.radius, this.radius * 0.9, c3);
+    this._bitmap.circle(this.radius, this.radius, this.radius * 0.8, c2);
+    this._bitmap.circle(this.radius, this.radius, this.radius * 0.5, c1);
 };
 
 Light.prototype.redrawShadow = function (points) {
