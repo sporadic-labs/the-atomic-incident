@@ -41,8 +41,7 @@ Phaser.Plugin.Lighting.prototype.enableDebug = function () {
     if (this._debugLightIndex === undefined || 
             this._debugLightIndex >= this.lights.length - 1) {
         this._debugLightIndex = 0;
-    }
-    else {
+    } else {
         this._debugLightIndex++;
     }
     this._originalShadowOpacity = this.shadowOpacity;
@@ -155,10 +154,10 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         this._debugBitmap.ctx.lineWidth = 3;
         this._debugBitmap.ctx.beginPath();
         for (var w = 0; w < walls.length; w++) {
-            var p = this._convertWorldPointToLocal(walls[w].midpoint);
+            var mp = this._convertWorldPointToLocal(walls[w].midpoint);
             var normal = walls[w].normal.setMagnitude(10);            
-            this._debugBitmap.ctx.moveTo(p.x , p.y);
-            this._debugBitmap.ctx.lineTo(p.x + normal.x, p.y + normal.y);
+            this._debugBitmap.ctx.moveTo(mp.x , mp.y);
+            this._debugBitmap.ctx.lineTo(mp.x + normal.x, mp.y + normal.y);
         }
         this._debugBitmap.ctx.stroke();
     }
@@ -226,7 +225,8 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light) {
 
 Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
     light.redraw(points); // World coordinates
-    var r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
+    var r = new Phaser.Rectangle(0, 0, light._bitmap.width, 
+        light._bitmap.height);
     var lightPoint = this._convertWorldPointToLocal(light.position);
     var dx = lightPoint.x - light.radius;
     var dy = lightPoint.y - light.radius;

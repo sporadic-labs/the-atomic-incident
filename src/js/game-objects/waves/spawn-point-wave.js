@@ -1,7 +1,6 @@
 module.exports = SpawnPointWave;
 
 var ShadowEnemy = require("../enemies/shadow-enemy.js");
-var utils = require("../../helpers/utilities.js");
 
 SpawnPointWave.prototype = Object.create(Phaser.Group.prototype);
 
