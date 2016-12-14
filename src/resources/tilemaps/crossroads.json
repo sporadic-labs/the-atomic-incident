@@ -175,6 +175,10 @@
                 {
                  "isOpaque":true
                 },
+             "10":
+                {
+                 "isOpaque":true
+                },
              "12":
                 {
                  "isOpaque":false
@@ -239,6 +243,22 @@
                 {
                  "isOpaque":false
                 },
+             "32":
+                {
+                 "isOpaque":false
+                },
+             "33":
+                {
+                 "isOpaque":false
+                },
+             "34":
+                {
+                 "isOpaque":false
+                },
+             "35":
+                {
+                 "isOpaque":false
+                },
              "4":
                 {
                  "isOpaque":true
@@ -253,7 +273,15 @@
                 },
              "7":
                 {
-                 "isOpaque":false
+                 "isOpaque":true
+                },
+             "8":
+                {
+                 "isOpaque":true
+                },
+             "9":
+                {
+                 "isOpaque":true
                 }
             },
          "tilepropertytypes":
@@ -266,6 +294,10 @@
                 {
                  "isOpaque":"bool"
                 },
+             "10":
+                {
+                 "isOpaque":"bool"
+                },
              "12":
                 {
                  "isOpaque":"bool"
@@ -330,6 +362,22 @@
                 {
                  "isOpaque":"bool"
                 },
+             "32":
+                {
+                 "isOpaque":"bool"
+                },
+             "33":
+                {
+                 "isOpaque":"bool"
+                },
+             "34":
+                {
+                 "isOpaque":"bool"
+                },
+             "35":
+                {
+                 "isOpaque":"bool"
+                },
              "4":
                 {
                  "isOpaque":"bool"
@@ -343,6 +391,14 @@
                  "isOpaque":"bool"
                 },
              "7":
+                {
+                 "isOpaque":"bool"
+                },
+             "8":
+                {
+                 "isOpaque":"bool"
+                },
+             "9":
                 {
                  "isOpaque":"bool"
                 }
