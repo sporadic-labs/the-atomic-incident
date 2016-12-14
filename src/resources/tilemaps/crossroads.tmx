@@ -182,7 +182,7 @@
   <object id="37" name="light" type="light" gid="2" x="387" y="313" width="25" height="25">
    <properties>
     <property name="color" type="color" value="#ffc285ff"/>
-    <property name="radius" value="400"/>
+    <property name="radius" value="325"/>
    </properties>
   </object>
  </objectgroup>
