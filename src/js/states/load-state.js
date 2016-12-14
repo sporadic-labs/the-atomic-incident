@@ -9,7 +9,8 @@ function LoadState() {}
 // Set the 'current map' to be loaded by the game
 // Default to level_03 until we have some actual maps...
 LoadState.prototype.init = function (map) {
-    this.currentMap = map ? map : 'resources/tilemaps/pacman.json'
+    this.currentMap = map ? map : 
+        "resources/tilemaps/" + this.game.globals.tilemapFiles[0];
 };
 
 LoadState.prototype.preload = function () {    

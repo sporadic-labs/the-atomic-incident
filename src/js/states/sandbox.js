@@ -17,9 +17,6 @@ var DestructableLight = require("../game-objects/destructable-light.js");
 function Sandbox() {}
 
 Sandbox.prototype.create = function () {
-    // Create the space for globals on the game object
-    this.game.globals = {};
-
     // Shorthands
     var game = this.game;
     var globals = game.globals;
@@ -121,14 +118,12 @@ Sandbox.prototype.create = function () {
 
     // Menu for switching tile maps
     var menu = [];
-    var tilemapFiles = ["pacman.json", "maze-one-light.json", 
-        "multilight-test.json", "two-light-open.json"];
     var x = game.width - 36;
-    for (var i = 0; i < tilemapFiles.length; i++) {
+    for (var i = 0; i < globals.tilemapFiles.length; i++) {
         // The callback needs a reference to the value of i on each iteration,
         // so create a callback with binding
         var cb = game.state.start.bind(game.state, "load", true, true, 
-            "resources/tilemaps/" + tilemapFiles[i]);
+            "resources/tilemaps/" + globals.tilemapFiles[i]);
         var b = game.add.button(x, (36 * i) + 4, "button", cb);
         b.fixedToCamera = true;
         menu.push(b);

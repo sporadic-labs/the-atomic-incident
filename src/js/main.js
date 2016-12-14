@@ -10,6 +10,13 @@ var StartScreen = require("./states/start-screen.js");
 // Keep this on CANVAS until Phaser 3 for performance reasons?
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, "game-container");
 
+// Create the space for globals on the game object
+var globals = game.globals = {};
+globals.tilemapFiles = [
+    "crossroads.json", "pacman.json", "maze-one-light.json", 
+    "multilight-test.json", "two-light-open.json"
+];
+
 game.state.add("boot", BootState);
 game.state.add("load", LoadState);
 game.state.add("start", StartScreen);
