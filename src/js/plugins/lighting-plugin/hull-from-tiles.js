@@ -1,9 +1,17 @@
 var hull = require("hull.js");
 
+/**
+ * Returns an array of polygons where each is a hull built from clusters of 
+ * colliding & opaque tiles from the tilemap. Each polygon is an array of 
+ * line objects in the form: 
+ *  { line, midpoint, length, normal }
+ * The midpoint, length & normal are precomuted to help the game run faster.
+ */
 module.exports = function calculateHullsFromTiles(tilemapLayer) {
     var clusters = calculateClusters(tilemapLayer);
     var hulls = calculateHulls(clusters);
-    return hulls;
+    var hullsWithNormals = calculateNormals(hulls);
+    return hullsWithNormals;
 };
 
 function calculateClusters(tilemapLayer) {
@@ -130,9 +138,27 @@ function calculateHulls(clusters) {
 
         // Add the final lines to the polygon
         polygons.push(lines);
-
     }
     return polygons;
+}
+
+function calculateNormals(hull) {
+    var hullsWithNormals = [];
+    for (var i = 0; i < hull.length; i++) {
+        var hullWithNormals = [];
+        for (var j = 0; j < hull[i].length; j++) {
+            var line = hull[i][j];
+            var normal = getOutwardNormal(line);
+            hullWithNormals.push({
+                line: line,
+                length: line.length,
+                midpoint: line.midPoint(),
+                normal: normal
+            });
+        }
+        hullsWithNormals.push(hullWithNormals);
+    }
+    return hullsWithNormals;
 }
 
 function checkIfCollinear(line1, line2) {
@@ -145,4 +171,14 @@ function checkIfCollinear(line1, line2) {
     var dx2 = line2.end.x - line2.start.x;
     var dy2 = line2.end.y - line2.start.y;
     return ((dx1 * dy2) - (dy1 * dx2)) === 0;
+}
+
+function getOutwardNormal(line) {
+    // The wall lines are returned from hull.js in clockwise order, so the 
+    // outward facing normal should be the following. MH: there are two 
+    // possible normals - figured it was this one via trial and error 
+    return new Phaser.Point(
+        (line.end.y - line.start.y),
+        -(line.end.x - line.start.x)
+    ).setMagnitude(1);
 }
