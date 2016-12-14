@@ -23,6 +23,10 @@ Phaser.Plugin.Lighting.prototype.removeLight = function (light) {
     if (i !== -1) this.lights.splice(i, 1);
 };
 
+Phaser.Plugin.Lighting.prototype.getWalls = function () {
+    return this._walls;
+};
+
 Phaser.Plugin.Lighting.prototype.setOpacity = function (opacity) {
     this.shadowOpacity = opacity;
 };
@@ -108,14 +112,6 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     this._debugImage.visible = false;
 };
 
-Phaser.Plugin.Lighting.prototype.render = function () {
-    if (!this._debugEnabled) return;
-    for (var i = 0; i < this._walls.length; i++) {
-        var line = this._walls[i];
-        this.game.debug.geom(line, "rgba(255,0,255,0.75)");
-    }
-};
-
 Phaser.Plugin.Lighting.prototype.update = function () {    
     var walls = this._walls;
     // walls = walls.concat(this._getPlayerLines());
@@ -130,7 +126,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
         light.update();
-        var points = this._castLight(light, walls);
+        var points = this._castLight(light);
         this._drawLight(light, points);
 
         // Draw the light rays - this gets pretty messy with multiple lights,
@@ -159,9 +155,8 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         this._debugBitmap.ctx.lineWidth = 3;
         this._debugBitmap.ctx.beginPath();
         for (var w = 0; w < walls.length; w++) {
-            var wall = walls[w];
-            var p = this._convertWorldPointToLocal(wall.midPoint());
-            var normal = this._getOutwardNormal(wall).setMagnitude(10);            
+            var p = this._convertWorldPointToLocal(walls[w].midpoint);
+            var normal = walls[w].normal.setMagnitude(10);            
             this._debugBitmap.ctx.moveTo(p.x , p.y);
             this._debugBitmap.ctx.lineTo(p.x + normal.x, p.y + normal.y);
         }
@@ -176,33 +171,9 @@ Phaser.Plugin.Lighting.prototype.update = function () {
     this._bitmap.update();
 };
 
-Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
+Phaser.Plugin.Lighting.prototype._castLight = function (light) {
     var points = [];
-
-    // Determine which walls have normals that face away the light and only cast
-    // light at them. This avoids having shadows "inside" of the walls.
-    var backWalls = [];
-    for (var w = 0; w < walls.length; w++) {
-        var wall = walls[w];
-        
-        // Ignore walls that are not within range of the light. MH: including 
-        // this for performance reasons on larger maps with many walls. Quick &
-        // dirty check by checking starting position of line with a fudge factor
-        // of the map's tile size.
-        var d = wall.start.distance(light.position);
-        if (d > (light.radius + this._tileSize)) continue;
-
-        var normal = this._getOutwardNormal(wall);
-        // Shift the light so that its origin is at the wall endpoint, then 
-        // calculate the dot of the that and the normal. This way both vectors
-        // have the same origin point.
-        var dot = normal.dot(Phaser.Point.subtract(light.position, wall.end));
-        if (dot < 0) {
-            // If the dot between the normal and the light point in negative,
-            // the wall faces away from the light source
-            backWalls.push(wall);
-        }
-    }
+    var backWalls = light.intersectingWalls;
 
     // Only cast light at the walls that face away from the light. MH: this 
     // appears to work well when it comes to our current, single screen design.
@@ -212,8 +183,8 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
         // Get start and end point for each wall.
         var wall = backWalls[w];
 
-        var startAngle = light.position.angle(wall.start);
-        var endAngle = light.position.angle(wall.end);
+        var startAngle = light.position.angle(wall.line.start);
+        var endAngle = light.position.angle(wall.line.end);
 
         // Check for an intersection at each angle, and +/- 0.001
         // Add the intersection to the points array.
@@ -252,16 +223,6 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
     this._sortPoints(points, light.position);
     return points;
 };
-
-Phaser.Plugin.Lighting.prototype._getOutwardNormal = function (line) {
-    // The wall lines are returned from hull.js in clockwise order, so the 
-    // outward facing normal should be the following. MH: there are two 
-    // possible normals - figured it was this one via trial and error 
-    return new Phaser.Point(
-        (line.end.y - line.start.y),
-        -(line.end.x - line.start.x)
-    );
-}
 
 Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
     light.redraw(points); // World coordinates
@@ -313,7 +274,7 @@ Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls) {
     var closestIntersection = null;
 
     for (var i = 0; i < walls.length; i++) {
-        var intersect = Phaser.Line.intersects(ray, walls[i]);
+        var intersect = Phaser.Line.intersects(ray, walls[i].line);
         if (intersect) {
             // Find the closest intersection
             var distance = this.game.math.distance(ray.start.x, ray.start.y,

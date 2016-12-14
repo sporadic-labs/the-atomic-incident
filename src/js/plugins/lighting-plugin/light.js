@@ -11,6 +11,8 @@ function Light(game, parent, position, radius, color) {
     this._debugGraphics = null;
     this._bitmap = game.add.bitmapData(2 * this.radius, 2 * this.radius);
     this._needsRedraw = true;
+
+    this.intersectingWalls = this._recalculateWalls();
 }
 
 Light.prototype.enableDebug = function () {
@@ -32,6 +34,7 @@ Light.prototype.update = function () {
     if (this._lastRadius !== this.radius || 
             !this._lastPosition.equals(this.position)) {
         this._needsRedraw = true;
+        this.intersectingWalls = this._recalculateWalls();
     }
     this._lastRadius = this.radius;
     this._lastPosition = this.position.clone();
@@ -114,4 +117,38 @@ Light.prototype._updateDebug = function () {
     this._debugGraphics.lineStyle(5, 0xFF00FF, 0.6);
     this._debugGraphics.drawCircle(0, 0, 2);
     this._debugGraphics.drawCircle(0, 0, 2 * this.radius);
+};
+
+Light.prototype._recalculateWalls = function () {
+    var walls = this.game.globals.plugins.lighting.getWalls();
+
+    // Determine which walls have normals that face away from the light - these
+    // are the walls that intersect light rights
+    var intersectingWalls = [];
+    for (var w = 0; w < walls.length; w++) {
+        var wall = walls[w];
+        
+        // Ignore walls that are not within range of the light. MH: this is 
+        // essentially checking whether two circles intersect. Circle 1 is the 
+        // the light. Circle 2 is a circle that circumscribes the wall (e.g. 
+        // placed at the midpoint, with a radius of half wall length). There are
+        // more accurate circle vs line collision detection algorithms that we
+        // could use if needed...
+        var dist = wall.midpoint.distance(this.position);
+        if (dist > (this.radius + (wall.length / 2))) continue;
+
+
+        // Shift the light so that its origin is at the wall midpoint, then 
+        // calculate the dot of the that and the normal. This way both vectors
+        // have the same origin point.
+        var relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
+        var dot = wall.normal.dot(relativePos);
+        if (dot < 0) {
+            // If the dot between the normal and the light point in negative,
+            // the wall faces away from the light source
+            intersectingWalls.push(wall);
+        }
+    }
+    
+    return intersectingWalls;
 };
