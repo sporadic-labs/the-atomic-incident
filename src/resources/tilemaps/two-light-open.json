@@ -121,15 +121,15 @@
          "tilewidth":25
         }, 
         {
-         "columns":8,
+         "columns":12,
          "firstgid":7,
          "image":"wall-tiles.png",
          "imageheight":75,
-         "imagewidth":200,
+         "imagewidth":300,
          "margin":0,
          "name":"wall-tiles",
          "spacing":0,
-         "tilecount":24,
+         "tilecount":36,
          "tileheight":25,
          "tiles":
             {
