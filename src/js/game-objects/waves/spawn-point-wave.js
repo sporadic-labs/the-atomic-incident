@@ -14,7 +14,18 @@ function SpawnPointWave(game) {
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
 
+    // Fix to make this wave work with maps that don't have spawn points defined
+    // in tiled
     this._spawnRegions = this._map.objects["spawn points"] || [];
+    if (this._spawnRegions.length === 0) {
+        this._spawnRegions.push({
+            rectangle: true,
+            x: 0,
+            y: 0,
+            width: this.game.world.width,
+            height: this.game.world.height
+        }); 
+    }
 
     this._timer = this.game.time.create(false);
     this._timer.start();
