@@ -13,8 +13,8 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, "game-container");
 // Create the space for globals on the game object
 var globals = game.globals = {};
 globals.tilemapFiles = [
-    "crossroads.json", "pacman.json", "maze-one-light.json", 
-    "multilight-test.json", "two-light-open.json"
+    "pacman-smaller.json", "crossroads.json", "pacman.json", 
+    "maze-one-light.json", "multilight-test.json", "two-light-open.json"
 ];
 
 game.state.add("boot", BootState);

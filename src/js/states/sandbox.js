@@ -89,10 +89,19 @@ Sandbox.prototype.create = function () {
     // Create lights
     var lights = utils.default(map.objects["lights"], []); // Default to empty
     lights.forEach(function (light) {
-        var x = light.x + map.tileWidth / 2;
-        var y = light.y - map.tileHeight / 2;
+        var x, y, radius;
         var p = light.properties || {};
-        var radius = p.radius ? Number(p.radius) : 300;
+        if (light.ellipse) {
+            // Newer format for lights - using ellipses in Tiled
+            x = light.x + (light.width / 2);
+            y = light.y + (light.height / 2);
+            radius = light.width / 2;
+        } else {
+            // Fallback to support old format using tiles
+            x = light.x + map.tileWidth / 2;
+            y = light.y - map.tileHeight / 2;
+            radius = p.radius ? Number(p.radius) : 300;
+        }
         var color = p.color ? utils.tiledColorToRgb(p.color) : 0xFFFFFFFF;
         var health = p.health ? Number(p.health) : 100;
         new DestructableLight(game, x, y, groups.lights, radius, color, 
