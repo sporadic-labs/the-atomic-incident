@@ -9,7 +9,7 @@ function ShadowEnemy(game, x, y, parentGroup) {
         parentGroup);
 
     this._maxSpeed = 50;
-    this._damage = 10 / 1000; // 10 units per second
+    this._damage = 10; // 10 units per second
     this._target = null;
 
     this._findTarget();
@@ -54,7 +54,7 @@ ShadowEnemy.prototype.update = function () {
     // If in range of target, attack
     var distance = this.position.distance(this._target.position);
     if (distance < 30) {
-        this._target.health -= (this._damage * this.game.time.elapsedMS);
+        this._target.takeDamage(this._damage * this.game.time.physicsElapsed);
     }
 };
 
