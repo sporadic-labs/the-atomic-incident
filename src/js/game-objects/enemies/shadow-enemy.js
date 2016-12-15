@@ -8,6 +8,12 @@ function ShadowEnemy(game, x, y, parentGroup) {
     BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/idle-01", 100,
         parentGroup);
 
+    // Add an eye image that sits above the shadow layer. The enemy owns this 
+    // image, so it is responsible for updating and destroying it.
+    this._eyeImage = game.make.image(0, 0, "assets", "shadow-enemy/eye");
+    this._eyeImage.anchor.copyFrom(this.anchor);
+    game.globals.groups.foreground.add(this._eyeImage);
+
     this._maxSpeed = 50;
     this._damage = 10; // 10 units per second
     this._target = null;
@@ -58,6 +64,11 @@ ShadowEnemy.prototype.update = function () {
     }
 };
 
+ShadowEnemy.prototype.postUpdate = function () {
+    this._eyeImage.position.copyFrom(this.position);
+    BaseEnemy.prototype.postUpdate.apply(this, arguments);
+};
+
 ShadowEnemy.prototype._moveTowards = function (position) {
     var distance = this.position.distance(position);
     var angle = this.position.angle(position);
@@ -87,4 +98,9 @@ ShadowEnemy.prototype._findTarget = function () {
     if (this._target === null) {
         this._target = this.game.globals.player;
     }
+};
+
+ShadowEnemy.prototype.destroy = function () {
+    this._eyeImage.destroy();
+    BaseEnemy.prototype.destroy.apply(this, arguments);
 };
