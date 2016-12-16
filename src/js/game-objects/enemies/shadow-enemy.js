@@ -65,8 +65,11 @@ ShadowEnemy.prototype.update = function () {
 };
 
 ShadowEnemy.prototype.postUpdate = function () {
-    this._eyeImage.position.copyFrom(this.position);
+    // Force the Phaser.Sprite postUpdate to happen *first* since that is where
+    // the physics gets applied
     BaseEnemy.prototype.postUpdate.apply(this, arguments);
+    // Now the eye image can be properly positioned
+    this._eyeImage.position.copyFrom(this.position);
 };
 
 ShadowEnemy.prototype._moveTowards = function (position) {
