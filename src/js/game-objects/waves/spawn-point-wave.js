@@ -81,26 +81,6 @@ SpawnPointWave.prototype._spawnInRect = function (rect) {
     }
 };
 
-SpawnPointWave.prototype._scheduleGroupActivation = function (group) {
-    // Move the group to the non-colliding group
-    this._nonCollidingGroup.add(group);
-    // Tween it's transparency to give the player a single that the group is 
-    // spawning
-    group.alpha = 0.25;
-    var tween = this.game.make.tween(group)
-        .to({ alpha: 1 }, this._spawnActivationDelay, "Quad.easeInOut", true);
-    // Schedule the activation
-    this._timer.add(this._spawnActivationDelay, function () {
-        // To be safe, check if the group has been destroyed
-        if (!group.game) return; 
-        // To be safe, stop the tween
-        tween.stop();
-        group.alpha = 1;
-        // Move the group to the colliding wave group
-        this.add(group);
-    }, this);
-};
-
 SpawnPointWave.prototype.destroy = function () {
     this._timer.destroy();
 
