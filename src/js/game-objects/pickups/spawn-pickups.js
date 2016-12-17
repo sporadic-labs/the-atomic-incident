@@ -27,9 +27,7 @@ function SpawnPickups(game) {
 }
 
 SpawnPickups.prototype.spawn = function (x, y) {
-    console.log("spawn!")
     if ((this._scorekeeper.getScore() % 20) === 0) {
-        console.log("spawn a new weapon!");
         var num = this.game.rnd.integerInRange(0, 7);
         new WeaponPickup(this.game, x, y, this.weaponTypes[num]);
     }
