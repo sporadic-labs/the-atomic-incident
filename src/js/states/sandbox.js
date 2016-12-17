@@ -120,13 +120,11 @@ Sandbox.prototype.create = function () {
     // new Wave1(game);
 
     var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
-    new SpawnerWave(game)
+    globals.spawnEnemies = new SpawnerWave(game);
 
-    // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
-    // for (var i=0; i<50; i++) {
-    //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
-    //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
-    // }
+    var SpawnPickups = require("../game-objects/pickups/spawn-pickups.js");
+    globals.spawnPickups = new SpawnPickups(game);
+
 
     // Menu for switching tile maps
     var menu = [];
