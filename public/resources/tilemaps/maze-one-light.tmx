@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="25" tileheight="25" nextobjectid="41">
+ <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6" columns="6">
+  <image source="tiles_25.png" width="150" height="25"/>
+ </tileset>
+ <tileset firstgid="7" name="wall-tiles" tilewidth="25" tileheight="25" tilecount="36" columns="12">
+  <image source="wall-tiles.png" width="300" height="75"/>
+  <tile id="0">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="isOpaque" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+   <objectgroup draworder="index">
+    <object id="1" x="8" y="8" width="10" height="10"/>
+   </objectgroup>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="isOpaque" type="bool" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="bg" width="32" height="24">
+  <data encoding="csv">
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6
+</data>
+ </layer>
+ <layer name="walls" width="32" height="24">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,10,12,8,0,0,0,0,0,10,12,8,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,11,0,0,0,0,10,12,8,36,10,12,8,0,0,0,0,11,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,0,31,0,0,0,0,0,0,0,31,0,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,11,0,0,0,0,0,0,0,0,0,11,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,9,0,0,0,0,0,0,0,0,0,9,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,0,0,0,35,0,0,0,35,0,0,0,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,0,0,0,37,0,0,0,37,0,0,0,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,0,0,0,33,0,0,0,33,0,0,0,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,11,0,0,0,34,36,32,0,0,0,11,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,9,0,0,0,0,0,0,0,0,0,9,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,0,0,0,31,0,0,0,0,0,0,0,31,0,0,0,13,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,0,0,0,0,10,12,8,36,10,12,8,0,0,0,0,9,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,10,12,8,0,0,0,0,0,10,12,8,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="player">
+  <object id="1" gid="3" x="375" y="250" width="25" height="25"/>
+ </objectgroup>
+ <objectgroup name="lights">
+  <object id="37" name="light" type="light" gid="2" x="375" y="300" width="30" height="30">
+   <properties>
+    <property name="color" type="color" value="#ffffbf00"/>
+    <property name="radius" value="500"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
