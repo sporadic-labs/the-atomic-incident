@@ -111,7 +111,7 @@ BaseProjectile.prototype.update = function() {
     // If it is, begin tracking.  Otherwise, continue on the initial
     // trajectory. NOTE(rex): HMMMM This isn't quite working...
     if (this._tracking) {
-        // Was somethign supposed to happen here?
+        // Was something supposed to happen here?
     }
 }
 
