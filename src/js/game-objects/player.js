@@ -289,18 +289,12 @@ Player.prototype._onCollideWithEnemy = function () {
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
-    // console.log('hit a pickup!')
     if (pickup._category === "weapon") {
-        if (pickup.type === this._gunType) {
-            this.getGun().incrementAmmo(pickup.ammoAmount);
-        } else {
-            this._gunType = pickup.type;
-            this.getGun().fillAmmo();
-        }
+        self._gunType = pickup.type;
+        self.changeGuns(pickup.type);
     }
     pickup.destroy();
 };
-
 
 Player.prototype.destroy = function () {
     this._reticule.destroy();
@@ -318,3 +312,31 @@ Player.prototype.getGun = function() {
 Player.prototype.getAmmo = function() {
     if (this._gun.getAmmo) return this._gun.getAmmo();
 };
+
+Player.prototype.changeGuns = function(type) {
+    if (type === "weapon-machine-gun") {
+        this._gun.destroy();
+        this._gun = new MachineGun(this.game, this.parent, this);
+    } else if (type === "weapon-laser") {
+        this._gun.destroy();
+        this._gun = new Laser(this.game, this.parent, this);
+    } else if (type === "weapon-beam") {
+        this._gun.destroy();
+        this._gun = new Beam(this.game, this.parent, this);
+    } else if (type === "weapon-arrow") {
+        this._gun.destroy();
+        this._gun = new Arrow(this.game, this.parent, this);
+    } else if (type === "weapon-sword") {
+        this._gun.destroy();
+        this._gun = new MeleeWeapon(this.game, this.parent, this);
+    } else if (type === "weapon-scattershot") {
+        this._gun.destroy();
+        this._gun = new Scattershot(this.game, this.parent, this);
+    } else if (type === "weapon-flamethrower") {
+        this._gun.destroy();
+        this._gun = new Flamethrower(this.game, this.parent, this);
+    } else if (type === "explosive") {
+        this._gun.destroy();
+        this._gun = new Explosive(this.game, this.parent, this);
+    }
+}
