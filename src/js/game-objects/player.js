@@ -289,6 +289,7 @@ Player.prototype._onCollideWithEnemy = function () {
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
+    // console.log('hit a pickup!')
     if (pickup._category === "weapon") {
         if (pickup.type === this._gunType) {
             this.getGun().incrementAmmo(pickup.ammoAmount);
