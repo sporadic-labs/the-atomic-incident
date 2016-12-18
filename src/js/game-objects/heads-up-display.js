@@ -18,9 +18,11 @@ function HeadsUpDisplay(game, parentGroup) {
     };
     this._scoreText = game.make.text(30, 20, "Score: 0", textStyle);
     this.add(this._scoreText);
-    this._comboText = game.make.text(30, 60, "Combo: 0", textStyle);
+    this._heartsText = game.make.text(30, 60, "Hearts: 3", textStyle);
+    this.add(this._heartsText);
+    this._comboText = game.make.text(30, 100, "Combo: 0", textStyle);
     this.add(this._comboText);
-    this._ammoText = game.make.text(30, 100, "Ammo: 0", textStyle);
+    this._ammoText = game.make.text(30, 140, "Ammo: 0", textStyle);
     this.add(this._ammoText);
     this._debugText = game.make.text(30, game.height - 40, 
         "Debug ('E' key): false", textStyle);
@@ -30,6 +32,7 @@ function HeadsUpDisplay(game, parentGroup) {
 
 HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText("Score: " + this._scoreKeeper.getScore());
+    this._heartsText.setText("Hearts: " + this._player.hearts);
     if (this._player._gunType === "default") {
         this._ammoText.setText("Ammo: -");
     } else {
