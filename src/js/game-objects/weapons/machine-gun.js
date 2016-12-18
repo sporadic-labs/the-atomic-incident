@@ -14,8 +14,8 @@ var projectileOptions = {
 
 function MachineGun(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "MachineGun", player);
-    this.initAmmo(240);
-    this.initCooldown(56);
+    this.initAmmo(400);
+    this.initCooldown(52);
 }
 
 MachineGun.prototype.fire = function (targetPos) {
@@ -38,8 +38,8 @@ MachineGun.prototype.fire = function (targetPos) {
 
 MachineGun.prototype._createProjectile = function (x, y, angle) {
     var p = new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, 16, angle, 300, 160, projectileOptions);
-    p.scale.setTo(0.75, 0.75);
+        this._player, 24, angle, 300, 264, projectileOptions);
+    p.scale.setTo(0.72, 0.72);
     // // Randomize the color of each flame.
     var r = this.game.rnd.integerInRange(120, 160);
     var g = this.game.rnd.integerInRange(160, 200);
