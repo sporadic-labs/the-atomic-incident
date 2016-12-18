@@ -84,7 +84,14 @@ function Player(game, x, y, parentGroup) {
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
         (this.height - diameter) / 2);
 
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+    this.satBody = globals.plugins.satBody.addBoxBody(this);
+
+    // Lighting for player
+    this._lighting = globals.plugins.lighting;
+    this.playerLight = this._lighting.addLight(
+        new Phaser.Point(this.position.x, this.position.y), 36, 0xEBDC6A
+    );
+    globals.groups.foreground.add(this.playerLight);
 
     // Player controls
     this._controls = new Controller(this.game.input);
@@ -171,6 +178,9 @@ Player.prototype.update = function () {
             this.body.velocity.add(drag.x, drag.y);
         }
     }
+
+    // Update light position
+    this.playerLight.position = this.position;
 
     // ammo check
     if (this._gun.isAmmoEmpty && this._gun.isAmmoEmpty()) {
