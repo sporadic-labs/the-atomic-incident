@@ -5,10 +5,17 @@ var BaseExplosive = require("./base-explosive.js");
 
 Grenade.prototype = Object.create(BaseWeapon.prototype);
 
+// optional settings for projectiles
+var projectileOptions = {
+    isDestructible: true,
+    rotateOnSetup: true,
+    speedModifier: 0.984,
+};
+
 function Grenade(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Grenade", player);
-    this.initAmmo(30);
-    this.initCooldown(150);
+    this.initAmmo(46);
+    this.initCooldown(520);
 }
 
 Grenade.prototype.fire = function (targetPos) {
@@ -51,5 +58,6 @@ Grenade.prototype.specialFire = function () {
 };
 
 Grenade.prototype._createProjectile = function (x, y, angle) {
-    new BaseExplosive(this.game, x, y, this, this._player, angle);
+    var g = new BaseExplosive(this.game, x, y, "assets", "weapons/e-saw-02", this, 
+        this._player, 84, angle, 164, 360, 2400, projectileOptions);
 };

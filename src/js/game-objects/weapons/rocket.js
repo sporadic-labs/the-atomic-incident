@@ -5,10 +5,17 @@ var BaseExplosive = require("./base-explosive.js");
 
 Rocket.prototype = Object.create(BaseWeapon.prototype);
 
+// optional settings for projectiles
+var projectileOptions = {
+    isDestructible: true,
+    rotateOnSetup: true,
+    speedModifier: 1.025,
+};
+
 function Rocket(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Rocket", player);
-    this.initAmmo(30);
-    this.initCooldown(150);
+    this.initAmmo(32);
+    this.initCooldown(860);
 }
 
 Rocket.prototype.fire = function (targetPos) {
@@ -51,5 +58,6 @@ Rocket.prototype.specialFire = function () {
 };
 
 Rocket.prototype._createProjectile = function (x, y, angle) {
-    new BaseExplosive(this.game, x, y, this, this._player, angle);
+    var r = new BaseExplosive(this.game, x, y, "assets", "weapons/slug", this, 
+        this._player, 112, angle, 80, 500, -1, projectileOptions);
 };
