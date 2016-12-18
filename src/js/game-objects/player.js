@@ -12,7 +12,8 @@ var Beam = require("./weapons/beam.js");
 var MeleeWeapon = require("./weapons/melee-weapon.js");
 var Scattershot = require("./weapons/scattershot.js");
 var Flamethrower = require("./weapons/flamethrower.js");
-var Explosive = require("./weapons/explosive.js");
+var Grenade = require("./weapons/grenade.js");
+var Rocket = require("./weapons/rocket.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -119,7 +120,9 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("weapon-laser", [Kb.FIVE]);
     this._controls.addKeyboardControl("weapon-beam", [Kb.SIX]);
     this._controls.addKeyboardControl("weapon-arrow", [Kb.SEVEN]);
-    this._controls.addKeyboardControl("explosive", [Kb.EIGHT]);
+    this._controls.addKeyboardControl("grenade", [Kb.EIGHT]);
+    this._controls.addKeyboardControl("rocket", [Kb.NINE]);
+    this._controls.addKeyboardControl("weapon-slug", [Kb.ZERO]);
 }
 
 Player.prototype.getCombo = function () {
@@ -190,29 +193,25 @@ Player.prototype.update = function () {
 
     // Swapping weapons
     if (this._controls.isControlActive("weapon-machine-gun")) {
-        this._gun.destroy();
-        this._gun = new MachineGun(this.game, this.parent, this);
+        this.changeGuns("weapon-machine-gun");
     } else if (this._controls.isControlActive("weapon-laser")) {
-        this._gun.destroy();
-        this._gun = new Laser(this.game, this.parent, this);
+        this.changeGuns("weapon-laser");
     } else if (this._controls.isControlActive("weapon-beam")) {
-        this._gun.destroy();
-        this._gun = new Beam(this.game, this.parent, this);
+        this.changeGuns("weapon-beam");
     } else if (this._controls.isControlActive("weapon-arrow")) {
-        this._gun.destroy();
-        this._gun = new Arrow(this.game, this.parent, this);
+        this.changeGuns("weapon-arrow");
     } else if (this._controls.isControlActive("weapon-sword")) {
-        this._gun.destroy();
-        this._gun = new MeleeWeapon(this.game, this.parent, this);
+        this.changeGuns("weapon-sword");
     } else if (this._controls.isControlActive("weapon-scattershot")) {
-        this._gun.destroy();
-        this._gun = new Scattershot(this.game, this.parent, this);
+        this.changeGuns("weapon-scattershot");
     } else if (this._controls.isControlActive("weapon-flamethrower")) {
-        this._gun.destroy();
-        this._gun = new Flamethrower(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("explosive")) {
-        this._gun.destroy();
-        this._gun = new Explosive(this.game, this.parent, this);
+        this.changeGuns("weapon-flamethrower");
+    } else if (this._controls.isControlActive("grenade")) {
+        this.changeGuns("grenade");
+    } else if (this._controls.isControlActive("rocket")) {
+        this.changeGuns("rocket");
+    } else if (this._controls.isControlActive("weapon-slug")) {
+        this.changeGuns("weapon-slug");
     }
 
     // Firing logic
@@ -370,8 +369,14 @@ Player.prototype.changeGuns = function(type) {
     } else if (type === "weapon-flamethrower") {
         this._gun.destroy();
         this._gun = new Flamethrower(this.game, this.parent, this);
-    } else if (type === "explosive") {
+    } else if (type === "grenade") {
         this._gun.destroy();
-        this._gun = new Explosive(this.game, this.parent, this);
+        this._gun = new Grenade(this.game, this.parent, this);
+    } else if (type === "rocket") {
+        this._gun.destroy();
+        this._gun = new Rocket(this.game, this.parent, this);
+    } else if (type === "weapon-slug") {
+        this._gun.destroy();
+        this._gun = new Gun(this.game, this.parent, this);
     }
 }
