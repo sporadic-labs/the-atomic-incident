@@ -1,6 +1,7 @@
 module.exports = SpawnPointWave;
 
 var ShadowEnemy = require("../enemies/shadow-enemy.js");
+var ShadowBomber = require("../enemies/shadow-bomber.js");
 
 SpawnPointWave.prototype = Object.create(Phaser.Group.prototype);
 
@@ -71,7 +72,11 @@ SpawnPointWave.prototype._spawnInRect = function (rect) {
         var y = this.game.rnd.integerInRange(rect.y, rect.y + rect.height);
         if (this._isTileEmpty(x, y) && 
                 lighting.isPointInShadow(new Phaser.Point(x, y))) {
-            new ShadowEnemy(this.game, x, y, this);
+            if (this.game.rnd.frac() < 0.75) {
+                new ShadowEnemy(this.game, x, y, this);
+            } else {
+                new ShadowBomber(this.game, x, y, this);
+            }
             return;
         }
     }

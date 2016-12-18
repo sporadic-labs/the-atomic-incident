@@ -117,7 +117,6 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
-    this._bitmap.clear();
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
 
     if (this._debugEnabled) this._debugBitmap.clear();
@@ -132,34 +131,24 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         // so only draw one of them
         if (this._debugEnabled && (i === this._debugLightIndex)) {
             var localPoints = points.map(this._convertWorldPointToLocal, this);
-            this._debugBitmap.ctx.beginPath();
-            this._debugBitmap.ctx.strokeStyle = "rgb(255, 0, 0)";
-            this._debugBitmap.ctx.fillStyle = "rgb(255, 0, 0)";
-            this._debugBitmap.ctx.lineWidth = 1;
             var lightPoint = this._convertWorldPointToLocal(light.position);
             for(var k = 0; k < localPoints.length; k++) {
                 var p = localPoints[k];
-                this._debugBitmap.ctx.moveTo(lightPoint.x, lightPoint.y);
-                this._debugBitmap.ctx.lineTo(p.x, p.y);
-                this._debugBitmap.ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y,
+                    "rgb(255, 255, 255)", 1);
+                this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 255, 255)");
             }
-            this._debugBitmap.ctx.stroke();
         }
     }
 
     // Draw the wall normals
     if (this._debugEnabled) {
-        this._debugBitmap.ctx.strokeStyle = "rgb(255, 0, 255)";
-        this._debugBitmap.ctx.fillStyle = "rgb(255, 0, 255)";
-        this._debugBitmap.ctx.lineWidth = 3;
-        this._debugBitmap.ctx.beginPath();
         for (var w = 0; w < walls.length; w++) {
             var mp = this._convertWorldPointToLocal(walls[w].midpoint);
-            var normal = walls[w].normal.setMagnitude(10);            
-            this._debugBitmap.ctx.moveTo(mp.x , mp.y);
-            this._debugBitmap.ctx.lineTo(mp.x + normal.x, mp.y + normal.y);
+            var norm = walls[w].normal.setMagnitude(10);          
+            this._debugBitmap.line(mp.x , mp.y, mp.x + norm.x, mp.y + norm.y,
+                "rgb(255, 255, 255)", 3);
         }
-        this._debugBitmap.ctx.stroke();
     }
 
     // This just tells the engine it should update the texture cache

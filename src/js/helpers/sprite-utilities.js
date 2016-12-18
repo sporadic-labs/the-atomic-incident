@@ -20,3 +20,20 @@ exports.checkOverlapWithGroup = function (sprite, group, callback, context) {
         }
     }
 };
+
+/**
+ * Recursively collide a sprite against a group using arcade physics
+ */
+exports.arcadeRecursiveCollide = function (sprite, group, callback, context) {
+    // Loop through children in group
+    for (var i = 0; i < group.children.length; i += 1) {
+        var child = group.children[i];
+        if (child instanceof Phaser.Group) {
+            // If child is a group, recursion time
+            exports.arcadeRecursiveCollide(sprite, child, callback, context);
+        } else {
+            var arcade = sprite.game.physics.arcade;
+            arcade.collide(sprite, child, callback, null, context);
+        }
+    }
+};

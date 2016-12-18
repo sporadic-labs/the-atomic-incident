@@ -1,7 +1,7 @@
 module.exports = BaseEnemy;
 
 var utils = require("../../helpers/utilities.js");
-var HealthBar = require("./health-bar.js");
+var HealthBar = require("../components/health-bar.js");
 
 BaseEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 
