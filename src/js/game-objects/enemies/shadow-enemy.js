@@ -2,6 +2,7 @@ module.exports = ShadowEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
 var TargetingComponent = require("../components/targeting-component.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 
@@ -37,6 +38,9 @@ ShadowEnemy.prototype.update = function () {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
+    // Collisions with other enemies
+    spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
+    
     // Update targeting
     var target = this._targetingComponent.update();
 

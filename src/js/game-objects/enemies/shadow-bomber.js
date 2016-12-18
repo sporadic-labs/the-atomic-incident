@@ -2,6 +2,7 @@ module.exports = ShadowBomber;
 
 var BaseEnemy = require("./base-enemy.js");
 var TargetingComponent = require("../components/targeting-component.js");
+var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowBomber.prototype = Object.create(BaseEnemy.prototype);
 
@@ -15,7 +16,7 @@ function ShadowBomber(game, x, y, parentGroup) {
         "shadow-enemy/bomber-eye-idle-01");
     this._eyeImage.anchor.copyFrom(this.anchor);
     game.globals.groups.foreground.add(this._eyeImage);
-    
+
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
 
@@ -37,6 +38,9 @@ function ShadowBomber(game, x, y, parentGroup) {
 ShadowBomber.prototype.update = function () {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+
+    // Collisions with other enemies
+    spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
 
     // Update targeting
     var target = this._targetingComponent.update();
