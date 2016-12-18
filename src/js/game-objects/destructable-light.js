@@ -1,7 +1,5 @@
 module.exports = DesctructableLight;
 
-var Controller = require("../helpers/controller.js");
-var spriteUtils = require("../helpers/sprite-utilities.js");
 var utils = require("../helpers/utilities.js");
 
 // Prototype chain - inherits from Sprite
@@ -18,6 +16,9 @@ function DesctructableLight(game, x, y, parentGroup, radius, color, health) {
 
     this.originalRadius = this.radius = radius;
     this.originalHealth = this.health = utils.default(health, 100);
+    this._healthRechargeRate = 3; // Health per second
+    this._rechargeDelay = 0.5; // Delay after taking damage before recharging
+    this._timeSinceDamage = 0;
     this.light = this._lighting.addLight(new Phaser.Point(x, y), radius, color);
 
     game.physics.arcade.enable(this);
@@ -27,12 +28,26 @@ function DesctructableLight(game, x, y, parentGroup, radius, color, health) {
         (this.height - diameter) / 2);
 }
 
-DesctructableLight.prototype.update = function () {
-    // this.health -= 1;
+DesctructableLight.prototype.takeDamage = function (amount) {
+    this.health -= amount;
     if (this.health <= 0) {
         this.health = 0;
         this.destroy();
     }
+    this._timeSinceDamage = 0;
+}
+
+DesctructableLight.prototype.update = function () {
+    // Update the health
+    var elapsed = this.game.time.physicsElapsed
+    this._timeSinceDamage += elapsed;
+    if (this._timeSinceDamage > this._rechargeDelay) {
+        this.health += this._healthRechargeRate * elapsed;
+        if (this.health > this.originalHealth) {
+            this.health = this.originalHealth;
+        }
+    }
+    // Update the radius based on the health
     this.radius = (this.health / this.originalHealth) * this.originalRadius;
     this.light.radius = this.radius;
 };

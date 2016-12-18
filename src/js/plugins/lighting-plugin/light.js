@@ -1,21 +1,18 @@
 module.exports = Light;
 
 function Light(game, parent, position, radius, color) {
-	this.game = game;
-	this.parent = parent;
-	this.position = position.clone();
-	this.radius = radius;
+    this.game = game;
+    this.parent = parent;
+    this.position = position.clone();
+    this.radius = radius;
     this.originalRadius = radius;
-	this.color = (color !== undefined) ? color : 0xFFFFFFFF;
+    this.color = (color !== undefined) ? color : 0xFFFFFFFF;
     this._isDebug = false;
     this._debugGraphics = null;
-    this._noise = Simple1DNoise();
-    this._noise.setScale(0.25);
-    this._noise.setAmplitude(10);
-    this._frameCount = 0;
-
     this._bitmap = game.add.bitmapData(2 * this.radius, 2 * this.radius);
     this._needsRedraw = true;
+
+    this.intersectingWalls = this._recalculateWalls();
 }
 
 Light.prototype.enableDebug = function () {
@@ -34,10 +31,10 @@ Light.prototype.disableDebug = function () {
 };
 
 Light.prototype.update = function () {
-    // this.radius = this.originalRadius + this._noise.getVal(this._frameCount++);
     if (this._lastRadius !== this.radius || 
             !this._lastPosition.equals(this.position)) {
         this._needsRedraw = true;
+        this.intersectingWalls = this._recalculateWalls();
     }
     this._lastRadius = this.radius;
     this._lastPosition = this.position.clone();
@@ -45,6 +42,8 @@ Light.prototype.update = function () {
 };
 
 Light.prototype.redraw = function (points) {
+    // Light is expecting these points to be in world coordinates, since its own
+    // position is in world coordinates
     if (this._needsRedraw) {
         // Clear offscreen buffer
         this._bitmap.cls();
@@ -80,9 +79,9 @@ Light.prototype.redrawLight = function () {
     var c2 = Phaser.Color.getWebRGB(c);
     c.a = 100;
     var c3 = Phaser.Color.getWebRGB(c);   
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.9), c3);
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.8), c2);
-    this._bitmap.circle(this.radius, this.radius, Math.round(this.radius * 0.5), c1);
+    this._bitmap.circle(this.radius, this.radius, this.radius * 0.9, c3);
+    this._bitmap.circle(this.radius, this.radius, this.radius * 0.8, c2);
+    this._bitmap.circle(this.radius, this.radius, this.radius * 0.5, c1);
 };
 
 Light.prototype.redrawShadow = function (points) {
@@ -95,15 +94,13 @@ Light.prototype.redrawShadow = function (points) {
     this._bitmap.ctx.fillStyle = "white";
     this._bitmap.ctx.strokeStyle = "white";
 
-    // Convert the world positions of the light points to local coordinates 
-    // within the bitmap
-    points.forEach(function (point) {
-        point.subtract(this.position.x - this.radius, 
-            this.position.y - this.radius);
-    }, this);
-    this._bitmap.ctx.moveTo(points[0].x, points[0].y);
+    // Figure out the offset needed to convert the world positions of the light
+    // points to local coordinates within the bitmap
+    var xOff = this.position.x - this.radius;
+    var yOff = this.position.y - this.radius;
+    this._bitmap.ctx.moveTo(points[0].x - xOff, points[0].y - yOff);
     for(var i = 0; i < points.length; i++) {
-        this._bitmap.ctx.lineTo(points[i].x, points[i].y);
+        this._bitmap.ctx.lineTo(points[i].x - xOff, points[i].y - yOff);
     }
     this._bitmap.ctx.closePath();
     this._bitmap.ctx.fill();
@@ -122,52 +119,36 @@ Light.prototype._updateDebug = function () {
     this._debugGraphics.drawCircle(0, 0, 2 * this.radius);
 };
 
-var Simple1DNoise = function() {
-    var MAX_VERTICES = 256;
-    var MAX_VERTICES_MASK = MAX_VERTICES -1;
-    var amplitude = 1;
-    var scale = 1;
+Light.prototype._recalculateWalls = function () {
+    var walls = this.game.globals.plugins.lighting.getWalls();
 
-    var r = [];
+    // Determine which walls have normals that face away from the light - these
+    // are the walls that intersect light rights
+    var intersectingWalls = [];
+    for (var w = 0; w < walls.length; w++) {
+        var wall = walls[w];
+        
+        // Ignore walls that are not within range of the light. MH: this is 
+        // essentially checking whether two circles intersect. Circle 1 is the 
+        // the light. Circle 2 is a circle that circumscribes the wall (e.g. 
+        // placed at the midpoint, with a radius of half wall length). There are
+        // more accurate circle vs line collision detection algorithms that we
+        // could use if needed...
+        var dist = wall.midpoint.distance(this.position);
+        if (dist > (this.radius + (wall.length / 2))) continue;
 
-    for ( var i = 0; i < MAX_VERTICES; ++i ) {
-        r.push(Math.random());
-    }
 
-    var getVal = function( x ){
-        var scaledX = x * scale;
-        var xFloor = Math.floor(scaledX);
-        var t = scaledX - xFloor;
-        var tRemapSmoothstep = t * t * ( 3 - 2 * t );
-
-        /// Modulo using &
-        var xMin = xFloor & MAX_VERTICES_MASK;
-        var xMax = ( xMin + 1 ) & MAX_VERTICES_MASK;
-
-        var y = lerp( r[ xMin ], r[ xMax ], tRemapSmoothstep );
-
-        return y * amplitude;
-    };
-
-    /**
-    * Linear interpolation function.
-    * @param a The lower integer value
-    * @param b The upper integer value
-    * @param t The value between the two
-    * @returns {number}
-    */
-    var lerp = function(a, b, t ) {
-        return a * ( 1 - t ) + b * t;
-    };
-
-    // return the API
-    return {
-        getVal: getVal,
-        setAmplitude: function(newAmplitude) {
-            amplitude = newAmplitude;
-        },
-        setScale: function(newScale) {
-            scale = newScale;
+        // Shift the light so that its origin is at the wall midpoint, then 
+        // calculate the dot of the that and the normal. This way both vectors
+        // have the same origin point.
+        var relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
+        var dot = wall.normal.dot(relativePos);
+        if (dot < 0) {
+            // If the dot between the normal and the light point in negative,
+            // the wall faces away from the light source
+            intersectingWalls.push(wall);
         }
-    };
+    }
+    
+    return intersectingWalls;
 };

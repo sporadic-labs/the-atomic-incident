@@ -32,9 +32,15 @@ function Player(game, x, y, parentGroup) {
     this.anchor.set(0.5);
     parentGroup.add(this);
 
+    this.hearts = 3;
+    this._isTakingDamage = false;
+
+    this._timer = this.game.time.create(false);
+    this._timer.start();
+
     this._isShooting = false;
     this._isDead = false;
-
+    
     // Shorthand
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
@@ -151,9 +157,7 @@ Player.prototype.update = function () {
     // Custom drag. Arcade drag runs the calculation on each axis separately. 
     // This leads to more drag in the diagonal than in other directions.  To fix
     // that, we need to apply drag ourselves.
-    /* jshint ignore:start */
     // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
-    /* jshint ignore:end */
     if (acceleration.isZero() && !this.body.velocity.isZero()) {
         var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
         if (this.body.velocity.getMagnitude() < dragMagnitude) {
@@ -256,10 +260,12 @@ Player.prototype.update = function () {
     }
 
     // Enemy collisions
-    spriteUtils.checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
+    spriteUtils.checkOverlapWithGroup(this, this._enemies, 
+        this._onCollideWithEnemy, this);
 
     // Pickup collisions
-    spriteUtils.checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+    spriteUtils.checkOverlapWithGroup(this, this._pickups, 
+        this._onCollideWithPickup, this);
 
     // Light collisions
     this.game.physics.arcade.collide(this, this._lights);
@@ -276,34 +282,48 @@ Player.prototype.update = function () {
 };
 
 Player.prototype._onCollideWithEnemy = function () {
-    // return to start screen
-    // *** this doesn't work, didn't look into it...
-    // this.game.state.start("start");
+    this.takeDamage();
+};
 
-    // for sandbox testing
-    // console.log("died!");
-    // this.body.enable = false;
-    // this._isDead = true;
+Player.prototype.takeDamage = function () {
+    // If player is already taking damage, nothing else to do
+    if (this._isTakingDamage) return;
 
-    this.game.state.restart();
+    // Lose a heart & restart the game if no hearts remain
+    this.hearts -= 1;
+    if (this.hearts <= 0) {
+        this.game.state.restart();
+    }
+
+    // Speed boost on damage
+    var originalSpeed = this._maxSpeed;
+    this._maxSpeed = 2 * this._maxSpeed;
+
+    // Flicker tween to indicate when player is invulnerable
+    this._isTakingDamage = true;
+    var tween = this.game.make.tween(this)
+        .to({ alpha: 0.25 }, 100, "Quad.easeInOut", true, 0, 5, true);
+
+    // When tween is over, reset
+    tween.onComplete.add(function() {
+        this._isTakingDamage = false;
+        this._maxSpeed = originalSpeed;
+    }, this);
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     if (pickup._category === "weapon") {
-        if (pickup.type === this._gunType) {
-            this.getGun().incrementAmmo(pickup.ammoAmount);
-        } else {
-            this._gunType = pickup.type;
-            this.getGun().fillAmmo();
-        }
+        self._gunType = pickup.type;
+        self.changeGuns(pickup.type);
     }
     pickup.destroy();
 };
 
-
 Player.prototype.destroy = function () {
     this._reticule.destroy();
     this._comboTracker.destroy();
+    this._timer.destroy();
+    this.game.tweens.removeFrom(this);
     for (var gun in this._allGuns) {
         this._allGuns[gun].destroy();
     }
@@ -317,3 +337,31 @@ Player.prototype.getGun = function() {
 Player.prototype.getAmmo = function() {
     if (this._gun.getAmmo) return this._gun.getAmmo();
 };
+
+Player.prototype.changeGuns = function(type) {
+    if (type === "weapon-machine-gun") {
+        this._gun.destroy();
+        this._gun = new MachineGun(this.game, this.parent, this);
+    } else if (type === "weapon-laser") {
+        this._gun.destroy();
+        this._gun = new Laser(this.game, this.parent, this);
+    } else if (type === "weapon-beam") {
+        this._gun.destroy();
+        this._gun = new Beam(this.game, this.parent, this);
+    } else if (type === "weapon-arrow") {
+        this._gun.destroy();
+        this._gun = new Arrow(this.game, this.parent, this);
+    } else if (type === "weapon-sword") {
+        this._gun.destroy();
+        this._gun = new MeleeWeapon(this.game, this.parent, this);
+    } else if (type === "weapon-scattershot") {
+        this._gun.destroy();
+        this._gun = new Scattershot(this.game, this.parent, this);
+    } else if (type === "weapon-flamethrower") {
+        this._gun.destroy();
+        this._gun = new Flamethrower(this.game, this.parent, this);
+    } else if (type === "explosive") {
+        this._gun.destroy();
+        this._gun = new Explosive(this.game, this.parent, this);
+    }
+}

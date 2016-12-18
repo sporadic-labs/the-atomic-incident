@@ -3,8 +3,8 @@
  <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6" columns="6">
   <image source="tiles_25.png" width="150" height="25"/>
  </tileset>
- <tileset firstgid="7" name="wall-tiles" tilewidth="25" tileheight="25" tilecount="8" columns="7">
-  <image source="wall-tiles.png" width="175" height="25"/>
+ <tileset firstgid="7" name="wall-tiles" tilewidth="25" tileheight="25" tilecount="36" columns="12">
+  <image source="wall-tiles.png" width="300" height="75"/>
   <tile id="7">
    <objectgroup draworder="index">
     <object id="1" x="8" y="8" width="10" height="10"/>

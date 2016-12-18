@@ -23,15 +23,26 @@ Phaser.Plugin.Lighting.prototype.removeLight = function (light) {
     if (i !== -1) this.lights.splice(i, 1);
 };
 
+Phaser.Plugin.Lighting.prototype.getWalls = function () {
+    return this._walls;
+};
+
 Phaser.Plugin.Lighting.prototype.setOpacity = function (opacity) {
     this.shadowOpacity = opacity;
 };
 
 Phaser.Plugin.Lighting.prototype.enableDebug = function () {
     this._debugEnabled = true;
-    this._rayBitmapImage.visible = true;
+    this._debugImage.visible = true;
     for (var i = 0; i < this.lights.length; i++) {
         this.lights[i].enableDebug();
+    }
+    // Hack: cycle through lights by enabling/disabling the debug mode
+    if (this._debugLightIndex === undefined || 
+            this._debugLightIndex >= this.lights.length - 1) {
+        this._debugLightIndex = 0;
+    } else {
+        this._debugLightIndex++;
     }
     this._originalShadowOpacity = this.shadowOpacity;
     this.shadowOpacity = 0.8;
@@ -39,7 +50,7 @@ Phaser.Plugin.Lighting.prototype.enableDebug = function () {
 
 Phaser.Plugin.Lighting.prototype.disableDebug = function () {
     this._debugEnabled = false;
-    this._rayBitmapImage.visible = false;
+    this._debugImage.visible = false;
     for (var i = 0; i < this.lights.length; i++) {
         this.lights[i].disableDebug();
     }
@@ -63,8 +74,8 @@ Phaser.Plugin.Lighting.prototype.isPointInShadow = function (worldPoint) {
 Phaser.Plugin.Lighting.prototype.destroy = function () {
     this._bitmap.destroy();
     this._image.destroy();
-    this._rayBitmap.destroy();
-    this._rayBitmapImage.destroy();
+    this._debugBitmap.destroy();
+    this._debugImage.destroy();
     Phaser.Plugin.prototype.destroy.apply(this, arguments);
 };
 
@@ -84,59 +95,84 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     
     this._bitmap = bitmap;
     this._image = image;
-    this._lightWalls = calculateHullsFromTiles(tilemapLayer);
-
-    this._rayBitmap = this.game.add.bitmapData(game.width, game.height);
-    this._rayBitmapImage = this._rayBitmap.addToWorld(game.width / 2, 
-        game.height / 2, 0.5, 0.5, 1, 1);
-    parent.addChild(this._rayBitmapImage);
-    this._rayBitmapImage.fixedToCamera = true;
-    this._rayBitmapImage.visible = false;
-};
-
-Phaser.Plugin.Lighting.prototype.render = function () {
-    if (!this._debugEnabled) return;
-    for (var i = 0; i < this._lightWalls.length; i++) {
-        for (var j = 0; j < this._lightWalls[i].length; j++) {
-            var line = this._lightWalls[i][j];
-            this.game.debug.geom(line, "rgba(255,0,255,0.75)");
+    this._tileSize = tilemapLayer.map.tileWidth;
+    this._wallClusters = calculateHullsFromTiles(tilemapLayer);
+    this._walls = [];
+    for (var i = 0; i < this._wallClusters.length; i++) {
+        for (var j = 0; j < this._wallClusters[i].length; j++) {
+            this._walls.push(this._wallClusters[i][j]);
         }
     }
+
+    this._debugBitmap = this.game.add.bitmapData(game.width, game.height);
+    this._debugImage = this._debugBitmap.addToWorld(0, 0);
+    parent.addChild(this._debugImage);
+    this._debugImage.fixedToCamera = true;
+    this._debugImage.visible = false;
 };
 
-Phaser.Plugin.Lighting.prototype.update = function () {
-    var globals = this.game.globals;
-    var walls = this._getVisibleWalls();
+Phaser.Plugin.Lighting.prototype.update = function () {    
+    var walls = this._walls;
     // walls = walls.concat(this._getPlayerLines());
 
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
-    this._bitmap.clear();
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
+
+    if (this._debugEnabled) this._debugBitmap.clear();
 
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
         light.update();
-        var points = this._castLight(light, walls);
+        var points = this._castLight(light);
         this._drawLight(light, points);
+
+        // Draw the light rays - this gets pretty messy with multiple lights,
+        // so only draw one of them
+        if (this._debugEnabled && (i === this._debugLightIndex)) {
+            var localPoints = points.map(this._convertWorldPointToLocal, this);
+            var lightPoint = this._convertWorldPointToLocal(light.position);
+            for(var k = 0; k < localPoints.length; k++) {
+                var p = localPoints[k];
+                this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y,
+                    "rgb(255, 255, 255)", 1);
+                this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 255, 255)");
+            }
+        }
+    }
+
+    // Draw the wall normals
+    if (this._debugEnabled) {
+        for (var w = 0; w < walls.length; w++) {
+            var mp = this._convertWorldPointToLocal(walls[w].midpoint);
+            var norm = walls[w].normal.setMagnitude(10);          
+            this._debugBitmap.line(mp.x , mp.y, mp.x + norm.x, mp.y + norm.y,
+                "rgb(255, 255, 255)", 3);
+        }
     }
 
     // This just tells the engine it should update the texture cache
     this._bitmap.dirty = true;
-    if (this._debugEnabled) this._rayBitmap.dirty = true;
+    if (this._debugEnabled) this._debugBitmap.dirty = true;
 
     // Update the bitmap so that pixels are available
     this._bitmap.update();
 };
 
-Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
+Phaser.Plugin.Lighting.prototype._castLight = function (light) {
     var points = [];
+    var backWalls = light.intersectingWalls;
 
-    for (var w = 0; w < walls.length; w++) {
+    // Only cast light at the walls that face away from the light. MH: this 
+    // appears to work well when it comes to our current, single screen design.
+    // We'll need to do some testing to see if this breaks moving lights and/or
+    // maps larger than the screen.
+    for (var w = 0; w < backWalls.length; w++) {
         // Get start and end point for each wall.
-        var wall = walls[w];
-        var startAngle = light.position.angle(wall.start);
-        var endAngle = light.position.angle(wall.end);
+        var wall = backWalls[w];
+
+        var startAngle = light.position.angle(wall.line.start);
+        var endAngle = light.position.angle(wall.line.end);
 
         // Check for an intersection at each angle, and +/- 0.001
         // Add the intersection to the points array.
@@ -166,7 +202,7 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
             light.position.x + Math.cos(angle) * light.radius,
             light.position.y + Math.sin(angle) * light.radius);
         // Check if the ray intersected any walls
-        var intersect = ctx._getWallIntersection(ray, walls);
+        var intersect = ctx._getWallIntersection(ray, backWalls);
         // Save the intersection or the end of the ray
         if (intersect) return intersect;
         else return ray.end;
@@ -176,31 +212,14 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light, walls) {
     return points;
 };
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {    
-    var localPoints = points.map(this._convertWorldPointToLocal, this);
-    light.redraw(localPoints);
-    var r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
-    var dx = light.position.x - light.radius;
-    var dy = light.position.y - light.radius;
+Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
+    light.redraw(points); // World coordinates
+    var r = new Phaser.Rectangle(0, 0, light._bitmap.width, 
+        light._bitmap.height);
+    var lightPoint = this._convertWorldPointToLocal(light.position);
+    var dx = lightPoint.x - light.radius;
+    var dy = lightPoint.y - light.radius;
     this._bitmap.copyRect(light._bitmap, r, dx, dy);
-
-    // Draw each of the rays on the rayBitmap
-    if (this._debugEnabled) {
-        this._rayBitmap.context.clearRect(0, 0, this.game.width, 
-            this.game.height);
-        this._rayBitmap.context.beginPath();
-        this._rayBitmap.context.strokeStyle = "rgb(255, 0, 0)";
-        this._rayBitmap.context.fillStyle = "rgb(255, 0, 0)";
-        this._rayBitmap.context.moveTo(localPoints[0].x, localPoints[0].y);
-        var lightPoint = this._convertWorldPointToLocal(light.position);
-        for(var k = 0; k < localPoints.length; k++) {
-            var p = localPoints[k];
-            this._rayBitmap.context.moveTo(lightPoint.x, lightPoint.y);
-            this._rayBitmap.context.lineTo(p.x, p.y);
-            this._rayBitmap.context.fillRect(p.x - 2, p.y - 2, 4, 4);
-        }
-        this._rayBitmap.context.stroke();
-    }
 };
 
 Phaser.Plugin.Lighting.prototype._getPlayerLines = function () {
@@ -217,80 +236,6 @@ Phaser.Plugin.Lighting.prototype._getPlayerLines = function () {
         lastY = y;
     }
     return playerLines;
-};
-
-Phaser.Plugin.Lighting.prototype._getVisibleWalls = function () {
-    var camRect = this.camera.view;
-    var visibleWalls = [];
-
-    // Create walls for each corner of the stage & add them to the walls array
-    var x = camRect.x;
-    var y = camRect.y;
-    var w = camRect.width;
-    var h = camRect.height;
-    var camLeft = new Phaser.Line(x, y + h, x, y);
-    var camTop = new Phaser.Line(x, y, x + w, y);
-    var camRight = new Phaser.Line(x + w, y, x + w, y + h);
-    var camBottom = new Phaser.Line(x + w, y + h, x, y + h);
-    visibleWalls.push(camLeft, camRight, camTop, camBottom);
-
-    for (var i = 0; i < this._lightWalls.length; i++) {
-        for (var j = 0; j < this._lightWalls[i].length; j++) {
-            var line = this._lightWalls[i][j];
-            if (camRect.intersectsRaw(line.left, line.right, line.top, 
-                line.bottom)) {
-                line = getVisibleSegment(line);
-                visibleWalls.push(line);
-            }
-        }
-    }
-
-    function getVisibleSegment(line) {
-        // This function checks the given line against the edges of the camera. 
-        // If it intersects with an edge, then we need to only get the visible
-        // portion of the line.
-        // TODO: if we want this to work for diagonal lines in the tilemap, we
-        // need to update this code to account for the possibility that a line
-        // can intersect multiple edges of the camera 
-        var p = line.intersects(camLeft, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.x < line.end.x) {
-                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
-            } else {
-                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
-            }
-        }
-        var p = line.intersects(camRight, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.x < line.end.x) {
-                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
-            } else {
-                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
-            }
-        }
-        var p = line.intersects(camTop, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.y < line.end.y) {
-                return new Phaser.Line(p.x, p.y, line.end.x, line.end.y);
-            } else {
-                return new Phaser.Line(p.x, p.y, line.start.x, line.start.y);
-            }
-        }
-        var p = line.intersects(camBottom, true);
-        if (p) {
-            // Find which point on the line is visible
-            if (line.start.y < line.end.y) {
-                return new Phaser.Line(line.start.x, line.start.y, p.x, p.y);
-            } else {
-                return new Phaser.Line(line.end.x, line.end.y, p.x, p.y);
-            }
-        }
-        return line;
-    }
-    return visibleWalls;
 };
 
 Phaser.Plugin.Lighting.prototype._convertWorldPointToLocal = function (point) {
@@ -318,7 +263,7 @@ Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls) {
     var closestIntersection = null;
 
     for (var i = 0; i < walls.length; i++) {
-        var intersect = Phaser.Line.intersects(ray, walls[i]);
+        var intersect = Phaser.Line.intersects(ray, walls[i].line);
         if (intersect) {
             // Find the closest intersection
             var distance = this.game.math.distance(ray.start.x, ray.start.y,

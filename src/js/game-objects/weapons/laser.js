@@ -62,7 +62,8 @@ Laser.prototype._createProjectile = function (angle, playerDistance,
 Tracker.prototype = Object.create(Phaser.Sprite.prototype);
 
 /**
- * @param {Projectile} bullets - Array of bullets associated with a specific tracker.
+ * @param {Projectile} bullets - Array of bullets associated with a specific 
+ * tracker.
  */
 function Tracker(game, x, y, bullets) {
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
@@ -75,7 +76,6 @@ function Tracker(game, x, y, bullets) {
 }
 
 Tracker.prototype.update = function() {
-    console.log('this.is happening at least');
     // Set tracker position to bullet[0] position
     this.position.x = this.bullets[0].position.x;
     this.position.y = this.bullets[0].position.y;
@@ -86,7 +86,6 @@ Tracker.prototype.update = function() {
 }
 
 Tracker.prototype._onCollideWithEnemy = function (self, enemy) {
-    console.log('collide!');
     for (var i = 0; i < this.bullets.length; i++) {
         this.bullets[0].trackTarget(enemy);
     }

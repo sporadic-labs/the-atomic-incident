@@ -49,3 +49,18 @@ exports.tiledColorToRgb = function (hexColor) {
     var b = parseInt(hexColor.substring(7), 16);
     return Phaser.Color.getColor32(a, r, g, b);
 }
+
+/** 
+ * Fisher-Yates algorithm to shuffle an array in place. 
+ * Source: https://bost.ocks.org/mike/shuffle/ 
+ * */
+exports.shuffleArray = function (array) {
+    for (var i = array.length - 1; i > 0; i -= 1) {
+        // Random element between 0 (inclusive) and i (exclusive)
+        var j = Math.floor(Math.random() * i);
+        // Swap elements i and j
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+};

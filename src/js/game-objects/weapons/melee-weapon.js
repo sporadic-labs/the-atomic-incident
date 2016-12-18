@@ -7,6 +7,7 @@ MeleeWeapon.prototype = Object.create(Phaser.Sprite.prototype);
 function MeleeWeapon(game, parentGroup, player) {    
     Phaser.Sprite.call(this, game, player.x, player.y, "assets", 
         "weapons/sword");
+    this.scale.setTo(0.8, 0.8);
 
     this.anchor.set(0.5, 1.0);
     this.pivot.y = 18;

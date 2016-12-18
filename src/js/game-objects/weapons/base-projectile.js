@@ -1,7 +1,6 @@
 module.exports = BaseProjectile;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
-var Fire = require("./fire.js");
 
 BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -52,7 +51,8 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (options !== undefined && options.grow !== undefined)
         this._grow = options.grow;
     else this._grow = false;
-    if (options !== undefined && options.tracking !== undefined && options.trackingRadius !== undefined) {
+    if (options !== undefined && options.tracking !== undefined && 
+            options.trackingRadius !== undefined) {
         this._tracking = options.tracking;
         this._trackingTarget = options.trackingTarget;
     } else {
@@ -77,11 +77,15 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
         this._speed, this.body.velocity);
 
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+
+    // Make sure the projectile isn't spawning in a wall
+    SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
+        this._onCollideWithMap);
 }
 
 BaseProjectile.prototype.update = function() {
     // Collisions with the tilemap
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer,
+    SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
         this._onCollideWithMap);
 
     // If a decate rate was set, apply it to the velocity.
@@ -90,8 +94,8 @@ BaseProjectile.prototype.update = function() {
         this.body.velocity.y = this.body.velocity.y * this._decayRate;
     }
 
-    // If the grow flag was set, increase the scale of the projectile every frame.
-    // This might be a hack, but if it applicable elsewhere we can figure
+    // If the grow flag was set, increase the scale of the projectile every
+    // frame. This might be a hack, but if it applicable elsewhere we can figure
     // something more generic out.
     if (this._grow) {
         var x = this.scale.x * 1.0264;
@@ -108,10 +112,10 @@ BaseProjectile.prototype.update = function() {
     }
 
     // If the projectile tracks, check if target is within the tracking radius.
-    // If it is, begin tracking.  Otherwise, continue on the initiail trajectory.
-    // NOTE(rex): HMMMM This isn't quite working...
+    // If it is, begin tracking.  Otherwise, continue on the initial
+    // trajectory. NOTE(rex): HMMMM This isn't quite working...
     if (this._tracking) {
-
+        // Was something supposed to happen here?
     }
 }
 
@@ -132,6 +136,7 @@ BaseProjectile.prototype.destroy = function () {
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };
 
+// eslint-disable-next-line no-unused-vars
 BaseProjectile.prototype._onCollideWithMap = function (self, map) {
     if (self._isDestructable) {
         self._remove = true;
@@ -160,7 +165,6 @@ BaseProjectile.prototype.trackTarget = function(self, target) {
     var distance = this.position.distance(target.position);
     var angle = this.position.angle(target.position);
     var targetSpeed = distance / this.game.time.physicsElapsed;
-    var magnitude = Math.min(15, targetSpeed);
     this.body.velocity.x = targetSpeed * Math.cos(angle);
     this.body.velocity.y = targetSpeed * Math.sin(angle);
 }

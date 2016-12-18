@@ -4,10 +4,11 @@
 
 module.exports = Sandbox;
 
+require("../plugins/AStar.js");
+
 var utils = require("../helpers/utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
-var AStar = require("../plugins/AStar.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
@@ -16,9 +17,6 @@ var DestructableLight = require("../game-objects/destructable-light.js");
 function Sandbox() {}
 
 Sandbox.prototype.create = function () {
-    // Create the space for globals on the game object
-    this.game.globals = {};
-
     // Shorthands
     var game = this.game;
     var globals = game.globals;
@@ -81,19 +79,29 @@ Sandbox.prototype.create = function () {
 
     // Player
     // Get the Spawn Point(s) for the player from the tile map.
-    var playerStartPoint = this.getMapPoints("player")[0]; // only one for the moment...
+    var playerStartPoint = this.getMapPoints("player")[0]; // temp fix
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, playerStartPoint.x, playerStartPoint.y, groups.midground);
+    var player = new Player(game, playerStartPoint.x, playerStartPoint.y, 
+        groups.midground);
     this.camera.follow(player);
     globals.player = player;
 
     // Create lights
-    var lights = utils.default(map.objects["lights"], []); // Default to empty list
+    var lights = utils.default(map.objects["lights"], []); // Default to empty
     lights.forEach(function (light) {
-        var x = light.x + map.tileWidth / 2;
-        var y = light.y - map.tileHeight / 2;
+        var x, y, radius;
         var p = light.properties || {};
-        var radius = p.radius ? Number(p.radius) : 300;
+        if (light.ellipse) {
+            // Newer format for lights - using ellipses in Tiled
+            x = light.x + (light.width / 2);
+            y = light.y + (light.height / 2);
+            radius = light.width / 2;
+        } else {
+            // Fallback to support old format using tiles
+            x = light.x + map.tileWidth / 2;
+            y = light.y - map.tileHeight / 2;
+            radius = p.radius ? Number(p.radius) : 300;
+        }
         var color = p.color ? utils.tiledColorToRgb(p.color) : 0xFFFFFFFF;
         var health = p.health ? Number(p.health) : 100;
         new DestructableLight(game, x, y, groups.lights, radius, color, 
@@ -102,36 +110,35 @@ Sandbox.prototype.create = function () {
     // this.mouseLight = this.lighting.addLight(new Phaser.Point(0, 0), 150, 
     //     Phaser.Color.getColor32(255, 255, 217, 0));
 
-    // Temporary fix: make walls appear on top of lights
-    groups.foreground.bringToTop(wallLayer);
-
     // Score
     globals.scoreKeeper = new ScoreKeeper();
 
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
     
-    var Wave1 = require("../game-objects/waves/wave-1.js");
-    new Wave1(game);
+    // var Wave1 = require("../game-objects/waves/wave-1.js");
+    // new Wave1(game);
 
-    // var WeaponPickup = require("../game-objects/pickups/weapon-pickup.js");
-    // for (var i=0; i<50; i++) {
-    //     new WeaponPickup(this.game, this.game.rnd.integerInRange(0, 1300), 
-    //         this.game.rnd.integerInRange(0, 1300), "gun", 5)
-    // }
+    var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
+    globals.spawnEnemies = new SpawnerWave(game);
+
+    var SpawnPickups = require("../game-objects/pickups/spawn-pickups.js");
+    globals.spawnPickups = new SpawnPickups(game);
+
 
     // Menu for switching tile maps
-    var menu = []
-    menu[0] = game.add.button(game.width - 36, 4, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/multilight-test.json');
-    }, this);
-    menu[1] = game.add.button(game.width - 36, 38, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/level_03.json');
-    }, this);
-    menu[2] = game.add.button(game.width - 36, 72, 'button', function() {
-        this.game.state.start('load', true, true, 'resources/tilemaps/level_04.json');
-    }, this);
-    this.menu = menu
+    var menu = [];
+    var x = game.width - 36;
+    for (var i = 0; i < globals.tilemapFiles.length; i++) {
+        // The callback needs a reference to the value of i on each iteration,
+        // so create a callback with binding
+        var cb = game.state.start.bind(game.state, "load", true, true, 
+            "resources/tilemaps/" + globals.tilemapFiles[i]);
+        var b = game.add.button(x, (36 * i) + 4, "button", cb);
+        b.fixedToCamera = true;
+        menu.push(b);
+    }
+    this.menu = menu;
 
     // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
@@ -174,7 +181,8 @@ Sandbox.prototype.update = function () {
 
 Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
-    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, "#ff0000");
+    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, 
+    //  "#ff0000");
 };
 
 Sandbox.prototype.shutdown = function () {

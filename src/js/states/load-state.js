@@ -9,14 +9,14 @@ function LoadState() {}
 // Set the 'current map' to be loaded by the game
 // Default to level_03 until we have some actual maps...
 LoadState.prototype.init = function (map) {
-    this.currentMap = map ? map : 'resources/tilemaps/level_03.json'
+    this.currentMap = map ? map : 
+        "resources/tilemaps/" + this.game.globals.tilemapFiles[0];
 };
 
 LoadState.prototype.preload = function () {    
     // Images
     this.load.atlasJSONHash("assets", "resources/atlases/assets.png", 
         "resources/atlases/assets.json");
-    this.load.image("fogMask", "resources/images/fog-mask-2.png")
 
     // Tilemap
     this.load.tilemap("tilemap", this.currentMap, null, 
