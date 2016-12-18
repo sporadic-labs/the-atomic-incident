@@ -14,7 +14,7 @@ var projectileOptions = {
 
 function Laser(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Laser", player);
-    this.initAmmo(120);
+    this.initAmmo(124);
     this.initCooldown(160, 500);
     this.tracker = null;
 }
@@ -25,14 +25,14 @@ Laser.prototype.fire = function (targetPos) {
         var angle = this._player.position.angle(targetPos); // Radians
         var spacing = 0.16 * this._player.width;
         var spacing2 = 0.36 * this._player.width;
-        var a = this._createProjectile(angle, 48, 0);
-        var b = this._createProjectile(angle, 16, spacing2);
-        var c = this._createProjectile(angle, 16, -spacing2);
-        var d = this._createProjectile(angle, 24, spacing);
-        var e = this._createProjectile(angle, 24, -spacing);
+        var a = this._createProjectile(angle, 32, 0);
+        var b = this._createProjectile(angle + 0.04, 8, spacing2);
+        var c = this._createProjectile(angle - 0.04, 8, -spacing2);
+        var d = this._createProjectile(angle + 0.12, 16, spacing);
+        var e = this._createProjectile(angle - 0.12, 16, -spacing);
         this.tracker = new Tracker(this.game, a.position.x, a.position.y,
             [a, b, c, d, e]);
-        this.incrementAmmo(-5);
+        this.incrementAmmo(-1);
         this._startCooldown(this._cooldownTime);
     }
 };
@@ -45,7 +45,7 @@ Laser.prototype._createProjectile = function (angle, playerDistance,
     var y = this._player.y + (playerDistance * Math.sin(angle)) - 
         (perpendicularOffset * Math.sin(perpAngle));    
     var p = new Projectile(this.game, x, y, "assets", "weapons/laser-01", this,
-        this._player, 7, angle, 640, 320, projectileOptions);
+        this._player, 16, angle, 640, 320, projectileOptions);
     p.scale.setTo(0.72, 0.72);
     var rgb = Phaser.Color.HSLtoRGB(0.52, 0.5, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
