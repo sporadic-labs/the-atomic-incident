@@ -22,7 +22,9 @@ function SpawnPickups(game) {
         "weapon-laser",
         "weapon-beam",
         "weapon-arrow",
-        "explosive",
+        "grenade",
+        "rocket",
+        "weapon-slug",
     ];
 
     this.spawn(this._player.position.x, this._player.position.y + 16);
@@ -30,7 +32,7 @@ function SpawnPickups(game) {
 
 SpawnPickups.prototype.spawn = function (x, y) {
     if ((this._scorekeeper.getScore() % 20) === 0) {
-        var num = this.game.rnd.integerInRange(0, 7);
+        var num = this.game.rnd.integerInRange(0, this.weaponTypes.length-1);
         new WeaponPickup(this.game, x, y, this.weaponTypes[num]);
     }
 };
