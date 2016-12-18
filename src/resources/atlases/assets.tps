@@ -415,6 +415,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/shadow-enemy/bomber-eye-idle-01.png</key>
+            <key type="filename">frames/shadow-enemy/bomber-idle-01.png</key>
             <key type="filename">frames/shadow-enemy/eye.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
