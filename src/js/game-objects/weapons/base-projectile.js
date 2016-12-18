@@ -81,7 +81,7 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
 
 BaseProjectile.prototype.update = function() {
     // Collisions with the tilemap
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer,
+    SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
         this._onCollideWithMap);
 
     // If a decate rate was set, apply it to the velocity.
