@@ -11,13 +11,14 @@ function BasePickup(game, x, y, key, frame, parentGroup, category, pointValue) {
 
     this._category = category;
     this._initialPos = this.position.clone();
-    this._startTime = this.game.time.now;
+    this._startTime = game.time.now;
     this._pointValue = utils.default(pointValue, 0);
 
     // Configure physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setCircle(this.width / 2 * 0.8); // Fudge factor
+
+    this.satBody = game.globals.plugins.satBody.addBoxBody(this);
 }
 
 BasePickup.prototype.killByPlayer = function () {
