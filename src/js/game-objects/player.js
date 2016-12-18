@@ -278,16 +278,6 @@ Player.prototype.update = function () {
 
     // Light collisions
     this.game.physics.arcade.collide(this, this._lights);
-
-    // if (this._isDead) {
-    //     console.log("dead!");
-    //     this.animations.play(ANIM_NAMES.DIE);
-    //     this.animations.onComplete.add(function() {
-    //         this._isDead = false;
-    //         this.destroy();
-    //         this.game.state.restart();
-    //     }, this);
-    // }
 };
 
 Player.prototype._onCollideWithEnemy = function () {
