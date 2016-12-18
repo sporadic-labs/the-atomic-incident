@@ -2,6 +2,7 @@ module.exports = SpawnPointWave;
 
 var ShadowEnemy = require("../enemies/shadow-enemy.js");
 var ShadowBomber = require("../enemies/shadow-bomber.js");
+var WaveType = require("./wave-type.js");
 
 SpawnPointWave.prototype = Object.create(Phaser.Group.prototype);
 
@@ -13,6 +14,19 @@ function SpawnPointWave(game) {
     this._player = this.game.globals.player;
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
+
+    /**
+     * Array of possible wave types where each element is an object that 
+     * describes a wave:
+     *  { probability: oddsOfWaveOccuring, enemyName: fractionOfTotalEnemies, 
+     *      ..., total: numEnemiesInWave, name: nameForDebugging }
+     */
+    this._waveTypes = [
+        {probability: 0.2, waveType: new WaveType(game, "Bombers", 0, 2)},
+        {probability: 0.5, waveType: new WaveType(game, "Attackers", 4, 0)},
+        {probability: 0.2, waveType: new WaveType(game, "Mixed", 3, 1)},
+        {probability: 0.1, waveType: new WaveType(game, "AttackersRush", 6, 0)}
+    ];
 
     // Fix to make this wave work with maps that don't have spawn points defined
     // in tiled
@@ -43,26 +57,55 @@ SpawnPointWave.prototype._spawnCluster = function () {
 
 SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, numToSpawn, 
         delay) {
-    var numSpawned = 0;
+    // Pick a wave type and get the first enemy
+    var waveType = this._pickWaveType();
+    waveType.startNewSpawn();
+    var enemyTypeToSpawn = waveType.getNextEnemyType();
+
+    
+    // Spawn the enemies in the wave with a small delay between each enemy
     var delayedSpawn = function () {
-        this._spawnInRegion(region);
-        numSpawned++;
-        if (numSpawned < numToSpawn) this._timer.add(delay, delayedSpawn);
+        var spawnPoint = this._getSpawnPointInRegion(region);
+        if (enemyTypeToSpawn === "bomber") {
+            new ShadowBomber(this.game, spawnPoint.x, spawnPoint.y, this);
+        } else if (enemyTypeToSpawn === "attacker") {
+            new ShadowEnemy(this.game, spawnPoint.x, spawnPoint.y, this);
+        }
+        enemyTypeToSpawn = waveType.getNextEnemyType();
+        if (enemyTypeToSpawn) this._timer.add(delay, delayedSpawn);
     }.bind(this);
     delayedSpawn();
 };
 
-SpawnPointWave.prototype._spawnInRegion = function (region) {
+SpawnPointWave.prototype._pickWaveType = function () {
+    // Use a random number between 0 and 1 to do a weighted pick from 
+    // this._waveProbabilities. A running total is needed to sample the waves. 
+    // If the probabilities for the waves are:
+    //  0.2, 0.5, 0.3
+    // That is really checking if the random number is between:
+    //  [0.0 - 0.2], [0.2 - 0.7], [0.7 - 1.0]  
+    var rand = this.game.rnd.frac();
+    var runningTotal = 0;
+    for (var i = 0; i < this._waveTypes.length; i++) {
+        var probability = this._waveTypes[i].probability;
+        runningTotal += probability;
+        if (rand <= runningTotal) return this._waveTypes[i].waveType;
+    }
+    // If the probabilities don't add up to one, return the last wave
+    return this._waveTypes[i - 1].waveType;
+};
+
+SpawnPointWave.prototype._getSpawnPointInRegion = function (region) {
     // For now, just working with rectangular spawn areas, but tiled supports
     // ellipses/polygons/polylines
     if (!region.rectangle) {
         console.warn("Unsupported spawn point type!");
         return;
     }
-    this._spawnInRect(region);
+    return this._getSpawnPointInRect(region);
 };
 
-SpawnPointWave.prototype._spawnInRect = function (rect) {
+SpawnPointWave.prototype._getSpawnPointInRect = function (rect) {
     var attempts = 0;
     var maxAttempts = 1000;
     var lighting = this.game.globals.plugins.lighting;
@@ -70,15 +113,8 @@ SpawnPointWave.prototype._spawnInRect = function (rect) {
         attempts++;
         var x = this.game.rnd.integerInRange(rect.x, rect.x + rect.width);
         var y = this.game.rnd.integerInRange(rect.y, rect.y + rect.height);
-        if (this._isTileEmpty(x, y) && 
-                lighting.isPointInShadow(new Phaser.Point(x, y))) {
-            if (this.game.rnd.frac() < 0.75) {
-                new ShadowEnemy(this.game, x, y, this);
-            } else {
-                new ShadowBomber(this.game, x, y, this);
-            }
-            return;
-        }
+        var p = new Phaser.Point(x, y);
+        if (this._isTileEmpty(x, y) && lighting.isPointInShadow(p)) return p;
     }
 
     if (attempts >= maxAttempts) {
