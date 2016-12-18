@@ -37,3 +37,21 @@ exports.arcadeRecursiveCollide = function (sprite, group, callback, context) {
         }
     }
 };
+
+/**
+ * Check a sprite's overlap against a tilemap layer using SAT bodies
+ */
+exports.satSpriteVsTilemap = function (sprite, tilemapLayer, callback, context) {
+    var b = sprite.satBody.getAxisAlignedBounds();
+    var tiles = tilemapLayer.getTiles(b.x, b.y, b.width, b.height, true);
+    for (var i = 0; i < tiles.length; i++) {
+        var tile = tiles[i];
+        var isOverlap = sprite.satBody.testOverlapVsRectangle({
+            x: tile.worldX,
+            y: tile.worldY,
+            width: tile.width,
+            height: tile.height
+        });
+        if (isOverlap) callback.call(context, sprite, tile);
+    }
+};
