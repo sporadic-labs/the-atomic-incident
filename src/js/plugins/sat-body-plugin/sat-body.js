@@ -76,6 +76,33 @@ SatBody.prototype.getBodyType = function () {
     return this._bodyType;
 };
 
+SatBody.prototype.getAxisAlignedBounds = function () {
+    var left = null, right = null, top = null, bottom = null;
+    if (this._bodyType === BODY_TYPE.POLYGON) {
+        var points = this._body.calcPoints;
+        for (var i = 0; i < points.length; i++) {
+            var x = points[i].x + this._body.pos.x;
+            var y = points[i].y + this._body.pos.y;
+            if (left === undefined || x < left) left = x;
+            if (right === undefined || x > right) right = x;
+            if (top === undefined || y < top) top = y;
+            if (bottom === undefined || y > bottom) bottom = y;
+        }
+    } else if (this._bodyType === BODY_TYPE.CIRCLE) {
+        left = this._body.pos.x - this._body.r;
+        right = this._body.pos.x + this._body.r;
+        top = this._body.pos.y - this._body.r;
+        bottom = this._body.pos.y + this._body.r;
+    }
+    // Return a rectangle representing the bounds
+    return { 
+        x: left,
+        y: top,
+        width: right - left,
+        height: bottom - top
+    };
+};
+
 SatBody.prototype.testOverlap = function (otherBody) {
     // Handy boolean shorthands
     var thisIsCircle = (this._bodyType === BODY_TYPE.CIRCLE);
@@ -90,6 +117,18 @@ SatBody.prototype.testOverlap = function (otherBody) {
         return SAT.testPolygonCircle(otherBody._body, this._body);
     } else {
         return SAT.testPolygonPolygon(this._body, otherBody._body);
+    }
+};
+
+SatBody.prototype.testOverlapVsRectangle = function (rect) {
+    // Convert rectangle to a SAT body
+    var satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
+
+    // Determine the appropriate collision body comparison
+    if (this._bodyType === BODY_TYPE.CIRCLE) {
+        return SAT.testPolygonCircle(satRect, this._body);
+    } else {
+        return SAT.testPolygonPolygon(this._body, satRect);
     }
 };
 
