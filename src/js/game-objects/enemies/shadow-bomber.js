@@ -15,6 +15,9 @@ function ShadowBomber(game, x, y, parentGroup) {
         "shadow-enemy/bomber-eye-idle-01");
     this._eyeImage.anchor.copyFrom(this.anchor);
     game.globals.groups.foreground.add(this._eyeImage);
+    
+    // Temp fix: move the health bar above the shadow/light layer
+    game.globals.groups.foreground.add(this._healthBar);
 
     this._damage = 25; // 100 units in an explosion
 

@@ -15,6 +15,9 @@ function ShadowEnemy(game, x, y, parentGroup) {
     this._eyeImage.anchor.copyFrom(this.anchor);
     game.globals.groups.foreground.add(this._eyeImage);
 
+    // Temp fix: move the health bar above the shadow/light layer
+    game.globals.groups.foreground.add(this._healthBar);
+
     this._damage = 10; // 10 units per second
 
     this._targetingComponent = new TargetingComponent(this, 50);
