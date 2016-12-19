@@ -123,6 +123,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
+        if (!light.enabled) continue;
         light.update();
         var points = this._castLight(light);
         this._drawLight(light, points);

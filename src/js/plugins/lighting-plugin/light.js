@@ -7,6 +7,7 @@ function Light(game, parent, position, radius, color) {
     this.radius = radius;
     this.originalRadius = radius;
     this.color = (color !== undefined) ? color : 0xFFFFFFFF;
+    this.enabled = true;
     this._isDebug = false;
     this._debugGraphics = null;
     this._bitmap = game.add.bitmapData(2 * this.radius, 2 * this.radius);
