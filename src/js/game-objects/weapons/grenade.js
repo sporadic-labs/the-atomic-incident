@@ -58,6 +58,6 @@ Grenade.prototype.specialFire = function () {
 };
 
 Grenade.prototype._createProjectile = function (x, y, angle) {
-    var g = new BaseExplosive(this.game, x, y, "assets", "weapons/e-saw-02", this, 
+    new BaseExplosive(this.game, x, y, "assets", "weapons/e-saw-02", this, 
         this._player, 84, angle, 164, 360, 2400, projectileOptions);
 };

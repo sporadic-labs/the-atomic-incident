@@ -79,7 +79,6 @@ BaseExplosive.prototype.update = function() {
 }
 
 BaseExplosive.prototype.explode = function () {
-    console.log('exploding');
     this._hasExploded = true;
     // Switch to explosion circle SAT body 
     this.game.globals.plugins.satBody.removeBody(this.satBody);

@@ -1,7 +1,6 @@
 module.exports = RustySword;
 
 var BaseMelee = require("./base-melee.js");
-var SpriteUtils = require("../../helpers/sprite-utilities.js");
 
 RustySword.prototype = Object.create(BaseMelee.prototype);
 

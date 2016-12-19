@@ -3,10 +3,6 @@ module.exports = WeaponPickup;
 var BasePickup = require("./base-pickup.js");
 var spriteUtils = require("../../helpers/sprite-utilities.js");
 
-var ANIM_NAMES = {
-    IDLE: "idle"
-};
-
 WeaponPickup.prototype = Object.create(BasePickup.prototype);
 
 function WeaponPickup(game, x, y, type) {
@@ -65,13 +61,6 @@ function WeaponPickup(game, x, y, type) {
     this._label.anchor.copyFrom(this.anchor);
     this._label.position.copyFrom(this.position);
     game.globals.groups.midground.add(this._label);
-
-    // NOTE(rex): This animation doesn't quite work with a label...
-    // // Setup animations
-    // var idleFrames = Phaser.Animation.generateFrameNames("pickups/box-", 1, 4, 
-    //     "", 2);
-    // this.animations.add(ANIM_NAMES.IDLE, idleFrames, 4, true);
-    // this.animations.play(ANIM_NAMES.IDLE);
 }
 
 WeaponPickup.prototype.destroy = function () {

@@ -4,7 +4,8 @@ var utils = require("../../helpers/utilities.js");
 
 BasePickup.prototype = Object.create(Phaser.Sprite.prototype);
 
-function BasePickup(game, x, y, key, frame, parentGroup, category, pointValue, life) {
+function BasePickup(game, x, y, key, frame, parentGroup, category,
+        pointValue, life) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.set(0.5);
     parentGroup.add(this);

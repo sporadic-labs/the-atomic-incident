@@ -45,9 +45,10 @@ BaseMelee.prototype.postUpdate = function () {
 BaseMelee.prototype.swing = function (targetPos, angle) {
     // start angle
     var halfAngle = (angle/2) * (Math.PI/180) * this._swingDir;
-    this.rotation = this._player.position.angle(targetPos) + (Math.PI/2) - halfAngle;
-    var pos = (this._player.position.angle(targetPos) + (Math.PI/2) - halfAngle) *
-        (180/Math.PI);
+    this.rotation = this._player.position.angle(targetPos) +
+        (Math.PI/2) - halfAngle;
+    var pos = (this._player.position.angle(targetPos) + (Math.PI/2) -
+        halfAngle) * (180/Math.PI);
     // Angle Calculation correction
     if (pos < 360 && pos > 180) {
         pos -= 360;
