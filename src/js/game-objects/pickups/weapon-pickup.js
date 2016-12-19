@@ -18,7 +18,7 @@ function WeaponPickup(game, x, y, type) {
     // Tint the box, and set a label.
     this.type = type;
     this._label;
-    if (this.type === "weapon-sword") {
+    if (this.type === "rusty-sword") {
         spriteUtils.applyRandomLightnessTint(this, 0.98, 1, 0.6);
         this._label = game.make.image(0, 0, "assets", "weapons/sword");
         this._label.scale.setTo(0.36, 0.36);

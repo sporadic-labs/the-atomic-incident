@@ -15,7 +15,7 @@ function SpawnPickups(game) {
     this._scorekeeper = game.globals.scoreKeeper;
 
     this.weaponTypes = [
-        "weapon-sword",
+        "rusty-sword",
         "weapon-scattershot",
         "weapon-flamethrower",
         "weapon-machine-gun",
