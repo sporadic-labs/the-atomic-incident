@@ -76,7 +76,7 @@ function BaseProjectile(game, x, y, parentGroup, player, angle) {
 
     this._hasExploded = false;
     this._damage = 100;
-    this._range = 400;
+    this._range = 200;
     this._speed = 200;
 
     this._player = player;
@@ -91,7 +91,7 @@ function BaseProjectile(game, x, y, parentGroup, player, angle) {
 
 BaseProjectile.prototype.update = function() {
     // Collisions with the tilemap
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer, 
+    SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
         this._onCollideWithMap);
 }
 
