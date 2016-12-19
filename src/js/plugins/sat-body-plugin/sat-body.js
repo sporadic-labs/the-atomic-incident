@@ -132,6 +132,23 @@ SatBody.prototype.testOverlapVsRectangle = function (rect) {
     }
 };
 
+SatBody.prototype.collideVsRectangle = function (rect) {
+    // Convert rectangle to a SAT body
+    var satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
+    var response = new SAT.Response();
+    
+    // Determine the appropriate collision body comparison
+    var isCollision;
+    if (this._bodyType === BODY_TYPE.CIRCLE) {
+        isCollision = SAT.testPolygonCircle(satRect, this._body, response);
+    } else {
+        isCollision = SAT.testPolygonPolygon(this._body, satRect, response);
+    }
+
+    if (isCollision) return response;
+    else return false;
+};
+
 SatBody.prototype.postUpdate = function () {
     // Update the position of the colliding body
     if (this._bodyType === BODY_TYPE.CIRCLE) {
