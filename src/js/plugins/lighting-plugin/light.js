@@ -75,9 +75,9 @@ Light.prototype.redrawLight = function () {
     // from center 
     var c = Phaser.Color.getRGB(this.color);
     var c1 = Phaser.Color.getWebRGB(c);
-    c.a = 175;
+    c.a *= 0.68;
     var c2 = Phaser.Color.getWebRGB(c);
-    c.a = 100;
+    c.a *= 0.57;
     var c3 = Phaser.Color.getWebRGB(c);   
     this._bitmap.circle(this.radius, this.radius, this.radius * 0.9, c3);
     this._bitmap.circle(this.radius, this.radius, this.radius * 0.8, c2);
