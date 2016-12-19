@@ -2,6 +2,7 @@ module.exports = Gun;
 
 var BaseWeapon = require("./base-weapon.js");
 var Projectile = require("./base-projectile.js");
+var BouncingProjectile = require("./bouncing-projectile.js");
 
 Gun.prototype = Object.create(BaseWeapon.prototype);
 
@@ -55,6 +56,8 @@ Gun.prototype.specialFire = function () {
 };
 
 Gun.prototype._createProjectile = function (x, y, angle) {
-    new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, 100, angle, 300, 200, projectileOptions);
+    // new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
+    //     this._player, 100, angle, 300, 200, projectileOptions);
+    var p = new BouncingProjectile(this.game, x, y, "assets", "weapons/circle", this, 
+        this._player, 100, angle, 300, 20);
 };
