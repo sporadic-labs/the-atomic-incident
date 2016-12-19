@@ -378,7 +378,7 @@
 },
 "fx/swoosh-02":
 {
-	"frame": {"x":675,"y":221,"w":8,"h":16},
+	"frame": {"x":703,"y":239,"w":8,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":16},
@@ -602,7 +602,7 @@
 },
 "player/die-04":
 {
-	"frame": {"x":703,"y":239,"w":10,"h":8},
+	"frame": {"x":511,"y":247,"w":10,"h":8},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":8,"y":9,"w":10,"h":8},
@@ -824,6 +824,14 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":800,"h":20},
 	"sourceSize": {"w":800,"h":20}
 },
+"weapons/circle":
+{
+	"frame": {"x":675,"y":221,"w":12,"h":12},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12}
+},
 "weapons/death-beam":
 {
 	"frame": {"x":435,"y":235,"w":20,"h":20},
@@ -975,6 +983,6 @@
 	"format": "RGBA8888",
 	"size": {"w":923,"h":256},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:9172fc133c0a9d76ce29915d1643e2c0:7c42881f874a8f41a97fc4f4173a07bd:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:d4f56b59634620c7a6a845393c0822cc:b6d54e7c0857e027672b608f70f868a1:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
