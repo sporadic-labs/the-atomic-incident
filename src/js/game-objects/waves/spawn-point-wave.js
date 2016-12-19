@@ -52,7 +52,7 @@ SpawnPointWave.prototype._spawnCluster = function () {
     var region = this.game.rnd.pick(this._spawnRegions);
     this._spawnSeriesWithDelay(region, 3, 200);
     // Schedule next spawn
-    this._timer.add(4000, this._spawnCluster.bind(this));
+    this._timer.add(6000, this._spawnCluster.bind(this));
 };
 
 SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, numToSpawn, 
