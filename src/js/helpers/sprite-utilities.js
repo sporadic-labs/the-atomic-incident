@@ -38,20 +38,48 @@ exports.arcadeRecursiveCollide = function (sprite, group, callback, context) {
     }
 };
 
+
 /**
- * Check a sprite's overlap against a tilemap layer using SAT bodies
+ * Check a sprite's overlap against a tilemap layer using SAT bodies. This
+ * creates a SAT body for tiles on-the-fly.
+ *
+ * @param {any} sprite The sprite with the SAT body
+ * @param {TilemapLayer} tilemapLayer The tilemap layer to collide against.
+ * @param {boolean} [resolveCollisions=false] Should any collisions be resolved
+ * so that the sprite is no longer colliding?
+ * @param {boolean} [processAllCollisions=false] Should all overlaps be checked
+ * (true) or should the function stop after the first overlap (false).
+ * @param {function} callback Function to run on overlap. This gets passed the
+ * sprite and the tile it overlaps with.
+ * @param {object} context The context to use with the callback.
+ * @returns {boolean} Whether or not a collision was detected.
  */
-exports.satSpriteVsTilemap = function (sprite, tilemapLayer, callback, context) {
+exports.satSpriteVsTilemap = function (sprite, tilemapLayer, resolveCollisions,
+        processAllCollisions, callback, context) {
+    if (processAllCollisions === undefined) processAllCollisions = false;
+    if (resolveCollisions === undefined) resolveCollisions = false;
+
+    var isOverlapDetected = false; 
     var b = sprite.satBody.getAxisAlignedBounds();
     var tiles = tilemapLayer.getTiles(b.x, b.y, b.width, b.height, true);
     for (var i = 0; i < tiles.length; i++) {
         var tile = tiles[i];
-        var isOverlap = sprite.satBody.testOverlapVsRectangle({
+        var response = sprite.satBody.collideVsRectangle({
             x: tile.worldX,
             y: tile.worldY,
             width: tile.width,
             height: tile.height
         });
-        if (isOverlap) callback.call(context, sprite, tile);
+        if (response !== false) {
+            if (resolveCollisions) {
+                sprite.body.x -= response.overlapV.x;
+                sprite.body.y -= response.overlapV.y;
+                sprite.satBody.postUpdate();
+            }
+            isOverlapDetected = true;
+            if (callback) callback.call(context, sprite, tile, response);
+            if (!processAllCollisions) return true;
+        }
     }
+    return isOverlapDetected;
 };
