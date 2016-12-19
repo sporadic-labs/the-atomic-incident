@@ -76,7 +76,7 @@ BaseSpray.prototype.update = function() {
     this._age++;
 
     // Collisions with the tilemap
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer,
+    SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
         this._onCollideWithMap);
 
     // If a decate rate is set, apply it to the velocity.
