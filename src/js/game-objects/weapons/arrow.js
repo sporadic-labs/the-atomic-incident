@@ -11,11 +11,12 @@ var projectileOptions = {
     rotateOnSetup: true,
     canBounce: true,
     canPierce: true,
+    speedModifier: 0.992,
 };
 
 function Arrow(game, parentGroup, player) {
     BaseWeapon.call(this, game, parentGroup, "Arrow", player);
-    this.initAmmo(40);
+    this.initAmmo(48);
     this.initCooldown(360);
 }
 

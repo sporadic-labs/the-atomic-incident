@@ -1,24 +1,24 @@
-module.exports = Gun;
+module.exports = Rocket;
 
 var BaseWeapon = require("./base-weapon.js");
-var Projectile = require("./base-projectile.js");
+var BaseExplosive = require("./base-explosive.js");
 
-Gun.prototype = Object.create(BaseWeapon.prototype);
+Rocket.prototype = Object.create(BaseWeapon.prototype);
 
 // optional settings for projectiles
 var projectileOptions = {
     isDestructible: true,
     rotateOnSetup: true,
-    canBounce: false,
+    speedModifier: 1.025,
 };
 
-function Gun(game, parentGroup, player) {
-    BaseWeapon.call(this, game, parentGroup, "Gun", player);
-    this.initAmmo(-1);
-    this.initCooldown(320, 480);
+function Rocket(game, parentGroup, player) {
+    BaseWeapon.call(this, game, parentGroup, "Rocket", player);
+    this.initAmmo(32);
+    this.initCooldown(860);
 }
 
-Gun.prototype.fire = function (targetPos) {
+Rocket.prototype.fire = function (targetPos) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
         // Find trajectory
         var angle = this._player.position.angle(targetPos); // Radians
@@ -30,11 +30,14 @@ Gun.prototype.fire = function (targetPos) {
             Math.sin(angle);
 
         this._createProjectile(x, y, angle);
+
+        this.incrementAmmo(-1);
+
         this._startCooldown(this._cooldownTime);
     }
 };
 
-Gun.prototype.specialFire = function () {
+Rocket.prototype.specialFire = function () {
     if (this.isAbleToAttack() && this.getAmmo() > 0) {
         // create 8 bullets evenly distributed in a circle
         for (var i=0; i<=7; i++) {
@@ -54,7 +57,7 @@ Gun.prototype.specialFire = function () {
     }
 };
 
-Gun.prototype._createProjectile = function (x, y, angle) {
-    new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
-        this._player, 100, angle, 300, 200, projectileOptions);
+Rocket.prototype._createProjectile = function (x, y, angle) {
+    new BaseExplosive(this.game, x, y, "assets", "weapons/slug", this, 
+        this._player, 112, angle, 80, 500, -1, projectileOptions);
 };

@@ -10,9 +10,7 @@ BaseProjectile.prototype = Object.create(Phaser.Sprite.prototype);
 // - rotateOnSetup - bool
 // - canBounce - bool
 // - canPierce - bool // bullets go through enemies
-// - canBurn - bool
-// - decayRate - range (0 - 1.0)
-// - grow - bool // ok seriously i'm not sure about this one...
+// - speedModifier - range (0 - 1.0)
 // - tracking - bool
 // - trackingTarget - (x, y) (or an object maybe, i don't really know...)
 function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
@@ -42,15 +40,9 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     if (options !== undefined && options.canBounce !== undefined)
         this._canBounce = options.canBounce;
     else this._canBounce = true;
-    if (options !== undefined && options.canBurn !== undefined)
-        this._canBurn = options.canBurn;
-    else this._canBurn = false;
-    if (options !== undefined && options.decayRate !== undefined)
-        this._decayRate = options.decayRate;
-    else this._decayRate = 1.0;
-    if (options !== undefined && options.grow !== undefined)
-        this._grow = options.grow;
-    else this._grow = false;
+    if (options !== undefined && options.speedModifier !== undefined)
+        this._speedModifier = options.speedModifier;
+    else this._speedModifier = 1.0;
     if (options !== undefined && options.tracking !== undefined && 
             options.trackingRadius !== undefined) {
         this._tracking = options.tracking;
@@ -66,11 +58,6 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
         this.rotation = angle + (Math.PI / 2); // Radians
     else
         this.rotation = angle;
-
-    // If grow, the bullet grows from size 0.25 to 1.00
-    if (this._grow) {
-        this.scale.setTo(0.25, 0.25);
-    }
 
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
@@ -88,27 +75,10 @@ BaseProjectile.prototype.update = function() {
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
         this._onCollideWithMap);
 
-    // If a decate rate was set, apply it to the velocity.
-    if (this._decayRate) {
-        this.body.velocity.x = this.body.velocity.x * this._decayRate;
-        this.body.velocity.y = this.body.velocity.y * this._decayRate;
-    }
-
-    // If the grow flag was set, increase the scale of the projectile every
-    // frame. This might be a hack, but if it applicable elsewhere we can figure
-    // something more generic out.
-    if (this._grow) {
-        var x = this.scale.x * 1.0264;
-        var y = this.scale.y * 1.0264;
-        this.scale.setTo(x, y);
-    }
-
-    // If the projectile can burn, check each tile for a fire.
-    // If one exists, ignore the tile and keep moving.  If there is no fire,
-    // destroy the projectile and create a fire.
-    if (this._canBurn && this.checkTileMapLocation(this.position.x,
-        this.position.y)) {
-        // this isn't working yet...
+    // If there is a speed modifier, apply it.
+    if (this._speedModifier !== 1.0) {
+        this.body.velocity.x = this.body.velocity.x * this._speedModifier;
+        this.body.velocity.y = this.body.velocity.y * this._speedModifier;
     }
 
     // If the projectile tracks, check if target is within the tracking radius.
