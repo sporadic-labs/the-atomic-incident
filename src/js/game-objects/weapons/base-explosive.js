@@ -123,9 +123,6 @@ BaseExplosive.prototype.postUpdate = function () {
 
 // eslint-disable-next-line no-unused-vars
 BaseExplosive.prototype._onCollideWithMap = function (self, map) {
-    if (self._isDestructable) {
-        self._remove = true;
-    }
     self.explode();
 };
 
@@ -136,6 +133,4 @@ BaseExplosive.prototype._onCollideWithEnemy = function (self, enemy) {
 
 BaseExplosive.prototype._onExplodeEnemy = function (self, enemy) {
     enemy.takeDamage(this._damage);
-    if (self._isDestructable) self._remove = true;
-    self.explode();
 };
