@@ -25,7 +25,7 @@ BaseWeapon.prototype.initAmmo = function (totalAmmo, currentAmmo) {
 
 BaseWeapon.prototype.initCooldown = function (cooldownTime, 
     specialCooldownTime) {
-    // Set up a timer that doesn't autodestroy itself
+    // Set up default cooldown times
     this._cooldownTime = cooldownTime;
     this._specialCooldownTime = utils.default(specialCooldownTime, 
         cooldownTime);
