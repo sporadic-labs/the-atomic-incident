@@ -91,10 +91,9 @@ function Player(game, x, y, parentGroup) {
 
     // Lighting for player
     this._lighting = globals.plugins.lighting;
-    this.playerLight = this._lighting.addLight(
-        new Phaser.Point(this.position.x, this.position.y), 36, 0xEBDC6A
-    );
-    globals.groups.foreground.add(this.playerLight);
+    this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 25, 
+        Phaser.Color.getColor32(150, 210, 210, 255));
+    globals.groups.foreground.add(this.flashlight);
 
     // Player controls
     this._controls = new Controller(this.game.input);
@@ -185,9 +184,6 @@ Player.prototype.update = function () {
             this.body.velocity.add(drag.x, drag.y);
         }
     }
-
-    // Update light position
-    this.playerLight.position = this.position;
 
     // ammo check
     if (this._gun.isAmmoEmpty && this._gun.isAmmoEmpty()) {
@@ -285,6 +281,27 @@ Player.prototype.update = function () {
 
     // Light collisions
     this.game.physics.arcade.collide(this, this._lights);
+};
+
+Player.prototype.postUpdate = function () {
+    // This is not a pretty hack, but it checks whether the player is in shadow
+    // in either of the cardinal directions. If yes, turn on the player's 
+    // flashlight. MH: this weirdness was necessary because as soon the player's
+    // light is turned on, the player's immediate position is no longer in 
+    // shadow.
+    var pos = this.position;
+    var P = Phaser.Point;
+    var d = this.flashlight.radius + 5;
+    if (this._lighting.isPointInShadow(P.add(pos, new P(0, d))) ||
+            this._lighting.isPointInShadow(P.add(pos, new P(0, -d))) ||
+            this._lighting.isPointInShadow(P.add(pos, new P(d, 0))) ||
+            this._lighting.isPointInShadow(P.add(pos, new P(-d, 0)))) {
+        this.flashlight.enabled = true;
+        this.flashlight.position.copyFrom(pos);
+    } else {
+        this.flashlight.enabled = false;
+    }
+    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
 };
 
 Player.prototype._onCollideWithEnemy = function () {

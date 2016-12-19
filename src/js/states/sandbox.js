@@ -106,9 +106,7 @@ Sandbox.prototype.create = function () {
         var health = p.health ? Number(p.health) : 100;
         new DestructableLight(game, x, y, groups.lights, radius, color, 
             health);
-    }, this);   
-    this.playerLight = this.lighting.addLight(new Phaser.Point(0, 0), 25, 
-        Phaser.Color.getColor32(150, 210, 210, 255));
+    }, this);
 
     // Score
     globals.scoreKeeper = new ScoreKeeper();
@@ -173,23 +171,7 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    // This is not a pretty hack, but it checks whether the player is in shadow
-    // in either of the cardinal directions. If yes, turn on the player's 
-    // flashlight. MH: this weirdness was necessary because as soon the player's
-    // light is turned on, the player's immediate position is no longer in 
-    // shadow.
-    var playerPos = this.game.globals.player.position;
-    var P = Phaser.Point;
-    var d = this.playerLight.radius + 5;
-    if (this.lighting.isPointInShadow(P.add(playerPos, new P(0, d))) ||
-            this.lighting.isPointInShadow(P.add(playerPos, new P(0, -d))) ||
-            this.lighting.isPointInShadow(P.add(playerPos, new P(d, 0))) ||
-            this.lighting.isPointInShadow(P.add(playerPos, new P(-d, 0)))) {
-        this.playerLight.enabled = true;
-        this.playerLight.position.copyFrom(playerPos);
-    } else {
-        this.playerLight.enabled = false;
-    }
+    
 };
 
 Sandbox.prototype.render = function () {
