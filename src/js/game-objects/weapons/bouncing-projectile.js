@@ -15,37 +15,30 @@ function BouncingProjectile(game, x, y, key, frame, parentGroup, player, damage,
 }
 
 BouncingProjectile.prototype.update = function() {
-    // Debugging checks
-    // console.log(`
-    //     pos:        ${this.position.x} + ${this.position.y}
-    //     previous:   ${this.previousPosition.x} + ${this.previousPosition.y}
-    //     body pos:   ${this.body.x} + ${this.body.y}
-    //     body prev:  ${this.body.prev.x} + ${this.body.prev.y}
-    //     sat:        ${this.satBody._body.pos.x} + ${this.satBody._body.pos.y}
-    // `)
-
-    // The velocity and acceleration are applied to the arcade body in the 
-    // sprite's preUpdate function. The SAT body needs to be updated from the
-    // sprite body. MH: this calculation isn't quite perfect and is hard coded
-    // for the sprite having a scale of 1 and an anchor of (0.5, 0.5). This 
-    // updating should be offloaded to the SAT body plugin!
-    this.satBody._body.pos.x = this.body.x + (this.width / 2);
-    this.satBody._body.pos.y = this.body.y + (this.height / 2);
+    // The SAT body needs to be updated to match the arcade body, which has
+    // velocity and acceleration applied in the sprite's preUpdate method
+    this.satBody.updateFromBody();
 
     // Collisions with the tilemap
     this._bounceX = false;
     this._bounceY = false;
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
         this._onCollideWithMap, this);
-
-    if (this._bounceX) this.body.velocity.x *= -1;
-    if (this._bounceY) this.body.velocity.y *= -1;
-    if (this._bounceX || this._bounceY) this._numBounces++;
-    if (this._numBounces >= this._maxBounces) this.destroy();
+    
+    // Use the bounce flags to update the sprite
+    if (this._bounceX || this._bounceY) {
+        if (this._bounceX) this.body.velocity.x *= -1;
+        if (this._bounceY) this.body.velocity.y *= -1;
+        this._numBounces++;
+        if (this._numBounces >= this._maxBounces) this.destroy();
+    }
 };
 
 BouncingProjectile.prototype._onCollideWithMap = function (self, tile, 
         response) {
+    // MH: is this the correct bounce calculation? This looks at the overlap
+    // vector from the SAT.js collision response. If the overlap is mostly in
+    // the x-axis, flip along the x-axis. Otherwise, flip along the y-axis.
     if (Math.abs(response.overlapV.x) > Math.abs(response.overlapV.y)) {
         this._bounceX = true;
     } else {
