@@ -12,6 +12,7 @@ function BouncingProjectile(game, x, y, key, frame, parentGroup, player, damage,
         damage, angle, speed, 99999, {});
     this._maxBounces = maxBounces;
     this._numBounces = 0;
+    this._lastValidPosition = this.body.position.clone();
 }
 
 BouncingProjectile.prototype.update = function() {
@@ -27,10 +28,14 @@ BouncingProjectile.prototype.update = function() {
     
     // Use the bounce flags to update the sprite
     if (this._bounceX || this._bounceY) {
+        this.body.position.copyFrom(this._lastValidPosition);
         if (this._bounceX) this.body.velocity.x *= -1;
         if (this._bounceY) this.body.velocity.y *= -1;
         this._numBounces++;
         if (this._numBounces >= this._maxBounces) this.destroy();
+        
+    } else {
+        this._lastValidPosition.copyFrom(this.body.position);
     }
 };
 
