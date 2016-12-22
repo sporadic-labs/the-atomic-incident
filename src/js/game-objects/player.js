@@ -87,7 +87,7 @@ function Player(game, x, y, parentGroup) {
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
         (this.height - diameter) / 2);
 
-    this.satBody = globals.plugins.satBody.addBoxBody(this);
+    this.satBody = globals.plugins.satBody.addCircleBody(this);
 
     // Lighting for player
     this._lighting = globals.plugins.lighting;
