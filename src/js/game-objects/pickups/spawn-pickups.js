@@ -26,8 +26,6 @@ function SpawnPickups(game) {
         "rocket",
         "weapon-slug",
     ];
-
-    this.spawn(this._player.position.x, this._player.position.y + 16);
 }
 
 SpawnPickups.prototype.spawn = function (x, y) {
