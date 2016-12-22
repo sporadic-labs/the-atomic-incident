@@ -28,6 +28,11 @@ BouncingProjectile.prototype.update = function() {
     
     // Use the bounce flags to update the sprite
     if (this._bounceX || this._bounceY) {
+        // MH: really simple collision resolution method here. This leads to
+        // things not quite feeling like they are contacting the walls though! A
+        // better solution would be calculate how far the projectile has moved
+        // into a wall and use that to push the projectile along its bounced 
+        // path.
         this.body.position.copyFrom(this._lastValidPosition);
         if (this._bounceX) this.body.velocity.x *= -1;
         if (this._bounceY) this.body.velocity.y *= -1;
