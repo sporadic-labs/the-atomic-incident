@@ -47,7 +47,7 @@ exports.arcadeRecursiveCollide = function (sprite, group, callback, context) {
  * @param {TilemapLayer} tilemapLayer The tilemap layer to collide against.
  * @param {function} callback Function to run on overlap. This gets passed the
  * sprite and the tile it overlaps with. If the callback returns true,
- * satSpriteVsTilemap will exit early and stop checking for overlaps.
+ * satSpriteVsTilemap will exit early and stop checking for additional overlap.
  * @param {object} context The context to use with the callback.
  * @returns {boolean} Whether or not a collision was detected.
  */
