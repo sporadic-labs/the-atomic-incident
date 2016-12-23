@@ -76,6 +76,18 @@ SatBody.prototype.initCircle = function () {
     this._body = circle(vec(b.x, b.y), b.radius);
 };
 
+/**
+ * Updates the radius for the SAT body. The (x, y) coordinates of the SAT body 
+ * stay at the center of the arcade body.
+ * @param {float} radius New radius to use for the SAT body
+ * @returns {SatBody} Returns the SatBody for chaining
+ */
+SatBody.prototype.setCircleRadius = function (radius) {
+    if (this._bodyType !== BODY_TYPE.CIRCLE) return;
+    this._body.r = radius;
+    return this;
+};
+
 // MH: Needs testing before being used!
 SatBody.prototype.initPolygon = function (points) {
     console.warn("Untested polygon SAT body!");
@@ -189,25 +201,26 @@ SatBody.prototype.updateFromBody = function () {
 
     // Update the position of the SAT body using the arcade body. Arcade bodies
     // are positions are relative to the top left of the body. 
+    var arcadeBody = this._sprite.body;
 
     if (this._bodyType === BODY_TYPE.CIRCLE) {
         // The arcade body position for a circle is anchored at the top left, 
         // but SAT circles are anchored at the center, so shift the position.
-        this._body.pos.x = this._sprite.body.x + this._body.r;
-        this._body.pos.y = this._sprite.body.y + this._body.r;
+        this._body.pos.x = arcadeBody.x + arcadeBody.width / 2;
+        this._body.pos.y = arcadeBody.y + arcadeBody.height / 2;
     } else if (this._bodyType === BODY_TYPE.BOX) {
         // The arcade body position for a rectangle is anchored at the top left.
         // SAT boxes are also anchored at the top left, but they have an offset
         // applied to ensure rotation happens around the center. Thus, the SAT
         // body needs to account for that offset by shifting the position.
-        this._body.pos.x = this._sprite.body.x + this._sprite.body.width / 2;
-        this._body.pos.y = this._sprite.body.y + this._sprite.body.height / 2;
+        this._body.pos.x = arcadeBody.x + arcadeBody.width / 2;
+        this._body.pos.y = arcadeBody.y + arcadeBody.height / 2;
         this._body.setAngle(this._sprite.rotation);
         // Rotation should probably be world rotation...or something?
     } else if (this._bodyType === BODY_TYPE.POLYGON) {
         // MH: Not yet sure what needs to happen here
-        this._body.pos.x = this._sprite.body.x;
-        this._body.pos.y = this._sprite.body.y;
+        this._body.pos.x = arcadeBody.body.x;
+        this._body.pos.y = arcadeBody.body.y;
         this._body.setAngle(this._sprite.rotation);
         // Rotation should probably be world rotation...or something?
     }
