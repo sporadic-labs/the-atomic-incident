@@ -12,9 +12,20 @@ function BouncingProjectile(game, x, y, key, frame, parentGroup, player, damage,
         damage, angle, speed, 99999, {});
     this._maxBounces = maxBounces;
     this._numBounces = 0;
+
+    // Make sure the projectile isn't spawning in a wall
+    SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
+        function () {
+            this.remove = true;   
+        }, this);
 }
 
 BouncingProjectile.prototype.update = function() {
+    if (this.remove) {
+        this.destroy();
+        return;
+    }
+
     // The SAT body needs to be updated to match the arcade body, which has
     // velocity and acceleration applied in the sprite's preUpdate method
     this.satBody.updateFromBody();
