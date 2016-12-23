@@ -28,7 +28,6 @@ function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
     this._initialPos = this.position.clone();
     this._remove = false; // check if BaseProjectile should be removed?
 
-
     // projectile options
     if (options !== undefined && options.isDestructible !== undefined)
         this._isDestructable = options.isDestructible;
@@ -48,11 +47,7 @@ function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
         this.rotation = angle;
 
     // Store variable for explosion
-    this._explosionRadius = 160;
-    this._graphics;
-    // this._graphics.beginFill(0x000000);
-    // this._graphics.drawCircle(0, 0, 10);
-    // this._graphics.endFill();
+    this._explosionRadius = 80;
 
     this._timer = game.time.create(false);
     this._timer.start();
@@ -87,7 +82,7 @@ BaseExplosive.prototype.explode = function () {
     // Draw explosion circle
     this._graphics.clear();
     this._graphics.beginFill(0x000000, 0.5);
-    this._graphics.drawCircle(0, 0, this._explosionRadius);
+    this._graphics.drawCircle(0, 0, this._explosionRadius * 2);
     this._graphics.endFill();
     // Check explosion overlap
     SpriteUtils.checkOverlapWithGroup(this, this._enemies, this._onExplodeEnemy,
