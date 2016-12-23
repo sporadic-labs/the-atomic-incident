@@ -69,7 +69,7 @@ function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
 BaseExplosive.prototype.update = function() {
     // Collisions with the tilemap
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap);
+        this._onCollideWithMap, this);
 
     // If there is a speed modifier, apply it.
     if (this._speedModifier !== 1.0) {
