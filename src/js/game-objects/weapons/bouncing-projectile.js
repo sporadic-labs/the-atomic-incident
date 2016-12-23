@@ -12,7 +12,6 @@ function BouncingProjectile(game, x, y, key, frame, parentGroup, player, damage,
         damage, angle, speed, 99999, {});
     this._maxBounces = maxBounces;
     this._numBounces = 0;
-    this._lastValidPosition = this.body.position.clone();
 }
 
 BouncingProjectile.prototype.update = function() {
@@ -28,19 +27,10 @@ BouncingProjectile.prototype.update = function() {
     
     // Use the bounce flags to update the sprite
     if (this._bounceX || this._bounceY) {
-        // MH: really simple collision resolution method here. This leads to
-        // things not quite feeling like they are contacting the walls though! A
-        // better solution would be calculate how far the projectile has moved
-        // into a wall and use that to push the projectile along its bounced 
-        // path.
-        this.body.position.copyFrom(this._lastValidPosition);
         if (this._bounceX) this.body.velocity.x *= -1;
         if (this._bounceY) this.body.velocity.y *= -1;
         this._numBounces++;
         if (this._numBounces >= this._maxBounces) this.destroy();
-        
-    } else {
-        this._lastValidPosition.copyFrom(this.body.position);
     }
 };
 
@@ -54,8 +44,15 @@ BouncingProjectile.prototype._onCollideWithMap = function (self, tile,
     } else {
         this._bounceY = true;
     }
+    // Adjust the arcade body but not the SAT body. If the SAT body is moved, it
+    // will throw off the other calculations. MH: I feel like there are edge
+    // cases where this collision resolution will break, but I'm not seeing any
+    // in practice
+    this.body.x -= response.overlapV.x;
+    this.body.y -= response.overlapV.y;
     // If projectile has already bounced along both axes, no need to check any
-    // more collisions
+    // more collisions. MH: the only thing that could throw this off is the
+    // collision resolution
     if (this._bounceX && this._bounceY) return true;
 };
 
