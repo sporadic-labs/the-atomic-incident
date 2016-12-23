@@ -27,8 +27,7 @@ function ShadowEnemy(game, x, y, parentGroup) {
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
         (this.height - diameter) / 2);
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this, 
-        diameter / 2);
+    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
 
     this.body.angularVelocity = this.game.rnd.sign() *
         this.game.rnd.realInRange(25, 35);

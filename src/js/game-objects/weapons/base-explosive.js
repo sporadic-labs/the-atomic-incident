@@ -63,7 +63,7 @@ function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
 
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this, 5);
+    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
 }
 
 BaseExplosive.prototype.update = function() {
@@ -81,9 +81,7 @@ BaseExplosive.prototype.update = function() {
 BaseExplosive.prototype.explode = function () {
     this._hasExploded = true;
     // Switch to explosion circle SAT body 
-    this.game.globals.plugins.satBody.removeBody(this.satBody);
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this, 
-        this._explosionRadius / 2);
+    this.satBody.setCircleRadius(this._explosionRadius);
     // Stop moving
     this.body.velocity.set(0);
     // Draw explosion circle
