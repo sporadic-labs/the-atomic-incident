@@ -67,7 +67,7 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
 
     // Make sure the projectile isn't spawning in a wall
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap);
+        this._onCollideWithMap, this);
 }
 
 BaseProjectile.prototype.update = function() {
