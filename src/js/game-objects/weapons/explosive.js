@@ -92,7 +92,7 @@ function BaseProjectile(game, x, y, parentGroup, player, angle) {
 BaseProjectile.prototype.update = function() {
     // Collisions with the tilemap
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap);
+        this._onCollideWithMap, this);
 }
 
 BaseProjectile.prototype.explode = function () {    
