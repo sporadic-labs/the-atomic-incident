@@ -25,7 +25,9 @@ function Beam(game, parentGroup, player) {
     this._beamSize = this.height;
     this._range = this.width;
 
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+    this.game.physics.arcade.enable(this);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this)
+        .setPivot(0, this.height / 2);
 }
 
 Beam.prototype.fire = function (targetPos) {

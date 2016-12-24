@@ -45,22 +45,24 @@ function SatBody(sprite) {
 }
 
 /**
- * Creates a SAT box for the sprite based on an underlying arcade body. The
- * SAT body is placed at the position of the body and given a width and height
- * that match the body. The SAT box has an offset to ensure rotation works 
- * properly.
+ * Creates a SAT box for the sprite based on an underlying arcade body. The SAT
+ * body is placed at the position of the body and given a width and height that
+ * match the body. By default, SAT box has a pivot/offset set so that the box
+ * rotates around its center. 
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
+ * @returns {SatBody} Returns the SatBody for chaining
  */
 SatBody.prototype.initBox = function () {
     this._bodyType = BODY_TYPE.BOX;
     var b = this._sprite.body;
     this._boxBody = box(vec(b.x, b.y), b.width, b.height);
     this._body = this._boxBody.toPolygon();
-    // SAT body is currently at arcade body position, which is anchored at 
-    // (0, 0). To ensure that rotation works, use SAT.js offset to shift the 
-    // SAT points to the center before rotation is applied.
-    this._body.setOffset(vec(-b.width / 2, -b.height / 2));
+    // Arcade body is anchored at (0, 0). To ensure that rotation works, use
+    // SAT.js offset to shift the SAT points to the center before rotation is
+    // applied.
+    this.setPivot(b.width / 2, b.height / 2);
+    return this;
 };
 
 /**
@@ -85,6 +87,20 @@ SatBody.prototype.initCircle = function () {
 SatBody.prototype.setCircleRadius = function (radius) {
     if (this._bodyType !== BODY_TYPE.CIRCLE) return;
     this._body.r = radius;
+    return this;
+};
+
+/**
+ * Sets the pivot for the SAT box or polygon body. This is the (x, y) offset
+ * applied to the points in the SAT body before any rotation is applied. This
+ * only applies to box and polygon bodies - circles are always centered. Note:
+ * in the current implementation, the pivot is the same as the anchor.
+ * @param {float} x x position of pivot in pixels
+ * @param {float} y y position of pivot in pixels
+ * @returns {SatBody} Returns the SatBody for chaining
+ */
+SatBody.prototype.setPivot = function (x, y) {
+    this._body.setOffset(vec(-x, -y));
     return this;
 };
 
@@ -210,19 +226,19 @@ SatBody.prototype.updateFromBody = function () {
         this._body.pos.y = arcadeBody.y + arcadeBody.height / 2;
     } else if (this._bodyType === BODY_TYPE.BOX) {
         // The arcade body position for a rectangle is anchored at the top left.
-        // SAT boxes are also anchored at the top left, but they have an offset
-        // applied to ensure rotation happens around the center. Thus, the SAT
-        // body needs to account for that offset by shifting the position.
-        this._body.pos.x = arcadeBody.x + arcadeBody.width / 2;
-        this._body.pos.y = arcadeBody.y + arcadeBody.height / 2;
-        this._body.setAngle(this._sprite.rotation);
-        // Rotation should probably be world rotation...or something?
+        // SAT boxes have their pivot (and anchor) defined by the SAT body's
+        // offset property. This offset is applied in SAT.js to ensure rotation
+        // happens around the right location. To place the SAT body, start with
+        // the arcade body location and shift by the negative offset (because
+        // SAT is going to apply the positive offset internally).
+        this._body.pos.x = arcadeBody.x + (-this._body.offset.x);
+        this._body.pos.y = arcadeBody.y + (-this._body.offset.y);
+        this._body.setAngle(this._sprite.rotation); // MH: World rotation?
     } else if (this._bodyType === BODY_TYPE.POLYGON) {
         // MH: Not yet sure what needs to happen here
-        this._body.pos.x = arcadeBody.body.x;
-        this._body.pos.y = arcadeBody.body.y;
-        this._body.setAngle(this._sprite.rotation);
-        // Rotation should probably be world rotation...or something?
+        this._body.pos.x = arcadeBody.x + (-this._body.offset.x);
+        this._body.pos.y = arcadeBody.y + (-this._body.offset.y);
+        this._body.setAngle(this._sprite.rotation); // MH: World rotation?
     }
 };
 
