@@ -18,8 +18,7 @@ Phaser.Plugin.SatBody.prototype = Object.create(Phaser.Plugin.prototype);
  * @returns {SatBody}
  */
 Phaser.Plugin.SatBody.prototype.addBoxBody = function (sprite) {
-    var body = new SatBody(sprite);
-    body.initBox();
+    var body = new SatBody(sprite).initBox();
     if (this._isDebug) body.enableDebug();
     this._bodies.push(body);
     return body;
@@ -34,8 +33,7 @@ Phaser.Plugin.SatBody.prototype.addBoxBody = function (sprite) {
  * @returns {SatBody}
  */
 Phaser.Plugin.SatBody.prototype.addCircleBody = function (sprite) {
-    var body = new SatBody(sprite);
-    body.initCircle();
+    var body = new SatBody(sprite).initCircle();
     if (this._isDebug) body.enableDebug();
     this._bodies.push(body);
     return body;
@@ -49,8 +47,7 @@ Phaser.Plugin.SatBody.prototype.addCircleBody = function (sprite) {
  * @returns {SatBody}
  */
 Phaser.Plugin.SatBody.prototype.addPolygonBody = function (sprite, points) {
-    var body = new SatBody(sprite);
-    body.initPolygon(points);
+    var body = new SatBody(sprite).initPolygon(points);
     if (this._isDebug) body.enableDebug();
     this._bodies.push(body);
     return body;

@@ -71,11 +71,13 @@ SatBody.prototype.initBox = function () {
  * matches the body.
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
+ * @returns {SatBody} Returns the SatBody for chaining
  */
 SatBody.prototype.initCircle = function () {
     this._bodyType = BODY_TYPE.CIRCLE;
     var b = this._sprite.body;
     this._body = circle(vec(b.x, b.y), b.radius);
+    return this;
 };
 
 /**
@@ -112,6 +114,7 @@ SatBody.prototype.initPolygon = function (points) {
     this._bodyType = BODY_TYPE.POLYGON;
     var s = this._sprite;
     this._body = polygon(vec(s.x, s.y), points);
+    return this;
 };
 
 SatBody.prototype.getBody = function () {
@@ -213,8 +216,6 @@ SatBody.prototype.postUpdate = function () {
  * arcade physics).
  */
 SatBody.prototype.updateFromBody = function () {
-    // Arcade physics bodies
-
     // Update the position of the SAT body using the arcade body. Arcade bodies
     // are positions are relative to the top left of the body. 
     var arcadeBody = this._sprite.body;
@@ -247,10 +248,17 @@ SatBody.prototype.destroy = function () {
     this.game.globals.plugins.satBody.removeBody(this);
 };
 
+/**
+ * @returns {SatBody} Returns the SatBody for chaining
+ */
 SatBody.prototype.setDebugColor = function (debugColor) {
     this._debugColor = debugColor;
+    return this;
 };
 
+/**
+ * @returns {SatBody} Returns the SatBody for chaining
+ */
 SatBody.prototype.enableDebug = function (debugColor) {
     debugColor = (debugColor !== undefined) ? debugColor : 0x00FF00;
     this._isDebug = true;
@@ -261,11 +269,16 @@ SatBody.prototype.enableDebug = function (debugColor) {
     } 
     this._debugGraphics.visible = true;
     if (debugColor) this.setDebugColor(debugColor);
+    return this;
 };
 
+/**
+ * @returns {SatBody} Returns the SatBody for chaining
+ */
 SatBody.prototype.disableDebug = function () {    
     this._isDebug = false;
     if (this._debugGraphics) this._debugGraphics.visible = false;
+    return this;
 };
 
 SatBody.prototype._updateDebug = function () {
