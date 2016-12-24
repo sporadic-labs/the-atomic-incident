@@ -25,7 +25,7 @@ var ANIM_NAMES = {
     DIE: "die"
 };
 
-var WEAPON_NAMES = require("../constants/weapon-names");
+var WEAPONS = require("../constants/weapons.js");
 
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);

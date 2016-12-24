@@ -1,7 +1,7 @@
 module.exports = SpawnPickups;
 
 var WeaponPickup = require("./weapon-pickup.js");
-var WEAPON_NAMES = require("../../constants/weapon-names.js");
+var WEAPON_NAMES = require("../../constants/weapons.js");
 
 SpawnPickups.prototype = Object.create(Phaser.Group.prototype);
 
