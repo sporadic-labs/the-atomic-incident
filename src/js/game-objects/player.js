@@ -25,6 +25,8 @@ var ANIM_NAMES = {
     DIE: "die"
 };
 
+var WEAPON_NAMES = require("../constants/weapon-names");
+
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -57,7 +59,9 @@ function Player(game, x, y, parentGroup) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Weapons
-    this._gun = new Gun(game, parentGroup, this);
+    this._gunName = WEAPON_NAMES.SLUG;
+    this._guns = {};
+    this._guns[WEAPON_NAMES.SLUG] = new Gun(game, parentGroup, this);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -114,18 +118,17 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("attack-special",
         Phaser.Pointer.RIGHT_BUTTON);
     // Cycling weapons
-    this._controls.addKeyboardControl("rusty-sword", [Kb.ONE]);
-    this._controls.addKeyboardControl("weapon-scattershot", [Kb.TWO]);
-    this._controls.addKeyboardControl("weapon-flamethrower", [Kb.THREE]);
-    this._controls.addKeyboardControl("weapon-machine-gun", [Kb.FOUR]);
-    this._controls.addKeyboardControl("weapon-laser", [Kb.FIVE]);
-    this._controls.addKeyboardControl("weapon-beam", [Kb.SIX]);
-    this._controls.addKeyboardControl("weapon-arrow", [Kb.SEVEN]);
-    this._controls.addKeyboardControl("grenade", [Kb.EIGHT]);
-    this._controls.addKeyboardControl("rocket", [Kb.NINE]);
-    this._controls.addKeyboardControl("weapon-slug", [Kb.ZERO]);
-
-    this._controls.addKeyboardControl("explosive", [Kb.M]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.RUSTY_SWORD, [Kb.ONE]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.SCATTERSHOT, [Kb.TWO]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.FLAMETHROWER, [Kb.THREE]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.MACHINE_GUN, [Kb.FOUR]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.LASER, [Kb.FIVE]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.BEAM, [Kb.SIX]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.ARROW, [Kb.SEVEN]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.GRENADE, [Kb.EIGHT]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.ROCKET, [Kb.NINE]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.SLUG, [Kb.ZERO]);
+    this._controls.addKeyboardControl(WEAPON_NAMES.EXPLOSIVE, [Kb.M]);
 }
 
 Player.prototype.getCombo = function () {
@@ -186,35 +189,16 @@ Player.prototype.update = function () {
     }
 
     // ammo check
-    if (this._gun.isAmmoEmpty && this._gun.isAmmoEmpty()) {
-        this._gun.destroy();
-        this._gun = new Gun(this.game, this.parent, this);
+    if (this.getGun().isAmmoEmpty && this.getGun().isAmmoEmpty()) {
+        this._gunName = WEAPON_NAMES.SLUG;
     }
 
     // Swapping weapons
-    if (this._controls.isControlActive("weapon-machine-gun")) {
-        this.changeGuns("weapon-machine-gun");
-    } else if (this._controls.isControlActive("weapon-laser")) {
-        this.changeGuns("weapon-laser");
-    } else if (this._controls.isControlActive("weapon-beam")) {
-        this.changeGuns("weapon-beam");
-    } else if (this._controls.isControlActive("weapon-arrow")) {
-        this.changeGuns("weapon-arrow");
-    } else if (this._controls.isControlActive("weapon-scattershot")) {
-        this.changeGuns("weapon-scattershot");
-    } else if (this._controls.isControlActive("weapon-flamethrower")) {
-        this.changeGuns("weapon-flamethrower");
-    } else if (this._controls.isControlActive("grenade")) {
-        this.changeGuns("grenade");
-    } else if (this._controls.isControlActive("rocket")) {
-        this.changeGuns("rocket");
-    } else if (this._controls.isControlActive("weapon-slug")) {
-        this.changeGuns("weapon-slug");
-    } else if (this._controls.isControlActive("rusty-sword")) {
-        this.changeGuns("rusty-sword");
-
-    } else if (this._controls.isControlActive("explosive")) {
-        this.changeGuns("explosive");
+    for (var key in WEAPON_NAMES) {
+        var weaponName = WEAPON_NAMES[key];
+        if (this._controls.isControlActive(weaponName)) {
+            this.changeGuns(weaponName);
+        }
     }
 
     // Firing logic
@@ -239,7 +223,7 @@ Player.prototype.update = function () {
         attackDir.y += 1;
     }
     if (isShooting) {
-        this._gun.fire(attackDir);
+        this.getGun().fire(attackDir);
     }
 
     // special weapons logic
@@ -255,7 +239,7 @@ Player.prototype.update = function () {
         specialAttackDir.y -= 1;
     }
     if (isShootingSpecial && this.getGun().specialFire) {
-        this._gun.specialFire(specialAttackDir);
+        this.getGun().specialFire(specialAttackDir);
     }
 
     // Check whether player is moving in order to update its animation
@@ -354,47 +338,46 @@ Player.prototype.destroy = function () {
 };
 
 Player.prototype.getGun = function() {
-    return this._gun;
+    return this._guns[this._gunName];
 };
 
 Player.prototype.getAmmo = function() {
-    if (this._gun.getAmmo) return this._gun.getAmmo();
+    var gun = this.getGun();
+    if (gun.getAmmo) return gun.getAmmo();
 };
 
-Player.prototype.changeGuns = function(type) {
-    if (type === "weapon-machine-gun") {
-        this._gun.destroy();
-        this._gun = new MachineGun(this.game, this.parent, this);
-    } else if (type === "weapon-laser") {
-        this._gun.destroy();
-        this._gun = new Laser(this.game, this.parent, this);
-    } else if (type === "weapon-beam") {
-        this._gun.destroy();
-        this._gun = new Beam(this.game, this.parent, this);
-    } else if (type === "weapon-arrow") {
-        this._gun.destroy();
-        this._gun = new Arrow(this.game, this.parent, this);
-    } else if (type === "weapon-scattershot") {
-        this._gun.destroy();
-        this._gun = new Scattershot(this.game, this.parent, this);
-    } else if (type === "weapon-flamethrower") {
-        this._gun.destroy();
-        this._gun = new Flamethrower(this.game, this.parent, this);
-    } else if (type === "grenade") {
-        this._gun.destroy();
-        this._gun = new Grenade(this.game, this.parent, this);
-    } else if (type === "rocket") {
-        this._gun.destroy();
-        this._gun = new Rocket(this.game, this.parent, this);
-    } else if (type === "weapon-slug") {
-        this._gun.destroy();
-        this._gun = new Gun(this.game, this.parent, this);
-    } else if (type === "rusty-sword") {
-        this._gun.destroy();
-        this._gun = new RustySword(this.game, this.parent, this);
-
-    } else if (type === "explosive") {
-        this._gun.destroy();
-        this._gun = new Explosive(this.game, this.parent, this);
+Player.prototype.changeGuns = function (weaponName) {
+    // Change guns
+    this._gunName = weaponName;
+    // If a gun of the appropriate type has been created, refill the ammo.
+    // Otherwise, create a new gun.
+    if (this._guns[weaponName]) {
+        this._guns[weaponName].fillAmmo();
+    } else {
+        var gun;
+        if (weaponName === WEAPON_NAMES.MACHINE_GUN) {
+            gun = new MachineGun(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.LASER) {
+            gun = new Laser(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.BEAM) {
+            gun = new Beam(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.ARROW) {
+            gun = new Arrow(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.SCATTERSHOT) {
+            gun = new Scattershot(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.FLAMETHROWER) {
+            gun = new Flamethrower(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.GRENADE) {
+            gun = new Grenade(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.ROCKET) {
+            gun = new Rocket(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.SLUG) {
+            gun = new Gun(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.RUSTY_SWORD) {
+            gun = new RustySword(this.game, this.parent, this);
+        } else if (weaponName === WEAPON_NAMES.EXPLOSIVE) {
+            gun = new Explosive(this.game, this.parent, this);
+        }
+        this._guns[weaponName] = gun;
     }
 }
