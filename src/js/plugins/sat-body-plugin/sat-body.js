@@ -38,6 +38,8 @@ var polygon = function (pos, points) {
 function SatBody(sprite) {
     this.game = sprite.game;
     this._sprite = sprite;
+    var b = this._sprite.body;
+    this._lastBodySize = {w: b.width, h: b.height};
     this.disableDebug();
 
     // Schedule clean up when parent sprite owner is destroyed
@@ -200,6 +202,17 @@ SatBody.prototype.collideVsRectangle = function (rect) {
 };
 
 SatBody.prototype.postUpdate = function () {
+    // Check the sprite's body to see if the scale has changed, and if so, 
+    // update the SAT body to match
+    var b = this._sprite.body;
+    var newBodySize = {w: b.width, h: b.height};
+    if (this._lastBodySize.w !== newBodySize.w ||
+            this._lastBodySize.h !== newBodySize.h) {
+        this._lastBodySize = newBodySize;
+        if (this._bodyType === BODY_TYPE.BOX) this.initBox();
+        else if (this._bodyType === BODY_TYPE.CIRCLE) this.initCircle();
+        else this.initPolygon();
+    }
     // Update the body based on the latest arcade body physics
     this.updateFromBody();
     // Render is going to be called next, so update the debug
