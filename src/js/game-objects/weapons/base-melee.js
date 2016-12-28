@@ -8,7 +8,6 @@ BaseMelee.prototype = Object.create(Phaser.Sprite.prototype);
 function BaseMelee(game, key, frame, parentGroup, player, damage) {
     Phaser.Sprite.call(this, game, player.x, player.y, key, frame);
     this.anchor.set(0.5, 1.0);
-    this.pivot.y = 10;
     parentGroup.add(this);
 
     this._player = player;
@@ -27,8 +26,9 @@ function BaseMelee(game, key, frame, parentGroup, player, damage) {
     this.visible = false;
     this._swingTween = null; 
 
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this, 38, 
-        this.height + this.pivot.y);
+    this.game.physics.arcade.enable(this);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this)
+        .setPivot(0, this.height);
 }
 
 BaseMelee.prototype.postUpdate = function () {
