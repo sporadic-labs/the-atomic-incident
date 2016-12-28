@@ -45,35 +45,48 @@ function SatBody(sprite) {
 }
 
 /**
- * Creates a SAT box for the sprite based on an underlying arcade body. The
- * SAT body is placed at the position of the body and given a width and height
- * that match the body. The SAT box has an offset to ensure rotation works 
- * properly.
+ * Creates a SAT box for the sprite.
+ * If there is an arcade body, it is used as reference for the sat body
+ * position, width and height.  The SAT box has an offset to ensure
+ * rotation works properly.
+ * If there is no arcade body, the sprite is used as reference, and the
+ * sprites anchor is used to calculate offset.
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
+ * RT: melee weapons and the beam do not use arcade bodies.
  */
 SatBody.prototype.initBox = function () {
     this._bodyType = BODY_TYPE.BOX;
-    var b = this._sprite.body;
+    var b = this._sprite.body ? this._sprite.body : this._sprite;
     this._boxBody = box(vec(b.x, b.y), b.width, b.height);
     this._body = this._boxBody.toPolygon();
-    // SAT body is currently at arcade body position, which is anchored at 
-    // (0, 0). To ensure that rotation works, use SAT.js offset to shift the 
-    // SAT points to the center before rotation is applied.
-    this._body.setOffset(vec(-b.width / 2, -b.height / 2));
+    // Update position of sat body differently based on 
+    // whether there is an arcade body or not.
+    if (this._sprite.body) {
+        // SAT body is currently at arcade body position, which is anchored at
+        // (0, 0). To ensure that rotation works, use SAT.js offset to shift the 
+        // SAT points to the center before rotation is applied.
+        this._body.setOffset(vec(-b.width / 2, -b.height / 2));
+    } else {
+        var anchor = this._sprite.anchor;
+        this._body.translate(-anchor.x * b.width, -anchor.y * b.height);
+    }
 };
 
 /**
- * Creates a SAT circle for the sprite based on an underlying arcade body. The
- * SAT body is placed at the position of the body and given a radius that 
- * matches the body.
+ * Creates a SAT circle for the sprite.
+ * If there is an arcade body, it is used as reference for the position and
+ * radius of the SAT body.
+ * If there is no arcade body, use the sprite as reference for position and
+ * radius of the SAT body.
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
  */
 SatBody.prototype.initCircle = function () {
     this._bodyType = BODY_TYPE.CIRCLE;
-    var b = this._sprite.body;
-    this._body = circle(vec(b.x, b.y), b.radius);
+    var b = this._sprite.body ? this._sprite.body : this._sprite;
+    var r = b.radius ? b.radius : b.width / 2;
+    this._body = circle(vec(b.x, b.y), r);
 };
 
 /**
