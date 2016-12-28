@@ -194,8 +194,15 @@ SatBody.prototype.collideVsRectangle = function (rect) {
 };
 
 SatBody.prototype.postUpdate = function () {
-    // Update the body based on the latest arcade body physics
-    this.updateFromBody();
+    // Update the position of the sat body differently based
+    // on whether an arcade body exists or not.
+    if (this._sprite.body) {
+        // Update the body based on the latest arcade body physics
+        this.updateFromArcadeBody();
+    } else {
+        // Update the body based on sprite position
+        this.updateFromSprite();
+    }
     // Render is going to be called next, so update the debug
     if (this._isDebug) this._updateDebug();
 };
