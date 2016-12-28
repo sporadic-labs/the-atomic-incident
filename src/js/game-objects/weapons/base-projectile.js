@@ -62,18 +62,18 @@ function BaseProjectile(game, x, y, key, frame, parentGroup, player, damage,
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
-
+    
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 
     // Make sure the projectile isn't spawning in a wall
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap, this);
+        this._onCollideWithMap, this, 6);
 }
 
 BaseProjectile.prototype.update = function() {
     // Collisions with the tilemap
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap);
+        this._onCollideWithMap, this, 6);
 
     // If there is a speed modifier, apply it.
     if (this._speedModifier !== 1.0) {

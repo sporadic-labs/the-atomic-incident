@@ -58,13 +58,13 @@ function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, 
         this._speed, this.body.velocity);
 
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
+    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
 BaseExplosive.prototype.update = function() {
     // Collisions with the tilemap
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap, this);
+        this._onCollideWithMap, this, 6);
 
     // If there is a speed modifier, apply it.
     if (this._speedModifier !== 1.0) {

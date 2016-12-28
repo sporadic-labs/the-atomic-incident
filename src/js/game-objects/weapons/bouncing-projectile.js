@@ -34,7 +34,7 @@ BouncingProjectile.prototype.update = function() {
     this._bounceX = false;
     this._bounceY = false;
     SpriteUtils.satSpriteVsTilemap(this, this.game.globals.tileMapLayer, 
-        this._onCollideWithMap, this);
+        this._onCollideWithMap, this, 6);
     
     // Use the bounce flags to update the sprite
     if (this._bounceX || this._bounceY) {

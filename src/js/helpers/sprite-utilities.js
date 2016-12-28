@@ -38,31 +38,34 @@ exports.arcadeRecursiveCollide = function (sprite, group, callback, context) {
     }
 };
 
-
 /**
  * Check a sprite's overlap against a tilemap layer using SAT bodies. This
  * creates a SAT body for tiles on-the-fly.
  *
  * @param {any} sprite The sprite with the SAT body
  * @param {TilemapLayer} tilemapLayer The tilemap layer to collide against.
- * @param {function} callback Function to run on overlap. This gets passed the
+ * @param {function} [callback] Function to run on overlap. This gets passed the
  * sprite and the tile it overlaps with. If the callback returns true,
  * satSpriteVsTilemap will exit early and stop checking for additional overlap.
- * @param {object} context The context to use with the callback.
+ * @param {object} [context] The context to use with the callback.
+ * @param {float} [fudgeFactor=0] A number of pixels to use to "fudge" the
+ * collision detection. A positive value will shrink the tiles by the specifed
+ * number of pixels and a negative value will inflate the tile size.
  * @returns {boolean} Whether or not a collision was detected.
  */
 exports.satSpriteVsTilemap = function (sprite, tilemapLayer, callback, 
-        context) {
+        context, fudgeFactor) {
+    fudgeFactor = fudgeFactor || 0;
     var isOverlapDetected = false; 
     var b = sprite.satBody.getAxisAlignedBounds();
     var tiles = tilemapLayer.getTiles(b.x, b.y, b.width, b.height, true);
     for (var i = 0; i < tiles.length; i++) {
         var tile = tiles[i];
         var response = sprite.satBody.collideVsRectangle({
-            x: tile.worldX,
-            y: tile.worldY,
-            width: tile.width,
-            height: tile.height
+            x: tile.worldX + fudgeFactor,
+            y: tile.worldY + fudgeFactor,
+            width: tile.width - fudgeFactor,
+            height: tile.height - fudgeFactor
         });
         if (response === false) continue;
         isOverlapDetected = true;
