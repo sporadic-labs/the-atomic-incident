@@ -209,13 +209,10 @@ SatBody.prototype.postUpdate = function () {
  * is updated (which happens in stage.preUpdate and in stage.postUpdate for
  * arcade physics).
  */
-SatBody.prototype.updateFromBody = function () {
-    // Arcade physics bodies
-
+SatBody.prototype.updateFromArcadeBody = function () {
     // Update the position of the SAT body using the arcade body. Arcade bodies
     // are positions are relative to the top left of the body. 
     var arcadeBody = this._sprite.body;
-
     if (this._bodyType === BODY_TYPE.CIRCLE) {
         // The arcade body position for a circle is anchored at the top left, 
         // but SAT circles are anchored at the center, so shift the position.
