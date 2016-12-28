@@ -47,7 +47,6 @@ function SatBody(sprite) {
 }
 
 /**
-<<<<<<< HEAD
  * Creates a SAT box for the sprite.
  * If there is an arcade body, it is used as reference for the sat body
  * position, width and height.  The SAT box has an offset to ensure
@@ -57,15 +56,6 @@ function SatBody(sprite) {
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
  * RT: melee weapons and the beam do not use arcade bodies.
-=======
- * Creates a SAT box for the sprite based on an underlying arcade body. The SAT
- * body is placed at the position of the body and given a width and height that
- * match the body. By default, SAT box has a pivot/offset set so that the box
- * rotates around its center. 
- * MH: will we ever need this to be more flexible and allow for a SAT box that
- * doesn't line up with an arcade body?
- * @returns {SatBody} Returns the SatBody for chaining
->>>>>>> 947c94fb042466c104ee1484c8771a9ae6e9a237
  */
 SatBody.prototype.initBox = function () {
     this._bodyType = BODY_TYPE.BOX;
