@@ -239,6 +239,31 @@ SatBody.prototype.updateFromBody = function () {
     }
 };
 
+/**
+ * Updates the SAT body position and rotation, based on the shape of the
+ * sat body and the position of the sprite.
+ */
+SatBody.prototype.updateFromSprite = function () {
+    // Update the position of the colliding body
+    if (this._bodyType === BODY_TYPE.CIRCLE) {
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
+    } else if (this._bodyType === BODY_TYPE.BOX) {
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
+        this._body.setAngle(this._sprite.rotation);
+        // Rotation should probably be world rotation...or something?
+    } else if (this._bodyType === BODY_TYPE.POLYGON) {
+        // MH: Not yet sure what needs to happen here
+        this._body.pos.x = arcadeBody.body.x;
+        this._body.pos.y = arcadeBody.body.y;
+        this._body.setAngle(this._sprite.rotation);
+        // Rotation should probably be world rotation...or something?
+    }
+
+    if (this._isDebug) this._updateDebug();
+};
+
 SatBody.prototype.destroy = function () {
     if (this._debugGraphics) this._debugGraphics.destroy();
     this.game.globals.plugins.satBody.removeBody(this);
