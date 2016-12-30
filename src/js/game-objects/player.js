@@ -99,6 +99,16 @@ function Player(game, x, y, parentGroup) {
         Phaser.Color.getColor32(150, 210, 210, 255));
     globals.groups.foreground.add(this.flashlight);
 
+    // Directional arrow, for dev purposes
+    this._compass = game.make.image(0, 0, "assets", "test/bullet");
+    this._compass.scale.setTo(0.64, 0.64);
+    // Set the anchor, position and rotation.
+    this._compass.anchor.copyFrom(this.anchor);
+    this._compass.position.copyFrom(this.position);
+    this._compass.rotation = this.rotation;
+    // Add it to the foreground (so it is visible).
+    game.globals.groups.midground.add(this._compass);
+
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
