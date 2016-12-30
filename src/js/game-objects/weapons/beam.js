@@ -13,6 +13,9 @@ function Beam(game, parentGroup, player) {
     this._timer = game.time.create(false);
     this._timer.start();
     
+    // NOTE(rex): Hardcode this for now...
+    this._name = "Beam" ;
+    
     this._cooldownTime = 1000;
     this._attackDuration = 2000;
     this._isAttacking = false;
