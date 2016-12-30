@@ -100,11 +100,15 @@ function Player(game, x, y, parentGroup) {
     globals.groups.foreground.add(this.flashlight);
 
     // Directional arrow, for dev purposes
-    this._compass = game.make.image(0, 0, "assets", "test/bullet");
+    this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
     this._compass.scale.setTo(0.64, 0.64);
     // Set the anchor, position and rotation.
     this._compass.anchor.copyFrom(this.anchor);
-    this._compass.position.copyFrom(this.position);
+    var cX = this.position.x + (0.6 * this.width) *
+        Math.cos(this.rotation - (Math.PI/2));
+    var cY = this.position.y + (0.6 * this.width) *
+        Math.sin(this.rotation - (Math.PI/2));
+    this._compass.position.copyFrom(new Phaser.Point(cX, cY));
     this._compass.rotation = this.rotation;
     // Add it to the foreground (so it is visible).
     game.globals.groups.midground.add(this._compass);
@@ -300,7 +304,11 @@ Player.prototype.postUpdate = function () {
     }
 
     // Update compass position and rotation
-    this._compass.position.copyFrom(this.position);
+    var cX = this.position.x + (0.6 * this.width) *
+        Math.cos(this.rotation - (Math.PI/2));
+    var cY = this.position.y + (0.6 * this.width) *
+        Math.sin(this.rotation - (Math.PI/2));
+    this._compass.position.copyFrom(new Phaser.Point(cX, cY));
     this._compass.rotation = this.rotation;
 
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
