@@ -251,8 +251,8 @@ Player.prototype.update = function () {
         specialAttackDir.x += 0;
         specialAttackDir.y -= 1;
     }
-    if (isShootingSpecial && this.getGun().specialFire) {
-        this.getGun().specialFire(specialAttackDir);
+    if (isShootingSpecial && this._weapon.specialFire) {
+        this._weapon.specialFire(specialAttackDir);
     }
 
     // Check whether player is moving in order to update its animation
