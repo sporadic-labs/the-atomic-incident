@@ -18,27 +18,27 @@ function WeaponPickup(game, x, y, type) {
         spriteUtils.applyRandomLightnessTint(this, 0.98, 1, 0.6);
         this._label = game.make.image(0, 0, "assets", "weapons/sword");
         this._label.scale.setTo(0.36, 0.36);
-    } else if (this.type === "weapon-scattershot") {
+    } else if (this.type === "scattershot") {
         spriteUtils.applyRandomLightnessTint(this, 0.67, 1, 0.6);
         this._label = game.make.image(0, 0, "assets", "weapons/slug");
         this._label.scale.setTo(0.25, 0.25);
-    } else if (this.type === "weapon-flamethrower") {
+    } else if (this.type === "flamethrower") {
         spriteUtils.applyRandomLightnessTint(this, 0.16, 0.86, 0.6);
         this._label = game.make.image(0, 0, "assets", "weapons/e-burst-01");
         this._label.scale.setTo(0.42, 0.42);
-    } else if (this.type === "weapon-machine-gun") {
+    } else if (this.type === "machine-gun") {
         spriteUtils.applyRandomLightnessTint(this, 1.0, 0.64, 0.46);
         this._label = game.make.image(0, 0, "assets", "weapons/slug");
         this._label.scale.setTo(0.42, 0.42);
-    } else if (this.type === "weapon-laser") {
+    } else if (this.type === "laser") {
         spriteUtils.applyRandomLightnessTint(this, 0.22, 0.7, 0.3);
         this._label = game.make.image(0, 0, "assets", "weapons/laser-01");
         this._label.scale.setTo(0.76, 0.76);
-    } else if (this.type === "weapon-beam") {
+    } else if (this.type === "beam") {
         spriteUtils.applyRandomLightnessTint(this, 0.54, 1, 0.6);
         this._label = game.make.image(0, 0, "assets", "weapons/death-beam");
         this._label.scale.setTo(0.56, 0.56);
-    } else if (this.type === "weapon-arrow") {
+    } else if (this.type === "arrow") {
         spriteUtils.applyRandomLightnessTint(this, 0.16, 0.42, 0.74);
         this._label = game.make.image(0, 0, "assets", "weapons/arrow");
         this._label.rotation =+ (Math.PI); // rotate 180 degrees
@@ -50,7 +50,7 @@ function WeaponPickup(game, x, y, type) {
         spriteUtils.applyRandomLightnessTint(this, 0.38, 1, 0.22);
         this._label = game.make.image(0, 0, "assets", "weapons/slug");
         this._label.scale.setTo(0.64, 0.96);
-    } else if (this.type === "weapon-slug") {
+    } else if (this.type === "slug") {
         spriteUtils.applyRandomLightnessTint(this, 0.99, 0.15, 1.0);
         this._label = game.make.image(0, 0, "assets", "weapons/slug");
         this._label.scale.setTo(0.96, 0.96);
