@@ -24,6 +24,9 @@ function HeadsUpDisplay(game, parentGroup) {
     this.add(this._comboText);
     this._ammoText = game.make.text(30, 140, "Ammo: 0", textStyle);
     this.add(this._ammoText);
+    // TODO(rex): Figure out a better way to center this.
+    this._weaponText = game.make.text((game.width / 2) - (75), game.height * 0.9, this._player.getGun()._name, textStyle);
+    this.add(this._weaponText);
     this._debugText = game.make.text(30, game.height - 40, 
         "Debug ('E' key): false", textStyle);
     this._debugText.fontSize = 14;
@@ -40,6 +43,8 @@ HeadsUpDisplay.prototype.update = function () {
             this._player.getAmmo() + " / " + this._player.getGun()._totalAmmo);
     }
     this._comboText.setText("Combo: " + this._player.getCombo());
+    this._weaponText.setText(this._player.getGun()._name);
+
     this._debugText.setText("Debug ('E' key): " + 
         this._satBodyPlugin.isDebugAllEnabled());
 };
