@@ -198,6 +198,9 @@ Player.prototype.update = function () {
         }
     }
 
+    // Update the rotation of the player based on the reticule
+    this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
+
     // ammo check
     if (this._weapon.isAmmoEmpty && this._weapon.isAmmoEmpty()) {
         this.changeGuns(WEAPONS.SLUG);
@@ -295,6 +298,11 @@ Player.prototype.postUpdate = function () {
     } else {
         this.flashlight.enabled = false;
     }
+
+    // Update compass position and rotation
+    this._compass.position.copyFrom(this.position);
+    this._compass.rotation = this.rotation;
+
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
 };
 
