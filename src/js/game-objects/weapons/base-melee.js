@@ -5,13 +5,14 @@ var SpriteUtils = require("../../helpers/sprite-utilities.js");
 
 BaseMelee.prototype = Object.create(Phaser.Sprite.prototype);
 
-function BaseMelee(game, key, frame, parentGroup, player, damage) {
+function BaseMelee(game, key, frame, weaponName, parentGroup, player, damage) {
     Phaser.Sprite.call(this, game, player.x, player.y, key, frame);
     this.anchor.set(0.5, 1.0);
     parentGroup.add(this);
 
     this._player = player;
     this._enemies = this.game.globals.groups.enemies;
+    this._name = weaponName;
 
     // Set up a timer that doesn't autodestroy itself
     this._cooldownTimer = this.game.time.create(false);

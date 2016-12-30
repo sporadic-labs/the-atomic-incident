@@ -5,7 +5,7 @@ var BaseMelee = require("./base-melee.js");
 RustySword.prototype = Object.create(BaseMelee.prototype);
 
 function RustySword(game, parentGroup, player) {
-    BaseMelee.call(this, game, "assets", "weapons/sword",
+    BaseMelee.call(this, game, "assets", "weapons/sword", "Rusty Sword",
         parentGroup, player, 26);
     this.scale.setTo(0.72, 0.72);
     this.initCooldown(360, 980);
