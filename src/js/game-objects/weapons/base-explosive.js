@@ -76,6 +76,9 @@ BaseExplosive.prototype.update = function() {
 BaseExplosive.prototype.explode = function () {
     this._hasExploded = true;
     // Switch to explosion circle SAT body 
+    this.game.globals.plugins.satBody.removeBody(this.satBody);
+    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this,
+        this._range / 2);
     this.satBody.setCircleRadius(this._explosionRadius);
     // Stop moving
     this.body.velocity.set(0);
