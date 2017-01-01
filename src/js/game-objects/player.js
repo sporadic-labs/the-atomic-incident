@@ -122,10 +122,10 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("move-right", [Kb.D]);
     this._controls.addKeyboardControl("move-down", [Kb.S]);
     // primary attack
-    this._controls.addKeyboardControl("attack-up", [Kb.UP]);
-    this._controls.addKeyboardControl("attack-left", [Kb.LEFT]);
-    this._controls.addKeyboardControl("attack-right", [Kb.RIGHT]);
-    this._controls.addKeyboardControl("attack-down", [Kb.DOWN]);
+    this._controls.addKeyboardControl("arrow-up", [Kb.UP]);
+    this._controls.addKeyboardControl("arrow-left", [Kb.LEFT]);
+    this._controls.addKeyboardControl("arrow-right", [Kb.RIGHT]);
+    this._controls.addKeyboardControl("arrow-down", [Kb.DOWN]);
     this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
     // special attack
     this._controls.addKeyboardControl("attack-space", [Kb.SPACEBAR]);
@@ -225,17 +225,17 @@ Player.prototype.update = function () {
         isShooting = true;
         attackDir = this._reticule.position.clone();
     }
-    if (this._controls.isControlActive("attack-left")) {
+    if (this._controls.isControlActive("arrow-left")) {
         isShooting = true;
         attackDir.x += -1;
-    } else if (this._controls.isControlActive("attack-right")) {
+    } else if (this._controls.isControlActive("arrow-right")) {
         isShooting = true;
         attackDir.x += 1;
     }
-    if (this._controls.isControlActive("attack-up")) {
+    if (this._controls.isControlActive("arrow-up")) {
         isShooting = true;
         attackDir.y += -1;
-    } else if (this._controls.isControlActive("attack-down")) {
+    } else if (this._controls.isControlActive("arrow-down")) {
         isShooting = true;
         attackDir.y += 1;
     }
