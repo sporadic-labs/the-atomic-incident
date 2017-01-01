@@ -25,8 +25,11 @@ function HeadsUpDisplay(game, parentGroup) {
     this.add(this._comboText);
     this._ammoText = game.make.text(30, 140, "Ammo: 0", textStyle);
     this.add(this._ammoText);
-    // TODO(rex): Figure out a better way to center this.
-    this._weaponText = game.make.text((game.width / 2) - (75), game.height * 0.9, this._player.getGun()._name, textStyle);
+    // You have to setup the text before it has a width.  So set it up...
+    this._weaponText = game.make.text((game.width / 2), game.height * 0.9,
+        this._player.getGun()._name, textStyle);
+    // And then update the position
+    this._weaponText.x = (game.width / 2) - (this._weaponText.width / 2);
     this.add(this._weaponText);
     this._debugText = game.make.text(30, game.height - 45, 
         "Debug ('E' key): false", textStyle);
@@ -49,6 +52,9 @@ HeadsUpDisplay.prototype.update = function () {
     }
     this._comboText.setText("Combo: " + this._player.getCombo());
     this._weaponText.setText(this._player.getGun()._name);
+    // Update the position of the weapon text, so if it has changed,
+    // it will still be centered
+    this._weaponText.x = (this.game.width / 2) - (this._weaponText.width / 2);
 
     this._debugText.setText("Debug ('E' key): " + 
         this._satBodyPlugin.isDebugAllEnabled());
