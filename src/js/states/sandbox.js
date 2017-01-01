@@ -28,7 +28,9 @@ Sandbox.prototype.create = function () {
     globals.options = {
         controlTypes: [
             "mouse",
-            "keyboard",
+            // "keyboard",
+            "asteroids", // left and right arrows rotate, forward shoots backward flips
+            "zelda", // 8 directions only, up down left right diagonal
             // "controller",
         ],
         controls: 0,
@@ -160,7 +162,6 @@ Sandbox.prototype.create = function () {
         } else {
             globals.options.controls++;
         }
-        console.log(globals.options.controlTypes[globals.options.controls]);
     }, this);
 
     // Toggle debugging SAT bodies
