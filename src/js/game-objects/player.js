@@ -52,6 +52,14 @@ function Player(game, x, y, parentGroup) {
     this._pickups = globals.groups.pickups;
     this._lights = globals.groups.lights;
 
+    // Control options
+    this._controlType = globals.options.controlTypes[globals.options.controls];
+    this._controlCtr = 0;
+    // Timer for flipping cooldown
+    this._cooldownTimer = this.game.time.create(false);
+    this._cooldownTimer.start();
+    this._ableToFlip = true;
+
     // Combo
     this._comboTracker = new ComboTracker(game, 2000);
 
@@ -202,8 +210,78 @@ Player.prototype.update = function () {
         }
     }
 
-    // Update the rotation of the player based on the reticule
-    this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
+    // The control type option will determine how the player rotates
+    // Update the current control type, and then update rotation!
+    var options = this.game.globals.options;
+    this._controlType = options.controlTypes[options.controls];
+    if (this._controlType === "mouse") {
+        // Update the rotation of the player based on the reticule
+        this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
+    } else if (this._controlType === "asteroids") { // TODO(rex): Change this to keyboard
+        // NOTE(rex): The following is a bizarre attempt to give some acceleration to the
+        // rotation of the player.  I just hacked this together in the moment, and
+        // there is most likely a better way to do this.  Research that...
+
+        // If one of the arrow keys is active, update the rotation
+        if (this._controls.isControlActive("arrow-left")) {
+            // Increment the counter
+            this._controlCtr++;
+            // Increase rotation to a point,
+            var mod = 60 - (this._controlCtr * this._controlCtr * 0.12);
+            if (mod > 18) {
+                this.rotation -= Math.PI/mod;
+            } else {
+                // then cap it
+                this.rotation -= Math.PI/18;
+            }
+        } else if (this._controls.isControlActive("arrow-right")) {
+            // Increment the counter
+            this._controlCtr++;
+            // Increase rotation to a point,
+            var mod = 60 - (this._controlCtr * this._controlCtr * 0.12);
+            if (mod > 18) {
+                this.rotation += Math.PI/mod;
+            } else {
+                // then cap it
+                this.rotation += Math.PI/18;
+            }
+        } else if (this._controls.isControlActive("arrow-down")) {
+            // The down arrow is used to flip the player 180 degrees,
+            // it has a cooldown so you don't flip constantly if
+            // holding the down arrow.
+            if (this._ableToFlip) {
+                this.rotation += Math.PI;
+                this._startCooldown(540);
+            }
+        } else {
+            // Reset the counter if no rotation arrows are active
+            this._controlCtr = 0;
+        }
+    } else if (this._controlType === "zelda") { // TODO(rex): Change this to keyboard
+        // If one of the arrow keys is active, update the rotation
+        // Do cardinal directions first
+        if (this._controls.isControlActive("arrow-left")) {
+            this.rotation = 270*(Math.PI/180);
+        } else if (this._controls.isControlActive("arrow-right")) {
+            this.rotation = 90*(Math.PI/180);
+        }
+        if (this._controls.isControlActive("arrow-up")) {
+            this.rotation = 0*(Math.PI/180);
+        } else if (this._controls.isControlActive("arrow-down")) {
+            this.rotation = 180*(Math.PI/180);
+        }
+        // Then diagonals!
+        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-up")) {
+            this.rotation = 315*(Math.PI/180);
+        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-up")) {
+            this.rotation = 45*(Math.PI/180);
+        }
+        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-down")) {
+            this.rotation = 235*(Math.PI/180);
+        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-down")) {
+            this.rotation = 135*(Math.PI/180);
+        }
+    }
 
     // ammo check
     if (this._weapon.isAmmoEmpty && this._weapon.isAmmoEmpty()) {
@@ -221,23 +299,63 @@ Player.prototype.update = function () {
     // Firing logic
     var isShooting = false;
     var attackDir = this.position.clone();
-    if (this._controls.isControlActive("attack")) {
-        isShooting = true;
-        attackDir = this._reticule.position.clone();
-    }
-    if (this._controls.isControlActive("arrow-left")) {
-        isShooting = true;
-        attackDir.x += -1;
-    } else if (this._controls.isControlActive("arrow-right")) {
-        isShooting = true;
-        attackDir.x += 1;
-    }
-    if (this._controls.isControlActive("arrow-up")) {
-        isShooting = true;
-        attackDir.y += -1;
-    } else if (this._controls.isControlActive("arrow-down")) {
-        isShooting = true;
-        attackDir.y += 1;
+
+    // Control options will also impact the firing logic
+    if (this._controlType === "mouse") {
+        // If the control type is mouse...
+        // Attack direction is cloned from the mouse position
+        if (this._controls.isControlActive("attack")) {
+            isShooting = true;
+            attackDir = this._reticule.position.clone();
+        }
+    } else if (this._controlType === "asteroids") { // TODO(rex): Change this to keyboard.
+        // If the control type is asteroids...
+        // The up arrow fires in the direction the player is currently facing
+        if (this._controls.isControlActive("arrow-up")) {
+            isShooting = true;
+            // Calculate an arbitrary target position in the
+            // direction the player is facing
+            attackDir.x = this.position.x + (0.75 * this.width) * 
+                Math.cos(this.rotation - (Math.PI/2));
+            attackDir.y = this.position.y + (0.75 * this.width) * 
+                Math.sin(this.rotation - (Math.PI/2));
+        }
+    } else if (this._controlType === "zelda") { // TODO(rex): Change this to keyboard.
+        // If the control type is zelda...
+        // Check the arrow keys for a direction
+        // Do cardinal directions first!
+        if (this._controls.isControlActive("arrow-left")) {
+            isShooting = true;
+            attackDir.x += -1;
+        } else if (this._controls.isControlActive("arrow-right")) {
+            isShooting = true;
+            attackDir.x += 1;
+        } else  if (this._controls.isControlActive("arrow-up")) {
+            isShooting = true;
+            attackDir.y += -1;
+        } else if (this._controls.isControlActive("arrow-down")) {
+            isShooting = true;
+            attackDir.y += 1;
+        }
+        // Then do diagonals
+        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-up")) {
+            isShooting = true;
+            attackDir.x += -1;
+            attackDir.y += -1;
+        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-up")) {
+            isShooting = true;
+            attackDir.x += 1;
+            attackDir.y += -1;
+        }
+        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-down")) {
+            isShooting = true;
+            attackDir.x += -1;
+            attackDir.y += 1;
+        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-down")) {
+            isShooting = true;
+            attackDir.x += 1;
+            attackDir.y += 1;
+        }
     }
     if (isShooting) {
         this._weapon.fire(attackDir);
@@ -355,6 +473,7 @@ Player.prototype.destroy = function () {
     this._reticule.destroy();
     this._comboTracker.destroy();
     this._timer.destroy();
+    this._cooldownTimer.destroy();
     this.game.tweens.removeFrom(this);
     for (var key in this._weapons) {
         this._weapons[key].destroy();
@@ -404,3 +523,11 @@ Player.prototype.changeGuns = function (weaponName) {
         this._weapon = this._weapons[weaponName] = weapon;
     }
 }
+
+Player.prototype._startCooldown = function (time) {
+    if (!this._ableToFlip) return;
+    this._ableToFlip = false;
+    this._cooldownTimer.add(time, function () {
+        this._ableToFlip = true;
+    }, this);
+};
