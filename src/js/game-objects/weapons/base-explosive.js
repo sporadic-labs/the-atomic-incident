@@ -108,11 +108,15 @@ BaseExplosive.prototype.postUpdate = function () {
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
     }
+
+    // If the time has expired on this explosive, and it hasn't exploded yet, blow up!
+    if (this._timer.ms > this._life && this._life > 0 && !this._hasExploded) {
+        this.explode();
+    }
+
     // If projectile has collided with an enemy, or is out of range, remove it
     if ((this.position.distance(this._initialPos) > this._range &&
-         this._range > 0) || 
-        (this._timer.ms > this._life && this._life > 0) ||
-        (this._isDestructable && this._remove)) {
+         this._range > 0) || (this._isDestructable && this._remove)) {
         this.destroy();
     }
 };
