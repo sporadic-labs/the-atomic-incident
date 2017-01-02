@@ -15,7 +15,6 @@ var Grenade = require("./weapons/grenade.js");
 var Rocket = require("./weapons/rocket.js");
 // Test
 var RustySword = require("./weapons/rusty-sword.js");
-var Explosive = require("./weapons/explosive.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -150,7 +149,6 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl(WEAPONS.GRENADE, [Kb.EIGHT]);
     this._controls.addKeyboardControl(WEAPONS.ROCKET, [Kb.NINE]);
     this._controls.addKeyboardControl(WEAPONS.SLUG, [Kb.ZERO]);
-    this._controls.addKeyboardControl(WEAPONS.EXPLOSIVE, [Kb.M]);
 }
 
 Player.prototype.getCombo = function () {
@@ -517,8 +515,6 @@ Player.prototype.changeGuns = function (weaponName) {
             weapon = new Gun(this.game, this.parent, this);
         } else if (weaponName === WEAPONS.RUSTY_SWORD) {
             weapon = new RustySword(this.game, this.parent, this);
-        } else if (weaponName === WEAPONS.EXPLOSIVE) {
-            weapon = new Explosive(this.game, this.parent, this);
         }
         this._weapon = this._weapons[weaponName] = weapon;
     }
