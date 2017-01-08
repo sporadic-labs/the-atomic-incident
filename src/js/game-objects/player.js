@@ -174,10 +174,16 @@ Player.prototype.update = function () {
 
     // The agar.io controls override normal WASD controls
     if (this._controlType !== "agar.io") {
-        if (this._controls.isControlActive("move-left")) acceleration.x = -1;
-        else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
-        if (this._controls.isControlActive("move-up")) acceleration.y = -1;
-        else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
+        if (this._controls.isControlActive("move-left")) {
+            acceleration.x = -1;
+        } else if (this._controls.isControlActive("move-right")) {
+            acceleration.x = 1;
+        }
+        if (this._controls.isControlActive("move-up")) {
+            acceleration.y = -1;
+        } else if (this._controls.isControlActive("move-down")) {
+            acceleration.y = 1;
+        }
     } else {
         // When the mouse is down, move the player to the mouse position
         if (this._controls.isControlActive("attack")) {
@@ -190,7 +196,6 @@ Player.prototype.update = function () {
             acceleration.x = magnitude * Math.cos(angle);
             acceleration.y = magnitude * Math.sin(angle);
         }
-
     }
 
     // Normalize the acceleration and set the magnitude. This makes it so that
@@ -226,27 +231,31 @@ Player.prototype.update = function () {
 
     // The control type option will determine how the player rotates
     // Update the current control type, and then update rotation!
+    // TODO(rex): Select a control type and change it to 'keyboard'!
     var options = this.game.globals.options;
     this._controlType = options.controlTypes[options.controls];
     if (this._controlType === "mouse") {
         // Update the rotation of the player based on the reticule
-        this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
-    } else if (this._controlType === "agar.io") { // TODO(rex): Change this to keyboard
+        this.rotation = this.position.angle(this._reticule.position) +
+            (Math.PI/2);
+    } else if (this._controlType === "agar.io") { 
         // Update the rotation of the player based on the reticule
-        this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
-    } else if (this._controlType === "asteroids") { // TODO(rex): Change this to keyboard
-        // NOTE(rex): The following is a bizarre attempt to give some acceleration to the
-        // rotation of the player.  I just hacked this together in the moment, and
-        // there is most likely a better way to do this.  Research that...
+        this.rotation = this.position.angle(this._reticule.position) +
+            (Math.PI/2);
+    } else if (this._controlType === "asteroids") {
+        // NOTE(rex): The following is a bizarre attempt to give some
+        // acceleration to the rotation of the player.  I just hacked
+        // this together in the moment, and there is most likely a
+        // better way to do this.  Figure it out...
 
         // If one of the arrow keys is active, update the rotation
         if (this._controls.isControlActive("arrow-left")) {
             // Increment the counter
             this._controlCtr++;
             // Increase rotation to a point,
-            var mod = 60 - (this._controlCtr * this._controlCtr * 0.12);
-            if (mod > 18) {
-                this.rotation -= Math.PI/mod;
+            var modL = 60 - (this._controlCtr * this._controlCtr * 0.12);
+            if (modL > 18) {
+                this.rotation -= Math.PI/modL;
             } else {
                 // then cap it
                 this.rotation -= Math.PI/18;
@@ -255,9 +264,9 @@ Player.prototype.update = function () {
             // Increment the counter
             this._controlCtr++;
             // Increase rotation to a point,
-            var mod = 60 - (this._controlCtr * this._controlCtr * 0.12);
-            if (mod > 18) {
-                this.rotation += Math.PI/mod;
+            var modR = 60 - (this._controlCtr * this._controlCtr * 0.12);
+            if (modR > 18) {
+                this.rotation += Math.PI/modR;
             } else {
                 // then cap it
                 this.rotation += Math.PI/18;
@@ -274,7 +283,7 @@ Player.prototype.update = function () {
             // Reset the counter if no rotation arrows are active
             this._controlCtr = 0;
         }
-    } else if (this._controlType === "zelda") { // TODO(rex): Change this to keyboard
+    } else if (this._controlType === "zelda") {
         // If one of the arrow keys is active, update the rotation
         // Do cardinal directions first
         if (this._controls.isControlActive("arrow-left")) {
@@ -288,14 +297,18 @@ Player.prototype.update = function () {
             this.rotation = 180*(Math.PI/180);
         }
         // Then diagonals!
-        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-up")) {
+        if (this._controls.isControlActive("arrow-left") &&
+            this._controls.isControlActive("arrow-up")) {
             this.rotation = 315*(Math.PI/180);
-        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-up")) {
+        } else if (this._controls.isControlActive("arrow-right") &&
+                   this._controls.isControlActive("arrow-up")) {
             this.rotation = 45*(Math.PI/180);
         }
-        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-down")) {
+        if (this._controls.isControlActive("arrow-left") &&
+            this._controls.isControlActive("arrow-down")) {
             this.rotation = 235*(Math.PI/180);
-        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-down")) {
+        } else if (this._controls.isControlActive("arrow-right") &&
+                   this._controls.isControlActive("arrow-down")) {
             this.rotation = 135*(Math.PI/180);
         }
     }
@@ -337,7 +350,7 @@ Player.prototype.update = function () {
             attackDir.y = this.position.y + (0.75 * this.width) * 
                 Math.sin(this.rotation - (Math.PI/2));
         }
-    } else if (this._controlType === "asteroids") { // TODO(rex): Change this to keyboard.
+    } else if (this._controlType === "asteroids") {
         // If the control type is asteroids...
         // The up arrow fires in the direction the player is currently facing
         if (this._controls.isControlActive("arrow-up")) {
@@ -349,7 +362,7 @@ Player.prototype.update = function () {
             attackDir.y = this.position.y + (0.75 * this.width) * 
                 Math.sin(this.rotation - (Math.PI/2));
         }
-    } else if (this._controlType === "zelda") { // TODO(rex): Change this to keyboard.
+    } else if (this._controlType === "zelda") {
         // If the control type is zelda...
         // Check the arrow keys for a direction
         // Do cardinal directions first!
@@ -367,20 +380,24 @@ Player.prototype.update = function () {
             attackDir.y += 1;
         }
         // Then do diagonals
-        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-up")) {
+        if (this._controls.isControlActive("arrow-left") &&
+            this._controls.isControlActive("arrow-up")) {
             isShooting = true;
             attackDir.x += -1;
             attackDir.y += -1;
-        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-up")) {
+        } else if (this._controls.isControlActive("arrow-right") &&
+                   this._controls.isControlActive("arrow-up")) {
             isShooting = true;
             attackDir.x += 1;
             attackDir.y += -1;
         }
-        if (this._controls.isControlActive("arrow-left") && this._controls.isControlActive("arrow-down")) {
+        if (this._controls.isControlActive("arrow-left") &&
+            this._controls.isControlActive("arrow-down")) {
             isShooting = true;
             attackDir.x += -1;
             attackDir.y += 1;
-        } else if (this._controls.isControlActive("arrow-right") && this._controls.isControlActive("arrow-down")) {
+        } else if (this._controls.isControlActive("arrow-right") &&
+                   this._controls.isControlActive("arrow-down")) {
             isShooting = true;
             attackDir.x += 1;
             attackDir.y += 1;

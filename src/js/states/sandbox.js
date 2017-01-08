@@ -29,7 +29,7 @@ Sandbox.prototype.create = function () {
         controlTypes: [
             "mouse",
             // "keyboard",
-            "asteroids", // left and right arrows rotate, forward shoots backward flips
+            "asteroids", // left/right rotate, up shoots down flips
             "zelda", // 8 directions only, up down left right diagonal
             "agar.io",
             // "controller", // not supported yet
@@ -158,7 +158,8 @@ Sandbox.prototype.create = function () {
     // Toggle control options
     var controlToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.C);
     controlToggleKey.onDown.add(function () {
-        if (globals.options.controls === globals.options.controlTypes.length-1) {
+        if (globals.options.controls ===
+            globals.options.controlTypes.length - 1) {
             globals.options.controls = 0;
         } else {
             globals.options.controls++;

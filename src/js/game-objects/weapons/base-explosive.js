@@ -109,8 +109,10 @@ BaseExplosive.prototype.postUpdate = function () {
             this._onCollideWithEnemy, this);
     }
 
-    // If the time has expired on this explosive, and it hasn't exploded yet, blow up!
-    if (this._timer.ms > this._life && this._life > 0 && !this._hasExploded) {
+    // If the time has expired on this explosive,
+    // and it hasn't exploded yet, blow up!
+    if (this._timer.ms > this._life && this._life > 0 &&
+        !this._hasExploded) {
         this.explode();
     }
 
