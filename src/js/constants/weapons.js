@@ -9,5 +9,4 @@ module.exports = {
     GRENADE: "grenade",
     ROCKET: "rocket",
     SLUG: "slug",
-    EXPLOSIVE: "explosive"
 };
