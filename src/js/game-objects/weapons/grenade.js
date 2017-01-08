@@ -1,7 +1,7 @@
 module.exports = Grenade;
 
 var BaseWeapon = require("./base-weapon.js");
-var BaseExplosive = require("./base-explosive.js");
+var ExplosiveProjectile = require("./explosive-projectile.js");
 
 Grenade.prototype = Object.create(BaseWeapon.prototype);
 
@@ -58,6 +58,6 @@ Grenade.prototype.specialFire = function () {
 };
 
 Grenade.prototype._createProjectile = function (x, y, angle) {
-    new BaseExplosive(this.game, x, y, "assets", "weapons/e-saw-02", this, 
+    new ExplosiveProjectile(this.game, x, y, "assets", "weapons/e-saw-02", this, 
         this._player, 84, angle, 164, 360, 2400, projectileOptions);
 };

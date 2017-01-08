@@ -1,7 +1,7 @@
 module.exports = Rocket;
 
 var BaseWeapon = require("./base-weapon.js");
-var BaseExplosive = require("./base-explosive.js");
+var ExplosiveProjectile = require("./explosive-projectile.js");
 
 Rocket.prototype = Object.create(BaseWeapon.prototype);
 
@@ -58,6 +58,6 @@ Rocket.prototype.specialFire = function () {
 };
 
 Rocket.prototype._createProjectile = function (x, y, angle) {
-    new BaseExplosive(this.game, x, y, "assets", "weapons/slug", this, 
+    new ExplosiveProjectile(this.game, x, y, "assets", "weapons/slug", this, 
         this._player, 112, angle, 80, 500, -1, projectileOptions);
 };

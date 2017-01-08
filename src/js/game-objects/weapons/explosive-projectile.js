@@ -1,17 +1,11 @@
-module.exports = BaseExplosive;
+module.exports = ExplosiveProjectile;
 
 var SpriteUtils = require("../../helpers/sprite-utilities.js");
 var BaseProjectile = require("./base-projectile.js");
 
-BaseExplosive.prototype = Object.create(BaseProjectile.prototype);
+ExplosiveProjectile.prototype = Object.create(BaseProjectile.prototype);
 
-// Set Range & Life to -1 if you don't care about these options
-// options is an object containing some optional settings for the
-// base projectile class
-// - isDestructible - bool
-// - rotateOnSetup - bool
-// - speedModifier - range (0 - 1.0)
-function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
+function ExplosiveProjectile(game, x, y, key, frame, parentGroup, player, damage,
     angle, speed, range, life, options) {
     // Phaser.Sprite.call(this, game, x, y, key, frame);
     BaseProjectile.call(this, game, x, y, key, frame, parentGroup, player, 
@@ -29,7 +23,7 @@ function BaseExplosive(game, x, y, key, frame, parentGroup, player, damage,
     this._hasExploded = false;
 }
 
-BaseExplosive.prototype.explode = function () {
+ExplosiveProjectile.prototype.explode = function () {
     this._hasExploded = true;
     // Switch to explosion circle SAT body 
     this.game.globals.plugins.satBody.removeBody(this.satBody);
@@ -50,13 +44,13 @@ BaseExplosive.prototype.explode = function () {
     this._timer.add(100, this.destroy, this);
 };
 
-BaseExplosive.prototype.destroy = function () {
+ExplosiveProjectile.prototype.destroy = function () {
     this._graphics.destroy();
     this._timer.destroy();
     BaseProjectile.prototype.destroy.apply(this, arguments);
 };
 
-BaseExplosive.prototype.postUpdate = function () {
+ExplosiveProjectile.prototype.postUpdate = function () {
     // Update arcade physics
     BaseProjectile.prototype.postUpdate.apply(this, arguments);
     // Check overlap for the non-exploded projectile
@@ -80,15 +74,15 @@ BaseExplosive.prototype.postUpdate = function () {
 };
 
 // eslint-disable-next-line no-unused-vars
-BaseExplosive.prototype._onCollideWithMap = function (self, map) {
+ExplosiveProjectile.prototype._onCollideWithMap = function (self, map) {
     self.explode();
 };
 
 // eslint-disable-next-line no-unused-vars
-BaseExplosive.prototype._onCollideWithEnemy = function (self, enemy) { 
+ExplosiveProjectile.prototype._onCollideWithEnemy = function (self, enemy) { 
     self.explode();
 };
 
-BaseExplosive.prototype._onExplodeEnemy = function (self, enemy) {
+ExplosiveProjectile.prototype._onExplodeEnemy = function (self, enemy) {
     enemy.takeDamage(this._damage);
 };
