@@ -58,6 +58,6 @@ Gun.prototype.specialFire = function () {
 Gun.prototype._createProjectile = function (x, y, angle) {
     // new Projectile(this.game, x, y, "assets", "weapons/slug", this, 
     //     this._player, 100, angle, 300, 200, projectileOptions);
-    var p = new BouncingProjectile(this.game, x, y, "assets", "weapons/circle", this, 
-        this._player, 100, angle, 300, 20);
+    new BouncingProjectile(this.game, x, y, "assets", "weapons/circle",
+        this, this._player, 100, angle, 300, 20);
 };
