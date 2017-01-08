@@ -31,7 +31,8 @@ Sandbox.prototype.create = function () {
             // "keyboard",
             "asteroids", // left and right arrows rotate, forward shoots backward flips
             "zelda", // 8 directions only, up down left right diagonal
-            // "controller",
+            "agar.io",
+            // "controller", // not supported yet
         ],
         controls: 0,
         difficulty: "no thumbs",

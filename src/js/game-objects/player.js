@@ -172,10 +172,26 @@ Player.prototype.update = function () {
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
 
-    if (this._controls.isControlActive("move-left")) acceleration.x = -1;
-    else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
-    if (this._controls.isControlActive("move-up")) acceleration.y = -1;
-    else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
+    // The agar.io controls override normal WASD controls
+    if (this._controlType !== "agar.io") {
+        if (this._controls.isControlActive("move-left")) acceleration.x = -1;
+        else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
+        if (this._controls.isControlActive("move-up")) acceleration.y = -1;
+        else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
+    } else {
+        // When the mouse is down, move the player to the mouse position
+        if (this._controls.isControlActive("attack")) {
+            // Calculate the acceleration based on the direction
+            // the player needs to travel to reach the reticle
+            var distance = this.position.distance(this._reticule.position);
+            var angle = this.position.angle(this._reticule.position);
+            var targetSpeed = distance / this.game.time.physicsElapsed;
+            var magnitude = Math.min(this._maxSpeed, targetSpeed);
+            acceleration.x = magnitude * Math.cos(angle);
+            acceleration.y = magnitude * Math.sin(angle);
+        }
+
+    }
 
     // Normalize the acceleration and set the magnitude. This makes it so that
     // the player moves in the same speed in all directions.
@@ -213,6 +229,9 @@ Player.prototype.update = function () {
     var options = this.game.globals.options;
     this._controlType = options.controlTypes[options.controls];
     if (this._controlType === "mouse") {
+        // Update the rotation of the player based on the reticule
+        this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
+    } else if (this._controlType === "agar.io") { // TODO(rex): Change this to keyboard
         // Update the rotation of the player based on the reticule
         this.rotation = this.position.angle(this._reticule.position) + (Math.PI/2);
     } else if (this._controlType === "asteroids") { // TODO(rex): Change this to keyboard
@@ -306,6 +325,18 @@ Player.prototype.update = function () {
             isShooting = true;
             attackDir = this._reticule.position.clone();
         }
+    } else if (this._controlType === "agar.io") {
+        // If the control type is agar.io...
+        // Space fires in the direction the player is currently facing
+        if (this._controls.isControlActive("attack-space")) {
+            isShooting = true;
+            // Calculate an arbitrary target position in the
+            // direction the player is facing
+            attackDir.x = this.position.x + (0.75 * this.width) * 
+                Math.cos(this.rotation - (Math.PI/2));
+            attackDir.y = this.position.y + (0.75 * this.width) * 
+                Math.sin(this.rotation - (Math.PI/2));
+        }
     } else if (this._controlType === "asteroids") { // TODO(rex): Change this to keyboard.
         // If the control type is asteroids...
         // The up arrow fires in the direction the player is currently facing
@@ -366,7 +397,9 @@ Player.prototype.update = function () {
         isShootingSpecial = true;
         specialAttackDir = this._reticule.position.clone();
     }
-    if (this._controls.isControlActive("attack-space")) {
+    // Space does something different in the agar.io controls
+    if (this._controls.isControlActive("attack-space") &&
+        this._controlType !== "agar.io") {
         isShootingSpecial = true;
         specialAttackDir.x += 0;
         specialAttackDir.y -= 1;
