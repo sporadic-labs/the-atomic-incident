@@ -28,7 +28,7 @@ BouncingProjectile.prototype.update = function() {
 
     // The SAT body needs to be updated to match the arcade body, which has
     // velocity and acceleration applied in the sprite's preUpdate method
-    this.satBody.updateFromBody();
+    this.satBody.updateFromArcadeBody();
 
     // Collisions with the tilemap
     this._bounceX = false;

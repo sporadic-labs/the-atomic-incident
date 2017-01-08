@@ -27,9 +27,9 @@ function BaseMelee(game, key, frame, weaponName, parentGroup, player, damage) {
     this.visible = false;
     this._swingTween = null; 
 
-    this.game.physics.arcade.enable(this);
+    // this.game.physics.arcade.enable(this);
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this)
-        .setPivot(0, this.height);
+        .setPivot(0, this.height / 2)
 }
 
 BaseMelee.prototype.postUpdate = function () {

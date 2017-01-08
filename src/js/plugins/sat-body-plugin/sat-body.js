@@ -38,7 +38,9 @@ var polygon = function (pos, points) {
 function SatBody(sprite) {
     this.game = sprite.game;
     this._sprite = sprite;
-    var b = this._sprite.body;
+    // Check for an arcade body, then get the correct sprite reference
+    // for calculating the dimensions
+    var b = this._sprite.body ? this._sprite.body : this._sprite;
     this._lastBodySize = {w: b.width, h: b.height};
     this.disableDebug();
 
@@ -47,19 +49,33 @@ function SatBody(sprite) {
 }
 
 /**
- * Creates a SAT box for the sprite based on an underlying arcade body. The SAT
- * body is placed at the position of the body and given a width and height that
- * match the body. By default, SAT box has a pivot/offset set so that the box
- * rotates around its center. 
+ * Creates a SAT box for the sprite.
+ * If there is an arcade body, it is used as reference for the sat body
+ * position, width and height.  The SAT box has an offset to ensure
+ * rotation works properly.
+ * If there is no arcade body, the sprite is used as reference, and the
+ * sprites anchor is used to calculate offset.
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
- * @returns {SatBody} Returns the SatBody for chaining
+ * RT: melee weapons do not use arcade bodies.
  */
 SatBody.prototype.initBox = function () {
     this._bodyType = BODY_TYPE.BOX;
-    var b = this._sprite.body;
+    var b = this._sprite.body ? this._sprite.body : this._sprite;
     this._boxBody = box(vec(b.x, b.y), b.width, b.height);
     this._body = this._boxBody.toPolygon();
+    // Update position of sat body differently based on
+    // whether there is an arcade body or not.
+    if (this._sprite.body) {
+        // SAT body is currently at arcade body position, which is anchored at
+        // (0, 0). To ensure that rotation works, use SAT.js offset to shift
+        // the SAT points to the center before rotation is applied.
+        this._body.setOffset(vec(-b.width / 2, -b.height / 2));
+    } else {
+        var anchor = this._sprite.anchor;
+        // this._body.translate(-anchor.x * b.width, -anchor.y * b.height);
+        this._body.translate(-anchor.x, -anchor.y * (b.height / 2));
+    }
     // Arcade body is anchored at (0, 0). To ensure that rotation works, use
     // SAT.js offset to shift the SAT points to the center before rotation is
     // applied.
@@ -68,17 +84,20 @@ SatBody.prototype.initBox = function () {
 };
 
 /**
- * Creates a SAT circle for the sprite based on an underlying arcade body. The
- * SAT body is placed at the position of the body and given a radius that 
- * matches the body.
+ * Creates a SAT circle for the sprite.
+ * If there is an arcade body, it is used as reference for the position and
+ * radius of the SAT body.
+ * If there is no arcade body, use the sprite as reference for position and
+ * radius of the SAT body.
  * MH: will we ever need this to be more flexible and allow for a SAT box that
  * doesn't line up with an arcade body?
  * @returns {SatBody} Returns the SatBody for chaining
  */
 SatBody.prototype.initCircle = function () {
     this._bodyType = BODY_TYPE.CIRCLE;
-    var b = this._sprite.body;
-    this._body = circle(vec(b.x, b.y), b.radius);
+    var b = this._sprite.body ? this._sprite.body : this._sprite;
+    var r = b.radius ? b.radius : b.width / 2;
+    this._body = circle(vec(b.x, b.y), r);
     return this;
 };
 
@@ -202,9 +221,19 @@ SatBody.prototype.collideVsRectangle = function (rect) {
 };
 
 SatBody.prototype.postUpdate = function () {
-    // Check the sprite's body to see if the scale has changed, and if so, 
+    // Update the position of the sat body differently based
+    // on whether an arcade body exists or not.
+    if (this._sprite.body) {
+        // Update the body based on the latest arcade body physics
+        this.updateFromArcadeBody();
+    } else {
+        // Update the body based on sprite position
+        this.updateFromSprite();
+    }
+    // Check the sprite's body (or the sprite itself),
+    // to see if the scale has changed, and if so,
     // update the SAT body to match
-    var b = this._sprite.body;
+    var b = this._sprite.body ? this._sprite.body : this._sprite;
     var newBodySize = {w: b.width, h: b.height};
     if (this._lastBodySize.w !== newBodySize.w ||
             this._lastBodySize.h !== newBodySize.h) {
@@ -213,8 +242,6 @@ SatBody.prototype.postUpdate = function () {
         else if (this._bodyType === BODY_TYPE.CIRCLE) this.initCircle();
         else this.initPolygon();
     }
-    // Update the body based on the latest arcade body physics
-    this.updateFromBody();
     // Render is going to be called next, so update the debug
     if (this._isDebug) this._updateDebug();
 };
@@ -228,11 +255,10 @@ SatBody.prototype.postUpdate = function () {
  * is updated (which happens in stage.preUpdate and in stage.postUpdate for
  * arcade physics).
  */
-SatBody.prototype.updateFromBody = function () {
+SatBody.prototype.updateFromArcadeBody = function () {
     // Update the position of the SAT body using the arcade body. Arcade bodies
     // are positions are relative to the top left of the body. 
     var arcadeBody = this._sprite.body;
-
     if (this._bodyType === BODY_TYPE.CIRCLE) {
         // The arcade body position for a circle is anchored at the top left, 
         // but SAT circles are anchored at the center, so shift the position.
@@ -254,6 +280,31 @@ SatBody.prototype.updateFromBody = function () {
         this._body.pos.y = arcadeBody.y + (-this._body.offset.y);
         this._body.setAngle(this._sprite.rotation); // MH: World rotation?
     }
+};
+
+/**
+ * Updates the SAT body position and rotation, based on the shape of the
+ * sat body and the position of the sprite.
+ */
+SatBody.prototype.updateFromSprite = function () {
+    // Update the position of the colliding body
+    if (this._bodyType === BODY_TYPE.CIRCLE) {
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
+    } else if (this._bodyType === BODY_TYPE.BOX) {
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
+        this._body.setAngle(this._sprite.rotation);
+        // Rotation should probably be world rotation...or something?
+    } else if (this._bodyType === BODY_TYPE.POLYGON) {
+        // MH: Not yet sure what needs to happen here
+        this._body.pos.x = this._sprite.world.x;
+        this._body.pos.y = this._sprite.world.y;
+        this._body.setAngle(this._sprite.rotation);
+        // Rotation should probably be world rotation...or something?
+    }
+
+    if (this._isDebug) this._updateDebug();
 };
 
 SatBody.prototype.destroy = function () {
