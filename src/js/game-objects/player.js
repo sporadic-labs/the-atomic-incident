@@ -123,6 +123,8 @@ function Player(game, x, y, parentGroup) {
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
+    // pickup
+    this._controls.addKeyboardControl("toggle-pickup", [Kb.SHIFT]);
     // movement
     this._controls.addKeyboardControl("move-up", [Kb.W]);
     this._controls.addKeyboardControl("move-left", [Kb.A]);
@@ -228,6 +230,33 @@ Player.prototype.update = function () {
             this.body.velocity.add(drag.x, drag.y);
         }
     }
+
+    // Pickup logic
+    var pickupControl = this._controls.isControlActive("toggle-pickup");
+    // Only attempt to toggle pickup the frame the key was pressed
+    if (pickupControl && !this._lastPickupToggle) {
+        // Delay to prevent multiple pickups from running
+        this._canPickup = false;
+        this._timer.add(100, function () { 
+            this._canPickup = true; 
+        }, this);
+        if (this._carryingItem) {
+            // If carrying a pickup, drop it
+            this._carryingItem.drop();
+            this._carryingItem = null;
+        } else {
+            // If overlapping a pickup and it has a pickUp method, pick it up
+            var arcade = this.game.physics.arcade;
+            this._pickups.forEach(function (pickup) {
+                if (pickup.body && pickup.pickUp && 
+                        arcade.intersects(pickup.body, this.body)) {
+                    pickup.pickUp(this);
+                    this._carryingItem = pickup;
+                }
+            }, this);
+        }
+    }
+    this._lastPickupToggle = pickupControl;
 
     // The control type option will determine how the player rotates
     // Update the current control type, and then update rotation!
