@@ -16,9 +16,7 @@ function CarriableLight(game, x, y, parentGroup, radius, color, health) {
 
     this.originalRadius = this.radius = radius;
     this.originalHealth = this.health = utils.default(health, 100);
-    this._healthRechargeRate = 3; // Health per second
-    this._rechargeDelay = 0.5; // Delay after taking damage before recharging
-    this._timeSinceDamage = 0;
+    this._decayRate = 3; // Health per second
     this.light = this._lighting.addLight(new Phaser.Point(x, y), radius, color);
 
     game.physics.arcade.enable(this);
@@ -40,25 +38,9 @@ CarriableLight.prototype.drop = function () {
     this._beingCarried = false;
 };
 
-CarriableLight.prototype.takeDamage = function (amount) {
-    this.health -= amount;
-    if (this.health <= 0) {
-        this.health = 0;
-        this.destroy();
-    }
-    this._timeSinceDamage = 0;
-}
-
 CarriableLight.prototype.update = function () {
     // Update the health
-    var elapsed = this.game.time.physicsElapsed
-    this._timeSinceDamage += elapsed;
-    if (this._timeSinceDamage > this._rechargeDelay) {
-        this.health += this._healthRechargeRate * elapsed;
-        if (this.health > this.originalHealth) {
-            this.health = this.originalHealth;
-        }
-    }
+    this.health -= this._decayRate * this.game.time.physicsElapsed;
     // Update the radius based on the health
     this.radius = (this.health / this.originalHealth) * this.originalRadius;
     this.light.radius = this.radius;
