@@ -13,6 +13,7 @@ var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
+var CarriableLight = require("../game-objects/carriable-light.js");
 
 function Sandbox() {}
 
@@ -102,6 +103,9 @@ Sandbox.prototype.create = function () {
         groups.midground);
     this.camera.follow(player);
     globals.player = player;
+    
+    this.playerLight = new CarriableLight(game, player.position.x + 25, 
+        player.position.y, groups.pickups, 300, 0xFFFFFFFF, 100);
 
     // Create lights
     var lights = utils.default(map.objects["lights"], []); // Default to empty
