@@ -41,6 +41,7 @@ CarriableLight.prototype.drop = function () {
 CarriableLight.prototype.update = function () {
     // Update the health
     this.health -= this._decayRate * this.game.time.physicsElapsed;
+    if (this.health <= 0) this.health = 0; 
     // Update the radius based on the health
     this.radius = (this.health / this.originalHealth) * this.originalRadius;
     this.light.radius = this.radius;
