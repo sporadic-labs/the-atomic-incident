@@ -9,6 +9,7 @@ function TargetingComponent(parent, maxSpeed) {
     this.parent = parent;
     this.target = null;
     this._maxSpeed = maxSpeed;
+    this._visionRadius = 500;
 
     this._findTarget();
 }
@@ -19,6 +20,9 @@ TargetingComponent.prototype.update = function () {
     
     // Update target
     if (!this.target || (this.target.health <= 0)) this._findTarget();
+
+    var distance = this.parent.world.distance(this.target.position);
+    if (distance > this._visionRadius) return this.target;
     
     // Calculate path
     var tilemapLayer = this.game.globals.tileMapLayer;
