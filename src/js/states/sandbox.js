@@ -108,8 +108,7 @@ Sandbox.prototype.create = function () {
     globals.player = player;
     
     this.playerLight = new CarriableLight(game, player.position.x + 25, 
-        player.position.y, groups.pickups, 300, 0xFFFFFFFF, 100);
-
+        player.position.y, groups.lights, 300, 0xFFFFFFFF, 100);
     
     // Spawn charging stations in the rooms of the map
     var rooms = utils.default(map.objects["rooms"], []); // Default to empty

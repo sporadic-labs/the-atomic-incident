@@ -232,7 +232,7 @@ Player.prototype.update = function () {
         }
     }
 
-    // Pickup logic
+    // Pickup light logic
     var pickupControl = this._controls.isControlActive("toggle-pickup");
     // Only attempt to toggle pickup the frame the key was pressed
     if (pickupControl && !this._lastPickupToggle) {
@@ -241,25 +241,25 @@ Player.prototype.update = function () {
         this._timer.add(100, function () { 
             this._canPickup = true; 
         }, this);
-        if (this._carryingItem) {
+        if (this._lightBeingCarried) {
             // If carrying a pickup, drop it
-            this._carryingItem.drop();
-            this._carryingItem = null;
+            this._lightBeingCarried.drop();
+            this._lightBeingCarried = null;
         } else {
             // If overlapping a pickup and it has a pickUp method, pick it up
             var arcade = this.game.physics.arcade;
-            this._pickups.forEach(function (pickup) {
-                if (pickup.body && pickup.pickUp && 
-                        arcade.intersects(pickup.body, this.body)) {
-                    pickup.pickUp(this);
-                    this._carryingItem = pickup;
+            this._lights.forEach(function (light) {
+                if (light.body && light.pickUp && 
+                        arcade.intersects(light.body, this.body)) {
+                    light.pickUp(this);
+                    this._lightBeingCarried = light;
                 }
             }, this);
         }
     }
     this._lastPickupToggle = pickupControl;
     // Only shoot if not carrying an item
-    this._canShoot = !this._carryingItem;
+    this._canShoot = !this._lightBeingCarried;
 
     // The control type option will determine how the player rotates
     // Update the current control type, and then update rotation!
@@ -477,9 +477,6 @@ Player.prototype.update = function () {
     // Pickup collisions
     spriteUtils.checkOverlapWithGroup(this, this._pickups, 
         this._onCollideWithPickup, this);
-
-    // Light collisions
-    this.game.physics.arcade.collide(this, this._lights);
 };
 
 Player.prototype.postUpdate = function () {
