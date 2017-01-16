@@ -69,6 +69,7 @@ function Player(game, x, y, parentGroup) {
     this._weapons = {};
     this._weapon = 
         this._weapons[WEAPONS.SLUG] = new Gun(game, parentGroup, this);
+    this._canShoot = true;
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -257,6 +258,8 @@ Player.prototype.update = function () {
         }
     }
     this._lastPickupToggle = pickupControl;
+    // Only shoot if not carrying an item
+    this._canShoot = !this._carryingItem;
 
     // The control type option will determine how the player rotates
     // Update the current control type, and then update rotation!
@@ -432,7 +435,7 @@ Player.prototype.update = function () {
             attackDir.y += 1;
         }
     }
-    if (isShooting) {
+    if (isShooting && this._canShoot) {
         this._weapon.fire(attackDir);
     }
 
@@ -450,7 +453,7 @@ Player.prototype.update = function () {
         specialAttackDir.x += 0;
         specialAttackDir.y -= 1;
     }
-    if (isShootingSpecial && this._weapon.specialFire) {
+    if (isShootingSpecial && this._weapon.specialFire && this._canShoot) {
         this._weapon.specialFire(specialAttackDir);
     }
 
