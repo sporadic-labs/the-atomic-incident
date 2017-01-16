@@ -21,21 +21,55 @@ function CarriableLight(game, x, y, parentGroup, radius, color, health) {
 
     game.physics.arcade.enable(this);
     this.body.immovable = true;
-    this.body.setCircle(this.width);
+    this.body.setCircle(this.width / 2);
 }
 
 CarriableLight.prototype.pickUp = function (carrier) {
-    this.body.enable = false;
-    this.visible = false;
     this._carrier = carrier;
     this._beingCarried = true;
+
+    // If light was in a charging station, stop the charge
+    if (this._station) {
+        this._station.stopCharge();
+        this._station = null;
+    }
 };
 
 CarriableLight.prototype.drop = function () {
-    this.body.enable = true;
-    this.visible = true;
     this._carrier = null;
     this._beingCarried = false;
+
+    // Body is out of date since it hasn't been updating
+    // this.body.position = Phaser.Point.add(
+    //     this.game.globals.player.body.position,
+    //     this.body.offset
+    // );
+    
+    // Check for an overlapping charging station
+    var arcade = this.game.physics.arcade;
+    var stations = this.game.globals.groups.chargingStations;
+    stations.forEach(function (station) {
+        if (arcade.intersects(station.body, this.body)) {
+            station.startCharge(this);
+            this._station = station;
+            // Snap position to the charging station
+            this.position.copyFrom(this._station.position);
+        }
+    }, this);
+
+    // Drop the light somewhere in front of where the player is currently 
+    // looking (if the light wasn't just placed in a station)
+    // MH: maybe this isn't the thing to do, since it blocks the player's 
+    // movement
+    if (!this._station) {
+        var player = this.game.globals.player;
+        // Offset in the direction of the player rotation
+        var offset = new Phaser.Point(
+            Math.cos(player.rotation - (Math.PI/2)) * player.width * 0.8, 
+            Math.sin(player.rotation - (Math.PI/2)) * player.height * 0.8
+        );
+        this.position = Phaser.Point.add(player.position, offset);
+    }
 };
 
 CarriableLight.prototype.update = function () {
