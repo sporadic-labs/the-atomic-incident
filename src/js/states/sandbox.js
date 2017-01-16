@@ -14,6 +14,7 @@ var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
 var CarriableLight = require("../game-objects/carriable-light.js");
+var ChargingStation = require("../game-objects/charge-station.js");
 
 function Sandbox() {}
 
@@ -58,7 +59,9 @@ Sandbox.prototype.create = function () {
     groups.pickups = game.add.group(groups.midground, "pickups");
     groups.nonCollidingGroup = game.add.group(groups.midground, 
         "non-colliding");
-    groups.lights = game.add.group(groups.foreground, "lights");
+    groups.chargingStations = game.add.group(groups.midground, 
+        "charging-stations");
+    groups.lights = game.add.group(groups.midground, "lights");
     globals.groups = groups;
 
     // Initializing the world
@@ -107,6 +110,20 @@ Sandbox.prototype.create = function () {
     this.playerLight = new CarriableLight(game, player.position.x + 25, 
         player.position.y, groups.pickups, 300, 0xFFFFFFFF, 100);
 
+    
+    // Spawn charging stations in the rooms of the map
+    var rooms = utils.default(map.objects["rooms"], []); // Default to empty
+    if (rooms.length) {
+        var numStations = Math.floor(rooms.length / 3);
+        var shuffledRooms = utils.shuffleArray(rooms.slice(0));
+        for (var i = 0; i < numStations; i++) {
+            var room = shuffledRooms[i];
+            var x = room.x + (room.width / 2);
+            var y = room.y + (room.height / 2);
+            new ChargingStation(game, x, y, groups.chargingStations, 50);
+        }
+    }
+    
     // Create lights
     var lights = utils.default(map.objects["lights"], []); // Default to empty
     lights.forEach(function (light) {
@@ -210,6 +227,13 @@ Sandbox.prototype.render = function () {
     this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
     // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, 
     //  "#ff0000");
+
+    // this.game.globals.groups.chargingStations.forEach(function (station) {
+    //     this.game.debug.body(station);
+    // }, this);
+    // this.game.globals.groups.lights.forEach(function (light) {
+    //     this.game.debug.body(light);
+    // }, this);
 };
 
 Sandbox.prototype.shutdown = function () {
