@@ -197,6 +197,24 @@ Sandbox.prototype.create = function () {
             globals.plugins.lighting.enableDebug();
         }
     }, this);
+
+    // Simple pause menu
+    var textStyle = {font: "18px Arial", fill: "#9C9C9C"};
+    var pauseText = this.game.add.text(this.game.width - 20, 
+        this.game.height - 5, "Pause", textStyle);
+    pauseText.inputEnabled = true;
+    pauseText.anchor.set(1, 1);
+    pauseText.events.onInputDown.add(function () {
+        game.paused = true;
+        pauseText.text = "Play";
+        function unpause() {
+            game.paused = false;
+            pauseText.text = "Pause";
+            this.game.input.onDown.remove(unpause, this);
+        }
+        this.game.input.onDown.add(unpause, this);
+    }, this);
+    
 };
 
 Sandbox.prototype.getMapPoints = function(key) {
