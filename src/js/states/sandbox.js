@@ -202,6 +202,7 @@ Sandbox.prototype.create = function () {
     var textStyle = {font: "18px Arial", fill: "#9C9C9C"};
     var pauseText = this.game.add.text(this.game.width - 20, 
         this.game.height - 5, "Pause", textStyle);
+    pauseText.fixedToCamera = true;
     pauseText.inputEnabled = true;
     pauseText.anchor.set(1, 1);
     pauseText.events.onInputDown.add(function () {
