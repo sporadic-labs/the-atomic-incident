@@ -69,6 +69,7 @@ function Player(game, x, y, parentGroup) {
     this._weapons = {};
     this._weapon = 
         this._weapons[WEAPONS.SLUG] = new Gun(game, parentGroup, this);
+    this._canShoot = true;
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -123,6 +124,8 @@ function Player(game, x, y, parentGroup) {
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
+    // pickup
+    this._controls.addKeyboardControl("toggle-pickup", [Kb.SHIFT]);
     // movement
     this._controls.addKeyboardControl("move-up", [Kb.W]);
     this._controls.addKeyboardControl("move-left", [Kb.A]);
@@ -228,6 +231,35 @@ Player.prototype.update = function () {
             this.body.velocity.add(drag.x, drag.y);
         }
     }
+
+    // Pickup light logic
+    var pickupControl = this._controls.isControlActive("toggle-pickup");
+    // Only attempt to toggle pickup the frame the key was pressed
+    if (pickupControl && !this._lastPickupToggle) {
+        // Delay to prevent multiple pickups from running
+        this._canPickup = false;
+        this._timer.add(100, function () { 
+            this._canPickup = true; 
+        }, this);
+        if (this._lightBeingCarried) {
+            // If carrying a pickup, drop it
+            this._lightBeingCarried.drop();
+            this._lightBeingCarried = null;
+        } else {
+            // If overlapping a pickup and it has a pickUp method, pick it up
+            var arcade = this.game.physics.arcade;
+            this._lights.forEach(function (light) {
+                if (light.body && light.pickUp && 
+                        arcade.intersects(light.body, this.body)) {
+                    light.pickUp(this);
+                    this._lightBeingCarried = light;
+                }
+            }, this);
+        }
+    }
+    this._lastPickupToggle = pickupControl;
+    // Only shoot if not carrying an item
+    this._canShoot = !this._lightBeingCarried;
 
     // The control type option will determine how the player rotates
     // Update the current control type, and then update rotation!
@@ -403,7 +435,7 @@ Player.prototype.update = function () {
             attackDir.y += 1;
         }
     }
-    if (isShooting) {
+    if (isShooting && this._canShoot) {
         this._weapon.fire(attackDir);
     }
 
@@ -421,7 +453,7 @@ Player.prototype.update = function () {
         specialAttackDir.x += 0;
         specialAttackDir.y -= 1;
     }
-    if (isShootingSpecial && this._weapon.specialFire) {
+    if (isShootingSpecial && this._weapon.specialFire && this._canShoot) {
         this._weapon.specialFire(specialAttackDir);
     }
 
@@ -445,9 +477,6 @@ Player.prototype.update = function () {
     // Pickup collisions
     spriteUtils.checkOverlapWithGroup(this, this._pickups, 
         this._onCollideWithPickup, this);
-
-    // Light collisions
-    this.game.physics.arcade.collide(this, this._lights);
 };
 
 Player.prototype.postUpdate = function () {

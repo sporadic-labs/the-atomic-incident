@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.1</string>
+        <string>4.3.3</string>
         <key>fileName</key>
         <string>C:/Users/micha/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
@@ -394,6 +394,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/light/charging.psd</key>
+            <key type="filename">frames/shadow-enemy/bomber-eye-idle-01.png</key>
+            <key type="filename">frames/shadow-enemy/bomber-idle-01.png</key>
+            <key type="filename">frames/shadow-enemy/eye.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,6,13,13</rect>
+                <key>scale9Paddings</key>
+                <rect>6,6,13,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/light/light.psd</key>
             <key type="filename">frames/shadow-enemy/idle-01.png</key>
             <key type="filename">frames/weapons/death-beam.png</key>
@@ -412,21 +428,6 @@
                 <rect>5,5,10,10</rect>
                 <key>scale9Paddings</key>
                 <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">frames/shadow-enemy/bomber-eye-idle-01.png</key>
-            <key type="filename">frames/shadow-enemy/bomber-idle-01.png</key>
-            <key type="filename">frames/shadow-enemy/eye.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,6,13,13</rect>
-                <key>scale9Paddings</key>
-                <rect>6,6,13,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
