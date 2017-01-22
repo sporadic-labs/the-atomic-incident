@@ -9,7 +9,7 @@ function TargetingComponent(parent, maxSpeed) {
     this.parent = parent;
     this.target = null;
     this._maxSpeed = maxSpeed;
-    this._visionRadius = 500;
+    this._visionRadius = 1200;
 
     this._findTarget();
 }
