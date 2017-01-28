@@ -11,8 +11,8 @@ module.exports = Phaser.Plugin.Lighting = function (game, manager) {
 
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
 
-Phaser.Plugin.Lighting.prototype.addLight = function (position, radius, color) {
-    var light = new Light(this.game, this.parent, position, radius, color);
+Phaser.Plugin.Lighting.prototype.addLight = function (shape, color) {
+    var light = new Light(this.game, this.parent, shape, color);
     this.lights.push(light);
     if (this._debugEnabled) light.enableDebug();
     return light;
@@ -199,9 +199,7 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light) {
     // which it intersects the edge of the stage.
     function checkRayIntersection(ctx, angle) {
         // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(light.position.x, light.position.y,
-            light.position.x + Math.cos(angle) * light.radius,
-            light.position.y + Math.sin(angle) * light.radius);
+        var ray = light.getLightRay(angle);
         // Check if the ray intersected any walls
         var intersect = ctx._getWallIntersection(ray, backWalls);
         // Save the intersection or the end of the ray
@@ -217,10 +215,8 @@ Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
     light.redraw(points); // World coordinates
     var r = new Phaser.Rectangle(0, 0, light._bitmap.width, 
         light._bitmap.height);
-    var lightPoint = this._convertWorldPointToLocal(light.position);
-    var dx = lightPoint.x - light.radius;
-    var dy = lightPoint.y - light.radius;
-    this._bitmap.copyRect(light._bitmap, r, dx, dy);
+    var p = this._convertWorldPointToLocal(light.getTopLeft());
+    this._bitmap.copyRect(light._bitmap, r, p.x, p.y);
 };
 
 Phaser.Plugin.Lighting.prototype._getPlayerLines = function () {

@@ -103,7 +103,7 @@ function Player(game, x, y, parentGroup) {
 
     // Lighting for player
     this._lighting = globals.plugins.lighting;
-    this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 25, 
+    this.flashlight = this._lighting.addLight(new Phaser.Circle(0, 0, 50), 
         Phaser.Color.getColor32(150, 210, 210, 255));
     globals.groups.foreground.add(this.flashlight);
 
