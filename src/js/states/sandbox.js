@@ -107,21 +107,21 @@ Sandbox.prototype.create = function () {
     this.camera.follow(player);
     globals.player = player;
     
-    this.playerLight = new CarriableLight(game, player.position.x + 25, 
-        player.position.y, groups.lights, 300, 0xFFFFFFFF, 100);
+    // this.playerLight = new CarriableLight(game, player.position.x + 25, 
+    //     player.position.y, groups.lights, 300, 0xFFFFFFFF, 100);
     
-    // Spawn charging stations in the rooms of the map
-    var rooms = utils.default(map.objects["rooms"], []); // Default to empty
-    if (rooms.length) {
-        var numStations = Math.floor(rooms.length / 3);
-        var shuffledRooms = utils.shuffleArray(rooms.slice(0));
-        for (var i = 0; i < numStations; i++) {
-            var room = shuffledRooms[i];
-            var x = room.x + (room.width / 2);
-            var y = room.y + (room.height / 2);
-            new ChargingStation(game, x, y, groups.chargingStations, 50);
-        }
-    }
+    // // Spawn charging stations in the rooms of the map
+    // var rooms = utils.default(map.objects["rooms"], []); // Default to empty
+    // if (rooms.length) {
+    //     var numStations = Math.floor(rooms.length / 3);
+    //     var shuffledRooms = utils.shuffleArray(rooms.slice(0));
+    //     for (var i = 0; i < numStations; i++) {
+    //         var room = shuffledRooms[i];
+    //         var x = room.x + (room.width / 2);
+    //         var y = room.y + (room.height / 2);
+    //         new ChargingStation(game, x, y, groups.chargingStations, 50);
+    //     }
+    // }
     
     // Create lights
     var lights = utils.default(map.objects["lights"], []); // Default to empty
@@ -144,6 +144,12 @@ Sandbox.prototype.create = function () {
         new DestructableLight(game, x, y, groups.lights, radius, color, 
             health);
     }, this);
+
+    
+    var polygon = new Phaser.Polygon(103, 306, 301, 159, 310, 106, 278, 58, 227, 
+        33, 171, 39, 110, 72);
+    this.mouseLight = this.lighting.addLight(polygon, 0xFFFFFFFF);
+        
 
     // Score
     globals.scoreKeeper = new ScoreKeeper();
@@ -238,7 +244,7 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    
+    this.mouseLight.position.copyFrom(this.input.mousePointer.position);
 };
 
 Sandbox.prototype.render = function () {
