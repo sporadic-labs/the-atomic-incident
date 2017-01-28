@@ -145,11 +145,23 @@ Sandbox.prototype.create = function () {
             health);
     }, this);
 
-    
-    var polygon = new Phaser.Polygon(103, 306, 301, 159, 310, 106, 278, 58, 227, 
-        33, 171, 39, 110, 72);
-    this.mouseLight = this.lighting.addLight(polygon, 0xFFFFFFFF);
-        
+    // Generate a flashlight shaped polygon
+    var lightOrientation = -90 * Math.PI / 180;
+    var lightArcAngle = 60 * Math.PI / 180;
+    var arcSamples = 6;
+    var lightPoints = [new Phaser.Point(0, 0)];
+    var lightRange = 250;
+    for (var i = 0; i <= arcSamples; i += 1) {
+        var percent = (i / arcSamples)
+        var currentAngle = (lightArcAngle / 2) - (lightArcAngle * percent);
+        lightPoints.push(new Phaser.Point(
+            Math.cos(lightOrientation + currentAngle) * lightRange,
+            Math.sin(lightOrientation + currentAngle) * lightRange
+        ));
+    }
+    var polygon = new Phaser.Polygon(lightPoints);
+    this.mouseLight = this.lighting.addLight(new Phaser.Point(400, 400), 
+        polygon, 0xFFFFFFFF);
 
     // Score
     globals.scoreKeeper = new ScoreKeeper();

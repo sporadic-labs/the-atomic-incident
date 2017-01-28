@@ -19,7 +19,9 @@ function DesctructableLight(game, x, y, parentGroup, radius, color, health) {
     this._healthRechargeRate = 3; // Health per second
     this._rechargeDelay = 0.5; // Delay after taking damage before recharging
     this._timeSinceDamage = 0;
-    this.light = this._lighting.addLight(new Phaser.Circle(x, y, radius * 2), 
+    this.light = this._lighting.addLight(
+        new Phaser.Point(x, y),
+        new Phaser.Circle(0, 0, radius * 2), 
         color);
 
     game.physics.arcade.enable(this);
