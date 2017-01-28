@@ -244,7 +244,10 @@ Sandbox.prototype.getMapPoints = function(key) {
 };
 
 Sandbox.prototype.update = function () {
-    this.mouseLight.position.copyFrom(this.input.mousePointer.position);
+    this.mouseLight.position.setTo(
+        this.input.mousePointer.x + this.camera.x,
+        this.input.mousePointer.y + this.camera.y
+    );
 };
 
 Sandbox.prototype.render = function () {
