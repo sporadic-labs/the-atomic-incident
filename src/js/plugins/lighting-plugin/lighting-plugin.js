@@ -11,8 +11,8 @@ module.exports = Phaser.Plugin.Lighting = function (game, manager) {
 
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
 
-Phaser.Plugin.Lighting.prototype.addLight = function (shape, color) {
-    var light = new Light(this.game, this.parent, shape, color);
+Phaser.Plugin.Lighting.prototype.addLight = function (position, shape, color) {
+    var light = new Light(this.game, this.parent, position, shape, color);
     this.lights.push(light);
     if (this._debugEnabled) light.enableDebug();
     return light;

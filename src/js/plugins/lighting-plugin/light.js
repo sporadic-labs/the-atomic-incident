@@ -10,7 +10,7 @@ module.exports = Light;
  * @param {Phaser.Circle|Phaser.Rectangle|Phaser.Polygon} shape
  * @param {Phaser.Color|hex} color
  */
-function Light(game, parent, shape, color) {
+function Light(game, parent, position, shape, color) {
     this.game = game;
     this.parent = parent;
     this.shape = shape;
@@ -19,16 +19,13 @@ function Light(game, parent, shape, color) {
     this._isDebug = false;
     this._debugGraphics = null;
     this._needsRedraw = true;
+    this.position = position.clone();
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
-        this.position = new Phaser.Point(shape.x, shape.y);
         this._bitmap = game.add.bitmapData(shape.diameter, shape.diameter);
         this._containingRadius = shape.radius;
     } else if (shape instanceof Phaser.Rectangle) {
-        // Position at the center of the rectangle
-        this.position = new Phaser.Point(shape.x + shape.width / 2, 
-            shape.y + shape.height / 2);
         // Define bitmap to be the same size as the rectangle
         this._bitmap = game.add.bitmapData(shape.width, shape.height);
         // Define a circle that contains the rectangle
@@ -69,25 +66,17 @@ function Light(game, parent, shape, color) {
         var maxX = points[0];
         var minY = points[1];
         var maxY = points[1];
-        for (var i = 2; i < points.length; i += 2) {
+        this._points = [];
+        for (var i = 0; i < points.length; i += 2) {
             if (points[i] < minX) minX = points[i];
             if (points[i] > maxX) maxX = points[i];
             if (points[i + 1] < minY) minY = points[i + 1];
             if (points[i + 1] > maxY) maxY = points[i + 1];
+            this._points.push(new Phaser.Point(points[i], points[i + 1]));
         }
-        this._width = maxX - minX;
-        this._height = maxY - minY;
-        // Set the position to be the center of the bounding box
-        this.position = new Phaser.Point((minX + maxX) / 2, (minY + maxY) / 2);
-        // Find the position of the points of the polygon relative to center of
-        // the bounding box
-        this._relativePoints = [];
-        for (var i = 0; i < points.length; i += 2) {
-            this._relativePoints.push(new Phaser.Point(
-                points[i] - this.position.x, 
-                points[i + 1] - this.position.y
-            ));
-        }
+        this._boundingTopLeft = new Phaser.Point(minX, minY);
+        this._width = Math.abs(maxX - minX);
+        this._height = Math.abs(maxY - minY);
         // Create the bitmap to just fit the polygon's bounding box
         this._bitmap = game.add.bitmapData(this._width, this._height);
         // Define a circle that contains the polygon
@@ -235,12 +224,12 @@ Light.prototype.redrawLight = function () {
         // relative to bitmap itself. The bitmap
         this._bitmap.ctx.fillStyle = c1;
         this._bitmap.ctx.beginPath();
-        this._bitmap.ctx.moveTo(this._relativePoints[0].x + (this._width / 2), 
-            this._relativePoints[0].y + (this._height / 2));
-        for (var i = 1; i < this._relativePoints.length; i += 1) {
+        this._bitmap.ctx.moveTo(this._points[0].x - this._boundingTopLeft.x, 
+            this._points[0].y - this._boundingTopLeft.y);
+        for (var i = 1; i < this._points.length; i += 1) {
             this._bitmap.ctx.lineTo(
-                this._relativePoints[i].x + (this._width / 2), 
-                this._relativePoints[i].y + (this._height / 2));
+                this._points[i].x - this._boundingTopLeft.x, 
+                this._points[i].y - this._boundingTopLeft.y);
         }
         this._bitmap.ctx.closePath();
         this._bitmap.ctx.fill();
@@ -265,8 +254,8 @@ Light.prototype.getTopLeft = function () {
         );
     } else {
         return new Phaser.Point(
-            this.position.x - (this._width / 2),
-            this.position.y - (this._height / 2)
+            this.position.x + this._boundingTopLeft.x,
+            this.position.y + this._boundingTopLeft.y
         );
     }
 };
@@ -313,7 +302,7 @@ Light.prototype._updateDebug = function () {
             this.shape.width, this.shape.height
         );
     } else {
-        var points = this._relativePoints.slice(0);
+        var points = this._points.slice(0);
         points.push(points[0]);
         this._debugGraphics.drawPolygon(points);
     }
