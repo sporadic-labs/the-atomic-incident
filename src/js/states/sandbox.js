@@ -260,6 +260,8 @@ Sandbox.prototype.update = function () {
         this.input.mousePointer.x + this.camera.x,
         this.input.mousePointer.y + this.camera.y
     );
+    
+    this.mouseLight.rotation += Math.PI/100;
 };
 
 Sandbox.prototype.render = function () {

@@ -20,6 +20,7 @@ function Light(game, parent, position, shape, color) {
     this._debugGraphics = null;
     this._needsRedraw = true;
     this.position = position.clone();
+    this.rotation = 0;
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
@@ -66,21 +67,26 @@ function Light(game, parent, position, shape, color) {
         var maxX = points[0];
         var minY = points[1];
         var maxY = points[1];
-        this._points = [];
+        this._originalPoints = [];
         for (var i = 0; i < points.length; i += 2) {
-            if (points[i] < minX) minX = points[i];
-            if (points[i] > maxX) maxX = points[i];
-            if (points[i + 1] < minY) minY = points[i + 1];
-            if (points[i + 1] > maxY) maxY = points[i + 1];
-            this._points.push(new Phaser.Point(points[i], points[i + 1]));
+            var x = points[i];
+            var y = points[i + 1];
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+            this._originalPoints.push(new Phaser.Point(x, y));
         }
-        this._boundingTopLeft = new Phaser.Point(minX, minY);
         this._width = Math.abs(maxX - minX);
         this._height = Math.abs(maxY - minY);
-        // Create the bitmap to just fit the polygon's bounding box
-        this._bitmap = game.add.bitmapData(this._width, this._height);
+        // Old method: fitting the bitmap to the polygon. For now, creating a 
+        // bitmap that matches the screen size so that we can do rotations 
+        // easily without doing complex coordinate transformations. TODO: 
+        // optimize and shrink the bitmap to the smallest size needed
+        this._bitmap = game.add.bitmapData(game.width, game.height);
         // Define a circle that contains the polygon
         this._containingRadius = Math.max(this._width, this._height);
+        this._setRotation(0);
     }
 
     this.intersectingWalls = this._recalculateWalls();
@@ -101,7 +107,21 @@ Light.prototype.disableDebug = function () {
     if (this._debugGraphics) this._debugGraphics.visible = false;
 };
 
+Light.prototype._setRotation = function (angle) {
+    this.rotation = angle;
+    if (!(this.shape instanceof Phaser.Polygon)) return;
+    this._points = [];
+    for (var i = 0; i < this._originalPoints.length; i++) {
+        var newPoint = this._originalPoints[i].clone().rotate(0, 0, angle);
+        this._points.push(newPoint);
+    }
+};
+
 Light.prototype.update = function () {
+    if (this._lastRotation !== this.rotation) {
+        this._setRotation(this.rotation);
+        this._lastRotation = this.rotation;
+    }
     // For now, force redrawing and recalculating of the walls each frame
     this._needsRedraw = true;
     this.intersectingWalls = this._recalculateWalls();
@@ -221,15 +241,18 @@ Light.prototype.redrawLight = function () {
         this._bitmap.rect(0, 0, shape.width, shape.height, c1);
     } else {
         // Draw the polygon using the underlying bitmap. The points must be
-        // relative to bitmap itself. The bitmap
+        // relative to bitmap itself. The bitmap is placed at the camera's top
+        // left for now, so a point is located at:
+        //      point[i] + light position - camera position
+        var offset = Phaser.Point.subtract(this.position, this.game.camera);
         this._bitmap.ctx.fillStyle = c1;
         this._bitmap.ctx.beginPath();
-        this._bitmap.ctx.moveTo(this._points[0].x - this._boundingTopLeft.x, 
-            this._points[0].y - this._boundingTopLeft.y);
+        this._bitmap.ctx.moveTo(offset.x + this._points[0].x, 
+            offset.y + this._points[0].y);
         for (var i = 1; i < this._points.length; i += 1) {
             this._bitmap.ctx.lineTo(
-                this._points[i].x - this._boundingTopLeft.x, 
-                this._points[i].y - this._boundingTopLeft.y);
+                offset.x + this._points[i].x, 
+                offset.y + this._points[i].y);
         }
         this._bitmap.ctx.closePath();
         this._bitmap.ctx.fill();
@@ -253,10 +276,9 @@ Light.prototype.getTopLeft = function () {
             this.position.y - (this.shape.height / 2)
         );
     } else {
-        return new Phaser.Point(
-            this.position.x + this._boundingTopLeft.x,
-            this.position.y + this._boundingTopLeft.y
-        );
+        // Polygon bitmap is set to the screen size, so its top left should 
+        // match the camera's location
+        return this.game.camera.position.clone();
     }
 };
 
