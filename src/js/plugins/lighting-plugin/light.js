@@ -67,6 +67,7 @@ function Light(game, parent, position, shape, color) {
         var maxX = points[0];
         var minY = points[1];
         var maxY = points[1];
+        this._originalShape = shape.clone();
         this._originalPoints = [];
         for (var i = 0; i < points.length; i += 2) {
             var x = points[i];
@@ -115,6 +116,7 @@ Light.prototype._setRotation = function (angle) {
         var newPoint = this._originalPoints[i].clone().rotate(0, 0, angle);
         this._points.push(newPoint);
     }
+    this.shape = new Phaser.Polygon(this._points);
 };
 
 Light.prototype.update = function () {
@@ -135,6 +137,35 @@ Light.prototype.update = function () {
     if (this._debugGraphics) this._updateDebug();
 };
 
+/**
+ * Check if a given world point is in the light cast by this light object.
+ *
+ * @param {Phaser.Point} worldPosition World point to check
+ * @returns {bool}
+ */
+Light.prototype.isPointInLight = function (worldPosition) {
+    // Check if the position is within range of the light's shape
+    var lightRelativePos = Phaser.Point.subtract(worldPosition, this.position);
+    var inShape = this.shape.contains(lightRelativePos.x, lightRelativePos.y);
+    if (!inShape) return false;
+    
+    // If position is in the shape, do the more detailed work of checking the 
+    // appropriate pixel in the light's bitmap 
+    var bitmapPos = this.getTopLeft();
+    var bitmapRelativePos = Phaser.Point.subtract(worldPosition, bitmapPos);
+    // Round to pixel position
+    bitmapRelativePos.x = Math.round(bitmapRelativePos.x);
+    bitmapRelativePos.y = Math.round(bitmapRelativePos.y);
+    // If point is outside of light's bitmap, return false
+    if ((bitmapRelativePos.x < 0) || (bitmapRelativePos.y < 0) ||
+            (bitmapRelativePos.x > this._bitmap.width) ||
+            (bitmapRelativePos.y > this._bitmap.height)) {
+        return false;
+    }
+    var color = this._bitmap.getPixel(bitmapRelativePos.x, bitmapRelativePos.y);
+    if (color.r !== 0 || color.g !== 0 || color.b !== 0) return true;
+    return false;
+};
 
 /**
  * Get a ray that starts at the position of the light and terminates at the edge
@@ -215,7 +246,8 @@ Light.prototype.redraw = function (points) {
         this._bitmap.cls();
         this.redrawLight();
         this.redrawShadow(points);      
-        this._needsRedraw = false;  
+        this._needsRedraw = false;
+        this._bitmap.update(); // Update bitmap so that pixels can be queried
     }
 };
 
