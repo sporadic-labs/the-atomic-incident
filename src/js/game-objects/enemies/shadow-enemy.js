@@ -21,7 +21,7 @@ function ShadowEnemy(game, x, y, parentGroup) {
 
     this._damage = 10; // 10 units per second
 
-    this._targetingComponent = new TargetingComponent(this, 50);
+    this._targetingComponent = new TargetingComponent(this, 75);
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
