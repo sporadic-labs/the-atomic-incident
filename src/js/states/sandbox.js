@@ -15,6 +15,7 @@ var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
 var CarriableLight = require("../game-objects/carriable-light.js");
 var ChargingStation = require("../game-objects/charge-station.js");
+var PulseLight = require("../game-objects/pulse-light.js");
 
 function Sandbox() {}
 
@@ -163,6 +164,16 @@ Sandbox.prototype.create = function () {
     this.mouseLight = this.lighting.addLight(new Phaser.Point(400, 400), 
         polygon, 0xFFFFFFFF);
 
+    // Array of Towers added to the scene.
+    this.towers = [];
+    // A reference for the light you are about to place.
+    this.lightToPlace = "pulse";
+    // Use the J key to choose the pulse light as the next light to be added
+    var selectLightKey = game.input.keyboard.addKey(Phaser.Keyboard.J);
+    selectLightKey.onDown.add(function () {
+        this.lightToPlace = "pulse";
+    }, this);
+
     // Score
     globals.scoreKeeper = new ScoreKeeper();
 
@@ -262,6 +273,23 @@ Sandbox.prototype.update = function () {
     );
     
     this.mouseLight.rotation += Math.PI/100;
+
+    // If the user has clicked on the table...
+    if (this.game.input.activePointer.isDown) {
+        // Check the map for a tile at the mouse position
+        var checkTile = this.game.globals.tileMap.getTileWorldXY(this.input.mousePointer.x + this.camera.x,
+            this.input.mousePointer.y + this.camera.y, this.game.globals.tileMap.tileWidth,
+            this.game.globals.tileMap.tileHeight, this.game.globals.tileMapLayer);
+        // If there is no tile at the mouse position, and the lightToPlace is set to 'pulse'...
+        if (this.lightToPlace === "pulse" && (checkTile === null || checkTile === undefined)) {
+            // Create a new pulse light and add it to the towers array
+            this.towers.push(new PulseLight(this.game, this.input.mousePointer.x + this.camera.x,
+                this.input.mousePointer.y + this.camera.y, this.game.globals.groups.midground,
+                300, 0x8DCDE3FF, 840));
+            // set the lightToPlace to null
+            this.lightToPlace = null;
+        }
+    }
 };
 
 Sandbox.prototype.render = function () {
