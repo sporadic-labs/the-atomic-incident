@@ -37,6 +37,7 @@ function Player(game, x, y, parentGroup) {
     parentGroup.add(this);
 
     this.hearts = 3;
+    this.coins = 300;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);

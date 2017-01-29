@@ -17,20 +17,10 @@ function HeadsUpDisplay(game, parentGroup) {
         fill: "#9C9C9C",
         align: "left"
     };
-    this._scoreText = game.make.text(30, 20, "Score: 0", textStyle);
-    this.add(this._scoreText);
-    this._heartsText = game.make.text(30, 60, "Hearts: 3", textStyle);
+    this._heartsText = game.make.text(30, 20, "Hearts: 3", textStyle);
     this.add(this._heartsText);
-    this._comboText = game.make.text(30, 100, "Combo: 0", textStyle);
-    this.add(this._comboText);
-    this._ammoText = game.make.text(30, 140, "Ammo: 0", textStyle);
-    this.add(this._ammoText);
-    // You have to setup the text before it has a width.  So set it up...
-    this._weaponText = game.make.text((game.width / 2), game.height * 0.9,
-        this._player.getGun()._name, textStyle);
-    // And then update the position
-    this._weaponText.x = (game.width / 2) - (this._weaponText.width / 2);
-    this.add(this._weaponText);
+    this._coinsText = game.make.text(30, 60, "Coins: 0", textStyle);
+    this.add(this._coinsText);
     this._debugText = game.make.text(30, game.height - 45, 
         "Debug ('E' key): false", textStyle);
     this._debugText.fontSize = 14;
@@ -42,19 +32,8 @@ function HeadsUpDisplay(game, parentGroup) {
 }
 
 HeadsUpDisplay.prototype.update = function () {
-    this._scoreText.setText("Score: " + this._scoreKeeper.getScore());
+    this._coinsText.setText("Coins: " + this._player.coins);
     this._heartsText.setText("Hearts: " + this._player.hearts);
-    if (this._player._gunType === "default") {
-        this._ammoText.setText("Ammo: -");
-    } else {
-        this._ammoText.setText("Ammo: " + 
-            this._player.getAmmo() + " / " + this._player.getGun()._totalAmmo);
-    }
-    this._comboText.setText("Combo: " + this._player.getCombo());
-    this._weaponText.setText(this._player.getGun()._name);
-    // Update the position of the weapon text, so if it has changed,
-    // it will still be centered
-    this._weaponText.x = (this.game.width / 2) - (this._weaponText.width / 2);
 
     this._debugText.setText("Debug ('E' key): " + 
         this._satBodyPlugin.isDebugAllEnabled());
