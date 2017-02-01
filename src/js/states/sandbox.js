@@ -283,11 +283,13 @@ Sandbox.prototype.update = function () {
         // If there is no tile at the mouse position, and the lightToPlace is set to 'pulse'...
         if (this.lightToPlace === "pulse" && (checkTile === null || checkTile === undefined)) {
             // Create a new pulse light and add it to the towers array
-            this.towers.push(new PulseLight(this.game, this.input.mousePointer.x + this.camera.x,
+            var t = new PulseLight(this.game, this.input.mousePointer.x + this.camera.x,
                 this.input.mousePointer.y + this.camera.y, this.game.globals.groups.midground,
-                300, 0x8DCDE3FF, 840));
+                300, 25, 0x8DCDE3FF, 840);
+            this.towers.push(t);
             // set the lightToPlace to null
             this.lightToPlace = null;
+            this.game.globals.player.coins -= t.value;
         }
     }
 };

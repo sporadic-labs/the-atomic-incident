@@ -544,6 +544,8 @@ Player.prototype.takeDamage = function () {
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     if (pickup._category === "weapon") {
         self.changeGuns(pickup.type);
+    } else if (pickup._category === "score") {
+        this.coins += pickup._pointValue;
     }
     pickup.destroy();
 };

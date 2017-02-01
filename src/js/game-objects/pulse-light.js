@@ -5,7 +5,7 @@ var spriteUtils = require("../helpers/sprite-utilities.js");
 // Prototype chain - inherits from Sprite
 PulseLight.prototype = Object.create(Phaser.Sprite.prototype);
 
-function PulseLight(game, x, y, parentGroup, radius, color, delay) {
+function PulseLight(game, x, y, parentGroup, radius, value, color, delay) {
     Phaser.Sprite.call(this, game, x, y, "assets", "light/light");
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -16,6 +16,7 @@ function PulseLight(game, x, y, parentGroup, radius, color, delay) {
     this.delay = delay;
     this.damage = 20; // Damage per second
     this.color = color;
+    this.value = value; // Cost for the tower
 
     this._lighting = game.globals.plugins.lighting;
 
