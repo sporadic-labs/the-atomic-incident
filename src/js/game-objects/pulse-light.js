@@ -39,12 +39,6 @@ function PulseLight(game, x, y, parentGroup, radius, value, color, delay) {
     this.body.setCircle(this.width / 2);
 }
 
-PulseLight.prototype.drop = function (position) {
-    this._placed = true;
-    this.position.copyFrom(position)
-    this.light.position.copyFrom(position)
-};
-
 PulseLight.prototype._pulse = function () {
     if (this.isLightOn) {
         this.tweenTint(this.light, 0xB0EBFF, 0x000000, this.delay*0.9);
