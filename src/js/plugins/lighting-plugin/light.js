@@ -339,7 +339,6 @@ Light.prototype.redrawShadow = function (points) {
 };
 
 Light.prototype.destroy = function () {
-    this.game.tweens.removeFrom(this);
     if (this._debugGraphics) this._debugGraphics.destroy();
     this.game.globals.plugins.lighting.removeLight(this);
 };
@@ -396,24 +395,4 @@ Light.prototype._recalculateWalls = function () {
     }
     
     return intersectingWalls;
-};
-
-Light.prototype.switchOn = function (duration, color) {
-    this.enabled = !this.enabled;
-    var tween = this.game.make.tween(this)
-        .to({ color: color }, duration, "Quad.easeIn", true, 0, 0, false);
-    tween.onComplete.add(function() {
-        console.log('light is on!')
-    }, this);
-
-};
-
-Light.prototype.switchOff = function (duration, color) {
-    var tween = this.game.make.tween(this)
-        .to({ color: 0x000000F }, duration, "Quad.easeIn", true, 0, 0, false);
-    // When tween is over, destroy this pickup
-    tween.onComplete.add(function() {
-        this.enabled = !this.enabled;
-        console.log('light is off!')
-    }, this);
 };
