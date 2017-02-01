@@ -144,6 +144,8 @@ Light.prototype.update = function () {
  * @returns {bool}
  */
 Light.prototype.isPointInLight = function (worldPosition) {
+    // Exit if light is disabled
+    if (!this.enabled) return false;
     // Check if the position is within range of the light's shape
     var lightRelativePos = Phaser.Point.subtract(worldPosition, this.position);
     var inShape = this.shape.contains(lightRelativePos.x, lightRelativePos.y);
@@ -350,7 +352,7 @@ Light.prototype._updateDebug = function () {
     this._debugGraphics.lineStyle(5, 0xFF00FF, 0.6);
     this._debugGraphics.drawCircle(0, 0, 2);
     if (this.shape instanceof Phaser.Circle) {
-        this._debugGraphics.drawCircle(0, 0, 2 * this.radius);
+        this._debugGraphics.drawCircle(0, 0, 2 * this.shape.radius);
     } else if (this.shape instanceof Phaser.Rectangle) {
         this._debugGraphics.drawRect(
             -this.shape.width / 2, -this.shape.height / 2, 

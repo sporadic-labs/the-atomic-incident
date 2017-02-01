@@ -59,9 +59,14 @@ PulseLight.prototype.update = function () {
     // Damage enemies
     var enemies = this.game.globals.groups.enemies;
     var damage = this.damage * this.game.time.physicsElapsed;
-    spriteUtils.forEachRecursive(enemies, function (enemy) {
-        var inLight = this.light.isPointInLight(enemy.worldPosition);
-        if (inLight) enemy.takeDamage(damage);
+    spriteUtils.forEachRecursive(enemies, function (child) {
+        if (child instanceof Phaser.Sprite && child.takeDamage) {
+            // MH: why does world position not work here...
+            var inLight = this.light.isPointInLight(child.position);
+            if (inLight) {
+                child.takeDamage(damage);
+            }
+        }
     }, this);
 };
 
