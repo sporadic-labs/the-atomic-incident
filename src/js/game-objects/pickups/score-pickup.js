@@ -13,7 +13,7 @@ ScorePickup.prototype.constructor = ScorePickup;
 function ScorePickup(game, x, y) {
     var pickups = game.globals.groups.pickups;
     BasePickup.call(this, game, x, y, "assets", "pickups/diamond-01",
-        pickups, "score", 0, 10000);
+        pickups, "score", 1, 10000);
 
     spriteUtils.applyRandomLightnessTint(this, 0.52, 1, 0.6);
 }
