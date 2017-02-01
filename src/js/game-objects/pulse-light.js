@@ -46,11 +46,9 @@ PulseLight.prototype.drop = function (position) {
 
 PulseLight.prototype._pulse = function () {
     if (this.isLightOn) {
-        this.light.switchOff(this.delay);
-        this.isLightOn = !this.isLightOn;
+        this.tweenTint(this.light, 0xB0EBFF, 0x000000, this.delay*0.9);
     } else if (!this.isLightOn) {
-        this.light.switchOn(this.delay, this.color);
-        this.isLightOn = !this.isLightOn;
+        this.tweenTint(this.light, 0x000000, 0xB0EBFF, this.delay*0.9);
     }
     this.pulseTimer = setTimeout(this._pulse.bind(this), this.delay);
 }
@@ -76,4 +74,26 @@ PulseLight.prototype.destroy = function () {
     this.game.tweens.removeFrom(this);
     this.light.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
+};
+
+// Thanks lewster32
+// Source: http://www.html5gamedevs.com/topic/7162-tweening-a-tint/
+PulseLight.prototype.tweenTint = function(obj, startColor, endColor, time) {
+    // create an object to tween with our step value at 0
+    var colorBlend = { step: 0 };
+    // create the tween on this object and tween its step property to 100
+    var colorTween = this.game.add.tween(colorBlend).to({step: 100}, time);
+    // run the interpolateColor function every time the tween updates, feeding it the
+    // updated value of our tween each time, and set the result as our tint
+    colorTween.onUpdateCallback(function() {
+        obj.color = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);
+    });
+    colorTween.onComplete.add(function() {
+        this.isLightOn = !this.isLightOn;
+    }, this);
+
+    // set the object to the start color straight away
+    obj.color = startColor;
+    // start the tween
+    colorTween.start();
 };
