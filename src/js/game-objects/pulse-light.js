@@ -13,8 +13,10 @@ function PulseLight(game, x, y, parentGroup, radius, color, delay) {
     var c = Phaser.Color.valueToColor(color);
     this.tint = Phaser.Color.getColor(c.r, c.g, c.b);
 
+    this.game = game;
     this.delay = delay;
     this.damage = 20; // Damage per second
+    this.color = color;
 
     this._lighting = game.globals.plugins.lighting;
 
@@ -23,14 +25,14 @@ function PulseLight(game, x, y, parentGroup, radius, color, delay) {
         new Phaser.Point(x, y),
         new Phaser.Circle(0, 0, radius * 2), 
         color);
-    // Turn light off by default
-    this.light.enabled = false;
+    // Turn light on by default
+    this.isLightOn = true;
 
     // Create a timer for turning the light on/off
     this._timer = this.game.time.create(false);
     this._timer.start();
     // Pulse after the lighting system has had a chance to update once
-    setTimeout(this._pulse.bind(this), 0);
+    this.pulseTimer = setTimeout(this._pulse.bind(this), 0);
 
     game.physics.arcade.enable(this);
     this.body.immovable = true;
@@ -44,8 +46,14 @@ PulseLight.prototype.drop = function (position) {
 };
 
 PulseLight.prototype._pulse = function () {
-    this.light.enabled = !this.light.enabled;
-    setTimeout(this._pulse.bind(this), this.delay);
+    if (this.isLightOn) {
+        this.light.switchOff(this.delay);
+        this.isLightOn = !this.isLightOn;
+    } else if (!this.isLightOn) {
+        this.light.switchOn(this.delay, this.color);
+        this.isLightOn = !this.isLightOn;
+    }
+    this.pulseTimer = setTimeout(this._pulse.bind(this), this.delay);
 }
 
 PulseLight.prototype.update = function () {
@@ -70,7 +78,9 @@ PulseLight.prototype.update = function () {
 };
 
 PulseLight.prototype.destroy = function () {
+    clearTimeout(this.pulseTimer);
     this._timer.destroy();
+    this.game.tweens.removeFrom(this);
     this.light.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };
