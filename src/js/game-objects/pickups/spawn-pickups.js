@@ -1,14 +1,13 @@
 module.exports = SpawnPickups;
 
-var WeaponPickup = require("./weapon-pickup.js");
-var WEAPON_NAMES = require("../../constants/weapons.js");
+var ScorePickup = require("./score-pickup.js");
 
 SpawnPickups.prototype = Object.create(Phaser.Group.prototype);
 
 function SpawnPickups(game) {
     this.game = game;
     var pickups = game.globals.groups.pickups;
-    Phaser.Group.call(this, game, pickups, "weapon-pickups");
+    Phaser.Group.call(this, game, pickups, "score-pickups");
 
     this._map = game.globals.tileMap;
     this._player = game.globals.player;
@@ -17,10 +16,9 @@ function SpawnPickups(game) {
 }
 
 SpawnPickups.prototype.spawn = function (x, y) {
-    if ((this._scorekeeper.getScore() % 20) === 0) {
-        var keys = Object.keys(WEAPON_NAMES);
-        var key = this.game.rnd.pick(keys);
-        new WeaponPickup(this.game, x, y, WEAPON_NAMES[key]);
+    var dropRate = this.game.rnd.integerInRange(1, 3);
+    if ((this._scorekeeper.getScore() % dropRate) === 0) {
+        new ScorePickup(this.game, x, y);
     }
 };
 

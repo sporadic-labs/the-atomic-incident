@@ -10,16 +10,14 @@ var ANIM_NAMES = {
 ScorePickup.prototype = Object.create(BasePickup.prototype);
 ScorePickup.prototype.constructor = ScorePickup;
 
-function ScorePickup(game, x, y, parentGroup, type, scoreSignal) {
+function ScorePickup(game, x, y) {
+    var pickups = game.globals.groups.pickups;
     BasePickup.call(this, game, x, y, "assets", "pickups/diamond-01",
-        parentGroup, "score", scoreSignal, 5);
+        pickups, "score", 0, 10000);
 
-    this.type = type;
     spriteUtils.applyRandomLightnessTint(this, 0.52, 1, 0.6);
-
-    // Setup animations
-    var idleFrames = Phaser.Animation.generateFrameNames("pickups/diamond-",
-        1, 6, "", 2);
-    this.animations.add(ANIM_NAMES.IDLE, idleFrames, 4, true);
-    this.animations.play(ANIM_NAMES.IDLE);
 }
+
+ScorePickup.prototype.destroy = function () {
+    BasePickup.prototype.destroy.apply(this, arguments);
+};
