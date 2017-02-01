@@ -1,6 +1,7 @@
 module.exports = PulseLight;
 
 var utils = require("../helpers/utilities.js");
+var spriteUtils = require("../helpers/sprite-utilities.js");
 
 // Prototype chain - inherits from Sprite
 PulseLight.prototype = Object.create(Phaser.Sprite.prototype);
@@ -13,6 +14,7 @@ function PulseLight(game, x, y, parentGroup, radius, color, delay) {
     this.tint = Phaser.Color.getColor(c.r, c.g, c.b);
 
     this.delay = delay;
+    this.damage = 20; // Damage per second
 
     this._lighting = game.globals.plugins.lighting;
 
@@ -58,6 +60,13 @@ PulseLight.prototype.update = function () {
         this.position.copyFrom(this._carrier.position);
     }
     this.light.position.copyFrom(this.position);
+    // Damage enemies
+    var enemies = this.game.globals.groups.enemies;
+    var damage = this.damage * this.game.time.physicsElapsed;
+    spriteUtils.forEachRecursive(enemies, function (enemy) {
+        var inLight = this.light.isPointInLight(enemy.worldPosition);
+        if (inLight) enemy.takeDamage(damage);
+    }, this);
 };
 
 PulseLight.prototype.destroy = function () {
