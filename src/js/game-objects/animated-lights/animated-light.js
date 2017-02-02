@@ -25,7 +25,7 @@ AnimatedLight.prototype.destroy = function () {
     for (var i = 0; i < this._tweenTargets.length; i++) {
         this.game.tweens.removeFrom(this._tweenTargets[i]);
     }
-    Light.destory.apply(this);
+    Light.prototype.destroy.apply(this);
 };
 
 /**
