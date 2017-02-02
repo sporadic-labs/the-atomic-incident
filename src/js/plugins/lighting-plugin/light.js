@@ -127,13 +127,6 @@ Light.prototype.update = function () {
     // For now, force redrawing and recalculating of the walls each frame
     this._needsRedraw = true;
     this.intersectingWalls = this._recalculateWalls();
-    // if (this._lastRadius !== this.radius || 
-    //         !this._lastPosition.equals(this.position)) {
-    //     this._needsRedraw = true;
-    //     this.intersectingWalls = this._recalculateWalls();
-    // }
-    // this._lastRadius = this.radius;
-    // this._lastPosition = this.position.clone();
     if (this._debugGraphics) this._updateDebug();
 };
 
