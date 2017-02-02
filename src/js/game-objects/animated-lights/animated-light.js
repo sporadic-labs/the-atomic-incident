@@ -58,6 +58,24 @@ AnimatedLight.createPulsingCircle = function (game, position, shape, color,
  * A static method for creating a rotating spotlight
  * @static
  */
+AnimatedLight.createContractingCircle = function (game, position, shape, color, 
+        duration) {
+    var lighting = game.globals.plugins.lighting;
+    var light = new AnimatedLight(game, lighting.parent, position, shape, 
+            color);
+
+    // Yoyo'ing and repeating tween to fade the light in and out
+    game.add.tween(light.shape)
+        .to({radius: 0}, duration, "Linear", true)
+        .repeat(-1).yoyo(true);
+    
+    return light;
+};
+
+/**
+ * A static method for creating a rotating spotlight
+ * @static
+ */
 AnimatedLight.createRotatingSpotlight = function (game, position, 
         orientation, span, range, color, rotationSpeed) {
     var lighting = game.globals.plugins.lighting;
