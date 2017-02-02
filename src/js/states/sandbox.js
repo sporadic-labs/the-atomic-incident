@@ -148,23 +148,9 @@ Sandbox.prototype.create = function () {
             health);
     }, this);
 
-    // Generate a flashlight shaped polygon
-    var lightOrientation = -90 * Math.PI / 180;
-    var lightArcAngle = 60 * Math.PI / 180;
-    var arcSamples = 6;
-    var lightPoints = [new Phaser.Point(0, 0)];
-    var lightRange = 250;
-    for (var i = 0; i <= arcSamples; i += 1) {
-        var percent = (i / arcSamples)
-        var currentAngle = (lightArcAngle / 2) - (lightArcAngle * percent);
-        lightPoints.push(new Phaser.Point(
-            Math.cos(lightOrientation + currentAngle) * lightRange,
-            Math.sin(lightOrientation + currentAngle) * lightRange
-        ));
-    }
-    var polygon = new Phaser.Polygon(lightPoints);
+    // Generate a circle light at the mouse
     this.mouseLight = this.lighting.addLight(new Phaser.Point(400, 400), 
-        polygon, 0xFFFFFFFF);
+        new Phaser.Circle(0, 0, 200), 0xFFFFFFFF);
 
     // Array of Towers added to the scene.
     globals.towers = [];
@@ -255,7 +241,6 @@ Sandbox.prototype.create = function () {
         }
         this.game.input.onDown.add(unpause, this);
     }, this);
-    
 };
 
 Sandbox.prototype.getMapPoints = function(key) {
@@ -283,8 +268,6 @@ Sandbox.prototype.update = function () {
         this.input.mousePointer.y + this.camera.y
     );
     
-    this.mouseLight.rotation += Math.PI/100;
-
     // If the user has clicked on the table...
     if (this.game.input.activePointer.isDown) {
         // Check the map for a tile at the mouse position
