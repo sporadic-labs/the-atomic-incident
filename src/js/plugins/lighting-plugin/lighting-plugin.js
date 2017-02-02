@@ -18,6 +18,12 @@ Phaser.Plugin.Lighting.prototype.addLight = function (position, shape, color) {
     return light;
 };
 
+Phaser.Plugin.Lighting.prototype.addExistingLight = function (light) {
+    this.lights.push(light);
+    if (this._debugEnabled) light.enableDebug();
+    return light;
+};
+
 Phaser.Plugin.Lighting.prototype.removeLight = function (light) {
     var i = this.lights.indexOf(light);
     if (i !== -1) this.lights.splice(i, 1);

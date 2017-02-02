@@ -15,8 +15,9 @@ var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
 var CarriableLight = require("../game-objects/carriable-light.js");
 var ChargingStation = require("../game-objects/charge-station.js");
-var PulseLight = require("../game-objects/pulse-light.js");
 var RotatingLight = require("../game-objects/rotating-light.js");
+var Tower = require("../game-objects/towers/tower.js");
+var PulsingLight = require("../game-objects/animated-lights/pulsing-light.js");
 
 function Sandbox() {}
 
@@ -291,15 +292,19 @@ Sandbox.prototype.update = function () {
             this.input.mousePointer.y + this.camera.y, this.game.globals.tileMap.tileWidth,
             this.game.globals.tileMap.tileHeight, this.game.globals.tileMapLayer);
         // If there is no tile at the mouse position, and the towerToPlace is set to 'pulse'...
+        var x = this.input.mousePointer.x + this.camera.x;
+        var y = this.input.mousePointer.y + this.camera.y;
+        var parent = this.game.globals.groups.midground;
         if (this.game.globals.towerToPlace === 0 && (checkTile === null || checkTile === undefined)) {
             // Create a new pulse light and add it to the towers array
-            var t = new PulseLight(this.game, this.input.mousePointer.x + this.camera.x,
-                this.input.mousePointer.y + this.camera.y, this.game.globals.groups.midground,
-                300, 25, 0x8DCDE3FF, 840);
-            this.game.globals.towers.push(t);
+            var light = new PulsingLight(this.game, parent, 
+                new Phaser.Point(x, y), new Phaser.Circle(0, 0, 300), 
+                0x8DCDE3FF, 1000, 1500);
+            var tower = new Tower(this.game, x, y, parent, 25, light);
+            this.game.globals.towers.push(tower);
             // set the towerToPlace to null
             this.game.globals.towerToPlace = null;
-            this.game.globals.player.coins -= t.value;
+            this.game.globals.player.coins -= tower.value;
         } else if (this.game.globals.towerToPlace === 1 && (checkTile === null || checkTile === undefined)) {
             // Create a new pulse light and add it to the towers array
             var r = new RotatingLight(this.game, this.input.mousePointer.x + this.camera.x,
