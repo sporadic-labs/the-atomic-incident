@@ -5,13 +5,13 @@ var spriteUtils = require("../../helpers/sprite-utilities.js");
 // Prototype chain - inherits from Sprite
 Tower.prototype = Object.create(Phaser.Sprite.prototype);
 
-function Tower(game, x, y, parentGroup, value, light) {
+function Tower(game, x, y, parentGroup, value, damage, light) {
     Phaser.Sprite.call(this, game, x, y, "assets", "light/light");
     this.anchor.set(0.5);
     parentGroup.add(this);
 
     this.game = game;
-    this.damage = 20; // Damage per second
+    this.damage = damage; // Damage per second
     this.value = value; // Cost for the tower
     this.light = light;
 
