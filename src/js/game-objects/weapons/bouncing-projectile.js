@@ -21,7 +21,7 @@ function BouncingProjectile(game, x, y, key, frame, parentGroup, player, damage,
 }
 
 BouncingProjectile.prototype.update = function() {
-    if (this.remove) {
+    if (this.remove || !this.game.world.bounds.contains(this.x, this.y)) {
         this.destroy();
         return;
     }
