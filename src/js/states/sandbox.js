@@ -17,7 +17,7 @@ var CarriableLight = require("../game-objects/carriable-light.js");
 var ChargingStation = require("../game-objects/charge-station.js");
 var RotatingLight = require("../game-objects/rotating-light.js");
 var Tower = require("../game-objects/towers/tower.js");
-var PulsingLight = require("../game-objects/animated-lights/pulsing-light.js");
+var AnimatedLight = require("../game-objects/animated-lights/animated-light.js");
 
 function Sandbox() {}
 
@@ -297,23 +297,25 @@ Sandbox.prototype.update = function () {
         var parent = this.game.globals.groups.midground;
         if (this.game.globals.towerToPlace === 0 && (checkTile === null || checkTile === undefined)) {
             // Create a new pulse light and add it to the towers array
-            var light = new PulsingLight(this.game, parent, 
+            var pulsingLight = AnimatedLight.createPulsingCircle(this.game, 
                 new Phaser.Point(x, y), new Phaser.Circle(0, 0, 300), 
-                0x8DCDE3FF, 1000, 1500);
-            var tower = new Tower(this.game, x, y, parent, 25, light);
+                0x8DCDE3FF, 1000);
+            var tower = new Tower(this.game, x, y, parent, 25, 20, 
+                pulsingLight);
             this.game.globals.towers.push(tower);
             // set the towerToPlace to null
             this.game.globals.towerToPlace = null;
             this.game.globals.player.coins -= tower.value;
         } else if (this.game.globals.towerToPlace === 1 && (checkTile === null || checkTile === undefined)) {
-            // Create a new pulse light and add it to the towers array
-            var r = new RotatingLight(this.game, this.input.mousePointer.x + this.camera.x,
-                this.input.mousePointer.y + this.camera.y, this.game.globals.groups.midground,
-                240, 40, 0x8DCDE3FF);
-            this.game.globals.towers.push(r);
+            // Create a new rotating spotlight and add it to the towers array
+            var rotatingLight = AnimatedLight.createRotatingSpotlight(this.game,
+                new Phaser.Point(x, y), 0, 60, 240, 0x8DCDE3FF, 90);
+            var tower = new Tower(this.game, x, y, parent, 25, 100,
+                rotatingLight);
+            this.game.globals.towers.push(tower);
             // set the towerToPlace to null
             this.game.globals.towerToPlace = null;
-            this.game.globals.player.coins -= r.value;
+            this.game.globals.player.coins -= tower.value;
         }
     }
 };
