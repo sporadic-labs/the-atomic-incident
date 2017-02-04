@@ -25,23 +25,6 @@ Sandbox.prototype.create = function () {
     // Shorthands
     var game = this.game;
     var globals = game.globals;
-    
-    // Options
-    // - controlTypes - valid options: mouse, keyboard, controller
-    // - controls - index of control type selected
-    // - difficulty - who knows if we will need this?
-    globals.options = {
-        controlTypes: [
-            "mouse",
-            // "keyboard",
-            "asteroids", // left/right rotate, up shoots down flips
-            "zelda", // 8 directions only, up down left right diagonal
-            "agar.io",
-            // "controller", // not supported yet
-        ],
-        controls: 0,
-        difficulty: "no thumbs",
-    }
 
     // Debugging FPS
     game.time.advancedTiming = true;
@@ -201,17 +184,6 @@ Sandbox.prototype.create = function () {
         menu.push(b);
     }
     this.menu = menu;
-
-    // Toggle control options
-    var controlToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.C);
-    controlToggleKey.onDown.add(function () {
-        if (globals.options.controls ===
-            globals.options.controlTypes.length - 1) {
-            globals.options.controls = 0;
-        } else {
-            globals.options.controls++;
-        }
-    }, this);
 
     // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);

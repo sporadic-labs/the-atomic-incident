@@ -37,9 +37,6 @@ function Player(game, x, y, parentGroup) {
     this._pickups = globals.groups.pickups;
     this._lights = globals.groups.lights;
 
-    // Control options
-    this._controlType = globals.options.controlTypes[globals.options.controls];
-    this._controlCtr = 0;
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
@@ -102,6 +99,7 @@ function Player(game, x, y, parentGroup) {
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
+    var P = Phaser.Pointer;
     // pickup
     this._controls.addKeyboardControl("toggle-pickup", [Kb.SHIFT]);
     // movement
@@ -109,11 +107,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("move-left", [Kb.A]);
     this._controls.addKeyboardControl("move-right", [Kb.D]);
     this._controls.addKeyboardControl("move-down", [Kb.S]);
-    // primary attack
-    this._controls.addKeyboardControl("arrow-up", [Kb.UP]);
-    this._controls.addKeyboardControl("arrow-left", [Kb.LEFT]);
-    this._controls.addKeyboardControl("arrow-right", [Kb.RIGHT]);
-    this._controls.addKeyboardControl("arrow-down", [Kb.DOWN]);
+    this._controls.addMouseDownControl("mouse-move", [P.LEFT_BUTTON]);
 }
 
 Player.prototype.update = function () {
@@ -126,19 +120,23 @@ Player.prototype.update = function () {
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
 
-    // The agar.io controls override normal WASD controls
-    if (this._controlType !== "agar.io") {
-        if (this._controls.isControlActive("move-left")) {
-            acceleration.x = -1;
-        } else if (this._controls.isControlActive("move-right")) {
-            acceleration.x = 1;
-        }
-        if (this._controls.isControlActive("move-up")) {
-            acceleration.y = -1;
-        } else if (this._controls.isControlActive("move-down")) {
-            acceleration.y = 1;
-        }
+    // WASD controls
+    if (this._controls.isControlActive("move-left")) acceleration.x = -1;
+    else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
+    if (this._controls.isControlActive("move-up")) acceleration.y = -1;
+    else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
+
+    // Agar.io mouse controls
+    this.rotation = this.position.angle(this._reticule.position) +
+        (Math.PI/2);
+    if (this._controls.isControlActive("mouse-move")) {
+        var d = Phaser.Point.subtract(this._reticule.position, this.position);
+        // If distance is more than a few pixels, set the acceleration to move 
+        // in the direction of the distance
+        if (d.getMagnitude() > 5) acceleration.copyFrom(d);
+        if (acceleration.getMagnitude() < 5) acceleration.set(0, 0);
     }
+
 
     // Normalize the acceleration and set the magnitude. This makes it so that
     // the player moves in the same speed in all directions.
@@ -197,90 +195,6 @@ Player.prototype.update = function () {
         }
     }
     this._lastPickupToggle = pickupControl;
-
-    // The control type option will determine how the player rotates
-    // Update the current control type, and then update rotation!
-    // TODO(rex): Select a control type and change it to 'keyboard'!
-    var options = this.game.globals.options;
-    this._controlType = options.controlTypes[options.controls];
-    if (this._controlType === "mouse") {
-        // Update the rotation of the player based on the reticule
-        this.rotation = this.position.angle(this._reticule.position) +
-            (Math.PI/2);
-    } else if (this._controlType === "agar.io") { 
-        // Update the rotation of the player based on the reticule
-        this.rotation = this.position.angle(this._reticule.position) +
-            (Math.PI/2);
-    } else if (this._controlType === "asteroids") {
-        // NOTE(rex): The following is a bizarre attempt to give some
-        // acceleration to the rotation of the player.  I just hacked
-        // this together in the moment, and there is most likely a
-        // better way to do this.  Figure it out...
-
-        // If one of the arrow keys is active, update the rotation
-        if (this._controls.isControlActive("arrow-left")) {
-            // Increment the counter
-            this._controlCtr++;
-            // Increase rotation to a point,
-            var modL = 60 - (this._controlCtr * this._controlCtr * 0.12);
-            if (modL > 18) {
-                this.rotation -= Math.PI/modL;
-            } else {
-                // then cap it
-                this.rotation -= Math.PI/18;
-            }
-        } else if (this._controls.isControlActive("arrow-right")) {
-            // Increment the counter
-            this._controlCtr++;
-            // Increase rotation to a point,
-            var modR = 60 - (this._controlCtr * this._controlCtr * 0.12);
-            if (modR > 18) {
-                this.rotation += Math.PI/modR;
-            } else {
-                // then cap it
-                this.rotation += Math.PI/18;
-            }
-        } else if (this._controls.isControlActive("arrow-down")) {
-            // The down arrow is used to flip the player 180 degrees,
-            // it has a cooldown so you don't flip constantly if
-            // holding the down arrow.
-            if (this._ableToFlip) {
-                this.rotation += Math.PI;
-                this._startCooldown(540);
-            }
-        } else {
-            // Reset the counter if no rotation arrows are active
-            this._controlCtr = 0;
-        }
-    } else if (this._controlType === "zelda") {
-        // If one of the arrow keys is active, update the rotation
-        // Do cardinal directions first
-        if (this._controls.isControlActive("arrow-left")) {
-            this.rotation = 270*(Math.PI/180);
-        } else if (this._controls.isControlActive("arrow-right")) {
-            this.rotation = 90*(Math.PI/180);
-        }
-        if (this._controls.isControlActive("arrow-up")) {
-            this.rotation = 0*(Math.PI/180);
-        } else if (this._controls.isControlActive("arrow-down")) {
-            this.rotation = 180*(Math.PI/180);
-        }
-        // Then diagonals!
-        if (this._controls.isControlActive("arrow-left") &&
-            this._controls.isControlActive("arrow-up")) {
-            this.rotation = 315*(Math.PI/180);
-        } else if (this._controls.isControlActive("arrow-right") &&
-                   this._controls.isControlActive("arrow-up")) {
-            this.rotation = 45*(Math.PI/180);
-        }
-        if (this._controls.isControlActive("arrow-left") &&
-            this._controls.isControlActive("arrow-down")) {
-            this.rotation = 235*(Math.PI/180);
-        } else if (this._controls.isControlActive("arrow-right") &&
-                   this._controls.isControlActive("arrow-down")) {
-            this.rotation = 135*(Math.PI/180);
-        }
-    }
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
