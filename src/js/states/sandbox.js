@@ -77,6 +77,13 @@ Sandbox.prototype.create = function () {
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
 
+    // Hack: make tiles visible over top of lighting layer
+    var tiles = wallLayer.getTiles(0, 0, this.world.width, this.world.height);
+    tiles.forEach(function (t) {
+        t.alpha = 0.6;
+    });
+    wallLayer.bringToTop();
+
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
@@ -130,7 +137,7 @@ Sandbox.prototype.create = function () {
 
     // Generate a circle light at the mouse
     this.mouseLight = this.lighting.addLight(new Phaser.Point(400, 400), 
-        new Phaser.Circle(0, 0, 200), 0xFFFFFFFF);
+        new Phaser.Circle(0, 0, 300), 0xFFFFFFFF);
 
     // Array of Towers added to the scene.
     globals.towers = [];
