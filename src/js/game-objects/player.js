@@ -3,6 +3,7 @@ module.exports = Player;
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 var Reticule = require("./reticule.js");
+var lightUtils = require("./lights/light-utilities.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -78,7 +79,7 @@ function Player(game, x, y, parentGroup) {
     // Lighting for player
     this._lighting = globals.plugins.lighting;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
-        new Phaser.Circle(0, 0, 50), 
+        lightUtils.generateSpotlightPolygon(0, 60, 200), 
         Phaser.Color.getColor32(150, 210, 210, 255));
     globals.groups.foreground.add(this.flashlight);
 
@@ -121,20 +122,30 @@ Player.prototype.update = function () {
     var acceleration = new Phaser.Point(0, 0);
 
     // WASD controls
+    var keyboardMovement = false;
     if (this._controls.isControlActive("move-left")) acceleration.x = -1;
     else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
     if (this._controls.isControlActive("move-up")) acceleration.y = -1;
     else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
+    // If keyboard was active, update rotation
+    if (acceleration.getMagnitude() > 0) {
+        keyboardMovement = true;
+        this.rotation = new Phaser.Point(0, 0).angle(acceleration) +
+            (Math.PI/2);
+    }
 
-    // Agar.io mouse controls
-    this.rotation = this.position.angle(this._reticule.position) +
-        (Math.PI/2);
-    if (this._controls.isControlActive("mouse-move")) {
-        var d = Phaser.Point.subtract(this._reticule.position, this.position);
-        // If distance is more than a few pixels, set the acceleration to move 
-        // in the direction of the distance
-        if (d.getMagnitude() > 5) acceleration.copyFrom(d);
-        if (acceleration.getMagnitude() < 5) acceleration.set(0, 0);
+    // Agar.io mouse controls (if keyboard controls aren't active this frame)
+    if (!keyboardMovement) {
+        this.rotation = this.position.angle(this._reticule.position) +
+            (Math.PI/2);
+        if (this._controls.isControlActive("mouse-move")) {
+            var d = Phaser.Point.subtract(this._reticule.position, 
+                this.position);
+            // If distance is more than a few pixels, set the acceleration to
+            // move in the direction of the distance
+            if (d.getMagnitude() > 5) acceleration.copyFrom(d);
+            if (acceleration.getMagnitude() < 5) acceleration.set(0, 0);
+        }
     }
 
 
@@ -206,23 +217,17 @@ Player.prototype.update = function () {
 };
 
 Player.prototype.postUpdate = function () {
-    // This is not a pretty hack, but it checks whether the player is in shadow
-    // in either of the cardinal directions. If yes, turn on the player's 
-    // flashlight. MH: this weirdness was necessary because as soon the player's
-    // light is turned on, the player's immediate position is no longer in 
-    // shadow.
-    var pos = this.position;
-    var P = Phaser.Point;
-    var d = this.flashlight.radius + 5;
-    if (this._lighting.isPointInShadow(P.add(pos, new P(0, d))) ||
-            this._lighting.isPointInShadow(P.add(pos, new P(0, -d))) ||
-            this._lighting.isPointInShadow(P.add(pos, new P(d, 0))) ||
-            this._lighting.isPointInShadow(P.add(pos, new P(-d, 0)))) {
-        this.flashlight.enabled = true;
-        this.flashlight.position.copyFrom(pos);
-    } else {
-        this.flashlight.enabled = false;
-    }
+    // Update flashlight placement
+    this.flashlight.rotation = this.rotation - (Math.PI / 2);
+    this.flashlight.position.copyFrom(this.position);
+    // Check if the position just behind the player is in shadow. Since the
+    // flashlight points forward from the player, the flashlight's light get in
+    // way for this calculation.
+    var pos = this.position.clone().subtract(
+        Math.cos(this.rotation - (Math.PI / 2)) * 5,
+        Math.sin(this.rotation - (Math.PI / 2)) * 5
+    );
+    this.flashlight.enabled = this._lighting.isPointInShadow(pos);
 
     // Update compass position and rotation
     var cX = this.position.x + (0.6 * this.width) *
