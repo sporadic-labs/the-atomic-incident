@@ -160,45 +160,11 @@ Sandbox.prototype.create = function () {
         }
     }, this);
 
-
     // Use the space bar place your selected light at the players position
     var placeLightKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     placeLightKey.onDown.add(function () {
-        var x = player.position.x;
-        var y = player.position.y;
-        var playerPoint = new Phaser.Point(x, y);
-        var parent = this.game.globals.groups.midground;
-        var tower;
-        if (globals.towerToPlace === 0) {
-            // Pulse light tower
-            var pulsingLight = AnimatedLight.createPulsingCircle(this.game,
-                playerPoint, new Phaser.Circle(0, 0, 300),
-                0x8DCDE3FF, 1000);
-            tower = new Tower(this.game, x, y, parent, 25, 20,
-                pulsingLight);
-            globals.towers.push(tower);
-            globals.towerToPlace = null;
-            globals.player.coins -= tower.value;
-        } else if (globals.towerToPlace === 1) {
-            // Rotating spotlight tower
-            var rotatingLight = AnimatedLight.createRotatingSpotlight(
-                this.game, playerPoint, 0, 60, 240, 0x8DCDE3FF, 90);
-            tower = new Tower(this.game, x, y, parent, 25, 100,
-                rotatingLight);
-            globals.towers.push(tower);
-            globals.towerToPlace = null;
-            globals.player.coins -= tower.value;
-        } else if (this.game.globals.towerToPlace === 2) {
-            // Contracting light tower
-            var contractingLight = AnimatedLight.createContractingCircle(
-                this.game, playerPoint, new Phaser.Circle(0, 0, 300),
-                0x8DCDE3FF, 1000);
-            tower = new Tower(this.game, x, y, parent, 25, 50,
-                contractingLight);
-            globals.towers.push(tower);
-            globals.towerToPlace = null;
-            globals.player.coins -= tower.value;
-        }
+        var player = this.game.globals.player;
+        this.placeTower(player.position.x, player.position.y);
     }, this);
 
     // Score
@@ -289,44 +255,45 @@ Sandbox.prototype.update = function () {
 
     var globals = this.game.globals;
     // If the user has right-clicked on the map, and a tower has been selected...
-    if (this.game.input.activePointer.rightButton.isDown &&
-        globals.towerToPlace !== null) {
-        var x = globals.player.position.x;
-        var y = globals.player.position.y;
-        var playerPoint = new Phaser.Point(x, y);
-        var parent = this.game.globals.groups.midground;
-        var tower;
-        if (globals.towerToPlace === 0) {
-            // Pulse light tower
-            var pulsingLight = AnimatedLight.createPulsingCircle(this.game, 
-                playerPoint, new Phaser.Circle(0, 0, 300), 
-                0x8DCDE3FF, 1000);
-            tower = new Tower(this.game, x, y, parent, 25, 20, 
-                pulsingLight);
-            globals.towers.push(tower);
-            globals.towerToPlace = null;
-            globals.player.coins -= tower.value;
-        } else if (globals.towerToPlace === 1) {
-            // Rotating spotlight tower
-            var rotatingLight = AnimatedLight.createRotatingSpotlight(
-                this.game, playerPoint, 0, 60, 240, 0x8DCDE3FF, 90);
-            tower = new Tower(this.game, x, y, parent, 25, 100,
-                rotatingLight);
-            globals.towers.push(tower);
-            globals.towerToPlace = null;
-            globals.player.coins -= tower.value;
-        } else if (this.game.globals.towerToPlace === 2) {
-            // Contracting light tower
-            var contractingLight = AnimatedLight.createContractingCircle(
-                this.game, playerPoint, new Phaser.Circle(0, 0, 300), 
-                0x8DCDE3FF, 1000);
-            tower = new Tower(this.game, x, y, parent, 25, 50,
-                contractingLight);
-            globals.towers.push(tower);
-            globals.towerToPlace = null;
-            globals.player.coins -= tower.value;
-        }
+    if (this.game.input.activePointer.rightButton.isDown) {
+        var player = this.game.globals.player;
+        this.placeTower(player.position.x, player.position.y);
     }
+};
+
+Sandbox.prototype.placeTower = function (x, y) {
+    var globals = this.game.globals;
+    var towerPoint = new Phaser.Point(x, y);
+    var tower;
+    var parent = globals.groups.midground;
+    if (globals.towerToPlace === 0) {
+        // Pulse light tower
+        var pulsingLight = AnimatedLight.createPulsingCircle(this.game, 
+            towerPoint, new Phaser.Circle(0, 0, 300), 
+            0x8DCDE3FF, 1000);
+        tower = new Tower(this.game, x, y, parent, 25, 20, 
+            pulsingLight);
+        globals.towers.push(tower);
+        globals.player.coins -= tower.value;
+    } else if (globals.towerToPlace === 1) {
+        // Rotating spotlight tower
+        var rotatingLight = AnimatedLight.createRotatingSpotlight(
+            this.game, towerPoint, 0, 60, 240, 0x8DCDE3FF, 90);
+        tower = new Tower(this.game, x, y, parent, 25, 100,
+            rotatingLight);
+        globals.towers.push(tower);
+        globals.player.coins -= tower.value;
+    } else if (this.game.globals.towerToPlace === 2) {
+        // Contracting light tower
+        var contractingLight = AnimatedLight.createContractingCircle(
+            this.game, towerPoint, new Phaser.Circle(0, 0, 300), 
+            0x8DCDE3FF, 1000);
+        tower = new Tower(this.game, x, y, parent, 25, 50,
+            contractingLight);
+        globals.towers.push(tower);
+        globals.player.coins -= tower.value;
+    }
+    globals.towerToPlace = null;
 };
 
 Sandbox.prototype.render = function () {
