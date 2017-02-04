@@ -207,10 +207,9 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light) {
         // Create a ray from the light to a point on the circle
         var ray = light.getLightRay(angle);
         // Check if the ray intersected any walls
-        var intersect = ctx._getWallIntersection(ray, backWalls);
-        // Save the intersection or the end of the ray
-        if (intersect) return intersect;
-        else return ray.end;
+        var intersection = ctx._getWallIntersection(ray, backWalls, light.id);
+        if (intersection) return intersection;
+        return ray.end;
     }
 
     this._sortPoints(points, light.position);
@@ -258,22 +257,23 @@ Phaser.Plugin.Lighting.prototype._sortPoints = function (points, target) {
     });
 };
 
-// Dynamic lighting/Raycasting.
-// Thanks, yafd!
-// http://gamemechanicexplorer.com/#raycasting-2
-Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls) {
+// Find the closest wall that faces away from the light
+Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls, 
+        lightId) {
     var distanceToWall = Number.POSITIVE_INFINITY;
     var closestIntersection = null;
-
     for (var i = 0; i < walls.length; i++) {
-        var intersect = Phaser.Line.intersects(ray, walls[i].line);
-        if (intersect) {
-            // Find the closest intersection
-            var distance = this.game.math.distance(ray.start.x, ray.start.y,
-                intersect.x, intersect.y);
-            if (distance < distanceToWall) {
-                distanceToWall = distance;
-                closestIntersection = intersect;
+        // Check if wall faces away from the selected light
+        if (walls[i].backFacings[lightId]) {
+            var intersect = Phaser.Line.intersects(ray, walls[i].line);
+            if (intersect) {
+                // Find the closest intersection
+                var distance = this.game.math.distance(ray.start.x, ray.start.y,
+                    intersect.x, intersect.y);
+                if (distance < distanceToWall) {
+                    distanceToWall = distance;
+                    closestIntersection = intersect;
+                }
             }
         }
     }
