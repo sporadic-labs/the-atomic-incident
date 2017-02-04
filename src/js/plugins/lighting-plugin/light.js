@@ -1,5 +1,6 @@
 module.exports = Light;
 
+Light.instances = 0;
 
 /**
  * Creates a Light object that is responsible for casting light against the 
@@ -21,6 +22,7 @@ function Light(game, parent, position, shape, color) {
     this._needsRedraw = true;
     this.position = position.clone();
     this.rotation = 0;
+    this.id = Light.instances++;
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
