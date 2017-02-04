@@ -93,7 +93,7 @@ Sandbox.prototype.create = function () {
     var playerStartPoint = this.getMapPoints("player")[0]; // temp fix
     // Setup a new player, and attach it to the global variabls object.
     var player = new Player(game, playerStartPoint.x, playerStartPoint.y, 
-        groups.midground);
+        groups.foreground);
     this.camera.follow(player);
     globals.player = player;
     
