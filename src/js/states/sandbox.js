@@ -13,11 +13,8 @@ var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
-var CarriableLight = require("../game-objects/carriable-light.js");
-var ChargingStation = require("../game-objects/charge-station.js");
-var RotatingLight = require("../game-objects/rotating-light.js");
 var Tower = require("../game-objects/towers/tower.js");
-var AnimatedLight = require("../game-objects/animated-lights/animated-light.js");
+var AnimatedLight = require("../game-objects/lights/animated-light.js");
 
 function Sandbox() {}
 
