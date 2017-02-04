@@ -3,10 +3,6 @@ module.exports = ScorePickup;
 var BasePickup = require("./base-pickup.js");
 var spriteUtils = require("../../helpers/sprite-utilities.js");
 
-var ANIM_NAMES = {
-    IDLE: "idle"
-};
-
 ScorePickup.prototype = Object.create(BasePickup.prototype);
 ScorePickup.prototype.constructor = ScorePickup;
 
