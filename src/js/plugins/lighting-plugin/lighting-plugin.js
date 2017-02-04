@@ -123,6 +123,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
+    this._bitmap.cls(); // Clear so shadow opacity works again
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
 
     if (this._debugEnabled) this._debugBitmap.clear();
