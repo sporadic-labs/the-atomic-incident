@@ -24,7 +24,7 @@ function Player(game, x, y, parentGroup) {
     parentGroup.add(this);
 
     this.hearts = 3;
-    this.coins = 300;
+    this.coins = 120;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);
@@ -82,6 +82,7 @@ function Player(game, x, y, parentGroup) {
         lightUtils.generateSpotlightPolygon(0, 60, 200), 
         Phaser.Color.getColor32(150, 210, 210, 255));
     globals.groups.foreground.add(this.flashlight);
+    this.flashlight.enabled = true;
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -227,7 +228,7 @@ Player.prototype.postUpdate = function () {
         Math.cos(this.rotation - (Math.PI / 2)) * 5,
         Math.sin(this.rotation - (Math.PI / 2)) * 5
     );
-    this.flashlight.enabled = this._lighting.isPointInShadow(pos);
+    // this.flashlight.enabled = this._lighting.isPointInShadow(pos);
 
     // Update compass position and rotation
     var cX = this.position.x + (0.6 * this.width) *
