@@ -382,11 +382,16 @@ Light.prototype._recalculateWalls = function () {
         // have the same origin point.
         var relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
         var dot = wall.normal.dot(relativePos);
-        if (dot < 0) {
-            // If the dot between the normal and the light point in negative,
-            // the wall faces away from the light source
-            intersectingWalls.push(wall);
-        }
+        var isBackFacing = dot < 0; 
+
+        // Add some information to the wall to indicate whether it is back
+        // facing or not. Walls are passed around by reference, so each light
+        // does not have its own unique copy. Thus, the information needs to be
+        // stored under an id unique to the specific light.
+        wall.backFacings = wall.backFacings || {};
+        wall.backFacings[this.id] = isBackFacing; 
+        
+        intersectingWalls.push(wall);
     }
     
     return intersectingWalls;
