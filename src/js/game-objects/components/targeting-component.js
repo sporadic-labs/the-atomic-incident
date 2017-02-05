@@ -46,7 +46,7 @@ TargetingComponent.prototype.update = function () {
         // If there is an a* path to the target, move to the next node
         if (this._path) {
             this._updateTargetPathNode();
-            this._moveTowards(this._targetPathNode);
+            this._moveTowards(this._path.getCurrentPoint());
         }
     }
     return this.target;
@@ -55,11 +55,28 @@ TargetingComponent.prototype.update = function () {
 TargetingComponent.prototype._recalculatePath = function () {
     // Calculate path
     var tilemapLayer = this.game.globals.tileMapLayer;
+    var tileHeight = this.game.globals.tileMap.tileHeight;
+    var tileWidth = this.game.globals.tileMap.tileWidth;
     var start = tilemapLayer.getTileXY(this.parent.x, this.parent.y, {});
     var goal = tilemapLayer.getTileXY(this.target.x, this.target.y, {});
     var path = this.game.globals.plugins.astar.findPath(start, goal);
-    this._path = path.nodes.length ? path : null; 
-    this._targetPathNode = null;
+    
+    // Extract the array of points
+    if (path.nodes.length) {
+        // Astar gives the path in reverse order, so copy and reverse it
+        var pathArray = path.nodes.reverse();
+        // Astar gives tile coordinates, so construct an array of points in 
+        // world coordinates
+        var pointsArray = [];
+        for (var i = 0; i < pathArray.length; i++) {
+            pointsArray.push(new Phaser.Point(
+                pathArray[i].x * tileWidth + tileWidth / 2, 
+                pathArray[i].y * tileHeight + tileHeight / 2
+            ));
+        }
+        // Construct a Path instance from the points
+        this._path = new Path(pointsArray);
+    }
 };
 
 TargetingComponent.prototype._updateTargetPathNode = function () {
@@ -67,18 +84,8 @@ TargetingComponent.prototype._updateTargetPathNode = function () {
     var pos = this.parent.world;
     // If there is no target node or the parent is within a fudge factor of the
     // current target node, then update the target
-    if (!this._targetPathNode || pos.distance(this._targetPathNode) < 5) {
-        // If there is a node left in the path, pop it off of the path
-        if (this._path.nodes.length > 0) {
-            var nextNode = this._path.nodes.pop();
-            var tileHeight = this.game.globals.tileMap.tileHeight;
-            var tileWidth = this.game.globals.tileMap.tileWidth;
-            this._targetPathNode = new Phaser.Point(
-                nextNode.x * tileWidth + tileWidth / 2, 
-                nextNode.y * tileHeight + tileHeight / 2
-            );
-        }
-    }
+    var targetNode = this._path.getCurrentPoint();
+    if (pos.distance(targetNode) < 5) this._path.advancePoint();
 };
 
 TargetingComponent.prototype._moveTowards = function (position) {
@@ -119,4 +126,41 @@ TargetingComponent.prototype._findClosestLight = function () {
 
 TargetingComponent.prototype.destroy = function () {
     // Nothing special to destroy
+};
+
+/**
+ * A light weight class for representing a path that an agent can travel along 
+ * 
+ * @param {Phaser.Point[]} points Array of points that make up the path
+ */
+function Path(points) {
+    this._points = points;
+    this._position = 0;
+}
+
+/**
+ * Current point the agent should be heading towards. Should always return a 
+ * valid point.
+ * @returns {Phaser.Point}
+ */
+Path.prototype.getCurrentPoint = function () {
+    return this._points[this._position];
+};
+
+/**
+ * @returns {Phaser.Point} True if the path is empty
+ */
+Path.prototype.isEmpty = function () {
+    return (this._points.length === 0);
+};
+
+/**
+ * Advances along the path to the next point. Will not advance path the last
+ * point.
+ * @returns {this} For chaining purposes
+ */
+Path.prototype.advancePoint = function () {
+    if ((this._position + 1) >= this._points.length) return;
+    else this._position++;
+    return this;
 };
