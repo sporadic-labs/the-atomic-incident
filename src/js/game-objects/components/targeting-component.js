@@ -9,8 +9,8 @@ module.exports = TargetingComponent;
 function TargetingComponent(parent, maxSpeed, visionDistance, path) {
     this.game = parent.game;
     this.parent = parent;
+    this.target = null;
     this._maxSpeed = maxSpeed;
-    this._target = null;
     this._visionDistance = visionDistance || 100;
     this._player = this.game.globals.player;
     this._path = path;
@@ -38,7 +38,7 @@ TargetingComponent.prototype.update = function () {
     } else {
         // If player is not in range and the target was previously the player,
         // target a light
-        var wasTargetingPlayer = (this._target === this._player);
+        var wasTargetingPlayer = (this.target === this._player);
         var isTargetDead = (this.target && this.target.health <= 0);
         if (!this.target || wasTargetingPlayer || isTargetDead) {
             var lightTarget = this._findClosestLight();
