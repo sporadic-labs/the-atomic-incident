@@ -13,7 +13,8 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, "game-container");
 // Create the space for globals on the game object
 var globals = game.globals = {};
 globals.tilemapFiles = [
-    "tower-defense-1.json"
+    "tower-defense-2.json",
+    "tower-defense-1.json",
 ];
 
 game.state.add("boot", BootState);
