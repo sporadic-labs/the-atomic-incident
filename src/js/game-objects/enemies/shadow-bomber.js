@@ -15,7 +15,8 @@ function ShadowBomber(game, x, y, parentGroup) {
 
     this._damage = 25; // 100 units in an explosion
 
-    this._targetingComponent = new TargetingComponent(this, 40, 125);
+    var rndPath = game.rnd.integerInRange(0, game.globals.enemyPaths.length - 1);
+    this._targetingComponent = new TargetingComponent(this, 40, 125, game.globals.enemyPaths[rndPath]);
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
