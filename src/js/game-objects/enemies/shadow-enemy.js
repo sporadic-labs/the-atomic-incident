@@ -10,12 +10,6 @@ function ShadowEnemy(game, x, y, parentGroup) {
     BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/idle-01", 100,
         parentGroup);
 
-    // Add an eye image that sits above the shadow layer. The enemy owns this 
-    // image, so it is responsible for updating and destroying it.
-    this._eyeImage = game.make.image(0, 0, "assets", "shadow-enemy/eye");
-    this._eyeImage.anchor.copyFrom(this.anchor);
-    game.globals.groups.foreground.add(this._eyeImage);
-
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
 
@@ -50,17 +44,4 @@ ShadowEnemy.prototype.update = function () {
     if (distance < 30 && target.takeDamage) {
         target.takeDamage(this._damage * this.game.time.physicsElapsed);
     }
-};
-
-ShadowEnemy.prototype.postUpdate = function () {
-    // Force the Phaser.Sprite postUpdate to happen *first* since that is where
-    // the physics gets applied
-    BaseEnemy.prototype.postUpdate.apply(this, arguments);
-    // Now the eye image can be properly positioned
-    this._eyeImage.position.copyFrom(this.position);
-};
-
-ShadowEnemy.prototype.destroy = function () {
-    this._eyeImage.destroy();
-    BaseEnemy.prototype.destroy.apply(this, arguments);
 };
