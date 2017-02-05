@@ -254,6 +254,14 @@ Sandbox.prototype.update = function () {
     //     this.input.mousePointer.y + this.camera.y
     // );
 
+    if (this.game.input.keyboard.isDown(Phaser.KeyCode.T)) {
+        var player = this.game.globals.player;
+        player.position.setTo(
+            this.input.mousePointer.x + this.camera.x,
+            this.input.mousePointer.y + this.camera.y
+        );
+    }
+
     var globals = this.game.globals;
     // If the user has right-clicked on the map, and a tower has been selected...
     if (this.game.input.activePointer.rightButton.isDown) {
