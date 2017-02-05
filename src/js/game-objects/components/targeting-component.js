@@ -129,6 +129,7 @@ TargetingComponent.prototype.destroy = function () {
     // Nothing special to destroy
 };
 
+
 /**
  * A light weight class for representing a path that an agent can travel along 
  * 
@@ -164,4 +165,31 @@ Path.prototype.advancePoint = function () {
     if ((this._position + 1) >= this._points.length) return;
     else this._position++;
     return this;
+};
+
+/**
+ * Returns the last point in the path or null
+ * @returns {Phaser.Point|null}
+ */
+Path.prototype.getFinalPoint = function () {
+    if (!this.isEmpty()) return this._points[this.points.length - 1];
+    return null;
+};
+
+/**
+ * Returns the last point in the path or null
+ * @returns {Phaser.Point|null}
+ */
+Path.prototype.isAtFinalPoint = function () {
+    return ((this._position + 1) >= this._points.length);
+};
+
+/**
+ * Constructs a shallow copy of the path (e.g. doesn't deep copy the _points 
+ * array)
+ * @returns {Path}
+ */
+Path.prototype.clone = function () {
+    var newPath = new Path(this._points);
+    newPath._position = this._position;
 };
