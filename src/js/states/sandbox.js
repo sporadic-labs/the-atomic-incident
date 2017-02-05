@@ -180,7 +180,18 @@ Sandbox.prototype.create = function () {
     // Construct an array of arrays, containing the list of points in
     // world coordinates of each possible enemy path.
     var enemyPathsRaw = utils.default(map.objects["enemy paths"], []);
-    var enemyPathsList;
+    var enemyPaths = [];
+    for (var i = 0; i < enemyPathsRaw.length; i++) {
+        var pathNodes = utils.default(enemyPathsRaw[i].polyline, []);
+        var startX = enemyPathsRaw[i].x;
+        var startY = enemyPathsRaw[i].y;
+        var tempPaths = [];
+        for (var j = 0; j < pathNodes.length; j++) {
+            tempPaths.push(new Phaser.Point(startX + pathNodes[j][0], startY + pathNodes[j][1]));
+        }
+        enemyPaths.push(tempPaths);
+    }
+    globals.enemyPaths = enemyPaths;
 
     var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
     globals.spawnEnemies = new SpawnerWave(game);
