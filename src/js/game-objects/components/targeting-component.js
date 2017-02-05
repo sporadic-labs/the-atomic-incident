@@ -9,12 +9,18 @@ module.exports = TargetingComponent;
 function TargetingComponent(parent, maxSpeed, visionDistance, path) {
     this.game = parent.game;
     this.parent = parent;
-    this.target = null;
     this._maxSpeed = maxSpeed;
+    this._target = null;
     this._visionDistance = visionDistance || 100;
     this._player = this.game.globals.player;
     this._path = path;
 
+    this._path = null;
+    if (Array.isArray(path)) {
+        this._path = new Path(path);
+        this._originalPath = this._path.clone();
+    }
+    
     var lightTarget = this._findClosestLight();
     this._switchTarget(lightTarget);
 }
@@ -27,11 +33,12 @@ TargetingComponent.prototype.update = function () {
     var distToPlayer = this._player.position.distance(this.parent.position);
     if (distToPlayer <= this._visionDistance) {
         // Player is in range, switch to targeting player
-        this._switchTarget(this._player)
+        this._path = this._getPathToPoint(this._player);
+        this._switchTarget(this._player);
     } else {
         // If player is not in range and the target was previously the player,
         // target a light
-        var wasTargetingPlayer = (this.target === this._player);
+        var wasTargetingPlayer = (this._target === this._player);
         var isTargetDead = (this.target && this.target.health <= 0);
         if (!this.target || wasTargetingPlayer || isTargetDead) {
             var lightTarget = this._findClosestLight();
@@ -42,7 +49,9 @@ TargetingComponent.prototype.update = function () {
     // Update the path to the target when needed
     if (this.target) {
         var hasMoved = !this._lastTargetPosition.equals(this.target.position);
-        if (hasMoved || this._path === null) this._recalculatePath();
+        if (hasMoved || this._path === null) {
+            this._path = this._getPathToPoint(this.target);
+        }
         
         // If there is an a* path to the target, move to the next node
         if (this._path) {
@@ -53,13 +62,13 @@ TargetingComponent.prototype.update = function () {
     return this.target;
 };
 
-TargetingComponent.prototype._recalculatePath = function () {
+TargetingComponent.prototype._getPathToPoint = function (point) {
     // Calculate path
     var tilemapLayer = this.game.globals.tileMapLayer;
     var tileHeight = this.game.globals.tileMap.tileHeight;
     var tileWidth = this.game.globals.tileMap.tileWidth;
     var start = tilemapLayer.getTileXY(this.parent.x, this.parent.y, {});
-    var goal = tilemapLayer.getTileXY(this.target.x, this.target.y, {});
+    var goal = tilemapLayer.getTileXY(point.x, point.y, {});
     var path = this.game.globals.plugins.astar.findPath(start, goal);
     
     // Extract the array of points
@@ -76,8 +85,10 @@ TargetingComponent.prototype._recalculatePath = function () {
             ));
         }
         // Construct a Path instance from the points
-        this._path = new Path(pointsArray);
+        return new Path(pointsArray);
     }
+
+    return null;
 };
 
 TargetingComponent.prototype._updateTargetPathNode = function () {
