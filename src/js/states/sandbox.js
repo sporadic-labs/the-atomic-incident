@@ -271,7 +271,7 @@ Sandbox.prototype.placeTower = function (x, y) {
         // Pulse light tower
         var pulsingLight = AnimatedLight.createPulsingCircle(this.game, 
             towerPoint, new Phaser.Circle(0, 0, 300), 
-            new Color("rgba(255, 255, 255, 1)"), 1000);
+            new Color("rgba(255, 255, 255, 1)"), 1000, 1000, 250);
         tower = new Tower(this.game, x, y, parent, 25, 20, 
             pulsingLight);
         globals.towers.push(tower);

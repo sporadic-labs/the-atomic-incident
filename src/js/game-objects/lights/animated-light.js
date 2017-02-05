@@ -33,18 +33,23 @@ AnimatedLight.prototype.destroy = function () {
  * @static
  */
 AnimatedLight.createPulsingCircle = function (game, position, shape, color, 
-        pulseTime) {
+        onTime, offTime, tweenTime) {
     var lighting = game.globals.plugins.lighting;
     var light = new AnimatedLight(game, lighting.parent, position, shape, 
             color);
 
     // Tween setup
+    var maxAlpha = light.color.a; 
     light.addTweenTarget(light.color);
 
-    // Yoyo'ing and repeating tween to fade the light in and out
+    // Fading the light in and out
     game.add.tween(light.color)
-        .to({a: 0}, pulseTime, "Linear", true)
-        .repeat(-1).yoyo(true);
+        // First tween: leave light on and then tween it off
+        .to({a: 0}, tweenTime, "Linear", false, onTime)
+        // Child tween: leave light off and then tween it on
+        .to({a: maxAlpha}, tweenTime, "Linear", false, offTime)
+        // Repeat the sequence of tweens (without yoyoing)
+        .repeatAll(-1).start();
     
     return light;
 };
