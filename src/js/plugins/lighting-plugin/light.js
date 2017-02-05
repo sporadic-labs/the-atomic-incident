@@ -1,5 +1,7 @@
 module.exports = Light;
 
+var Color = require("../../helpers/Color.js");
+
 Light.instances = 0;
 
 /**
@@ -15,7 +17,7 @@ function Light(game, parent, position, shape, color) {
     this.game = game;
     this.parent = parent;
     this.shape = shape;
-    this.color = (color !== undefined) ? color : 0xFFFFFFFF;
+    this.color = (color instanceof Color) ? color : new Color(color);
     this.enabled = true;
     this._isDebug = false;
     this._debugGraphics = null;
@@ -240,7 +242,6 @@ Light.prototype.redraw = function (points) {
     // position is in world coordinates
     if (this._needsRedraw) {
         // Clear offscreen buffer
-        this._bitmap.cls();
         this.redrawLight();
         this.redrawShadow(points);      
         this._needsRedraw = false;
@@ -251,14 +252,15 @@ Light.prototype.redraw = function (points) {
 Light.prototype.redrawLight = function () {
     // Draw the circular gradient for the light. This is the light without
     // factoring in shadows
+    this._bitmap.cls();
     this._bitmap.blendSourceOver(); // Default blend mode
 
-    var c = Phaser.Color.getRGB(this.color);
-    var c1 = Phaser.Color.getWebRGB(c);
+    var c = this.color.clone();
+    var c1 = c.getWebColor();
     c.a *= 0.6;
-    var c2 = Phaser.Color.getWebRGB(c);
+    var c2 = c.getWebColor();
     c.a *= 0.3;
-    var c3 = Phaser.Color.getWebRGB(c);
+    var c3 = c.getWebColor();
 
     var shape = this.shape;
     if (shape instanceof Phaser.Circle) {

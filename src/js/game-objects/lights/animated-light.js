@@ -39,21 +39,12 @@ AnimatedLight.createPulsingCircle = function (game, position, shape, color,
             color);
 
     // Tween setup
-    var Color = Phaser.Color;
-    var colorObject = Color.fromRGBA(color);
-    light.addTweenTarget(colorObject);
+    light.addTweenTarget(light.color);
 
     // Yoyo'ing and repeating tween to fade the light in and out
-    game.add.tween(colorObject)
+    game.add.tween(light.color)
         .to({a: 0}, pulseTime, "Linear", true)
-        .repeat(-1).yoyo(true)
-        .onUpdateCallback(function () {
-            Color.updateColor(colorObject);
-            // MH: there might be a better way to do this...
-            light.color = Color.packPixel(
-                colorObject.r, colorObject.g, colorObject.b, colorObject.a
-            );
-        }, this);
+        .repeat(-1).yoyo(true);
     
     return light;
 };

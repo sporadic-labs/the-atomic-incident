@@ -15,6 +15,7 @@ var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
 var Tower = require("../game-objects/towers/tower.js");
 var AnimatedLight = require("../game-objects/lights/animated-light.js");
+var Color = require("../helpers/Color.js");
 
 function Sandbox() {}
 
@@ -270,7 +271,7 @@ Sandbox.prototype.placeTower = function (x, y) {
         // Pulse light tower
         var pulsingLight = AnimatedLight.createPulsingCircle(this.game, 
             towerPoint, new Phaser.Circle(0, 0, 300), 
-            0x8DCDE3FF, 1000);
+            new Color("rgba(255, 255, 255, 1)"), 1000);
         tower = new Tower(this.game, x, y, parent, 25, 20, 
             pulsingLight);
         globals.towers.push(tower);
