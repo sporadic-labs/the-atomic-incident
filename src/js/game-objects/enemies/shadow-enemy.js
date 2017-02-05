@@ -15,7 +15,7 @@ function ShadowEnemy(game, x, y, parentGroup) {
 
     this._damage = 10; // 10 units per second
 
-    this._targetingComponent = new TargetingComponent(this, 75);
+    this._targetingComponent = new TargetingComponent(this, 75, 125);
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
@@ -38,10 +38,12 @@ ShadowEnemy.prototype.update = function () {
     var target = this._targetingComponent.update();
 
     // If in range of target, attack
-    var distance = this.position.distance(target.position);
-    // NOTE(rex): Make sure the takeDamage method exists before calling it
-    // it doesn't exist on the player.
-    if (distance < 30 && target.takeDamage) {
-        target.takeDamage(this._damage * this.game.time.physicsElapsed);
+    if (target) {
+        var distance = this.position.distance(target.position);
+        // NOTE(rex): Make sure the takeDamage method exists before calling it
+        // it doesn't exist on the player.
+        if (distance < 30 && target.takeDamage) {
+            target.takeDamage(this._damage * this.game.time.physicsElapsed);
+        }
     }
 };
