@@ -13,6 +13,7 @@ function TargetingComponent(parent, maxSpeed, visionDistance, path) {
     this._maxSpeed = maxSpeed;
     this._visionDistance = visionDistance || 100;
     this._player = this.game.globals.player;
+    this._path = path;
 
     var lightTarget = this._findClosestLight();
     this._switchTarget(lightTarget);
