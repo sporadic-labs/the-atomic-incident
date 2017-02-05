@@ -177,6 +177,11 @@ Sandbox.prototype.create = function () {
     // var Wave1 = require("../game-objects/waves/wave-1.js");
     // new Wave1(game);
 
+    // Construct an array of arrays, containing the list of points in
+    // world coordinates of each possible enemy path.
+    var enemyPathsRaw = utils.default(map.objects["enemy paths"], []);
+    var enemyPathsList;
+
     var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
     globals.spawnEnemies = new SpawnerWave(game);
 
