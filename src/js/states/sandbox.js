@@ -226,13 +226,16 @@ Sandbox.prototype.create = function () {
 
     // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
+    this._debug = false;
     debugToggleKey.onDown.add(function () {
         if (globals.plugins.satBody.isDebugAllEnabled()) {
             globals.plugins.satBody.disableDebugAll();
             globals.plugins.lighting.disableDebug();
+            this._debug = false;
         } else {
             globals.plugins.satBody.enableDebugAll();
             globals.plugins.lighting.enableDebug();
+            this._debug = true;
         }
     }, this);
 
@@ -334,6 +337,19 @@ Sandbox.prototype.render = function () {
     // this.game.globals.groups.lights.forEach(function (light) {
     //     this.game.debug.body(light);
     // }, this);
+
+    // Draw enemy paths for the current level
+    if (this._debug) {
+        for (var i = 0; i < this.game.globals.enemyPaths.length; i++) {
+            var path = this.game.globals.enemyPaths[i];
+            for (var p = 1; p < path.length; p++) {
+                this.game.debug.geom(path[p]);
+                this.game.debug.geom(new Phaser.Line(
+                    path[p - 1].x, path[p - 1].y, path[p].x, path[p].y
+                ));
+            }
+        }
+    }
 };
 
 Sandbox.prototype.shutdown = function () {
