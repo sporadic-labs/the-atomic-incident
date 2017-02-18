@@ -214,6 +214,16 @@ Sandbox.prototype.create = function () {
     }
     this.menu = menu;
 
+    // Teleport using world position
+    var teleportKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
+    teleportKey.onDown.add(function () {
+        var player = this.game.globals.player;
+        player.position.setTo(
+            this.input.mousePointer.x + this.camera.x,
+            this.input.mousePointer.y + this.camera.y
+        );
+    }, this);
+
     // Toggle debugging SAT bodies
     var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
     debugToggleKey.onDown.add(function () {
@@ -269,14 +279,6 @@ Sandbox.prototype.update = function () {
     //     this.input.mousePointer.x + this.camera.x,
     //     this.input.mousePointer.y + this.camera.y
     // );
-
-    if (this.game.input.keyboard.isDown(Phaser.KeyCode.T)) {
-        var player = this.game.globals.player;
-        player.position.setTo(
-            this.input.mousePointer.x + this.camera.x,
-            this.input.mousePointer.y + this.camera.y
-        );
-    }
 
     var globals = this.game.globals;
     // If the user has right-clicked on the map, and a tower has been selected...
