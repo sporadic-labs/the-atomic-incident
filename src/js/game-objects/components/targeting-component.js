@@ -16,50 +16,65 @@ function TargetingComponent(parent, maxSpeed, visionDistance, path) {
     this._path = path;
 
     this._path = null;
-    if (Array.isArray(path)) {
-        this._path = new Path(path);
-        this._originalPath = this._path.clone();
-    }
-    
-    var lightTarget = this._findClosestLight();
-    this._switchTarget(lightTarget);
+    if (Array.isArray(path)) this._path = new Path(path);
 }
 
 TargetingComponent.prototype.update = function () {
     // Stop moving
     this.parent.body.velocity.set(0);
 
-    // Update the target to be the player or a light
     var distToPlayer = this._player.position.distance(this.parent.position);
-    if (distToPlayer <= this._visionDistance) {
-        // Player is in range, switch to targeting player
-        this._path = this._getPathToPoint(this._player);
-        this._switchTarget(this._player);
-    } else {
-        // If player is not in range and the target was previously the player,
-        // target a light
-        var wasTargetingPlayer = (this.target === this._player);
-        var isTargetDead = (this.target && this.target.health <= 0);
-        if (!this.target || wasTargetingPlayer || isTargetDead) {
-            var lightTarget = this._findClosestLight();
-            this._switchTarget(lightTarget);
+    var closestLight = this._findClosestLightInRange();
+
+    if (distToPlayer <= this._visionDistance) this._switchTarget(this._player);
+    else if (closestLight) this._switchTarget(closestLight);
+    else {
+        // Neither light or player is in range
+        if (this.target || !this._path) {
+            // If there was a target or the path is empty, pick a new path
+            this.target = null;
+            this._path = this._getClosestLevelPath();
         }
     }
 
     // Update the path to the target when needed
     if (this.target) {
-        var hasMoved = !this._lastTargetPosition.equals(this.target.position);
-        if (hasMoved || this._path === null) {
+        if (!this._lastTargetPosition.equals(this.target.position)) {
             this._path = this._getPathToPoint(this.target);
         }
-        
-        // If there is an a* path to the target, move to the next node
-        if (this._path) {
-            this._updateTargetPathNode();
-            this._moveTowards(this._path.getCurrentPoint());
+    }
+    
+    // If there is a path, move to the next node
+    if (this._path) {
+        var targetNode = this._path.getCurrentPoint();
+        // Fudge factor for advancing along the path
+        if (this.parent.world.distance(targetNode) < 5) {
+            this._path.advancePoint();
+        }
+        this._moveTowards(this._path.getCurrentPoint());
+    }
+
+    return this.target;
+};
+
+TargetingComponent.prototype._getClosestLevelPath = function () {
+    var paths = this.game.globals.enemyPaths;
+    var closestDistance = Infinity;
+    var closestPath = null;
+    var closestPointIndex = null;
+    for (var i = 0; i < paths.length; i++) {
+        var path = paths[i];
+        for (var p = path.length - 1; p >= 0; p--) {
+            var point = path[p];
+            var distance = this.parent.world.distance(point);
+            if (distance < closestDistance) {
+                closestPath = path;
+                closestPointIndex = p;
+                closestDistance = distance;
+            }
         }
     }
-    return this.target;
+    return new Path(closestPath, closestPointIndex);
 };
 
 TargetingComponent.prototype._getPathToPoint = function (point) {
@@ -91,15 +106,6 @@ TargetingComponent.prototype._getPathToPoint = function (point) {
     return null;
 };
 
-TargetingComponent.prototype._updateTargetPathNode = function () {
-    if (!this._path) return;
-    var pos = this.parent.world;
-    // If there is no target node or the parent is within a fudge factor of the
-    // current target node, then update the target
-    var targetNode = this._path.getCurrentPoint();
-    if (pos.distance(targetNode) < 5) this._path.advancePoint();
-};
-
 TargetingComponent.prototype._moveTowards = function (position) {
     var distance = this.parent.position.distance(position);
     var angle = this.parent.position.angle(position);
@@ -111,24 +117,29 @@ TargetingComponent.prototype._moveTowards = function (position) {
 
 TargetingComponent.prototype._switchTarget = function (target) {
     this.target = target;
-    this._path = null;
     this._targetPathNode = null;
-    if (target) this._lastTargetPosition = this.target.position.clone();
+    if (target) {
+        this._lastTargetPosition = this.target.position.clone();
+        this._path = this._getPathToPoint(this.target);
+    }
 };
 
-TargetingComponent.prototype._findClosestLight = function () {
+TargetingComponent.prototype._findClosestLightInRange = function () {
     var lights = this.game.globals.groups.lights;
-    var targetDistance = null;
+    var closestDistance = Infinity;
     var closestLight = null;
 
     // Target the closest light
     lights.forEach(function (light) {
         // Check if light is the "base" light that enemies should be targeting
         if (light instanceof DestructableLight) {
+            // Skip dead lights
+            if (light.health <= 0) return;
+            // Check if light is in vision radius and is closer than previous
             var distance = this.parent.world.distance(light.position);
-            if ((targetDistance === null) || distance < targetDistance) {
+            if (distance < this._visionDistance && distance < closestDistance) {
                 closestLight = light;
-                targetDistance = distance;
+                closestDistance = distance;
             }
         }
     }, this);
@@ -145,10 +156,11 @@ TargetingComponent.prototype.destroy = function () {
  * A light weight class for representing a path that an agent can travel along 
  * 
  * @param {Phaser.Point[]} points Array of points that make up the path
+ * @param {number} [startingPosition=0] Index of starting position in the path
  */
-function Path(points) {
+function Path(points, startingPosition) {
     this._points = points;
-    this._position = 0;
+    this._position = startingPosition || 0;
 }
 
 /**
