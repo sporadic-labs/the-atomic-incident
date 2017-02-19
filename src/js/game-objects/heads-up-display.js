@@ -24,7 +24,7 @@ function HeadsUpDisplay(game, parentGroup) {
     this._towerText = game.make.text(30, 100, "Tower: Pulse", textStyle);
     this.add(this._towerText);
     this._debugText = game.make.text(30, game.height - 45, 
-        "Debug ('E' key): false", textStyle);
+        "Debug ('E' key)", textStyle);
     this._debugText.fontSize = 14;
     this.add(this._debugText);
 }
@@ -35,7 +35,4 @@ HeadsUpDisplay.prototype.update = function () {
     var towerText = this.game.globals.towerList[this.game.globals.towerToPlace];
     if (!towerText) towerText = "none";
     this._towerText.setText("Tower: " + towerText);
-
-    this._debugText.setText("Debug ('E' key): " + 
-        this._satBodyPlugin.isDebugAllEnabled());
 };

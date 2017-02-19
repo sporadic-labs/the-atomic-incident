@@ -12,6 +12,7 @@ var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
+var DebugDisplay = require("../game-objects/debug-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
 var Tower = require("../game-objects/towers/tower.js");
 var TargetingTower = require("../game-objects/towers/targeting-tower.js");
@@ -175,6 +176,8 @@ Sandbox.prototype.create = function () {
 
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.foreground);
+    globals.debugDisplay = new DebugDisplay(game, groups.foreground);
+    
     
     // var Wave1 = require("../game-objects/waves/wave-1.js");
     // new Wave1(game);
@@ -224,21 +227,6 @@ Sandbox.prototype.create = function () {
             this.input.mousePointer.x + this.camera.x,
             this.input.mousePointer.y + this.camera.y
         );
-    }, this);
-
-    // Toggle debugging SAT bodies
-    var debugToggleKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
-    this._debug = false;
-    debugToggleKey.onDown.add(function () {
-        if (globals.plugins.satBody.isDebugAllEnabled()) {
-            globals.plugins.satBody.disableDebugAll();
-            globals.plugins.lighting.disableDebug();
-            this._debug = false;
-        } else {
-            globals.plugins.satBody.enableDebugAll();
-            globals.plugins.lighting.enableDebug();
-            this._debug = true;
-        }
     }, this);
 
     // Simple pause menu
@@ -345,15 +333,13 @@ Sandbox.prototype.render = function () {
     // }, this);
 
     // Draw enemy paths for the current level
-    if (this._debug) {
-        for (var i = 0; i < this.game.globals.enemyPaths.length; i++) {
-            var path = this.game.globals.enemyPaths[i];
-            for (var p = 1; p < path.length; p++) {
-                this.game.debug.geom(path[p]);
-                this.game.debug.geom(new Phaser.Line(
-                    path[p - 1].x, path[p - 1].y, path[p].x, path[p].y
-                ));
-            }
+    for (var i = 0; i < this.game.globals.enemyPaths.length; i++) {
+        var path = this.game.globals.enemyPaths[i];
+        for (var p = 1; p < path.length; p++) {
+            this.game.debug.geom(path[p]);
+            this.game.debug.geom(new Phaser.Line(
+                path[p - 1].x, path[p - 1].y, path[p].x, path[p].y
+            ));
         }
     }
 };
