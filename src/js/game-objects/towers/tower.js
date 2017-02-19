@@ -27,7 +27,7 @@ function Tower(game, x, y, parentGroup, value, damage, light) {
     // Different light color for tower in "placement" mode
     this._originalLightColor = light.color.clone();
     var placementLightColor = this._originalLightColor.clone();
-    placementLightColor.a = 100;
+    placementLightColor.a *= 0.4;
     this.light.color = placementLightColor;
 
     game.physics.arcade.enable(this);
