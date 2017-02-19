@@ -8,6 +8,7 @@ require("../plugins/AStar.js");
 var SlickUI = require("../plugins/slick-ui.min.js");
 
 var utils = require("../helpers/utilities.js");
+var lightUtils = require("../game-objects/lights/light-utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
@@ -152,10 +153,9 @@ Sandbox.prototype.create = function () {
     globals.towers = [];
     // A list of all towers
     globals.towerList = [
+        "circular",
+        "spotlight",
         "targeting",
-        "pulse",
-        "rotating",
-        "contracting"
     ];
     // A reference for the light you are about to place.
     globals.towerToPlace = null;
@@ -184,11 +184,6 @@ Sandbox.prototype.create = function () {
     var rotatingLightKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     rotatingLightKey.onDown.add(function () {
         globals.towerToPlace = 2
-    }, this);
-    // 4 = Contracting Tower
-    var contractingLightKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
-    contractingLightKey.onDown.add(function () {
-        globals.towerToPlace = 3
     }, this);
 
     // Use the space bar place your selected light at the players position
@@ -320,34 +315,26 @@ Sandbox.prototype.placeTower = function (x, y) {
     var towerPoint = new Phaser.Point(x, y);
     var tower;
     var parent = globals.groups.midground;
+    var lighting = globals.plugins.lighting;
     if (globals.towerToPlace === 0 && globals.player.coins >= 20) {
-        tower = new TargetingTower(this.game, x, y, parent, 20, 100);
+        // Static, circular light with low damage
+        var circularLight = lighting.addLight(towerPoint,
+            new Phaser.Circle(0, 0, 400), 
+            new Color("rgba(255, 255, 255, 0.5)"));
+        tower = new Tower(this.game, x, y, parent, 20, 10, circularLight);
         globals.towers.push(tower);
         globals.player.coins -= tower.value;
     } else if (globals.towerToPlace === 1 && globals.player.coins >= 20) {
-        // Pulse light tower
-        var pulsingLight = AnimatedLight.createPulsingCircle(this.game, 
-            towerPoint, new Phaser.Circle(0, 0, 300), 
-            new Color("rgba(255, 255, 255, 1)"), 1000, 1000, 250);
-        tower = new Tower(this.game, x, y, parent, 20, 20, 
-            pulsingLight);
+        // Static, spotlight with high damage
+        var spotPoly = lightUtils.generateSpotlightPolygon(0, 45, 250);
+        var spotlight = lighting.addLight(towerPoint, spotPoly, 
+            new Color("rgba(255, 255, 255, 0.75)"));
+        tower = new Tower(this.game, x, y, parent, 20, 40, spotlight);
         globals.towers.push(tower);
         globals.player.coins -= tower.value;
     } else if (globals.towerToPlace === 2 && globals.player.coins >= 30) {
-        // Rotating spotlight tower
-        var rotatingLight = AnimatedLight.createRotatingSpotlight(
-            this.game, towerPoint, 0, 60, 240, 0x8DCDE3FF, 90);
-        tower = new Tower(this.game, x, y, parent, 30, 100,
-            rotatingLight);
-        globals.towers.push(tower);
-        globals.player.coins -= tower.value;
-    } else if (this.game.globals.towerToPlace === 3 && globals.player.coins >= 20) {
-        // Contracting light tower
-        var contractingLight = AnimatedLight.createContractingCircle(
-            this.game, towerPoint, new Phaser.Circle(0, 0, 300), 
-            0x8DCDE3FF, 1000);
-        tower = new Tower(this.game, x, y, parent, 20, 50,
-            contractingLight);
+        // Targeting tower
+        tower = new TargetingTower(this.game, x, y, parent, 20, 100);
         globals.towers.push(tower);
         globals.player.coins -= tower.value;
     }
