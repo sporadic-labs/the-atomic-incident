@@ -5,6 +5,7 @@
 module.exports = Sandbox;
 
 require("../plugins/AStar.js");
+var SlickUI = require("../plugins/slick-ui.min.js");
 
 var utils = require("../helpers/utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
@@ -74,11 +75,16 @@ Sandbox.prototype.create = function () {
     globals.plugins = {
         satBody: game.plugins.add(SatBodyPlugin),
         astar: game.plugins.add(Phaser.Plugin.AStar),
-        lighting: game.plugins.add(LightingPlugin, groups.foreground, wallLayer)
+        lighting: game.plugins.add(LightingPlugin, groups.foreground, wallLayer),
+        ui: game.plugins.add(Phaser.Plugin.SlickUI)
     };
     this.lighting = globals.plugins.lighting;
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
+    // Slick UI
+    // NOTE(rex): The Kenny Theme is the default theme provided by Slick UI.
+    globals.plugins.ui.load('../../resources/themes/kenney/kenney.json');
+
 
     // Hack: make tiles visible over top of lighting layer
     var tiles = wallLayer.getTiles(0, 0, this.world.width, this.world.height);
@@ -239,6 +245,13 @@ Sandbox.prototype.create = function () {
         menu.push(b);
     }
     this.menu = menu;
+
+
+    // NOTE(rex): Testing the Slick UI...
+    var panel;
+    console.log(SlickUI);
+    globals.plugins.ui.add(panel = new SlickUI.Element.Panel(8, 8, 150, game.height - 16));
+
 
     // Teleport using world position
     var teleportKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
