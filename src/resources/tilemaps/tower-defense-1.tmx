@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="84">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="87">
  <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6">
   <image source="tiles_25.png" width="150" height="25"/>
  </tileset>
@@ -200,5 +200,13 @@
  </objectgroup>
  <objectgroup name="spawn points">
   <object id="82" x="2.66667" y="2.66667" width="144" height="105.333"/>
+ </objectgroup>
+ <objectgroup name="enemy paths">
+  <object id="84" name="outside" x="24" y="49">
+   <polyline points="0,0 21,215 55,370 99,519 152,564 227,508 281,397 316,272 367,174 429,160 465,219 419,292 380,361 383,465 421,546 473,616 638,654"/>
+  </object>
+  <object id="85" name="inside" x="115" y="44">
+   <polyline points="0,0 1,204 16,315 56,441 118,452 176,354 216,232 249,120 352,93 436,167 428,231 353,309 321,391 350,495 408,571 530,557"/>
+  </object>
  </objectgroup>
 </map>
