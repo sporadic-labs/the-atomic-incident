@@ -23,6 +23,17 @@ function TargetingTower(game, x, y, parentGroup, value, damage) {
     this.light = lighting.addLight(new Phaser.Point(x, y), polygon, 
         new Color("rgba(255, 255, 255, 1)"));
 
+    this._inPlacementMode = true;
+
+    // Create the keys for controlling placement
+    var keyboard = game.input.keyboard;
+    this._confirmKey = keyboard.addKey(Phaser.Keyboard.ENTER);
+
+    // Different light color for tower in "placement" mode
+    this._originalLightColor = this.light.color.clone();
+    var placementLightColor = new Color(0, 235, 47, 100);
+    this.light.color = placementLightColor;
+
     game.physics.arcade.enable(this);
     this.body.immovable = true;
     this.body.setCircle(this.width / 2);
@@ -61,17 +72,29 @@ TargetingTower.prototype.update = function () {
         else this.light.rotation += delta;
     }
 
-    // Damage enemies
-    var damage = this.damage * this.game.time.physicsElapsed;
-    spriteUtils.forEachRecursive(enemies, function (child) {
-        if (child instanceof Phaser.Sprite && child.takeDamage) {
-            // MH: why does world position not work here...
-            var inLight = this.light.isPointInLight(child.position);
-            if (inLight) {
-                child.takeDamage(damage);
-            }
+    if (this._inPlacementMode) {
+        if (this._confirmKey.isDown) {
+            this._inPlacementMode = false;
+            this.light.color = this._originalLightColor;
         }
-    }, this);
+        // Keep light at the player's point
+        this.position.copyFrom(this.game.globals.player.position);
+    } else {
+        // Damage enemies
+        var damage = this.damage * this.game.time.physicsElapsed;
+        spriteUtils.forEachRecursive(enemies, function (child) {
+            if (child instanceof Phaser.Sprite && child.takeDamage) {
+                // MH: why does world position not work here...
+                var inLight = this.light.isPointInLight(child.position);
+                if (inLight) {
+                    child.takeDamage(damage);
+                }
+            }
+        }, this);
+    }
+    
+    // Keep the light in sync with the tower's position
+    this.light.position.copyFrom(this.position);
 };
 
 TargetingTower.prototype.destroy = function () {
