@@ -26,7 +26,8 @@ function Tower(game, x, y, parentGroup, value, damage, light) {
 
     // Different light color for tower in "placement" mode
     this._originalLightColor = light.color.clone();
-    var placementLightColor = new Color(0, 235, 47, 100);
+    var placementLightColor = this._originalLightColor.clone();
+    placementLightColor.a = 100;
     this.light.color = placementLightColor;
 
     game.physics.arcade.enable(this);
@@ -44,8 +45,14 @@ Tower.prototype.update = function () {
             this._inPlacementMode = false;
             this.light.color = this._originalLightColor;
         }
-        // Keep light at the player's point
-        this.position.copyFrom(this.game.globals.player.position);
+        // Keep light slighting in front of the player
+        var player = this.game.globals.player;
+        var playerHeading = player.rotation - (Math.PI/2);
+        var offset = player.width * 1.20;
+        this.position.set(
+            player.position.x + offset * Math.cos(playerHeading),
+            player.position.y + offset * Math.sin(playerHeading)
+        );
     } else {
         // Damage enemies
         var enemies = this.game.globals.groups.enemies;

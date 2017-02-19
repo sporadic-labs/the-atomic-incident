@@ -27,11 +27,14 @@ function TargetingTower(game, x, y, parentGroup, value, damage) {
 
     // Create the keys for controlling placement
     var keyboard = game.input.keyboard;
+    this._rotateLeftKey = keyboard.addKey(Phaser.Keyboard.LEFT);
+    this._rotateRightKey = keyboard.addKey(Phaser.Keyboard.RIGHT);
     this._confirmKey = keyboard.addKey(Phaser.Keyboard.ENTER);
 
     // Different light color for tower in "placement" mode
     this._originalLightColor = this.light.color.clone();
-    var placementLightColor = new Color(0, 235, 47, 100);
+    var placementLightColor = this._originalLightColor.clone();
+    placementLightColor.a = 100;
     this.light.color = placementLightColor;
 
     game.physics.arcade.enable(this);
@@ -73,12 +76,22 @@ TargetingTower.prototype.update = function () {
     }
 
     if (this._inPlacementMode) {
-        if (this._confirmKey.isDown) {
+        if (this._rotateLeftKey.isDown) {
+            this.light.rotation -= Math.PI * this.game.time.physicsElapsed;
+        } else if (this._rotateRightKey.isDown) {
+            this.light.rotation += Math.PI * this.game.time.physicsElapsed;
+        } else if (this._confirmKey.isDown) {
             this._inPlacementMode = false;
             this.light.color = this._originalLightColor;
         }
-        // Keep light at the player's point
-        this.position.copyFrom(this.game.globals.player.position);
+        // Keep light slighting in front of the player
+        var player = this.game.globals.player;
+        var playerHeading = player.rotation - (Math.PI/2);
+        var offset = player.width * 1.20;
+        this.position.set(
+            player.position.x + offset * Math.cos(playerHeading),
+            player.position.y + offset * Math.sin(playerHeading)
+        );
     } else {
         // Damage enemies
         var damage = this.damage * this.game.time.physicsElapsed;
