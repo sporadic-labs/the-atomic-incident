@@ -163,6 +163,27 @@ Sandbox.prototype.create = function () {
             globals.towerToPlace++;
         }
     }, this);
+    // Allow the user to select towers using the number keys.
+    // 1 = Targeting Tower
+    var targetingLightKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    targetingLightKey.onDown.add(function () {
+        globals.towerToPlace = 0
+    }, this);
+    // 2 = Pulsing Tower
+    var pulseLightKey = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    pulseLightKey.onDown.add(function () {
+        globals.towerToPlace = 1
+    }, this);
+    // 3 = Rotating Tower
+    var rotatingLightKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+    rotatingLightKey.onDown.add(function () {
+        globals.towerToPlace = 2
+    }, this);
+    // 4 = Contracting Tower
+    var contractingLightKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+    contractingLightKey.onDown.add(function () {
+        globals.towerToPlace = 3
+    }, this);
 
     // Use the space bar place your selected light at the players position
     var placeLightKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
