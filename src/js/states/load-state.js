@@ -47,6 +47,6 @@ LoadState.prototype.create = function () {
     this.loadingText.setText("100%");
 
     // this.game.state.start("start"); // start screen
-    this.game.state.start("sandbox"); // for testing
+    this.game.state.start("slick-ui-test"); // for testing
 
 };
