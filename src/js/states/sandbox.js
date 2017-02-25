@@ -5,7 +5,8 @@
 module.exports = Sandbox;
 
 require("../plugins/AStar.js");
-var SlickUI = require("../plugins/slick-ui.min.js");
+
+var SlickUI = require("../plugins/slick-ui.js");
 
 var utils = require("../helpers/utilities.js");
 var lightUtils = require("../game-objects/lights/light-utilities.js");
