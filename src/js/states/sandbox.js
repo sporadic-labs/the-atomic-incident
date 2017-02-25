@@ -83,10 +83,6 @@ Sandbox.prototype.create = function () {
     this.lighting = globals.plugins.lighting;
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
-    // Slick UI
-    // NOTE(rex): The Kenny Theme is the default theme provided by Slick UI.
-    globals.plugins.ui.load('../../resources/themes/kenny/kenney.json');
-
 
     // Hack: make tiles visible over top of lighting layer
     var tiles = wallLayer.getTiles(0, 0, this.world.width, this.world.height);

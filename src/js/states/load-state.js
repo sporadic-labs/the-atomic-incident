@@ -26,7 +26,7 @@ LoadState.prototype.preload = function () {
 
     // SlickUI theme assets
     var slickUI = this.game.globals.plugins.slickUI;
-    slickUI.load("resources/themes/kenney/kenney.json");
+    slickUI.load("resources/themes/kenny/kenney.json");
 
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
