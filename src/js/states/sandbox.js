@@ -74,12 +74,12 @@ Sandbox.prototype.create = function () {
     globals.tileMapLayer = wallLayer;
 
     // Plugins
-    globals.plugins = {
-        satBody: game.plugins.add(SatBodyPlugin),
-        astar: game.plugins.add(Phaser.Plugin.AStar),
-        lighting: game.plugins.add(LightingPlugin, groups.foreground, wallLayer),
-        ui: game.plugins.add(Phaser.Plugin.SlickUI)
-    };
+    global.plugins = (global.plugins !== undefined ) ? global.plugins : {}; 
+    globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
+    globals.plugins.astar = game.plugins.add(Phaser.Plugin.AStar); 
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, 
+        groups.foreground, wallLayer); 
+    globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     this.lighting = globals.plugins.lighting;
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
