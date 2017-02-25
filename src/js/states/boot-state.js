@@ -18,5 +18,10 @@ BootState.prototype.create = function () {
     this.stage.disableVisibilityChange = true;
     this.stage.backgroundColor = "#F9F9F9";
 
+    // Load any plugins
+    var globals = this.game.globals;
+    globals.plugins.SlickUI = require("../plugins/slick-ui");
+    globals.plugins.slickUI = this.game.plugins.add(Phaser.Plugin.SlickUI);
+
     this.game.state.start("load");
 };

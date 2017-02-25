@@ -16,11 +16,7 @@ globals.tilemapFiles = [
     "tower-defense-2.json",
     "tower-defense-1.json",
 ];
-
-// Load any plugins
 globals.plugins = {};
-globals.plugins.SlickUI = require("./plugins/slick-ui");
-globals.plugins.slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
 
 game.state.add("boot", BootState);
 game.state.add("load", LoadState);
