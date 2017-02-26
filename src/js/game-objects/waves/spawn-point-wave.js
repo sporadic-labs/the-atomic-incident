@@ -15,6 +15,8 @@ function SpawnPointWave(game) {
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
 
+    this._startingDelayBetweenWaves = 6000; // ms
+
     /**
      * Array of possible wave types where each element is an object that 
      * describes a wave:
@@ -51,8 +53,13 @@ function SpawnPointWave(game) {
 SpawnPointWave.prototype._spawnCluster = function () {
     var region = this.game.rnd.pick(this._spawnRegions);
     this._spawnSeriesWithDelay(region, 3, 200);
+    // Increment the global waveNum
+    this.game.globals.waveNum++;
+    // NOTE(rex): Hack a difficulty curve...
+    var mod = 100 / (100 - (this.game.globals.waveNum * 2));
+    var delay = this._startingDelayBetweenWaves * mod;
     // Schedule next spawn
-    this._timer.add(6000, this._spawnCluster.bind(this));
+    this._timer.add(delay, this._spawnCluster.bind(this));
 };
 
 SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, numToSpawn, 

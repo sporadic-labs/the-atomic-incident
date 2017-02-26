@@ -215,6 +215,10 @@ Sandbox.prototype.create = function () {
     }
     globals.enemyPaths = enemyPaths;
 
+    // Keep track of what wave the player is on using the globals object.
+    var waveNum = 0;
+    globals.waveNum = waveNum;
+
     var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
     globals.spawnEnemies = new SpawnerWave(game);
 
@@ -342,15 +346,15 @@ Sandbox.prototype.render = function () {
     // }, this);
 
     // Draw enemy paths for the current level
-    for (var i = 0; i < this.game.globals.enemyPaths.length; i++) {
-        var path = this.game.globals.enemyPaths[i];
-        for (var p = 1; p < path.length; p++) {
-            this.game.debug.geom(path[p]);
-            this.game.debug.geom(new Phaser.Line(
-                path[p - 1].x, path[p - 1].y, path[p].x, path[p].y
-            ));
-        }
-    }
+    // for (var i = 0; i < this.game.globals.enemyPaths.length; i++) {
+    //     var path = this.game.globals.enemyPaths[i];
+    //     for (var p = 1; p < path.length; p++) {
+    //         this.game.debug.geom(path[p]);
+    //         this.game.debug.geom(new Phaser.Line(
+    //             path[p - 1].x, path[p - 1].y, path[p].x, path[p].y
+    //         ));
+    //     }
+    // }
 };
 
 Sandbox.prototype.shutdown = function () {

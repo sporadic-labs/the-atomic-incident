@@ -23,6 +23,8 @@ function HeadsUpDisplay(game, parentGroup) {
     this.add(this._coinsText);
     this._towerText = game.make.text(30, 100, "Tower: Pulse", textStyle);
     this.add(this._towerText);
+    this._waveNum = game.make.text(30, 140, "Wave: 0", textStyle);
+    this.add(this._waveNum);
     this._debugText = game.make.text(30, game.height - 45, 
         "Debug ('E' key)", textStyle);
     this._debugText.fontSize = 14;
@@ -32,6 +34,7 @@ function HeadsUpDisplay(game, parentGroup) {
 HeadsUpDisplay.prototype.update = function () {
     this._coinsText.setText("Coins: " + this._player.coins);
     this._heartsText.setText("Hearts: " + this._player.hearts);
+    this._waveNum.setText("Wave: " + this.game.globals.waveNum);
     var towerText = this.game.globals.towerList[this.game.globals.towerToPlace];
     if (!towerText) towerText = "none";
     this._towerText.setText("Tower: " + towerText);
