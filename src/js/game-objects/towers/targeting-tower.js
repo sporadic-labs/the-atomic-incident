@@ -4,6 +4,12 @@ var spriteUtils = require("../../helpers/sprite-utilities.js");
 var lightUtils = require("../lights/light-utilities.js");
 var Color = require("../../helpers/Color.js");
 
+var UI_MODE = {
+    PLACING_POSITION: "placing position",
+    SETTING_ROTATION: "setting rotation",
+    FINISHED_PLACEMENT: "finished placement"
+};
+
 // Prototype chain - inherits from Sprite
 TargetingTower.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -23,17 +29,22 @@ function TargetingTower(game, x, y, parentGroup, value, damage) {
     this.light = lighting.addLight(new Phaser.Point(x, y), polygon, 
         new Color("rgba(255, 255, 255, 1)"));
 
-    this._inPlacementMode = true;
+    this._uiMode = UI_MODE.PLACING_POSITION;
 
-    // Create the keys for controlling placement
-    var keyboard = game.input.keyboard;
-    this._rotateLeftKey = keyboard.addKey(Phaser.Keyboard.LEFT);
-    this._rotateRightKey = keyboard.addKey(Phaser.Keyboard.RIGHT);
-    this.game.input.activePointer.rightButton.onDown.addOnce(function () {
-        this._inPlacementMode = false;
+    // UI handlers for placing and rotating the tower
+    var rightButtonDown = this.game.input.activePointer.rightButton.onDown;
+    var onFirstClick = function () {
+        // Position set, move to setting rotation
+        this._uiMode = UI_MODE.SETTING_ROTATION;
+        rightButtonDown.addOnce(onSecondClick, this);
+    };
+    var onSecondClick = function () {
+        // Rotation set, finished placement
+        this._uiMode = UI_MODE.FINISHED_PLACEMENT;
         this.light.color = this._originalLightColor;
-    }, this);
-
+    }
+    rightButtonDown.addOnce(onFirstClick, this);
+    
     // Different light color for tower in "placement" mode
     this._originalLightColor = this.light.color.clone();
     var placementLightColor = this._originalLightColor.clone();
@@ -78,12 +89,8 @@ TargetingTower.prototype.update = function () {
         else this.light.rotation += delta;
     }
 
-    if (this._inPlacementMode) {
-        if (this._rotateLeftKey.isDown) {
-            this.light.rotation -= Math.PI * this.game.time.physicsElapsed;
-        } else if (this._rotateRightKey.isDown) {
-            this.light.rotation += Math.PI * this.game.time.physicsElapsed;
-        }
+    
+    if (this._uiMode == UI_MODE.PLACING_POSITION) {
         // Keep light slighting in front of the player
         var player = this.game.globals.player;
         var playerHeading = player.rotation - (Math.PI/2);
@@ -92,6 +99,12 @@ TargetingTower.prototype.update = function () {
             player.position.x + offset * Math.cos(playerHeading),
             player.position.y + offset * Math.sin(playerHeading)
         );
+    } else if (this._uiMode == UI_MODE.SETTING_ROTATION) {
+        var mousePoint = new Phaser.Point(
+            this.game.input.mousePointer.x + this.game.camera.x,
+            this.game.input.mousePointer.y + this.game.camera.y
+        );
+        this.light.rotation = this.light.position.angle(mousePoint);
     } else {
         // Damage enemies
         var damage = this.damage * this.game.time.physicsElapsed;
