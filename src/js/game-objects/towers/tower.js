@@ -22,7 +22,10 @@ function Tower(game, x, y, parentGroup, value, damage, light) {
     var keyboard = game.input.keyboard;
     this._rotateLeftKey = keyboard.addKey(Phaser.Keyboard.LEFT);
     this._rotateRightKey = keyboard.addKey(Phaser.Keyboard.RIGHT);
-    this._confirmKey = keyboard.addKey(Phaser.Keyboard.ENTER);
+    this.game.input.activePointer.rightButton.onDown.addOnce(function () {
+        this._inPlacementMode = false;
+        this.light.color = this._originalLightColor;
+    }, this);
 
     // Different light color for tower in "placement" mode
     this._originalLightColor = light.color.clone();
@@ -41,10 +44,7 @@ Tower.prototype.update = function () {
             this.light.rotation -= Math.PI * this.game.time.physicsElapsed;
         } else if (this._rotateRightKey.isDown) {
             this.light.rotation += Math.PI * this.game.time.physicsElapsed;
-        } else if (this._confirmKey.isDown) {
-            this._inPlacementMode = false;
-            this.light.color = this._originalLightColor;
-        }
+        } 
         // Keep light slighting in front of the player
         var player = this.game.globals.player;
         var playerHeading = player.rotation - (Math.PI/2);
