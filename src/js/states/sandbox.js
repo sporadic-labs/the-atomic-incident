@@ -17,6 +17,7 @@ var DebugDisplay = require("../game-objects/debug-display.js");
 var DestructableLight = require("../game-objects/destructable-light.js");
 var Tower = require("../game-objects/towers/tower.js");
 var TargetingTower = require("../game-objects/towers/targeting-tower.js");
+var ProjectileTower = require("../game-objects/towers/projectile-tower.js");
 var AnimatedLight = require("../game-objects/lights/animated-light.js");
 var Color = require("../helpers/Color.js");
 
@@ -151,6 +152,7 @@ Sandbox.prototype.create = function () {
         "circular",
         "spotlight",
         "targeting",
+        "projectile"
     ];
     // A reference for the light you are about to place.
     globals.towerToPlace = null;
@@ -179,6 +181,11 @@ Sandbox.prototype.create = function () {
     var rotatingLightKey = game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     rotatingLightKey.onDown.add(function () {
         globals.towerToPlace = 2
+    }, this);
+    // 4 = Projectile Tower
+    var projectileLightKey = game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+    projectileLightKey.onDown.add(function () {
+        globals.towerToPlace = 3
     }, this);
 
     // Use the space bar place your selected light at the players position
@@ -327,6 +334,11 @@ Sandbox.prototype.placeTower = function (x, y) {
     } else if (globals.towerToPlace === 2 && globals.player.coins >= 30) {
         // Targeting tower
         tower = new TargetingTower(this.game, x, y, parent, 20, 100);
+        globals.towers.push(tower);
+        globals.player.coins -= tower.value;
+    } else if (globals.towerToPlace === 3 && globals.player.coins >= 30) {
+        // Projectile tower
+        tower = new ProjectileTower(this.game, x, y, parent, 20, 100);
         globals.towers.push(tower);
         globals.player.coins -= tower.value;
     }
