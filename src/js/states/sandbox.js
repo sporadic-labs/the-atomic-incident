@@ -235,19 +235,7 @@ Sandbox.prototype.create = function () {
         menu.push(b);
     }
     this.menu = menu;
-
-
-    // NOTE(rex): Testing the Slick UI...
-    var panel;
-    var slickUI = globals.plugins.slickUI;
-    var SlickUI = globals.plugins.SlickUI;
-    slickUI.add(panel = new SlickUI.Element.Panel(8, 8, 150, game.height - 16));
-    var button;
-    panel.add(button = new SlickUI.Element.Button(0,0, 140, 80));
-    button.events.onInputUp.add(function () {console.log('Clicked button');});
-    button.add(new SlickUI.Element.Text(0,0, "My button")).center()
-
-
+    
     // Teleport using world position
     var teleportKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
     teleportKey.onDown.add(function () {
