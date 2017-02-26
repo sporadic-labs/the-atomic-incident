@@ -15,7 +15,7 @@ function SpawnPointWave(game) {
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
 
-    this._startingDelayBetweenWaves = 6000; // ms
+    this._startingDelayBetweenWaves = 24000; // ms
 
     /**
      * Array of possible wave types where each element is an object that 
@@ -24,10 +24,10 @@ function SpawnPointWave(game) {
      *      ..., total: numEnemiesInWave, name: nameForDebugging }
      */
     this._waveTypes = [
-        {probability: 0.2, waveType: new WaveType(game, "Bombers", 0, 2)},
-        {probability: 0.5, waveType: new WaveType(game, "Attackers", 4, 0)},
-        {probability: 0.2, waveType: new WaveType(game, "Mixed", 3, 1)},
-        {probability: 0.1, waveType: new WaveType(game, "AttackersRush", 6, 0)}
+        {probability: 0.2, waveType: new WaveType(game, "Bombers", 0, 11)},
+        {probability: 0.5, waveType: new WaveType(game, "Attackers", 14, 0)},
+        {probability: 0.2, waveType: new WaveType(game, "Mixed", 10, 5)},
+        {probability: 0.1, waveType: new WaveType(game, "AttackersRush", 18, 0)}
     ];
 
     // Fix to make this wave work with maps that don't have spawn points defined
@@ -52,18 +52,19 @@ function SpawnPointWave(game) {
 
 SpawnPointWave.prototype._spawnCluster = function () {
     var region = this.game.rnd.pick(this._spawnRegions);
-    this._spawnSeriesWithDelay(region, 3, 200);
+    var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 200;
+    this._spawnSeriesWithDelay(region, rndDelay);
     // Increment the global waveNum
     this.game.globals.waveNum++;
     // NOTE(rex): Hack a difficulty curve...
-    var mod = 100 / (100 - (this.game.globals.waveNum * 2));
-    var delay = this._startingDelayBetweenWaves * mod;
+    // TODO(rex): This should be better...
+    var mod = (100 - (this.game.globals.waveNum * 2)) / 100;
+    var modDelay = this._startingDelayBetweenWaves * mod;
     // Schedule next spawn
-    this._timer.add(delay, this._spawnCluster.bind(this));
+    this._timer.add(modDelay, this._spawnCluster.bind(this));
 };
 
-SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, numToSpawn, 
-        delay) {
+SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, delay) {
     // Pick a wave type and get the first enemy
     var waveType = this._pickWaveType();
     waveType.startNewSpawn();

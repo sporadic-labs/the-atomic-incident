@@ -33,7 +33,7 @@ ShadowEnemy.prototype.update = function () {
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
     // Collisions with other enemies
-    spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
+    // spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
     
     // Update targeting
     var target = this._targetingComponent.update();
