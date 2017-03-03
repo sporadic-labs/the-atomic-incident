@@ -132,8 +132,11 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         var light = this.lights[i];
         if (!light.enabled) continue;
         light.update();
-        var points = this._castLight(light);
-        this._drawLight(light, points);
+        if (light.needsRedraw) {
+            var points = this._castLight(light);
+            light.redraw(points); // World coordinates
+        }
+        this._drawLight(light);
 
         // Draw the light rays - this gets pretty messy with multiple lights,
         // so only draw one of them
@@ -217,8 +220,7 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light) {
     return points;
 };
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
-    light.redraw(points); // World coordinates
+Phaser.Plugin.Lighting.prototype._drawLight = function (light) {
     var r = new Phaser.Rectangle(0, 0, light._bitmap.width, 
         light._bitmap.height);
     var p = this._convertWorldPointToLocal(light.getTopLeft());

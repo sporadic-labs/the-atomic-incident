@@ -57,3 +57,11 @@ Color.prototype.getWebColor = function () {
 Color.prototype.clone = function () {
     return new Color(this.r, this.g, this.b, this.a);
 };
+
+/**
+ * Return deep copy of the color
+ * @returns {Color}
+ */
+Color.prototype.equals = function (c) {
+    return this.r === c.r && this.g === c.g && this.b === c.b && this.a === c.a;
+};

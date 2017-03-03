@@ -19,12 +19,16 @@ function Light(game, parent, position, shape, color) {
     this.shape = shape;
     this.color = (color instanceof Color) ? color : new Color(color);
     this.enabled = true;
+    this.needsRedraw = true;
     this._isDebug = false;
     this._debugGraphics = null;
-    this._needsRedraw = true;
     this.position = position.clone();
     this.rotation = 0;
     this.id = Light.instances++;
+
+    this._lastRotation = this.rotation;
+    this._lastPosition = position.clone();
+    this._lastColor = this.color.clone();
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
@@ -124,13 +128,22 @@ Light.prototype._setRotation = function (angle) {
 };
 
 Light.prototype.update = function () {
+    // Check for changes that require a redraw
     if (this._lastRotation !== this.rotation) {
         this._setRotation(this.rotation);
         this._lastRotation = this.rotation;
+        this.needsRedraw = true;
     }
-    // For now, force redrawing and recalculating of the walls each frame
-    this._needsRedraw = true;
-    this.intersectingWalls = this._recalculateWalls();
+    if (!this._lastPosition.equals(this.position)) {
+        this._lastPosition.copyFrom(this.position);
+        this.needsRedraw = true;
+    }
+    if (!this._lastColor.equals(this.color)) {
+        this._lastColor = this.color.clone();
+        this.needsRedraw = true;
+    }
+
+    if (this.needsRedraw) this.intersectingWalls = this._recalculateWalls();
     if (this._debugGraphics) this._updateDebug();
 };
 
@@ -240,11 +253,11 @@ Light.prototype.getLightRay = function (angle) {
 Light.prototype.redraw = function (points) {
     // Light is expecting these points to be in world coordinates, since its own
     // position is in world coordinates
-    if (this._needsRedraw) {
+    if (this.needsRedraw) {
         // Clear offscreen buffer
         this.redrawLight();
         this.redrawShadow(points);      
-        this._needsRedraw = false;
+        this.needsRedraw = false;
         this._bitmap.update(); // Update bitmap so that pixels can be queried
     }
 };
