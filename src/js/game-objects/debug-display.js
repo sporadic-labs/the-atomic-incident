@@ -46,13 +46,30 @@ function DebugDisplay(game, parentGroup) {
         if (this._lightsDebug) globals.plugins.lighting.enableDebug();
         else globals.plugins.lighting.disableDebug();
     }, this);
+
+    this._checkShadowText = game.make.text(30, 300, "Mouse in shadow: no", 
+        textStyle);
+    this.add(this._checkShadowText);
 }
 
 DebugDisplay.prototype.update = function () {
     this._satText.setText("Debug SAT: " + boolToOnOff(this._satDebug));
     this._lightsText.setText("Debug Lights: " + boolToOnOff(this._lightsDebug));
+
+    // Check if mouse is in shadow
+    var game = this.game;
+    var mousePoint = new Phaser.Point(
+        game.input.mousePointer.x + game.camera.x,
+        game.input.mousePointer.y + game.camera.y
+    );
+    var inShadow = game.globals.plugins.lighting.isPointInShadow(mousePoint);
+    this._checkShadowText.setText("Mouse in shadow: " + boolToYesNo(inShadow));
 };
 
 function boolToOnOff(boolValue) {
     return boolValue ? "On" : "Off";
+}
+
+function boolToYesNo(boolValue) {
+    return boolValue ? "Yes" : "No";
 }
