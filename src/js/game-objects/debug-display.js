@@ -47,9 +47,9 @@ function DebugDisplay(game, parentGroup) {
         else globals.plugins.lighting.disableDebug();
     }, this);
 
-    this._checkShadowText = game.make.text(30, 300, "Mouse in shadow: no", 
+    this._mouseLightText = game.make.text(30, 300, "Mouse in light: No", 
         textStyle);
-    this.add(this._checkShadowText);
+    this.add(this._mouseLightText);
 }
 
 DebugDisplay.prototype.update = function () {
@@ -63,7 +63,7 @@ DebugDisplay.prototype.update = function () {
         game.input.mousePointer.y + game.camera.y
     );
     var inShadow = game.globals.plugins.lighting.isPointInShadow(mousePoint);
-    this._checkShadowText.setText("Mouse in shadow: " + boolToYesNo(inShadow));
+    this._mouseLightText.setText("Mouse in light: " + boolToYesNo(!inShadow));
 };
 
 function boolToOnOff(boolValue) {
