@@ -83,12 +83,12 @@ Sandbox.prototype.create = function () {
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
 
-    // Hack: make tiles visible over top of lighting layer
-    var tiles = wallLayer.getTiles(0, 0, this.world.width, this.world.height);
-    tiles.forEach(function (t) {
-        t.alpha = 0.6;
-    });
-    wallLayer.bringToTop();
+    // // Hack: make tiles visible over top of lighting layer
+    // var tiles = wallLayer.getTiles(0, 0, this.world.width, this.world.height);
+    // tiles.forEach(function (t) {
+    //     t.alpha = 0.6;
+    // });
+    // wallLayer.bringToTop();
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
