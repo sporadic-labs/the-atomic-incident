@@ -32,35 +32,32 @@ function Light(game, parent, position, shape, color) {
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
+        // For a circlular light, the bitmap is set to be the size of the
+        // circle. The light should then be drawn in the center of the bitmap.
         this._bitmap = game.add.bitmapData(shape.diameter, shape.diameter);
-        this._containingRadius = shape.radius;
+        this._boundingRadius = shape.radius;
     } else if (shape instanceof Phaser.Polygon) {
+        // For a polygon light, the bitmap is set to be the size of bounding
+        // circle around the polygon. That means that the polygon can rotate
+        // without a point going beyond the bitmap. That also means that we need
+        // to make sure the polygon's scale doesn't get increased anywhere!
         var points = shape.toNumberArray();
-        // Find the bounding box around the polygon
-        var minX = points[0];
-        var maxX = points[0];
-        var minY = points[1];
-        var maxY = points[1];
+        // Cache the original shape for the purposes of rotating
         this._originalShape = shape.clone();
         this._originalPoints = [];
+        this._boundingRadius = 0;
+        var center = new Phaser.Point(0, 0); // Points are relative to (0, 0)
+        // Convert the points to Phaser.Point and find the bounding radius
         for (var i = 0; i < points.length; i += 2) {
-            var x = points[i];
-            var y = points[i + 1];
-            if (x < minX) minX = x;
-            if (x > maxX) maxX = x;
-            if (y < minY) minY = y;
-            if (y > maxY) maxY = y;
-            this._originalPoints.push(new Phaser.Point(x, y));
+            var p = new Phaser.Point(points[i], points[i + 1]);
+            this._originalPoints.push(p);
+            var d = center.distance(p);
+            if (d > this._boundingRadius) this._boundingRadius = d;
         }
-        this._width = Math.abs(maxX - minX);
-        this._height = Math.abs(maxY - minY);
-        // Old method: fitting the bitmap to the polygon. For now, creating a 
-        // bitmap that matches the screen size so that we can do rotations 
-        // easily without doing complex coordinate transformations. TODO: 
-        // optimize and shrink the bitmap to the smallest size needed
-        this._bitmap = game.add.bitmapData(game.width, game.height);
-        // Define a circle that contains the polygon
-        this._containingRadius = Math.max(this._width, this._height);
+        this._bitmap = game.add.bitmapData(
+            2 * this._boundingRadius, 
+            2 * this._boundingRadius
+        );
         this._setRotation(0);
     }
 
@@ -165,8 +162,8 @@ Light.prototype.getLightRay = function (angle) {
         // from old rectangle shape code in this commit: 
         //  e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
         ray.end.setTo(
-            this.position.x + Math.cos(angle) * this._containingRadius,
-            this.position.y + Math.sin(angle) * this._containingRadius
+            this.position.x + Math.cos(angle) * this._boundingRadius,
+            this.position.y + Math.sin(angle) * this._boundingRadius
         );
         return ray;
     }
@@ -199,18 +196,23 @@ Light.prototype.redrawLight = function () {
 
     var shape = this.shape;
     if (shape instanceof Phaser.Circle) {
+        // Draw the circle in the center of the bitmap
         this._bitmap.circle(shape.radius, shape.radius, shape.radius * 1, c3);
         this._bitmap.circle(shape.radius, shape.radius, shape.radius * 0.6, c2);
         this._bitmap.circle(shape.radius, shape.radius, shape.radius * 0.4, c1);
     } else if (shape instanceof Phaser.Polygon) {
+        // Draw the polygon using the underlying bitmap. The points are relative
+        // to the center of the bitmap (light.position is the center of the
+        // bitmap). The center of the bitmap is at the location
+        // (boundingRadius, boundingRadius), so shift each point by the radius
         this._bitmap.ctx.fillStyle = c1;
         this._bitmap.ctx.beginPath();
-        this._bitmap.ctx.moveTo(offset.x + this._points[0].x, 
-            offset.y + this._points[0].y);
+        this._bitmap.ctx.moveTo(this._boundingRadius + this._points[0].x, 
+            this._boundingRadius + this._points[0].y);
         for (var i = 1; i < this._points.length; i += 1) {
             this._bitmap.ctx.lineTo(
-                offset.x + this._points[i].x, 
-                offset.y + this._points[i].y);
+                this._boundingRadius + this._points[i].x, 
+                this._boundingRadius + this._points[i].y);
         }
         this._bitmap.ctx.closePath();
         this._bitmap.ctx.fill();
@@ -228,15 +230,14 @@ Light.prototype.getTopLeft = function () {
             this.position.x - this.shape.radius,
             this.position.y - this.shape.radius
         );
-    } else if (this.shape instanceof Phaser.Rectangle) {
+    } else if (this.shape instanceof Phaser.Polygon) {
+        // Polygon bitmap is set to be the size of the bounding circle. The
+        // light's position is in the center of the bitmap, so to get from the
+        // position to the top left, simply shift by the circle radius.
         return new Phaser.Point(
-            this.position.x - (this.shape.width / 2),
-            this.position.y - (this.shape.height / 2)
+            this.position.x - this._boundingRadius,
+            this.position.y - this._boundingRadius
         );
-    } else {
-        // Polygon bitmap is set to the screen size, so its top left should 
-        // match the camera's location
-        return this.game.camera.position.clone();
     }
 };
 
@@ -299,7 +300,7 @@ Light.prototype._recalculateWalls = function () {
         // more accurate circle vs line collision detection algorithms that we
         // could use if needed...
         var dist = wall.midpoint.distance(this.position);
-        if (dist > (this._containingRadius + (wall.length / 2))) continue;
+        if (dist > (this._boundingRadius + (wall.length / 2))) continue;
 
         // Shift the light so that its origin is at the wall midpoint, then 
         // calculate the dot of the that and the normal. This way both vectors
