@@ -15,8 +15,7 @@ function ShadowEnemy(game, x, y, parentGroup) {
 
     this._damage = 10; // 10 units per second
 
-    var rndPath = game.rnd.integerInRange(0, game.globals.enemyPaths.length - 1);
-    this._targetingComponent = new TargetingComponent(this, 75, 125, game.globals.enemyPaths[rndPath]);
+    this._targetingComponent = new TargetingComponent(this, 75);
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
@@ -31,9 +30,6 @@ function ShadowEnemy(game, x, y, parentGroup) {
 ShadowEnemy.prototype.update = function () {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
-
-    // Collisions with other enemies
-    // spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
     
     // Update targeting
     var target = this._targetingComponent.update();
