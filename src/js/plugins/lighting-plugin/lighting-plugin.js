@@ -138,20 +138,21 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         }
         this._drawLight(light);
 
-        // Disabled for now, since now all lights have their points recalculated
-        // on every frame:
-        // // Draw the light rays - this gets pretty messy with multiple lights,
-        // // so only draw one of them
-        // if (this._debugEnabled && (i === this._debugLightIndex)) {
-        //     var localPoints = points.map(this._convertWorldPointToLocal, this);
-        //     var lightPoint = this._convertWorldPointToLocal(light.position);
-        //     for(var k = 0; k < localPoints.length; k++) {
-        //         var p = localPoints[k];
-        //         this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y,
-        //             "rgb(255, 255, 255)", 1);
-        //         this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 255, 255)");
-        //     }
-        // }
+        // Draw the light rays - this gets pretty messy with multiple lights,
+        // so only draw one of them
+        if (this._debugEnabled && (i === this._debugLightIndex)) {
+            // Recalculate the points in case the light didn't need to be
+            // redrawn
+            var points = this._castLight(light);
+            var localPoints = points.map(this._convertWorldPointToLocal, this);
+            var lightPoint = this._convertWorldPointToLocal(light.position);
+            for(var k = 0; k < localPoints.length; k++) {
+                var p = localPoints[k];
+                this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y,
+                    "rgb(255, 255, 255)", 1);
+                this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 255, 255)");
+            }
+        }
     }
 
     // Draw the wall normals
