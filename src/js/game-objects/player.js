@@ -24,13 +24,14 @@ function Player(game, x, y, parentGroup) {
     parentGroup.add(this);
 
     this.hearts = 3;
-    this.coins = 120;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
 
     this._isDead = false;
+
+    this.damage = 36; // NOTE(rex): Not quite sure if this should be a part of the player or not...
     
     // Shorthand
     var globals = this.game.globals;
@@ -129,23 +130,24 @@ Player.prototype.update = function () {
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
         this._onCollideWithEnemy, this);
 
-    // Pickup collisions
-    spriteUtils.checkOverlapWithGroup(this, this._pickups, 
-        this._onCollideWithPickup, this);
+    // Damage enemies
+    var damage = this.damage * this.game.time.physicsElapsed;
+    spriteUtils.forEachRecursive(this._enemies, function (child) {
+        if (child instanceof Phaser.Sprite && child.takeDamage) {
+            // MH: why does world position not work here...
+            var inLight = this.flashlight.isPointInLight(child.position);
+            if (inLight) {
+                child.takeDamage(damage);
+            }
+        }
+    }, this);
+
 };
 
 Player.prototype.postUpdate = function () {
     // Update flashlight placement
     this.flashlight.rotation = this.rotation - (Math.PI / 2);
     this.flashlight.position.copyFrom(this.position);
-    // Check if the position just behind the player is in shadow. Since the
-    // flashlight points forward from the player, the flashlight's light get in
-    // way for this calculation.
-    var pos = this.position.clone().subtract(
-        Math.cos(this.rotation - (Math.PI / 2)) * 5,
-        Math.sin(this.rotation - (Math.PI / 2)) * 5
-    );
-    // this.flashlight.enabled = this._lighting.isPointInShadow(pos);
 
     // Update compass position and rotation
     var cX = this.position.x + (0.6 * this.width) *
