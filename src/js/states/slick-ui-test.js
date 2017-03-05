@@ -4,6 +4,13 @@
 
 module.exports = SlickTestUI;
 
+var color = {
+    h: 1,
+    s: 1,
+    l: 0.5,
+    a: 1
+};
+
 function SlickTestUI() {}
 
 SlickTestUI.prototype.preload = function () {
@@ -20,10 +27,28 @@ SlickTestUI.prototype.create = function () {
     var slickUI = globals.plugins.slickUI;
     var SlickUI = globals.plugins.SlickUI;
 
-    var panel;
-    slickUI.add(panel = new SlickUI.Element.Panel(8, 8, 150, game.height - 16));
-    var button;
-    panel.add(button = new SlickUI.Element.Button(0,0, 140, 80));
-    button.events.onInputUp.add(function () {console.log('Clicked button');});
-    button.add(new SlickUI.Element.Text(0,0, "My button")).center();
+    var panel = new SlickUI.Element.Panel(game.width - 208, 8, 200, 
+        game.height - 16);
+    slickUI.add(panel);
+
+    var hSlider = new SlickUI.Element.Slider(20, 30, panel.width - 40, 1);
+    panel.add(hSlider);
+    var sSlider = new SlickUI.Element.Slider(20, 80, panel.width - 40, 1);
+    panel.add(sSlider);
+    var lSlider = new SlickUI.Element.Slider(20, 130, panel.width - 40, 0.5);
+    panel.add(lSlider);
+    var aSlider = new SlickUI.Element.Slider(20, 180, panel.width - 40, 1);
+    panel.add(aSlider);
+
+    hSlider.onDrag.add((value) => color.h = value); 
+    sSlider.onDrag.add((value) => color.s = value); 
+    lSlider.onDrag.add((value) => color.l = value); 
+    aSlider.onDrag.add((value) => color.a = value);
+};
+
+
+
+SlickTestUI.prototype.update = function () {
+    var c = Phaser.Color.HSLtoRGB(color.h, color.s, color.l);
+    this.game.stage.backgroundColor = `rgb(${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)})`;
 };
