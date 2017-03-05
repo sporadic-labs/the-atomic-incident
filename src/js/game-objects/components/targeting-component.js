@@ -2,8 +2,6 @@
 // BaseComponent class that enforces that components have the standard lifecycle
 // methods of update/destroy/etc.
 
-var DestructableLight = require("../destructable-light.js");
-
 module.exports = TargetingComponent;
 
 function TargetingComponent(parent, maxSpeed, visionDistance, path) {
@@ -125,26 +123,26 @@ TargetingComponent.prototype._switchTarget = function (target) {
 };
 
 TargetingComponent.prototype._findClosestLightInRange = function () {
-    var lights = this.game.globals.groups.lights;
-    var closestDistance = Infinity;
-    var closestLight = null;
+    // var lights = this.game.globals.groups.lights;
+    // var closestDistance = Infinity;
+    // var closestLight = null;
 
-    // Target the closest light
-    lights.forEach(function (light) {
-        // Check if light is the "base" light that enemies should be targeting
-        if (light instanceof DestructableLight) {
-            // Skip dead lights
-            if (light.health <= 0) return;
-            // Check if light is in vision radius and is closer than previous
-            var distance = this.parent.world.distance(light.position);
-            if (distance < this._visionDistance && distance < closestDistance) {
-                closestLight = light;
-                closestDistance = distance;
-            }
-        }
-    }, this);
+    // // Target the closest light
+    // lights.forEach(function (light) {
+    //     // Check if light is the "base" light that enemies should be targeting
+    //     if (light instanceof DestructableLight) {
+    //         // Skip dead lights
+    //         if (light.health <= 0) return;
+    //         // Check if light is in vision radius and is closer than previous
+    //         var distance = this.parent.world.distance(light.position);
+    //         if (distance < this._visionDistance && distance < closestDistance) {
+    //             closestLight = light;
+    //             closestDistance = distance;
+    //         }
+    //     }
+    // }, this);
     
-    return closestLight;
+    // return closestLight;
 };
 
 TargetingComponent.prototype.destroy = function () {
