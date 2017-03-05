@@ -2,17 +2,8 @@ module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
-var ComboTracker = require("../helpers/combo-tracker.js");
 var Reticule = require("./reticule.js");
-var Gun = require("./weapons/gun.js");
-var MachineGun = require("./weapons/machine-gun.js");
-var Laser = require("./weapons/laser.js");
-var Arrow = require("./weapons/arrow.js");
-var Beam = require("./weapons/beam.js");
-var MeleeWeapon = require("./weapons/melee-weapon.js");
-var Scattershot = require("./weapons/scattershot.js");
-var Flamethrower = require("./weapons/flamethrower.js");
-var Explosive = require("./weapons/explosive.js");
+var lightUtils = require("./lights/light-utilities.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -33,12 +24,12 @@ function Player(game, x, y, parentGroup) {
     parentGroup.add(this);
 
     this.hearts = 3;
+    this.coins = 120;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
 
-    this._isShooting = false;
     this._isDead = false;
     
     // Shorthand
@@ -47,14 +38,13 @@ function Player(game, x, y, parentGroup) {
     this._pickups = globals.groups.pickups;
     this._lights = globals.groups.lights;
 
-    // Combo
-    this._comboTracker = new ComboTracker(game, 2000);
+    // Timer for flipping cooldown
+    this._cooldownTimer = this.game.time.create(false);
+    this._cooldownTimer.start();
+    this._ableToFlip = true;
 
     // Reticle
     this._reticule = new Reticule(game, globals.groups.foreground);
-
-    // Weapons
-    this._gun = new Gun(game, parentGroup, this);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
@@ -84,47 +74,43 @@ function Player(game, x, y, parentGroup) {
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
         (this.height - diameter) / 2);
 
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+    this.satBody = globals.plugins.satBody.addCircleBody(this);
+
+    // Lighting for player
+    this._lighting = globals.plugins.lighting;
+    this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
+        lightUtils.generateSpotlightPolygon(0, 60, 200), 
+        Phaser.Color.getColor32(150, 210, 210, 255));
+    globals.groups.foreground.add(this.flashlight);
+    this.flashlight.enabled = true;
+
+    // Directional arrow, for dev purposes
+    this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
+    this._compass.scale.setTo(0.64, 0.64);
+    // Set the anchor, position and rotation.
+    this._compass.anchor.copyFrom(this.anchor);
+    var cX = this.position.x + (0.6 * this.width) *
+        Math.cos(this.rotation - (Math.PI/2));
+    var cY = this.position.y + (0.6 * this.width) *
+        Math.sin(this.rotation - (Math.PI/2));
+    this._compass.position.copyFrom(new Phaser.Point(cX, cY));
+    this._compass.rotation = this.rotation;
+    // Add it to the foreground (so it is visible).
+    game.globals.groups.midground.add(this._compass);
 
     // Player controls
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
+    var P = Phaser.Pointer;
+    // pickup
+    this._controls.addKeyboardControl("toggle-pickup", [Kb.SHIFT]);
     // movement
     this._controls.addKeyboardControl("move-up", [Kb.W]);
     this._controls.addKeyboardControl("move-left", [Kb.A]);
     this._controls.addKeyboardControl("move-right", [Kb.D]);
     this._controls.addKeyboardControl("move-down", [Kb.S]);
-    // primary attack
-    this._controls.addKeyboardControl("attack-up", [Kb.UP]);
-    this._controls.addKeyboardControl("attack-left", [Kb.LEFT]);
-    this._controls.addKeyboardControl("attack-right", [Kb.RIGHT]);
-    this._controls.addKeyboardControl("attack-down", [Kb.DOWN]);
-    this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
-    // special attack
-    this._controls.addKeyboardControl("attack-space", [Kb.SPACEBAR]);
-    this._controls.addMouseDownControl("attack-special",
-        Phaser.Pointer.RIGHT_BUTTON);
-    // Cycling weapons
-    this._controls.addKeyboardControl("weapon-sword", [Kb.ONE]);
-    this._controls.addKeyboardControl("weapon-scattershot", [Kb.TWO]);
-    this._controls.addKeyboardControl("weapon-flamethrower", [Kb.THREE]);
-    this._controls.addKeyboardControl("weapon-machine-gun", [Kb.FOUR]);
-    this._controls.addKeyboardControl("weapon-laser", [Kb.FIVE]);
-    this._controls.addKeyboardControl("weapon-beam", [Kb.SIX]);
-    this._controls.addKeyboardControl("weapon-arrow", [Kb.SEVEN]);
-    this._controls.addKeyboardControl("explosive", [Kb.EIGHT]);
+    this._controls.addMouseDownControl("mouse-move", [P.LEFT_BUTTON]);
 }
-
-Player.prototype.getCombo = function () {
-    return this._comboTracker.getCombo();
-};
-
-Player.prototype.incrementCombo = function (increment) {
-    this._comboTracker.incrementCombo(increment);
-    var newSpeed = Phaser.Math.mapLinear(this.getCombo(), 0, 50, 50, 500);
-    newSpeed = Phaser.Math.clamp(newSpeed, 50, 500);
-    this._maxSpeed = newSpeed; 
-};
 
 Player.prototype.update = function () {
     this._controls.update();
@@ -136,10 +122,33 @@ Player.prototype.update = function () {
     // pressed - allows for quick stopping.
     var acceleration = new Phaser.Point(0, 0);
 
+    // WASD controls
+    var keyboardMovement = false;
     if (this._controls.isControlActive("move-left")) acceleration.x = -1;
     else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
     if (this._controls.isControlActive("move-up")) acceleration.y = -1;
     else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
+    // If keyboard was active, update rotation
+    if (acceleration.getMagnitude() > 0) {
+        keyboardMovement = true;
+        this.rotation = new Phaser.Point(0, 0).angle(acceleration) +
+            (Math.PI/2);
+    }
+
+    // Agar.io mouse controls (if keyboard controls aren't active this frame)
+    if (!keyboardMovement) {
+        this.rotation = this.position.angle(this._reticule.position) +
+            (Math.PI/2);
+        if (this._controls.isControlActive("mouse-move")) {
+            var d = Phaser.Point.subtract(this._reticule.position, 
+                this.position);
+            // If distance is more than a few pixels, set the acceleration to
+            // move in the direction of the distance
+            if (d.getMagnitude() > 5) acceleration.copyFrom(d);
+            if (acceleration.getMagnitude() < 5) acceleration.set(0, 0);
+        }
+    }
+
 
     // Normalize the acceleration and set the magnitude. This makes it so that
     // the player moves in the same speed in all directions.
@@ -172,92 +181,32 @@ Player.prototype.update = function () {
         }
     }
 
-    // ammo check
-    if (this._gun.isAmmoEmpty && this._gun.isAmmoEmpty()) {
-        this._gun.destroy();
-        this._gun = new Gun(this.game, this.parent, this);
+    // Pickup light logic
+    var pickupControl = this._controls.isControlActive("toggle-pickup");
+    // Only attempt to toggle pickup the frame the key was pressed
+    if (pickupControl && !this._lastPickupToggle) {
+        // Delay to prevent multiple pickups from running
+        this._canPickup = false;
+        this._timer.add(100, function () { 
+            this._canPickup = true; 
+        }, this);
+        if (this._lightBeingCarried) {
+            // If carrying a pickup, drop it
+            this._lightBeingCarried.drop();
+            this._lightBeingCarried = null;
+        } else {
+            // If overlapping a pickup and it has a pickUp method, pick it up
+            var arcade = this.game.physics.arcade;
+            this._lights.forEach(function (light) {
+                if (light.body && light.pickUp && 
+                        arcade.intersects(light.body, this.body)) {
+                    light.pickUp(this);
+                    this._lightBeingCarried = light;
+                }
+            }, this);
+        }
     }
-
-    // Swapping weapons
-    if (this._controls.isControlActive("weapon-machine-gun")) {
-        this._gun.destroy();
-        this._gun = new MachineGun(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-laser")) {
-        this._gun.destroy();
-        this._gun = new Laser(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-beam")) {
-        this._gun.destroy();
-        this._gun = new Beam(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-arrow")) {
-        this._gun.destroy();
-        this._gun = new Arrow(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-sword")) {
-        this._gun.destroy();
-        this._gun = new MeleeWeapon(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-scattershot")) {
-        this._gun.destroy();
-        this._gun = new Scattershot(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("weapon-flamethrower")) {
-        this._gun.destroy();
-        this._gun = new Flamethrower(this.game, this.parent, this);
-    } else if (this._controls.isControlActive("explosive")) {
-        this._gun.destroy();
-        this._gun = new Explosive(this.game, this.parent, this);
-    }
-
-    // Firing logic
-    var isShooting = false;
-    var attackDir = this.position.clone();
-    if (this._controls.isControlActive("attack")) {
-        isShooting = true;
-        attackDir = this._reticule.position.clone();
-    }
-    if (this._controls.isControlActive("attack-left")) {
-        isShooting = true;
-        attackDir.x += -1;
-    } else if (this._controls.isControlActive("attack-right")) {
-        isShooting = true;
-        attackDir.x += 1;
-    }
-    if (this._controls.isControlActive("attack-up")) {
-        isShooting = true;
-        attackDir.y += -1;
-    } else if (this._controls.isControlActive("attack-down")) {
-        isShooting = true;
-        attackDir.y += 1;
-    }
-    if (isShooting) {
-        this._gun.fire(attackDir);
-    }
-
-    // special weapons logic
-    var isShootingSpecial = false;
-    var specialAttackDir = this.position.clone();
-    if (this._controls.isControlActive("attack-special")) {
-        isShootingSpecial = true;
-        specialAttackDir = this._reticule.position.clone();
-    }
-    if (this._controls.isControlActive("attack-space")) {
-        isShootingSpecial = true;
-        specialAttackDir.x += 0;
-        specialAttackDir.y -= 1;
-    }
-    if (isShootingSpecial && this.getGun().specialFire) {
-        this._gun.specialFire(specialAttackDir);
-    }
-
-    // Check whether player is moving in order to update its animation
-    var isIdle = acceleration.isZero();
-    if ((isShooting || isShootingSpecial) &&
-        (this.animations.name !== ANIM_NAMES.ATTACK)) {
-        this.animations.play(ANIM_NAMES.ATTACK);
-    } else if (!isShooting && !isShootingSpecial && isIdle &&
-        this.animations.name !== ANIM_NAMES.IDLE) {
-        this.animations.play(ANIM_NAMES.IDLE);
-    } else if (!isShooting && !isShootingSpecial && !isIdle &&
-        this.animations.name !== ANIM_NAMES.MOVE) {
-        this.animations.play(ANIM_NAMES.MOVE);
-    }
+    this._lastPickupToggle = pickupControl;
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
@@ -266,19 +215,30 @@ Player.prototype.update = function () {
     // Pickup collisions
     spriteUtils.checkOverlapWithGroup(this, this._pickups, 
         this._onCollideWithPickup, this);
+};
 
-    // Light collisions
-    this.game.physics.arcade.collide(this, this._lights);
+Player.prototype.postUpdate = function () {
+    // Update flashlight placement
+    this.flashlight.rotation = this.rotation - (Math.PI / 2);
+    this.flashlight.position.copyFrom(this.position);
+    // Check if the position just behind the player is in shadow. Since the
+    // flashlight points forward from the player, the flashlight's light get in
+    // way for this calculation.
+    var pos = this.position.clone().subtract(
+        Math.cos(this.rotation - (Math.PI / 2)) * 5,
+        Math.sin(this.rotation - (Math.PI / 2)) * 5
+    );
+    // this.flashlight.enabled = this._lighting.isPointInShadow(pos);
 
-    // if (this._isDead) {
-    //     console.log("dead!");
-    //     this.animations.play(ANIM_NAMES.DIE);
-    //     this.animations.onComplete.add(function() {
-    //         this._isDead = false;
-    //         this.destroy();
-    //         this.game.state.restart();
-    //     }, this);
-    // }
+    // Update compass position and rotation
+    var cX = this.position.x + (0.6 * this.width) *
+        Math.cos(this.rotation - (Math.PI/2));
+    var cY = this.position.y + (0.6 * this.width) *
+        Math.sin(this.rotation - (Math.PI/2));
+    this._compass.position.copyFrom(new Phaser.Point(cX, cY));
+    this._compass.rotation = this.rotation;
+
+    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
 };
 
 Player.prototype._onCollideWithEnemy = function () {
@@ -313,55 +273,28 @@ Player.prototype.takeDamage = function () {
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     if (pickup._category === "weapon") {
-        self._gunType = pickup.type;
         self.changeGuns(pickup.type);
+    } else if (pickup._category === "score") {
+        this.coins += pickup._pointValue;
     }
     pickup.destroy();
 };
 
 Player.prototype.destroy = function () {
     this._reticule.destroy();
-    this._comboTracker.destroy();
     this._timer.destroy();
+    this._cooldownTimer.destroy();
     this.game.tweens.removeFrom(this);
-    for (var gun in this._allGuns) {
-        this._allGuns[gun].destroy();
+    for (var key in this._weapons) {
+        this._weapons[key].destroy();
     }
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };
 
-Player.prototype.getGun = function() {
-    return this._gun;
+Player.prototype._startCooldown = function (time) {
+    if (!this._ableToFlip) return;
+    this._ableToFlip = false;
+    this._cooldownTimer.add(time, function () {
+        this._ableToFlip = true;
+    }, this);
 };
-
-Player.prototype.getAmmo = function() {
-    if (this._gun.getAmmo) return this._gun.getAmmo();
-};
-
-Player.prototype.changeGuns = function(type) {
-    if (type === "weapon-machine-gun") {
-        this._gun.destroy();
-        this._gun = new MachineGun(this.game, this.parent, this);
-    } else if (type === "weapon-laser") {
-        this._gun.destroy();
-        this._gun = new Laser(this.game, this.parent, this);
-    } else if (type === "weapon-beam") {
-        this._gun.destroy();
-        this._gun = new Beam(this.game, this.parent, this);
-    } else if (type === "weapon-arrow") {
-        this._gun.destroy();
-        this._gun = new Arrow(this.game, this.parent, this);
-    } else if (type === "weapon-sword") {
-        this._gun.destroy();
-        this._gun = new MeleeWeapon(this.game, this.parent, this);
-    } else if (type === "weapon-scattershot") {
-        this._gun.destroy();
-        this._gun = new Scattershot(this.game, this.parent, this);
-    } else if (type === "weapon-flamethrower") {
-        this._gun.destroy();
-        this._gun = new Flamethrower(this.game, this.parent, this);
-    } else if (type === "explosive") {
-        this._gun.destroy();
-        this._gun = new Explosive(this.game, this.parent, this);
-    }
-}

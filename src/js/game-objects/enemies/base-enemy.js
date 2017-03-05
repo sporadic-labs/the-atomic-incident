@@ -24,8 +24,6 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue) {
     // Configure simple physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = false;
-    
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 }
 
 BaseEnemy.prototype.takeDamage = function (damage) {

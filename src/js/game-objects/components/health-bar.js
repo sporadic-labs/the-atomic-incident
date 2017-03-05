@@ -67,7 +67,7 @@ HealthBar.prototype._scheduleFadeOut = function () {
 
     // Create a fade out tween after a delay
     this._tween = this.game.make.tween(this)
-        .to({ alpha: 0 }, 1000, "Quad.easeInOut", true, 2000);
+        .to({ alpha: 0 }, 1000, "Quad.easeInOut", true, 500);
     this._tween.onComplete.add(this.hide.bind(this));
 };
 

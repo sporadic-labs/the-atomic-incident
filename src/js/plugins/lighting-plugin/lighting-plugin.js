@@ -11,8 +11,14 @@ module.exports = Phaser.Plugin.Lighting = function (game, manager) {
 
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
 
-Phaser.Plugin.Lighting.prototype.addLight = function (position, radius, color) {
-    var light = new Light(this.game, this.parent, position, radius, color);
+Phaser.Plugin.Lighting.prototype.addLight = function (position, shape, color) {
+    var light = new Light(this.game, this.parent, position, shape, color);
+    this.lights.push(light);
+    if (this._debugEnabled) light.enableDebug();
+    return light;
+};
+
+Phaser.Plugin.Lighting.prototype.addExistingLight = function (light) {
     this.lights.push(light);
     if (this._debugEnabled) light.enableDebug();
     return light;
@@ -117,19 +123,27 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
+    this._bitmap.cls(); // Clear so shadow opacity works again
     this._bitmap.fill(0, 0, 0, this.shadowOpacity);
 
     if (this._debugEnabled) this._debugBitmap.clear();
 
     for (var i = 0; i < this.lights.length; i++) {
         var light = this.lights[i];
+        if (!light.enabled) continue;
         light.update();
-        var points = this._castLight(light);
-        this._drawLight(light, points);
+        if (light.needsRedraw) {
+            var points = this._castLight(light);
+            light.redraw(points); // World coordinates
+        }
+        this._drawLight(light);
 
         // Draw the light rays - this gets pretty messy with multiple lights,
         // so only draw one of them
         if (this._debugEnabled && (i === this._debugLightIndex)) {
+            // Recalculate the points in case the light didn't need to be
+            // redrawn
+            var points = this._castLight(light);
             var localPoints = points.map(this._convertWorldPointToLocal, this);
             var lightPoint = this._convertWorldPointToLocal(light.position);
             for(var k = 0; k < localPoints.length; k++) {
@@ -198,28 +212,22 @@ Phaser.Plugin.Lighting.prototype._castLight = function (light) {
     // which it intersects the edge of the stage.
     function checkRayIntersection(ctx, angle) {
         // Create a ray from the light to a point on the circle
-        var ray = new Phaser.Line(light.position.x, light.position.y,
-            light.position.x + Math.cos(angle) * light.radius,
-            light.position.y + Math.sin(angle) * light.radius);
+        var ray = light.getLightRay(angle);
         // Check if the ray intersected any walls
-        var intersect = ctx._getWallIntersection(ray, backWalls);
-        // Save the intersection or the end of the ray
-        if (intersect) return intersect;
-        else return ray.end;
+        var intersection = ctx._getWallIntersection(ray, backWalls, light.id);
+        if (intersection) return intersection;
+        return ray.end;
     }
 
     this._sortPoints(points, light.position);
     return points;
 };
 
-Phaser.Plugin.Lighting.prototype._drawLight = function (light, points) {
-    light.redraw(points); // World coordinates
+Phaser.Plugin.Lighting.prototype._drawLight = function (light) {
     var r = new Phaser.Rectangle(0, 0, light._bitmap.width, 
         light._bitmap.height);
-    var lightPoint = this._convertWorldPointToLocal(light.position);
-    var dx = lightPoint.x - light.radius;
-    var dy = lightPoint.y - light.radius;
-    this._bitmap.copyRect(light._bitmap, r, dx, dy);
+    var p = this._convertWorldPointToLocal(light.getTopLeft());
+    this._bitmap.copyRect(light._bitmap, r, p.x, p.y);
 };
 
 Phaser.Plugin.Lighting.prototype._getPlayerLines = function () {
@@ -255,22 +263,23 @@ Phaser.Plugin.Lighting.prototype._sortPoints = function (points, target) {
     });
 };
 
-// Dynamic lighting/Raycasting.
-// Thanks, yafd!
-// http://gamemechanicexplorer.com/#raycasting-2
-Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls) {
+// Find the closest wall that faces away from the light
+Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls, 
+        lightId) {
     var distanceToWall = Number.POSITIVE_INFINITY;
     var closestIntersection = null;
-
     for (var i = 0; i < walls.length; i++) {
-        var intersect = Phaser.Line.intersects(ray, walls[i].line);
-        if (intersect) {
-            // Find the closest intersection
-            var distance = this.game.math.distance(ray.start.x, ray.start.y,
-                intersect.x, intersect.y);
-            if (distance < distanceToWall) {
-                distanceToWall = distance;
-                closestIntersection = intersect;
+        // Check if wall faces away from the selected light
+        if (walls[i].backFacings[lightId]) {
+            var intersect = Phaser.Line.intersects(ray, walls[i].line);
+            if (intersect) {
+                // Find the closest intersection
+                var distance = this.game.math.distance(ray.start.x, ray.start.y,
+                    intersect.x, intersect.y);
+                if (distance < distanceToWall) {
+                    distanceToWall = distance;
+                    closestIntersection = intersect;
+                }
             }
         }
     }

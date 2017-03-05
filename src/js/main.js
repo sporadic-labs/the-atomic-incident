@@ -8,17 +8,19 @@ var LoadState = require("./states/load-state.js");
 var StartScreen = require("./states/start-screen.js");
 
 // Keep this on CANVAS until Phaser 3 for performance reasons?
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, "game-container");
+var game = new Phaser.Game(750, 750, Phaser.CANVAS, "game-container");
 
 // Create the space for globals on the game object
 var globals = game.globals = {};
 globals.tilemapFiles = [
-    "pacman-smaller.json", "crossroads.json", "pacman.json", 
-    "maze-one-light.json", "multilight-test.json", "two-light-open.json"
+    "tower-defense-2.json",
+    "tower-defense-1.json",
 ];
+globals.plugins = {};
 
 game.state.add("boot", BootState);
 game.state.add("load", LoadState);
 game.state.add("start", StartScreen);
 game.state.add("sandbox", Sandbox);
+game.state.add("slick-ui-test", require("./states/slick-ui-test.js"));
 game.state.start("boot");

@@ -9,25 +9,45 @@ module.exports = Phaser.Plugin.SatBody = function (game, parent) {
 
 Phaser.Plugin.SatBody.prototype = Object.create(Phaser.Plugin.prototype);
 
-Phaser.Plugin.SatBody.prototype.addBoxBody = function (sprite, width, height) {
-    var body = new SatBody(sprite);
-    body.initBox(width, height);
+/**
+ * Creates a SAT box for the sprite based on an underlying arcade body. The
+ * SAT body is placed at the position of the body and given a width and height
+ * that match the body. See SatBody:initBox.
+ * 
+ * @param {Sprite} sprite The sprite to add the body to 
+ * @returns {SatBody}
+ */
+Phaser.Plugin.SatBody.prototype.addBoxBody = function (sprite) {
+    var body = new SatBody(sprite).initBox();
     if (this._isDebug) body.enableDebug();
     this._bodies.push(body);
     return body;
 };
 
-Phaser.Plugin.SatBody.prototype.addCircleBody = function (sprite, radius) {
-    var body = new SatBody(sprite);
-    body.initCircle(radius);
+/**
+ * Creates a SAT circle for the sprite based on an underlying arcade body. The
+ * SAT body is placed at the position of the body and given a radius that 
+ * matches the body. See SatBody:initCircle.
+ * 
+ * @param {Sprite} sprite The sprite to add the body to
+ * @returns {SatBody}
+ */
+Phaser.Plugin.SatBody.prototype.addCircleBody = function (sprite) {
+    var body = new SatBody(sprite).initCircle();
     if (this._isDebug) body.enableDebug();
     this._bodies.push(body);
     return body;
 };
 
+/**
+ * Creates a SAT polygon for the sprite based on an array of points. See
+ * SatBody:initPolygon.
+ *
+ * @param {Sprite} sprite The sprite to add the body to
+ * @returns {SatBody}
+ */
 Phaser.Plugin.SatBody.prototype.addPolygonBody = function (sprite, points) {
-    var body = new SatBody(sprite);
-    body.initPolygon(points);
+    var body = new SatBody(sprite).initPolygon(points);
     if (this._isDebug) body.enableDebug();
     this._bodies.push(body);
     return body;
@@ -51,8 +71,12 @@ Phaser.Plugin.SatBody.prototype.disableDebugAll = function () {
     }
 };
 
+/** 
+ * Update the SAT bodies after the final arcade physics calculations are run (
+ * which happens in stage.postUpdate). This is automatically called by the 
+ * plugin manager. See Phaser/core/Game#updateLogic for the lifecycle.
+ */
 Phaser.Plugin.SatBody.prototype.postUpdate = function () {
-    // Update after the physics have been applied to all game objects
     for (var i = 0; i < this._bodies.length; i += 1) {
         this._bodies[i].postUpdate();
     }
