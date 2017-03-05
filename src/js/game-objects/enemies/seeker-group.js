@@ -40,7 +40,7 @@ function SeekerGroup(game, numToSpawn) {
 }
 
 SeekerGroup.prototype.checkTileMapLocation = function(x, y) {
-    var checkTile = this.game.globals.tileMap.getTileWorldXY(x, y, 36, 36,
+    var checkTile = this.game.globals.tileMap.getTileWorldXY(x, y, 25, 25,
         this.game.globals.tileMapLayer);
 
     if (checkTile === null || checkTile === undefined) return true;

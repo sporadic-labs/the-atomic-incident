@@ -39,6 +39,23 @@ exports.arcadeRecursiveCollide = function (sprite, group, callback, context) {
 };
 
 /**
+ * Recursively iterate through a group to find all non-Phaser.Group children
+ */
+exports.forEachRecursive = function (group, callback, context) {
+    // Loop through children in group
+    for (var i = 0; i < group.children.length; i += 1) {
+        var child = group.children[i];
+        if (child instanceof Phaser.Group) {
+            // If child is a group, recursion time
+            exports.forEachRecursive(child, callback, context);
+        } else {
+            var exitEarly = callback.call(context, child);
+            if (exitEarly) return;
+        }
+    }
+};
+
+/**
  * Check a sprite's overlap against a tilemap layer using SAT bodies. This
  * creates a SAT body for tiles on-the-fly.
  *

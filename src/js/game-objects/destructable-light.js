@@ -1,6 +1,7 @@
 module.exports = DesctructableLight;
 
 var utils = require("../helpers/utilities.js");
+var Color = require("../helpers/Color.js");
 
 // Prototype chain - inherits from Sprite
 DesctructableLight.prototype = Object.create(Phaser.Sprite.prototype);
@@ -9,8 +10,8 @@ function DesctructableLight(game, x, y, parentGroup, radius, color, health) {
     Phaser.Sprite.call(this, game, x, y, "assets", "light/light");
     this.anchor.set(0.5);
     parentGroup.add(this);
-    var c = Phaser.Color.valueToColor(color);
-    this.tint = Phaser.Color.getColor(c.r, c.g, c.b);
+    this.color = (color instanceof Color) ? color : new Color(color);
+    this.tint = this.color.getRgbColorInt();
 
     this._lighting = game.globals.plugins.lighting;
 
@@ -19,7 +20,10 @@ function DesctructableLight(game, x, y, parentGroup, radius, color, health) {
     this._healthRechargeRate = 3; // Health per second
     this._rechargeDelay = 0.5; // Delay after taking damage before recharging
     this._timeSinceDamage = 0;
-    this.light = this._lighting.addLight(new Phaser.Point(x, y), radius, color);
+    this.light = this._lighting.addLight(
+        new Phaser.Point(x, y),
+        new Phaser.Circle(0, 0, radius * 2), 
+        this.color);
 
     game.physics.arcade.enable(this);
     this.body.immovable = true;
