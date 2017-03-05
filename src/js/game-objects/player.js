@@ -75,12 +75,13 @@ function Player(game, x, y, parentGroup) {
         (this.height - diameter) / 2);
 
     this.satBody = globals.plugins.satBody.addCircleBody(this);
-
+ 
     // Lighting for player
     this._lighting = globals.plugins.lighting;
+    var lightSize = 3 * Math.max(game.width, game.height);
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
-        lightUtils.generateSpotlightPolygon(0, 60, 200), 
-        Phaser.Color.getColor32(150, 210, 210, 255));
+        new Phaser.Circle(0, 0, lightSize), 
+        Phaser.Color.getColor32(133, 171, 255, 255));
     globals.groups.foreground.add(this.flashlight);
     this.flashlight.enabled = true;
 
