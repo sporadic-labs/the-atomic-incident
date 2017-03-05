@@ -19,8 +19,6 @@ function HeadsUpDisplay(game, parentGroup) {
     };
     this._heartsText = game.make.text(30, 20, "Hearts: 3", textStyle);
     this.add(this._heartsText);
-    this._coinsText = game.make.text(30, 60, "Coins: 0", textStyle);
-    this.add(this._coinsText);
     this._waveNum = game.make.text(30, 100, "Wave: 0", textStyle);
     this.add(this._waveNum);
     this._debugText = game.make.text(30, game.height - 45, 
@@ -30,7 +28,6 @@ function HeadsUpDisplay(game, parentGroup) {
 }
 
 HeadsUpDisplay.prototype.update = function () {
-    this._coinsText.setText("Coins: " + this._player.coins);
     this._heartsText.setText("Hearts: " + this._player.hearts);
     this._waveNum.setText("Wave: " + this.game.globals.waveNum);
 };

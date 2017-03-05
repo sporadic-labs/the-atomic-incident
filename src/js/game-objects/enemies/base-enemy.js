@@ -30,7 +30,6 @@ BaseEnemy.prototype.takeDamage = function (damage) {
     var newHealth = this._healthBar.incrementHealth(-damage);
     if (newHealth <= 0) {
         this._scoreKeeper.incrementScore(this._pointValue);
-        this._spawnPickups.spawn(this.position.x, this.position.y);
         this.destroy();
         return true;
     }
