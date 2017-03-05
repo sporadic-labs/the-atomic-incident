@@ -114,99 +114,15 @@ function Player(game, x, y, parentGroup) {
 
 Player.prototype.update = function () {
     this._controls.update();
+
+    // Snap player to the mouse position
+    this.position.setTo(
+        this.game.input.mousePointer.x + this.game.camera.x,
+        this.game.input.mousePointer.y + this.game.camera.y
+    );
     
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
-
-    // Calculate the player's new acceleration. It should be zero if no keys are
-    // pressed - allows for quick stopping.
-    var acceleration = new Phaser.Point(0, 0);
-
-    // WASD controls
-    var keyboardMovement = false;
-    if (this._controls.isControlActive("move-left")) acceleration.x = -1;
-    else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
-    if (this._controls.isControlActive("move-up")) acceleration.y = -1;
-    else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
-    // If keyboard was active, update rotation
-    if (acceleration.getMagnitude() > 0) {
-        keyboardMovement = true;
-        this.rotation = new Phaser.Point(0, 0).angle(acceleration) +
-            (Math.PI/2);
-    }
-
-    // Agar.io mouse controls (if keyboard controls aren't active this frame)
-    if (!keyboardMovement) {
-        this.rotation = this.position.angle(this._reticule.position) +
-            (Math.PI/2);
-        if (this._controls.isControlActive("mouse-move")) {
-            var d = Phaser.Point.subtract(this._reticule.position, 
-                this.position);
-            // If distance is more than a few pixels, set the acceleration to
-            // move in the direction of the distance
-            if (d.getMagnitude() > 5) acceleration.copyFrom(d);
-            if (acceleration.getMagnitude() < 5) acceleration.set(0, 0);
-        }
-    }
-
-
-    // Normalize the acceleration and set the magnitude. This makes it so that
-    // the player moves in the same speed in all directions.
-    acceleration = acceleration.setMagnitude(this._maxAcceleration);
-    this.body.acceleration.copyFrom(acceleration);
-
-    // Cap the velocity. Phaser physics's max velocity caps the velocity in the
-    // x & y dimensions separately. This allows the sprite to move faster along
-    // a diagonal than it would along the x or y axis. To fix that, we need to
-    // cap the velocity based on it's magnitude.
-    if (this.body.velocity.getMagnitude() > this._maxSpeed) {
-        this.body.velocity.setMagnitude(this._maxSpeed);
-    }
-
-    // Custom drag. Arcade drag runs the calculation on each axis separately. 
-    // This leads to more drag in the diagonal than in other directions.  To fix
-    // that, we need to apply drag ourselves.
-    // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
-    if (acceleration.isZero() && !this.body.velocity.isZero()) {
-        var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
-        if (this.body.velocity.getMagnitude() < dragMagnitude) {
-            // Snap to 0 velocity so that we avoid the drag causing the velocity
-            // to flip directions and end up oscillating
-            this.body.velocity.set(0);
-        } else {
-            // Apply drag in opposite direction of velocity
-            var drag = this.body.velocity.clone()
-                .setMagnitude(-1 * dragMagnitude); 
-            this.body.velocity.add(drag.x, drag.y);
-        }
-    }
-
-    // Pickup light logic
-    var pickupControl = this._controls.isControlActive("toggle-pickup");
-    // Only attempt to toggle pickup the frame the key was pressed
-    if (pickupControl && !this._lastPickupToggle) {
-        // Delay to prevent multiple pickups from running
-        this._canPickup = false;
-        this._timer.add(100, function () { 
-            this._canPickup = true; 
-        }, this);
-        if (this._lightBeingCarried) {
-            // If carrying a pickup, drop it
-            this._lightBeingCarried.drop();
-            this._lightBeingCarried = null;
-        } else {
-            // If overlapping a pickup and it has a pickUp method, pick it up
-            var arcade = this.game.physics.arcade;
-            this._lights.forEach(function (light) {
-                if (light.body && light.pickUp && 
-                        arcade.intersects(light.body, this.body)) {
-                    light.pickUp(this);
-                    this._lightBeingCarried = light;
-                }
-            }, this);
-        }
-    }
-    this._lastPickupToggle = pickupControl;
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
