@@ -90,10 +90,8 @@ Sandbox.prototype.create = function () {
     this.physics.arcade.gravity.set(0);
 
     // Player
-    // Get the Spawn Point(s) for the player from the tile map.
-    var playerStartPoint = this.getMapPoints("player")[0]; // temp fix
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, playerStartPoint.x, playerStartPoint.y, 
+    var player = new Player(game, game.width/2, game.height/2, 
         groups.foreground);
     this.camera.follow(player);
     globals.player = player;
