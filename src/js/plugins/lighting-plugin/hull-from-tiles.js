@@ -4,8 +4,9 @@ var hull = require("hull.js");
  * Returns an array of polygons where each is a hull built from clusters of 
  * colliding & opaque tiles from the tilemap. Each polygon is an array of 
  * line objects in the form: 
- *  { line, midpoint, length, normal }
- * The midpoint, length & normal are precomuted to help the game run faster.
+ *  { line, midpoint, length, normal, shapeId }
+ * The midpoint, length & normal are precomuted to help the game run faster. The
+ * shapeId says which hull shape the line belongs to.
  */
 module.exports = function calculateHullsFromTiles(tilemapLayer) {
     var clusters = calculateClusters(tilemapLayer);
@@ -153,7 +154,8 @@ function calculateNormals(hull) {
                 line: line,
                 length: line.length,
                 midpoint: line.midPoint(),
-                normal: normal
+                normal: normal,
+                shapeId: i
             });
         }
         hullsWithNormals.push(hullWithNormals);
