@@ -6,9 +6,9 @@ var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 
-function ShadowEnemy(game, x, y, parentGroup) {
+function ShadowEnemy(game, x, y, parentGroup, color) {
     BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/idle-01", 100,
-        parentGroup);
+        parentGroup, 1, color);
 
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
