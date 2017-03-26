@@ -24,10 +24,10 @@ function SpawnPointWave(game) {
      *      ..., total: numEnemiesInWave, name: nameForDebugging }
      */
     this._waveTypes = [
-        {probability: 0.2, waveType: new WaveType(game, "Bombers", 0, 11)},
-        {probability: 0.5, waveType: new WaveType(game, "Attackers", 14, 0)},
-        {probability: 0.2, waveType: new WaveType(game, "Mixed", 10, 5)},
-        {probability: 0.1, waveType: new WaveType(game, "AttackersRush", 18, 0)}
+        {probability: 0.0, waveType: new WaveType(game, "Bombers", 0, 11)},
+        {probability: 1.0, waveType: new WaveType(game, "Attackers", 14, 0)},
+        {probability: 0.0, waveType: new WaveType(game, "Mixed", 10, 5)},
+        {probability: 0.0, waveType: new WaveType(game, "AttackersRush", 18, 0)}
     ];
 
     // Fix to make this wave work with maps that don't have spawn points defined
