@@ -124,7 +124,7 @@ Player.prototype.update = function () {
     );
     var delta = Phaser.Point.subtract(dest, this.body.position);
     var targetDistance = delta.getMagnitude();
-    var maxDistance = 0.6 * this.width;
+    var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
     if (targetDistance > maxDistance) {
         delta.setMagnitude(maxDistance);
     }
