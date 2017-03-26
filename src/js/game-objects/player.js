@@ -143,9 +143,7 @@ Player.prototype.update = function () {
             // MH: why does world position not work here...
             var inLight = this.flashlight.isPointInLight(child.position);
             var flashlightColor = this.flashlight.color;
-            console.log('Flashlight Color: ' + flashlightColor)
             var enemyColor = child.color;
-            console.log('Enemy Color: ' + enemyColor)
             // If the enemy color matches the flashlight color, then the enemies
             // should take damage.
             var matchingLights = flashlightColor.rgbEquals(enemyColor);
