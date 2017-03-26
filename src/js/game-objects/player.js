@@ -79,7 +79,7 @@ function Player(game, x, y, parentGroup) {
  
     // Lighting for player
     this._lighting = globals.plugins.lighting;
-    var lightSize = 3 * Math.max(game.width, game.height);
+    var lightSize = 600;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
         new Phaser.Circle(0, 0, lightSize), 
         Phaser.Color.getColor32(133, 171, 255, 255));
@@ -117,13 +117,18 @@ function Player(game, x, y, parentGroup) {
 Player.prototype.update = function () {
     this._controls.update();
 
-    // Snap player to the mouse position
-    this.position.setTo(
-        this.game.input.mousePointer.x + this.game.camera.x,
-        this.game.input.mousePointer.y + this.game.camera.y
+    // Move towards the mouse position
+    var dest = new Phaser.Point(
+        this.game.input.mousePointer.x + this.game.camera.x - this.body.width / 2,
+        this.game.input.mousePointer.y + this.game.camera.y - this.body.height / 2
     );
-    
-    // Collisions with the tilemap
+    var delta = Phaser.Point.subtract(dest, this.body.position);
+    var targetDistance = delta.getMagnitude();
+    var maxDistance = 0.6 * this.width;
+    if (targetDistance > maxDistance) {
+        delta.setMagnitude(maxDistance);
+    }
+    this.body.position.add(delta.x, delta.y);
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
     // Enemy collisions
