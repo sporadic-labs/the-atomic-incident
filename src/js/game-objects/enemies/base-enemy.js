@@ -18,7 +18,7 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
 
     // Tint the enemy based on the color.
     this.color = (color instanceof Color) ? color : new Color(color);
-    this.tint = this.color.getRgbColorInt;
+    this.tint = this.color.getRgbColorInt();
 
     // Health bar 
     var cx = 0;
