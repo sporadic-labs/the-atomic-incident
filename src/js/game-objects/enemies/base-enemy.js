@@ -2,10 +2,11 @@ module.exports = BaseEnemy;
 
 var utils = require("../../helpers/utilities.js");
 var HealthBar = require("../components/health-bar.js");
+var Color = require("../../helpers/Color.js");
 
 BaseEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 
-function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue) {
+function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, color) {
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -14,6 +15,10 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue) {
     this._scoreKeeper = this.game.globals.scoreKeeper;
     this._spawnPickups = this.game.globals.spawnPickups;
     this._pointValue = utils.default(pointValue, 1);
+
+    // Tint the enemy based on the color.
+    this.color = (color instanceof Color) ? color : new Color(color);
+    this.tint = this.color.getRgbColorInt;
 
     // Health bar 
     var cx = 0;
