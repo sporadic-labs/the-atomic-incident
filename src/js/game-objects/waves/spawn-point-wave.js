@@ -3,6 +3,9 @@ module.exports = SpawnPointWave;
 var ShadowEnemy = require("../enemies/shadow-enemy.js");
 var ShadowBomber = require("../enemies/shadow-bomber.js");
 var WaveType = require("./wave-type.js");
+var Color = require("../../helpers/Color.js");
+
+var ColorOpts = require("../../constants/colors.js")
 
 SpawnPointWave.prototype = Object.create(Phaser.Group.prototype);
 
@@ -70,14 +73,22 @@ SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, delay) {
     waveType.startNewSpawn();
     var enemyTypeToSpawn = waveType.getNextEnemyType();
 
+    var enemyColor = this.game.rnd.integerInRange(1, 3);
+    if (enemyColor === 1) {
+        return new Color(ColorOpts.red)
+    } else if (enemyColor === 2) {
+        return new Color(ColorOpts.green)
+    } else if (enemyColor === 3) {
+        return new Color(ColorOpts.blue)
+    }
     
     // Spawn the enemies in the wave with a small delay between each enemy
     var delayedSpawn = function () {
         var spawnPoint = this._getSpawnPointInRegion(region);
         if (enemyTypeToSpawn === "bomber") {
-            new ShadowBomber(this.game, spawnPoint.x, spawnPoint.y, this);
+            new ShadowBomber(this.game, spawnPoint.x, spawnPoint.y, this, enemyColor);
         } else if (enemyTypeToSpawn === "attacker") {
-            new ShadowEnemy(this.game, spawnPoint.x, spawnPoint.y, this);
+            new ShadowEnemy(this.game, spawnPoint.x, spawnPoint.y, this, enemyColor);
         }
         enemyTypeToSpawn = waveType.getNextEnemyType();
         if (enemyTypeToSpawn) this._timer.add(delay, delayedSpawn);
