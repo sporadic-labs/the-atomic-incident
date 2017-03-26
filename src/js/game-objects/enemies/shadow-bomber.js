@@ -6,9 +6,9 @@ var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowBomber.prototype = Object.create(BaseEnemy.prototype);
 
-function ShadowBomber(game, x, y, parentGroup) {
+function ShadowBomber(game, x, y, parentGroup, color) {
     BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/bomber-idle-01", 
-        200, parentGroup);
+        200, parentGroup, 1, color);
 
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);

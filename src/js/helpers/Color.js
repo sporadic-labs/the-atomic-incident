@@ -59,9 +59,17 @@ Color.prototype.clone = function () {
 };
 
 /**
- * Return deep copy of the color
- * @returns {Color}
+ * Do the RGBA values of the color param match this color?
+ * @returns {boolean}
  */
-Color.prototype.equals = function (c) {
+Color.prototype.rgbaEquals = function (c) {
     return this.r === c.r && this.g === c.g && this.b === c.b && this.a === c.a;
+};
+
+/**
+ * Do the RGB values of the color param match this color?
+ * @returns {boolean}
+ */
+Color.prototype.rgbEquals = function (c) {
+    return this.r === c.r && this.g === c.g && this.b === c.b;
 };
