@@ -73,18 +73,19 @@ SpawnPointWave.prototype._spawnSeriesWithDelay = function (region, delay) {
     waveType.startNewSpawn();
     var enemyTypeToSpawn = waveType.getNextEnemyType();
 
-    var enemyColor = this.game.rnd.integerInRange(1, 3);
-    if (enemyColor === 1) {
-        return new Color(ColorOpts.red)
-    } else if (enemyColor === 2) {
-        return new Color(ColorOpts.green)
-    } else if (enemyColor === 3) {
-        return new Color(ColorOpts.blue)
-    }
     
     // Spawn the enemies in the wave with a small delay between each enemy
     var delayedSpawn = function () {
         var spawnPoint = this._getSpawnPointInRegion(region);
+        var colorNum = this.game.rnd.integerInRange(1, 3);
+        var enemyColor;
+        if (colorNum === 1) {
+            enemyColor = ColorOpts.red;
+        } else if (colorNum === 2) {
+            enemyColor = ColorOpts.green;
+        } else if (colorNum === 3) {
+            enemyColor = ColorOpts.blue;
+        }
         if (enemyTypeToSpawn === "bomber") {
             new ShadowBomber(this.game, spawnPoint.x, spawnPoint.y, this, enemyColor);
         } else if (enemyTypeToSpawn === "attacker") {
