@@ -132,6 +132,10 @@ Player.prototype.update = function () {
     this.body.position.add(delta.x, delta.y);
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
+    // Update the rotation of the player based on the reticule
+    this.rotation = this.position.angle(this._reticule.position) +
+        (Math.PI/2);
+
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
         this._onCollideWithEnemy, this);
