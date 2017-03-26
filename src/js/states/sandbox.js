@@ -39,12 +39,12 @@ Sandbox.prototype.create = function () {
         foreground: game.add.group(this.world, "foreground")
     };
     groups.enemies = game.add.group(groups.midground, "enemies");
-    groups.pickups = game.add.group(groups.midground, "pickups");
     groups.nonCollidingGroup = game.add.group(groups.midground, 
         "non-colliding");
     groups.chargingStations = game.add.group(groups.midground, 
         "charging-stations");
     groups.lights = game.add.group(groups.midground, "lights");
+    groups.pickups = game.add.group(groups.foreground, "pickups");
     globals.groups = groups;
 
     // Initializing the world
@@ -78,6 +78,9 @@ Sandbox.prototype.create = function () {
     this.lighting.setOpacity(0.9);
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
+
+    // Hack: pull pickups above the shadow/lighting layer
+    groups.foreground.bringToTop(groups.pickups);
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
