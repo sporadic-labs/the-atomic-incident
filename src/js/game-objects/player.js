@@ -32,7 +32,7 @@ function Player(game, x, y, parentGroup) {
 
     this._isDead = false;
 
-    this.damage = 36; // NOTE(rex): Not quite sure if this should be a part of the player or not...
+    this.damage = 100; // NOTE(rex): Not quite sure if this should be a part of the player or not...
     
     // Shorthand
     var globals = this.game.globals;
