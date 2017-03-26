@@ -3,6 +3,7 @@ module.exports = Player;
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 var Reticule = require("./reticule.js");
+var colors = require("../constants/colors.js");
 var lightUtils = require("./lights/light-utilities.js");
 
 var ANIM_NAMES = {
@@ -82,7 +83,7 @@ function Player(game, x, y, parentGroup) {
     var lightSize = 600;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
         new Phaser.Circle(0, 0, lightSize), 
-        Phaser.Color.getColor32(133, 171, 255, 255));
+        colors.red);
     globals.groups.foreground.add(this.flashlight);
     this.flashlight.enabled = true;
 
