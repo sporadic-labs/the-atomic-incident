@@ -15,8 +15,3 @@ function LightPickup(game, x, y, parentGroup, color) {
     game.physics.arcade.enable(this);
     this.satBody = game.globals.plugins.satBody.addBoxBody(this);
 }
-
-// LightPickup.prototype.killByPlayer = function () {
-//     this._scoreSignal.dispatch(this._pointValue);
-//     this.destroy();
-// };

@@ -136,6 +136,10 @@ Player.prototype.update = function () {
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
         this._onCollideWithEnemy, this);
 
+    // Light pickups
+    spriteUtils.checkOverlapWithGroup(this, this._pickups, 
+        this._onCollideWithPickup, this);
+
     // Damage enemies
     var damage = this.damage * this.game.time.physicsElapsed;
     spriteUtils.forEachRecursive(this._enemies, function (child) {
@@ -173,6 +177,11 @@ Player.prototype.postUpdate = function () {
 
 Player.prototype._onCollideWithEnemy = function () {
     this.takeDamage();
+};
+
+Player.prototype._onCollideWithPickup = function (self, pickup) {
+    this.flashlight.color = pickup.color;
+    pickup.destroy();
 };
 
 Player.prototype.takeDamage = function () {
