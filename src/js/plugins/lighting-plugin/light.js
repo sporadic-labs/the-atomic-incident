@@ -101,7 +101,7 @@ Light.prototype.update = function () {
         this._lastPosition.copyFrom(this.position);
         this.needsRedraw = true;
     }
-    if (!this._lastColor.equals(this.color)) {
+    if (!this._lastColor.rgbaEquals(this.color)) {
         this._lastColor = this.color.clone();
         this.needsRedraw = true;
     }
