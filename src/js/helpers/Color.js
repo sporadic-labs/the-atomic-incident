@@ -27,6 +27,20 @@ function Color(color) {
 }
 
 /**
+ * Sets the color channels specified by the r, g, b and a keys of the given
+ * argument.
+ * @param {object} colorObject An object with r, g, b, a keys in range 0 - 255
+ * @returns {this} For chaining
+ */
+Color.prototype.setTo = function (colorObject) {
+    if (colorObject.r !== undefined) this.r = colorObject.r;
+    if (colorObject.g !== undefined) this.g = colorObject.g;
+    if (colorObject.b !== undefined) this.b = colorObject.b;
+    if (colorObject.a !== undefined) this.a = colorObject.a;
+    return this;
+};
+
+/**
  * Get a 32-bit integer representation of the color which includes alpha
  * @returns {Number} 32-bit integer, e.g. 0xFF00FFFF
  */
