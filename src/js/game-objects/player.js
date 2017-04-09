@@ -4,6 +4,7 @@ var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 var Reticule = require("./reticule.js");
 var colors = require("../constants/colors.js");
+var Color = require("../helpers/Color.js");
 var lightUtils = require("./lights/light-utilities.js");
 
 var ANIM_NAMES = {
@@ -32,7 +33,7 @@ function Player(game, x, y, parentGroup) {
 
     this._isDead = false;
 
-    this.damage = 100; // NOTE(rex): Not quite sure if this should be a part of the player or not...
+    this.damage = 10000; // NOTE(rex): Not quite sure if this should be a part of the player or not...
     
     // Shorthand
     var globals = this.game.globals;
@@ -149,7 +150,7 @@ Player.prototype.update = function () {
     spriteUtils.forEachRecursive(this._enemies, function (child) {
         if (child instanceof Phaser.Sprite && child.takeDamage) {
             // MH: why does world position not work here...
-            var inLight = this.flashlight.isPointInLight(child.position);
+            var inLight = this.flashlight.isPointInPulse(child.position);
             var flashlightColor = this.flashlight.color;
             var enemyColor = child.color;
             // If the enemy color matches the flashlight color, then the enemies
@@ -185,6 +186,7 @@ Player.prototype._onCollideWithEnemy = function () {
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     this.flashlight.color = pickup.color;
+    this.flashlight.startPulse();
     pickup.destroy();
 };
 
