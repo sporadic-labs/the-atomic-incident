@@ -14,7 +14,6 @@ var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DebugDisplay = require("../game-objects/debug-display.js");
-var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
 
 function Sandbox() {}
 
@@ -104,9 +103,13 @@ Sandbox.prototype.create = function () {
     var waveNum = 0;
     globals.waveNum = waveNum;
 
-    var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
+    // Enemy Waves
+    // var SpawnerWave = require("../game-objects/waves/spawn-point-wave.js");
+    var SpawnerWave = require("../game-objects/waves/spawn-circle-wave.js");
     globals.spawnEnemies = new SpawnerWave(game);
 
+    // Pickups
+    var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
     new PickupSpawner(game);
 
     // Menu for switching tile maps
