@@ -26,9 +26,26 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
     this._healthBar = new HealthBar(game, this, parentGroup, cx, cy, 20, 4);
     this._healthBar.initHealth(health);
 
+    this._spawned = false; // use check if the enemy is fully spawned!
+    this._fading = true; // use check if enemy is fading in!
+
     // Configure simple physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = false;
+}
+
+BaseEnemy.prototype.update = function () {
+    if (this._fading) {
+        this._fading = false;
+        var tween = this.game.make.tween(this)
+            .to({ alpha: 0.25 }, 300, "Quad.easeInOut", true, 0, 5, true);
+    }
+
+    // When tween is over, set the spawning flag to false.
+    tween.onComplete.add(function() {
+        this._spawned = true;
+    }, this);
+
 }
 
 BaseEnemy.prototype.takeDamage = function (damage) {
@@ -50,6 +67,7 @@ BaseEnemy.prototype.postUpdate = function () {
 };
 
 BaseEnemy.prototype.destroy = function () {
+    this.game.tweens.removeFrom(this);
     this._healthBar.destroy();
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
 };

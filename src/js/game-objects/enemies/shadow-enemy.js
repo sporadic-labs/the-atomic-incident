@@ -35,7 +35,7 @@ ShadowEnemy.prototype.update = function () {
     var target = this._targetingComponent.update();
 
     // If in range of target, attack
-    if (target) {
+    if (target && this._spawned) {
         var distance = this.position.distance(target.position);
         // NOTE(rex): Make sure the takeDamage method exists before calling it
         // it doesn't exist on the player.
