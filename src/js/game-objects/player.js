@@ -180,8 +180,10 @@ Player.prototype.postUpdate = function () {
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
 };
 
-Player.prototype._onCollideWithEnemy = function () {
-    this.takeDamage();
+Player.prototype._onCollideWithEnemy = function (self, enemy) {
+    if (enemy._spawned) {
+        this.takeDamage();
+    }
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
