@@ -39,13 +39,11 @@ BaseEnemy.prototype.update = function () {
         this._fading = false;
         var tween = this.game.make.tween(this)
             .to({ alpha: 0.25 }, 300, "Quad.easeInOut", true, 0, 5, true);
+        // When tween is over, set the spawning flag to false.
+        tween.onComplete.add(function() {
+            this._spawned = true;
+        }, this);
     }
-
-    // When tween is over, set the spawning flag to false.
-    tween.onComplete.add(function() {
-        this._spawned = true;
-    }, this);
-
 }
 
 BaseEnemy.prototype.takeDamage = function (damage) {

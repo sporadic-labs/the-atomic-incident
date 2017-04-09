@@ -28,6 +28,8 @@ function ShadowEnemy(game, x, y, parentGroup, color) {
 }
 
 ShadowEnemy.prototype.update = function () {
+    if (!this._spawned) { return } // If the enemy hasn't spawned yet, don't move or attack!
+
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
     
@@ -35,7 +37,7 @@ ShadowEnemy.prototype.update = function () {
     var target = this._targetingComponent.update();
 
     // If in range of target, attack
-    if (target && this._spawned) {
+    if (target) {
         var distance = this.position.distance(target.position);
         // NOTE(rex): Make sure the takeDamage method exists before calling it
         // it doesn't exist on the player.
