@@ -12,7 +12,6 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
     parentGroup.add(this);
 
     this._player = this.game.globals.player;
-    this._scoreKeeper = this.game.globals.scoreKeeper;
     this._spawnPickups = this.game.globals.spawnPickups;
     this._pointValue = utils.default(pointValue, 1);
 
@@ -43,7 +42,6 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
 BaseEnemy.prototype.takeDamage = function (damage) {
     var newHealth = this._healthBar.incrementHealth(-damage);
     if (newHealth <= 0) {
-        this._scoreKeeper.incrementScore(this._pointValue);
         this.destroy();
         return true;
     }

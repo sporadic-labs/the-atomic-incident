@@ -187,6 +187,7 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
+    this.game.globals.scoreKeeper.incrementScore(1);
     this.flashlight.color = pickup.color;
     this.flashlight.startPulse();
     pickup.destroy();
