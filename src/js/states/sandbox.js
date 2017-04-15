@@ -126,8 +126,8 @@ Sandbox.prototype.create = function () {
     }
     this.menu = menu;
     
-    // Simple pause menu
-    var textStyle = {font: "18px Arial", fill: "#9C9C9C"};
+    // Simple pause menu{
+    var textStyle = {font: "18px 'Alfa Slab One'", fill: "#9C9C9C"};
     var pauseText = this.game.add.text(this.game.width - 20, 
         this.game.height - 5, "Pause", textStyle);
     pauseText.fixedToCamera = true;
