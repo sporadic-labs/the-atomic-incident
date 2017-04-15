@@ -34,15 +34,5 @@ ShadowEnemy.prototype.update = function () {
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
     
     // Update targeting
-    var target = this._targetingComponent.update();
-
-    // If in range of target, attack
-    if (target) {
-        var distance = this.position.distance(target.position);
-        // NOTE(rex): Make sure the takeDamage method exists before calling it
-        // it doesn't exist on the player.
-        if (distance < 30 && target.takeDamage) {
-            target.takeDamage(this._damage * this.game.time.physicsElapsed);
-        }
-    }
+    this._targetingComponent.update();
 };

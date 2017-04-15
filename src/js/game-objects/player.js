@@ -181,7 +181,7 @@ Player.prototype.postUpdate = function () {
 };
 
 Player.prototype._onCollideWithEnemy = function (self, enemy) {
-    if (enemy._spawned) {
+    if (enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
     }
 };
