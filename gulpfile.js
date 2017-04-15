@@ -45,6 +45,10 @@ var paths = {
         src: ["src/resources/**/*.*"],
         dest: dest + "/resources"
     },
+    fonts: {
+        src: ["src/fonts/**/*.*"],
+        dest: dest + "/fonts"
+    },
     deploy: {
     	src: ["public/**/*.*"]
     }
@@ -189,6 +193,14 @@ gulp.task("resources", function () {
         .pipe(liveReload());
 });
 
+// Take any (new) fonts from src/fonts over to build/fonts.
+gulp.task("fonts", function () {
+    return gulp.src(paths.fonts.src)
+        .pipe(newer(paths.fonts.dest))
+        .pipe(gulp.dest(paths.fonts.dest))
+        .pipe(liveReload());
+});
+
 // The build task will run all the individual build-related tasks above.
 gulp.task("build", [
     "copy-html",
@@ -196,6 +208,7 @@ gulp.task("build", [
     "js-lint",
     "js-browserify",
     "js-libs",
+    "fonts",
     "resources"
 ]);
 
