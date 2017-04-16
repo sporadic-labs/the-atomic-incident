@@ -8,34 +8,36 @@ PickupSpawner.prototype = Object.create(Phaser.Group.prototype);
 function PickupSpawner(game) {
     var pickupGroup = game.globals.groups.pickups;
     Phaser.Group.call(this, game, pickupGroup, "pickup-spawner");
-
-
-    this._map = this.game.globals.tileMap;
-
-    this._timer = this.game.time.create(false);
-    this._timer.start();
-
-    // Spawn after the lighting system has had a chance to update once
-    this._timer.add(0, this._spawnPickup.bind(this));
 }
 
-PickupSpawner.prototype._spawnPickup = function () {
-    var colorName = this.game.rnd.pick(["red", "blue", "green"]);
+PickupSpawner.prototype.update = function () {
+    if (this.children.length === 0) {
+        this._spawnPickup("red");
+        this._spawnPickup("blue");
+        this._spawnPickup("green");
+    }
+    Phaser.Group.prototype.update.apply(this, arguments);
+};
+
+PickupSpawner.prototype._spawnPickup = function (colorName) {
     var color = colors[colorName];
     var point = this._getSpawnPoint();
     new LightPickup(this.game, point.x, point.y, this, color);
-    var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 5000;
-    this._timer.add(rndDelay, this._spawnPickup.bind(this));
 };
 
 PickupSpawner.prototype._getSpawnPoint = function () {
+    var map = this.game.globals.tileMap;
+    var player = this.game.globals.player;
     var attempts = 0;
     var maxAttempts = 1000;
     while ((attempts < maxAttempts)) {
         attempts++;
-        var x = this.game.rnd.integerInRange(0, this.game.width);
-        var y = this.game.rnd.integerInRange(0, this.game.height);
-        var p = new Phaser.Point(x, y);
+        // Pick a tile x & y position that is not along the very edge
+        var x = this.game.rnd.integerInRange(1, map.width - 2);
+        var y = this.game.rnd.integerInRange(1, map.height - 2);
+        // Calculate the pixel position and check that it doesn't overlap player
+        var p = new Phaser.Point(x * map.tileWidth, y * map.tileWidth);
+        if (p.distance(player.position) <= 30) continue;
         if (this._isTileEmpty(x, y)) return p;
     }
     if (attempts >= maxAttempts) {
@@ -43,16 +45,9 @@ PickupSpawner.prototype._getSpawnPoint = function () {
     }
 };
 
-PickupSpawner.prototype.destroy = function () {
-    this._timer.destroy();
-
-    // Call the super class and pass along any arugments
-    Phaser.Group.prototype.destroy.apply(this, arguments);
-};
-
 PickupSpawner.prototype._isTileEmpty = function (x, y) {
     var map = this.game.globals.tileMap;
-    var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
+    var checkTile = map.getTile(x, y, 
         this.game.globals.tileMapLayer, true);
     // Check if location was out of bounds or invalid (getTileWorldXY returns 
     // null for invalid locations when nonNull param is true)

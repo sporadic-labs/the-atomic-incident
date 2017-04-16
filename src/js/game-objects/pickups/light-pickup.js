@@ -8,7 +8,6 @@ function LightPickup(game, x, y, parentGroup, color) {
     Phaser.Sprite.call(this, game, x, y, "assets", "pickups/diamond-01");
     this.color = (color instanceof Color) ? color : new Color(color);
     this.tint = this.color.getRgbColorInt();
-    this.anchor.set(0.5);
     parentGroup.add(this);
 
     // Configure physics
