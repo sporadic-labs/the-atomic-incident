@@ -16,7 +16,7 @@ function SpawnWave(game) {
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
 
-    this._startingDelayBetweenWaves = 24000; // ms
+    this._startingDelayBetweenWaves = 20000; // ms
 
     /**
      * Array of possible wave types where each element is an object that 
@@ -80,11 +80,8 @@ SpawnWave.prototype._spawnSeriesWithDelay = function (region, delay) {
     waveType.startNewSpawn();
     var enemyTypeToSpawn = waveType.getNextEnemyType();
     var cntr = 0; // Counter for enemies.
-    var playerOrMap = this.game.rnd.sign(); // 1 = player, -1 = map.
 
-    // Log something for debugging.
-    playerOrMap > 0 ? console.log(waveType.name + " around player.") : console.log(waveType.name + " around map.");
-
+    console.log(waveType.name)
 
     // Spawn the enemies in the wave with a small delay between each enemy
     var delayedSpawn = function () {
@@ -93,19 +90,10 @@ SpawnWave.prototype._spawnSeriesWithDelay = function (region, delay) {
         if (waveType.pattern === "Point") {
             spawnPoint = this._getSpawnPointInRegion(region);
         } else if (waveType.pattern === "Circle") {
-            if (playerOrMap < 0) { // map
-                spawnPoint = this._getSpawnPointOnRadius(
-                    this.game.width / 2,
-                    this.game.height / 2,
-                    300,
-                 );
-            } else { // player
-                spawnPoint = this._getSpawnPointOnRadius(
-                    this._player.position.x,
-                    this._player.position.y,
-                    80,
-                );
-            }
+            var xPos = this._player.position.x;
+            var yPos = this._player.position.y;
+            var rad = 64;
+            spawnPoint = this._getSpawnPointOnRadius(xPos, yPos, rad, cntr);
         } else if (waveType.pattern === "Grid") {
             var gridW = 8; // TODO(rt): Should these be modified ever?
             var gridH = 8; // TODO(rt): Should these be modified ever?
@@ -188,14 +176,18 @@ SpawnWave.prototype._getSpawnPointInRect = function (rect) {
  * @param  {number} radius - Radius of circle.
  * @return {Phaser.Point}  - An empty point along the circle's circumference (x, y).
  */
-SpawnWave.prototype._getSpawnPointOnRadius = function (centerX, centerY, radius) {
+SpawnWave.prototype._getSpawnPointOnRadius = function (centerX, centerY, radius, index) {
     var attempts = 0;
     var maxAttempts = 1000;
     while ((attempts < maxAttempts)) {
         attempts++;
         // Figure out where each enemy should be placed along the circumference of a circle.
-        var angle = this.game.rnd.realInRange(0, 1) * 2 * Math.PI; // Get a random angle around the circumference.
-        var rndRadius = radius + this.game.rnd.realInRange(-24, 24); // Get a random offset of the given radius.
+
+        // var angle = this.game.rnd.realInRange(0, 1) * 2 * Math.PI; // Get a random angle around the circumference.
+        // var rndRadius = radius + this.game.rnd.realInRange(-24, 24); // Get a random offset of the given radius.
+
+        var angle = (index / 24) * (2 * Math.PI); // 24 total enemies spawned.
+
         var x = centerX + (radius * Math.cos(angle));        
         var y = centerY + (radius * Math.sin(angle));
         // If the chosen location isn't in an empty tile, get out!
