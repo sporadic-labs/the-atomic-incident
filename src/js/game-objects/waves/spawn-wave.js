@@ -27,7 +27,7 @@ function SpawnWave(game) {
     this._waveTypes = [
         {probability: 0.12, waveType: new WaveType(game, "Even Circle", "Circle", 8, 8, 8)},
         {probability: 0.12, waveType: new WaveType(game, "Even Point", "Point", 8, 8, 8)},
-        {probability: 0.1, waveType: new WaveType(game, "Even Grid", "Grid", 8, 8, 8)}, // This is a test...
+        {probability: 0.1, waveType: new WaveType(game, "Even Grid", "Grid", 12, 12, 12)}, // This is a test...
         {probability: 0.12, waveType: new WaveType(game, "Red Circle", "Circle", 12, 6, 6)},
         {probability: 0.1, waveType: new WaveType(game, "Red Point", "Point", 12, 6, 6)},
         {probability: 0.12, waveType: new WaveType(game, "Green Circle", "Circle", 6, 12, 6)},
@@ -58,7 +58,8 @@ function SpawnWave(game) {
 }
 
 SpawnWave.prototype._spawnCluster = function () {
-    var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 200;
+    // var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 200;
+    var rndDelay = 0;
     // NOTE(rt): Prob don't need this anymore, I am just gonna leave it for the moment...
     var region = this.game.rnd.pick(this._spawnRegions);
     this._spawnSeriesWithDelay(region, rndDelay);
@@ -79,8 +80,11 @@ SpawnWave.prototype._spawnSeriesWithDelay = function (region, delay) {
     waveType.startNewSpawn();
     var enemyTypeToSpawn = waveType.getNextEnemyType();
     var cntr = 0; // Counter for enemies.
+    var playerOrMap = this.game.rnd.sign(); // 1 = player, -1 = map.
 
-    console.log(waveType.name);
+    // Log something for debugging.
+    playerOrMap > 0 ? console.log(waveType.name + " around player.") : console.log(waveType.name + " around map.");
+
 
     // Spawn the enemies in the wave with a small delay between each enemy
     var delayedSpawn = function () {
@@ -89,14 +93,24 @@ SpawnWave.prototype._spawnSeriesWithDelay = function (region, delay) {
         if (waveType.pattern === "Point") {
             spawnPoint = this._getSpawnPointInRegion(region);
         } else if (waveType.pattern === "Circle") {
-            var centerX = this.game.width / 2; // TODO(rex): These could be the player position as well?
-            var centerY = this.game.height / 2; // TODO(rex): These could be the player position as well?
-            spawnPoint = this._getSpawnPointOnRadius(centerX, centerY, 300);
+            if (playerOrMap < 0) { // map
+                spawnPoint = this._getSpawnPointOnRadius(
+                    this.game.width / 2,
+                    this.game.height / 2,
+                    300,
+                 );
+            } else { // player
+                spawnPoint = this._getSpawnPointOnRadius(
+                    this._player.position.x,
+                    this._player.position.y,
+                    80,
+                );
+            }
         } else if (waveType.pattern === "Grid") {
-            var gridW = 6; // TODO(rt): Should these be modified ever?
-            var gridH = 6; // TODO(rt): Should these be modified ever?
-            var yCoord = cntr % 6;
-            var xCoord = cntr - (6 * yCoord);
+            var gridW = 8; // TODO(rt): Should these be modified ever?
+            var gridH = 8; // TODO(rt): Should these be modified ever?
+            var yCoord = cntr % gridW;
+            var xCoord = cntr - (gridH * yCoord);
             spawnPoint = this._getSpawnPointOnGrid(gridW, gridH, xCoord, yCoord);
         }
 
