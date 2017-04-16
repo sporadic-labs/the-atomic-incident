@@ -116,7 +116,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("dash", [P.LEFT_BUTTON]);
 
     // Player abilities
-    this._dashAbility = new CooldownAbility(this.game, 2000, 250);
+    this._dashAbility = new CooldownAbility(this.game, 3500, 300);
 }
 
 Player.prototype.update = function () {
