@@ -6,6 +6,7 @@ var Reticule = require("./reticule.js");
 var colors = require("../constants/colors.js");
 var Color = require("../helpers/Color.js");
 var lightUtils = require("./lights/light-utilities.js");
+var CooldownAbility = require("./components/cooldown-ability.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -44,7 +45,6 @@ function Player(game, x, y, parentGroup) {
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
-    this._ableToFlip = true;
 
     // Reticle
     this._reticule = new Reticule(game, globals.groups.foreground);
@@ -113,20 +113,50 @@ function Player(game, x, y, parentGroup) {
     this._controls.addKeyboardControl("move-left", [Kb.A]);
     this._controls.addKeyboardControl("move-right", [Kb.D]);
     this._controls.addKeyboardControl("move-down", [Kb.S]);
-    this._controls.addMouseDownControl("mouse-move", [P.LEFT_BUTTON]);
+    this._controls.addMouseDownControl("dash", [P.LEFT_BUTTON]);
+
+    // Player abilities
+    this._dashAbility = new CooldownAbility(this.game, 2000, 250);
 }
 
 Player.prototype.update = function () {
+    // Update keyboard/mouse inputs
     this._controls.update();
 
-    // Move towards the mouse position
-    var dest = new Phaser.Point(
-        this.game.input.mousePointer.x + this.game.camera.x - this.body.width / 2,
-        this.game.input.mousePointer.y + this.game.camera.y - this.body.height / 2
+    // Calculate the destination and heading from the mouse
+    var g = this.game;
+    var destination = new Phaser.Point(
+        g.input.mousePointer.x + g.camera.x - this.body.width / 2,
+        g.input.mousePointer.y + g.camera.y - this.body.height / 2
     );
-    var delta = Phaser.Point.subtract(dest, this.body.position);
-    var targetDistance = delta.getMagnitude();
+    var heading = this.body.position.angle(destination);
+
+    // Speed limit
     var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
+
+    // Dash ability
+    if (this._controls.isControlActive("dash") && this._dashAbility.isReady()) {
+        this._dashAbility.activate();
+        this._dashHeading = heading;
+        this._invulnerable = true;
+        this.alpha = 0.5;
+        this._dashAbility.onDeactivation.addOnce(function () {
+            this._invulnerable = false;
+            this.alpha = 1;
+        }, this);
+    }
+    if (this._dashAbility.isActive()) {
+        maxDistance *= 5;
+        destination = this.body.position.clone();
+        destination.add(
+            1000 * Math.cos(this._dashHeading),
+            1000 * Math.sin(this._dashHeading)
+        );
+    }
+
+    // Move towards the mouse position
+    var delta = Phaser.Point.subtract(destination, this.body.position);
+    var targetDistance = delta.getMagnitude();
     if (targetDistance > maxDistance) {
         delta.setMagnitude(maxDistance);
     }
@@ -181,7 +211,7 @@ Player.prototype.postUpdate = function () {
 };
 
 Player.prototype._onCollideWithEnemy = function (self, enemy) {
-    if (enemy._spawned && !this._isTakingDamage) {
+    if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
     }
 };
@@ -228,12 +258,4 @@ Player.prototype.destroy = function () {
         this._weapons[key].destroy();
     }
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
-};
-
-Player.prototype._startCooldown = function (time) {
-    if (!this._ableToFlip) return;
-    this._ableToFlip = false;
-    this._cooldownTimer.add(time, function () {
-        this._ableToFlip = true;
-    }, this);
 };
