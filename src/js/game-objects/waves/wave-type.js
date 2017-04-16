@@ -2,20 +2,23 @@ module.exports = WaveType;
 
 var utils = require("../../helpers/utilities.js");
 
-function WaveType(game, name, numAttackers, numBombers) {
+function WaveType(game, name, pattern, redNum, greenNum, blueNum) {
     this.game = game;
     this.name = name;
-    this.numBombers = numBombers || 0;
-    this.numAttackers = numAttackers || 0;
-    this.totalEnemies = this.numBombers + this.numAttackers;
+    this.pattern = pattern;
+    this.redNum = redNum || 0;
+    this.greenNum = greenNum || 0;
+    this.blueNum = blueNum || 0;
+    this.totalEnemies = this.redNum + this.greenNum + this.blueNum;
     this._enemies = [];
 }
 
 WaveType.prototype.startNewSpawn = function () {
     this._enemies = [];
     var i;
-    for (i = 0; i < this.numBombers; i++) this._enemies.push("bomber");
-    for (i = 0; i < this.numAttackers; i++) this._enemies.push("attacker");
+    for (i = 0; i < this.redNum; i++) this._enemies.push("red");
+    for (i = 0; i < this.greenNum; i++) this._enemies.push("green");
+    for (i = 0; i < this.blueNum; i++) this._enemies.push("blue");
     utils.shuffleArray(this._enemies);
 };
 
