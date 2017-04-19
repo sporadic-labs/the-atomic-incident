@@ -151,19 +151,22 @@ gulp.task("js-libs", function() {
 
 // Combine, sourcemap and uglify our JS libraries into main.js. This uses 
 // browserify (CommonJS-style modules).
+// Build bundle once, before task is invoked
+var jsBundle = browserify({
+    entries: paths.js.entry,
+    noParse: [
+        // Don't parse the phaser libraries - seriously slows the build
+        // process. These are builds, so they don't need to be browsified.
+        require.resolve("phaser-ce/build/custom/phaser-split"),
+        require.resolve("phaser-ce/build/custom/p2"),
+        require.resolve("phaser-ce/build/custom/pixi")
+    ],
+    debug: true, // Allow debugger statements
+    cache: {}, packageCache: {}, plugin: [watchify] // Required for watchify
+}).transform(babel);
+// Task now incrementally builds
 gulp.task("js-browserify", function () {
-    var b = watchify(browserify({
-        entries: paths.js.entry,
-        noParse: [
-            // Don't parse the phaser libraries - seriously slows the build
-            // process. These are builds, so they don't need to be browsified.
-            require.resolve("phaser-ce/build/custom/phaser-split"),
-            require.resolve("phaser-ce/build/custom/p2"),
-            require.resolve("phaser-ce/build/custom/pixi")
-        ],
-        debug: true, // Allow debugger statements
-    })).transform(babel);
-    return b.bundle()    
+    return jsBundle.bundle()    
             .on("error", function (err) {
                 err.plugin = "Browserify";
                 beepLogError.call(this, err);
