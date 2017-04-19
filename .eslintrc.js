@@ -10,7 +10,8 @@ module.exports = {
 	},
 	env: {
 		browser: true,
-		commonjs: true
+		commonjs: true,
+		es6: true
 	},
 	globals: {
 		Phaser: true
