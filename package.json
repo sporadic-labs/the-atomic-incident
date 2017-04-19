@@ -12,6 +12,7 @@
   "dependencies": {},
   "devDependencies": {
     "babel-preset-env": "^1.4.0",
+    "babel-polyfill": "^6.23.0",
     "babelify": "^7.3.0",
     "beepbeep": "^1.2.0",
     "browserify": "^13.0.1",
