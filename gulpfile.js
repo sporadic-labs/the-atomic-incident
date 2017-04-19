@@ -82,6 +82,8 @@ var gulpif = require("gulp-if");
 var beep = require("beepbeep");
 var plumber = require("gulp-plumber");
 var eslint = require("gulp-eslint");
+var watchify = require("watchify");
+var babel = require("babelify");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
@@ -150,7 +152,7 @@ gulp.task("js-libs", function() {
 // Combine, sourcemap and uglify our JS libraries into main.js. This uses 
 // browserify (CommonJS-style modules).
 gulp.task("js-browserify", function () {
-    var b = browserify({
+    var b = watchify(browserify({
         entries: paths.js.entry,
         noParse: [
             // Don't parse the phaser libraries - seriously slows the build
@@ -160,7 +162,7 @@ gulp.task("js-browserify", function () {
             require.resolve("phaser-ce/build/custom/pixi")
         ],
         debug: true, // Allow debugger statements
-    });
+    })).transform(babel);
     return b.bundle()    
             .on("error", function (err) {
                 err.plugin = "Browserify";
