@@ -1,7 +1,7 @@
 module.exports = SpawnWave;
 
 var ShadowEnemy = require("../enemies/shadow-enemy.js");
-var WaveType = require("./wave-type.js");
+var Waves = require("./waves.js");
 var Color = require("../../helpers/Color.js");
 var ColorOpts = require("../../constants/colors.js")
 
@@ -16,25 +16,7 @@ function SpawnWave(game) {
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
 
-    this._startingDelayBetweenWaves = 20000; // ms
-
-    /**
-     * Array of possible wave types where each element is an object that 
-     * describes a wave:
-     *  {   probability: oddsOfWaveOccuring,
-     *      waveType: [ game, NameForDebugging, SpawnPattern, RedNum, GreenNum, BlueNum ] }
-     */
-    this._waveTypes = [
-        {probability: 0.12, waveType: new WaveType(game, "Even Circle", "Circle", 8, 8, 8)},
-        {probability: 0.12, waveType: new WaveType(game, "Even Point", "Point", 8, 8, 8)},
-        {probability: 0.1, waveType: new WaveType(game, "Even Grid", "Grid", 12, 12, 12)}, // This is a test...
-        {probability: 0.12, waveType: new WaveType(game, "Red Circle", "Circle", 12, 6, 6)},
-        {probability: 0.1, waveType: new WaveType(game, "Red Point", "Point", 12, 6, 6)},
-        {probability: 0.12, waveType: new WaveType(game, "Green Circle", "Circle", 6, 12, 6)},
-        {probability: 0.1, waveType: new WaveType(game, "Green Point", "Point", 6, 12, 6)},
-        {probability: 0.12, waveType: new WaveType(game, "Blue Circle", "Circle", 6, 6, 12)},
-        {probability: 0.1, waveType: new WaveType(game, "Blue Point", "Point", 6, 6, 12)},
-    ];
+    this._startingDelayBetweenWaves = 10000; // ms
 
     // Fix to make this wave work with maps that don't have spawn points defined
     // in tiled
@@ -75,47 +57,65 @@ SpawnWave.prototype._spawnCluster = function () {
 };
 
 SpawnWave.prototype._spawnSeriesWithDelay = function (region, delay) {
-    // Pick a wave type and get the first enemy
-    var waveType = this._pickWaveType();
-    waveType.startNewSpawn();
-    var enemyTypeToSpawn = waveType.getNextEnemyType();
-    var cntr = 0; // Counter for enemies.
+    // // Pick a wave type and get the first enemy
+    // var waveType = this._pickWaveType();
+    // waveType.startNewSpawn();
+    // var enemyTypeToSpawn = waveType.getNextEnemyType();
+    // var cntr = 0; // Counter for enemies.
 
-    console.log(waveType.name)
+    let wave;
+    const rand = this.game.rnd.integerInRange(0, 4);
+    const playerPos = this._player.position.clone();
+    if (rand === 0) {
+        // Circle around player
+        wave = new Waves.CircleWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7), playerPos, 100);
+    } else if (rand === 1) {
+        // Vertical lines near player
+        playerPos.add(this.game.rnd.sign() * 100, 0);
+        wave = new Waves.LineWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7), playerPos, 300, Math.PI / 2);
+    } else if (rand === 2) {
+        // Horizontal lines near player
+        playerPos.add(0, this.game.rnd.sign() * 100);
+        wave = new Waves.LineWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7), playerPos, 300, 0);
+    } else if (rand === 3) {
+        // Top/bottom edges of level
+        const top = new Waves.LineWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7),
+            new Phaser.Point(this.game.width / 2, 20),
+            this.game.width, 0);
+        const bottom = new Waves.LineWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7),
+            new Phaser.Point(this.game.width / 2, this.game.height - 20),
+            this.game.width, 0);
+        wave = new Waves.CombinedWave(top, bottom);
+    } else if (rand === 4) {
+        const left = new Waves.LineWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7),
+            new Phaser.Point(20, this.game.height / 2),
+            this.game.height, Math.PI / 2);
+        const right = new Waves.LineWave(this.game, 
+            new Waves.WaveComposition(7, 7, 7),
+            new Phaser.Point(this.game.width - 20, this.game.height / 2),
+            this.game.height, Math.PI / 2);
+        wave = new Waves.CombinedWave(left, right);
+    }
 
-    // Spawn the enemies in the wave with a small delay between each enemy
-    var delayedSpawn = function () {
-        cntr++; // Increment counter.
-        var spawnPoint;
-        if (waveType.pattern === "Point") {
-            spawnPoint = this._getSpawnPointInRegion(region);
-        } else if (waveType.pattern === "Circle") {
-            var xPos = this._player.position.x;
-            var yPos = this._player.position.y;
-            var rad = 64;
-            spawnPoint = this._getSpawnPointOnRadius(xPos, yPos, rad, cntr);
-        } else if (waveType.pattern === "Grid") {
-            var gridW = 8; // TODO(rt): Should these be modified ever?
-            var gridH = 8; // TODO(rt): Should these be modified ever?
-            var yCoord = cntr % gridW;
-            var xCoord = cntr - (gridH * yCoord);
-            spawnPoint = this._getSpawnPointOnGrid(gridW, gridH, xCoord, yCoord);
+    for (const enemy of wave.enemies()) {
+        const pos = enemy.position;
+        // Skip spawn point if the tile is occupied
+        if (!this._isTileEmpty(pos.x, pos.y)) continue;
+        // Spawn the enemy based on the type
+        if (enemy.type === "red") {
+            new ShadowEnemy(this.game, pos.x, pos.y, this, ColorOpts.red);
+        } else if (enemy.type === "blue") {
+            new ShadowEnemy(this.game, pos.x, pos.y, this, ColorOpts.blue);
+        } else if (enemy.type === "green") {
+            new ShadowEnemy(this.game, pos.x, pos.y, this, ColorOpts.green);
         }
-
-        if (!spawnPoint) {
-            // If no value spawn point was found, skip spawning the enemy!
-            // Otherwise, figure out what color the enemy is supposed to be and spawn it!
-        } else if (enemyTypeToSpawn === "red") {
-            new ShadowEnemy(this.game, spawnPoint.x, spawnPoint.y, this, ColorOpts.red);
-        } else if (enemyTypeToSpawn === "blue") {
-            new ShadowEnemy(this.game, spawnPoint.x, spawnPoint.y, this, ColorOpts.blue);
-        } else if (enemyTypeToSpawn === "green") {
-            new ShadowEnemy(this.game, spawnPoint.x, spawnPoint.y, this, ColorOpts.green);
-        }
-        enemyTypeToSpawn = waveType.getNextEnemyType();
-        if (enemyTypeToSpawn) this._timer.add(delay, delayedSpawn);
-    }.bind(this);
-    delayedSpawn();
+    }
 };
 
 SpawnWave.prototype._pickWaveType = function () {
