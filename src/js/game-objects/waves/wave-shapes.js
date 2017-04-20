@@ -1,56 +1,3 @@
-var utils = require("../../helpers/utilities.js");
-
-/**
- * Mainly a helper class for representing the types of enemies that can be in a
- * wave.
- * 
- * @class WaveComposition
- */
-class WaveComposition {
-    /**
-     * Creates an instance of WaveComposition.
-     * @param {number} redNum Number of enemies
-     * @param {number} greenNum Number of enemies
-     * @param {number} blueNum Number of enemies
-     * 
-     * @memberOf WaveComposition
-     */
-    constructor(redNum, greenNum, blueNum) {
-        this.redNum = redNum || 0;
-        this.greenNum = greenNum || 0;
-        this.blueNum = blueNum || 0;
-        this.totalEnemies = this.redNum + this.greenNum + this.blueNum;
-        this._enemies = [];
-
-        this.resetWave();
-    }
-
-    /**
-     * Regenerate the enemies in a random order 
-     * 
-     * @memberOf WaveComposition
-     */
-    resetWave() {
-        this._enemies = [];
-        var i;
-        for (i = 0; i < this.redNum; i++) this._enemies.push("red");
-        for (i = 0; i < this.greenNum; i++) this._enemies.push("green");
-        for (i = 0; i < this.blueNum; i++) this._enemies.push("blue");
-        utils.shuffleArray(this._enemies);
-    }
-
-    /**
-     * Generator that yields the enemy types in the current wave
-     * 
-     * @memberOf WaveComposition
-     */
-    *enemies() {
-        for (const enemy of this._enemies) {
-            yield enemy;
-        }
-    }
-}
-
 /**
  * A class for generating enemies evenly spaced around a center point.
  * 
@@ -178,7 +125,6 @@ class CombinedWave {
 }
 
 module.exports = {
-    WaveComposition,
     CircleWave,
     CombinedWave,
     LineWave
