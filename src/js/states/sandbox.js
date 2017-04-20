@@ -14,6 +14,7 @@ var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DebugDisplay = require("../game-objects/debug-display.js");
+var Path = require("../helpers/path.js");
 
 function Sandbox() {}
 
@@ -103,6 +104,12 @@ Sandbox.prototype.create = function () {
     var waveNum = 0;
     globals.waveNum = waveNum;
 
+    // Get paths from Tiled
+    globals.paths = {
+        vertical: this.parseTiledPaths("vertical-paths"),
+        horizontal: this.parseTiledPaths("horizontal-paths")
+    };
+
     // Enemy Waves
     var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
     globals.spawnEnemies = new SpawnerWave(game);
@@ -142,6 +149,25 @@ Sandbox.prototype.create = function () {
         }
         this.game.input.onDown.add(unpause, this);
     }, this);
+};
+
+Sandbox.prototype.parseTiledPaths = function (tiledLayerKey) {
+    const map = this.game.globals.tileMap;
+    const tiledPaths = utils.default(map.objects[tiledLayerKey], []);
+    const paths = [];
+    for (var i = 0; i < tiledPaths.length; i++) {
+        var pathNodes = utils.default(tiledPaths[i].polyline, []);
+        var startX = tiledPaths[i].x;
+        var startY = tiledPaths[i].y;
+        var path = new Path();
+        for (var j = 0; j < pathNodes.length; j++) {
+            path.addPoint(new Phaser.Point(
+                startX + pathNodes[j][0], startY + pathNodes[j][1]
+            ));
+        }
+        paths.push(path);
+    }
+    return paths;
 };
 
 Sandbox.prototype.getMapPoints = function(key) {
