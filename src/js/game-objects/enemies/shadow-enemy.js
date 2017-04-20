@@ -41,6 +41,6 @@ ShadowEnemy.prototype.update = function () {
 };
 
 ShadowEnemy.prototype.destroy = function () {
-    for (const component of this._components) component.destory();
+    for (const component of this._components) component.destroy();
     BaseEnemy.prototype.destroy.apply(this, arguments);
 };
