@@ -1,8 +1,6 @@
 module.exports = ShadowEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
-var TargetingComponent = require("../components/targeting-component.js");
-var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 
@@ -13,9 +11,9 @@ function ShadowEnemy(game, x, y, parentGroup, color) {
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
 
-    this._damage = 10; // 10 units per second
+    this._components = [];
 
-    this._targetingComponent = new TargetingComponent(this, 75);
+    this._damage = 10; // 10 units per second
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
@@ -27,12 +25,22 @@ function ShadowEnemy(game, x, y, parentGroup, color) {
         this.game.rnd.realInRange(25, 35);
 }
 
+ShadowEnemy.prototype.addComponent = function (component) {
+    this._components.push(component);
+};
+
 ShadowEnemy.prototype.update = function () {
-    if (!this._spawned) { return } // If the enemy hasn't spawned yet, don't move or attack!
+    // If the enemy hasn't spawned yet, don't move or attack!
+    if (!this._spawned) return;
 
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
     
-    // Update targeting
-    this._targetingComponent.update();
+    // Update any components
+    for (const component of this._components) component.update();
+};
+
+ShadowEnemy.prototype.destroy = function () {
+    for (const component of this._components) component.destory();
+    BaseEnemy.prototype.destroy.apply(this, arguments);
 };
