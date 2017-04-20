@@ -1,9 +1,11 @@
 module.exports = SpawnWave;
 
-var ShadowEnemy = require("../enemies/shadow-enemy.js");
-var Waves = require("./waves.js");
-var Color = require("../../helpers/Color.js");
-var ColorOpts = require("../../constants/colors.js")
+const ShadowEnemy = require("../enemies/shadow-enemy.js");
+const Color = require("../../helpers/Color.js");
+const Colors = require("../../constants/colors.js");
+const PathTweenWave = require("./path-tween-wave.js");
+const WaveShapes = require("./wave-shapes.js");
+const WaveComposition = require("./wave-composition.js");
 
 SpawnWave.prototype = Object.create(Phaser.Group.prototype);
 
@@ -31,6 +33,23 @@ function SpawnWave(game) {
             height: this.game.world.height
         }); 
     }
+    
+    this._possibleWaves = [
+        {
+            name: "Slow Speed Path Tween - Random Any One Type", 
+            wave: new PathTweenWave(
+                this.game, WaveComposition.CreateRandOneType(this.game), 50
+            ),
+            probability: 1/2
+        },
+        {
+            name: "Fast Speed Path Tween - Random Any One Type", 
+            wave: new PathTweenWave(
+                this.game, WaveComposition.CreateRandOneType(this.game), 100
+            ),
+            probability: 1/2
+        }
+    ];
 
     this._timer = this.game.time.create(false);
     this._timer.start();
@@ -40,11 +59,15 @@ function SpawnWave(game) {
 }
 
 SpawnWave.prototype._spawnCluster = function () {
-    // var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 200;
-    var rndDelay = 0;
-    // NOTE(rt): Prob don't need this anymore, I am just gonna leave it for the moment...
-    var region = this.game.rnd.pick(this._spawnRegions);
-    this._spawnSeriesWithDelay(region, rndDelay);
+    // // var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 200;
+    // var rndDelay = 0;
+    // // NOTE(rt): Prob don't need this anymore, I am just gonna leave it for the moment...
+    // var region = this.game.rnd.pick(this._spawnRegions);
+    // this._spawnSeriesWithDelay(region, rndDelay);
+
+    const waveType = this._pickWaveType();
+    console.log("Spawning " + waveType.name);
+    waveType.wave.spawn();
 
     // Increment the global waveNum
     this.game.globals.waveNum++;
@@ -56,84 +79,22 @@ SpawnWave.prototype._spawnCluster = function () {
     this._timer.add(modDelay, this._spawnCluster.bind(this));
 };
 
-SpawnWave.prototype._spawnSeriesWithDelay = function (region, delay) {
-    // // Pick a wave type and get the first enemy
-    // var waveType = this._pickWaveType();
-    // waveType.startNewSpawn();
-    // var enemyTypeToSpawn = waveType.getNextEnemyType();
-    // var cntr = 0; // Counter for enemies.
-
-    let wave;
-    const rand = this.game.rnd.integerInRange(0, 4);
-    const playerPos = this._player.position.clone();
-    if (rand === 0) {
-        // Circle around player
-        wave = new Waves.CircleWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7), playerPos, 100);
-    } else if (rand === 1) {
-        // Vertical lines near player
-        playerPos.add(this.game.rnd.sign() * 100, 0);
-        wave = new Waves.LineWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7), playerPos, 300, Math.PI / 2);
-    } else if (rand === 2) {
-        // Horizontal lines near player
-        playerPos.add(0, this.game.rnd.sign() * 100);
-        wave = new Waves.LineWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7), playerPos, 300, 0);
-    } else if (rand === 3) {
-        // Top/bottom edges of level
-        const top = new Waves.LineWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7),
-            new Phaser.Point(this.game.width / 2, 20),
-            this.game.width, 0);
-        const bottom = new Waves.LineWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7),
-            new Phaser.Point(this.game.width / 2, this.game.height - 20),
-            this.game.width, 0);
-        wave = new Waves.CombinedWave(top, bottom);
-    } else if (rand === 4) {
-        const left = new Waves.LineWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7),
-            new Phaser.Point(20, this.game.height / 2),
-            this.game.height, Math.PI / 2);
-        const right = new Waves.LineWave(this.game, 
-            new Waves.WaveComposition(7, 7, 7),
-            new Phaser.Point(this.game.width - 20, this.game.height / 2),
-            this.game.height, Math.PI / 2);
-        wave = new Waves.CombinedWave(left, right);
-    }
-
-    for (const enemy of wave.enemies()) {
-        const pos = enemy.position;
-        // Skip spawn point if the tile is occupied
-        if (!this._isTileEmpty(pos.x, pos.y)) continue;
-        // Spawn the enemy based on the type
-        if (enemy.type === "red") {
-            new ShadowEnemy(this.game, pos.x, pos.y, this, ColorOpts.red);
-        } else if (enemy.type === "blue") {
-            new ShadowEnemy(this.game, pos.x, pos.y, this, ColorOpts.blue);
-        } else if (enemy.type === "green") {
-            new ShadowEnemy(this.game, pos.x, pos.y, this, ColorOpts.green);
-        }
-    }
-};
-
 SpawnWave.prototype._pickWaveType = function () {
     // Use a random number between 0 and 1 to do a weighted pick from 
-    // this._waveProbabilities. A running total is needed to sample the waves. 
+    // this._possibleWaves. A running total is needed to sample the waves. 
     // If the probabilities for the waves are:
     //  0.2, 0.5, 0.3
     // That is really checking if the random number is between:
     //  [0.0 - 0.2], [0.2 - 0.7], [0.7 - 1.0]  
     var rand = this.game.rnd.frac();
     var runningTotal = 0;
-    for (var i = 0; i < this._waveTypes.length; i++) {
-        var probability = this._waveTypes[i].probability;
+    for (const possibleWave of this._possibleWaves) {
+        var probability = possibleWave.probability;
         runningTotal += probability;
-        if (rand <= runningTotal) return this._waveTypes[i].waveType;
+        if (rand <= runningTotal) return possibleWave;
     }
     // If the probabilities don't add up to one, return the last wave
-    return this._waveTypes[i - 1].waveType;
+    return this._possibleWaves[this._possibleWaves.length - 1];
 };
 
 SpawnWave.prototype._getSpawnPointInRegion = function (region) {
