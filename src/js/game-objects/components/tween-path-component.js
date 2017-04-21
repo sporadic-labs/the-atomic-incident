@@ -1,3 +1,5 @@
+const TargetingComponent = require("../components/targeting-component.js");
+
 /**
  * A component that can move a parent object along a path.
  * 
@@ -14,11 +16,14 @@ class TweenPathComponent {
      * 
      * @memberOf TweenPathComponent
      */
-    constructor(owner, path, speed, shouldRepeat = true, 
+    constructor(owner, path, speed, visionRadius = 100, shouldRepeat = true, 
             shouldYoYo = true) {
         this.game = owner.game;
         this.owner = owner;
+        this.speed = speed;
         this._path = path;
+        this._visionRadius = visionRadius;
+        this._player = this.game.globals.player;
 
         this._positionAlongPath = 0;
         const length = this._path.getLength();
@@ -40,10 +45,18 @@ class TweenPathComponent {
         }
         const point = this._path.getPointAtLength(this._positionAlongPath);
         this.owner.position.copyFrom(point);
+
+        // Switch to chasing player if player is visible
+        if (point.distance(this._player.position) <= this._visionRadius) {
+            const t = new TargetingComponent(this.owner, this.speed);
+            this.owner.addComponent(t);
+            this.destroy();
+        }
     }
 
     destroy() {
         this.game.tweens.remove(this._tween);
+        this.owner.removeComponent(this);
     }
 }
 

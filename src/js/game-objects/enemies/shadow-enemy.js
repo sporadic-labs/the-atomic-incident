@@ -29,6 +29,11 @@ ShadowEnemy.prototype.addComponent = function (component) {
     this._components.push(component);
 };
 
+ShadowEnemy.prototype.removeComponent = function (component) {
+    const i = this._components.indexOf(component);
+    if (i !== -1) this._components.splice(i, 1);
+};
+
 ShadowEnemy.prototype.update = function () {
     // If the enemy hasn't spawned yet, don't move or attack!
     if (!this._spawned) return;
@@ -36,8 +41,10 @@ ShadowEnemy.prototype.update = function () {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
     
-    // Update any components
-    for (const component of this._components) component.update();
+    // Update any components - loop in reverse to allow components to be removed
+    for (let i = this._components.length - 1; i >= 0; i--) {
+        this._components[i].update();
+    }
 };
 
 ShadowEnemy.prototype.destroy = function () {
