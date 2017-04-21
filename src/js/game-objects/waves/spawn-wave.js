@@ -6,6 +6,7 @@ const Colors = require("../../constants/colors.js");
 const PathTweenWave = require("./path-tween-wave.js");
 const WaveShapes = require("./wave-shapes.js");
 const WaveComposition = require("./wave-composition.js");
+const TargetingWave = require("./targeting-wave.js");
 
 SpawnWave.prototype = Object.create(Phaser.Group.prototype);
 
@@ -34,20 +35,31 @@ function SpawnWave(game) {
         }); 
     }
     
+    const g = this.game;
+    const {CircleWave} = WaveShapes;
     this._possibleWaves = [
         {
             name: "Slow Speed Path Tween - Random Any One Type", 
             wave: new PathTweenWave(
-                this.game, WaveComposition.CreateRandOneType(this.game), 50
+                g, WaveComposition.CreateRandOneType(g), 50
             ),
-            probability: 1/2
+            probability: .4
         },
         {
             name: "Fast Speed Path Tween - Random Any One Type", 
             wave: new PathTweenWave(
-                this.game, WaveComposition.CreateRandOneType(this.game), 100
+                g, WaveComposition.CreateRandOneType(g), 100
             ),
-            probability: 1/2
+            probability: .2
+        },
+        {
+            name: "Circle Around Player - All Three Types",
+            wave: new TargetingWave(
+                g, new CircleWave(
+                    g, WaveComposition.CreateRandThreeTypes(g, 20), 130
+                )
+            ),
+            probability: .4
         }
     ];
 

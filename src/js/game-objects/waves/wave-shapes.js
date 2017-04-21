@@ -9,15 +9,13 @@ class CircleWave {
      * @param {Phaser.Game} game 
      * @param {WaveComposition} waveComposition The types of enemies to use 
      * for generation
-     * @param {Phaser.Point} position The center of the circle
      * @param {number} radius The radius of the circle
      * 
      * @memberOf CircleWave
      */
-    constructor(game, waveComposition, position, radius) {
+    constructor(game, waveComposition, radius) {
         this.game = game;
         this.radius = radius;
-        this.position = position;
         this._waveComposition = waveComposition;
     }
 
@@ -28,7 +26,8 @@ class CircleWave {
      * @memberOf CircleWave
      */
     *enemies() {
-        this._waveComposition.resetWave();
+        this.position = this.game.globals.player.position.clone();
+        this._waveComposition.generate();
         let enemyNum = 0;
         const angleStep = 2 * Math.PI / this._waveComposition.totalEnemies;
         for (const enemy of this._waveComposition.enemies()) {
@@ -116,7 +115,6 @@ class CombinedWave {
 
     *enemies() {
         for (const wave of this._waves) {
-            debugger;
             for (const enemy of wave.enemies()) {
                 yield enemy;
             }
