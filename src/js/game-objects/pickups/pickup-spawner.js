@@ -34,7 +34,6 @@ class PickupSpawner extends Phaser.Group {
     _spawnPickup(colorName) {
         var color = colors[colorName];
         var point = this._getSpawnPoint();
-        console.log(`${colorName} : ${point.x}, ${point.y}`);
         new LightPickup(this.game, point.x, point.y, this, color);
     }
 
