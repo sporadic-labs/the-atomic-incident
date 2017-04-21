@@ -1,8 +1,0 @@
-{
-    "files": [
-        "src/"
-    ],
-    "compilerOptions": {
-        "target": "ES6"
-    }
-}
