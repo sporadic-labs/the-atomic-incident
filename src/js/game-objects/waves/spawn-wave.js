@@ -36,32 +36,64 @@ function SpawnWave(game) {
     }
     
     const g = this.game;
-    const {CircleWave} = WaveShapes;
-    this._possibleWaves = [
-        {
-            name: "Slow Speed Path Tween - Random Any One Type", 
-            wave: new PathTweenWave(
-                g, WaveComposition.CreateRandOneType(g), 50
-            ),
-            probability: .4
-        },
-        {
-            name: "Fast Speed Path Tween - Random Any One Type", 
-            wave: new PathTweenWave(
-                g, WaveComposition.CreateRandOneType(g), 100
-            ),
-            probability: .2
-        },
-        {
-            name: "Circle Around Player - All Three Types",
-            wave: new TargetingWave(
-                g, new CircleWave(
-                    g, WaveComposition.CreateRandThreeTypes(g, 20), 130
-                )
-            ),
-            probability: .4
-        }
-    ];
+    const {CircleWave, TunnelWave, CrossWave} = WaveShapes;
+    this._possibleWaves = [];
+    this._possibleWaves.push({
+        name: "Slow Speed Path Tween - Random Any One Type", 
+        wave: new PathTweenWave(
+            g, WaveComposition.CreateRandOneType(g), 50
+        ),
+        probability: 40/100
+    });
+    this._possibleWaves.push({
+        name: "Fast Speed Path Tween - Random Any One Type", 
+        wave: new PathTweenWave(
+            g, WaveComposition.CreateRandOneType(g), 100
+        ),
+        probability: 10/100
+    });
+    this._possibleWaves.push({
+        name: "Circle Around Player - All Three Types",
+        wave: new TargetingWave(
+            g, new CircleWave(
+                g, WaveComposition.CreateRandThreeTypes(g, 20), 130
+            )
+        ),
+        probability: 20/100
+    });
+    this._possibleWaves.push({
+        name: "Vertical Tunnel Around Player - Random Single Type Walls",
+        wave: new TargetingWave(
+            g, new TunnelWave(
+                g, 
+                WaveComposition.CreateRandOneType(g, 15),
+                WaveComposition.CreateRandOneType(g, 15),
+                100, 250, Math.PI / 2
+            )
+        ),
+        probability: 7.5/100
+    });
+    this._possibleWaves.push({
+        name: "Horizontal Tunnel Around Player - Random Single Type Walls",
+        wave: new TargetingWave(
+            g, new TunnelWave(
+                g, 
+                WaveComposition.CreateRandOneType(g, 15),
+                WaveComposition.CreateRandOneType(g, 15),
+                100, 250, 0
+            )
+        ),
+        probability: 7.5/100
+    });
+    // Share one wave composition with both lines of the cross
+    const sharedComposition = WaveComposition.CreateRandOneType(g, 11);
+    this._possibleWaves.push({
+        name: "Cross - Random Single Type Walls",
+        wave: new TargetingWave(
+            g, new CrossWave(g, sharedComposition, sharedComposition, 250)
+        ),
+        probability: 10/100
+    });
 
     this._timer = this.game.time.create(false);
     this._timer.start();
@@ -71,18 +103,14 @@ function SpawnWave(game) {
 }
 
 SpawnWave.prototype._spawnCluster = function () {
-    // // var rndDelay = (this.game.rnd.integerInRange(-5, 5) * 20) + 200;
-    // var rndDelay = 0;
-    // // NOTE(rt): Prob don't need this anymore, I am just gonna leave it for the moment...
-    // var region = this.game.rnd.pick(this._spawnRegions);
-    // this._spawnSeriesWithDelay(region, rndDelay);
-
     const waveType = this._pickWaveType();
-    console.log("Spawning " + waveType.name);
     waveType.wave.spawn();
 
     // Increment the global waveNum
     this.game.globals.waveNum++;
+
+    console.log(`Spawning #${this.game.globals.waveNum} : ${waveType.name}`);
+
     // NOTE(rt): Hack a difficulty curve...
     // TODO(rt): Get an actually useful curve here...
     var mod = (100 - (this.game.globals.waveNum * 2)) / 100;
