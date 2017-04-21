@@ -79,9 +79,6 @@ Sandbox.prototype.create = function () {
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
 
-    // Hack: pull pickups above the shadow/lighting layer
-    groups.foreground.bringToTop(groups.pickups);
-
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);

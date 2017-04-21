@@ -13,12 +13,14 @@ Light.instances = 0;
  * @param {Phaser.Circle|Phaser.Polygon} shape
  * @param {Phaser.Color|hex} color
  */
-function Light(game, parent, position, shape, color) {
+function Light(game, parent, position, shape, baseColor, pulseColor) {
     this.game = game;
     this.parent = parent;
     this.shape = shape;
-    this.baseColor = new Color(255, 255, 255);
-    this.color = (color instanceof Color) ? color : new Color(color);
+    this.baseColor = (baseColor instanceof Color) ? baseColor : 
+        new Color(baseColor);
+    this.pulseColor = (pulseColor instanceof Color) ? pulseColor : 
+        new Color(pulseColor);
     this.enabled = true;
     this.needsRedraw = true;
     this._isDebug = false;
@@ -29,7 +31,7 @@ function Light(game, parent, position, shape, color) {
 
     this._lastRotation = this.rotation;
     this._lastPosition = position.clone();
-    this._lastColor = this.color.clone();
+    this._lastColor = this.pulseColor.clone();
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
@@ -99,7 +101,7 @@ Light.prototype.startPulse = function (speed, width) {
     width = (width !== undefined) ? width : 75; // px
     this._pulse = {
         position: 0, // position of the outer edge of the pulse
-        color: this.color.getWebColor(),
+        color: this.pulseColor.getWebColor(),
         width: width // px size of the pulse
     };
     var duration = this._boundingRadius / speed * 1000;
@@ -120,8 +122,8 @@ Light.prototype.update = function () {
         this._lastPosition.copyFrom(this.position);
         this.needsRedraw = true;
     }
-    if (!this._lastColor.rgbaEquals(this.color)) {
-        this._lastColor = this.color.clone();
+    if (!this._lastColor.rgbaEquals(this.baseColor)) {
+        this._lastColor = this.baseColor.clone();
         this.needsRedraw = true;
     }
 

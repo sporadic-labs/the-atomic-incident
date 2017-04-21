@@ -84,7 +84,7 @@ function Player(game, x, y, parentGroup) {
     var lightSize = 600;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
         new Phaser.Circle(0, 0, lightSize), 
-        colors.red);
+        colors.white, colors.red);
     globals.groups.foreground.add(this.flashlight);
     this.flashlight.enabled = true;
 
@@ -181,7 +181,7 @@ Player.prototype.update = function () {
         if (child instanceof Phaser.Sprite && child.takeDamage) {
             // MH: why does world position not work here...
             var inLight = this.flashlight.isPointInPulse(child.position);
-            var flashlightColor = this.flashlight.color;
+            var flashlightColor = this.flashlight.pulseColor;
             var enemyColor = child.color;
             // If the enemy color matches the flashlight color, then the enemies
             // should take damage.
@@ -218,7 +218,7 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     this.game.globals.scoreKeeper.incrementScore(1);
-    this.flashlight.color = pickup.color;
+    this.flashlight.pulseColor = pickup.color;
     this.flashlight.startPulse();
     pickup.destroy();
 };
