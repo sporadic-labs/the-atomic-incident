@@ -5,6 +5,21 @@ class PickupSpawner extends Phaser.Group {
     constructor(game) {
         var pickupGroup = game.globals.groups.pickups;
         super(game, pickupGroup, "pickup-spawner");
+        this._map = this.game.globals.tileMap;
+        this._spawnLocations = this._getSpawnLocations();
+    }
+
+    _getSpawnLocations() {
+        const pickups = this._map.objects["pickups"] || [];
+        const points = [];
+        for (var i = 0; i < pickups.length; i++) {
+            // Rectangle center
+            points.push(new Phaser.Point(
+                pickups[i].x + pickups[i].width / 2, 
+                pickups[i].y + pickups[i].height / 2
+            ));
+        }
+        return points;
     }
 
     update() {
@@ -19,27 +34,31 @@ class PickupSpawner extends Phaser.Group {
     _spawnPickup(colorName) {
         var color = colors[colorName];
         var point = this._getSpawnPoint();
+        console.log(`${colorName} : ${point.x}, ${point.y}`);
         new LightPickup(this.game, point.x, point.y, this, color);
     }
 
     _getSpawnPoint() {
-        var map = this.game.globals.tileMap;
         var player = this.game.globals.player;
-        var attempts = 0;
-        var maxAttempts = 1000;
-        while ((attempts < maxAttempts)) {
+        let attempts = 0; 
+        while ((attempts < 100)) {
             attempts++;
-            // Pick a tile x & y position that is not along the very edge
-            var x = this.game.rnd.integerInRange(1, map.width - 2);
-            var y = this.game.rnd.integerInRange(1, map.height - 2);
-            // Calculate the pixel position and check that it doesn't overlap player
-            var p = new Phaser.Point(x * map.tileWidth, y * map.tileWidth);
-            if (p.distance(player.position) <= 30) continue;
-            if (this._isTileEmpty(x, y)) return p;
+            const point = this.game.rnd.pick(this._spawnLocations);
+            // Make sure pickup is not underneath player
+            if (point.distance(player.position) <= 30) continue;
+            // Make sure pick is not underneath an existing pickup
+            let overlapExisting = false;
+            for (const pickup of this.children) {
+                if (point.distance(pickup.position) <= 30) {
+                    overlapExisting = true;
+                    break;
+                }
+            }
+            if (overlapExisting) continue;
+            // Valid point found
+            return point;
         }
-        if (attempts >= maxAttempts) {
-            console.warn("Not enough places found to spawn enemies.");
-        }
+        console.warn("Not enough places found to spawn pickups.");
     }
 
     _isTileEmpty(x, y) {
@@ -57,22 +76,3 @@ class PickupSpawner extends Phaser.Group {
 }
 
 module.exports = PickupSpawner;
-
-// Sandbox.prototype.parseTiledPaths = function (tiledLayerKey) {
-//     const map = this.game.globals.tileMap;
-//     const tiledPaths = utils.default(map.objects[tiledLayerKey], []);
-//     const paths = [];
-//     for (var i = 0; i < tiledPaths.length; i++) {
-//         var pathNodes = utils.default(tiledPaths[i].polyline, []);
-//         var startX = tiledPaths[i].x;
-//         var startY = tiledPaths[i].y;
-//         var path = new Path();
-//         for (var j = 0; j < pathNodes.length; j++) {
-//             path.addPoint(new Phaser.Point(
-//                 startX + pathNodes[j][0], startY + pathNodes[j][1]
-//             ));
-//         }
-//         paths.push(path);
-//     }
-//     return paths;
-// };

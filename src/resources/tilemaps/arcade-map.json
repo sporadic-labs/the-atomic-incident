@@ -156,7 +156,7 @@
         }, 
         {
          "draworder":"topdown",
-         "height":30,
+         "height":0,
          "name":"horizontal-paths",
          "objects":[
                 {
@@ -282,7 +282,7 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":30,
+         "width":0,
          "x":0,
          "y":0
         }, 
@@ -293,102 +293,102 @@
          "objects":[
                 {
                  "height":25,
-                 "id":87,
+                 "id":136,
                  "name":"1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":213,
-                 "y":212
+                 "x":225,
+                 "y":225
                 }, 
                 {
                  "height":25,
-                 "id":90,
+                 "id":137,
                  "name":"2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":513,
-                 "y":212
+                 "x":500,
+                 "y":225
                 }, 
                 {
                  "height":25,
-                 "id":91,
+                 "id":138,
                  "name":"3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":212,
-                 "y":512
+                 "x":225,
+                 "y":500
                 }, 
                 {
                  "height":25,
-                 "id":92,
+                 "id":139,
                  "name":"4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":512,
-                 "y":511
+                 "x":500,
+                 "y":500
                 }, 
                 {
                  "height":25,
-                 "id":93,
+                 "id":140,
                  "name":"5",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":362,
-                 "y":86
+                 "x":362.5,
+                 "y":87.5
                 }, 
                 {
                  "height":25,
-                 "id":94,
+                 "id":141,
                  "name":"6",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":638,
-                 "y":361
+                 "x":637.5,
+                 "y":368.75
                 }, 
                 {
                  "height":25,
-                 "id":95,
+                 "id":142,
                  "name":"7",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":362,
-                 "y":636
+                 "x":362.5,
+                 "y":637.5
                 }, 
                 {
                  "height":25,
-                 "id":96,
+                 "id":143,
                  "name":"8",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":86,
-                 "y":362
+                 "x":87.5,
+                 "y":362.5
                 }, 
                 {
                  "height":25,
-                 "id":97,
+                 "id":144,
                  "name":"9",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":25,
-                 "x":362,
-                 "y":362
+                 "x":362.5,
+                 "y":362.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -397,7 +397,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":118,
+ "nextobjectid":145,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":25,

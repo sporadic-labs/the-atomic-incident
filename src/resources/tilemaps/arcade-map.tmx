@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="118">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="145">
  <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6" columns="6">
   <image source="tiles_25.png" width="150" height="25"/>
  </tileset>
@@ -228,14 +228,14 @@
   </object>
  </objectgroup>
  <objectgroup name="pickups">
-  <object id="87" name="1" x="213" y="212" width="25" height="25"/>
-  <object id="90" name="2" x="513" y="212" width="25" height="25"/>
-  <object id="91" name="3" x="212" y="512" width="25" height="25"/>
-  <object id="92" name="4" x="512" y="511" width="25" height="25"/>
-  <object id="93" name="5" x="362" y="86" width="25" height="25"/>
-  <object id="94" name="6" x="638" y="361" width="25" height="25"/>
-  <object id="95" name="7" x="362" y="636" width="25" height="25"/>
-  <object id="96" name="8" x="86" y="362" width="25" height="25"/>
-  <object id="97" name="9" x="362" y="362" width="25" height="25"/>
+  <object id="136" name="1" x="225" y="225" width="25" height="25"/>
+  <object id="137" name="2" x="500" y="225" width="25" height="25"/>
+  <object id="138" name="3" x="225" y="500" width="25" height="25"/>
+  <object id="139" name="4" x="500" y="500" width="25" height="25"/>
+  <object id="140" name="5" x="362.5" y="87.5" width="25" height="25"/>
+  <object id="141" name="6" x="637.5" y="368.75" width="25" height="25"/>
+  <object id="142" name="7" x="362.5" y="637.5" width="25" height="25"/>
+  <object id="143" name="8" x="87.5" y="362.5" width="25" height="25"/>
+  <object id="144" name="9" x="362.5" y="362.5" width="25" height="25"/>
  </objectgroup>
 </map>
