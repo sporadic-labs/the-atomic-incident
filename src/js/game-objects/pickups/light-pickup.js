@@ -19,6 +19,13 @@ class LightPickup extends Phaser.Sprite {
     }
 
     pickUp() {
+        // Screen flash after a short delay
+        const cam = this.game.camera;
+        const timer = this.game.time.create(true);
+        timer.add(50, () => {
+            cam.flash(this.color.getRgbColorInt(), 300, true, 0.9);
+        });
+        timer.start();
         this.pickupSound.play();
         this.destroy();
     }

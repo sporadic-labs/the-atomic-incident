@@ -213,6 +213,7 @@ Player.prototype.postUpdate = function () {
 Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
+        this.game.camera.shake(0.01, 200);
     }
 };
 
