@@ -42,7 +42,11 @@ var paths = {
     	dest: dest + "/js"
     },
     resources: {
-        src: ["src/resources/**/*.*"],
+        src: [
+            "src/resources/**/*.*", 
+            "!src/resources/audio/audacity/**/*",
+            "!src/resources/atlases/frames/**/*"
+        ],
         dest: dest + "/resources"
     },
     fonts: {
