@@ -24,6 +24,9 @@ LoadState.prototype.preload = function () {
     this.load.image("coloredTiles", "resources/tilemaps/tiles_25.png");
     this.load.image("wallTiles", "resources/tilemaps/wall-tiles.png");
 
+    // Sounds
+    this.load.audio("whoosh", "resources/audio/whoosh.mp3");
+
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
         "0%", { 

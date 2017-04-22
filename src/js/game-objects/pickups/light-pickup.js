@@ -14,6 +14,13 @@ class LightPickup extends Phaser.Sprite {
         const lightColor = color.clone().setTo({a: 200});
         this.light = this._lighting.addLight(new Phaser.Point(x, y), 
             new Phaser.Circle(0, 0, 100), lightColor);
+
+        this.pickupSound = this.game.globals.soundManager.add("whoosh");
+    }
+
+    pickUp() {
+        this.pickupSound.play();
+        this.destroy();
     }
 
     destroy() {

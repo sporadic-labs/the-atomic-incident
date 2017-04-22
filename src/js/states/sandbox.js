@@ -15,6 +15,7 @@ var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DebugDisplay = require("../game-objects/debug-display.js");
 var Path = require("../helpers/path.js");
+const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 
 function Sandbox() {}
 
@@ -78,6 +79,9 @@ Sandbox.prototype.create = function () {
     this.lighting.setOpacity(0.9);
     // AStar plugin
     globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
+
+    // Sound manager
+    globals.soundManager = new SoundEffectManager(this.game);
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
