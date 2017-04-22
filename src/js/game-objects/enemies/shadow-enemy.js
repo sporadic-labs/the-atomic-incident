@@ -23,6 +23,9 @@ function ShadowEnemy(game, x, y, parentGroup, color) {
 
     this.body.angularVelocity = this.game.rnd.sign() *
         this.game.rnd.realInRange(25, 35);
+
+    this._dieSound = this.game.globals.soundManager.add("pop");
+    this._dieSound.playMultiple = true;
 }
 
 ShadowEnemy.prototype.addComponent = function (component) {
@@ -48,6 +51,7 @@ ShadowEnemy.prototype.update = function () {
 };
 
 ShadowEnemy.prototype.destroy = function () {
+    this._dieSound.play();
     for (const component of this._components) component.destroy();
     BaseEnemy.prototype.destroy.apply(this, arguments);
 };

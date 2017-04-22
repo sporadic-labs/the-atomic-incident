@@ -26,6 +26,7 @@ LoadState.prototype.preload = function () {
 
     // Sounds
     this.load.audio("whoosh", "resources/audio/whoosh.mp3");
+    this.load.audio("pop", "resources/audio/pop.mp3");
 
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
