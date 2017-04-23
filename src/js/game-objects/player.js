@@ -195,6 +195,23 @@ Player.prototype.update = function () {
         }
     }, this);
 
+    // Trigger pickups when the lights collide.
+    spriteUtils.forEachRecursive(this._pickups, function (child) {
+        if (child instanceof Phaser.Sprite) {
+            // MH: why does world position not work here...
+            var inLight = this.flashlight.isPointInPulse(child.position);
+            if (inLight) {
+                // Destroy the pickup.
+                child.pickUp();
+                // Trigger some fx.
+                this._effects.lightFlash(child.color.getRgbColorInt());
+                this.game.camera.shake(0.005, 80);
+                // TODO(rt): Trigger a new light that destroys itself after it is done...
+                // this.flashlight.startPulse();
+            }
+        }
+    }, this);
+
 };
 
 Player.prototype.postUpdate = function () {
