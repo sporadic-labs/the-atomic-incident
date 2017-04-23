@@ -342,6 +342,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/hud/dash.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>25,25,50,50</rect>
+                <key>scale9Paddings</key>
+                <rect>25,25,50,50</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/hud/grid.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -381,6 +394,20 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/hud/heart-open.png</key>
+            <key type="filename">frames/hud/heart.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/hud/targeting-arrow.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -398,6 +425,7 @@
             <key type="filename">frames/shadow-enemy/bomber-eye-idle-01.png</key>
             <key type="filename">frames/shadow-enemy/bomber-idle-01.png</key>
             <key type="filename">frames/shadow-enemy/eye.png</key>
+            <key type="filename">frames/shadow-enemy/tintable-idle.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

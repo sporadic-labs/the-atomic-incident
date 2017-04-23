@@ -13,11 +13,14 @@ Light.instances = 0;
  * @param {Phaser.Circle|Phaser.Polygon} shape
  * @param {Phaser.Color|hex} color
  */
-function Light(game, parent, position, shape, color) {
+function Light(game, parent, position, shape, baseColor, pulseColor) {
     this.game = game;
     this.parent = parent;
     this.shape = shape;
-    this.color = (color instanceof Color) ? color : new Color(color);
+    this.baseColor = (baseColor instanceof Color) ? baseColor : 
+        new Color(baseColor);
+    this.pulseColor = (pulseColor instanceof Color) ? pulseColor : 
+        new Color(pulseColor);
     this.enabled = true;
     this.needsRedraw = true;
     this._isDebug = false;
@@ -28,7 +31,7 @@ function Light(game, parent, position, shape, color) {
 
     this._lastRotation = this.rotation;
     this._lastPosition = position.clone();
-    this._lastColor = this.color.clone();
+    this._lastColor = this.pulseColor.clone();
 
     // Set position and create bitmap based on shape type
     if (shape instanceof Phaser.Circle) {
@@ -62,6 +65,8 @@ function Light(game, parent, position, shape, color) {
     }
 
     this.intersectingWalls = this._recalculateWalls();
+    this._pulse = null;
+    this._pulseTween = null;
 }
 
 Light.prototype.enableDebug = function () {
@@ -90,6 +95,22 @@ Light.prototype._setRotation = function (angle) {
     this.shape = new Phaser.Polygon(this._points);
 };
 
+Light.prototype.startPulse = function (speed, width) {
+    if (this._pulseTween) this._pulseTween.stop();
+    speed = (speed !== undefined) ? speed : 400; // px/s
+    width = (width !== undefined) ? width : 75; // px
+    this._pulse = {
+        position: 0, // position of the outer edge of the pulse
+        color: this.pulseColor.getWebColor(),
+        width: width // px size of the pulse
+    };
+    var duration = this._boundingRadius / speed * 1000;
+    var endPosition = this._boundingRadius + width;
+    this._pulseTween = this.game.add.tween(this._pulse).to(
+        {position: endPosition}, duration, Phaser.Easing.Linear.None, true
+    );
+}
+
 Light.prototype.update = function () {
     // Check for changes that require a redraw
     if (this._lastRotation !== this.rotation) {
@@ -101,13 +122,31 @@ Light.prototype.update = function () {
         this._lastPosition.copyFrom(this.position);
         this.needsRedraw = true;
     }
-    if (!this._lastColor.equals(this.color)) {
-        this._lastColor = this.color.clone();
+    if (!this._lastColor.rgbaEquals(this.baseColor)) {
+        this._lastColor = this.baseColor.clone();
         this.needsRedraw = true;
     }
 
     if (this.needsRedraw) this.intersectingWalls = this._recalculateWalls();
     if (this._debugGraphics) this._updateDebug();
+};
+
+/**
+ * Check if a point is in the pulse of the current light.
+ *
+ * @param {Phaser.Point} worldPosition World point to check
+ * @returns {bool}
+ */
+Light.prototype.isPointInPulse = function (worldPosition) {
+    // Exit if light is disabled or there is no pulse
+    if (!this.enabled || !this._pulseTween) return false;
+    // Check if the position is within the arc of the pulse
+    var dist = Phaser.Point.distance(worldPosition, this.position);
+    var outerRadius = this._pulse.position;
+    var innerRadius = this._pulse.position - this._pulse.width;
+    if (dist > outerRadius || dist < innerRadius) return false;
+    // Finally, check if the point is actually in light (and not in shadow)
+    return this.isPointInLight(worldPosition);
 };
 
 /**
@@ -187,25 +226,28 @@ Light.prototype.redrawLight = function () {
     this._bitmap.cls();
     this._bitmap.blendSourceOver(); // Default blend mode
 
-    var c = this.color.clone();
-    var c1 = c.getWebColor();
-    c.a *= 0.6;
-    var c2 = c.getWebColor();
-    c.a *= 0.3;
-    var c3 = c.getWebColor();
-
     var shape = this.shape;
     if (shape instanceof Phaser.Circle) {
-        // Draw the circle in the center of the bitmap
-        this._bitmap.circle(shape.radius, shape.radius, shape.radius * 1, c3);
-        this._bitmap.circle(shape.radius, shape.radius, shape.radius * 0.6, c2);
-        this._bitmap.circle(shape.radius, shape.radius, shape.radius * 0.4, c1);
+        // Light as a simple circle
+        var cx = shape.radius;
+        var cy = shape.radius;
+        this._bitmap.circle(cx, cy, shape.radius, this.baseColor.getWebColor());
+        // Pulse - draw two arcs, one filled and one unfilled to get a doughnut
+        if (this._pulse) {
+            var startRadius = Math.max(this._pulse.position - this._pulse.width, 0);
+            var endRadius = Math.min(this._pulse.position, this._boundingRadius);
+            this._bitmap.ctx.beginPath();
+            this._bitmap.ctx.fillStyle = this._pulse.color;
+            this._bitmap.ctx.arc(cx, cy, endRadius, 0, 2 * Math.PI, false); // Filled
+            this._bitmap.ctx.arc(cx, cy, startRadius, 0, 2 * Math.PI, true); // Unfilled
+            this._bitmap.ctx.fill();
+        }
     } else if (shape instanceof Phaser.Polygon) {
         // Draw the polygon using the underlying bitmap. The points are relative
         // to the center of the bitmap (light.position is the center of the
         // bitmap). The center of the bitmap is at the location
         // (boundingRadius, boundingRadius), so shift each point by the radius
-        this._bitmap.ctx.fillStyle = c1;
+        this._bitmap.ctx.fillStyle = this.baseColor.getWebColor();
         this._bitmap.ctx.beginPath();
         this._bitmap.ctx.moveTo(this._boundingRadius + this._points[0].x, 
             this._boundingRadius + this._points[0].y);

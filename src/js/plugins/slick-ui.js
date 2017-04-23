@@ -4,7 +4,8 @@
  * SlickUI module.
  * This is a light wrapper around SlickUI's dist file so that it plays nicely
  * with our module structure. Updating
- *  1. Copy and paste the latest slick-ui.min.js into the IIFE below.
+ *  1. Copy and paste the latest slick-ui.min.js into the IIFE below. Grab it 
+ *     from mikewesthad/slick-ui/ which has a couple of bug fixes.
  *  2. Remove the "SlickUI = {};" line at the beginning of the pasted contents.
  * 
  * @module SlickUI 
@@ -804,7 +805,7 @@ module.exports = SlickUI;
         this.onDragStart = new Phaser.Signal();
         this.onDrag = new Phaser.Signal();
         this.onDragStop = new Phaser.Signal();
-        this.displayGroup = game.add.group();
+        this.displayGroup = this.container.root.game.add.group();
         var x = this.container.x + this._x;
         var y = this.container.y + this._y;
         var position = this._vertical ? y : x;

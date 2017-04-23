@@ -42,8 +42,16 @@ var paths = {
     	dest: dest + "/js"
     },
     resources: {
-        src: ["src/resources/**/*.*"],
+        src: [
+            "src/resources/**/*.*", 
+            "!src/resources/audio/audacity/**/*",
+            "!src/resources/atlases/frames/**/*"
+        ],
         dest: dest + "/resources"
+    },
+    fonts: {
+        src: ["src/fonts/**/*.*"],
+        dest: dest + "/fonts"
     },
     deploy: {
     	src: ["public/**/*.*"]
@@ -78,6 +86,8 @@ var gulpif = require("gulp-if");
 var beep = require("beepbeep");
 var plumber = require("gulp-plumber");
 var eslint = require("gulp-eslint");
+var watchify = require("watchify");
+var babel = require("babelify");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
@@ -145,19 +155,22 @@ gulp.task("js-libs", function() {
 
 // Combine, sourcemap and uglify our JS libraries into main.js. This uses 
 // browserify (CommonJS-style modules).
+// Build bundle once, before task is invoked
+var jsBundle = browserify({
+    entries: paths.js.entry,
+    noParse: [
+        // Don't parse the phaser libraries - seriously slows the build
+        // process. These are builds, so they don't need to be browsified.
+        require.resolve("phaser-ce/build/custom/phaser-split"),
+        require.resolve("phaser-ce/build/custom/p2"),
+        require.resolve("phaser-ce/build/custom/pixi")
+    ],
+    debug: true, // Allow debugger statements
+    cache: {}, packageCache: {}, plugin: [watchify] // Required for watchify
+}).transform(babel);
+// Task now incrementally builds
 gulp.task("js-browserify", function () {
-    var b = browserify({
-        entries: paths.js.entry,
-        noParse: [
-            // Don't parse the phaser libraries - seriously slows the build
-            // process. These are builds, so they don't need to be browsified.
-            require.resolve("phaser-ce/build/custom/phaser-split"),
-            require.resolve("phaser-ce/build/custom/p2"),
-            require.resolve("phaser-ce/build/custom/pixi")
-        ],
-        debug: true, // Allow debugger statements
-    });
-    return b.bundle()    
+    return jsBundle.bundle()    
             .on("error", function (err) {
                 err.plugin = "Browserify";
                 beepLogError.call(this, err);
@@ -189,6 +202,14 @@ gulp.task("resources", function () {
         .pipe(liveReload());
 });
 
+// Take any (new) fonts from src/fonts over to build/fonts.
+gulp.task("fonts", function () {
+    return gulp.src(paths.fonts.src)
+        .pipe(newer(paths.fonts.dest))
+        .pipe(gulp.dest(paths.fonts.dest))
+        .pipe(liveReload());
+});
+
 // The build task will run all the individual build-related tasks above.
 gulp.task("build", [
     "copy-html",
@@ -196,6 +217,7 @@ gulp.task("build", [
     "js-lint",
     "js-browserify",
     "js-libs",
+    "fonts",
     "resources"
 ]);
 

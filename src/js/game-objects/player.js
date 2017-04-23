@@ -3,7 +3,10 @@ module.exports = Player;
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 var Reticule = require("./reticule.js");
+var colors = require("../constants/colors.js");
+var Color = require("../helpers/Color.js");
 var lightUtils = require("./lights/light-utilities.js");
+var CooldownAbility = require("./components/cooldown-ability.js");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -24,24 +27,25 @@ function Player(game, x, y, parentGroup) {
     parentGroup.add(this);
 
     this.hearts = 3;
-    this.coins = 120;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
 
     this._isDead = false;
+
+    this.damage = 10000; // NOTE(rex): Not quite sure if this should be a part of the player or not...
     
     // Shorthand
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
     this._lights = globals.groups.lights;
+    this._effects = this.game.globals.plugins.effects;
 
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
-    this._ableToFlip = true;
 
     // Reticle
     this._reticule = new Reticule(game, globals.groups.foreground);
@@ -75,12 +79,13 @@ function Player(game, x, y, parentGroup) {
         (this.height - diameter) / 2);
 
     this.satBody = globals.plugins.satBody.addCircleBody(this);
-
+ 
     // Lighting for player
     this._lighting = globals.plugins.lighting;
+    var lightSize = 360;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
-        lightUtils.generateSpotlightPolygon(0, 60, 200), 
-        Phaser.Color.getColor32(150, 210, 210, 255));
+        new Phaser.Circle(0, 0, lightSize), 
+        colors.white, colors.red);
     globals.groups.foreground.add(this.flashlight);
     this.flashlight.enabled = true;
 
@@ -102,133 +107,118 @@ function Player(game, x, y, parentGroup) {
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
     var P = Phaser.Pointer;
-    // pickup
-    this._controls.addKeyboardControl("toggle-pickup", [Kb.SHIFT]);
-    // movement
-    this._controls.addKeyboardControl("move-up", [Kb.W]);
-    this._controls.addKeyboardControl("move-left", [Kb.A]);
-    this._controls.addKeyboardControl("move-right", [Kb.D]);
-    this._controls.addKeyboardControl("move-down", [Kb.S]);
-    this._controls.addMouseDownControl("mouse-move", [P.LEFT_BUTTON]);
+    this._controls.addMouseDownControl("pulse", [P.LEFT_BUTTON]);
+    this._controls.addMouseDownControl("dash", [P.RIGHT_BUTTON]);
+
+    // Player abilities
+    this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
+    this._dashAbility = new CooldownAbility(this.game, 3500, 300);
 }
 
 Player.prototype.update = function () {
+    // Update keyboard/mouse inputs
     this._controls.update();
-    
-    // Collisions with the tilemap
+
+    // Calculate the destination and heading from the mouse
+    var g = this.game;
+    var destination = new Phaser.Point(
+        g.input.mousePointer.x + g.camera.x - this.body.width / 2,
+        g.input.mousePointer.y + g.camera.y - this.body.height / 2
+    );
+    var heading = this.body.position.angle(destination);
+
+    // Speed limit
+    var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
+
+    // Fire the flashlight pulse!
+    if (this._controls.isControlActive("pulse") && this._pulseAbility.isReady()) {
+        this._effects.lightFlash(this.flashlight.pulseColor.getRgbColorInt());
+        this._pulseAbility.activate();
+        this.flashlight.startPulse();
+    }
+
+    // Dash ability
+    if (this._controls.isControlActive("dash") && this._dashAbility.isReady()) {
+        this._dashAbility.activate();
+        this._dashHeading = heading;
+        this._invulnerable = true;
+        this.alpha = 0.5;
+        this._dashAbility.onDeactivation.addOnce(function () {
+            this._invulnerable = false;
+            this.alpha = 1;
+        }, this);
+    }
+    if (this._dashAbility.isActive()) {
+        maxDistance *= 5;
+        destination = this.body.position.clone();
+        destination.add(
+            1000 * Math.cos(this._dashHeading),
+            1000 * Math.sin(this._dashHeading)
+        );
+    }
+
+    // Move towards the mouse position
+    var delta = Phaser.Point.subtract(destination, this.body.position);
+    var targetDistance = delta.getMagnitude();
+    if (targetDistance > maxDistance) {
+        delta.setMagnitude(maxDistance);
+    }
+    this.body.position.add(delta.x, delta.y);
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
 
-    // Calculate the player's new acceleration. It should be zero if no keys are
-    // pressed - allows for quick stopping.
-    var acceleration = new Phaser.Point(0, 0);
-
-    // WASD controls
-    var keyboardMovement = false;
-    if (this._controls.isControlActive("move-left")) acceleration.x = -1;
-    else if (this._controls.isControlActive("move-right")) acceleration.x = 1;
-    if (this._controls.isControlActive("move-up")) acceleration.y = -1;
-    else if (this._controls.isControlActive("move-down")) acceleration.y = 1;
-    // If keyboard was active, update rotation
-    if (acceleration.getMagnitude() > 0) {
-        keyboardMovement = true;
-        this.rotation = new Phaser.Point(0, 0).angle(acceleration) +
-            (Math.PI/2);
-    }
-
-    // Agar.io mouse controls (if keyboard controls aren't active this frame)
-    if (!keyboardMovement) {
-        this.rotation = this.position.angle(this._reticule.position) +
-            (Math.PI/2);
-        if (this._controls.isControlActive("mouse-move")) {
-            var d = Phaser.Point.subtract(this._reticule.position, 
-                this.position);
-            // If distance is more than a few pixels, set the acceleration to
-            // move in the direction of the distance
-            if (d.getMagnitude() > 5) acceleration.copyFrom(d);
-            if (acceleration.getMagnitude() < 5) acceleration.set(0, 0);
-        }
-    }
-
-
-    // Normalize the acceleration and set the magnitude. This makes it so that
-    // the player moves in the same speed in all directions.
-    acceleration = acceleration.setMagnitude(this._maxAcceleration);
-    this.body.acceleration.copyFrom(acceleration);
-
-    // Cap the velocity. Phaser physics's max velocity caps the velocity in the
-    // x & y dimensions separately. This allows the sprite to move faster along
-    // a diagonal than it would along the x or y axis. To fix that, we need to
-    // cap the velocity based on it's magnitude.
-    if (this.body.velocity.getMagnitude() > this._maxSpeed) {
-        this.body.velocity.setMagnitude(this._maxSpeed);
-    }
-
-    // Custom drag. Arcade drag runs the calculation on each axis separately. 
-    // This leads to more drag in the diagonal than in other directions.  To fix
-    // that, we need to apply drag ourselves.
-    // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
-    if (acceleration.isZero() && !this.body.velocity.isZero()) {
-        var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
-        if (this.body.velocity.getMagnitude() < dragMagnitude) {
-            // Snap to 0 velocity so that we avoid the drag causing the velocity
-            // to flip directions and end up oscillating
-            this.body.velocity.set(0);
-        } else {
-            // Apply drag in opposite direction of velocity
-            var drag = this.body.velocity.clone()
-                .setMagnitude(-1 * dragMagnitude); 
-            this.body.velocity.add(drag.x, drag.y);
-        }
-    }
-
-    // Pickup light logic
-    var pickupControl = this._controls.isControlActive("toggle-pickup");
-    // Only attempt to toggle pickup the frame the key was pressed
-    if (pickupControl && !this._lastPickupToggle) {
-        // Delay to prevent multiple pickups from running
-        this._canPickup = false;
-        this._timer.add(100, function () { 
-            this._canPickup = true; 
-        }, this);
-        if (this._lightBeingCarried) {
-            // If carrying a pickup, drop it
-            this._lightBeingCarried.drop();
-            this._lightBeingCarried = null;
-        } else {
-            // If overlapping a pickup and it has a pickUp method, pick it up
-            var arcade = this.game.physics.arcade;
-            this._lights.forEach(function (light) {
-                if (light.body && light.pickUp && 
-                        arcade.intersects(light.body, this.body)) {
-                    light.pickUp(this);
-                    this._lightBeingCarried = light;
-                }
-            }, this);
-        }
-    }
-    this._lastPickupToggle = pickupControl;
+    // Update the rotation of the player based on the reticule
+    this.rotation = this.position.angle(this._reticule.position) +
+        (Math.PI/2);
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies, 
         this._onCollideWithEnemy, this);
 
-    // Pickup collisions
+    // Light pickups
     spriteUtils.checkOverlapWithGroup(this, this._pickups, 
         this._onCollideWithPickup, this);
+
+    // Damage enemies
+    var damage = this.damage * this.game.time.physicsElapsed;
+    spriteUtils.forEachRecursive(this._enemies, function (child) {
+        if (child instanceof Phaser.Sprite && child.takeDamage) {
+            // MH: why does world position not work here...
+            var inLight = this.flashlight.isPointInPulse(child.position);
+            var flashlightColor = this.flashlight.pulseColor;
+            var enemyColor = child.color;
+            // If the enemy color matches the flashlight color, then the enemies
+            // should take damage.
+            var matchingLights = flashlightColor.rgbEquals(enemyColor);
+            if (inLight && matchingLights) {
+                child.takeDamage(damage);
+            }
+        }
+    }, this);
+
+    // Trigger pickups when the lights collide.
+    spriteUtils.forEachRecursive(this._pickups, function (child) {
+        if (child instanceof Phaser.Sprite) {
+            // MH: why does world position not work here...
+            var inLight = this.flashlight.isPointInPulse(child.position);
+            if (inLight) {
+                // Destroy the pickup.
+                child.pickUp();
+                // Trigger some fx.
+                // NOTE(rt): This is probably overkill...
+                this._effects.lightFlash(child.color.getRgbColorInt());
+                this.game.camera.shake(0.005, 80);
+                // TODO(rt): Trigger a new light that destroys itself after it is done...
+                // this.flashlight.startPulse();
+            }
+        }
+    }, this);
+
 };
 
 Player.prototype.postUpdate = function () {
     // Update flashlight placement
     this.flashlight.rotation = this.rotation - (Math.PI / 2);
     this.flashlight.position.copyFrom(this.position);
-    // Check if the position just behind the player is in shadow. Since the
-    // flashlight points forward from the player, the flashlight's light get in
-    // way for this calculation.
-    var pos = this.position.clone().subtract(
-        Math.cos(this.rotation - (Math.PI / 2)) * 5,
-        Math.sin(this.rotation - (Math.PI / 2)) * 5
-    );
-    // this.flashlight.enabled = this._lighting.isPointInShadow(pos);
 
     // Update compass position and rotation
     var cX = this.position.x + (0.6 * this.width) *
@@ -241,8 +231,19 @@ Player.prototype.postUpdate = function () {
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
 };
 
-Player.prototype._onCollideWithEnemy = function () {
-    this.takeDamage();
+Player.prototype._onCollideWithEnemy = function (self, enemy) {
+    if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
+        this.takeDamage();
+        this.game.camera.shake(0.01, 200);
+        // Trigger a red flash to indicate damage!
+        this._effects.lightFlash(0XF2CECE);
+    }
+};
+
+Player.prototype._onCollideWithPickup = function (self, pickup) {
+    this.game.globals.scoreKeeper.incrementScore(1);
+    this.flashlight.pulseColor = pickup.color;
+    pickup.pickUp();
 };
 
 Player.prototype.takeDamage = function () {
@@ -271,15 +272,6 @@ Player.prototype.takeDamage = function () {
     }, this);
 };
 
-Player.prototype._onCollideWithPickup = function (self, pickup) {
-    if (pickup._category === "weapon") {
-        self.changeGuns(pickup.type);
-    } else if (pickup._category === "score") {
-        this.coins += pickup._pointValue;
-    }
-    pickup.destroy();
-};
-
 Player.prototype.destroy = function () {
     this._reticule.destroy();
     this._timer.destroy();
@@ -289,12 +281,4 @@ Player.prototype.destroy = function () {
         this._weapons[key].destroy();
     }
     Phaser.Sprite.prototype.destroy.apply(this, arguments);
-};
-
-Player.prototype._startCooldown = function (time) {
-    if (!this._ableToFlip) return;
-    this._ableToFlip = false;
-    this._cooldownTimer.add(time, function () {
-        this._ableToFlip = true;
-    }, this);
 };

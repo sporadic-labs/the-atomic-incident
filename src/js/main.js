@@ -1,3 +1,5 @@
+require("babel-polyfill");
+
 window.PIXI = require("phaser-ce/build/custom/pixi");
 window.p2 = require("phaser-ce/build/custom/p2");
 window.Phaser = require("phaser-ce/build/custom/phaser-split");
@@ -13,8 +15,8 @@ var game = new Phaser.Game(750, 750, Phaser.CANVAS, "game-container");
 // Create the space for globals on the game object
 var globals = game.globals = {};
 globals.tilemapFiles = [
-    "tower-defense-2.json",
-    "tower-defense-1.json",
+    "arcade-map.json",
+    "arcade-map-2.json"
 ];
 globals.plugins = {};
 

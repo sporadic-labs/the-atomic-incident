@@ -1,22 +1,19 @@
 module.exports = ShadowEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
-var TargetingComponent = require("../components/targeting-component.js");
-var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 
-function ShadowEnemy(game, x, y, parentGroup) {
-    BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/idle-01", 100,
-        parentGroup);
+function ShadowEnemy(game, x, y, parentGroup, color) {
+    BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/tintable-idle", 100,
+        parentGroup, 1, color);
 
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
 
-    this._damage = 10; // 10 units per second
+    this._components = [];
 
-    var rndPath = game.rnd.integerInRange(0, game.globals.enemyPaths.length - 1);
-    this._targetingComponent = new TargetingComponent(this, 75, 125, game.globals.enemyPaths[rndPath]);
+    this._damage = 10; // 10 units per second
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
@@ -26,25 +23,35 @@ function ShadowEnemy(game, x, y, parentGroup) {
 
     this.body.angularVelocity = this.game.rnd.sign() *
         this.game.rnd.realInRange(25, 35);
+
+    this._dieSound = this.game.globals.soundManager.add("pop");
+    this._dieSound.playMultiple = true;
 }
 
+ShadowEnemy.prototype.addComponent = function (component) {
+    this._components.push(component);
+};
+
+ShadowEnemy.prototype.removeComponent = function (component) {
+    const i = this._components.indexOf(component);
+    if (i !== -1) this._components.splice(i, 1);
+};
+
 ShadowEnemy.prototype.update = function () {
+    // If the enemy hasn't spawned yet, don't move or attack!
+    if (!this._spawned) return;
+
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
-
-    // Collisions with other enemies
-    // spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
     
-    // Update targeting
-    var target = this._targetingComponent.update();
-
-    // If in range of target, attack
-    if (target) {
-        var distance = this.position.distance(target.position);
-        // NOTE(rex): Make sure the takeDamage method exists before calling it
-        // it doesn't exist on the player.
-        if (distance < 30 && target.takeDamage) {
-            target.takeDamage(this._damage * this.game.time.physicsElapsed);
-        }
+    // Update any components - loop in reverse to allow components to be removed
+    for (let i = this._components.length - 1; i >= 0; i--) {
+        this._components[i].update();
     }
+};
+
+ShadowEnemy.prototype.destroy = function () {
+    this._dieSound.play();
+    for (const component of this._components) component.destroy();
+    BaseEnemy.prototype.destroy.apply(this, arguments);
 };

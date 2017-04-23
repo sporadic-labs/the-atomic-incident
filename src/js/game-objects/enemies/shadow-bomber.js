@@ -6,17 +6,16 @@ var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowBomber.prototype = Object.create(BaseEnemy.prototype);
 
-function ShadowBomber(game, x, y, parentGroup) {
+function ShadowBomber(game, x, y, parentGroup, color) {
     BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/bomber-idle-01", 
-        200, parentGroup);
+        200, parentGroup, 1, color);
 
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
 
     this._damage = 25; // 100 units in an explosion
 
-    var rndPath = game.rnd.integerInRange(0, game.globals.enemyPaths.length - 1);
-    this._targetingComponent = new TargetingComponent(this, 40, 125, game.globals.enemyPaths[rndPath]);
+    this._targetingComponent = new TargetingComponent(this, 40);
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
@@ -31,9 +30,6 @@ function ShadowBomber(game, x, y, parentGroup) {
 ShadowBomber.prototype.update = function () {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
-
-    // Collisions with other enemies
-    // spriteUtils.arcadeRecursiveCollide(this, this.game.globals.groups.enemies);
 
     // Update targeting
     var target = this._targetingComponent.update();

@@ -27,6 +27,20 @@ function Color(color) {
 }
 
 /**
+ * Sets the color channels specified by the r, g, b and a keys of the given
+ * argument.
+ * @param {object} colorObject An object with r, g, b, a keys in range 0 - 255
+ * @returns {this} For chaining
+ */
+Color.prototype.setTo = function (colorObject) {
+    if (colorObject.r !== undefined) this.r = colorObject.r;
+    if (colorObject.g !== undefined) this.g = colorObject.g;
+    if (colorObject.b !== undefined) this.b = colorObject.b;
+    if (colorObject.a !== undefined) this.a = colorObject.a;
+    return this;
+};
+
+/**
  * Get a 32-bit integer representation of the color which includes alpha
  * @returns {Number} 32-bit integer, e.g. 0xFF00FFFF
  */
@@ -59,9 +73,17 @@ Color.prototype.clone = function () {
 };
 
 /**
- * Return deep copy of the color
- * @returns {Color}
+ * Do the RGBA values of the color param match this color?
+ * @returns {boolean}
  */
-Color.prototype.equals = function (c) {
+Color.prototype.rgbaEquals = function (c) {
     return this.r === c.r && this.g === c.g && this.b === c.b && this.a === c.a;
+};
+
+/**
+ * Do the RGB values of the color param match this color?
+ * @returns {boolean}
+ */
+Color.prototype.rgbEquals = function (c) {
+    return this.r === c.r && this.g === c.g && this.b === c.b;
 };

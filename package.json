@@ -11,12 +11,16 @@
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
   "dependencies": {},
   "devDependencies": {
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.4.0",
+    "babelify": "^7.3.0",
     "beepbeep": "^1.2.0",
     "browserify": "^13.0.1",
     "del": "^2.2.0",
     "express": "^4.13.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^3.0.1",
     "gulp-gh-pages": "^0.5.4",
@@ -34,14 +38,16 @@
     "hull.js": "^0.2.10",
     "jshint": "^2.9.2",
     "jshint-stylish": "^2.2.0",
-    "phaser-ce": "^2.7.0",
+    "phaser-ce": "^2.7.7",
     "run-sequence": "^1.2.0",
     "sat": "^0.6.0",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.9.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "typings install"
   },
   "repository": {
     "type": "git",
