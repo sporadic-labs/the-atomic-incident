@@ -49,6 +49,13 @@ CooldownAbility.prototype.isActive = function () {
     return this._isAbilityActive;
 }
 
+CooldownAbility.prototype.progress = function () {
+    if (this._isAbilityActive) {
+        return (this._activeTime - this._timer.duration) / this._activeTime
+    }
+    return 1
+}
+
 CooldownAbility.prototype.destroy = function () {
     this._timer.destroy();
 }

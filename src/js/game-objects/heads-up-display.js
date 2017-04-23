@@ -13,9 +13,11 @@ function HeadsUpDisplay(game, parentGroup) {
 
     new HealthBar(game, 20, 15, this);
 
+    // Pulse cooldown icon
     this._pulseIcon = game.make.image(20, 50, "assets", "hud/dash");
     this.add(this._pulseIcon);
 
+    // Dash cooldown icon
     this._dashIcon = game.make.image(50, 50, "assets", "hud/dash");
     this.add(this._dashIcon);
 
@@ -24,8 +26,7 @@ function HeadsUpDisplay(game, parentGroup) {
     });
     this._scoreText.anchor.setTo(0.5);
     this.add(this._scoreText);
-    // this._waveNum = game.make.text(30, 100, "Wave: 0", textStyle);
-    // this.add(this._waveNum);
+
     this._debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
         font: "18px 'Alfa Slab One'", fill: "#9C9C9C", align: "left"
     });
@@ -34,7 +35,6 @@ function HeadsUpDisplay(game, parentGroup) {
 }
 
 HeadsUpDisplay.prototype.update = function () {
-    // this._waveNum.setText("Wave: " + this.game.globals.waveNum);
     this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
 
@@ -43,7 +43,6 @@ HeadsUpDisplay.prototype.update = function () {
 
     this._dashIcon.tint = this._player._dashAbility.isReady() ? 
         0xFFFFFF : 0x636363;
-
 };
 
 
