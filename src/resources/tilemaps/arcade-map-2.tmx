@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="98">
- <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="111">
+ <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6" columns="6">
   <image source="tiles_25.png" width="150" height="25"/>
  </tileset>
- <tileset firstgid="7" name="wall-tiles" tilewidth="25" tileheight="25" tilecount="36">
+ <tileset firstgid="7" name="wall-tiles" tilewidth="25" tileheight="25" tilecount="36" columns="12">
   <image source="wall-tiles.png" width="300" height="75"/>
   <tile id="0">
    <properties>
@@ -197,5 +197,45 @@
   <object id="95" name="7" x="363" y="661" width="25" height="25"/>
   <object id="96" name="8" x="63" y="361" width="25" height="25"/>
   <object id="97" name="9" x="362" y="362" width="25" height="25"/>
+ </objectgroup>
+ <objectgroup name="horizontal-paths">
+  <object id="98" x="25" y="200">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="99" x="25" y="550">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="103" x="25" y="325">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="104" x="25" y="75">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="105" x="25" y="425">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="106" x="25" y="675">
+   <polyline points="0,0 700,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="vertical-paths">
+  <object id="101" x="200" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="102" x="550" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="107" x="75" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="108" x="325" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="109" x="425" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="110" x="675" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
  </objectgroup>
 </map>
