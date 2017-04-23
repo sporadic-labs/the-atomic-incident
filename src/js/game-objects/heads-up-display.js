@@ -14,7 +14,17 @@ function HeadsUpDisplay(game, parentGroup) {
     new HealthBar(game, 20, 15, this);
 
     // Pulse cooldown icon
+    this._pulseIconOff = game.make.image(20, 50, "assets", "hud/dash");
+    this._pulseIconOff.tint = 0x636363;
+    this.add(this._pulseIconOff);
+
+    // Pulse cooldown icon w/ mask.
     this._pulseIcon = game.make.image(20, 50, "assets", "hud/dash");
+    var pulseMask = game.add.graphics(0,0);
+    pulseMask.beginFill();
+    pulseMask.drawRect(20, 50, 30, 30);
+    pulseMask.endFill();
+    this._pulseIcon.mask = pulseMask;
     this.add(this._pulseIcon);
 
     // Dash cooldown icon
@@ -38,8 +48,18 @@ HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
 
-    this._pulseIcon.tint = this._player._pulseAbility.isReady() ? 
-        this._player.flashlight.pulseColor.getRgbaColorInt() : 0x636363;
+    // this._pulseIcon.tint = this._player._pulseAbility.isReady() ?
+    //     this._player.flashlight.pulseColor.getRgbaColorInt() : 0x636363;
+
+    this._pulseIcon.tint = this._player.flashlight.pulseColor.getRgbaColorInt();
+
+    if (this._player._pulseAbility.isActive()) {
+        this._pulseIcon.mask.clear();
+        this._pulseIcon.mask.beginFill();
+        var p = this._player._pulseAbility.progress() * 30;
+        this._pulseIcon.mask.drawRect(20, 50, 30, p);
+        this._pulseIcon.mask.endFill();
+    }
 
     this._dashIcon.tint = this._player._dashAbility.isReady() ? 
         0xFFFFFF : 0x636363;
