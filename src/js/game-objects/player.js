@@ -41,6 +41,7 @@ function Player(game, x, y, parentGroup) {
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
     this._lights = globals.groups.lights;
+    this._effects = this.game.globals.plugins.effects;
 
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
@@ -106,16 +107,11 @@ function Player(game, x, y, parentGroup) {
     this._controls = new Controller(this.game.input);
     var Kb = Phaser.Keyboard;
     var P = Phaser.Pointer;
-    // pickup
-    this._controls.addKeyboardControl("toggle-pickup", [Kb.SHIFT]);
-    // movement
-    this._controls.addKeyboardControl("move-up", [Kb.W]);
-    this._controls.addKeyboardControl("move-left", [Kb.A]);
-    this._controls.addKeyboardControl("move-right", [Kb.D]);
-    this._controls.addKeyboardControl("move-down", [Kb.S]);
-    this._controls.addMouseDownControl("dash", [P.LEFT_BUTTON]);
+    this._controls.addMouseDownControl("pulse", [P.LEFT_BUTTON]);
+    this._controls.addMouseDownControl("dash", [P.RIGHT_BUTTON]);
 
     // Player abilities
+    this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
     this._dashAbility = new CooldownAbility(this.game, 3500, 300);
 }
 
@@ -133,6 +129,13 @@ Player.prototype.update = function () {
 
     // Speed limit
     var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
+
+    // Fire the flashlight pulse!
+    if (this._controls.isControlActive("pulse") && this._pulseAbility.isReady()) {
+        this._effects.lightFlash(this.flashlight.pulseColor.getRgbColorInt());
+        this._pulseAbility.activate();
+        this.flashlight.startPulse();
+    }
 
     // Dash ability
     if (this._controls.isControlActive("dash") && this._dashAbility.isReady()) {
@@ -220,7 +223,6 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     this.game.globals.scoreKeeper.incrementScore(1);
     this.flashlight.pulseColor = pickup.color;
-    this.flashlight.startPulse();
     pickup.pickUp();
 };
 
