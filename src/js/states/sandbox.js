@@ -16,6 +16,8 @@ var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DebugDisplay = require("../game-objects/debug-display.js");
 var Path = require("../helpers/path.js");
 const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
+const EffectsPlugin = 
+    require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 
 function Sandbox() {}
 
@@ -71,6 +73,7 @@ Sandbox.prototype.create = function () {
     // Plugins
     global.plugins = (global.plugins !== undefined ) ? global.plugins : {}; 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
+    globals.plugins.effects = game.plugins.add(EffectsPlugin); 
     globals.plugins.astar = game.plugins.add(Phaser.Plugin.AStar); 
     globals.plugins.lighting = game.plugins.add(LightingPlugin, 
         groups.foreground, wallLayer); 

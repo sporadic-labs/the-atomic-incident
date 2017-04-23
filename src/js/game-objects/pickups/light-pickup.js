@@ -10,6 +10,7 @@ class LightPickup extends Phaser.Sprite {
         game.physics.arcade.enable(this);
         this.satBody = game.globals.plugins.satBody.addBoxBody(this);
 
+        this._effects = this.game.globals.plugins.effects;
         this._lighting = this.game.globals.plugins.lighting;
         const lightColor = color.clone().setTo({a: 200});
         this.light = this._lighting.addLight(new Phaser.Point(x, y), 
@@ -19,13 +20,7 @@ class LightPickup extends Phaser.Sprite {
     }
 
     pickUp() {
-        // Screen flash after a short delay
-        const cam = this.game.camera;
-        const timer = this.game.time.create(true);
-        timer.add(50, () => {
-            cam.flash(this.color.getRgbColorInt(), 300, true, 0.9);
-        });
-        timer.start();
+        this._effects.lightFlash(this.color.getRgbColorInt());
         this.pickupSound.play();
         this.destroy();
     }
