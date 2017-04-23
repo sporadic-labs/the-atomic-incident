@@ -13,7 +13,10 @@ function HeadsUpDisplay(game, parentGroup) {
 
     new HealthBar(game, 20, 15, this);
 
-    this._dashIcon = game.make.image(20, 50, "assets", "hud/dash");
+    this._pulseIcon = game.make.image(20, 50, "assets", "hud/dash");
+    this.add(this._pulseIcon);
+
+    this._dashIcon = game.make.image(50, 50, "assets", "hud/dash");
     this.add(this._dashIcon);
 
     this._scoreText = game.make.text(this.game.width / 2, 34, "", {
@@ -35,8 +38,12 @@ HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
 
+    this._pulseIcon.tint = this._player._pulseAbility.isReady() ? 
+        this._player.flashlight.pulseColor.getRgbaColorInt() : 0x636363;
+
     this._dashIcon.tint = this._player._dashAbility.isReady() ? 
         0xFFFFFF : 0x636363;
+
 };
 
 
