@@ -28,7 +28,7 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
     this._spawned = false; // use check if the enemy is fully spawned!
 
     var tween = this.game.make.tween(this)
-        .to({ alpha: 0.25 }, 300, "Quad.easeInOut", true, 0, 3, true);
+        .to({ alpha: 0.25 }, 200, "Quad.easeInOut", true, 0, 2, true);
     // When tween is over, set the spawning flag to false.
     tween.onComplete.add(function() {
         this._spawned = true;
