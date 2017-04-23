@@ -14,23 +14,34 @@ function HeadsUpDisplay(game, parentGroup) {
     new HealthBar(game, 20, 15, this);
 
     // Pulse cooldown icon
+    this._pulseIcon = game.make.image(20, 50, "assets", "hud/dash");
+    this.add(this._pulseIcon);
+
+    // Pulse inactive cooldown icon w/ mask.
     this._pulseIconOff = game.make.image(20, 50, "assets", "hud/dash");
     this._pulseIconOff.tint = 0x636363;
-    this.add(this._pulseIconOff);
-
-    // Pulse cooldown icon w/ mask.
-    this._pulseIcon = game.make.image(20, 50, "assets", "hud/dash");
     var pulseMask = game.add.graphics(0,0);
     pulseMask.beginFill();
-    pulseMask.drawRect(20, 50, 30, 30);
+    pulseMask.drawRect(29, 49, 0, 0);
     pulseMask.endFill();
-    this._pulseIcon.mask = pulseMask;
-    this.add(this._pulseIcon);
+    this._pulseIconOff.mask = pulseMask;
+    this.add(this._pulseIconOff);
 
     // Dash cooldown icon
     this._dashIcon = game.make.image(50, 50, "assets", "hud/dash");
     this.add(this._dashIcon);
 
+    // Dash inactive cooldown icon w/ mask
+    this._dashIconOff = game.make.image(50, 50, "assets", "hud/dash");
+    this._dashIconOff.tint = 0x636363;
+    var dashMask = game.add.graphics(0,0);
+    dashMask.beginFill();
+    dashMask.drawRect(49, 49, 0, 0);
+    dashMask.endFill();
+    this._dashIconOff.mask = pulseMask;
+    this.add(this._dashIconOff);
+
+    // Text for HUD
     this._scoreText = game.make.text(this.game.width / 2, 34, "", {
         font: "30px 'Alfa Slab One'", fill: "#ffd800", align: "center"
     });
@@ -48,21 +59,30 @@ HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
 
-    // this._pulseIcon.tint = this._player._pulseAbility.isReady() ?
-    //     this._player.flashlight.pulseColor.getRgbaColorInt() : 0x636363;
-
+    // Set the color of the pulse icon based on the color of the player flashlight.
     this._pulseIcon.tint = this._player.flashlight.pulseColor.getRgbaColorInt();
-
-    if (this._player._pulseAbility.isActive()) {
-        this._pulseIcon.mask.clear();
-        this._pulseIcon.mask.beginFill();
-        var p = this._player._pulseAbility.progress() * 30;
-        this._pulseIcon.mask.drawRect(20, 50, 30, p);
-        this._pulseIcon.mask.endFill();
+    // Check if the pulse ability is ready.  If it isn't, the cooldown should be animating.
+    if (!this._player._pulseAbility.isReady()) {
+        // Clear the mask...
+        this._pulseIconOff.mask.clear();
+        this._pulseIconOff.mask.beginFill();
+        // Calculate new dimensions based on the progress.
+        var p = (this._player._pulseAbility.progress() * 34);
+        // Draw the mask.
+        this._pulseIconOff.mask.drawRect(19, 49, 32, p);
+        this._pulseIconOff.mask.endFill();
     }
-
-    this._dashIcon.tint = this._player._dashAbility.isReady() ? 
-        0xFFFFFF : 0x636363;
+    // Check if the dash ability is ready.  If it isn't, the cooldown should be animating.
+    if (!this._player._dashAbility.isReady()) {
+        // Clear the mask...
+        this._dashIconOff.mask.clear();
+        this._dashIconOff.mask.beginFill();
+        // Calculate new dimensions based on the progress.
+        var d = (this._player._dashAbility.progress() * 34);
+        // Draw the mask.
+        this._dashIconOff.mask.drawRect(49, 49, 32, d);
+        this._dashIconOff.mask.endFill();
+    }
 };
 
 
