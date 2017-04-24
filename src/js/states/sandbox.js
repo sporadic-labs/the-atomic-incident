@@ -4,8 +4,6 @@
 
 module.exports = Sandbox;
 
-require("../plugins/AStar.js");
-
 var utils = require("../helpers/utilities.js");
 var lightUtils = require("../game-objects/lights/light-utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
@@ -18,6 +16,7 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin = 
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
+const EasyStarPlugin = require("../plugins/EasyStarPlugin.js");
 
 function Sandbox() {}
 
@@ -59,27 +58,26 @@ Sandbox.prototype.create = function () {
 
     // Temp: switch between levels with 1 & 2 keys
     var map1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-    map1.onDown.add(() => {
-        levelManager.switchMap(0);
-        globals.plugins.astar.setAStarMap(levelManager.getCurrentTilemap(), "walls", "tiles_25");
-    });
+    map1.onDown.add(() => levelManager.switchMap(0));
     var map2 = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-    map2.onDown.add(() => {
-        levelManager.switchMap(1);
-        globals.plugins.astar.setAStarMap(levelManager.getCurrentTilemap(), "walls", "tiles_25");
-    });
+    map2.onDown.add(() => levelManager.switchMap(1));
 
     // Plugins
     global.plugins = (global.plugins !== undefined ) ? global.plugins : {}; 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
     globals.plugins.effects = game.plugins.add(EffectsPlugin); 
-    globals.plugins.astar = game.plugins.add(Phaser.Plugin.AStar); 
     globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.lightingOverlay); 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(0.9);
-    // AStar plugin
-    globals.plugins.astar.setAStarMap(levelManager.getCurrentTilemap(), "walls", "tiles_25");
+
+    // Easystarjs plugin
+    const easyStar = globals.plugins.easyStar = game.plugins.add(EasyStarPlugin);
+    easyStar.setGrid(levelManager.getCurrentWallLayer(), [-1]);
+    // Listen for level changes
+    levelManager.levelChangeSignal.add(() => {
+        globals.plugins.easyStar.setGrid(levelManager.getCurrentWallLayer(), [-1]);
+    });
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);

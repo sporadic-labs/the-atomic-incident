@@ -17,22 +17,22 @@ TargetingComponent.prototype.update = function () {
     this.parent.body.velocity.set(0);
 
     // Calculate path
-    var tilemap = this._levelManager.getCurrentTilemap();
-    var tilemapLayer = this._levelManager.getCurrentWallLayer();
-    var start = tilemapLayer.getTileXY(this.parent.x, this.parent.y, {});
-    var goal = tilemapLayer.getTileXY(this.target.position.x, this.target.position.y, {});
-    var path = this.game.globals.plugins.astar.findPath(start, goal);
-
-    // If there is an a* path to the target, move to the next node in the path
-    if (path.nodes.length) {
-        var tileHeight = tilemap.tileHeight;
-        var tileWidth = tilemap.tileWidth;
-        var nextNode = path.nodes[path.nodes.length - 1];
-        var nextTargetPoint = new Phaser.Point(
-            nextNode.x * tileWidth + tileWidth / 2, 
-            nextNode.y * tileHeight + tileHeight / 2
-        );
-        this._moveTowards(nextTargetPoint);
+    const easyStar = this.game.globals.plugins.easyStar;
+    const path = easyStar.getWorldPath(this.parent.position, this.target.position);
+    
+    // Check if there is a path that was found
+    if (path) {
+        if (path.length > 1) {
+            // If there are multiple steps in the path, head towards the second
+            // point. This allows the sprite to skip the tile it is currently in.
+            var nextNode = path[1];
+            var nextTargetPoint = new Phaser.Point(nextNode.x, nextNode.y);
+            this._moveTowards(nextTargetPoint);
+        } else {
+            // If there aren't multiple steps, sprite is close enough to directly head
+            // for the target itself
+            this._moveTowards(this.target.position);
+        }
     }
 
     return this.target;
