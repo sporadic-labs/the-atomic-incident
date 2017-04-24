@@ -21,8 +21,14 @@ LoadState.prototype.preload = function () {
     this.load.image("wallTiles", "resources/tilemaps/wall-tiles.png");
 
     // Sounds
-    this.load.audio("whoosh", "resources/audio/whoosh.mp3");
     this.load.audio("pop", "resources/audio/pop.mp3");
+    this.load.audio("whoosh", "resources/audio/whoosh.mp3");
+    this.load.audio("whoosh-2", "resources/audio/whoosh-2.mp3");
+    this.load.audio("warp", "resources/audio/warp.mp3");
+    this.load.audio("warp-2", "resources/audio/warp-2.mp3");
+    this.load.audio("impact", "resources/audio/impact.mp3");
+    this.load.audio("impact-2", "resources/audio/impact-2.mp3");
+    this.load.audio("smash", "resources/audio/smash.mp3");
 
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 

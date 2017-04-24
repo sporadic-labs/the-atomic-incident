@@ -108,6 +108,14 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("pulse", [P.LEFT_BUTTON]);
     this._controls.addMouseDownControl("dash", [P.RIGHT_BUTTON]);
 
+    // Player Sound fx
+    this._hitSoud = this.game.globals.soundManager.add("smash");
+    this._hitSoud.playMultiple = true;
+    this._dashSound = this.game.globals.soundManager.add("warp");
+    this._dashSound.playMultiple = true;
+    this._pulseSound = this.game.globals.soundManager.add("impact-2");
+    this._pulseSound.playMultiple = true;
+
     // Player abilities
     this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
     this._dashAbility = new CooldownAbility(this.game, 3500, 300);
@@ -133,11 +141,13 @@ Player.prototype.update = function () {
         this._effects.lightFlash(this.flashlight.pulseColor.getRgbColorInt());
         this._pulseAbility.activate();
         this.flashlight.startPulse();
+        this._pulseSound.play();
     }
 
     // Dash ability
     if (this._controls.isControlActive("dash") && this._dashAbility.isReady()) {
         this._dashAbility.activate();
+        this._dashSound.play();
         this._dashHeading = heading;
         this._invulnerable = true;
         this.alpha = 0.5;
@@ -233,6 +243,7 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
         this.game.camera.shake(0.01, 200);
+        this._hitSoud.play();
         // Trigger a red flash to indicate damage!
         this._effects.lightFlash(0XF2CECE);
     }
