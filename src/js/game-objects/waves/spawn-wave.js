@@ -1,8 +1,5 @@
 module.exports = SpawnWave;
 
-const ShadowEnemy = require("../enemies/shadow-enemy.js");
-const Color = require("../../helpers/Color.js");
-const Colors = require("../../constants/colors.js");
 const PathTweenWave = require("./path-tween-wave.js");
 const WaveShapes = require("./wave-shapes.js");
 const WaveComposition = require("./wave-composition.js");
@@ -94,7 +91,7 @@ SpawnWave.prototype._spawnCluster = function () {
     // Increment the global waveNum
     this.game.globals.waveNum++;
 
-    console.log(`Spawning #${this.game.globals.waveNum} : ${waveType.name}`);
+    // console.log(`Spawning #${this.game.globals.waveNum} : ${waveType.name}`);
 
     // NOTE(rt): Hack a difficulty curve...
     // TODO(rt): Get an actually useful curve here...
@@ -169,8 +166,10 @@ SpawnWave.prototype._getSpawnPointOnRadius = function (centerX, centerY, radius,
         attempts++;
         // Figure out where each enemy should be placed along the circumference of a circle.
 
-        // var angle = this.game.rnd.realInRange(0, 1) * 2 * Math.PI; // Get a random angle around the circumference.
-        // var rndRadius = radius + this.game.rnd.realInRange(-24, 24); // Get a random offset of the given radius.
+        // Get a random angle around the circumference.
+        // var angle = this.game.rnd.realInRange(0, 1) * 2 * Math.PI;
+        // Get a random offset of the given radius.
+        // var rndRadius = radius + this.game.rnd.realInRange(-24, 24);
 
         var angle = (index / 24) * (2 * Math.PI); // 24 total enemies spawned.
 
@@ -199,8 +198,6 @@ SpawnWave.prototype._getSpawnPointOnGrid = function (wNum, hNum, xCoord, yCoord)
     var y = (this.game.height / (hNum + 1)) * yCoord;
 
     if (this._isTileEmpty(x, y)) return new Phaser.Point(x, y);
-
-    console.log('This spot on the Grid already has a tile!')
 };
 
 SpawnWave.prototype.destroy = function () {

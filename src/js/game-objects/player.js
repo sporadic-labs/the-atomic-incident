@@ -4,8 +4,6 @@ var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 var Reticule = require("./reticule.js");
 var colors = require("../constants/colors.js");
-var Color = require("../helpers/Color.js");
-var lightUtils = require("./lights/light-utilities.js");
 var CooldownAbility = require("./components/cooldown-ability.js");
 
 var ANIM_NAMES = {
@@ -34,7 +32,8 @@ function Player(game, x, y, parentGroup) {
 
     this._isDead = false;
 
-    this.damage = 10000; // NOTE(rex): Not quite sure if this should be a part of the player or not...
+    // NOTE(rex): Not quite sure if this should be a part of the player or not...
+    this.damage = 10000;
     
     // Shorthand
     var globals = this.game.globals;
@@ -105,7 +104,6 @@ function Player(game, x, y, parentGroup) {
 
     // Player controls
     this._controls = new Controller(this.game.input);
-    var Kb = Phaser.Keyboard;
     var P = Phaser.Pointer;
     this._controls.addMouseDownControl("pulse", [P.LEFT_BUTTON]);
     this._controls.addMouseDownControl("dash", [P.RIGHT_BUTTON]);

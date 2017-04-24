@@ -7,6 +7,7 @@ module.exports = {
 		"indent": ["warn", 4, {"SwitchCase": 1}],
 		"max-len": ["warn", 100, {"ignoreUrls": true}],
 		"no-mixed-spaces-and-tabs": "warn",
+		"no-console": ["warn", {"allow": ["warn", "error"]}]
 	},
 	env: {
 		browser: true,

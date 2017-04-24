@@ -1,4 +1,3 @@
-var calculateHullsFromTiles = require("./hull-from-tiles.js");
 var Light = require("./light.js");
 
 module.exports = Phaser.Plugin.Lighting = function (game, manager) {
@@ -125,7 +124,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         if (!light.enabled) continue;
         light.update();
         if (light.needsRedraw) {
-            var points = this._castLight(light);
+            let points = this._castLight(light);
             light.redraw(points); // World coordinates
         }
         this._drawLight(light);
@@ -135,7 +134,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         if (this._debugEnabled && (i === this._debugLightIndex)) {
             // Recalculate the points in case the light didn't need to be
             // redrawn
-            var points = this._castLight(light);
+            let points = this._castLight(light);
             var localPoints = points.map(this._convertWorldPointToLocal, this);
             var lightPoint = this._convertWorldPointToLocal(light.position);
             for(var k = 0; k < localPoints.length; k++) {

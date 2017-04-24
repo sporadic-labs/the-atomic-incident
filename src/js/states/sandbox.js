@@ -4,8 +4,6 @@
 
 module.exports = Sandbox;
 
-var utils = require("../helpers/utilities.js");
-var lightUtils = require("../game-objects/lights/light-utilities.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
