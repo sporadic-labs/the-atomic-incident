@@ -83,7 +83,7 @@ function Player(game, x, y, parentGroup) {
  
     // Lighting for player
     this._lighting = globals.plugins.lighting;
-    var lightSize = 600;
+    var lightSize = 360;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
         new Phaser.Circle(0, 0, lightSize), 
         colors.white, colors.red);
@@ -204,6 +204,7 @@ Player.prototype.update = function () {
                 // Destroy the pickup.
                 child.pickUp();
                 // Trigger some fx.
+                // NOTE(rt): This is probably overkill...
                 this._effects.lightFlash(child.color.getRgbColorInt());
                 this.game.camera.shake(0.005, 80);
                 // TODO(rt): Trigger a new light that destroys itself after it is done...

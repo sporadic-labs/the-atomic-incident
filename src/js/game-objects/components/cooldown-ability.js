@@ -14,6 +14,8 @@ function CooldownAbility(game, cooldownTime, activeTime) {
     this._activeTime = activeTime;
     this._ableToUseAbility = true;
     this._isAbilityActive = false;
+    this._startTime = 0;
+    this._totalTime = cooldownTime + activeTime;
 
     this.onReady = new Phaser.Signal();
     this.onActivation = new Phaser.Signal();
@@ -25,11 +27,13 @@ function CooldownAbility(game, cooldownTime, activeTime) {
 
 CooldownAbility.prototype.activate = function () {
     this.onActivation.dispatch();
+    this._startTime = this._timer.ms;
 
     this._ableToUseAbility = false;
     this._timer.add(this._cooldownTime, function () {
         this._ableToUseAbility = true;
         this.onReady.dispatch();
+        this._startTime = 0;
     }, this);
     
     this._isAbilityActive = true;
@@ -47,6 +51,16 @@ CooldownAbility.prototype.isReady = function () {
 
 CooldownAbility.prototype.isActive = function () {
     return this._isAbilityActive;
+}
+
+CooldownAbility.prototype.progress = function () {
+    // If the ability is active or if the cooldown is active,
+    // the cooldown progress should be kept track of.
+    if (this._isAbilityActive || !this._ableToUseAbility) {
+        var timeSoFar = this._timer.ms - this._startTime;
+        return (this._totalTime - timeSoFar) / this._totalTime
+    }
+    return 1
 }
 
 CooldownAbility.prototype.destroy = function () {
