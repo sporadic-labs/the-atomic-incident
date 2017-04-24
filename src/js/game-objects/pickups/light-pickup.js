@@ -13,9 +13,7 @@ class LightPickup extends Phaser.Sprite {
         this._lighting = this.game.globals.plugins.lighting;
         const lightColor = color.clone().setTo({a: 200});
         this.light = this._lighting.addLight(new Phaser.Point(x, y), 
-            new Phaser.Circle(0, 0, 100), lightColor);
-
-        this.pickupSound = this.game.globals.soundManager.add("whoosh");
+        new Phaser.Circle(0, 0, 100), lightColor);
 
         // If the level has changed, make sure the pickup is not inside of a wall
         this._levelManager = game.globals.levelManager;
@@ -36,7 +34,6 @@ class LightPickup extends Phaser.Sprite {
     }
 
     pickUp() {
-        this.pickupSound.play();
         this.destroy();
     }
 

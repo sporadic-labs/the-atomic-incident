@@ -111,6 +111,8 @@ function Player(game, x, y, parentGroup) {
     // Player abilities
     this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
     this._dashAbility = new CooldownAbility(this.game, 3500, 300);
+
+    this.pickupSound = this.game.globals.soundManager.add("whoosh");
 }
 
 Player.prototype.update = function () {
@@ -133,6 +135,7 @@ Player.prototype.update = function () {
         this._effects.lightFlash(this.flashlight.pulseColor.getRgbColorInt());
         this._pulseAbility.activate();
         this.flashlight.startPulse();
+        this.pickupSound.play();
     }
 
     // Dash ability
