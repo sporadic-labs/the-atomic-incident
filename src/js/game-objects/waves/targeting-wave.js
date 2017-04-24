@@ -7,6 +7,7 @@ class TargetingWave {
         this.game = game;
         this._enemies = game.globals.groups.enemies;
         this._waveShape = waveShape;
+        this._levelManager = this.game.globals.levelManager;
     }
 
     spawn() {
@@ -27,9 +28,9 @@ class TargetingWave {
     }
     
     _isTileEmpty(x, y) {
-        var map = this.game.globals.tileMap;
-        var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
-            this.game.globals.tileMapLayer, true); 
+        const map = this._levelManager.getCurrentTilemap();
+        const wallLayer = this._levelManager.getCurrentWallLayer();
+        var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, wallLayer, true); 
         // null for invalid locations
         if (checkTile === null) return false;
         // Index of -1 is empty

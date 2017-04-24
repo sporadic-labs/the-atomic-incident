@@ -14,27 +14,12 @@ function SpawnWave(game) {
     var enemies = game.globals.groups.enemies;
     Phaser.Group.call(this, game, enemies, "directional-wave");
 
-    this._map = this.game.globals.tileMap;
     this._player = this.game.globals.player;
     this._enemiesGroup = enemies;
     this._nonCollidingGroup = this.game.globals.groups.nonCollidingGroup;
 
     this._startingDelayBetweenWaves = 10000; // ms
 
-    // Fix to make this wave work with maps that don't have spawn points defined
-    // in tiled
-    // TODO(rt): Probably don't need this anymore...
-    this._spawnRegions = this._map.objects["spawn points"] || [];
-    if (this._spawnRegions.length === 0) {
-        this._spawnRegions.push({
-            rectangle: true,
-            x: 0,
-            y: 0,
-            width: this.game.world.width,
-            height: this.game.world.height
-        }); 
-    }
-    
     const g = this.game;
     const {CircleWave, TunnelWave, CrossWave} = WaveShapes;
     this._possibleWaves = [];
@@ -226,9 +211,10 @@ SpawnWave.prototype.destroy = function () {
 };
 
 SpawnWave.prototype._isTileEmpty = function (x, y) {
-    var map = this.game.globals.tileMap;
+    var map = this.game.globals.levelManager.getCurrentTilemap();
+    var walls = this.game.globals.levelManager.getCurrentWallLayer();
     var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
-        this.game.globals.tileMapLayer, true);
+        walls, true);
     // Check if location was out of bounds or invalid (getTileWorldXY returns 
     // null for invalid locations when nonNull param is true)
     if (checkTile === null) return false;

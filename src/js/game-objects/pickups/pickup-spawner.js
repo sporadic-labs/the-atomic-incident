@@ -5,21 +5,23 @@ class PickupSpawner extends Phaser.Group {
     constructor(game) {
         var pickupGroup = game.globals.groups.pickups;
         super(game, pickupGroup, "pickup-spawner");
-        this._map = this.game.globals.tileMap;
-        this._spawnLocations = this._getSpawnLocations();
+        this._findSpawnLocations();
+
+        this._levelManager = game.globals.levelManager;
+        this._levelManager.levelChangeSignal.add(this._findSpawnLocations, this);
     }
 
-    _getSpawnLocations() {
-        const pickups = this._map.objects["pickups"] || [];
-        const points = [];
+    _findSpawnLocations() {
+        this._spawnLocations = [];
+        const map = this.game.globals.levelManager.getCurrentTilemap();
+        const pickups = map.objects["pickups"] || [];
         for (var i = 0; i < pickups.length; i++) {
             // Rectangle center
-            points.push(new Phaser.Point(
+            this._spawnLocations.push(new Phaser.Point(
                 pickups[i].x + pickups[i].width / 2, 
                 pickups[i].y + pickups[i].height / 2
             ));
         }
-        return points;
     }
 
     update() {
@@ -29,6 +31,11 @@ class PickupSpawner extends Phaser.Group {
             this._spawnPickup("green");
         }
         super.update(...arguments);
+    }
+
+    destroy() {
+        this._levelManager.levelChangeSignal.remove(this._findSpawnLocations, this);
+        super.destroy(...arguments);
     }
 
     _spawnPickup(colorName) {
@@ -61,9 +68,9 @@ class PickupSpawner extends Phaser.Group {
     }
 
     _isTileEmpty(x, y) {
-        var map = this.game.globals.tileMap;
-        var checkTile = map.getTile(x, y, 
-            this.game.globals.tileMapLayer, true);
+        const map = this._levelManager.getCurrentTilemap();
+        const wallLayer = this._levelManager.getCurrentWallLayer();
+        var checkTile = map.getTile(x, y, wallLayer, true);
         // Check if location was out of bounds or invalid (getTileWorldXY returns 
         // null for invalid locations when nonNull param is true)
         if (checkTile === null) return false;

@@ -14,10 +14,10 @@ var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DebugDisplay = require("../game-objects/debug-display.js");
-var Path = require("../helpers/path.js");
 const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin = 
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
+const LevelManager = require("../game-objects/level-manager.js");
 
 function Sandbox() {}
 
@@ -39,13 +39,13 @@ Sandbox.prototype.create = function () {
     var groups = {
         background: game.add.group(this.world, "background"),
         midground: game.add.group(this.world, "midground"),
-        foreground: game.add.group(this.world, "foreground")
+        foreground: game.add.group(this.world, "foreground"),
+        lightingOverlay: game.add.group(this.world, "lighting-overlay"),
+        hud: game.add.group(this.world, "hud"),
     };
     groups.enemies = game.add.group(groups.midground, "enemies");
     groups.nonCollidingGroup = game.add.group(groups.midground, 
         "non-colliding");
-    groups.chargingStations = game.add.group(groups.midground, 
-        "charging-stations");
     groups.lights = game.add.group(groups.midground, "lights");
     groups.pickups = game.add.group(groups.foreground, "pickups");
     globals.groups = groups;
@@ -53,35 +53,33 @@ Sandbox.prototype.create = function () {
     // Initializing the world
     this.stage.backgroundColor = "#F9F9F9";
 
-    // Loading the tilemap
-    var map = game.add.tilemap("tilemap");
-    // Set up the tilesets. First parameter is name of tileset in Tiled and 
-    // second paramter is name of tileset image in Phaser's cache
-    map.addTilesetImage("tiles_25", "coloredTiles");
-    var wallTileset = map.addTilesetImage("wall-tiles", "wallTiles");
-    // Create a layer for each 
-    var backgroundLayer = map.createLayer("bg", this.game.width, 
-        this.game.height, groups.background);
-    backgroundLayer.resizeWorld();
-    var wallLayer = map.createLayer("walls", this.game.width, this.game.height, 
-        groups.foreground);
-    map.setCollisionBetween(wallTileset.firstgid, wallTileset.firstgid + 
-        wallTileset.total, true, wallLayer);
-    globals.tileMap = map;
-    globals.tileMapLayer = wallLayer;
+    // Level manager
+    const levelManager = new LevelManager(game, "arcade-map", "arcade-map-2");
+    globals.levelManager = levelManager;
+
+    // Temp: switch between levels with 1 & 2 keys
+    var map1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    map1.onDown.add(() => {
+        levelManager.switchMap(0);
+        globals.plugins.astar.setAStarMap(levelManager.getCurrentTilemap(), "walls", "tiles_25");
+    });
+    var map2 = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    map2.onDown.add(() => {
+        levelManager.switchMap(1);
+        globals.plugins.astar.setAStarMap(levelManager.getCurrentTilemap(), "walls", "tiles_25");
+    });
 
     // Plugins
     global.plugins = (global.plugins !== undefined ) ? global.plugins : {}; 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
     globals.plugins.effects = game.plugins.add(EffectsPlugin); 
     globals.plugins.astar = game.plugins.add(Phaser.Plugin.AStar); 
-    globals.plugins.lighting = game.plugins.add(LightingPlugin, 
-        groups.foreground, wallLayer); 
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.lightingOverlay); 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(0.9);
     // AStar plugin
-    globals.plugins.astar.setAStarMap(map, "walls", "tiles_25");
+    globals.plugins.astar.setAStarMap(levelManager.getCurrentTilemap(), "walls", "tiles_25");
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
@@ -101,18 +99,12 @@ Sandbox.prototype.create = function () {
     globals.scoreKeeper = new ScoreKeeper();
 
     // HUD
-    globals.hud = new HeadsUpDisplay(game, groups.foreground);
+    globals.hud = new HeadsUpDisplay(game, groups.hud);
     globals.debugDisplay = new DebugDisplay(game, groups.foreground);
     
     // Keep track of what wave the player is on using the globals object.
     var waveNum = 0;
     globals.waveNum = waveNum;
-
-    // Get paths from Tiled
-    globals.paths = {
-        vertical: this.parseTiledPaths("vertical-paths"),
-        horizontal: this.parseTiledPaths("horizontal-paths")
-    };
 
     // Enemy Waves
     var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
@@ -153,25 +145,6 @@ Sandbox.prototype.create = function () {
         }
         this.game.input.onDown.add(unpause, this);
     }, this);
-};
-
-Sandbox.prototype.parseTiledPaths = function (tiledLayerKey) {
-    const map = this.game.globals.tileMap;
-    const tiledPaths = utils.default(map.objects[tiledLayerKey], []);
-    const paths = [];
-    for (var i = 0; i < tiledPaths.length; i++) {
-        var pathNodes = utils.default(tiledPaths[i].polyline, []);
-        var startX = tiledPaths[i].x;
-        var startY = tiledPaths[i].y;
-        var path = new Path();
-        for (var j = 0; j < pathNodes.length; j++) {
-            path.addPoint(new Phaser.Point(
-                startX + pathNodes[j][0], startY + pathNodes[j][1]
-            ));
-        }
-        paths.push(path);
-    }
-    return paths;
 };
 
 Sandbox.prototype.getMapPoints = function(key) {

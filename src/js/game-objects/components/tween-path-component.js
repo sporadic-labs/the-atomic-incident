@@ -34,6 +34,16 @@ class TweenPathComponent {
             .repeatAll(shouldRepeat ? -1 : 0)
             .yoyo(shouldYoYo);
         this._firstUpdate = true;
+
+        // If the level has changed, switch to a targeting component (to be safe)
+        this._levelManager = this.game.globals.levelManager;
+        this._levelManager.levelChangeSignal.add(this._switchToTargeting, this);
+    }
+
+    _switchToTargeting() {
+        const t = new TargetingComponent(this.owner, this.speed);
+        this.owner.addComponent(t);
+        this.destroy();
     }
 
     update() {
@@ -55,6 +65,7 @@ class TweenPathComponent {
     }
 
     destroy() {
+        this._levelManager.levelChangeSignal.remove(this._switchToTargeting, this);
         this.game.tweens.remove(this._tween);
         this.owner.removeComponent(this);
     }

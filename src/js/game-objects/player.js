@@ -42,6 +42,7 @@ function Player(game, x, y, parentGroup) {
     this._pickups = globals.groups.pickups;
     this._lights = globals.groups.lights;
     this._effects = this.game.globals.plugins.effects;
+    this._levelManager = globals.levelManager;
 
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
@@ -86,7 +87,6 @@ function Player(game, x, y, parentGroup) {
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
         new Phaser.Circle(0, 0, lightSize), 
         colors.white, colors.red);
-    globals.groups.foreground.add(this.flashlight);
     this.flashlight.enabled = true;
 
     // Directional arrow, for dev purposes
@@ -164,7 +164,7 @@ Player.prototype.update = function () {
         delta.setMagnitude(maxDistance);
     }
     this.body.position.add(delta.x, delta.y);
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+    this.game.physics.arcade.collide(this, this._levelManager.getCurrentWallLayer());
 
     // Update the rotation of the player based on the reticule
     this.rotation = this.position.angle(this._reticule.position) +

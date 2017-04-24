@@ -9,6 +9,7 @@ function TargetingComponent(parent, maxSpeed) {
     this.parent = parent;
     this._maxSpeed = maxSpeed;
     this.target = this.game.globals.player;
+    this._levelManager = this.game.globals.levelManager;
 }
 
 TargetingComponent.prototype.update = function () {
@@ -16,15 +17,16 @@ TargetingComponent.prototype.update = function () {
     this.parent.body.velocity.set(0);
 
     // Calculate path
-    var tilemapLayer = this.game.globals.tileMapLayer;
+    var tilemap = this._levelManager.getCurrentTilemap();
+    var tilemapLayer = this._levelManager.getCurrentWallLayer();
     var start = tilemapLayer.getTileXY(this.parent.x, this.parent.y, {});
     var goal = tilemapLayer.getTileXY(this.target.position.x, this.target.position.y, {});
     var path = this.game.globals.plugins.astar.findPath(start, goal);
 
     // If there is an a* path to the target, move to the next node in the path
     if (path.nodes.length) {
-        var tileHeight = this.game.globals.tileMap.tileHeight;
-        var tileWidth = this.game.globals.tileMap.tileWidth;
+        var tileHeight = tilemap.tileHeight;
+        var tileWidth = tilemap.tileWidth;
         var nextNode = path.nodes[path.nodes.length - 1];
         var nextTargetPoint = new Phaser.Point(
             nextNode.x * tileWidth + tileWidth / 2, 
