@@ -60,7 +60,7 @@ HeadsUpDisplay.prototype.update = function () {
     Phaser.Group.prototype.update.apply(this, arguments);
 
     // Set the color of the pulse icon based on the color of the player flashlight.
-    this._pulseIcon.tint = this._player.flashlight.pulseColor.getRgbaColorInt();
+    this._pulseIcon.tint = this._player.flashlight.pulseColor.getRgbColorInt();
     // Check if the pulse ability is ready.  If it isn't, the cooldown should be animating.
     if (!this._player._pulseAbility.isReady()) {
         // Clear the mask...
