@@ -24,5 +24,6 @@ game.state.add("boot", BootState);
 game.state.add("load", LoadState);
 game.state.add("start", StartScreen);
 game.state.add("sandbox", Sandbox);
+game.state.add("test", require("./states/test-state.js"));
 game.state.add("slick-ui-test", require("./states/slick-ui-test.js"));
 game.state.start("boot");
