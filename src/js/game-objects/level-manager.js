@@ -39,7 +39,7 @@ class LevelManager {
 
         // Show the first map
         this._loadedMapIndex = 0;
-        this._maps[this._loadedMapIndex].bgLayer.visible = true;
+        // this._maps[this._loadedMapIndex].bgLayer.visible = true;
         this._maps[this._loadedMapIndex].wallLayer.visible = true;
     }
 

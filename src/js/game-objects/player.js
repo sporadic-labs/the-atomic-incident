@@ -115,6 +115,7 @@ function Player(game, x, y, parentGroup) {
     this._dashSound.playMultiple = true;
     this._pulseSound = this.game.globals.soundManager.add("impact-2");
     this._pulseSound.playMultiple = true;
+    this.pickupSound = this.game.globals.soundManager.add("whoosh");
 
     // Player abilities
     this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
@@ -252,6 +253,7 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     this.game.globals.scoreKeeper.incrementScore(1);
     this.flashlight.pulseColor = pickup.color;
+    this.pickupSound.play();
     pickup.pickUp();
 };
 
