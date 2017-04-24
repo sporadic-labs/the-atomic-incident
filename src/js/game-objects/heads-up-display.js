@@ -2,6 +2,10 @@ module.exports = HeadsUpDisplay;
 
 HeadsUpDisplay.prototype = Object.create(Phaser.Group.prototype);
 
+/**
+ * @param {Phaser.Game} game 
+ * @param {Phaser.Group} parentGroup 
+ */
 function HeadsUpDisplay(game, parentGroup) {
     Phaser.Group.call(this, game, parentGroup, "heads-up-display");
     
@@ -40,6 +44,44 @@ function HeadsUpDisplay(game, parentGroup) {
     dashMask.endFill();
     this._dashIconOff.mask = pulseMask;
     this.add(this._dashIconOff);
+
+    // Play/pause
+    const unpause = () => {
+        pauseButton.visible = true;
+        playButton.visible = false;
+        game.paused = false;
+        this.game.input.onDown.remove(unpause, this);
+    }
+    const playPos = new Phaser.Point(game.width - 10, game.height - 10); 
+    const pauseButton = game.add.button(playPos.x, playPos.y, "assets", () => {
+        playButton.visible = true;
+        pauseButton.visible = false;
+        this.game.input.onDown.add(unpause, this);
+        game.paused = true;
+    }, this, "hud/play", "hud/play", "hud/play", "hud/play");
+    pauseButton.anchor.set(1, 1);
+    const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this, 
+        "hud/pause", "hud/pause", "hud/pause", "hud/pause");
+    playButton.anchor.set(1, 1);
+    playButton.visible = false;
+
+    // Mute/unmute
+    const mutePos = new Phaser.Point(game.width - 10, 10); 
+    const muteButton = game.add.button(mutePos.x, mutePos.y, "assets", () => {
+        unmuteButton.visible = true;
+        muteButton.visible = false;
+        game.sound.mute = true;
+    }, this, "hud/mute", "hud/mute", "hud/mute", "hud/mute");
+    muteButton.anchor.set(1, 0);
+    const unmuteButton = game.add.button(mutePos.x, mutePos.y, "assets", () => {
+        unmuteButton.visible = false;
+        muteButton.visible = true;
+        game.sound.mute = false;
+    }, this, "hud/sound", "hud/sound", "hud/sound", "hud/sound");
+    unmuteButton.anchor.set(1, 0);
+    // Show the appropriate button based on sound manager's state
+    if (game.sound.mute) muteButton.visible = false;
+    else unmuteButton.visible = false;
 
     // Text for HUD
     this._scoreText = game.make.text(this.game.width / 2, 34, "", {

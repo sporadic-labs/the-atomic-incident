@@ -110,37 +110,19 @@ Sandbox.prototype.create = function () {
     var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
     new PickupSpawner(game);
 
-    // Menu for switching tile maps
-    var menu = [];
-    var x = game.width - 36;
-    for (var i = 0; i < globals.tilemapFiles.length; i++) {
-        // The callback needs a reference to the value of i on each iteration,
-        // so create a callback with binding
-        var cb = game.state.start.bind(game.state, "load", true, true, 
-            "resources/tilemaps/" + globals.tilemapFiles[i]);
-        var b = game.add.button(x, (36 * i) + 4, "button", cb);
-        b.fixedToCamera = true;
-        menu.push(b);
-    }
-    this.menu = menu;
-    
-    // Simple pause menu{
-    var textStyle = {font: "18px 'Alfa Slab One'", fill: "#9C9C9C"};
-    var pauseText = this.game.add.text(this.game.width - 20, 
-        this.game.height - 5, "Pause", textStyle);
-    pauseText.fixedToCamera = true;
-    pauseText.inputEnabled = true;
-    pauseText.anchor.set(1, 1);
-    pauseText.events.onInputDown.add(function () {
-        game.paused = true;
-        pauseText.text = "Play";
-        function unpause() {
-            game.paused = false;
-            pauseText.text = "Pause";
-            this.game.input.onDown.remove(unpause, this);
-        }
-        this.game.input.onDown.add(unpause, this);
-    }, this);
+    // // Menu for switching tile maps
+    // var menu = [];
+    // var x = game.width - 36;
+    // for (var i = 0; i < globals.tilemapFiles.length; i++) {
+    //     // The callback needs a reference to the value of i on each iteration,
+    //     // so create a callback with binding
+    //     var cb = game.state.start.bind(game.state, "load", true, true, 
+    //         "resources/tilemaps/" + globals.tilemapFiles[i]);
+    //     var b = game.add.button(x, (36 * i) + 4, "button", cb);
+    //     b.fixedToCamera = true;
+    //     menu.push(b);
+    // }
+    // this.menu = menu;
 };
 
 Sandbox.prototype.getMapPoints = function(key) {

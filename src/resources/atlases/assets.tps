@@ -396,7 +396,11 @@
             </struct>
             <key type="filename">frames/hud/heart-open.png</key>
             <key type="filename">frames/hud/heart.png</key>
+            <key type="filename">frames/hud/mute.png</key>
+            <key type="filename">frames/hud/pause.png</key>
+            <key type="filename">frames/hud/play.png</key>
             <key type="filename">frames/hud/pulse.png</key>
+            <key type="filename">frames/hud/sound.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
