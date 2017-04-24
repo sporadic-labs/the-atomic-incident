@@ -50,5 +50,6 @@ SlickTestUI.prototype.create = function () {
 
 SlickTestUI.prototype.update = function () {
     var c = Phaser.Color.HSLtoRGB(color.h, color.s, color.l);
-    this.game.stage.backgroundColor = `rgb(${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)})`;
+    this.game.stage.backgroundColor = 
+        `rgb(${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)})`;
 };
