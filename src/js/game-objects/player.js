@@ -109,7 +109,7 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("dash", [P.RIGHT_BUTTON]);
 
     // Player Sound fx
-    this._hitSoud = this.game.globals.soundManager.add("smash");
+    this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
     this._hitSoud.playMultiple = true;
     this._dashSound = this.game.globals.soundManager.add("warp");
     this._dashSound.playMultiple = true;
