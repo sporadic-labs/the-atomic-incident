@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.1</string>
+        <string>4.3.3</string>
         <key>fileName</key>
         <string>C:/Users/micha/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
@@ -342,6 +342,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/hud/dash.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>25,25,50,50</rect>
+                <key>scale9Paddings</key>
+                <rect>25,25,50,50</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/hud/grid.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -381,6 +394,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/hud/heart-open.png</key>
+            <key type="filename">frames/hud/heart.png</key>
+            <key type="filename">frames/hud/pulse.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/hud/targeting-arrow.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -391,6 +419,23 @@
                 <rect>3,2,6,3</rect>
                 <key>scale9Paddings</key>
                 <rect>3,2,6,3</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">frames/light/charging.psd</key>
+            <key type="filename">frames/shadow-enemy/bomber-eye-idle-01.png</key>
+            <key type="filename">frames/shadow-enemy/bomber-idle-01.png</key>
+            <key type="filename">frames/shadow-enemy/eye.png</key>
+            <key type="filename">frames/shadow-enemy/tintable-idle.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,6,13,13</rect>
+                <key>scale9Paddings</key>
+                <rect>6,6,13,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -412,19 +457,6 @@
                 <rect>5,5,10,10</rect>
                 <key>scale9Paddings</key>
                 <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">frames/shadow-enemy/eye.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,6,13,13</rect>
-                <key>scale9Paddings</key>
-                <rect>6,6,13,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -494,6 +526,19 @@
                 <rect>200,5,400,10</rect>
                 <key>scale9Paddings</key>
                 <rect>200,5,400,10</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">frames/weapons/circle.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,6,6</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,6,6</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
