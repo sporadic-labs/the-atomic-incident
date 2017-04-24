@@ -14,11 +14,11 @@ function HeadsUpDisplay(game, parentGroup) {
     new HealthBar(game, 20, 15, this);
 
     // Pulse cooldown icon
-    this._pulseIcon = game.make.image(20, 50, "assets", "hud/dash");
+    this._pulseIcon = game.make.image(20, 50, "assets", "hud/pulse");
     this.add(this._pulseIcon);
 
     // Pulse inactive cooldown icon w/ mask.
-    this._pulseIconOff = game.make.image(20, 50, "assets", "hud/dash");
+    this._pulseIconOff = game.make.image(20, 50, "assets", "hud/pulse");
     this._pulseIconOff.tint = 0x636363;
     var pulseMask = game.add.graphics(0,0);
     pulseMask.beginFill();
