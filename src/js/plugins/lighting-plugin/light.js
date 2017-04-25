@@ -307,6 +307,7 @@ Light.prototype.redrawShadow = function (points) {
 
 Light.prototype.destroy = function () {
     if (this._debugGraphics) this._debugGraphics.destroy();
+    this._bitmap.destroy();
     this.game.globals.plugins.lighting.removeLight(this);
 };
 
