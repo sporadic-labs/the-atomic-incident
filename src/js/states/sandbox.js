@@ -103,8 +103,8 @@ Sandbox.prototype.create = function () {
     globals.waveNum = waveNum;
 
     // Enemy Waves
-    // var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
-    // globals.spawnEnemies = new SpawnerWave(game);
+    var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
+    globals.spawnEnemies = new SpawnerWave(game);
 
     // Pickups
     var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
