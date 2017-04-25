@@ -14,7 +14,7 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin = 
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
-const EasyStarPlugin = require("../plugins/EasyStarPlugin.js");
+const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
 
 function Sandbox() {}
 
@@ -103,8 +103,8 @@ Sandbox.prototype.create = function () {
     globals.waveNum = waveNum;
 
     // Enemy Waves
-    var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
-    globals.spawnEnemies = new SpawnerWave(game);
+    // var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
+    // globals.spawnEnemies = new SpawnerWave(game);
 
     // Pickups
     var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
