@@ -107,8 +107,11 @@ Light.prototype.startPulse = function (speed, width) {
     var duration = this._boundingRadius / speed * 1000;
     var endPosition = this._boundingRadius + width;
     this._pulseTween = this.game.add.tween(this._pulse).to(
-        {position: endPosition}, duration, Phaser.Easing.Linear.None, true
-    );
+        {position: endPosition}, duration, Phaser.Easing.Linear.None
+    ).to({position: endPosition}, 0).start();
+    // Note: adding an extra 0s tween to keep the tween going 1x frame past when it would normally
+    // end. This gives update a chance to catch up and draw the final tweened value before the tween
+    // is no longer running (which stops the light from redrawing).
 }
 
 Light.prototype.update = function () {
@@ -126,6 +129,7 @@ Light.prototype.update = function () {
         this._lastColor = this.baseColor.clone();
         this.needsRedraw = true;
     }
+    if (this._pulseTween && this._pulseTween.isRunning) this.needsRedraw = true;
 
     if (this.needsRedraw) this.intersectingWalls = this._recalculateWalls();
     if (this._debugGraphics) this._updateDebug();
@@ -233,7 +237,7 @@ Light.prototype.redrawLight = function () {
         var cy = shape.radius;
         this._bitmap.circle(cx, cy, shape.radius, this.baseColor.getWebColor());
         // Pulse - draw two arcs, one filled and one unfilled to get a doughnut
-        if (this._pulse) {
+        if (this._pulseTween && this._pulseTween.isRunning) {
             var startRadius = Math.max(this._pulse.position - this._pulse.width, 0);
             var endRadius = Math.min(this._pulse.position, this._boundingRadius);
             this._bitmap.ctx.beginPath();
