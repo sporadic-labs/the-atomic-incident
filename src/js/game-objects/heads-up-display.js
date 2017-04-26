@@ -95,11 +95,19 @@ function HeadsUpDisplay(game, parentGroup) {
     });
     this._debugText.anchor.set(0, 1);
     this.add(this._debugText);
+
+    this._fpsText = game.make.text(15, game.height - 25, "60", {
+        font: "18px 'Alfa Slab One'", fill: "#9C9C9C", align: "left"
+    })
+    this._fpsText.anchor.set(0, 1);
+    this.add(this._fpsText);
 }
 
 HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
+
+    this._fpsText.setText(this.game.time.fps);
 
     // Set the color of the pulse icon based on the color of the player flashlight.
     this._pulseIcon.tint = this._player.flashlight.pulseColor.getRgbColorInt();

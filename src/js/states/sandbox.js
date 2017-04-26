@@ -144,16 +144,6 @@ Sandbox.prototype.getMapPoints = function(key) {
     return mapPoints;
 };
 
-Sandbox.prototype.update = function () {
-    // Nothing here yet...
-};
-
-Sandbox.prototype.render = function () {
-    this.game.debug.text(this.game.time.fps, 5, 15, "#A8A8A8");
-    // this.game.debug.AStar(this.game.globals.plugins.astar, 20, 20, 
-    //  "#ff0000");
-};
-
 Sandbox.prototype.shutdown = function () {
     // Destroy all plugins (MH: should we be doing this or more selectively
     // removing plugins?)
