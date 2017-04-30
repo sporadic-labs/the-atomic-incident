@@ -17,7 +17,7 @@ void main() {
     vec2 texCoord = vTextureCoord; // Proper UV position of fragment
 
     // If the fragment is within range of the current wave position
-    if (dist <= (wavePos + 50.0) && dist >= (wavePos - 50.0)) {
+    if (dist <= (wavePos + 100.0) && dist >= (wavePos - 100.0)) {
         // Hacking an equation... figure this out better
         float x = abs(dist - wavePos);
         float distortAmount = x * (1.0 - pow(x * 0.01, 0.8)) / 2000.0;
