@@ -33,22 +33,21 @@ Sandbox.prototype.create = function () {
     });
 
     // Groups for z-index sorting and for collisions
-    var groups = {
-        background: game.add.group(this.world, "background"),
-        midground: game.add.group(this.world, "midground"),
-        foreground: game.add.group(this.world, "foreground"),
-        lightingOverlay: game.add.group(this.world, "lighting-overlay"),
-        hud: game.add.group(this.world, "hud"),
+    const groups = {
+        game: game.add.group(this.world, "game"),
+        gameOverlay: game.add.group(this.world, "game-overlay"),
+        hud: game.add.group(this.world, "hud")
     };
-    groups.enemies = game.add.group(groups.midground, "enemies");
-    groups.nonCollidingGroup = game.add.group(groups.midground, 
-        "non-colliding");
-    groups.lights = game.add.group(groups.midground, "lights");
-    groups.pickups = game.add.group(groups.foreground, "pickups");
+    groups.background = game.add.group(groups.game, "background");
+    groups.midground = game.add.group(groups.game, "midground");
+    groups.foreground = game.add.group(groups.game, "foreground");
+    groups.enemies = game.add.group(groups.midground, "enemies"),
+    groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding"),
+    groups.pickups = game.add.group(groups.foreground, "pickups"),
     globals.groups = groups;
 
     // Initializing the world
-    this.stage.backgroundColor = "#F9F9F9";
+    this.stage.backgroundColor = "#FFF";
 
     // Level manager
     const levelManager = new LevelManager(game, "arcade-map", "arcade-map-2");
@@ -61,10 +60,10 @@ Sandbox.prototype.create = function () {
     map2.onDown.add(() => levelManager.switchMap(1));
 
     // Plugins
-    global.plugins = (global.plugins !== undefined ) ? global.plugins : {}; 
+    global.plugins = (global.plugins !== undefined) ? global.plugins : {}; 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
     globals.plugins.effects = game.plugins.add(EffectsPlugin); 
-    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.lightingOverlay); 
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground); 
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(0.9);
@@ -86,8 +85,7 @@ Sandbox.prototype.create = function () {
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, game.width/2, game.height/2, 
-        groups.foreground);
+    var player = new Player(game, game.width/2, game.height/2, groups.foreground);
     this.camera.follow(player);
     globals.player = player;
 
@@ -96,7 +94,7 @@ Sandbox.prototype.create = function () {
 
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.hud);
-    globals.debugDisplay = new DebugDisplay(game, groups.foreground);
+    globals.debugDisplay = new DebugDisplay(game, groups.hud);
     
     // Keep track of what wave the player is on using the globals object.
     var waveNum = 0;
@@ -109,6 +107,9 @@ Sandbox.prototype.create = function () {
     // Pickups
     var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
     new PickupSpawner(game);
+
+    const PostProcessor = require("../game-objects/post-processor.js");
+    globals.postProcessor = new PostProcessor(game, globals.groups.game);
 
     // // Menu for switching tile maps
     // var menu = [];

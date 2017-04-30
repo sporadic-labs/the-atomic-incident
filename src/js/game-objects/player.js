@@ -39,7 +39,6 @@ function Player(game, x, y, parentGroup) {
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
-    this._lights = globals.groups.lights;
     this._effects = this.game.globals.plugins.effects;
     this._levelManager = globals.levelManager;
 
@@ -143,6 +142,7 @@ Player.prototype.update = function () {
         this._pulseAbility.activate();
         this.flashlight.startPulse();
         this._pulseSound.play();
+        this.game.globals.postProcessor.startWave(this.position);
     }
 
     // Dash ability
