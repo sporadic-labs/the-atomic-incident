@@ -17,7 +17,7 @@ class TweenPathComponent {
      * @memberOf TweenPathComponent
      */
     constructor(owner, path, speed, visionRadius = 100, shouldRepeat = true, 
-            shouldYoYo = true) {
+            shouldYoYo = true, destroyOnComplete = false) {
         this.game = owner.game;
         this.owner = owner;
         this.speed = speed;
@@ -34,6 +34,7 @@ class TweenPathComponent {
             .repeatAll(shouldRepeat ? -1 : 0)
             .yoyo(shouldYoYo);
         this._firstUpdate = true;
+        if (destroyOnComplete) this._tween.onComplete.add(this.destroy, this);
 
         // If the level has changed, switch to a targeting component (to be safe)
         this._levelManager = this.game.globals.levelManager;
