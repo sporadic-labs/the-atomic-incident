@@ -86,6 +86,8 @@ function Player(game, x, y, parentGroup) {
         new Phaser.Circle(0, 0, lightSize), 
         colors.white, colors.red);
     this.flashlight.enabled = true;
+    // Array for player ammo
+    this.ammo = [];
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -137,8 +139,10 @@ Player.prototype.update = function () {
     var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
 
     // Fire the flashlight pulse!
-    if (this._controls.isControlActive("pulse") && this._pulseAbility.isReady()) {
-        this._effects.lightFlash(this.flashlight.pulseColor.getRgbColorInt());
+    if (this._controls.isControlActive("pulse") && this._pulseAbility.isReady() && this.ammo.length > 0) {
+        var nextPulseColor = this.ammo.shift();
+        this.flashlight.pulseColor = nextPulseColor;
+        this._effects.lightFlash(nextPulseColor.getRgbColorInt());
         this._pulseAbility.activate();
         this.flashlight.startPulse();
         this._pulseSound.play();
@@ -216,8 +220,6 @@ Player.prototype.update = function () {
                 // NOTE(rt): This is probably overkill...
                 this._effects.lightFlash(child.color.getRgbColorInt());
                 this.game.camera.shake(0.005, 80);
-                // TODO(rt): Trigger a new light that destroys itself after it is done...
-                // this.flashlight.startPulse();
             }
         }
     }, this);
@@ -252,7 +254,11 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
     this.game.globals.scoreKeeper.incrementScore(1);
-    this.flashlight.pulseColor = pickup.color;
+    // Add the pickup color to the ammo array.
+    // NOTE(rex): Currently you can only have 1 shot at a time, so just replace the previous ammo entry with the new one.
+    // In the future, we may support multiple shots/ammo cartridges for color mixing or something...
+    // this.ammo.push(pickup.color);
+    this.ammo = [ pickup.color ];
     this.pickupSound.play();
     pickup.pickUp();
 };

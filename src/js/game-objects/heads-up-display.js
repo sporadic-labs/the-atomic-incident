@@ -109,8 +109,13 @@ HeadsUpDisplay.prototype.update = function () {
 
     this._fpsText.setText(this.game.time.fps);
 
-    // Set the color of the pulse icon based on the color of the player flashlight.
-    this._pulseIcon.tint = this._player.flashlight.pulseColor.getRgbColorInt();
+    // Set the color of the pulse icon based on the first color in the players ammo pack.
+    if (this._player.ammo.length > 0) {
+        this._pulseIcon.tint = this._player.ammo[0].getRgbColorInt();
+    } else {
+        this._pulseIcon.tint = `0xFFBCBCBC`;
+    }
+
     // Check if the pulse ability is ready.  If it isn't, the cooldown should be animating.
     if (!this._player._pulseAbility.isReady()) {
         // Clear the mask...
