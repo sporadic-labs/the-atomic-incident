@@ -29,7 +29,7 @@ function SpawnWave(game) {
         probability: 25/100
     });
     this._possibleWaves.push({
-        name: "Slow Speed Path Tween - Random Any One Type", 
+        name: "Path Tween - Random Any One Type", 
         wave: new PathTweenWave(
             g, WaveComposition.CreateRandOneType(g), 75
         ),
