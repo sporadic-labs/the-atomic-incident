@@ -113,7 +113,7 @@ HeadsUpDisplay.prototype.update = function () {
     if (this._player.ammo.length > 0) {
         this._pulseIcon.tint = this._player.ammo[0].getRgbColorInt();
     } else {
-        this._pulseIcon.tint = `0xFFBCBCBC`;
+        this._pulseIcon.tint = 0x363636;
     }
 
     // Check if the pulse ability is ready.  If it isn't, the cooldown should be animating.
