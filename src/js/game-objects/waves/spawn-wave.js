@@ -1,9 +1,11 @@
 module.exports = SpawnWave;
 
 const PathTweenWave = require("./path-tween-wave.js");
+const SnakePathWave = require("./snake-path-wave.js");
 const WaveShapes = require("./wave-shapes.js");
 const WaveComposition = require("./wave-composition.js");
 const TargetingWave = require("./targeting-wave.js");
+const FlythroughWave = require("./flythrough-wave.js");
 
 SpawnWave.prototype = Object.create(Phaser.Group.prototype);
 
@@ -21,18 +23,25 @@ function SpawnWave(game) {
     const {CircleWave, TunnelWave, CrossWave} = WaveShapes;
     this._possibleWaves = [];
     this._possibleWaves.push({
-        name: "Slow Speed Path Tween - Random Any One Type", 
-        wave: new PathTweenWave(
-            g, WaveComposition.CreateRandOneType(g), 50
-        ),
-        probability: 40/100
-    });
-    this._possibleWaves.push({
-        name: "Fast Speed Path Tween - Random Any One Type", 
-        wave: new PathTweenWave(
-            g, WaveComposition.CreateRandOneType(g), 100
+        name: "Flythrough Wave - Random Any One Type", 
+        wave: new FlythroughWave(
+            g, WaveComposition.CreateRandOneType(g, 6), 100
         ),
         probability: 10/100
+    });
+    this._possibleWaves.push({
+        name: "Snake Path Tween - Random Any One Type", 
+        wave: new SnakePathWave(
+            g, WaveComposition.CreateRandOneType(g, 6), 100
+        ),
+        probability: 20/100
+    });
+    this._possibleWaves.push({
+        name: "Path Tween - Random Any One Type", 
+        wave: new PathTweenWave(
+            g, WaveComposition.CreateRandOneType(g), 75
+        ),
+        probability: 20/100
     });
     this._possibleWaves.push({
         name: "Circle Around Player - All Three Types",
