@@ -58,10 +58,10 @@ function HeadsUpDisplay(game, parentGroup) {
         pauseButton.visible = false;
         this.game.input.onDown.add(unpause, this);
         game.paused = true;
-    }, this, "hud/play", "hud/play", "hud/play", "hud/play");
+    }, this, "hud/pause", "hud/pause", "hud/pause", "hud/pause");
     pauseButton.anchor.set(1, 1);
     const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this, 
-        "hud/pause", "hud/pause", "hud/pause", "hud/pause");
+        "hud/play", "hud/play", "hud/play", "hud/play");
     playButton.anchor.set(1, 1);
     playButton.visible = false;
 
@@ -71,13 +71,13 @@ function HeadsUpDisplay(game, parentGroup) {
         unmuteButton.visible = true;
         muteButton.visible = false;
         game.sound.mute = true;
-    }, this, "hud/mute", "hud/mute", "hud/mute", "hud/mute");
+    }, this, "hud/sound", "hud/sound", "hud/sound", "hud/sound");
     muteButton.anchor.set(1, 0);
     const unmuteButton = game.add.button(mutePos.x, mutePos.y, "assets", () => {
         unmuteButton.visible = false;
         muteButton.visible = true;
         game.sound.mute = false;
-    }, this, "hud/sound", "hud/sound", "hud/sound", "hud/sound");
+    }, this, "hud/mute", "hud/mute", "hud/mute", "hud/mute");
     unmuteButton.anchor.set(1, 0);
     // Show the appropriate button based on sound manager's state
     if (game.sound.mute) muteButton.visible = false;
