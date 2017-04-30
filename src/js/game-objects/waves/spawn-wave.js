@@ -1,6 +1,7 @@
 module.exports = SpawnWave;
 
 const PathTweenWave = require("./path-tween-wave.js");
+const SnakePathWave = require("./snake-path-wave.js");
 const WaveShapes = require("./wave-shapes.js");
 const WaveComposition = require("./wave-composition.js");
 const TargetingWave = require("./targeting-wave.js");
@@ -21,18 +22,18 @@ function SpawnWave(game) {
     const {CircleWave, TunnelWave, CrossWave} = WaveShapes;
     this._possibleWaves = [];
     this._possibleWaves.push({
-        name: "Slow Speed Path Tween - Random Any One Type", 
-        wave: new PathTweenWave(
-            g, WaveComposition.CreateRandOneType(g), 50
+        name: "Snake Path Tween - Random Any One Type", 
+        wave: new SnakePathWave(
+            g, WaveComposition.CreateRandOneType(g, 6), 100
         ),
-        probability: 40/100
+        probability: 25/100
     });
     this._possibleWaves.push({
-        name: "Fast Speed Path Tween - Random Any One Type", 
+        name: "Slow Speed Path Tween - Random Any One Type", 
         wave: new PathTweenWave(
-            g, WaveComposition.CreateRandOneType(g), 100
+            g, WaveComposition.CreateRandOneType(g), 75
         ),
-        probability: 10/100
+        probability: 25/100
     });
     this._possibleWaves.push({
         name: "Circle Around Player - All Three Types",
