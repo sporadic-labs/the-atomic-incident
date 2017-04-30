@@ -18,21 +18,31 @@ class TestState {
         const game = this.game;
         const globals = game.globals;
 
+        // Groups for z-index sorting and for collision detection
         const groups = {
-            background: game.add.group(this.world, "background"),
-            midground: game.add.group(this.world, "midground"),
-            foreground: game.add.group(this.world, "foreground")
+            game: game.add.group(this.world, "game"),
+            hud: game.add.group(this.world, "hud")
         };
+        groups.background = game.add.group(groups.game, "background");
+        groups.midground = game.add.group(groups.game, "midground");
+        groups.foreground = game.add.group(groups.game, "foreground");
+        groups.enemies = game.add.group(groups.midground, "enemies"),
+        groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding"),
+        groups.pickups = game.add.group(groups.foreground, "pickups"),
         globals.groups = groups;
 
-        const lm = new LevelManager(this.game, "tilemap", "tilemap-2");
+        const lm = new LevelManager(this.game, "arcade-map", "arcade-map-2");
 
-            
-        var map1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-        map1.onDown.add(() => lm.switchMap(0));
-        var map2 = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-        map2.onDown.add(() => lm.switchMap(1));
+        const img1 = this.game.add.image(0, 0, "assets", "hud/play");
+        img1.scale.setTo(3, 3);
+        const img2 = this.game.add.image(50, 0, "assets", "hud/play");
+        img2.scale.setTo(3, 3);
     }
+
+    update() {
+
+    }
+    
 }
 
 module.exports = TestState;
