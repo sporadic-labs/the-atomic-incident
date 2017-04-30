@@ -20,8 +20,9 @@ class TargetingWave {
             if (enemyInfo.type === "red") color = Colors.red;
             else if (enemyInfo.type === "green") color = Colors.green;
             else color = Colors.blue;
+            let shieldColor = Colors.green;
             const enemy = new ShadowEnemy(this.game, pos.x, pos.y, 
-                this._enemies, color);
+                this._enemies, color, shieldColor);
             const targetingComp = new TargetingComp(enemy, 100);
             enemy.addComponent(targetingComp);
         }

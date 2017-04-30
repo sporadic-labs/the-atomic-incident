@@ -1,10 +1,11 @@
 module.exports = ShadowEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
+var Color = require("../../helpers/Color.js");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 
-function ShadowEnemy(game, x, y, parentGroup, color) {
+function ShadowEnemy(game, x, y, parentGroup, color, shieldColor) {
     BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/tintable-idle", 100,
         parentGroup, 1, color);
 
@@ -14,6 +15,21 @@ function ShadowEnemy(game, x, y, parentGroup, color) {
     this._components = [];
 
     this._damage = 10; // 10 units per second
+
+    // If there wasn't a shieldColor provided, set the shieldColor and shield to null.
+    if (!shieldColor) {
+        this._shieldColor = null;
+        this._shield = null;
+    } else {
+        // If a shieldColor param was provided, you want a shield!
+        // Add the shield as a child sprite of the shadow enemy.
+        this._shield = game.add.sprite(0, 0, "assets", "shadow-enemy/outline");
+        this._shield.anchor.set(0.5);
+        // Also tint the shield based on the shield color!
+        this._shieldColor = shieldColor instanceof Color ? shieldColor : new Color(shieldColor);
+        this._shield.tint = this._shieldColor.getRgbColorInt();
+        this.addChild(this._shield);
+    }
 
     // Override from BaseEnemy
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
@@ -70,6 +86,7 @@ ShadowEnemy.prototype.update = function () {
 ShadowEnemy.prototype.destroy = function () {
     this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
     this._dieSound.play();
+
     for (const component of this._components) component.destroy();
     BaseEnemy.prototype.destroy.apply(this, arguments);
 };
