@@ -2,6 +2,8 @@
 // BaseComponent class that enforces that components have the standard lifecycle
 // methods of update/destroy/etc.
 
+const SpriteUtils = require("../../helpers/sprite-utilities.js");
+
 module.exports = TargetingComponent;
 
 function TargetingComponent(parent, maxSpeed) {
@@ -13,6 +15,8 @@ function TargetingComponent(parent, maxSpeed) {
 }
 
 TargetingComponent.prototype.update = function () {
+    SpriteUtils.arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
+
     // Stop moving
     this.parent.body.velocity.set(0);
 

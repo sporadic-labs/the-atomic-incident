@@ -16,7 +16,7 @@ function ShadowEnemy(game, x, y, parentGroup, color) {
     this._damage = 10; // 10 units per second
 
     // Override from BaseEnemy
-    var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
+    var diameter = 0.1 * this.width; // Fudge factor - body smaller than sprite
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
         (this.height - diameter) / 2);
     this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
