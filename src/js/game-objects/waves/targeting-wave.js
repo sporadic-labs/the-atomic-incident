@@ -20,6 +20,7 @@ class TargetingWave {
             if (enemyInfo.type === "red") color = Colors.red;
             else if (enemyInfo.type === "green") color = Colors.green;
             else color = Colors.blue;
+            // TODO(rex): Make a wave type that has enemies with shields.
             let shieldColor = Colors.green;
             const enemy = new ShadowEnemy(this.game, pos.x, pos.y, 
                 this._enemies, color, shieldColor);
