@@ -37,7 +37,7 @@ var paths = {
     },
     js: {
     	entry: "src/js/main.js",
-    	src: ["src/js/**/*.js"],
+    	src: ["src/js/**/*.{js,glsl}"],
     	outputFile: "main.js",
     	dest: dest + "/js"
     },
@@ -88,6 +88,7 @@ var plumber = require("gulp-plumber");
 var eslint = require("gulp-eslint");
 var watchify = require("watchify");
 var babel = require("babelify");
+var glslify = require("glslify");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
@@ -167,7 +168,7 @@ var jsBundle = browserify({
     ],
     debug: true, // Allow debugger statements
     cache: {}, packageCache: {}, plugin: [watchify] // Required for watchify
-}).transform(babel);
+}).transform(glslify).transform(babel);
 // Task now incrementally builds
 gulp.task("js-browserify", function () {
     return jsBundle.bundle()    
