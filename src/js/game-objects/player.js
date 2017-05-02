@@ -291,7 +291,6 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
             this._activeAbility = this._abilities[abilityNames.SLOW_MOTION];
         }
     } else if (pickup instanceof LightPickup) {
-        this._activeAbility = this._abilities[abilityNames.PULSE];
         this.game.globals.scoreKeeper.incrementScore(1);
         // Add the pickup color to the ammo array. NOTE(rex): Currently you can only have 1 shot at
         // a time, so just replace the previous ammo entry with the new one. In the future, we may
