@@ -1,3 +1,4 @@
+const HealthBar = require("./user-interface/health-bar"); 
 module.exports = HeadsUpDisplay;
 
 HeadsUpDisplay.prototype = Object.create(Phaser.Group.prototype);
@@ -141,29 +142,4 @@ HeadsUpDisplay.prototype.update = function () {
 };
 
 
-// Health bar helper class
-function HealthBar(game, x, y, parentGroup) {
-    Phaser.Group.call(this, game, parentGroup, "health-bar");
-    this.x = x;
-    this.y = y; 
-    this._player = this.game.globals.player;
-    this._fullHeartName = "hud/heart";
-    this._emptyHeartName = "hud/heart-open";
-
-    this._hearts = [
-        game.make.image(0, 0, "assets", this._fullHeartName),
-        game.make.image(30, 0, "assets", this._fullHeartName),
-        game.make.image(60, 0, "assets", this._fullHeartName)
-    ];
-    for (var i = 0; i < this._hearts.length; i++) this.add(this._hearts[i]);
-}
-
-HealthBar.prototype = Object.create(Phaser.Group.prototype);
-
-HealthBar.prototype.update = function () {
-    var numHearts = this._player.hearts;
-    for (var i = 0; i < this._hearts.length; i++) {
-        if (i < numHearts) this._hearts[i].frameName = this._fullHeartName;
-        else this._hearts[i].frameName = this._emptyHeartName;
-    }
 };
