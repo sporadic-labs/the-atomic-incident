@@ -33,6 +33,7 @@ class CircleWave {
      * @memberOf CircleWave
      */
     *enemies(regenerateEnemies = true) {
+        // Spawn in front of the player
         const player = this.game.globals.player;
         const v = player.getVelocity();
         this.position = player.position.clone().add(
