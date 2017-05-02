@@ -38,6 +38,8 @@ function Player(game, x, y, parentGroup) {
 
     this._isDead = false;
 
+    this.ghostMode = false;
+
     // NOTE(rex): Not quite sure if this should be a part of the player or not...
     this.damage = 10000;
     
@@ -195,11 +197,10 @@ Player.prototype.update = function () {
                 break;
             case abilityNames.GHOST:
                 if (ability.isReady() && shouldActivate) {
-                    spriteUtils.forEachRecursive(this._enemies, function (enemy) {
-                        enemy.enterGhostMode(ability._activeTime);
-                    }, this);
+                    this.ghostMode = true;
                     ability.activate();
                     ability.onDeactivation.addOnce(function () {
+                        this.ghostMode = false;
                         this._activeAbility = null;
                         ability.reset();
                     }, this);

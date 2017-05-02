@@ -11,6 +11,7 @@ class ShadowEnemy extends BaseEnemy {
         game.globals.groups.foreground.add(this._healthBar);
 
         this._movementComponent = null;
+        this._inGhostMode = false;
 
         this._damage = 10; // 10 units per second
 
@@ -71,16 +72,22 @@ class ShadowEnemy extends BaseEnemy {
         const lm = this.game.globals.levelManager;
         this.game.physics.arcade.collide(this, lm.getCurrentWallLayer());
 
+        // Switching into or out of ghost mode
+        if (this._player.ghostMode && !(this._movementComponent instanceof AvoidComp)) {
+            const dist = this._player.position.distance(this.position);
+            if (dist < 300) {
+                const speed = this._movementComponent ? this._movementComponent.speed : 100;
+                this.setMovementComponent(new AvoidComp(this, this._player, speed));
+                this._inGhostMode = true;
+            }
+        } else if (this._inGhostMode && !this._player.ghostMode) {
+            const speed = this._movementComponent ? this._movementComponent.speed : 100;
+            this.setMovementComponent(new TargetingComp(this, speed));
+            this._inGhostMode = false;
+        }
+
         if (this._movementComponent) this._movementComponent.update();
         super.update();
-    }
-
-    enterGhostMode(duration) {
-        const speed = this._movementComponent ? this._movementComponent.speed : 100;
-        this._movementComponent = new AvoidComp(this, this._player, speed);
-        this._timer.add(duration, function () {
-            this._movementComponent = new TargetingComp(this, speed);
-        }, this);
     }
 
     destroy(...args) {
