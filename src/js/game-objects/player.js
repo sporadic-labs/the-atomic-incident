@@ -132,6 +132,8 @@ function Player(game, x, y, parentGroup) {
     }
     this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
     this._activeAbility = null;
+
+    this._velocity = new Phaser.Point(0, 0);
 }
 
 Player.prototype.update = function () {
@@ -216,6 +218,10 @@ Player.prototype.update = function () {
     this.body.position.add(delta.x, delta.y);
     this.game.physics.arcade.collide(this, this._levelManager.getCurrentWallLayer());
 
+    // Update velocity after collision
+    Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
+    this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
+
     // Update the rotation of the player based on the reticule
     this.rotation = this.position.angle(this._reticule.position) +
         (Math.PI/2);
@@ -255,6 +261,10 @@ Player.prototype.update = function () {
         }
     }, this);
 
+};
+
+Player.prototype.getVelocity = function () {
+    return this._velocity;
 };
 
 Player.prototype.postUpdate = function () {

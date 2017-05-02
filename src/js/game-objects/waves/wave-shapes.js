@@ -33,7 +33,13 @@ class CircleWave {
      * @memberOf CircleWave
      */
     *enemies(regenerateEnemies = true) {
-        this.position = this.game.globals.player.position.clone();
+        const player = this.game.globals.player;
+        const v = player.getVelocity();
+        this.position = player.position.clone().add(
+            v.x * 0.25,
+            v.y * 0.25
+        );
+
         if (regenerateEnemies) this._waveComposition.generate();
         let enemyNum = 0;
         const angleStep = 2 * Math.PI / this._waveComposition.totalEnemies;
