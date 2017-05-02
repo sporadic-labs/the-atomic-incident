@@ -71,15 +71,15 @@ class ShadowEnemy extends BaseEnemy {
         const lm = this.game.globals.levelManager;
         this.game.physics.arcade.collide(this, lm.getCurrentWallLayer());
 
-        if (this._movementComponent) this.movementComponent.update();
+        if (this._movementComponent) this._movementComponent.update();
         super.update();
     }
 
     enterGhostMode(duration) {
         const speed = this._movementComponent ? this._movementComponent.speed : 100;
-        this.movementComponent = new AvoidComp(this, this._player, speed);
+        this._movementComponent = new AvoidComp(this, this._player, speed);
         this._timer.add(duration, function () {
-            this.movementComponent = new TargetingComp(this, speed);
+            this._movementComponent = new TargetingComp(this, speed);
         }, this);
     }
 
@@ -92,13 +92,13 @@ class ShadowEnemy extends BaseEnemy {
         super.destroy(...args);
     }
 
-    get movementComponent() {
-        return this._movementComponent; 
-    }
-
-    set movementComponent(newComponent) {
+    setMovementComponent(newComponent) {
         if (this._movementComponent) this._movementComponent.destroy();
         this._movementComponent = newComponent;
+    }
+
+    getMovementComponent() {
+        return this._movementComponent;
     }
 }
 

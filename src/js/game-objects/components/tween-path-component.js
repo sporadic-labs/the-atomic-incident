@@ -42,7 +42,7 @@ class TweenPathComponent {
     }
 
     _switchToTargeting() {
-        this.owner.movementComponent = new TargetingComponent(this.owner, this.speed);
+        this.owner.setMovementComponent(new TargetingComponent(this.owner, this.speed));
     }
 
     update() {

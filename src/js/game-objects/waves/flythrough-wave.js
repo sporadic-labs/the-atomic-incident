@@ -71,7 +71,7 @@ class FlythroughWave {
             this._enemies, color);
         const comp = new TweenPathComp(enemy, path.clone(), this.speed, 100, false, false, true);
         comp._tween.easing(Phaser.Easing.Linear.None, -1);
-        enemy.movementComponent = comp;
+        enemy.setMovementComponent(comp);
     }
 
     _spawnWithDelay(path, enemyTypes, delay) {

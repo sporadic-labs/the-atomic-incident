@@ -63,7 +63,7 @@ class PathTweenWave {
             const firstPoint = path.getPointAtLength(0);
             const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y,
                 this._enemies, color);
-            enemy.movementComponent = new TweenPathComp(enemy, path.clone(), this.speed);
+            enemy.setMovementComponent(new TweenPathComp(enemy, path.clone(), this.speed));
         }
     }
 

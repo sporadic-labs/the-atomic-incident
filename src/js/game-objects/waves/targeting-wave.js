@@ -24,7 +24,7 @@ class TargetingWave {
             let shieldColor = Colors.green;
             const enemy = new ShadowEnemy(this.game, pos.x, pos.y, 
                 this._enemies, color, shieldColor);
-            enemy.movementComponent = new TargetingComp(enemy, 100);
+            enemy.setMovementComponent(new TargetingComp(enemy, 100));
         }
     }
     
