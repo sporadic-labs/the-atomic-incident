@@ -9,14 +9,15 @@ module.exports = CooldownAbility;
  * @param {number} cooldownTime - the time it takes for an ability to recharge
  * @param {number} activeTime - the duration over which the ability is active
  */
-function CooldownAbility(game, cooldownTime, activeTime) {
+function CooldownAbility(game, cooldownTime, activeTime, name) {
+    this.name = name;
+    
     this._cooldownTime = cooldownTime;
     this._activeTime = activeTime;
     this._ableToUseAbility = true;
     this._isAbilityActive = false;
     this._startTime = 0;
-    this._totalTime = cooldownTime + activeTime;
-
+    
     this.onReady = new Phaser.Signal();
     this.onActivation = new Phaser.Signal();
     this.onDeactivation = new Phaser.Signal();
@@ -43,26 +44,28 @@ CooldownAbility.prototype.activate = function () {
     }, this);
 
     return this._ableToUseAbility;
-}
+};
 
 CooldownAbility.prototype.isReady = function () {
     return this._ableToUseAbility;
-}
+};
 
 CooldownAbility.prototype.isActive = function () {
     return this._isAbilityActive;
-}
+};
 
-CooldownAbility.prototype.progress = function () {
-    // If the ability is active or if the cooldown is active,
-    // the cooldown progress should be kept track of.
-    if (this._isAbilityActive || !this._ableToUseAbility) {
-        var timeSoFar = this._timer.ms - this._startTime;
-        return (this._totalTime - timeSoFar) / this._totalTime
-    }
-    return 1
-}
+CooldownAbility.prototype.reset = function () {
+    this._ableToUseAbility = true;
+    this._isAbilityActive = false;
+    this._timer.clearPendingEvents();
+};
+
+/** Returns a number between 0 (cooldown hasn't started) and 1 (cooldown complete) */
+CooldownAbility.prototype.getCooldownProgress = function () {
+    if (this._ableToUseAbility) return 1;
+    return (this._timer.ms - this._startTime) / this._cooldownTime;
+};
 
 CooldownAbility.prototype.destroy = function () {
     this._timer.destroy();
-}
+};
