@@ -309,6 +309,7 @@ Player.prototype.takeDamage = function () {
     // Lose a heart & restart the game if no hearts remain
     this.hearts -= 1;
     if (this.hearts <= 0) {
+        this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
         this.game.state.restart();
     }
 
