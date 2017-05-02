@@ -189,7 +189,7 @@ gulp.task("js-browserify", function () {
 
 // Lint only our custom JS.
 gulp.task("js-lint", function() {
-    return gulp.src(paths.js.src)    
+    return gulp.src([...paths.js.src, "!**/*.glsl"])    
         .pipe(plumber({ errorHandler: beepLogError }))
         .pipe(eslint())
         .pipe(eslint.format());
