@@ -104,6 +104,11 @@ class EasyStarPlugin extends Phaser.Plugin {
     getWorldPath(worldStart, worldDest) {
         const tileStart = this._tilemapLayer.getTileXY(worldStart.x, worldStart.y, {});
         const tileDest = this._tilemapLayer.getTileXY(worldDest.x, worldDest.y, {});
+        // Keep the start and destination on the tilemap
+        tileStart.x = Phaser.Math.clamp(tileStart.x, 0, this._tilemap.width - 1);
+        tileStart.y = Phaser.Math.clamp(tileStart.y, 0, this._tilemap.height - 1);
+        tileDest.x = Phaser.Math.clamp(tileDest.x, 0, this._tilemap.width - 1);
+        tileDest.y = Phaser.Math.clamp(tileDest.y, 0, this._tilemap.height - 1);
         const path = this.getTilePath(tileStart, tileDest);
         if (path) {
             const tw = this._tilemap.tileWidth;
