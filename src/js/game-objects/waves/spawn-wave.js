@@ -47,7 +47,7 @@ function SpawnWave(game) {
         name: "Circle Around Player - All Three Types",
         wave: new TargetingWave(
             g, new CircleWave(
-                g, WaveComposition.CreateRandThreeTypes(g, 20), 130
+                g, WaveComposition.CreateRandThreeTypes(g, 16), 80
             )
         ),
         probability: 20/100
