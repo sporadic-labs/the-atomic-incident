@@ -11,7 +11,7 @@ class Shockwave extends Phaser.Filter {
         this.uniforms.resolution = {type: "2f", value: {x: game.width, y: game.height}};
     }
 
-    startWave(position, radius, speed = 400) {
+    startWave(position) {
         // This should probably do a tween - like how the light pulses work
         this.wavePosition = 0;
         this.uniforms.center.value = {

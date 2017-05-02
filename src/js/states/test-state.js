@@ -31,7 +31,7 @@ class TestState {
         groups.pickups = game.add.group(groups.foreground, "pickups"),
         globals.groups = groups;
 
-        const lm = new LevelManager(this.game, "arcade-map", "arcade-map-2");
+        new LevelManager(this.game, "arcade-map", "arcade-map-2");
 
         const img1 = this.game.add.image(0, 0, "assets", "hud/play");
         img1.scale.setTo(3, 3);
