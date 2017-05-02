@@ -5,6 +5,7 @@ class AbilityPickup extends Phaser.Sprite {
         let frame = null;
         if (abilityName === abilities.DASH) frame = "pickups/dash";
         else if (abilityName === abilities.SLOW_MOTION) frame = "pickups/slow-motion"
+        else if (abilityName === abilities.GHOST) frame = "pickups/ghost"
 
         super(game, x, y, "assets", frame);
         this.anchor.set(0.5);

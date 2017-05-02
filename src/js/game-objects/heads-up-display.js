@@ -24,6 +24,7 @@ function HeadsUpDisplay(game, parentGroup) {
     this._pulseIcon = new AbilityIcon(game, 20, 50, this, "hud/pulse");
     this._dashIcon = new AbilityIcon(game, 53, 50, this, "hud/dash");
     this._slowIcon = new AbilityIcon(game, 86, 50, this, "hud/slow-motion");
+    this._ghostIcon = new AbilityIcon(game, 119, 50, this, "hud/ghost");
 
     // Play/pause
     const unpause = () => {
@@ -101,6 +102,7 @@ HeadsUpDisplay.prototype.update = function () {
 
     this._dashIcon.alpha = 0.1;
     this._slowIcon.alpha = 0.1;
+    this._ghostIcon.alpha = 0.1;
     if (this._player._activeAbility && this._player._activeAbility.isReady()) {
         switch (this._player._activeAbility.name) {
             case AbilityNames.DASH:
@@ -108,6 +110,9 @@ HeadsUpDisplay.prototype.update = function () {
                 break;
             case AbilityNames.SLOW_MOTION:
                 this._slowIcon.alpha = 1;
+                break;
+            case AbilityNames.GHOST:
+                this._ghostIcon.alpha = 1;
                 break;
             default:
                 break;

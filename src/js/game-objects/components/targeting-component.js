@@ -6,10 +6,10 @@ const SpriteUtils = require("../../helpers/sprite-utilities.js");
 
 module.exports = TargetingComponent;
 
-function TargetingComponent(parent, maxSpeed) {
+function TargetingComponent(parent, speed) {
     this.game = parent.game;
     this.parent = parent;
-    this._maxSpeed = maxSpeed;
+    this.speed = speed;
     this.target = this.game.globals.player;
     this._levelManager = this.game.globals.levelManager;
 }
@@ -46,7 +46,7 @@ TargetingComponent.prototype._moveTowards = function (position) {
     var distance = this.parent.position.distance(position);
     var angle = this.parent.position.angle(position);
     var targetSpeed = distance / this.game.time.physicsElapsed;
-    var magnitude = Math.min(this._maxSpeed, targetSpeed);
+    var magnitude = Math.min(this.speed, targetSpeed);
     this.parent.body.velocity.x = magnitude * Math.cos(angle);
     this.parent.body.velocity.y = magnitude * Math.sin(angle);
 };

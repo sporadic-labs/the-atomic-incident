@@ -2,6 +2,8 @@ module.exports = ShadowEnemy;
 
 var BaseEnemy = require("./base-enemy.js");
 var Color = require("../../helpers/Color.js");
+var AvoidComp = require("../components/avoid-component");
+var TargetingComp = require("../components/targeting-component");
 
 ShadowEnemy.prototype = Object.create(BaseEnemy.prototype);
 
@@ -12,6 +14,7 @@ function ShadowEnemy(game, x, y, parentGroup, color, shieldColor) {
     // Temp fix: move the health bar above the shadow/light layer
     game.globals.groups.foreground.add(this._healthBar);
 
+    this._movementComponent = null;
     this._components = [];
 
     this._damage = 10; // 10 units per second
@@ -35,6 +38,7 @@ function ShadowEnemy(game, x, y, parentGroup, color, shieldColor) {
     var diameter = 0.1 * this.width; // Fudge factor - body smaller than sprite
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
         (this.height - diameter) / 2);
+    this.body.collideWorldBounds = true;
     this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
 
     this.body.angularVelocity = this.game.rnd.sign() *
@@ -46,6 +50,9 @@ function ShadowEnemy(game, x, y, parentGroup, color, shieldColor) {
     // If the level has changed, make sure the enemy is not inside of a wall
     this._levelManager = game.globals.levelManager;
     this._levelManager.levelChangeSignal.add(this._checkCollision, this);
+
+    this._timer = game.time.create(false);
+    this._timer.start();
 }
 
 ShadowEnemy.prototype._checkCollision = function () {
@@ -61,14 +68,14 @@ ShadowEnemy.prototype._checkCollision = function () {
     if (tiles.length > 0) this.destroy();
 };
 
-ShadowEnemy.prototype.addComponent = function (component) {
-    this._components.push(component);
-};
+// ShadowEnemy.prototype.addComponent = function (component) {
+//     this._components.push(component);
+// };
 
-ShadowEnemy.prototype.removeComponent = function (component) {
-    const i = this._components.indexOf(component);
-    if (i !== -1) this._components.splice(i, 1);
-};
+// ShadowEnemy.prototype.removeComponent = function (component) {
+//     const i = this._components.indexOf(component);
+//     if (i !== -1) this._components.splice(i, 1);
+// };
 
 ShadowEnemy.prototype.update = function () {
     // If the enemy hasn't spawned yet, don't move or attack!
@@ -77,16 +84,38 @@ ShadowEnemy.prototype.update = function () {
     // Collisions with the tilemap
     this.game.physics.arcade.collide(this, this.game.globals.levelManager.getCurrentWallLayer());
     
+    if (this._movementComponent) this.movementComponent.update();
+
     // Update any components - loop in reverse to allow components to be removed
-    for (let i = this._components.length - 1; i >= 0; i--) {
-        this._components[i].update();
-    }
+    // for (let i = this._components.length - 1; i >= 0; i--) {
+    //     this._components[i].update();
+    // }
+};
+
+ShadowEnemy.prototype.enterGhostMode = function (duration) {
+    const speed = this._movementComponent ? this._movementComponent.speed : 100;
+    this._movementComponent = new AvoidComp(this, this._player, speed);
+    this._timer.add(duration, function () {
+        this._movementComponent = new TargetingComp(this, speed);
+    }, this);
 };
 
 ShadowEnemy.prototype.destroy = function () {
+    this._timer.destroy();
     this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
     this._dieSound.play();
 
+    if (this._movementComponent) this.movementComponent.destroy();
     for (const component of this._components) component.destroy();
     BaseEnemy.prototype.destroy.apply(this, arguments);
 };
+
+Object.defineProperty(ShadowEnemy.prototype, "movementComponent", {
+    get: function() { 
+        return this._movementComponent; 
+    },
+    set: function(newComponent) { 
+        if (this._movementComponent) this._movementComponent.destroy();
+        this._movementComponent = newComponent; 
+    }
+});

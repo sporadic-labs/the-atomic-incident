@@ -128,7 +128,8 @@ function Player(game, x, y, parentGroup) {
     const names = abilityNames;
     this._abilities = {
         [names.DASH]: new CooldownAbility(this.game, 3500, 300, names.DASH),
-        [names.SLOW_MOTION]: new CooldownAbility(this.game, 3500, 3000, names.SLOW_MOTION)
+        [names.SLOW_MOTION]: new CooldownAbility(this.game, 3500, 3000, names.SLOW_MOTION),
+        [names.GHOST]: new CooldownAbility(this.game, 3500, 6000, names.GHOST)
     }
     this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
     this._activeAbility = null;
@@ -190,6 +191,18 @@ Player.prototype.update = function () {
                 }
                 if (ability.isActive()) {
                     maxDistance *= 1.5;
+                }
+                break;
+            case abilityNames.GHOST:
+                if (ability.isReady() && shouldActivate) {
+                    spriteUtils.forEachRecursive(this._enemies, function (enemy) {
+                        enemy.enterGhostMode(ability._activeTime);
+                    }, this);
+                    ability.activate();
+                    ability.onDeactivation.addOnce(function () {
+                        this._activeAbility = null;
+                        ability.reset();
+                    }, this);
                 }
                 break;
             default:
@@ -299,6 +312,8 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
             this._activeAbility = this._abilities[abilityNames.DASH];
         } else if (pickup.abilityName === abilityNames.SLOW_MOTION) {
             this._activeAbility = this._abilities[abilityNames.SLOW_MOTION];
+        } else if (pickup.abilityName === abilityNames.GHOST) {
+            this._activeAbility = this._abilities[abilityNames.GHOST];
         }
     } else if (pickup instanceof LightPickup) {
         this.game.globals.scoreKeeper.incrementScore(1);

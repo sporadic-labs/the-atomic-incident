@@ -53,8 +53,7 @@ class SnakePathWave {
         const firstPoint = path.getPointAtLength(0);
         const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y,
             this._enemies, color);
-        const comp = new TweenPathComp(enemy, path.clone(), this.speed);
-        enemy.addComponent(comp);
+        enemy.movementComponent = new TweenPathComp(enemy, path.clone(), this.speed);
     }
 
     spawn() {

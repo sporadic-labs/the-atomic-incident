@@ -43,7 +43,7 @@ class PickupSpawner extends Phaser.Group {
 
     _spawnAbilityPickup() {
         const point = this._getSpawnPoint();
-        const name = this.game.rnd.pick([abilities.DASH, abilities.SLOW_MOTION]);
+        const name = this.game.rnd.pick([abilities.DASH, abilities.SLOW_MOTION, abilities.GHOST]);
         new AbilityPickup(this.game, point.x, point.y, this, name);
     }
 

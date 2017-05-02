@@ -42,9 +42,7 @@ class TweenPathComponent {
     }
 
     _switchToTargeting() {
-        const t = new TargetingComponent(this.owner, this.speed);
-        this.owner.addComponent(t);
-        this.destroy();
+        this.owner.movementComponent = new TargetingComponent(this.owner, this.speed);
     }
 
     update() {
@@ -59,16 +57,13 @@ class TweenPathComponent {
 
         // Switch to chasing player if player is visible
         if (point.distance(this._player.position) <= this._visionRadius) {
-            const t = new TargetingComponent(this.owner, this.speed);
-            this.owner.addComponent(t);
-            this.destroy();
+            this._switchToTargeting();
         }
     }
 
     destroy() {
         this._levelManager.levelChangeSignal.remove(this._switchToTargeting, this);
         this.game.tweens.remove(this._tween);
-        this.owner.removeComponent(this);
     }
 }
 
