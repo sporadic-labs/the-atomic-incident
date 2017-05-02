@@ -94,9 +94,9 @@ ShadowEnemy.prototype.update = function () {
 
 ShadowEnemy.prototype.enterGhostMode = function (duration) {
     const speed = this._movementComponent ? this._movementComponent.speed : 100;
-    this._movementComponent = new AvoidComp(this, this._player, speed);
+    this.movementComponent = new AvoidComp(this, this._player, speed);
     this._timer.add(duration, function () {
-        this._movementComponent = new TargetingComp(this, speed);
+        this.movementComponent = new TargetingComp(this, speed);
     }, this);
 };
 
@@ -105,7 +105,7 @@ ShadowEnemy.prototype.destroy = function () {
     this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
     this._dieSound.play();
 
-    if (this._movementComponent) this.movementComponent.destroy();
+    if (this._movementComponent) this._movementComponent.destroy();
     for (const component of this._components) component.destroy();
     BaseEnemy.prototype.destroy.apply(this, arguments);
 };

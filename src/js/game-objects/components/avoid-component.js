@@ -23,6 +23,10 @@ class AvoidComponent {
         this.target = avoidTarget;
         this._visionRadius = visionRadius;
         this._avoidDirection = new Phaser.Point(0, 0); // Point to be reused
+
+        owner.alpha = 1;
+        this._tween = this.game.add.tween(owner)
+            .to({alpha: 0.25}, 200, Phaser.Easing.Quadratic.InOut, true, 0, -1, true);
     }
 
     update() {
@@ -41,7 +45,8 @@ class AvoidComponent {
     }
 
     destroy() {
-        // Nothing to do here
+        this.owner.alpha = 1;
+        this.game.tweens.remove(this._tween);
     }
 }
 
