@@ -25,6 +25,7 @@ class LevelManager {
      */
     constructor(game, ...tilemapKeys) {
         this.game = game;
+        this._navMeshPlugin = this.game.globals.plugins.navMesh;
 
         // Load the tilemaps from the cache
         this._maps = [];
@@ -84,6 +85,7 @@ class LevelManager {
         t3.onComplete.add(() => {
             lastMap.wallLayer.visible = false;
             this._loadedMapIndex = index;
+            this._navMeshPlugin.switchLevel(this._maps[index].key);
             this.levelChangeSignal.dispatch(index);
         });
     }
@@ -152,8 +154,11 @@ class LevelManager {
                 walls.push(wall);
             }
         }
+        
+        // Load the navmesh from the tilemap object layer "navmesh"
+        const navMesh = this._navMeshPlugin.buildMeshFromTiled(key, tilemap, "navmesh");
 
-        return {key, tilemap, bgLayer, wallLayer, walls};
+        return {key, tilemap, bgLayer, wallLayer, navMesh, walls};
     }
 
 }
