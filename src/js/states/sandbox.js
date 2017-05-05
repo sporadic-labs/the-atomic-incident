@@ -15,6 +15,7 @@ const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
 const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
+const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 
 function Sandbox() {}
 
@@ -49,6 +50,13 @@ Sandbox.prototype.create = function () {
     // Initializing the world
     this.stage.backgroundColor = "#FFF";
 
+    // Plugins
+    global.plugins = (global.plugins !== undefined) ? global.plugins : {}; 
+    globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
+    globals.plugins.effects = game.plugins.add(EffectsPlugin); 
+    globals.plugins.navMesh = game.plugins.add(NavMeshPlugin);
+    globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
+
     // Level manager
     const levelManager = new LevelManager(game, "arcade-map", "arcade-map-2");
     globals.levelManager = levelManager;
@@ -59,12 +67,8 @@ Sandbox.prototype.create = function () {
     var map2 = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
     map2.onDown.add(() => levelManager.switchMap(1));
 
-    // Plugins
-    global.plugins = (global.plugins !== undefined) ? global.plugins : {}; 
-    globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
-    globals.plugins.effects = game.plugins.add(EffectsPlugin); 
+    // Lighting plugin - needs to be set up after level manager
     globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground); 
-    globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(0.9);
 
@@ -124,6 +128,7 @@ Sandbox.prototype.create = function () {
     //     menu.push(b);
     // }
     // this.menu = menu;
+
 };
 
 Sandbox.prototype.getMapPoints = function(key) {
