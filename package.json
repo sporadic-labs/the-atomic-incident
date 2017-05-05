@@ -38,7 +38,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "hull.js": "^0.2.10",
-    "javascript-astar": "^0.4.1",
+    "javascript-astar": "github:mikewesthad/javascript-astar",
     "jshint": "^2.9.2",
     "jshint-stylish": "^2.2.0",
     "libtess": "^1.2.2",
