@@ -284,6 +284,9 @@ gulp.task("clean:publish", function () {
     return del(["./.publish"]);
 });
 
+gulp.task("clean", function () {
+    return del(["./public"]);
+});
 
 // -- DEFAULT TASK -------------------------------------------------------------
 // This gulp task runs automatically when you don't specify task.
