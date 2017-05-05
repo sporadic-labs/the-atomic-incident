@@ -1,5 +1,5 @@
 /**
- * Modified from PathFinderPlugin: 
+ * Modified from PathFinderPlugin: https://github.com/appsbu-de/phaser_plugin_pathfinding
  */
 
 const EasyStar = require("easystarjs");
@@ -20,7 +20,7 @@ class EasyStarPlugin extends Phaser.Plugin {
      * @param {Phaser.Game} game 
      * @param {Phaser.PluginManager} manager 
      * 
-     * @memberOf Effects
+     * @memberOf EasyStarPlugin
      */
     constructor(game, manager) {
         super(game, manager);
