@@ -21,8 +21,8 @@ TargetingComponent.prototype.update = function () {
     this.parent.body.velocity.set(0);
 
     // Calculate path
-    const easyStar = this.game.globals.plugins.easyStar;
-    const path = easyStar.getWorldPath(this.parent.position, this.target.position);
+    const navMeshPlugin = this.game.globals.plugins.navMesh;
+    const path = navMeshPlugin.findPath(this.parent.position, this.target.position);
     
     // Check if there is a path that was found
     if (path) {
