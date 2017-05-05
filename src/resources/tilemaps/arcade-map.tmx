@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="163">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="338">
  <tileset firstgid="1" name="tiles_25" tilewidth="25" tileheight="25" tilecount="6" columns="6">
   <image source="tiles_25.png" width="150" height="25"/>
  </tileset>
@@ -187,6 +187,35 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="navmesh">
+  <object id="264" x="0" y="0" width="175" height="175"/>
+  <object id="265" x="300" y="0" width="150" height="175"/>
+  <object id="266" x="575" y="0" width="175" height="175"/>
+  <object id="267" x="175" y="0" width="125" height="75"/>
+  <object id="268" x="450" y="0" width="125" height="75"/>
+  <object id="269" x="0" y="300" width="175" height="150"/>
+  <object id="270" x="0" y="175" width="75" height="125"/>
+  <object id="271" x="0" y="450" width="75" height="125"/>
+  <object id="272" x="0" y="575" width="175" height="175"/>
+  <object id="273" x="300" y="575" width="150" height="175"/>
+  <object id="274" x="575" y="575" width="175" height="175"/>
+  <object id="275" x="575" y="300" width="175" height="150"/>
+  <object id="276" x="675" y="175" width="75" height="125"/>
+  <object id="277" x="675" y="450" width="75" height="125"/>
+  <object id="278" x="175" y="675" width="125" height="75"/>
+  <object id="279" x="450" y="675" width="125" height="75"/>
+  <object id="280" x="175" y="125" width="125" height="225"/>
+  <object id="281" x="450" y="125" width="125" height="225"/>
+  <object id="282" x="175" y="400" width="125" height="225"/>
+  <object id="283" x="450" y="400" width="125" height="225"/>
+  <object id="284" x="575" y="175" width="50" height="125"/>
+  <object id="285" x="575" y="450" width="50" height="125"/>
+  <object id="286" x="125" y="450" width="50" height="125"/>
+  <object id="287" x="125" y="175" width="50" height="125"/>
+  <object id="288" x="400" y="175" width="50" height="400"/>
+  <object id="289" x="300" y="175" width="50" height="400"/>
+  <object id="290" x="350" y="300" width="50" height="150"/>
+ </objectgroup>
  <objectgroup name="vertical-paths">
   <object id="98" x="150" y="25">
    <polyline points="0,0 0,700"/>
