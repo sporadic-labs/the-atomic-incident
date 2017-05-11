@@ -256,10 +256,19 @@ Player.prototype.update = function () {
             var inLight = this.flashlight.isPointInPulse(child.position);
             var flashlightColor = this.flashlight.pulseColor;
             var enemyColor = child.color;
+            if (child._shield) {
+                console.log(child._shield)
+                enemyColor = child._shieldColor;
+            } else {
+                enemyColor = child.color;
+            }
+
             // If the enemy color matches the flashlight color, then the enemies
             // should take damage.
             var matchingLights = flashlightColor.rgbEquals(enemyColor);
-            if (inLight && matchingLights) {
+            if (inLight && matchingLights && child._shield) {
+                child.damageShield(damage);
+            } else if (inLight && matchingLights) {
                 child.takeDamage(damage);
             }
         }

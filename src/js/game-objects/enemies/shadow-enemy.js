@@ -90,6 +90,12 @@ class ShadowEnemy extends BaseEnemy {
         super.update();
     }
 
+    damageShield(damage) {
+        console.log('damaging shield!');
+        this._shield = null;
+        this._shieldColor = null;
+    }
+
     destroy(...args) {
         this._timer.destroy();
         this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
