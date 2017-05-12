@@ -22,6 +22,11 @@ const Channel = require("./channel");
  *    to put connected polygons into groups like patroljs.
  *  - I'm sure there is stuff to optimize and test... For generalizing the code, make sure it works
  *    with any convex polgyon - triangles, quads, etc. 
+ *  - There are probably optimization tricks to do when dealing with certain types of shapes. E.g. 
+ *    we are using axis-aligned boxes for the polygons and it is dead simple to calculate if a point
+ *    is inside one of those...
+ *  - Would "Points-of-Visibility" pathfinding be any faster than this approach? 
+ *    http://www.david-gouveia.com/portfolio/pathfinding-on-a-2d-polygonal-map/ 
  * 
  * @class NavMesh
  */
