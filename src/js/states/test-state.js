@@ -61,7 +61,7 @@ class TestState {
         globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
         // Level manager
-        const levelManager = new LevelManager(game, "arcade-map");//, "arcade-map-2");
+        const levelManager = new LevelManager(game, "arcade-map", "arcade-map-2");
         globals.levelManager = levelManager;
 
         // Lighting plugin - needs to be set up after level manager
@@ -95,10 +95,6 @@ class TestState {
         this.startPoint = null;
         this.endPoint = null;
         this.game.input.onDown.add(() => {
-            // this.startPoint = this._getRandomEmptyPoint();
-            // this.endPoint = this._getRandomEmptyPoint();
-            // const path = globals.plugins.navMesh.findPath(this.startPoint, this.endPoint, true, true);
-
             if (!this.startPoint) {
                 this.startPoint = game.input.activePointer.position.clone();
                 graphics.clear();
@@ -112,25 +108,22 @@ class TestState {
                 this.endPoint = null;
             }
         });
+        
+        // For debugging individual paths, enter path info here:
+        // globals.plugins.navMesh.findPath(
+        //     new Phaser.Point(607.5, 472), 
+        //     new Phaser.Point(682.5, 481), 
+        //     true, true
+        // );
 
         // Astar vs Navmesh testing
 
-        // const iterations = 1000;
+        // const iterations = 10000;
         // const shortPaths = [];
         // const longPaths = [];
         // for (let i = 0; i < (iterations + 1); i += 2) {
         //     shortPaths.push(...this._getRandomPointsWithDistance(50, 150));
         //     longPaths.push(...this._getRandomPointsWithDistance(600));
-        // }
-        
-        // graphics.clear();
-        // for (let i = 0; i < iterations - 1; i += 2) {
-        //     graphics.lineStyle(1, 0xff0000);
-        //     graphics.moveTo(shortPaths[i].x, shortPaths[i].y);
-        //     graphics.lineTo(shortPaths[i + 1].x, shortPaths[i + 1].y);
-        //     graphics.lineStyle(1, 0x0000ff);
-        //     graphics.moveTo(longPaths[i].x, longPaths[i].y);
-        //     graphics.lineTo(longPaths[i + 1].x, longPaths[i + 1].y);
         // }
 
         // let start;

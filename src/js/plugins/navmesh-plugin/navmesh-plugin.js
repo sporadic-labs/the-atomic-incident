@@ -51,10 +51,12 @@ class NavMeshPlugin extends Phaser.Plugin {
      * @param {string} levelName The key to use to store the navmesh in the plugin 
      * @param {Phaser.Tilemap} tilemap The tilemap that contains polygons under an object layer
      * @param {string} objectKey The name of the object layer in the tilemap
+     * @param {number} [meshShrinkAmount=0] The amount (in pixels) that the navmesh has been
+     * shrunk around obstacles (a.k.a the amount obstacles have been expanded)
      * 
      * @memberof NavMeshPlugin
      */
-    buildMeshFromTiled(levelName, tilemap, objectKey) {
+    buildMeshFromTiled(levelName, tilemap, objectKey, meshShrinkAmount = 0) {
         // Load up the object layer
         const rects = tilemap.objects[objectKey];
         // Loop over the objects and construct a polygon
@@ -68,7 +70,7 @@ class NavMeshPlugin extends Phaser.Plugin {
             polygons.push(poly);
         }
         // Build the navmesh, cache it and set it to be the current
-        const navMesh = new NavMesh(this.game, polygons);
+        const navMesh = new NavMesh(this.game, polygons, meshShrinkAmount);
         this._navMeshes[levelName] = navMesh;
         this._currentNavMesh = navMesh;
     }  
@@ -126,17 +128,17 @@ class NavMeshPlugin extends Phaser.Plugin {
      */
     findPath(startPoint, endPoint, debugDraw = false, debugPrint = false) {
         if (!this._currentNavMesh) return;
-        const calculatedPath = this._currentNavMesh.findPath(startPoint, endPoint, debugDraw);
+        const path = this._currentNavMesh.findPath(startPoint, endPoint, debugDraw);
         if (debugPrint) {
             let s = `Path: (${startPoint.x}, ${startPoint.y}) -> (${endPoint.x}, ${endPoint.y})`;
-            if (calculatedPath) {
-                for (const p of calculatedPath) {
+            if (path) {
+                for (const p of path) {
                     s += `\n\t(${p.x}, ${p.y})`;
                 }
             } else s += `\n\tNo path found.`
             console.log(s);
         }
-        return calculatedPath;
+        return path;
     }
 
     /**

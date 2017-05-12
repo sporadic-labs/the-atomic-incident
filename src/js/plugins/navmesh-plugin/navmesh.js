@@ -29,14 +29,17 @@ class NavMesh {
 
     /**
      * Creates an instance of NavMesh.
-     * @param {Phaser.Game} game 
-     * @param {Phaser.Polygon[]} polygons 
-     * 
+     * @param {Phaser.Game} game
+     * @param {Phaser.Polygon[]} polygons
+     * @param {number} [meshShrinkAmount=0] The amount (in pixels) that the navmesh has been
+     * shrunk around obstacles (a.k.a the amount obstacles have been expanded)
+     *
      * @memberof NavMesh
      */
-    constructor(game, polygons) {
+    constructor(game, polygons, meshShrinkAmount = 0) {
         this.game = game;
         this._debugGraphics = null;
+        this._meshShrinkAmount = meshShrinkAmount;
 
         // Construct NavPoly instances for each polygon
         this._navPolygons = [];
@@ -49,16 +52,16 @@ class NavMesh {
         this.graph = new NavGraph(this._navPolygons);
     }
 
-    findPath(startPoint, endPoint, debugDraw = false) {
+    findPath(startPoint, endPoint, debugDraw = true) {
         let startPoly = null;
         let endPoly = null;
         let startDistance = Number.MAX_VALUE;
         let endDistance = Number.MAX_VALUE;
-        let d;
+        let d, r;
 
         // Find the closest poly for the starting and ending point
         for (const navPoly of this._navPolygons) {
-            let r = navPoly.boundingRadius;
+            r = navPoly.boundingRadius;
             d = navPoly.centroid.distance(startPoint);
             if (d <= startDistance && d <= r && navPoly.constains(startPoint)) {
                 startPoly = navPoly;
@@ -69,6 +72,40 @@ class NavMesh {
             if (d <= endDistance && d <= r && navPoly.constains(endPoint)) {
                 endPoly = navPoly;
                 endDistance = d;
+            }
+        }
+
+        // If the start point wasn't inside a polygon, run a more liberal check that allows a point
+        // to be within meshShrinkAmount radius of a polygon
+        if (!startPoly && this._meshShrinkAmount > 0) {
+            for (const navPoly of this._navPolygons) {
+                // Check if point is within bounding circle to avoid extra projection calculations
+                r = navPoly.boundingRadius + this._meshShrinkAmount;
+                d = navPoly.centroid.distance(startPoint);
+                if (d <= r) {
+                    // Check if projected point is within range of a polgyon and is closer than the
+                    // previous point
+                    const info = this._projectPointToPolygon(startPoint, navPoly);
+                    if (info.distance <= this._meshShrinkAmount && info.distance < startDistance) {
+                        startPoly = navPoly;
+                        startDistance = info.distance;
+                    }
+                }
+            }
+        }
+
+        // Same check as above, but for the end point
+        if (!endPoly && this._meshShrinkAmount > 0) {
+            for (const navPoly of this._navPolygons) {
+                r = navPoly.boundingRadius + this._meshShrinkAmount;
+                d = navPoly.centroid.distance(endPoint);
+                if (d <= r) {
+                    const info = this._projectPointToPolygon(endPoint, navPoly);
+                    if (info.distance <= this._meshShrinkAmount && info.distance < endDistance) {
+                        endPoly = navPoly;
+                        endDistance = info.distance;
+                    }
+                }
             }
         }
 
@@ -96,7 +133,7 @@ class NavMesh {
                     portal = navPolygon.portals[i];
                 }
             }
-            
+
             // Push the portal vertices into the channel
             channel.push(portal.start, portal.end);
         }
@@ -234,6 +271,45 @@ class NavMesh {
         const singlePointOverlap = points[1].point.equals(points[2].point);
         if (noOverlap || singlePointOverlap) return null;
         else return [points[1].point, points[2].point];
+    }
+
+    _projectPointToPolygon(point, navPoly) {
+        let closestProjection = null;
+        let closestDistance = Number.MAX_VALUE;
+        for (const edge of navPoly.edges) {
+            const projectedPoint = this._projectPointToEdge(point, edge);
+            const d = point.distance(projectedPoint);
+            if (closestProjection === null || d < closestDistance) {
+                closestDistance = d;
+                closestProjection = projectedPoint;
+            }
+        }
+        return {point: closestProjection, distance: closestDistance};
+    }
+
+    _distanceSquared(a, b) {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        return dx * dx + dy * dy;
+    }
+
+    // http://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
+    _projectPointToEdge(point, line) {
+        const a = line.start;
+        const b = line.end;
+        // Consider the parametric equation for the edge's line, p = a + t (b - a). We want to find
+        // where our point lies on the line by solving for t:
+        //  t = [(p-a) . (b-a)] / |b-a|^2
+        const l2 = this._distanceSquared(a, b);
+        let t = ((point.x - a.x) * (b.x - a.x) + (point.y - a.y) * (b.y - a.y)) / l2;
+        // We clamp t from [0,1] to handle points outside the segment vw.
+        t = Phaser.Math.clamp(t, 0, 1);
+        // Project onto the segment
+        const p = new Phaser.Point(
+            a.x + t * (b.x - a.x),
+            a.y + t * (b.y - a.y)
+        );
+        return p;        
     }
 
     enableDebug() {

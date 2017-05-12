@@ -157,7 +157,8 @@ class LevelManager {
         }
         
         // Load the navmesh from the tilemap object layer "navmesh"
-        const navMesh = this._navMeshPlugin.buildMeshFromTiled(key, tilemap, "navmesh");
+        const navMesh = this._navMeshPlugin.buildMeshFromTiled(key, tilemap, "navmesh-shrunken", 
+            12.5);
 
         return {key, tilemap, bgLayer, wallLayer, navMesh, walls};
     }
