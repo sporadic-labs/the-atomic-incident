@@ -257,7 +257,7 @@ Player.prototype.update = function () {
             var flashlightColor = this.flashlight.pulseColor;
             var enemyColor = child.color;
             if (child._shield) {
-                console.log(child._shield)
+                // console.log(child._shield)
                 enemyColor = child._shieldColor;
             } else {
                 enemyColor = child.color;
