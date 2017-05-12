@@ -19,7 +19,7 @@ class Channel {
         });
     }
 
-    stringPull() {
+    stringPull(agentRadius = 0) {
         var portals = this.portals;
         var pts = [];
         // Init scan state
@@ -48,8 +48,28 @@ class Channel {
                     rightIndex = i;
                 } else {
                     // Right vertex just crossed over the left vertex, so the left vertex should
-                    // now be part of the path.
-                    pts.push(portalLeft);
+                    // now be part of the path. Add some offset if the agent has a radius.       
+                    if (agentRadius > 0) {
+                        // Find the angle of the the edges on either side current right vertex
+                        const prevLeft = portals[i - 2].left;
+                        const nextLeft = portals[i].left;
+                        const nextAngle = portalLeft.angle(nextLeft);
+                        const prevAngle = prevLeft.angle(portalLeft);
+                        
+                        // Find the perpendicular to the midpoint of the two angles, i.e the normal
+                        // of the current right vertex
+                        const diff = utils.angleDifference(nextAngle, prevAngle);
+                        const angle = prevAngle + (diff / 2) - (Math.PI / 2);
+
+                        const offsetPoint = portalLeft.clone().add(
+                            agentRadius * Math.cos(angle),
+                            agentRadius * Math.sin(angle)
+                        );
+                        
+                        pts.push(offsetPoint);
+                    } else {
+                        pts.push(portalLeft);
+                    }
                     
                     // Restart scan from portal left point.
 
@@ -75,8 +95,28 @@ class Channel {
                     leftIndex = i;
                 } else {
                     // Left vertex just crossed over the right vertex, so the right vertex should
-                    // now be part of the path
-                    pts.push(portalRight);
+                    // now be part of the path. Add some offset if the agent has a radius.       
+                    if (agentRadius > 0) {
+                        // Find the angle of the the edges on either side current right vertex
+                        const prevRight = portals[i - 2].right;
+                        const nextRight = portals[i].right;
+                        const nextAngle = portalRight.angle(nextRight);
+                        const prevAngle = prevRight.angle(portalRight);
+                        
+                        // Find the perpendicular to the midpoint of the two angles, i.e the normal
+                        // of the current right vertex
+                        const diff = utils.angleDifference(nextAngle, prevAngle);
+                        const angle = prevAngle + (diff / 2) + (Math.PI / 2);
+
+                        const offsetPoint = portalRight.clone().add(
+                            agentRadius * Math.cos(angle),
+                            agentRadius * Math.sin(angle)
+                        );
+                        
+                        pts.push(offsetPoint);
+                    } else {
+                        pts.push(portalRight);
+                    }
                     
                     // Restart scan from portal right point.
 
