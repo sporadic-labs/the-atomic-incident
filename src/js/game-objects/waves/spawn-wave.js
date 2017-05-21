@@ -23,25 +23,32 @@ function SpawnWave(game) {
     const {CircleWave, TunnelWave, CrossWave} = WaveShapes;
     this._possibleWaves = [];
     this._possibleWaves.push({
-        name: "Flythrough Wave - Random Any One Type", 
+        name: "Flythrough Wave - Random Any One Type",
         wave: new FlythroughWave(
             g, WaveComposition.CreateRandOneType(g, 6), 100
+        ),
+        probability: 15/100
+    });
+    this._possibleWaves.push({
+        name: "Snake Path Tween - Random Any One Type",
+        wave: new SnakePathWave(
+            g, WaveComposition.CreateRandOneType(g, 6), 100
+        ),
+        probability: 15/100
+    });
+    this._possibleWaves.push({
+        name: "Path Tween - Random Any One Type",
+        wave: new PathTweenWave(
+            g, WaveComposition.CreateRandOneType(g), 75
         ),
         probability: 10/100
     });
     this._possibleWaves.push({
-        name: "Snake Path Tween - Random Any One Type", 
-        wave: new SnakePathWave(
-            g, WaveComposition.CreateRandOneType(g, 6), 100
-        ),
-        probability: 20/100
-    });
-    this._possibleWaves.push({
-        name: "Path Tween - Random Any One Type", 
+        name: "Path Tween - Random Any One Type  w/ shield",
         wave: new PathTweenWave(
-            g, WaveComposition.CreateRandOneType(g), 75
+            g, WaveComposition.CreateRandOneType(g, 10, true), 75
         ),
-        probability: 20/100
+        probability: 10/100
     });
     this._possibleWaves.push({
         name: "Circle Around Player - All Three Types",
@@ -50,7 +57,16 @@ function SpawnWave(game) {
                 g, WaveComposition.CreateRandThreeTypes(g, 16), 80
             )
         ),
-        probability: 20/100
+        probability: 10/100
+    });
+    this._possibleWaves.push({
+        name: "Circle Around Player - All Three Types w/ shield",
+        wave: new TargetingWave(
+            g, new CircleWave(
+                g, WaveComposition.CreateRandThreeTypes(g, 16, true), 80
+            )
+        ),
+        probability: 10/100
     });
     this._possibleWaves.push({
         name: "Vertical Tunnel Around Player - Random Single Type Walls",
@@ -58,7 +74,7 @@ function SpawnWave(game) {
             g, new TunnelWave(
                 g, 
                 WaveComposition.CreateRandOneType(g, 15),
-                WaveComposition.CreateRandOneType(g, 15),
+                WaveComposition.CreateRandOneType(g, 15, true),
                 100, 250, Math.PI / 2
             )
         ),
@@ -83,7 +99,7 @@ function SpawnWave(game) {
         wave: new TargetingWave(
             g, new CrossWave(g, sharedComposition, sharedComposition, 250)
         ),
-        probability: 10/100
+        probability: 15/100
     });
 
     this._timer = this.game.time.create(false);

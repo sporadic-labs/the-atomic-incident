@@ -61,11 +61,31 @@ class FlythroughWave {
         this._paths = [...vertical, ...horizontal];
     }
 
-    _spawnIndividual(path, enemyColor) {
+    _spawnIndividual(path, enemyColor, shield) {
         let color;
-        if (enemyColor === "red") color = Colors.red;
-        else if (enemyColor === "green") color = Colors.green;
-        else color = Colors.blue;
+        let shieldColor;
+        if (enemyColor === "red") {
+            color = Colors.red;
+            // If the shield flag was set when the wave was generated, choose
+            // a random colored shield that does NOT match the enemy color.
+            if (shield) {
+                shieldColor = this.game.rnd.pick([Colors.green, Colors.blue])
+            }
+        } else if (enemyColor === "green") {
+            color = Colors.green;
+            // If the shield flag was set when the wave was generated, choose
+            // a random colored shield that does NOT match the enemy color.
+            if (shield) {
+                shieldColor = this.game.rnd.pick([Colors.red, Colors.blue])
+            }
+        } else {
+            color = Colors.blue;
+            // If the shield flag was set when the wave was generated, choose
+            // a random colored shield that does NOT match the enemy color.
+            if (shield) {
+                shieldColor = this.game.rnd.pick([Colors.green, Colors.red])
+            }
+        }
         const firstPoint = path.getPointAtLength(0);
         const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y,
             this._enemies, color);
@@ -74,18 +94,19 @@ class FlythroughWave {
         enemy.setMovementComponent(comp);
     }
 
-    _spawnWithDelay(path, enemyTypes, delay) {
+    _spawnWithDelay(path, enemyTypes, delay, shield) {
         for (const [i, enemyType] of enemyTypes.entries()) {
-            this._timer.add(i * delay, this._spawnIndividual, this, path, enemyType);
+            this._timer.add(i * delay, this._spawnIndividual, this, path, enemyType, shield);
         }
     }
 
     spawn() {
         const path = this.game.rnd.pick(this._paths);
         const enemyTypes = this._waveComposition.generate().getEnemiesArray();
+        const shield = this._waveComposition._hasShield;
         const individualDelay = 1000;
         const totalTime = enemyTypes.length * individualDelay + 4000;
-        const callback = this._spawnWithDelay.bind(this, path, enemyTypes, individualDelay);
+        const callback = this._spawnWithDelay.bind(this, path, enemyTypes, individualDelay, shield);
         this._timer.loop(totalTime, callback);
         callback();
     }

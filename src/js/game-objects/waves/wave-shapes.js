@@ -51,7 +51,7 @@ class CircleWave {
                 Math.sin(angle) * this.radius
             );
             enemyNum++;
-            yield {type: enemy, position};
+            yield {type: enemy, position, shield: this._waveComposition._hasShield};
         }
     }
 }
@@ -117,7 +117,7 @@ class LineWave {
                 (lengthStep * enemyNum) * Math.sin(this.angle)
             );
             enemyNum++;
-            yield {type: enemy, position};
+            yield {type: enemy, position, shield: this._waveComposition._hasShield};
         }
     }
 }

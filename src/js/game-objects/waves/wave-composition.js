@@ -10,28 +10,31 @@ class WaveComposition {
      * @param {number} fractionRed Fraction of enemies that should be red
      * @param {number} fractionGreen Fraction of enemies that should be green
      * @param {number} fractionBlue Fraction of enemies that should be blue
+     * @param {boolean} shouldRandomize flag, should enemy order be shuffled?
+     * @param {boolean} hasShield flag, do enemies have shield on spawn?
      * 
      * @memberOf WaveComposition
      */
     constructor(game, totalEnemies = 10, fractionRed = 1, fractionGreen = 0, 
-            fractionBlue = 0, shouldRandomize = true) {
+            fractionBlue = 0, shouldRandomize = true, hasShield = false) {
         this.game = game;
         this._shouldRandomize = shouldRandomize;
+        this._hasShield = hasShield;
         this.setTotalEnemies(totalEnemies);
         this.setComposition(fractionRed, fractionGreen, fractionBlue);
         this.generate();
     }
 
-    static CreateRandOneType(game, totalEnemies = 10) {
-        return new WaveComposition(game, totalEnemies, 1, 0, 0, true);
+    static CreateRandOneType(game, totalEnemies = 10, hasShield = false) {
+        return new WaveComposition(game, totalEnemies, 1, 0, 0, true, hasShield);
     }
 
-    static CreateRandTwoTypes(game, totalEnemies = 10) {
-        return new WaveComposition(game, totalEnemies, 0.5, 0.5, 0, true);
+    static CreateRandTwoTypes(game, totalEnemies = 10, hasShield = false) {
+        return new WaveComposition(game, totalEnemies, 0.5, 0.5, 0, true, hasShield);
     }
 
-    static CreateRandThreeTypes(game, totalEnemies = 10) {
-        return new WaveComposition(game, totalEnemies, 0.33, 0.33, 0.34, true);
+    static CreateRandThreeTypes(game, totalEnemies = 10, hasShield = false) {
+        return new WaveComposition(game, totalEnemies, 0.33, 0.33, 0.34, true, hasShield);
     }
 
     /**

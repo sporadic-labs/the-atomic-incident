@@ -17,11 +17,29 @@ class TargetingWave {
             if (!this._isTileEmpty(pos.x, pos.y)) continue;
             // Spawn the enemy based on the type
             let color;
-            if (enemyInfo.type === "red") color = Colors.red;
-            else if (enemyInfo.type === "green") color = Colors.green;
-            else color = Colors.blue;
-            // TODO(rex): Make a wave type that has enemies with shields.
-            let shieldColor = Colors.green;
+            let shieldColor;
+            if (enemyInfo.type === "red") {
+                color = Colors.red;
+                // If the shield flag was set when the wave was generated, choose
+                // a random colored shield that does NOT match the enemy color.
+                if (enemyInfo.shield) {
+                    shieldColor = this.game.rnd.pick([Colors.green, Colors.blue])
+                }
+            } else if (enemyInfo.type === "green") {
+                color = Colors.green;
+                // If the shield flag was set when the wave was generated, choose
+                // a random colored shield that does NOT match the enemy color.
+                if (enemyInfo.shield) {
+                    shieldColor = this.game.rnd.pick([Colors.red, Colors.blue])
+                }
+            } else {
+                color = Colors.blue;
+                // If the shield flag was set when the wave was generated, choose
+                // a random colored shield that does NOT match the enemy color.
+                if (enemyInfo.shield) {
+                    shieldColor = this.game.rnd.pick([Colors.green, Colors.red])
+                }
+            }
             const enemy = new ShadowEnemy(this.game, pos.x, pos.y, 
                 this._enemies, color, shieldColor);
             enemy.setMovementComponent(new TargetingComp(enemy, 100));
