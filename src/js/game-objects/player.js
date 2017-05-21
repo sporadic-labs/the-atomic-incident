@@ -240,7 +240,6 @@ Player.prototype.update = function () {
     // Light pickups
     spriteUtils.checkOverlapWithGroup(this, this._pickups,
         this._onCollideWithPickup, this);
-
 };
 
 Player.prototype.getVelocity = function () {
