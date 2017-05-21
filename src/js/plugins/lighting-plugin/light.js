@@ -5,9 +5,9 @@ var Color = require("../../helpers/Color.js");
 Light.instances = 0;
 
 /**
- * Creates a Light object that is responsible for casting light against the 
+ * Creates a Light object that is responsible for casting light against the
  * walls from LightingPlugin
- * 
+ *
  * @param {Phaser.Game} game
  * @param {LightingPlugin} parent
  * @param {Phaser.Circle|Phaser.Polygon} shape
@@ -17,9 +17,9 @@ function Light(game, parent, position, shape, baseColor, pulseColor) {
     this.game = game;
     this.parent = parent;
     this.shape = shape;
-    this.baseColor = (baseColor instanceof Color) ? baseColor : 
+    this.baseColor = (baseColor instanceof Color) ? baseColor :
         new Color(baseColor);
-    this.pulseColor = (pulseColor instanceof Color) ? pulseColor : 
+    this.pulseColor = (pulseColor instanceof Color) ? pulseColor :
         new Color(pulseColor);
     this.enabled = true;
     this.needsRedraw = true;
@@ -58,7 +58,7 @@ function Light(game, parent, position, shape, baseColor, pulseColor) {
             if (d > this._boundingRadius) this._boundingRadius = d;
         }
         this._bitmap = game.add.bitmapData(
-            2 * this._boundingRadius, 
+            2 * this._boundingRadius,
             2 * this._boundingRadius
         );
         this._setRotation(0);
@@ -75,11 +75,11 @@ Light.prototype.enableDebug = function () {
         // Only create debug graphics if it is needed, for performance reasons
         this._debugGraphics = this.game.add.graphics(0, 0);
         this.parent.add(this._debugGraphics);
-    } 
+    }
     this._debugGraphics.visible = true;
 };
 
-Light.prototype.disableDebug = function () {    
+Light.prototype.disableDebug = function () {
     this._isDebug = false;
     if (this._debugGraphics) this._debugGraphics.visible = false;
 };
@@ -129,7 +129,7 @@ Light.prototype.update = function () {
         this._lastColor = this.baseColor.clone();
         this.needsRedraw = true;
     }
-    if (this._pulseTween && this._pulseTween.isRunning) this.needsRedraw = true;
+    if (this.isPulseActive()) this.needsRedraw = true;
 
     if (this.needsRedraw) this.intersectingWalls = this._recalculateWalls();
     if (this._debugGraphics) this._updateDebug();
@@ -139,7 +139,7 @@ Light.prototype.update = function () {
  * Check if a point is in the pulse of the current light.
  *
  * @param {Phaser.Point} worldPosition World point to check
- * @returns {bool}
+ * @returns {boolean}
  */
 Light.prototype.isPointInPulse = function (worldPosition) {
     // Exit if light is disabled or there is no pulse
@@ -151,6 +151,15 @@ Light.prototype.isPointInPulse = function (worldPosition) {
     if (dist > outerRadius || dist < innerRadius) return false;
     // Finally, check if the point is actually in light (and not in shadow)
     return this.isPointInLight(worldPosition);
+};
+
+/**
+ * Returns whether or not a pulse is currently running
+ *
+ * @returns {boolean}
+ */
+Light.prototype.isPulseActive = function () {
+    return (this._pulseTween && this._pulseTween.isRunning);
 };
 
 /**
@@ -166,9 +175,9 @@ Light.prototype.isPointInLight = function (worldPosition) {
     var lightRelativePos = Phaser.Point.subtract(worldPosition, this.position);
     var inShape = this.shape.contains(lightRelativePos.x, lightRelativePos.y);
     if (!inShape) return false;
-    
-    // If position is in the shape, do the more detailed work of checking the 
-    // appropriate pixel in the light's bitmap 
+
+    // If position is in the shape, do the more detailed work of checking the
+    // appropriate pixel in the light's bitmap
     var bitmapPos = this.getTopLeft();
     var bitmapRelativePos = Phaser.Point.subtract(worldPosition, bitmapPos);
     // Round to pixel position
@@ -202,7 +211,7 @@ Light.prototype.getLightRay = function (angle) {
         return ray;
     } else if (this.shape instanceof Phaser.Polygon) {
         // Hacky for now: cast the ray beyond the polygon's shape. See logic
-        // from old rectangle shape code in this commit: 
+        // from old rectangle shape code in this commit:
         //  e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
         ray.end.setTo(
             this.position.x + Math.cos(angle) * this._boundingRadius,
@@ -218,7 +227,7 @@ Light.prototype.redraw = function (points) {
     if (this.needsRedraw) {
         // Clear offscreen buffer
         this.redrawLight();
-        this.redrawShadow(points);      
+        this.redrawShadow(points);
         this.needsRedraw = false;
         this._bitmap.update(); // Update bitmap so that pixels can be queried
     }
@@ -237,7 +246,7 @@ Light.prototype.redrawLight = function () {
         var cy = shape.radius;
         this._bitmap.circle(cx, cy, shape.radius, this.baseColor.getWebColor());
         // Pulse - draw two arcs, one filled and one unfilled to get a doughnut
-        if (this._pulseTween && this._pulseTween.isRunning) {
+        if (this.isPulseActive()) {
             var startRadius = Math.max(this._pulse.position - this._pulse.width, 0);
             var endRadius = Math.min(this._pulse.position, this._boundingRadius);
             this._bitmap.ctx.beginPath();
@@ -253,11 +262,11 @@ Light.prototype.redrawLight = function () {
         // (boundingRadius, boundingRadius), so shift each point by the radius
         this._bitmap.ctx.fillStyle = this.baseColor.getWebColor();
         this._bitmap.ctx.beginPath();
-        this._bitmap.ctx.moveTo(this._boundingRadius + this._points[0].x, 
+        this._bitmap.ctx.moveTo(this._boundingRadius + this._points[0].x,
             this._boundingRadius + this._points[0].y);
         for (var i = 1; i < this._points.length; i += 1) {
             this._bitmap.ctx.lineTo(
-                this._boundingRadius + this._points[i].x, 
+                this._boundingRadius + this._points[i].x,
                 this._boundingRadius + this._points[i].y);
         }
         this._bitmap.ctx.closePath();
@@ -339,32 +348,32 @@ Light.prototype._recalculateWalls = function () {
     var intersectingWalls = [];
     for (var w = 0; w < walls.length; w++) {
         var wall = walls[w];
-        
-        // Ignore walls that are not within range of the light. MH: this is 
-        // essentially checking whether two circles intersect. Circle 1 is the 
-        // the light. Circle 2 is a circle that circumscribes the wall (e.g. 
+
+        // Ignore walls that are not within range of the light. MH: this is
+        // essentially checking whether two circles intersect. Circle 1 is the
+        // the light. Circle 2 is a circle that circumscribes the wall (e.g.
         // placed at the midpoint, with a radius of half wall length). There are
         // more accurate circle vs line collision detection algorithms that we
         // could use if needed...
         var dist = wall.midpoint.distance(this.position);
         if (dist > (this._boundingRadius + (wall.length / 2))) continue;
 
-        // Shift the light so that its origin is at the wall midpoint, then 
+        // Shift the light so that its origin is at the wall midpoint, then
         // calculate the dot of the that and the normal. This way both vectors
         // have the same origin point.
         var relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
         var dot = wall.normal.dot(relativePos);
-        var isBackFacing = dot < 0; 
+        var isBackFacing = dot < 0;
 
         // Add some information to the wall to indicate whether it is back
         // facing or not. Walls are passed around by reference, so each light
         // does not have its own unique copy. Thus, the information needs to be
         // stored under an id unique to the specific light.
         wall.backFacings = wall.backFacings || {};
-        wall.backFacings[this.id] = isBackFacing; 
-        
+        wall.backFacings[this.id] = isBackFacing;
+
         intersectingWalls.push(wall);
     }
-    
+
     return intersectingWalls;
 };
