@@ -10,6 +10,7 @@ const LightPickup = require("./pickups/light-pickup.js");
 const abilityNames = require("../constants/ability-names.js");
 
 const PulseAbility = require("./abilities/pulse-ability");
+const MineAbility = require("./abilities/mine-ability");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -136,7 +137,9 @@ function Player(game, x, y, parentGroup) {
     this._activeAbility = null;
 
     this._pulseAbility = new PulseAbility(this.game, this, 10000);
-    this._pulseAbility.activate();
+    this._mineAbility = new MineAbility(this.game, this, 10000, 100, 400);
+    this._ability = this._mineAbility;
+    this._ability.activate();
 
     this._velocity = new Phaser.Point(0, 0);
 }
@@ -214,7 +217,7 @@ Player.prototype.update = function () {
     }
 
     // Temp: always update pulse ability. Eventually add ability to switch active ability
-    this._pulseAbility.update();
+    this._ability.update();
 
     // Move towards the mouse position
     var delta = Phaser.Point.subtract(destination, this.body.position);
