@@ -91,7 +91,8 @@ class ShadowEnemy extends BaseEnemy {
     }
 
     damageShield(damage) {
-        console.log('damaging shield!');
+        // Destroy the shield sprite.
+        this._shield.destroy();
         this._shield = null;
         this._shieldColor = null;
     }
@@ -100,6 +101,8 @@ class ShadowEnemy extends BaseEnemy {
         this._timer.destroy();
         this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
         this._dieSound.play();
+
+        if (this._shield) this._shield.destroy();
 
         if (this._movementComponent) this._movementComponent.destroy();
         super.destroy(...args);

@@ -249,30 +249,29 @@ Player.prototype.update = function () {
         this._onCollideWithPickup, this);
 
     // Damage enemies
+    // var damage = this.damage * this.game.time.physicsElapsed;
     var damage = this.damage * this.game.time.physicsElapsed;
-    spriteUtils.forEachRecursive(this._enemies, function (child) {
-        if (child instanceof Phaser.Sprite && child.takeDamage) {
-            // MH: why does world position not work here...
-            var inLight = this.flashlight.isPointInPulse(child.position);
-            var flashlightColor = this.flashlight.pulseColor;
-            var enemyColor = child.color;
-            if (child._shield) {
-                // console.log(child._shield)
-                enemyColor = child._shieldColor;
-            } else {
-                enemyColor = child.color;
-            }
+    if (this.flashlight._pulseTween && this.flashlight._pulseTween.isRunning) {
+        spriteUtils.forEachRecursive(this._enemies, function (child) {
+            if (child instanceof Phaser.Sprite && child.takeDamage) {
+                // MH: why does world position not work here...
+                var inLight = this.flashlight.isPointInPulse(child.position);
+                var flashlightColor = this.flashlight.pulseColor;
+                var enemyColor = child._shield ? child._shieldColor : child.color;
+                if (!enemyColor) return;
 
-            // If the enemy color matches the flashlight color, then the enemies
-            // should take damage.
-            var matchingLights = flashlightColor.rgbEquals(enemyColor);
-            if (inLight && matchingLights && child._shield) {
-                child.damageShield(damage);
-            } else if (inLight && matchingLights) {
-                child.takeDamage(damage);
+                // If the enemy color matches the flashlight color, then the enemies
+                // should take damage.
+                var matchingLights = flashlightColor.rgbEquals(enemyColor);
+                if (inLight && matchingLights && child._shield) {
+                    child.damageShield(damage);
+                } else if (inLight && matchingLights) {
+                    child.takeDamage(damage);
+                }
             }
-        }
-    }, this);
+        }, this);
+    }
+
 
     // Trigger pickups when the lights collide.
     spriteUtils.forEachRecursive(this._pickups, function (child) {
