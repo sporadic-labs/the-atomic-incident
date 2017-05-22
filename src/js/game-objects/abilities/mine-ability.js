@@ -48,13 +48,8 @@ class MineAbility extends Ability {
         const mine = this._mines[index];
         mine.isTriggered = true;
         mine.sprite.destroy();
-        mine.light.destroy();
-        mine.light = this._lighting.addLight(
-            mine.sprite.position,
-            new Phaser.Circle(0, 0, this._explosionRadius),
-            mine.color.clone().setTo({a: 0}),
-            mine.color
-        );
+        mine.light.setShape(new Phaser.Circle(0, 0, this._explosionRadius));
+        mine.light.baseColor.setTo({a: 0});
         this._effects.lightFlash(mine.color.getRgbColorInt());
         mine.light.startPulse(this._explosionSpeed);
         this.game.globals.postProcessor.startWave(mine.light.position);
