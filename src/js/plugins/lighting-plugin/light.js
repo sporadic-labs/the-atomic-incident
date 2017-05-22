@@ -25,10 +25,11 @@ class Light {
         this.id = instances++;
         this._isDebug = false;
         this.rotation = 0;
+        this.intersectingWalls = this._recalculateWalls();
+        this.shape = null;
         this._lastRotation = this.rotation;
         this._lastPosition = position.clone();
         this._lastColor = this.baseColor.clone();
-        this.intersectingWalls = this._recalculateWalls();
         this._pulse = null;
         this._pulseTween = null;
         this._bitmap = null;
@@ -38,11 +39,12 @@ class Light {
     }
 
     setShape(shape) {
+        this.shape = shape;
+
+        // Figure out the appropriate bounding radius and bitmap size depending on the shape
         let bitmapWidth = 0;
         let bitmapHeight = 0;
         let boundingRadius = 0;
-
-        // Figure out the appropriate bounding radius and bitmap size depending on the shape
         if (shape instanceof Phaser.Circle) {
             // For a circlular light, the bitmap is set to be the size of the
             // circle. The light should then be drawn in the center of the bitmap.
