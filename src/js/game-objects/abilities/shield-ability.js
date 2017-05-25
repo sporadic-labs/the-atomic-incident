@@ -56,11 +56,14 @@ class ShieldAbility extends Ability {
             const color = this._player.ammo.shift();
             // Set the shield color based on the current ammo.
             this._shield.baseColor = color;
+            this._shield.baseColor.setTo({a: 155});
+
             // And turn it on!
             this._shield.enabled = true;
             // Remove any active tweens and reset the cooldown.
             if (this._shieldTween) {
                 this._shieldTween.stop();
+                this.game.tweens.remove(this._shieldTween);
             }
             this._fading = false;
             this._shieldCooldown.reset()
@@ -123,7 +126,6 @@ class ShieldAbility extends Ability {
 
     destroy() {
         this.deactivate();
-        this.game.tweens.removeFrom(this._shield.baseColor);
         super.destroy();
     }
 }
