@@ -11,6 +11,7 @@ const abilityNames = require("../constants/ability-names.js");
 
 const PulseAbility = require("./abilities/pulse-ability");
 const MineAbility = require("./abilities/mine-ability");
+const ShieldAbility = require("./abilities/shield-ability");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -138,7 +139,8 @@ function Player(game, x, y, parentGroup) {
 
     this._pulseAbility = new PulseAbility(this.game, this, 10000);
     this._mineAbility = new MineAbility(this.game, this, 10000, 100, 400);
-    this._ability = this._mineAbility;
+    this._shieldAbility = new ShieldAbility(this.game, this, 10000, 96, 4000);
+    this._ability = this._shieldAbility;
     this._ability.activate();
 
     this._velocity = new Phaser.Point(0, 0);
