@@ -18,6 +18,7 @@ class ShieldAbility extends Ability {
     constructor(game, player, damage, radius, duration) {
         super(game, player);
 
+        this.game = game;
         this._damage = damage;
         this._shieldRadius = radius
 
@@ -46,16 +47,23 @@ class ShieldAbility extends Ability {
         this._shield.enabled = false;
         // Cooldown component for shield duration.
         this._shieldCooldown = new CooldownAbility(this.game, duration, 0, "shield");
+        this._shieldTween = null;
     }
 
     _trigger() {
-        if (this._player.ammo.length > 0 && this._shieldCooldown.isReady()) {
+        if (this._player.ammo.length > 0) {
             // Grab the first color off of the ammo stack.
             const color = this._player.ammo.shift();
             // Set the shield color based on the current ammo.
             this._shield.baseColor = color;
             // And turn it on!
             this._shield.enabled = true;
+            // Remove any active tweens and reset the cooldown.
+            if (this._shieldTween) {
+                this._shieldTween.stop();
+            }
+            this._fading = false;
+            this._shieldCooldown.reset()
             // Activate the shieldCooldown.
             this._shieldCooldown.activate()
             this._pulseSound.play();
@@ -72,10 +80,10 @@ class ShieldAbility extends Ability {
         // If the shield is in the last 25% of its life, blink!
         if (this._shieldCooldown.getCooldownProgress() > 0.75 && !this._fading) {
             this._fading = true;
-            var tween = this.game.make.tween(this._shield.baseColor)
+            this._shieldTween = this.game.make.tween(this._shield.baseColor)
                 .to({ a: 120 }, 200, "Quad.easeInOut", true, 0, 5, true);
             // When tween is over, turn off the shield.
-            tween.onComplete.add(function() {
+            this._shieldTween.onComplete.add(function() {
                 this._shield.enabled = false;
                 this._fading = false;
             }, this);
@@ -115,6 +123,7 @@ class ShieldAbility extends Ability {
 
     destroy() {
         this.deactivate();
+        this.game.tweens.removeFrom(this._shield.baseColor);
         super.destroy();
     }
 }
