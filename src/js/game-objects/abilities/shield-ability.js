@@ -79,8 +79,8 @@ class ShieldAbility extends Ability {
         // If the shield is in the last 25% of its life, blink!
         if (this._shieldCooldown.getCooldownProgress() > 0.75 && !this._fading) {
             this._fading = true;
-            var tween = this.game.make.tween(this._shield)
-                .to({ alpha: 0.25 }, 300, "Quad.easeInOut", true, 0, 5, true);
+            var tween = this.game.make.tween(this._shield.baseColor)
+                .to({ a: 120 }, 200, "Quad.easeInOut", true, 0, 5, true);
             // When tween is over, turn off the shield.
             tween.onComplete.add(function() {
                 this._shield.enabled = false;
