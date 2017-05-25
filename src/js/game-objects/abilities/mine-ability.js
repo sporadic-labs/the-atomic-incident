@@ -16,6 +16,7 @@ class MineAbility extends Ability {
         this._mineDamage = mineDamage;
         this._explosionRadius = explosionRadius;
         this._explosionSpeed = explosionSpeed;
+        this._throwSpeed = 400;
 
         this._pointer = game.input.activePointer;
 
@@ -26,8 +27,11 @@ class MineAbility extends Ability {
         if (this._player.ammo.length > 0) {
             const color = this._player.ammo.shift();
             const pos = this._player.position;
-            new Mine(this.game, pos, this._mineGroup, color, this._mineDamage, this._explosionSpeed,
-                this._explosionRadius);
+
+            const speed = Phaser.Point.subtract(this._pointer.position, pos)
+                .setMagnitude(this._throwSpeed);
+            new Mine(this.game, pos, this._mineGroup, speed, color, this._mineDamage,
+                this._explosionSpeed, this._explosionRadius);
         }
     }
 
@@ -50,13 +54,15 @@ class MineAbility extends Ability {
 
 
 class Mine extends Phaser.Sprite {
-    constructor(game, position, parent, color, damage, explosionSpeed, explosionRadius) {
+    constructor(game, position, parent, velocity, color, damage, explosionSpeed, explosionRadius) {
         super(game, position.x, position.y, "assets", "fx/hit-04");
         parent.addChild(this);
         this.tint = color.getRgbColorInt();
         this.scale.set(1.25);
         this.anchor.set(0.5);
         this.game.physics.arcade.enable(this);
+        this.body.velocity = velocity;
+        this.body.collideWorldBounds = true;
 
         this._color = color;
         this._isTriggered = false;
@@ -66,13 +72,19 @@ class Mine extends Phaser.Sprite {
         this._effects = game.globals.plugins.effects;
         this._enemies = game.globals.groups.enemies;
         this._pickups = game.globals.groups.pickups;
+        this._levelManager = game.globals.levelManager;
         this._light = game.globals.plugins.lighting.addLight(
             position, new Phaser.Circle(0, 0, 50), color.clone().setTo({a: 155}), color
         );
     }
 
     update() {
+        this.game.physics.arcade.collide(this, this._levelManager.getCurrentWallLayer());
+        this._light.position.copyFrom(this.position);
+
         if (!this._isTriggered) {
+            // Apply custom drag
+            this.body.velocity.multiply(0.95, 0.95);
             spriteUtils.forEachRecursive(this._enemies, function (enemy) {
                 if (this.game.physics.arcade.overlap(this, enemy)) {
                     this.trigger();
@@ -116,6 +128,7 @@ class Mine extends Phaser.Sprite {
     }
 
     trigger() {
+        this.body.velocity.set(0, 0);
         this._isTriggered = true;
         this.alpha = 0;
         this._light.setShape(new Phaser.Circle(0, 0, this._explosionRadius));
