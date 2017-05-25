@@ -69,13 +69,6 @@ class ShieldAbility extends Ability {
         // If the shield is off, we don't need to worry about collisions.
         if (!this._shield.enabled) return;
 
-        // // If the shieldCooldown is over, and the shield is still enabled,
-        // // disable it and get out!
-        // if (this._shieldCooldown.isReady() && this._shield.enabled) {
-        //     this._shield.enabled = false;
-        //     return;
-        // }
-
         // If the shield is in the last 25% of its life, blink!
         if (this._shieldCooldown.getCooldownProgress() > 0.75 && !this._fading) {
             this._fading = true;
