@@ -1,6 +1,5 @@
 const Ability = require("./ability");
 const spriteUtils = require("../../helpers/sprite-utilities.js");
-const colors = require("../../constants/colors");
 
 class MineAbility extends Ability {
 
@@ -18,93 +17,18 @@ class MineAbility extends Ability {
         this._explosionRadius = explosionRadius;
         this._explosionSpeed = explosionSpeed;
 
-        this._input = game.input;
-        this._pointer = this._input.activePointer;
-        this._effects = game.globals.plugins.effects;
-        this._enemies = game.globals.groups.enemies;
-        this._pickups = game.globals.groups.pickups;
-        this._lighting = game.globals.plugins.lighting;
+        this._pointer = game.input.activePointer;
 
-        this._mines = [];
+        this._mineGroup = game.make.group(undefined, "Mines");
     }
 
     _placeMine() {
         if (this._player.ammo.length > 0) {
             const color = this._player.ammo.shift();
             const pos = this._player.position;
-            const sprite = this.game.add.sprite(pos.x, pos.y, "assets", "fx/hit-04"); // Temp visual
-            sprite.tint = color.getRgbColorInt();
-            sprite.scale.set(1.25);
-            sprite.anchor.set(0.5);
-            this.game.physics.arcade.enable(sprite);
-            const light = this._lighting.addLight(
-                pos, new Phaser.Circle(0, 0, 50), color.clone().setTo({a: 155}), color
-            );
-            this._mines.push({color, sprite, light, isTriggered: false});
+            new Mine(this.game, pos, this._mineGroup, color, this._mineDamage, this._explosionSpeed,
+                this._explosionRadius);
         }
-    }
-
-    _activateMine(index) {
-        const mine = this._mines[index];
-        mine.isTriggered = true;
-        mine.sprite.destroy();
-        mine.light.setShape(new Phaser.Circle(0, 0, this._explosionRadius));
-        mine.light.baseColor.setTo({a: 0});
-        this._effects.lightFlash(mine.color.getRgbColorInt());
-        mine.light.startPulse(this._explosionSpeed);
-        this.game.globals.postProcessor.startWave(mine.light.position);
-    }
-
-    update() {
-        for (let i = this._mines.length - 1; i >= 0; i--) {
-            const mine = this._mines[i];
-
-            if (!mine.isTriggered) {
-                // Check if an ememy has walked over a mine
-                spriteUtils.forEachRecursive(this._enemies, function (enemy) {
-                    if (this.game.physics.arcade.overlap(mine.sprite, enemy)) {
-                        this._activateMine(i);
-                        return true;
-                    }
-                }, this);
-            } else {
-                // Check if a triggered mine is done exploding
-                if (!mine.light.isPulseActive()) {
-                    mine.light.destroy();
-                    this._mines.splice(i, 1);
-                } else {
-                    // Damage enemies
-                    const damage = this._mineDamage * this.game.time.physicsElapsed;
-                    spriteUtils.forEachRecursive(this._enemies, function (child) {
-                        if (child instanceof Phaser.Sprite && child.takeDamage) {
-                            // MH: why does world position not work here...
-                            const inLight = mine.light.isPointInPulse(child.position);
-                            if (inLight) {
-                                const flashlightColor = mine.light.pulseColor;
-                                const enemyColor = child._shield ? child._shieldColor : child.color;
-
-                                // If the enemy color matches the flashlight color, then the enemies
-                                // should take damage.
-                                const matchingLights = flashlightColor.rgbEquals(enemyColor);
-                                if (matchingLights) {
-                                    if (child._shield) child.damageShield(damage);
-                                    else child.takeDamage(damage);
-                                }
-                            }
-                        }
-                    }, this);
-
-                    // Trigger pickups when the lights collide.
-                    spriteUtils.forEachRecursive(this._pickups, function (pickup) {
-                        // MH: why does world position not work here...
-                        var inLight = mine.light.isPointInPulse(pickup.position);
-                        if (inLight) pickup.destroy();
-                    }, this);
-                }
-            }
-        }
-
-
     }
 
     activate() {
@@ -118,9 +42,91 @@ class MineAbility extends Ability {
     }
 
     destroy() {
-        for (const mine of this._mines) mine.destroy();
-        this._mines = null;
+        this._mineGroup.destroy(true);
         this.deactivate();
+        super.destroy();
+    }
+}
+
+
+class Mine extends Phaser.Sprite {
+    constructor(game, position, parent, color, damage, explosionSpeed, explosionRadius) {
+        super(game, position.x, position.y, "assets", "fx/hit-04");
+        parent.addChild(this);
+        this.tint = color.getRgbColorInt();
+        this.scale.set(1.25);
+        this.anchor.set(0.5);
+        this.game.physics.arcade.enable(this);
+
+        this._color = color;
+        this._isTriggered = false;
+        this._damage = damage;
+        this._explosionSpeed = explosionSpeed;
+        this._explosionRadius = explosionRadius;
+        this._effects = game.globals.plugins.effects;
+        this._enemies = game.globals.groups.enemies;
+        this._pickups = game.globals.groups.pickups;
+        this._light = game.globals.plugins.lighting.addLight(
+            position, new Phaser.Circle(0, 0, 50), color.clone().setTo({a: 155}), color
+        );
+    }
+
+    update() {
+        if (!this._isTriggered) {
+            spriteUtils.forEachRecursive(this._enemies, function (enemy) {
+                if (this.game.physics.arcade.overlap(this, enemy)) {
+                    this.trigger();
+                    return true;
+                }
+            }, this);
+        } else {
+            // Check if a triggered mine is done exploding
+            if (!this._light.isPulseActive()) {
+                this.destroy();
+            } else {
+                // Damage enemies
+                const damage = this._damage * this.game.time.physicsElapsed;
+                spriteUtils.forEachRecursive(this._enemies, function (child) {
+                    if (child instanceof Phaser.Sprite && child.takeDamage) {
+                        // MH: why does world position not work here...
+                        const inLight = this._light.isPointInPulse(child.position);
+                        if (inLight) {
+                            const flashlightColor = this._light.pulseColor;
+                            const enemyColor = child._shield ? child._shieldColor : child.color;
+
+                            // If the enemy color matches the flashlight color, then the enemies
+                            // should take damage.
+                            const matchingLights = flashlightColor.rgbEquals(enemyColor);
+                            if (matchingLights) {
+                                if (child._shield) child.damageShield(damage);
+                                else child.takeDamage(damage);
+                            }
+                        }
+                    }
+                }, this);
+
+                // Trigger pickups when the lights collide.
+                spriteUtils.forEachRecursive(this._pickups, function (pickup) {
+                    // MH: why does world position not work here...
+                    var inLight = this._light.isPointInPulse(pickup.position);
+                    if (inLight) pickup.destroy();
+                }, this);
+            }
+        }
+    }
+
+    trigger() {
+        this._isTriggered = true;
+        this.alpha = 0;
+        this._light.setShape(new Phaser.Circle(0, 0, this._explosionRadius));
+        this._light.baseColor.setTo({a: 0});
+        this._effects.lightFlash(this._color.getRgbColorInt());
+        this._light.startPulse(this._explosionSpeed);
+        this.game.globals.postProcessor.startWave(this.position);
+    }
+
+    destroy() {
+        this._light.destroy();
         super.destroy();
     }
 }
