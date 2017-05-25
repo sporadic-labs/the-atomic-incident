@@ -20,7 +20,7 @@ class PickupSpawner extends Phaser.Group {
         for (var i = 0; i < pickups.length; i++) {
             // Rectangle center
             this._spawnLocations.push(new Phaser.Point(
-                pickups[i].x + pickups[i].width / 2, 
+                pickups[i].x + pickups[i].width / 2,
                 pickups[i].y + pickups[i].height / 2
             ));
         }
@@ -31,7 +31,7 @@ class PickupSpawner extends Phaser.Group {
             this._spawnPickup("red");
             this._spawnPickup("blue");
             this._spawnPickup("green");
-            this._spawnAbilityPickup();
+            // this._spawnAbilityPickup();
         }
         super.update(...arguments);
     }
@@ -55,7 +55,7 @@ class PickupSpawner extends Phaser.Group {
 
     _getSpawnPoint() {
         var player = this.game.globals.player;
-        let attempts = 0; 
+        let attempts = 0;
         while ((attempts < 100)) {
             attempts++;
             const point = this.game.rnd.pick(this._spawnLocations);
@@ -80,10 +80,10 @@ class PickupSpawner extends Phaser.Group {
         const map = this._levelManager.getCurrentTilemap();
         const wallLayer = this._levelManager.getCurrentWallLayer();
         var checkTile = map.getTile(x, y, wallLayer, true);
-        // Check if location was out of bounds or invalid (getTileWorldXY returns 
+        // Check if location was out of bounds or invalid (getTileWorldXY returns
         // null for invalid locations when nonNull param is true)
         if (checkTile === null) return false;
-        // Check if tile is empty (getTileWorldXY returns a tile with an index of 
+        // Check if tile is empty (getTileWorldXY returns a tile with an index of
         // -1 when the nonNull param is true)
         if (checkTile.index === -1) return true;
         else return false;
