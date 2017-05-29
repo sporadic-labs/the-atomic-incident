@@ -1,6 +1,6 @@
 module.exports = SpawnWave;
 
-const PathTweenWave = require("./path-tween-wave.js");
+import PathTweenWave from "./path-tween-wave";
 const SnakePathWave = require("./snake-path-wave.js");
 const WaveShapes = require("./wave-shapes.js");
 const WaveComposition = require("./wave-composition.js");
@@ -72,7 +72,7 @@ function SpawnWave(game) {
         name: "Vertical Tunnel Around Player - Random Single Type Walls",
         wave: new TargetingWave(
             g, new TunnelWave(
-                g, 
+                g,
                 WaveComposition.CreateRandOneType(g, 15),
                 WaveComposition.CreateRandOneType(g, 15, true),
                 100, 250, Math.PI / 2
@@ -84,7 +84,7 @@ function SpawnWave(game) {
         name: "Horizontal Tunnel Around Player - Random Single Type Walls",
         wave: new TargetingWave(
             g, new TunnelWave(
-                g, 
+                g,
                 WaveComposition.CreateRandOneType(g, 15),
                 WaveComposition.CreateRandOneType(g, 15),
                 100, 250, 0
@@ -127,12 +127,12 @@ SpawnWave.prototype._spawnCluster = function () {
 };
 
 SpawnWave.prototype._pickWaveType = function () {
-    // Use a random number between 0 and 1 to do a weighted pick from 
-    // this._possibleWaves. A running total is needed to sample the waves. 
+    // Use a random number between 0 and 1 to do a weighted pick from
+    // this._possibleWaves. A running total is needed to sample the waves.
     // If the probabilities for the waves are:
     //  0.2, 0.5, 0.3
     // That is really checking if the random number is between:
-    //  [0.0 - 0.2], [0.2 - 0.7], [0.7 - 1.0]  
+    //  [0.0 - 0.2], [0.2 - 0.7], [0.7 - 1.0]
     var rand = this.game.rnd.frac();
     var runningTotal = 0;
     for (const possibleWave of this._possibleWaves) {
@@ -198,7 +198,7 @@ SpawnWave.prototype._getSpawnPointOnRadius = function (centerX, centerY, radius,
 
         var angle = (index / 24) * (2 * Math.PI); // 24 total enemies spawned.
 
-        var x = centerX + (radius * Math.cos(angle));        
+        var x = centerX + (radius * Math.cos(angle));
         var y = centerY + (radius * Math.sin(angle));
         // If the chosen location isn't in an empty tile, get out!
         if (this._isTileEmpty(x, y)) return new Phaser.Point(x, y);
@@ -211,8 +211,8 @@ SpawnWave.prototype._getSpawnPointOnRadius = function (centerX, centerY, radius,
 
 /**
  * A random point at a given index position on  grid w/ a given w and h.
- * @param  {number} xCoord  - X index of point within grid. 
- * @param  {number} yCoord  - Y index of point within the grid. 
+ * @param  {number} xCoord  - X index of point within grid.
+ * @param  {number} yCoord  - Y index of point within the grid.
  * @param  {number} wNum    - W of grid (in points)
  * @param  {number} hNum    - H of grid (in points)
  * @return {Phaser.Point}   - An empty point at a specific coord position in a grid.
@@ -235,12 +235,12 @@ SpawnWave.prototype.destroy = function () {
 SpawnWave.prototype._isTileEmpty = function (x, y) {
     var map = this.game.globals.levelManager.getCurrentTilemap();
     var walls = this.game.globals.levelManager.getCurrentWallLayer();
-    var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
+    var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight,
         walls, true);
-    // Check if location was out of bounds or invalid (getTileWorldXY returns 
+    // Check if location was out of bounds or invalid (getTileWorldXY returns
     // null for invalid locations when nonNull param is true)
     if (checkTile === null) return false;
-    // Check if tile is empty (getTileWorldXY returns a tile with an index of 
+    // Check if tile is empty (getTileWorldXY returns a tile with an index of
     // -1 when the nonNull param is true)
     if (checkTile.index === -1) return true;
     else return false;

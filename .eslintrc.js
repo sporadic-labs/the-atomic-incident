@@ -14,6 +14,9 @@ module.exports = {
 		commonjs: true,
 		es6: true
 	},
+	parserOptions: {
+		sourceType: "module"
+	},
 	globals: {
 		Phaser: true
 	}
