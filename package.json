@@ -45,6 +45,7 @@
     "phaser-ce": "^2.7.7",
     "run-sequence": "^1.2.0",
     "sat": "^0.6.0",
+    "typescript": "^2.3.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.9.0"
