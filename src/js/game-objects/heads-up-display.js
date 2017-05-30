@@ -1,4 +1,4 @@
-const HealthBar = require("./user-interface/health-bar"); 
+const HealthBar = require("./user-interface/health-bar");
 const AbilityIcon = require("./user-interface/ability-icon");
 const AbilityNames = require("../constants/ability-names");
 
@@ -7,12 +7,12 @@ module.exports = HeadsUpDisplay;
 HeadsUpDisplay.prototype = Object.create(Phaser.Group.prototype);
 
 /**
- * @param {Phaser.Game} game 
- * @param {Phaser.Group} parentGroup 
+ * @param {Phaser.Game} game
+ * @param {Phaser.Group} parentGroup
  */
 function HeadsUpDisplay(game, parentGroup) {
     Phaser.Group.call(this, game, parentGroup, "heads-up-display");
-    
+
     this.game = game;
     this._scoreKeeper = this.game.globals.scoreKeeper;
     this._player = this.game.globals.player;
@@ -22,9 +22,9 @@ function HeadsUpDisplay(game, parentGroup) {
     new HealthBar(game, 20, 15, this);
 
     this._pulseIcon = new AbilityIcon(game, 20, 50, this, "hud/pulse");
-    this._dashIcon = new AbilityIcon(game, 53, 50, this, "hud/dash");
-    this._slowIcon = new AbilityIcon(game, 86, 50, this, "hud/slow-motion");
-    this._ghostIcon = new AbilityIcon(game, 119, 50, this, "hud/ghost");
+    // this._dashIcon = new AbilityIcon(game, 53, 50, this, "hud/dash");
+    // this._slowIcon = new AbilityIcon(game, 86, 50, this, "hud/slow-motion");
+    // this._ghostIcon = new AbilityIcon(game, 119, 50, this, "hud/ghost");
 
     // Play/pause
     const unpause = () => {
@@ -33,7 +33,7 @@ function HeadsUpDisplay(game, parentGroup) {
         game.paused = false;
         this.game.input.onDown.remove(unpause, this);
     }
-    const playPos = new Phaser.Point(game.width - 10, game.height - 10); 
+    const playPos = new Phaser.Point(game.width - 10, game.height - 10);
     const pauseButton = game.add.button(playPos.x, playPos.y, "assets", () => {
         playButton.visible = true;
         pauseButton.visible = false;
@@ -41,13 +41,13 @@ function HeadsUpDisplay(game, parentGroup) {
         game.paused = true;
     }, this, "hud/pause", "hud/pause", "hud/pause", "hud/pause");
     pauseButton.anchor.set(1, 1);
-    const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this, 
+    const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this,
         "hud/play", "hud/play", "hud/play", "hud/play");
     playButton.anchor.set(1, 1);
     playButton.visible = false;
 
     // Mute/unmute
-    const mutePos = new Phaser.Point(game.width - 10, 10); 
+    const mutePos = new Phaser.Point(game.width - 10, 10);
     const muteButton = game.add.button(mutePos.x, mutePos.y, "assets", () => {
         unmuteButton.visible = true;
         muteButton.visible = false;
@@ -100,24 +100,24 @@ HeadsUpDisplay.prototype.update = function () {
     }
     // this._pulseIcon.updateMask(this._player._pulseAbility.getCooldownProgress());
 
-    this._dashIcon.alpha = 0.1;
-    this._slowIcon.alpha = 0.1;
-    this._ghostIcon.alpha = 0.1;
-    if (this._player._activeAbility && this._player._activeAbility.isReady()) {
-        switch (this._player._activeAbility.name) {
-            case AbilityNames.DASH:
-                this._dashIcon.alpha = 1;
-                break;
-            case AbilityNames.SLOW_MOTION:
-                this._slowIcon.alpha = 1;
-                break;
-            case AbilityNames.GHOST:
-                this._ghostIcon.alpha = 1;
-                break;
-            default:
-                break;
-        }
-    }
+    // this._dashIcon.alpha = 0.1;
+    // this._slowIcon.alpha = 0.1;
+    // this._ghostIcon.alpha = 0.1;
+    // if (this._player._activeAbility && this._player._activeAbility.isReady()) {
+    //     switch (this._player._activeAbility.name) {
+    //         case AbilityNames.DASH:
+    //             this._dashIcon.alpha = 1;
+    //             break;
+    //         case AbilityNames.SLOW_MOTION:
+    //             this._slowIcon.alpha = 1;
+    //             break;
+    //         case AbilityNames.GHOST:
+    //             this._ghostIcon.alpha = 1;
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
 
     Phaser.Group.prototype.update.apply(this, arguments);
 };
