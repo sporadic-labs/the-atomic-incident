@@ -89,6 +89,9 @@ Sandbox.prototype.create = function () {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
+    // Ammo Manager
+    globals.ammoManager = new AmmoManager(game, groups.hud);
+
     // Player
     // Setup a new player, and attach it to the global variabls object.
     var player = new Player(game, game.width/2, game.height/2, groups.foreground);
@@ -116,9 +119,6 @@ Sandbox.prototype.create = function () {
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
-
-    // Ammo Manager
-    globals.ammoManager = new AmmoManager(game, groups.hud);
 
 
     // // Menu for switching tile maps
