@@ -19,6 +19,8 @@ function HeadsUpDisplay(game, parentGroup) {
     this._satBodyPlugin = this.game.globals.plugins.satBody;
     this.fixedToCamera = true;
 
+    this._ammoManager = game.globals.ammoManager;
+
     new HealthBar(game, 20, 15, this);
 
     this._pulseIcon = new AbilityIcon(game, 20, 50, this, "hud/pulse");
@@ -91,14 +93,13 @@ HeadsUpDisplay.prototype.update = function () {
     this._fpsText.setText(this.game.time.fps);
 
     // Set the color of the pulse icon based on the first color in the players ammo pack.
-    if (this._player.ammo.length > 0) {
-        this._pulseIcon.setTint(this._player.ammo[0].getRgbColorInt());
+    if (this._ammoManager.ammo() > 0) {
+        this._pulseIcon.setTint(this._ammoManager.activeAmmo.getRgbColorInt());
         this._pulseIcon.alpha = 1;
     } else {
         this._pulseIcon.setTint(0xffffff);
         this._pulseIcon.alpha = 0.1;
     }
-    // this._pulseIcon.updateMask(this._player._pulseAbility.getCooldownProgress());
 
     this._dashIcon.alpha = 0.1;
     this._slowIcon.alpha = 0.1;
