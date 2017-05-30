@@ -2,12 +2,29 @@ const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TargetingComp = require("../components/targeting-component.js");
 const Colors = require("../../constants/colors.js");
 
+import {CircleWave, TunnelWave, CrossWave} from "./wave-shapes";
+
 class TargetingWave {
     constructor(game, waveShape) {
         this.game = game;
         this._enemies = game.globals.groups.enemies;
         this._waveShape = waveShape;
         this._levelManager = this.game.globals.levelManager;
+    }
+
+    static createCircle(game, waveComposition, radius) {
+        const shape = new CircleWave(game, waveComposition, radius);
+        return new TargetingWave(game, shape);
+    }
+
+    static createTunnel(game, waveComposition, width, length, angle) {
+        const shape = new TunnelWave(game, waveComposition, waveComposition, width, length, angle);
+        return new TargetingWave(game, shape);
+    }
+
+    static createCross(game, waveComposition, length) {
+        const shape = new CrossWave(game, waveComposition, waveComposition, length);
+        return new TargetingWave(game, shape);
     }
 
     spawn() {

@@ -72,7 +72,7 @@ class LineWave {
      * for generation
      * @param {number} playerOffset The distance of the line from the player
      * @param {number} length The length of the line
-     * @param {number} angle Orientation in radians (counter-clockwise)
+     * @param {number} angle Orientation in degrees (counter-clockwise)
      *
      * @memberOf LineWave
      */
@@ -81,7 +81,7 @@ class LineWave {
         this.length = length;
         this.playerOffset = playerOffset;
         this.length = length;
-        this.angle = angle;
+        this.angle = angle * Math.PI / 180;
         this._waveComposition = waveComposition;
     }
 
@@ -136,18 +136,15 @@ class TunnelWave {
      * @param {WaveComposition} wall2Composition Composition of second wall
      * @param {number} width Width of the opening of the tunnel
      * @param {number} length Depth of the tunnel
-     * @param {number} angle Orientation in radians (counter-clockwise)
+     * @param {number} angle Orientation in degrees (counter-clockwise)
      *
      * @memberOf TunnelWave
      */
-    constructor(game, wall1Composition, wall2Composition, width, length,
-            angle) {
+    constructor(game, wall1Composition, wall2Composition, width, length,angle) {
         this._wall1Composition = wall1Composition;
         this._wall2Composition = wall2Composition;
-        this._line1 = new LineWave(game, wall1Composition, -(width / 2), length,
-            angle),
-        this._line2 = new LineWave(game, wall2Composition, width / 2, length,
-            angle);
+        this._line1 = new LineWave(game, wall1Composition, -(width / 2), length, angle),
+        this._line2 = new LineWave(game, wall2Composition, width / 2, length, angle);
     }
 
     /**

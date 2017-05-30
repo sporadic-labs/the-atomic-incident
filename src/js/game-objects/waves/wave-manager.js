@@ -1,5 +1,5 @@
 import {CircleWave} from "./wave-shapes";
-import WaveComposition from "./wave-composition";
+import WaveComp from "./wave-composition";
 import TargetingWave from "./targeting-wave";
 import PathTweenWave from "./path-tween-wave";
 import SnakePathWave from "./snake-path-wave";
@@ -31,21 +31,15 @@ class WaveManager {
             {
                 waveTime: 0,
                 color: colors.blue,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateBlue(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateBlue(g, 16), 80)
             }, {
                 waveTime: 3,
                 color: colors.green,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateGreen(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateGreen(g, 16), 80)
             }, {
                 waveTime: 6,
                 color: colors.red,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateRed(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateRed(g, 16), 80)
             },
         ]);
 
@@ -57,40 +51,28 @@ class WaveManager {
             {
                 waveTime: 0,
                 color: colors.red,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateRed(g, 16), 80)
-                )
+                wave: TargetingWave.createTunnel(g, WaveComp.CreateRed(g, 16), 100, 300, 90)
             },
             {
                 waveTime: 3,
                 color: colors.blue,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateBlue(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateBlue(g, 16), 80)
             }, {
                 waveTime: 4,
                 color: colors.green,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateGreen(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateGreen(g, 16), 80)
             }, {
                 waveTime: 7,
                 color: colors.blue,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateBlue(g, 16), 80)
-                )
+                wave: TargetingWave.createTunnel(g, WaveComp.CreateBlue(g, 16), 100, 300, 0)
             }, {
-                waveTime: 9,
+                waveTime: 10,
                 color: colors.red,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateRed(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateRed(g, 16), 80)
             }, {
                 waveTime: 11,
                 color: colors.green,
-                wave: new TargetingWave(
-                    g, new CircleWave(g, WaveComposition.CreateGreen(g, 16), 80)
-                )
+                wave: TargetingWave.createCircle(g, WaveComp.CreateGreen(g, 16), 80)
             },
         ]);
 
@@ -103,19 +85,19 @@ class WaveManager {
                 waveTime: 0,
                 color: colors.red,
                 wave: new PathTweenWave(
-                    g, WaveComposition.CreateRed(g, 16), 75
+                    g, WaveComp.CreateRed(g, 16), 75
                 )
             }, {
                 waveTime: 3,
                 color: colors.green,
                 wave: new SnakePathWave(
-                    g, WaveComposition.CreateGreen(g, 16), 75
+                    g, WaveComp.CreateGreen(g, 16), 75
                 )
             }, {
                 waveTime: 5,
                 color: colors.blue,
                 wave: new PathTweenWave(
-                    g, WaveComposition.CreateBlue(g, 16), 75
+                    g, WaveComp.CreateBlue(g, 16), 75
                 )
             }
         ]);

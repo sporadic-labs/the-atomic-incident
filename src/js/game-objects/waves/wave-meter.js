@@ -13,7 +13,7 @@ class WaveMeter extends Phaser.Group {
 
         this._width = 300;
         this._height = 30;
-        this._secondsInMeter = 20; // The timeslice that the meter visualizes, e.g. the next 20s
+        this._secondsInMeter = 15; // The timeslice that the meter visualizes, e.g. the next 20s
 
         this._graphics = game.make.graphics(
             game.width / 2 - this._width / 2,
