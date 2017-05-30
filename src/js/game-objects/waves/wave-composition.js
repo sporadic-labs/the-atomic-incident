@@ -1,7 +1,7 @@
 /**
  * Mainly a helper class for representing the types of enemies that can be in a
  * wave.
- * 
+ *
  * @class WaveComposition
  */
 class WaveComposition {
@@ -12,10 +12,10 @@ class WaveComposition {
      * @param {number} fractionBlue Fraction of enemies that should be blue
      * @param {boolean} shouldRandomize flag, should enemy order be shuffled?
      * @param {boolean} hasShield flag, do enemies have shield on spawn?
-     * 
+     *
      * @memberOf WaveComposition
      */
-    constructor(game, totalEnemies = 10, fractionRed = 1, fractionGreen = 0, 
+    constructor(game, totalEnemies = 10, fractionRed = 1, fractionGreen = 0,
             fractionBlue = 0, shouldRandomize = true, hasShield = false) {
         this.game = game;
         this._shouldRandomize = shouldRandomize;
@@ -37,16 +37,28 @@ class WaveComposition {
         return new WaveComposition(game, totalEnemies, 0.33, 0.33, 0.34, true, hasShield);
     }
 
+    static CreateRed(game, totalEnemies = 10, hasShield = false) {
+        return new WaveComposition(game, totalEnemies, 1, 0, 0, false, hasShield);
+    }
+
+    static CreateGreen(game, totalEnemies = 10, hasShield = false) {
+        return new WaveComposition(game, totalEnemies, 0, 1, 0, false, hasShield);
+    }
+
+    static CreateBlue(game, totalEnemies = 10, hasShield = false) {
+        return new WaveComposition(game, totalEnemies, 0, 0, 1, false, hasShield);
+    }
+
     /**
-     * Regenerate the enemies in a random order 
-     * 
+     * Regenerate the enemies in a random order
+     *
      * @memberOf WaveComposition
      */
     generate() {
         // Randomly shuffle enemy ratios if needed
         if (this._shouldRandomize) {
             const newRatio = Phaser.ArrayUtils.shuffle(
-               [this._fractionRed, this._fractionGreen, this._fractionBlue] 
+               [this._fractionRed, this._fractionGreen, this._fractionBlue]
             );
             this.setComposition(...newRatio);
         }
@@ -89,7 +101,7 @@ class WaveComposition {
 
     /**
      * Generator that yields the enemy types in the current wave
-     * 
+     *
      * @memberOf WaveComposition
      */
     *enemies() {
@@ -99,4 +111,4 @@ class WaveComposition {
     }
 }
 
-module.exports = WaveComposition;
+export default WaveComposition;

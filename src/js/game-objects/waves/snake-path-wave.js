@@ -38,7 +38,7 @@ class SnakePathWave {
         }
         return paths;
     }
-    
+
     _getPaths() {
         const vertical = this._parseTiledPaths("vertical-paths");
         const horizontal = this._parseTiledPaths("horizontal-paths");
@@ -70,4 +70,4 @@ class SnakePathWave {
     }
 }
 
-module.exports = SnakePathWave;
+export default SnakePathWave;

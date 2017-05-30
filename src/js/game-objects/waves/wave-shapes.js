@@ -4,17 +4,17 @@
 
 /**
  * A class for generating enemies evenly spaced around the player.
- * 
+ *
  * @class CircleWave
  */
 class CircleWave {
     /**
      * Creates an instance of CircleWave.
-     * @param {Phaser.Game} game 
-     * @param {WaveComposition} waveComposition The types of enemies to use 
+     * @param {Phaser.Game} game
+     * @param {WaveComposition} waveComposition The types of enemies to use
      * for generation
      * @param {number} radius The radius of the circle
-     * 
+     *
      * @memberOf CircleWave
      */
     constructor(game, waveComposition, radius) {
@@ -26,10 +26,10 @@ class CircleWave {
     /**
      * Generator that yields an object representing the enemy in the form:
      * {type: string name of color from WaveComposition, position}
-     * 
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a 
+     *
+     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
      * new set of enemies from the WaveComposition.
-     * 
+     *
      * @memberOf CircleWave
      */
     *enemies(regenerateEnemies = true) {
@@ -57,23 +57,23 @@ class CircleWave {
 }
 
 /**
- * A class for generating enemies in a line offset from the player by some 
+ * A class for generating enemies in a line offset from the player by some
  * distance. The tangent of the line always points towards the player. This wave
- * isn't terribly useful on its own, but it can be used to form more complex 
- * patterns, e.g. see tunnel class. 
- * 
+ * isn't terribly useful on its own, but it can be used to form more complex
+ * patterns, e.g. see tunnel class.
+ *
  * @class LineWave
  */
 class LineWave {
     /**
      * Creates an instance of LineWave.
-     * @param {Phaser.Game} game 
-     * @param {WaveComposition} waveComposition The types of enemies to use 
+     * @param {Phaser.Game} game
+     * @param {WaveComposition} waveComposition The types of enemies to use
      * for generation
      * @param {number} playerOffset The distance of the line from the player
      * @param {number} length The length of the line
      * @param {number} angle Orientation in radians (counter-clockwise)
-     * 
+     *
      * @memberOf LineWave
      */
     constructor(game, waveComposition, playerOffset, length, angle) {
@@ -88,10 +88,10 @@ class LineWave {
     /**
      * Generator that yields an object representing the enemy in the form:
      * {type: string name of color from WaveComposition, position}
-     * 
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a 
+     *
+     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
      * new set of enemies from the WaveComposition.
-     * 
+     *
      * @memberOf LineWave
      */
     *enemies(regenerateEnemies = true) {
@@ -105,7 +105,7 @@ class LineWave {
         if (regenerateEnemies) this._waveComposition.generate();
         // Figure out the enemy positions, starting at one end of the line
         let enemyNum = 0;
-        const lengthStep = this.length / 
+        const lengthStep = this.length /
             (this._waveComposition.totalEnemies - 1);
         const startPosition = pos.clone().subtract(
             (this.length / 2) * Math.cos(this.angle),
@@ -124,23 +124,23 @@ class LineWave {
 
 /**
  * A class for generating enemies in a tunnel formation - two walls on either
- * side of the player. Each wall has its own composition of enemies. 
- * 
+ * side of the player. Each wall has its own composition of enemies.
+ *
  * @class TunnelWave
  */
 class TunnelWave {
     /**
      * Creates an instance of TunnelWave.
-     * @param {Phaser.Game} game 
+     * @param {Phaser.Game} game
      * @param {WaveComposition} wall1Composition Composition of first wall
      * @param {WaveComposition} wall2Composition Composition of second wall
      * @param {number} width Width of the opening of the tunnel
      * @param {number} length Depth of the tunnel
      * @param {number} angle Orientation in radians (counter-clockwise)
-     * 
+     *
      * @memberOf TunnelWave
      */
-    constructor(game, wall1Composition, wall2Composition, width, length, 
+    constructor(game, wall1Composition, wall2Composition, width, length,
             angle) {
         this._wall1Composition = wall1Composition;
         this._wall2Composition = wall2Composition;
@@ -153,15 +153,15 @@ class TunnelWave {
     /**
      * Generator that yields an object representing the enemy in the form:
      * {type: string name of color from WaveComposition, position}
-     * 
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a 
+     *
+     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
      * new set of enemies from the WaveComposition.
-     * 
+     *
      * @memberOf TunnelWave
      */
     *enemies(regenerateEnemies = true) {
         // Allow the TunnelWave to be in charge of generating enemies from the
-        // WaveComposition instances 
+        // WaveComposition instances
         if (regenerateEnemies) {
             this._wall1Composition.generate();
             this._wall2Composition.generate();
@@ -173,18 +173,18 @@ class TunnelWave {
 
 /**
  * A class for generating enemies in an X formation centered on the player. Each
- * line of the X has its own composition of enemies. 
- * 
+ * line of the X has its own composition of enemies.
+ *
  * @class CrossWave
  */
 class CrossWave {
     /**
      * Creates an instance of CrossWave.
-     * @param {Phaser.Game} game 
+     * @param {Phaser.Game} game
      * @param {WaveComposition} line1Composition First line's composition
      * @param {WaveComposition} wall2Composition Second line's composition
      * @param {number} length Length of the lines forming the X
-     * 
+     *
      * @memberOf CrossWave
      */
     constructor(game, line1Composition, line2Composition, length) {
@@ -199,15 +199,15 @@ class CrossWave {
     /**
      * Generator that yields an object representing the enemy in the form:
      * {type: string name of color from WaveComposition, position}
-     * 
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a 
+     *
+     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
      * new set of enemies from the WaveComposition.
-     * 
+     *
      * @memberOf CrossWave
      */
     *enemies(regenerateEnemies = true) {
         // Allow the CrossWave to be in charge of generating enemies from the
-        // WaveComposition instances 
+        // WaveComposition instances
         if (regenerateEnemies) {
             this._line1Composition.generate();
             this._line2Composition.generate();
@@ -217,9 +217,4 @@ class CrossWave {
     }
 }
 
-module.exports = {
-    CircleWave,
-    LineWave,
-    TunnelWave,
-    CrossWave
-};
+export {CircleWave, LineWave, TunnelWave, CrossWave};

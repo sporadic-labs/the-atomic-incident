@@ -40,16 +40,16 @@ class TargetingWave {
                     shieldColor = this.game.rnd.pick([Colors.green, Colors.red])
                 }
             }
-            const enemy = new ShadowEnemy(this.game, pos.x, pos.y, 
+            const enemy = new ShadowEnemy(this.game, pos.x, pos.y,
                 this._enemies, color, shieldColor);
             enemy.setMovementComponent(new TargetingComp(enemy, 100));
         }
     }
-    
+
     _isTileEmpty(x, y) {
         const map = this._levelManager.getCurrentTilemap();
         const wallLayer = this._levelManager.getCurrentWallLayer();
-        var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, wallLayer, true); 
+        var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, wallLayer, true);
         // null for invalid locations
         if (checkTile === null) return false;
         // Index of -1 is empty
@@ -58,4 +58,4 @@ class TargetingWave {
     }
 }
 
-module.exports = TargetingWave;
+export default TargetingWave;
