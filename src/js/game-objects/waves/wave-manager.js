@@ -80,13 +80,13 @@ class WaveManager {
                     g, new CircleWave(g, WaveComposition.CreateBlue(g, 16), 80)
                 )
             }, {
-                waveTime: 3,
+                waveTime: 9,
                 color: colors.red,
                 wave: new TargetingWave(
                     g, new CircleWave(g, WaveComposition.CreateRed(g, 16), 80)
                 )
             }, {
-                waveTime: 3,
+                waveTime: 11,
                 color: colors.green,
                 wave: new TargetingWave(
                     g, new CircleWave(g, WaveComposition.CreateGreen(g, 16), 80)
