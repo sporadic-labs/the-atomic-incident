@@ -146,6 +146,7 @@ export class AmmoManager extends Phaser.Group {
     get activeAmmo() {
         return this._activeAmmoType;
     }
+ 
     /**
      * @method redAmmo
      * @param {number } amt - Number of bullets to add to the red ammo variable.
@@ -158,6 +159,7 @@ export class AmmoManager extends Phaser.Group {
     get redAmmo() {
         return this._redAmmoAmt;
     }
+
     /**
      * @method blueAmmo
      * @param { number } amt - Number of bullets to add to the blue ammo variable.
@@ -170,6 +172,7 @@ export class AmmoManager extends Phaser.Group {
     get blueAmmo() {
         return this._blueAmmoAmt;
     }
+
     /**
      * @method greenAmmo
      * @param { number } amt - Number of bullets to add to the green ammo variable.
@@ -196,5 +199,57 @@ export class AmmoManager extends Phaser.Group {
         this.redAmmo = r;
         this.greenAmmo = g;
         this.blueAmmo = b;
+    }
+
+    /**
+     * @method addRed
+     * @param {number} amt - Defaults to 1 if not provided
+     * 
+     * @memberof AmmoManager
+     */
+    addRed(amt) {
+        this._redAmmoAmt += amt ? amt : 1;
+    }
+
+    /**
+     * @method addGreen
+     * @param {number} amt - Defaults to 1 if not provided
+     * 
+     * @memberof AmmoManager
+     */
+    addGreen(amt) {
+        this._greenAmmoAmt += amt ? amt : 1;
+    }
+
+    /**
+     * @method addBlue
+     * @param {number} amt - Defaults to 1 if not provided
+     * 
+     * @memberof AmmoManager
+     */
+    addBlue(amt) {
+        this._blueAmmoAmt += amt ? amt : 1;
+    }
+
+    /**
+     * Remove ammo based on the current active ammo type.
+     * 
+     * @method shoot
+     * @param {number} amt - Defaults to 1 if not provided
+     * 
+     * @memberof AmmoManager
+     */
+    shoot(amt) {
+        switch (this._activeAmmoType) {
+            case Colors.red:
+                this._redAmmoAmt -= amt ? amt : 1;
+                break;
+            case Colors.green:
+                this._greenAmmoAmt -= amt ? amt : 1;
+                break;
+            case Colors.blue:
+                this._blueAmmoAmt -= amt ? amt : 1;
+                break;
+        }
     }
 }
