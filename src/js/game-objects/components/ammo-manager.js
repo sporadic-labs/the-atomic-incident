@@ -187,18 +187,66 @@ export class AmmoManager extends Phaser.Group {
     }
 
     /**
+     * @method ammo
+     * @returns { number } Amount of ammo for the active ammo type.
+     * 
+     * @memberof AmmoManager
+     */
+    ammo() {
+        switch (this._activeAmmoType) {
+            case Colors.red:
+                return this._redAmmoAmt;
+            case Colors.green:
+                return this._greenAmmoAmt;
+            case Colors.blue:
+                return this._blueAmmoAmt;
+        }
+    }
+
+    /**
      * Easily set new amounts of RGB ammo.
      * 
+     * @method addAllAmmo
      * @param { number } r 
      * @param { number } g 
      * @param { number } b 
      * 
      * @memberof AmmoManager
      */
-    addAmmo(r, g, b) {
+    addAllAmmo(r, g, b) {
         this.redAmmo = r;
         this.greenAmmo = g;
         this.blueAmmo = b;
+        this._rText.setText(this._redAmmoAmt);
+        this._gText.setText(this._greenAmmoAmt);
+        this._bText.setText(this._blueAmmoAmt);
+    }
+
+    /**
+     * Easily set new amounts of RGB ammo.
+     * 
+     * @method addAmmo
+     * @param { Color } color 
+     * @param { number } amt - Defaults to 1
+     * 
+     * @memberof AmmoManager
+     */
+    addAmmo(color, amt) {
+        // First make sure the param is an instance of Color.
+        const c = color instanceof Color ? color : new Color(color);
+        // Then update the color ammo amount based on the number passed in.
+        // Default to 1.
+        if (c === Colors.red) {
+            this._redAmmoAmt += amt ? amt : 1;
+        } else if (c === Colors.green) {
+            this._greenAmmoAmt += amt ? amt : 1;
+        } else if (c === Colors.blue) {
+            this._blueAmmoAmt += amt ? amt : 1;
+        }
+        // Update ammo HUD text with new numbers.
+        this._rText.setText(this._redAmmoAmt);
+        this._gText.setText(this._greenAmmoAmt);
+        this._bText.setText(this._blueAmmoAmt);
     }
 
     /**
@@ -209,6 +257,7 @@ export class AmmoManager extends Phaser.Group {
      */
     addRed(amt) {
         this._redAmmoAmt += amt ? amt : 1;
+        this._rText.setText(this._redAmmoAmt);
     }
 
     /**
@@ -219,6 +268,7 @@ export class AmmoManager extends Phaser.Group {
      */
     addGreen(amt) {
         this._greenAmmoAmt += amt ? amt : 1;
+        this._gText.setText(this._greenAmmoAmt);
     }
 
     /**
@@ -229,6 +279,7 @@ export class AmmoManager extends Phaser.Group {
      */
     addBlue(amt) {
         this._blueAmmoAmt += amt ? amt : 1;
+        this._bText.setText(this._blueAmmoAmt);
     }
 
     /**
@@ -240,16 +291,27 @@ export class AmmoManager extends Phaser.Group {
      * @memberof AmmoManager
      */
     shoot(amt) {
+        // If there is no ammo for the active type, you can't shoot.  So bail!
+        if (this.ammo() <= 0) return;
+        // If the requested amount is more than what is available, use what remains.
+        if (amt && this.ammo() - amt < 0) {
+            amt = this.ammo() - amt;
+        }
+
         switch (this._activeAmmoType) {
             case Colors.red:
                 this._redAmmoAmt -= amt ? amt : 1;
+                this._rText.setText(this._redAmmoAmt);
                 break;
             case Colors.green:
                 this._greenAmmoAmt -= amt ? amt : 1;
+                this._gText.setText(this._greenAmmoAmt);
                 break;
             case Colors.blue:
                 this._blueAmmoAmt -= amt ? amt : 1;
+                this._bText.setText(this._blueAmmoAmt);
                 break;
         }
     }
+
 }
