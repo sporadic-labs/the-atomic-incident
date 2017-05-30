@@ -17,21 +17,24 @@ class MineAbility extends Ability {
         this._explosionRadius = explosionRadius;
         this._explosionSpeed = explosionSpeed;
         this._throwSpeed = 400;
-
+        
+        this._ammoManager = game.globals.ammoManager;
         this._pointer = game.input.activePointer;
 
         this._mineGroup = game.make.group(undefined, "Mines");
     }
 
     _placeMine() {
-        if (this._player.ammo.length > 0) {
-            const color = this._player.ammo.shift();
+        if (this._ammoManager.ammo() > 0) {
+            const color = this._ammoManager.activeAmmo;
             const pos = this._player.position;
 
             const speed = Phaser.Point.subtract(this._pointer.position, pos)
                 .setMagnitude(this._throwSpeed);
             new Mine(this.game, pos, this._mineGroup, speed, color, this._mineDamage,
                 this._explosionSpeed, this._explosionRadius);
+
+            this._ammoManager.shoot();
         }
     }
 
