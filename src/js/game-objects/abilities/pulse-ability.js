@@ -62,11 +62,11 @@ class PulseAbility extends Ability {
         }, this);
 
         // Trigger pickups when the lights collide.
-        spriteUtils.forEachRecursive(this._pickups, function (pickup) {
-            // MH: why does world position not work here...
-            var inLight = this._flashlight.isPointInPulse(pickup.position);
-            if (inLight) pickup.destroy();
-        }, this);
+        // spriteUtils.forEachRecursive(this._pickups, function (pickup) {
+        //     // MH: why does world position not work here...
+        //     var inLight = this._flashlight.isPointInPulse(pickup.position);
+        //     if (inLight) pickup.destroy();
+        // }, this);
     }
 
     activate() {
