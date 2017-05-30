@@ -41,6 +41,19 @@ export class AmmoManager extends Phaser.Group {
 
 
         // Text for HUD
+        // Graphic for highlighting active ammo type.
+        const bitmap = game.add.bitmapData(game.width, game.height);
+        bitmap.circle(34, 107, 20, Colors.red.getWebColor());
+        /**
+         * @member { Phaser.BitmapData } _bitmap
+         */
+        this._bitmap = bitmap;
+        const sprite = game.add.sprite(0, 0, bitmap);
+        /**
+         * @member { Phaser.Sprite } _sprite
+         */
+        this._sprite = sprite;
+        this.add(sprite);
         /**
          * @member { Phaser.Text } _rText
          */
@@ -66,10 +79,6 @@ export class AmmoManager extends Phaser.Group {
         })
         this._bText.anchor.setTo(0.5);
         this.add(this._bText);
-        // Graphic for highlighting active ammo type.
-        // this._highlightAmmoType = new Phaser.Circle(0, 0, 30);
-        // this.add(this._highlightAmmoType);
-
 
 
         /**
@@ -84,6 +93,8 @@ export class AmmoManager extends Phaser.Group {
             // Update the activeAmmo property
             this.activeAmmo = Colors.red;
             // Update the HUD text
+            this._bitmap.cls();
+            this._bitmap.circle(34, 107, 20, Colors.red.getWebColor());
             this._rText.addColor(Colors.white.getWebColor(), 0);
             this._gText.addColor(Colors.green.getWebColor(), 0);
             this._bText.addColor(Colors.blue.getWebColor(), 0);
@@ -93,6 +104,8 @@ export class AmmoManager extends Phaser.Group {
         greenKey.onDown.add(() => {
             this.activeAmmo = Colors.green;
             // Update the HUD text
+            this._bitmap.cls();
+            this._bitmap.circle(68, 107, 20, Colors.green.getWebColor());
             this._rText.addColor(Colors.red.getWebColor(), 0);
             this._gText.addColor(Colors.white.getWebColor(), 0);
             this._bText.addColor(Colors.blue.getWebColor(), 0);
@@ -102,6 +115,8 @@ export class AmmoManager extends Phaser.Group {
         blueKey.onDown.add(() => {
             this.activeAmmo = Colors.blue;
             // Update the HUD text
+            this._bitmap.cls();
+            this._bitmap.circle(102, 107, 20, Colors.blue.getWebColor());
             this._rText.addColor(Colors.red.getWebColor(), 0);
             this._gText.addColor(Colors.green.getWebColor(), 0);
             this._bText.addColor(Colors.white.getWebColor(), 0);
