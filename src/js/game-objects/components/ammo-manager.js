@@ -80,48 +80,18 @@ export class AmmoManager extends Phaser.Group {
         this._bText.anchor.setTo(0.5);
         this.add(this._bText);
 
-
         /**
          * @member { Phaser.Keyboard } _inputs
          */
         this._inputs = game.input.keyboard;
         const K = Phaser.Keyboard;
         // Register keys 1, 2, 3 to set the active ammo type when pressed.
-        // 1 for red.
         const redKey = this._inputs.addKey(K.ONE)
-        redKey.onDown.add(() => {
-            // Update the activeAmmo property
-            this.activeAmmo = Colors.red;
-            // Update the HUD text
-            this._bitmap.cls();
-            this._bitmap.circle(34, 107, 20, Colors.red.getWebColor());
-            this._rText.addColor(Colors.white.getWebColor(), 0);
-            this._gText.addColor(Colors.green.getWebColor(), 0);
-            this._bText.addColor(Colors.blue.getWebColor(), 0);
-        });
-        // 2 for green.
+        redKey.onDown.add(() => this.activeAmmo = Colors.red);
         const greenKey = this._inputs.addKey(K.TWO)
-        greenKey.onDown.add(() => {
-            this.activeAmmo = Colors.green;
-            // Update the HUD text
-            this._bitmap.cls();
-            this._bitmap.circle(68, 107, 20, Colors.green.getWebColor());
-            this._rText.addColor(Colors.red.getWebColor(), 0);
-            this._gText.addColor(Colors.white.getWebColor(), 0);
-            this._bText.addColor(Colors.blue.getWebColor(), 0);
-        });
-        // 3 for blue.
+        greenKey.onDown.add(() => this.activeAmmo = Colors.green);
         const blueKey = this._inputs.addKey(K.THREE)
-        blueKey.onDown.add(() => {
-            this.activeAmmo = Colors.blue;
-            // Update the HUD text
-            this._bitmap.cls();
-            this._bitmap.circle(102, 107, 20, Colors.blue.getWebColor());
-            this._rText.addColor(Colors.red.getWebColor(), 0);
-            this._gText.addColor(Colors.green.getWebColor(), 0);
-            this._bText.addColor(Colors.white.getWebColor(), 0);
-        });
-
+        blueKey.onDown.add(() => this.activeAmmo = Colors.blue);
     }
 
     update() {
@@ -142,6 +112,26 @@ export class AmmoManager extends Phaser.Group {
         // Check if the value passed in is a color, otherwise use the Color constructor.
         const a = newAmmo instanceof Color ? newAmmo : new Color(newAmmo);
         this._activeAmmoType = a;
+
+        // Update the HUD text
+        this._bitmap.cls();
+        this._rText.addColor(Colors.red.getWebColor(), 0);
+        this._gText.addColor(Colors.green.getWebColor(), 0);
+        this._bText.addColor(Colors.blue.getWebColor(), 0);
+        switch (this._activeAmmoType) {
+            case Colors.red:
+                this._bitmap.circle(34, 107, 20, Colors.red.getWebColor());
+                this._rText.addColor(Colors.white.getWebColor(), 0);
+                break;
+            case Colors.green:
+                this._bitmap.circle(68, 107, 20, Colors.green.getWebColor());
+                this._gText.addColor(Colors.white.getWebColor(), 0);
+                break;
+            case Colors.blue:
+                this._bitmap.circle(102, 107, 20, Colors.blue.getWebColor());
+                this._bText.addColor(Colors.white.getWebColor(), 0);
+                break;
+        }
     }
     get activeAmmo() {
         return this._activeAmmoType;
@@ -227,21 +217,24 @@ export class AmmoManager extends Phaser.Group {
      * 
      * @method addAmmo
      * @param { Color } color 
-     * @param { number } amt - Defaults to 1
+     * @param { number } [amt=1]
      * 
      * @memberof AmmoManager
      */
-    addAmmo(color, amt) {
+    addAmmo(color, amt = 1) {
         // First make sure the param is an instance of Color.
         const c = color instanceof Color ? color : new Color(color);
+        const isAmmoEmpty = (this._redAmmoAmt + this._greenAmmoAmt + this._blueAmmoAmt) === 0; 
         // Then update the color ammo amount based on the number passed in.
-        // Default to 1.
         if (c === Colors.red) {
             this._redAmmoAmt += amt ? amt : 1;
+            if (isAmmoEmpty) this.activeAmmo = Colors.red;
         } else if (c === Colors.green) {
             this._greenAmmoAmt += amt ? amt : 1;
+            if (isAmmoEmpty) this.activeAmmo = Colors.green;
         } else if (c === Colors.blue) {
             this._blueAmmoAmt += amt ? amt : 1;
+            if (isAmmoEmpty) this.activeAmmo = Colors.blue;
         }
         // Update ammo HUD text with new numbers.
         this._rText.setText(this._redAmmoAmt);
