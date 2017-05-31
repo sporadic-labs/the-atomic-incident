@@ -224,17 +224,13 @@ export class AmmoManager extends Phaser.Group {
     addAmmo(color, amt = 1) {
         // First make sure the param is an instance of Color.
         const c = color instanceof Color ? color : new Color(color);
-        const isAmmoEmpty = (this._redAmmoAmt + this._greenAmmoAmt + this._blueAmmoAmt) === 0; 
         // Then update the color ammo amount based on the number passed in.
         if (c === Colors.red) {
             this._redAmmoAmt += amt ? amt : 1;
-            if (isAmmoEmpty) this.activeAmmo = Colors.red;
         } else if (c === Colors.green) {
             this._greenAmmoAmt += amt ? amt : 1;
-            if (isAmmoEmpty) this.activeAmmo = Colors.green;
         } else if (c === Colors.blue) {
             this._blueAmmoAmt += amt ? amt : 1;
-            if (isAmmoEmpty) this.activeAmmo = Colors.blue;
         }
         // Update ammo HUD text with new numbers.
         this._rText.setText(this._redAmmoAmt);
