@@ -23,16 +23,20 @@ class PulseAbility extends Ability {
         this._flashlight = this._player.flashlight;
         this._pulseSound = game.globals.soundManager.add("impact-2");
         this._pulseSound.playMultiple = true;
+
+        this._ammoManager = game.globals.ammoManager;
     }
 
     _fire() {
-        if (this._player.ammo.length > 0) {
-            const color = this._player.ammo.shift();
+        if (this._ammoManager.ammo() > 0) {
+            const color = this._ammoManager.activeAmmo;
             this._flashlight.pulseColor = color;
             this._effects.lightFlash(color.getRgbColorInt());
             this._flashlight.startPulse();
             this.game.globals.postProcessor.startWave(this._player.position);
             this._pulseSound.play();
+
+            this._ammoManager.shoot();
         }
 
     }

@@ -53,6 +53,7 @@ function Player(game, x, y, parentGroup) {
     this._pickups = globals.groups.pickups;
     this._effects = this.game.globals.plugins.effects;
     this._levelManager = globals.levelManager;
+    this._ammoManager = globals.ammoManager;
 
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
@@ -293,6 +294,7 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
         // support multiple shots/ammo cartridges for color mixing or something...
         // this.ammo.push(pickup.color);
         this.ammo = [ pickup.color ];
+        this._ammoManager.addAmmo(pickup.color);
     }
     this.pickupSound.play();
     pickup.pickUp();

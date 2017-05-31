@@ -34,6 +34,8 @@ class ShieldAbility extends Ability {
         this._pulseSound = game.globals.soundManager.add("impact-2");
         this._pulseSound.playMultiple = true;
 
+        this._ammoManager = game.globals.ammoManager;
+
         // Flag for determining if the shield is in the process of fading.
         this._fading = false;
 
@@ -51,9 +53,9 @@ class ShieldAbility extends Ability {
     }
 
     _trigger() {
-        if (this._player.ammo.length > 0) {
+        if (this._ammoManager.ammo() > 0) {
             // Grab the first color off of the ammo stack.
-            const color = this._player.ammo.shift();
+            const color = this._ammoManager.activeAmmo;
             // Set the shield color based on the current ammo.
             this._shield.baseColor = color;
             this._shield.baseColor.setTo({a: 155});
@@ -70,6 +72,8 @@ class ShieldAbility extends Ability {
             // Activate the shieldCooldown.
             this._shieldCooldown.activate()
             this._pulseSound.play();
+
+            this._ammoManager.shoot();
         }
     }
 

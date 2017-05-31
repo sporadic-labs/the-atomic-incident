@@ -18,6 +18,7 @@ const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
 const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 
 import WaveManager from "../game-objects/waves/wave-manager";
+import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 
 function Sandbox() {}
 
@@ -64,9 +65,9 @@ Sandbox.prototype.create = function () {
     globals.levelManager = levelManager;
 
     // Temp: switch between levels with 1 & 2 keys
-    var map1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    var map1 = game.input.keyboard.addKey(Phaser.Keyboard.NINE);
     map1.onDown.add(() => levelManager.switchMap(0));
-    var map2 = game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    var map2 = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
     map2.onDown.add(() => levelManager.switchMap(1));
 
     // Lighting plugin - needs to be set up after level manager
@@ -88,6 +89,9 @@ Sandbox.prototype.create = function () {
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
+
+    // Ammo Manager
+    globals.ammoManager = new AmmoManager(game, groups.hud);
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
@@ -115,6 +119,7 @@ Sandbox.prototype.create = function () {
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
+
 
     // // Menu for switching tile maps
     // var menu = [];
