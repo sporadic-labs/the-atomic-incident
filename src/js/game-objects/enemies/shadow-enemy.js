@@ -89,8 +89,8 @@ class ShadowEnemy extends BaseEnemy {
         if (this._movementComponent) this._movementComponent.update();
         super.update();
     }
-
-    damageShield(damage) {
+    
+    damageShield() {
         // Destroy the shield sprite.
         this._shield.destroy();
         this._shield = null;

@@ -1,6 +1,6 @@
 const HealthBar = require("./user-interface/health-bar");
 const AbilityIcon = require("./user-interface/ability-icon");
-const AbilityNames = require("../constants/ability-names");
+// const AbilityNames = require("../constants/ability-names");
 
 module.exports = HeadsUpDisplay;
 
