@@ -4,6 +4,7 @@
 
 module.exports = Sandbox;
 
+var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
@@ -110,12 +111,10 @@ Sandbox.prototype.create = function () {
     var waveNum = 0;
     globals.waveNum = waveNum;
 
-    // Enemy Waves
-    globals.spawnEnemies = new WaveManager(game);
+    // Waves of pickups and enemies
+    const pickupSpawner = new PickupSpawner(game);
+    globals.spawnEnemies = new WaveManager(game, pickupSpawner);
 
-    // Pickups
-    var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
-    new PickupSpawner(game);
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);

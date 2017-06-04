@@ -13,6 +13,19 @@ class PickupSpawner extends Phaser.Group {
         this._levelManager.levelChangeSignal.add(this._findSpawnLocations, this);
     }
 
+    spawnPickup(colorName, amount = 1) {
+        for (let i = 0; i < amount; i++) {
+            const color = colors[colorName];
+            const point = this._getSpawnPoint();
+            new LightPickup(this.game, point.x, point.y, this, color);
+        }
+    }
+
+    destroy() {
+        this._levelManager.levelChangeSignal.remove(this._findSpawnLocations, this);
+        super.destroy(...arguments);
+    }
+
     _findSpawnLocations() {
         this._spawnLocations = [];
         const map = this.game.globals.levelManager.getCurrentTilemap();
@@ -26,31 +39,10 @@ class PickupSpawner extends Phaser.Group {
         }
     }
 
-    update() {
-        if (this.children.length === 0) {
-            this._spawnPickup("red");
-            this._spawnPickup("blue");
-            this._spawnPickup("green");
-            // this._spawnAbilityPickup();
-        }
-        super.update(...arguments);
-    }
-
-    destroy() {
-        this._levelManager.levelChangeSignal.remove(this._findSpawnLocations, this);
-        super.destroy(...arguments);
-    }
-
     _spawnAbilityPickup() {
         const point = this._getSpawnPoint();
         const name = this.game.rnd.pick([abilities.DASH, abilities.SLOW_MOTION, abilities.GHOST]);
         new AbilityPickup(this.game, point.x, point.y, this, name);
-    }
-
-    _spawnPickup(colorName) {
-        const color = colors[colorName];
-        const point = this._getSpawnPoint();
-        new LightPickup(this.game, point.x, point.y, this, color);
     }
 
     _getSpawnPoint() {

@@ -40,7 +40,7 @@ class WaveMeter extends Phaser.Group {
             if ((wave.endTime <= startSeconds) || (wave.startTime >= endSeconds)) continue;
             // Otherwise, check each enemy group in the wave to see if it should be drawn
             for (const group of wave.enemyGroups) {
-                const groupTime = wave.startTime + group.time;
+                const groupTime = wave.startTime + wave.delay + group.time;
                 // Is this group within the time window of the wave meter?
                 if (groupTime >= startSeconds && groupTime <= endSeconds) {
                     // Find position of the group along the bar (number between 0 and 1)
