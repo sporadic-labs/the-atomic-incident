@@ -1,19 +1,9 @@
-import {CircleWave} from "./wave-shapes";
-import WaveComp from "./wave-composition";
-import TargetingWave from "./targeting-wave";
-import PathTweenWave from "./path-tween-wave";
-import SnakePathWave from "./snake-path-wave";
-import FlythroughWave from "./flythrough-wave";
 import WaveMeter from "./wave-meter";
-
-const colors = require("../../constants/colors");
-
 import GenerateLevel from "../../levels/level-1";
 
 class WaveManager {
     constructor(game) {
         this.game = game;
-        const g = game;
 
         this._timer = game.time.create(false);
         this._timer.start();
