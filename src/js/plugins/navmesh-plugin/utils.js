@@ -15,7 +15,10 @@ function almostEqual(value1, value2, errorMargin = 0.0001) {
 // https://gist.github.com/Aaronduino/4068b058f8dbc34b4d3a9eedc8b2cbe0
 function angleDifference(x, y) {
     let a = x - y;
-    a = (function(i, j) {return i-Math.floor(i/j)*j})(a+Math.PI, Math.PI*2); // (a+180) % 360; this ensures the correct sign
+    // (a+180) % 360; this ensures the correct sign
+    a = (function(i, j) {
+        return i-Math.floor(i/j)*j
+    })(a+Math.PI, Math.PI*2);
     a -= Math.PI;
     return a;
 }

@@ -154,8 +154,7 @@ class NavMesh {
             const newPoint = p.clone();
             if (!lastPoint || !newPoint.equals(lastPoint)) {
                 phaserPath.push(newPoint);
-            } 
-            else {
+            } else {
                 console.warn("duplicate!");
             }
             lastPoint = newPoint;

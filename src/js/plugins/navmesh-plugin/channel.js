@@ -42,7 +42,8 @@ class Channel {
 
             // Update right vertex.
             if (utils.triarea2(portalApex, portalRight, right) <= 0.0) {
-                if (portalApex.equals(portalRight) || utils.triarea2(portalApex, portalLeft, right) > 0.0) {
+                if (portalApex.equals(portalRight) || 
+                        utils.triarea2(portalApex, portalLeft, right) > 0.0) {
                     // Tighten the funnel.
                     portalRight = right;
                     rightIndex = i;
@@ -69,7 +70,8 @@ class Channel {
 
             // Update left vertex.
             if (utils.triarea2(portalApex, portalLeft, left) >= 0.0) {
-                if (portalApex.equals(portalLeft) || utils.triarea2(portalApex, portalRight, left) < 0.0) {
+                if (portalApex.equals(portalLeft) || 
+                        utils.triarea2(portalApex, portalRight, left) < 0.0) {
                     // Tighten the funnel.
                     portalLeft = left;
                     leftIndex = i;
