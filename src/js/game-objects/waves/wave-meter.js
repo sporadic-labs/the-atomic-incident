@@ -39,8 +39,8 @@ class WaveMeter extends Phaser.Group {
             // Skip if the wave has passed or is too far in the future
             if ((wave.endTime <= startSeconds) || (wave.startTime >= endSeconds)) continue;
             // Otherwise, check each enemy group in the wave to see if it should be drawn
-            for (const group of wave.groups) {
-                const groupTime = wave.startTime + group.waveTime;
+            for (const group of wave.enemyGroups) {
+                const groupTime = wave.startTime + group.time;
                 // Is this group within the time window of the wave meter?
                 if (groupTime >= startSeconds && groupTime <= endSeconds) {
                     // Find position of the group along the bar (number between 0 and 1)
@@ -54,12 +54,12 @@ class WaveMeter extends Phaser.Group {
     /**
      * @param {number} positionFraction Number between 0 and 1 representing where a group is on the
      * wave meter.
-     * @param {Object} group Enemy group representation from the WaveManager
+     * @param {Object} enemyGroup Enemy group representation from the WaveManager
      *
      * @memberof WaveMeter
      */
-    _drawGroup(positionFraction, group) {
-        const color = group.color.getRgbColorInt();
+    _drawGroup(positionFraction, enemyGroup) {
+        const color = enemyGroup.composition.getColor().getRgbColorInt();
         const diameter = 0.75 * this._height;
         const radius = diameter / 2;
         // Fudge factor: adjust the mapping so that a each circle stays inside edges of the bar

@@ -1,3 +1,5 @@
+const colors = require("../../constants/colors");
+
 /**
  * Mainly a helper class for representing the types of enemies that can be in a
  * wave.
@@ -7,46 +9,81 @@
 class WaveComposition {
     /**
      * Creates an instance of WaveComposition.
-     * @param {number} fractionRed Fraction of enemies that should be red
-     * @param {number} fractionGreen Fraction of enemies that should be green
-     * @param {number} fractionBlue Fraction of enemies that should be blue
-     * @param {boolean} shouldRandomize flag, should enemy order be shuffled?
-     * @param {boolean} hasShield flag, do enemies have shield on spawn?
-     *
-     * @memberOf WaveComposition
+     * @param {Object} options The parameters for the wave's composition
+     * @param {number} [options.red = 0] The number of red enemies
+     * @param {number} [options.green = 0] The number of green enemies
+     * @param {number} [options.blue = 0] The number of green enemies
+     * @param {boolean} [options.randomize = false] Whether or not to shuffle the enemy types
+     * @param {Color|null} [options.shield = null] The color of the shield
+     * 
+     * @memberof WaveComposition
      */
-    constructor(game, totalEnemies = 10, fractionRed = 1, fractionGreen = 0,
-            fractionBlue = 0, shouldRandomize = true, hasShield = false) {
-        this.game = game;
-        this._shouldRandomize = shouldRandomize;
-        this._hasShield = hasShield;
-        this.setTotalEnemies(totalEnemies);
-        this.setComposition(fractionRed, fractionGreen, fractionBlue);
+    constructor({red = 0, green = 0, blue = 0, randomize = false, shield = null} = {}) {
+        this._composition = {red, green, blue};
+        this._randomize = randomize;
+        this._shield = shield;
         this.generate();
     }
-
-    static CreateRandOneType(game, totalEnemies = 10, hasShield = false) {
-        return new WaveComposition(game, totalEnemies, 1, 0, 0, true, hasShield);
+    
+    /**
+     * Rescales the composition so that there are exactly enough enemies to match the newTotal.
+     * 
+     * @param {number} newTotal 
+     * @returns {this} For chaining
+     * 
+     * @memberof WaveComposition
+     */
+    setTotal(newTotal) {
+        const total = this.getTotal();
+        let {red, green, blue} = this._composition;
+        red = Math.floor((red / total) * newTotal); 
+        green = Math.floor((green / total) * newTotal); 
+        blue = Math.floor((blue / total) * newTotal);
+        let remainder = newTotal - (red + green + blue);
+        while (remainder > 0) {
+            remainder--;
+            const r = Math.random();
+            if (r <= 1 / 3) red++;
+            else if (r <= 2 / 3) green++;
+            else blue++;
+        }
+        this._composition = {red, green, blue};
+        return this;
     }
 
-    static CreateRandTwoTypes(game, totalEnemies = 10, hasShield = false) {
-        return new WaveComposition(game, totalEnemies, 0.5, 0.5, 0, true, hasShield);
+    /**
+     * Get the total number of enemies in the wave
+     * 
+     * @returns {number}
+     * 
+     * @memberof WaveComposition
+     */
+    getTotal() {
+        return this._composition.red + this._composition.green + this._composition.blue;
+    }
+    
+    /**
+     * Get the color of the shield, or null if there is no shield
+     * 
+     * @returns {Color|null}
+     * 
+     * @memberof WaveComposition
+     */
+    getShield() {
+        return this._shield;
     }
 
-    static CreateRandThreeTypes(game, totalEnemies = 10, hasShield = false) {
-        return new WaveComposition(game, totalEnemies, 0.33, 0.33, 0.34, true, hasShield);
-    }
-
-    static CreateRed(game, totalEnemies = 10, hasShield = false) {
-        return new WaveComposition(game, totalEnemies, 1, 0, 0, false, hasShield);
-    }
-
-    static CreateGreen(game, totalEnemies = 10, hasShield = false) {
-        return new WaveComposition(game, totalEnemies, 0, 1, 0, false, hasShield);
-    }
-
-    static CreateBlue(game, totalEnemies = 10, hasShield = false) {
-        return new WaveComposition(game, totalEnemies, 0, 0, 1, false, hasShield);
+    /**
+     * Get the color of this wave (assumes that the wave can only contain a single type)
+     * 
+     * @returns {Color}
+     * 
+     * @memberof WaveComposition
+     */
+    getColor() {
+        if (this._composition.red) return colors.red;
+        else if (this._composition.blue) return colors.blue;
+        else return colors.green;
     }
 
     /**
@@ -56,42 +93,20 @@ class WaveComposition {
      */
     generate() {
         // Randomly shuffle enemy ratios if needed
-        if (this._shouldRandomize) {
+        if (this._randomize) {
             const newRatio = Phaser.ArrayUtils.shuffle(
-               [this._fractionRed, this._fractionGreen, this._fractionBlue]
+               [this._composition.red, this._composition.green, this._composition.blue]
             );
-            this.setComposition(...newRatio);
-        }
-        // Figure out how many of each type we need
-        let r = Math.floor(this._fractionRed * this.totalEnemies);
-        let g = Math.floor(this._fractionGreen * this.totalEnemies);
-        let b = Math.floor(this._fractionBlue * this.totalEnemies);
-        const remainder = this.totalEnemies - (r + g + b);
-        for (let i = 0; i < remainder; i++) {
-            // Note: should this be a weighted choice?
-            const rand = this.game.rnd.integerInRange(0, 2);
-            if (rand === 0) r++;
-            else if (rand === 1) g++;
-            else b++;
+            this._composition.red = newRatio[0];
+            this._composition.green = newRatio[1];
+            this._composition.blue = newRatio[2];
         }
         // Create an array of strings representing the enemies
         this._enemies = [];
-        for (let i = 0; i < r; i++) this._enemies.push("red");
-        for (let i = 0; i < g; i++) this._enemies.push("green");
-        for (let i = 0; i < b; i++) this._enemies.push("blue");
+        for (let i = 0; i < this._composition.red; i++) this._enemies.push("red");
+        for (let i = 0; i < this._composition.green; i++) this._enemies.push("green");
+        for (let i = 0; i < this._composition.blue; i++) this._enemies.push("blue");
         Phaser.ArrayUtils.shuffle(this._enemies);
-        return this;
-    }
-
-    setTotalEnemies(totalEnemies) {
-        this.totalEnemies = totalEnemies;
-        return this;
-    }
-
-    setComposition(fractionRed = 1, fractionGreen = 0, fractionBlue = 0) {
-        this._fractionRed = fractionRed;
-        this._fractionGreen = fractionGreen;
-        this._fractionBlue = fractionBlue;
         return this;
     }
 

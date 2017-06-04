@@ -1,14 +1,22 @@
+import Wave from "./wave";
 const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TweenPathComp = require("../components/tween-path-component.js");
 const Colors = require("../../constants/colors.js");
 const Path = require("../../helpers/path.js");
 
-class SnakePathWave {
-    constructor(game, waveComposition, speed) {
+class SnakePathWave extends Wave {
+    /**
+     * Creates an instance of SnakePathWave.
+     * @param {Phaser.Game} game
+     * @param {Object} param 
+     * @param {number} param.speed Speed of the enemy's movement during the tween 
+     * 
+     * @memberof SnakePathWave
+     */
+    constructor(game, {speed = 100}) {
+        super(game);
         this.game = game;
         this.speed = speed;
-        this._waveComposition = waveComposition;
-        this._enemies = game.globals.groups.enemies;
 
         this._timer = this.game.time.create(false);
         this._timer.start();
@@ -16,7 +24,6 @@ class SnakePathWave {
         this._getPaths();
 
         // If the level has changed, check for paths in the new tilemap
-        this._levelManager = game.globals.levelManager;
         this._levelManager.levelChangeSignal.add(this._getPaths, this);
     }
 
@@ -56,9 +63,9 @@ class SnakePathWave {
         enemy.setMovementComponent(new TweenPathComp(enemy, path.clone(), this.speed));
     }
 
-    spawn() {
+    spawn(waveComposition) {
         const path = this.game.rnd.pick(this._paths);
-        const enemyTypes = this._waveComposition.generate().getEnemiesArray();
+        const enemyTypes = waveComposition.generate().getEnemiesArray();
         for (const [i, enemyType] of enemyTypes.entries()) {
             this._timer.add(i * 600, this._spawn, this, path, enemyType);
         }

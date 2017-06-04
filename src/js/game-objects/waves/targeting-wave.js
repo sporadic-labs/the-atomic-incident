@@ -1,34 +1,47 @@
+import Wave from "./wave";
 const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TargetingComp = require("../components/targeting-component.js");
 const Colors = require("../../constants/colors.js");
 
 import {CircleWave, TunnelWave, CrossWave} from "./wave-shapes";
 
-class TargetingWave {
+class TargetingWave extends Wave {
+    /**
+     * Creates an instance of TargetingWave.
+     * @param {Object} waveShape 
+     * 
+     * @memberof TargetingWave
+     */
     constructor(game, waveShape) {
-        this.game = game;
-        this._enemies = game.globals.groups.enemies;
+        super(game);
         this._waveShape = waveShape;
-        this._levelManager = this.game.globals.levelManager;
     }
 
-    static createCircle(game, waveComposition, radius) {
-        const shape = new CircleWave(game, waveComposition, radius);
+    /**
+     * @static
+     * @param {Object} options 
+     * @param {number} [options.radius = 80] Radius of the circle wave
+     * @returns {TargetingWave}
+     * 
+     * @memberof TargetingWave
+     */
+    static createCircle(game, {radius = 80}) {
+        const shape = new CircleWave(game, radius);
         return new TargetingWave(game, shape);
     }
 
-    static createTunnel(game, waveComposition, width, length, angle) {
-        const shape = new TunnelWave(game, waveComposition, waveComposition, width, length, angle);
+    static createTunnel(game, {width = 100, length = 300, angle = 90}) {
+        const shape = new TunnelWave(game, width, length, angle);
         return new TargetingWave(game, shape);
     }
 
-    static createCross(game, waveComposition, length) {
-        const shape = new CrossWave(game, waveComposition, waveComposition, length);
+    static createCross(game, {length = 100}) {
+        const shape = new CrossWave(game, length);
         return new TargetingWave(game, shape);
     }
 
-    spawn() {
-        for (const enemyInfo of this._waveShape.enemies()) {
+    spawn(waveComposition) {
+        for (const enemyInfo of this._waveShape.enemies(waveComposition)) {
             const pos = enemyInfo.position;
             // Skip spawn point if the tile is occupied
             if (!this._isTileEmpty(pos.x, pos.y)) continue;

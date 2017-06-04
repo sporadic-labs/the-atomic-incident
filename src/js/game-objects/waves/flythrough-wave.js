@@ -1,14 +1,21 @@
+import Wave from "./wave";
 const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TweenPathComp = require("../components/tween-path-component.js");
 const Colors = require("../../constants/colors.js");
 const Path = require("../../helpers/path.js");
 
-class FlythroughWave {
-    constructor(game, waveComposition, speed) {
-        this.game = game;
+class FlythroughWave extends Wave {
+    /**
+     * Creates an instance of FlythroughWave.
+     * @param {Phaser.Game} game
+     * @param {Object} param 
+     * @param {number} param.speed Speed of the enemy's movement during the tween 
+     * 
+     * @memberof FlythroughWave
+     */
+    constructor(game, {speed = 100}) {
+        super(game);
         this.speed = speed;
-        this._waveComposition = waveComposition;
-        this._enemies = game.globals.groups.enemies;
 
         this._timer = this.game.time.create(false);
         this._timer.start();
@@ -16,7 +23,6 @@ class FlythroughWave {
         this._getPaths();
 
         // If the level has changed, check for paths in the new tilemap
-        this._levelManager = game.globals.levelManager;
         this._levelManager.levelChangeSignal.add(this._getPaths, this);
     }
 
@@ -100,10 +106,10 @@ class FlythroughWave {
         }
     }
 
-    spawn() {
+    spawn(waveComposition) {
         const path = this.game.rnd.pick(this._paths);
-        const enemyTypes = this._waveComposition.generate().getEnemiesArray();
-        const shield = this._waveComposition._hasShield;
+        const enemyTypes = waveComposition.generate().getEnemiesArray();
+        const shield = waveComposition.getShield();
         const individualDelay = 1000;
         const totalTime = enemyTypes.length * individualDelay + 4000;
         const callback = this._spawnWithDelay.bind(this, path, enemyTypes, individualDelay, shield);

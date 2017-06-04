@@ -8,133 +8,42 @@ import WaveMeter from "./wave-meter";
 
 const colors = require("../../constants/colors");
 
+import GenerateLevel from "../../levels/level-1";
+
 class WaveManager {
     constructor(game) {
         this.game = game;
         const g = game;
 
-        this._meter = new WaveMeter(game, this);
-
         this._timer = game.time.create(false);
         this._timer.start();
 
         this._waves = [];
+        this._totalTime = 0;
         this._currentWaveIndex = 0;
 
-        this._totalTime = 0;
-
-        // Initial delay
-        this._addPause(5);
-
-        // Wave 1
-        this._addWave([
-            {
-                waveTime: 0,
-                color: colors.blue,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateBlue(g, 16), 80)
-            }, {
-                waveTime: 3,
-                color: colors.green,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateGreen(g, 16), 80)
-            }, {
-                waveTime: 6,
-                color: colors.red,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateRed(g, 16), 80)
-            },
-        ]);
-
-        // Rest
-        this._addPause(15);
-
-        // Wave 2
-        this._addWave([
-            {
-                waveTime: 0,
-                color: colors.red,
-                wave: TargetingWave.createTunnel(g, WaveComp.CreateRed(g, 16), 100, 300, 90)
-            },
-            {
-                waveTime: 3,
-                color: colors.blue,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateBlue(g, 16), 80)
-            }, {
-                waveTime: 4,
-                color: colors.green,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateGreen(g, 16), 80)
-            }, {
-                waveTime: 7,
-                color: colors.blue,
-                wave: TargetingWave.createTunnel(g, WaveComp.CreateBlue(g, 16), 100, 300, 0)
-            }, {
-                waveTime: 10,
-                color: colors.red,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateRed(g, 16), 80)
-            }, {
-                waveTime: 11,
-                color: colors.green,
-                wave: TargetingWave.createCircle(g, WaveComp.CreateGreen(g, 16), 80)
-            },
-        ]);
-
-        // Rest
-        this._addPause(15);
-
-        // Wave 3
-        this._addWave([
-            {
-                waveTime: 0,
-                color: colors.red,
-                wave: new PathTweenWave(
-                    g, WaveComp.CreateRed(g, 16), 75
-                )
-            }, {
-                waveTime: 3,
-                color: colors.green,
-                wave: new SnakePathWave(
-                    g, WaveComp.CreateGreen(g, 16), 75
-                )
-            }, {
-                waveTime: 5,
-                color: colors.blue,
-                wave: new PathTweenWave(
-                    g, WaveComp.CreateBlue(g, 16), 75
-                )
+        const waves = GenerateLevel(game);
+        for (const wave of waves) {
+            let totalWaveTime = 0;
+            const startTime = this._totalTime + (wave.delay || 0);
+            for (const enemyGroup of wave.enemyGroups) {
+                if (enemyGroup.time > totalWaveTime) totalWaveTime = enemyGroup.time;
+                const spawnTime = (startTime + enemyGroup.time) * 1000;
+                this._timer.add(spawnTime, () => {
+                    enemyGroup.wave.spawn(enemyGroup.composition);
+                });
             }
-        ]);
-    }
-
-    /**
-     * Adds a wave - a series of enemy groups with specific times when they should spawn
-     *
-     * @param {Object[]} enemyGroups Array of enemy groups in this wave
-     * @param {number} enemyGroups[].waveTime The time in seconds relative to the start of this wave
-     * @param {Wave} enemyGroups[].wave Instance of one of the wave classes
-     * @param {Color} enemyGroups[].color The color of the wave
-     *
-     * @memberof WaveManager
-     */
-    _addWave(enemyGroups) {
-        let totalWaveTime = 0;
-        const startTime = this._totalTime;
-        for (const enemyGroup of enemyGroups) {
-            if (enemyGroup.waveTime > totalWaveTime) totalWaveTime = enemyGroup.waveTime;
-            const spawnTime = (startTime + enemyGroup.waveTime) * 1000;
-            this._timer.add(spawnTime, () => {
-                enemyGroup.wave.spawn();
+            this._totalTime += startTime + totalWaveTime;
+            this._waves.push({
+                startTime,
+                endTime: this._totalTime,
+                enemyGroups: wave.enemyGroups,
+                ammoDrops: wave.ammoDrops
             });
         }
-        this._totalTime += totalWaveTime;
-        const wave = {
-            waveNumber: this._waves.length,
-            startTime,
-            endTime: this._totalTime,
-            groups: enemyGroups
-        };
-        this._waves.push(wave);
-    }
 
-    _addPause(pauseTime) {
-        this._totalTime += pauseTime;
+        this._meter = new WaveMeter(game, this);
+
     }
 
     getSeconds() {
