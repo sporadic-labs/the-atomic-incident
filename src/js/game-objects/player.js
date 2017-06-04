@@ -4,9 +4,14 @@ var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 var Reticule = require("./reticule.js");
 var colors = require("../constants/colors.js");
-var Color = require("../helpers/Color.js");
-var lightUtils = require("./lights/light-utilities.js");
 var CooldownAbility = require("./components/cooldown-ability.js");
+const AbilityPickup = require("./pickups/ability-pickup.js");
+const LightPickup = require("./pickups/light-pickup.js");
+const abilityNames = require("../constants/ability-names.js");
+
+const PulseAbility = require("./abilities/pulse-ability");
+const MineAbility = require("./abilities/mine-ability");
+const ShieldAbility = require("./abilities/shield-ability");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -19,6 +24,9 @@ var ANIM_NAMES = {
 // Prototype chain - inherits from Sprite
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
+/**
+ * @param {Phaser.Game} game
+ */
 function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
@@ -34,14 +42,18 @@ function Player(game, x, y, parentGroup) {
 
     this._isDead = false;
 
-    this.damage = 10000; // NOTE(rex): Not quite sure if this should be a part of the player or not...
-    
+    this.ghostMode = false;
+
+    // NOTE(rex): Not quite sure if this should be a part of the player or not...
+    this.damage = 10000;
+
     // Shorthand
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
-    this._lights = globals.groups.lights;
     this._effects = this.game.globals.plugins.effects;
+    this._levelManager = globals.levelManager;
+    this._ammoManager = globals.ammoManager;
 
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
@@ -51,15 +63,15 @@ function Player(game, x, y, parentGroup) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Setup animations
-    var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, 
+    var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4,
         "", 2);
-    var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, 
+    var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4,
         "", 2);
     var attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2,
         4, "", 2);
-    var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, 
+    var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4,
         "", 2);
-    var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, 
+    var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4,
         "", 2);
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 4, true);
@@ -75,19 +87,20 @@ function Player(game, x, y, parentGroup) {
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
-    this.body.setCircle(diameter / 2, (this.width - diameter) / 2, 
+    this.body.setCircle(diameter / 2, (this.width - diameter) / 2,
         (this.height - diameter) / 2);
 
     this.satBody = globals.plugins.satBody.addCircleBody(this);
- 
+
     // Lighting for player
     this._lighting = globals.plugins.lighting;
     var lightSize = 360;
-    this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0), 
-        new Phaser.Circle(0, 0, lightSize), 
+    this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0),
+        new Phaser.Circle(0, 0, lightSize),
         colors.white, colors.red);
-    globals.groups.foreground.add(this.flashlight);
     this.flashlight.enabled = true;
+    // Array for player ammo
+    this.ammo = [];
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -105,14 +118,33 @@ function Player(game, x, y, parentGroup) {
 
     // Player controls
     this._controls = new Controller(this.game.input);
-    var Kb = Phaser.Keyboard;
     var P = Phaser.Pointer;
     this._controls.addMouseDownControl("pulse", [P.LEFT_BUTTON]);
-    this._controls.addMouseDownControl("dash", [P.RIGHT_BUTTON]);
+    this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
+    // Player Sound fx
+    this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
+    this._hitSoud.playMultiple = true;
+    this._dashSound = this.game.globals.soundManager.add("warp");
+    this._dashSound.playMultiple = true;
+    this.pickupSound = this.game.globals.soundManager.add("whoosh");
 
     // Player abilities
-    this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
-    this._dashAbility = new CooldownAbility(this.game, 3500, 300);
+    const names = abilityNames;
+    this._abilities = {
+        [names.DASH]: new CooldownAbility(this.game, 3500, 300, names.DASH),
+        [names.SLOW_MOTION]: new CooldownAbility(this.game, 3500, 3000, names.SLOW_MOTION),
+        [names.GHOST]: new CooldownAbility(this.game, 3500, 6000, names.GHOST)
+    }
+    // this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
+    this._activeAbility = null;
+
+    this._pulseAbility = new PulseAbility(this.game, this, 10000);
+    this._mineAbility = new MineAbility(this.game, this, 10000, 100, 400);
+    this._shieldAbility = new ShieldAbility(this.game, this, 10000, 96, 4000);
+    this._ability = this._pulseAbility;
+    this._ability.activate();
+
+    this._velocity = new Phaser.Point(0, 0);
 }
 
 Player.prototype.update = function () {
@@ -130,32 +162,65 @@ Player.prototype.update = function () {
     // Speed limit
     var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
 
-    // Fire the flashlight pulse!
-    if (this._controls.isControlActive("pulse") && this._pulseAbility.isReady()) {
-        this._effects.lightFlash(this.flashlight.pulseColor.getRgbColorInt());
-        this._pulseAbility.activate();
-        this.flashlight.startPulse();
+    if (this._activeAbility) {
+        const ability = this._activeAbility;
+        const shouldActivate = this._controls.isControlActive("ability");
+        switch (ability.name) {
+            case abilityNames.DASH:
+                if (ability.isReady() && shouldActivate) {
+                    ability.activate();
+                    this._dashSound.play();
+                    this._dashHeading = heading;
+                    this._invulnerable = true;
+                    this.alpha = 0.5;
+                    ability.onDeactivation.addOnce(function () {
+                        this._invulnerable = false;
+                        this.alpha = 1;
+                        this._activeAbility = null;
+                        ability.reset();
+                    }, this);
+                }
+                if (ability.isActive()) {
+                    maxDistance *= 5;
+                    destination = this.body.position.clone();
+                    destination.add(
+                        1000 * Math.cos(this._dashHeading),
+                        1000 * Math.sin(this._dashHeading)
+                    );
+                }
+                break;
+            case abilityNames.SLOW_MOTION:
+                if (ability.isReady() && shouldActivate) {
+                    this.game.time.slowMotion = 3;
+                    ability.activate();
+                    ability.onDeactivation.addOnce(function () {
+                        this.game.time.slowMotion = 1;
+                        this._activeAbility = null;
+                        ability.reset();
+                    }, this);
+                }
+                if (ability.isActive()) {
+                    maxDistance *= 1.5;
+                }
+                break;
+            case abilityNames.GHOST:
+                if (ability.isReady() && shouldActivate) {
+                    this.ghostMode = true;
+                    ability.activate();
+                    ability.onDeactivation.addOnce(function () {
+                        this.ghostMode = false;
+                        this._activeAbility = null;
+                        ability.reset();
+                    }, this);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
-    // Dash ability
-    if (this._controls.isControlActive("dash") && this._dashAbility.isReady()) {
-        this._dashAbility.activate();
-        this._dashHeading = heading;
-        this._invulnerable = true;
-        this.alpha = 0.5;
-        this._dashAbility.onDeactivation.addOnce(function () {
-            this._invulnerable = false;
-            this.alpha = 1;
-        }, this);
-    }
-    if (this._dashAbility.isActive()) {
-        maxDistance *= 5;
-        destination = this.body.position.clone();
-        destination.add(
-            1000 * Math.cos(this._dashHeading),
-            1000 * Math.sin(this._dashHeading)
-        );
-    }
+    // Temp: always update pulse ability. Eventually add ability to switch active ability
+    this._ability.update();
 
     // Move towards the mouse position
     var delta = Phaser.Point.subtract(destination, this.body.position);
@@ -164,55 +229,27 @@ Player.prototype.update = function () {
         delta.setMagnitude(maxDistance);
     }
     this.body.position.add(delta.x, delta.y);
-    this.game.physics.arcade.collide(this, this.game.globals.tileMapLayer);
+    this.game.physics.arcade.collide(this, this._levelManager.getCurrentWallLayer());
+
+    // Update velocity after collision
+    Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
+    this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
 
     // Update the rotation of the player based on the reticule
     this.rotation = this.position.angle(this._reticule.position) +
         (Math.PI/2);
 
     // Enemy collisions
-    spriteUtils.checkOverlapWithGroup(this, this._enemies, 
+    spriteUtils.checkOverlapWithGroup(this, this._enemies,
         this._onCollideWithEnemy, this);
 
     // Light pickups
-    spriteUtils.checkOverlapWithGroup(this, this._pickups, 
+    spriteUtils.checkOverlapWithGroup(this, this._pickups,
         this._onCollideWithPickup, this);
+};
 
-    // Damage enemies
-    var damage = this.damage * this.game.time.physicsElapsed;
-    spriteUtils.forEachRecursive(this._enemies, function (child) {
-        if (child instanceof Phaser.Sprite && child.takeDamage) {
-            // MH: why does world position not work here...
-            var inLight = this.flashlight.isPointInPulse(child.position);
-            var flashlightColor = this.flashlight.pulseColor;
-            var enemyColor = child.color;
-            // If the enemy color matches the flashlight color, then the enemies
-            // should take damage.
-            var matchingLights = flashlightColor.rgbEquals(enemyColor);
-            if (inLight && matchingLights) {
-                child.takeDamage(damage);
-            }
-        }
-    }, this);
-
-    // Trigger pickups when the lights collide.
-    spriteUtils.forEachRecursive(this._pickups, function (child) {
-        if (child instanceof Phaser.Sprite) {
-            // MH: why does world position not work here...
-            var inLight = this.flashlight.isPointInPulse(child.position);
-            if (inLight) {
-                // Destroy the pickup.
-                child.pickUp();
-                // Trigger some fx.
-                // NOTE(rt): This is probably overkill...
-                this._effects.lightFlash(child.color.getRgbColorInt());
-                this.game.camera.shake(0.005, 80);
-                // TODO(rt): Trigger a new light that destroys itself after it is done...
-                // this.flashlight.startPulse();
-            }
-        }
-    }, this);
-
+Player.prototype.getVelocity = function () {
+    return this._velocity;
 };
 
 Player.prototype.postUpdate = function () {
@@ -235,14 +272,31 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
         this.game.camera.shake(0.01, 200);
+        this._hitSoud.play();
         // Trigger a red flash to indicate damage!
         this._effects.lightFlash(0XF2CECE);
     }
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
-    this.game.globals.scoreKeeper.incrementScore(1);
-    this.flashlight.pulseColor = pickup.color;
+    if (pickup instanceof AbilityPickup) {
+        if (pickup.abilityName === abilityNames.DASH) {
+            this._activeAbility = this._abilities[abilityNames.DASH];
+        } else if (pickup.abilityName === abilityNames.SLOW_MOTION) {
+            this._activeAbility = this._abilities[abilityNames.SLOW_MOTION];
+        } else if (pickup.abilityName === abilityNames.GHOST) {
+            this._activeAbility = this._abilities[abilityNames.GHOST];
+        }
+    } else if (pickup instanceof LightPickup) {
+        this.game.globals.scoreKeeper.incrementScore(1);
+        // Add the pickup color to the ammo array. NOTE(rex): Currently you can only have 1 shot at
+        // a time, so just replace the previous ammo entry with the new one. In the future, we may
+        // support multiple shots/ammo cartridges for color mixing or something...
+        // this.ammo.push(pickup.color);
+        this.ammo = [ pickup.color ];
+        this._ammoManager.addAmmo(pickup.color);
+    }
+    this.pickupSound.play();
     pickup.pickUp();
 };
 
@@ -253,6 +307,7 @@ Player.prototype.takeDamage = function () {
     // Lose a heart & restart the game if no hearts remain
     this.hearts -= 1;
     if (this.hearts <= 0) {
+        this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
         this.game.state.restart();
     }
 
@@ -273,6 +328,7 @@ Player.prototype.takeDamage = function () {
 };
 
 Player.prototype.destroy = function () {
+    this._pulseAbility.destroy();
     this._reticule.destroy();
     this._timer.destroy();
     this._cooldownTimer.destroy();

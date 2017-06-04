@@ -5,13 +5,17 @@ module.exports = {
 	rules: {
 		"brace-style": ["warn", "1tbs"],
 		"indent": ["warn", 4, {"SwitchCase": 1}],
-		"max-len": ["warn", 80, {"ignoreUrls": true}],
+		"max-len": ["warn", 100, {"ignoreUrls": true}],
 		"no-mixed-spaces-and-tabs": "warn",
+		"no-console": ["warn", {"allow": ["warn", "error"]}]
 	},
 	env: {
 		browser: true,
 		commonjs: true,
 		es6: true
+	},
+	parserOptions: {
+		sourceType: "module"
 	},
 	globals: {
 		Phaser: true

@@ -19,16 +19,21 @@ class SoundEffectManager {
     }
 
     /**
-     * Add a sound by its key if it hasn't already been loaded
+     * Add a sound by its key if it hasn't already been loaded. Parameters match 
+     * Phaser.SoundManger#add
      * 
-     * @param {string} key 
+     * @param {string} key Asset key for the sound.
+     * @param {number} [volume] Default value for the volume.
+     * @param {boolean} [loop] Whether or not the sound will loop.
+     * @param {boolean} [connect] Controls if the created Sound object will connect to the master 
+     * gainNode of the SoundManager when running under WebAudio.
      * @returns {Phaser.Sound} The sound that was loaded/retrieved from cache
      * 
      * @memberOf SoundEffectManager
      */
-    add(key) {
+    add(key, volume, loop, connect) {
         if (!this._soundsLoaded[key]) {
-            this._soundsLoaded[key] = this.game.add.audio(key);
+            this._soundsLoaded[key] = this.game.add.audio(key, volume, loop, connect);
         }
         return this._soundsLoaded[key];
     }

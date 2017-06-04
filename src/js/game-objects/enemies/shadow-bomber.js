@@ -2,7 +2,6 @@ module.exports = ShadowBomber;
 
 var BaseEnemy = require("./base-enemy.js");
 var TargetingComponent = require("../components/targeting-component.js");
-var spriteUtils = require("../../helpers/sprite-utilities.js");
 
 ShadowBomber.prototype = Object.create(BaseEnemy.prototype);
 

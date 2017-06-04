@@ -98,6 +98,18 @@ class Path {
         return this._points[this._points.length - 1];
     }
 
+    /**
+     * Get the point at a specified index along the path.
+     * 
+     * @param {number} index 
+     * @returns {Phaser.Point}
+     * 
+     * @memberOf Path
+     */
+    getPointAtIndex(index) {
+        return this._points[index];
+    }
+
     reverse() {
         this._points.reverse();
         this._segmentLengths.reverse();

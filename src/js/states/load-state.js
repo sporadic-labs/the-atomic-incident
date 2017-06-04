@@ -6,27 +6,29 @@ module.exports = LoadState;
 
 function LoadState() {}
 
-// Set the 'current map' to be loaded by the game
-// Default to level_03 until we have some actual maps...
-LoadState.prototype.init = function (map) {
-    this.currentMap = map ? map : 
-        "resources/tilemaps/" + this.game.globals.tilemapFiles[0];
-};
-
 LoadState.prototype.preload = function () {    
     // Images
     this.load.atlasJSONHash("assets", "resources/atlases/assets.png", 
         "resources/atlases/assets.json");
 
     // Tilemap
-    this.load.tilemap("tilemap", this.currentMap, null, 
-        Phaser.Tilemap.TILED_JSON);
+    for (const tilemapName of this.game.globals.tilemapFiles) {
+        const path = `resources/tilemaps/${tilemapName}`;
+        const key = tilemapName.split(".")[0];
+        this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
+    }
     this.load.image("coloredTiles", "resources/tilemaps/tiles_25.png");
     this.load.image("wallTiles", "resources/tilemaps/wall-tiles.png");
 
     // Sounds
-    this.load.audio("whoosh", "resources/audio/whoosh.mp3");
     this.load.audio("pop", "resources/audio/pop.mp3");
+    this.load.audio("whoosh", "resources/audio/whoosh.mp3");
+    this.load.audio("whoosh-2", "resources/audio/whoosh-2.mp3");
+    this.load.audio("warp", "resources/audio/warp.mp3");
+    this.load.audio("warp-2", "resources/audio/warp-2.mp3");
+    this.load.audio("impact", "resources/audio/impact.mp3");
+    this.load.audio("impact-2", "resources/audio/impact-2.mp3");
+    this.load.audio("smash", "resources/audio/smash.mp3");
 
     // Stand-in for a loading bar
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 

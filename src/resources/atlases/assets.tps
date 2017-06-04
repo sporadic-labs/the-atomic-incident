@@ -355,6 +355,30 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">frames/hud/ghost.png</key>
+            <key type="filename">frames/hud/heart-open.png</key>
+            <key type="filename">frames/hud/heart.png</key>
+            <key type="filename">frames/hud/mute.png</key>
+            <key type="filename">frames/hud/pause.png</key>
+            <key type="filename">frames/hud/play.png</key>
+            <key type="filename">frames/hud/pulse.png</key>
+            <key type="filename">frames/hud/slow-motion.png</key>
+            <key type="filename">frames/hud/sound.png</key>
+            <key type="filename">frames/pickups/dash.png</key>
+            <key type="filename">frames/pickups/ghost.png</key>
+            <key type="filename">frames/pickups/slow-motion.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/hud/grid.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -391,20 +415,6 @@
                 <rect>7,1,13,2</rect>
                 <key>scale9Paddings</key>
                 <rect>7,1,13,2</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">frames/hud/heart-open.png</key>
-            <key type="filename">frames/hud/heart.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,8,15,15</rect>
-                <key>scale9Paddings</key>
-                <rect>8,8,15,15</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -456,6 +466,19 @@
                 <rect>5,5,10,10</rect>
                 <key>scale9Paddings</key>
                 <rect>5,5,10,10</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">frames/shadow-enemy/outline.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,7,15,15</rect>
+                <key>scale9Paddings</key>
+                <rect>7,7,15,15</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

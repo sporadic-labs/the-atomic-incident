@@ -1,25 +1,29 @@
 var colors = require("../../constants/colors.js");
-var LightPickup = require("./light-pickup.js");
+const LightPickup = require("./light-pickup.js");
+const AbilityPickup = require("./ability-pickup.js");
+const abilities = require("../../constants/ability-names.js");
 
 class PickupSpawner extends Phaser.Group {
     constructor(game) {
         var pickupGroup = game.globals.groups.pickups;
         super(game, pickupGroup, "pickup-spawner");
-        this._map = this.game.globals.tileMap;
-        this._spawnLocations = this._getSpawnLocations();
+        this._findSpawnLocations();
+
+        this._levelManager = game.globals.levelManager;
+        this._levelManager.levelChangeSignal.add(this._findSpawnLocations, this);
     }
 
-    _getSpawnLocations() {
-        const pickups = this._map.objects["pickups"] || [];
-        const points = [];
+    _findSpawnLocations() {
+        this._spawnLocations = [];
+        const map = this.game.globals.levelManager.getCurrentTilemap();
+        const pickups = map.objects["pickups"] || [];
         for (var i = 0; i < pickups.length; i++) {
             // Rectangle center
-            points.push(new Phaser.Point(
-                pickups[i].x + pickups[i].width / 2, 
+            this._spawnLocations.push(new Phaser.Point(
+                pickups[i].x + pickups[i].width / 2,
                 pickups[i].y + pickups[i].height / 2
             ));
         }
-        return points;
     }
 
     update() {
@@ -27,19 +31,31 @@ class PickupSpawner extends Phaser.Group {
             this._spawnPickup("red");
             this._spawnPickup("blue");
             this._spawnPickup("green");
+            // this._spawnAbilityPickup();
         }
         super.update(...arguments);
     }
 
+    destroy() {
+        this._levelManager.levelChangeSignal.remove(this._findSpawnLocations, this);
+        super.destroy(...arguments);
+    }
+
+    _spawnAbilityPickup() {
+        const point = this._getSpawnPoint();
+        const name = this.game.rnd.pick([abilities.DASH, abilities.SLOW_MOTION, abilities.GHOST]);
+        new AbilityPickup(this.game, point.x, point.y, this, name);
+    }
+
     _spawnPickup(colorName) {
-        var color = colors[colorName];
-        var point = this._getSpawnPoint();
+        const color = colors[colorName];
+        const point = this._getSpawnPoint();
         new LightPickup(this.game, point.x, point.y, this, color);
     }
 
     _getSpawnPoint() {
         var player = this.game.globals.player;
-        let attempts = 0; 
+        let attempts = 0;
         while ((attempts < 100)) {
             attempts++;
             const point = this.game.rnd.pick(this._spawnLocations);
@@ -61,13 +77,13 @@ class PickupSpawner extends Phaser.Group {
     }
 
     _isTileEmpty(x, y) {
-        var map = this.game.globals.tileMap;
-        var checkTile = map.getTile(x, y, 
-            this.game.globals.tileMapLayer, true);
-        // Check if location was out of bounds or invalid (getTileWorldXY returns 
+        const map = this._levelManager.getCurrentTilemap();
+        const wallLayer = this._levelManager.getCurrentWallLayer();
+        var checkTile = map.getTile(x, y, wallLayer, true);
+        // Check if location was out of bounds or invalid (getTileWorldXY returns
         // null for invalid locations when nonNull param is true)
         if (checkTile === null) return false;
-        // Check if tile is empty (getTileWorldXY returns a tile with an index of 
+        // Check if tile is empty (getTileWorldXY returns a tile with an index of
         // -1 when the nonNull param is true)
         if (checkTile.index === -1) return true;
         else return false;
