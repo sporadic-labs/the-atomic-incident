@@ -11,12 +11,13 @@ var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 var DebugDisplay = require("../game-objects/debug-display.js");
 const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
-const EffectsPlugin = 
+const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
 const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
 const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 
+import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 
 function Sandbox() {}
@@ -28,7 +29,7 @@ Sandbox.prototype.create = function () {
 
     // Debugging FPS
     game.time.advancedTiming = true;
-    
+
     // Canvas styling
     game.canvas.style.cursor = "none";
     game.canvas.addEventListener("contextmenu", function(e) {
@@ -53,9 +54,9 @@ Sandbox.prototype.create = function () {
     this.stage.backgroundColor = "#FFF";
 
     // Plugins
-    global.plugins = (global.plugins !== undefined) ? global.plugins : {}; 
-    globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
-    globals.plugins.effects = game.plugins.add(EffectsPlugin); 
+    global.plugins = (global.plugins !== undefined) ? global.plugins : {};
+    globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
+    globals.plugins.effects = game.plugins.add(EffectsPlugin);
     globals.plugins.navMesh = game.plugins.add(NavMeshPlugin);
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
@@ -70,7 +71,7 @@ Sandbox.prototype.create = function () {
     map2.onDown.add(() => levelManager.switchMap(1));
 
     // Lighting plugin - needs to be set up after level manager
-    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground); 
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(0.9);
 
@@ -104,14 +105,13 @@ Sandbox.prototype.create = function () {
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.hud);
     globals.debugDisplay = new DebugDisplay(game, groups.hud);
-    
+
     // Keep track of what wave the player is on using the globals object.
     var waveNum = 0;
     globals.waveNum = waveNum;
 
     // Enemy Waves
-    var SpawnerWave = require("../game-objects/waves/spawn-wave.js");
-    globals.spawnEnemies = new SpawnerWave(game);
+    globals.spawnEnemies = new WaveManager(game);
 
     // Pickups
     var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
@@ -127,7 +127,7 @@ Sandbox.prototype.create = function () {
     // for (var i = 0; i < globals.tilemapFiles.length; i++) {
     //     // The callback needs a reference to the value of i on each iteration,
     //     // so create a callback with binding
-    //     var cb = game.state.start.bind(game.state, "load", true, true, 
+    //     var cb = game.state.start.bind(game.state, "load", true, true,
     //         "resources/tilemaps/" + globals.tilemapFiles[i]);
     //     var b = game.add.button(x, (36 * i) + 4, "button", cb);
     //     b.fixedToCamera = true;
