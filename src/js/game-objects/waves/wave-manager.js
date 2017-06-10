@@ -1,5 +1,8 @@
 import WaveMeter from "./wave-meter";
 import GenerateLevel from "../../levels/level-1";
+import WaveMenu from "./wave-menu";
+
+const colors = require("../../constants/colors");
 
 class WaveManager {
     /**
@@ -12,6 +15,12 @@ class WaveManager {
     constructor(game, pickupSpawner) {
         this.game = game;
         this._pickupSpawner = pickupSpawner;
+        const g = game;
+
+        // Meter for indicating which waves are coming.
+        this._meter = new WaveMeter(game, this);
+        // Menu to show wave/ammo compisition at the beginning of a wave.
+        this._menu = new WaveMenu(game, this);
 
         this._timer = game.time.create(false);
         this._timer.start();

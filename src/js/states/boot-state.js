@@ -23,7 +23,7 @@ BootState.prototype.create = function () {
     // Load the Slick UI plugin
     var globals = this.game.globals;
     globals.plugins.SlickUI = require("../plugins/slick-ui");
-    globals.plugins.slickUI = this.game.plugins.add(Phaser.Plugin.SlickUI);
+    // globals.plugins.slickUI = this.game.plugins.add(Phaser.Plugin.SlickUI);
 
     this.game.state.start("load");
 };
