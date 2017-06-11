@@ -1,4 +1,4 @@
-const calculateHull = require("../plugins/lighting-plugin/hull-from-tiles.js");
+import phaserTiledHull from "phaser-tiled-hull/src/library"; // Allows us to babelify ourselves
 
 /**
  * A class for managing and switching between multiple maps. It assumes that 
@@ -148,7 +148,7 @@ class LevelManager {
             wallTileset.total, true, wallLayer);
 
         // Calculate an array of walls for lighting calculations
-        const hulls = calculateHull(wallLayer);
+        const hulls = phaserTiledHull(wallLayer, {checkCollide: true});
         const walls = [];
         for (const wallCluster of hulls) {
             for (const wall of wallCluster) {

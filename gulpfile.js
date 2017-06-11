@@ -166,9 +166,10 @@ var jsBundle = browserify({
         require.resolve("phaser-ce/build/custom/p2"),
         require.resolve("phaser-ce/build/custom/pixi")
     ],
+    transform: [glslify, babel],
     debug: true, // Allow debugger statements
     cache: {}, packageCache: {}, plugin: [watchify] // Required for watchify
-}).transform(glslify).transform(babel);
+});
 // Task now incrementally builds
 gulp.task("js-browserify", function () {
     return jsBundle.bundle()    
