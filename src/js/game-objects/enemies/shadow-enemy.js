@@ -5,7 +5,7 @@ const TargetingComp = require("../components/targeting-component");
 
 class ShadowEnemy extends BaseEnemy {
     constructor(game, x, y, parentGroup, color, shieldColor) {
-        super(game, x, y, "assets", "shadow-enemy/tintable-idle", 100, parentGroup, 1, color);
+        super(game, x, y, "assets", "enemies/tintable-idle", 100, parentGroup, 1, color);
 
         // Temp fix: move the health bar above the shadow/light layer
         game.globals.groups.foreground.add(this._healthBar);
@@ -22,7 +22,7 @@ class ShadowEnemy extends BaseEnemy {
         } else {
             // If a shieldColor param was provided, you want a shield!
             // Add the shield as a child sprite of the shadow enemy.
-            this._shield = game.add.sprite(0, 0, "assets", "shadow-enemy/outline");
+            this._shield = game.add.sprite(0, 0, "assets", "enemies/outline");
             this._shield.anchor.set(0.5);
             // Also tint the shield based on the shield color!
             this._shieldColor = shieldColor instanceof Color ? shieldColor : new Color(shieldColor);

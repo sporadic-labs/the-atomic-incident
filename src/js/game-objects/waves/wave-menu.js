@@ -45,21 +45,21 @@ class WaveMenu extends Phaser.Group {
 
         // Enemy composition
         const redEnemySprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 2,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
+            game.make.sprite(0, 0, "assets", "enemies/tintable-idle"));
         panel.add(redEnemySprite);
         const redEnemies = new SlickUI.Element.Text(pW, pH * 2, `: 1`);
         panel.add(redEnemies);
         this._redEnemies = redEnemies;
 
         const greenEnemySprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 3,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
+            game.make.sprite(0, 0, "assets", "enemies/tintable-idle"));
         panel.add(greenEnemySprite);
         const greenEnemies = new SlickUI.Element.Text(pW, pH * 3, `: 1`);
         panel.add(greenEnemies);
         this._greenEnemies = greenEnemies;
 
         const blueEnemySprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 4,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
+            game.make.sprite(0, 0, "assets", "enemies/tintable-idle"));
         panel.add(blueEnemySprite);
         const blueEnemies = new SlickUI.Element.Text(pW, pH * 4, `: 1`);
         panel.add(blueEnemies);
@@ -67,21 +67,21 @@ class WaveMenu extends Phaser.Group {
 
         // Ammo composition
         const redAmmoSprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 5,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
+            game.make.sprite(0, 0, "assets", "enemies/tintable-idle"));
         panel.add(redAmmoSprite);
         const redAmmo = new SlickUI.Element.Text(pW, pH * 5, `: 1`);
         panel.add(redAmmo);
         this._redAmmo = redAmmo;
 
         const greenAmmoSprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 6,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
+            game.make.sprite(0, 0, "assets", "enemies/tintable-idle"));
         panel.add(greenAmmoSprite);
         const greenAmmo = new SlickUI.Element.Text(pW, pH * 6, `: 1`);
         panel.add(greenAmmo);
         this._greenAmmo = greenAmmo;
 
         const blueAmmoSprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 7,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
+            game.make.sprite(0, 0, "assets", "enemies/tintable-idle"));
         panel.add(blueAmmoSprite);
         const blueAmmo = new SlickUI.Element.Text(pW, pH * 7, `: 1`);
         panel.add(blueAmmo);

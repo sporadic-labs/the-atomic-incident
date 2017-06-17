@@ -6,7 +6,7 @@ var TargetingComponent = require("../components/targeting-component.js");
 ShadowBomber.prototype = Object.create(BaseEnemy.prototype);
 
 function ShadowBomber(game, x, y, parentGroup, color) {
-    BaseEnemy.call(this, game, x, y, "assets", "shadow-enemy/bomber-idle-01", 
+    BaseEnemy.call(this, game, x, y, "assets", "enemies/bomber-idle-01", 
         200, parentGroup, 1, color);
 
     // Temp fix: move the health bar above the shadow/light layer

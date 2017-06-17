@@ -20,7 +20,7 @@ class WaveManager {
         // Meter for indicating which waves are coming.
         this._meter = new WaveMeter(game, this);
         // Menu to show wave/ammo compisition at the beginning of a wave.
-        this._menu = new WaveMenu(game, this);
+        // this._menu = new WaveMenu(game, this);
 
         this._timer = game.time.create(false);
         this._timer.start();
