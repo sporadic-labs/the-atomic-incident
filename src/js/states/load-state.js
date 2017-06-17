@@ -17,8 +17,7 @@ LoadState.prototype.preload = function () {
         const key = tilemapName.split(".")[0];
         this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
     }
-    this.load.image("coloredTiles", "resources/tilemaps/tiles_25.png");
-    this.load.image("wallTiles", "resources/tilemaps/wall-tiles.png");
+    this.load.image("tiles", "resources/tilemaps/tiles.png");
 
     // Sounds
     this.load.audio("pop", "resources/audio/pop.mp3");
