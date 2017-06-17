@@ -43,12 +43,17 @@ TargetingComponent.prototype.update = function () {
 };
 
 TargetingComponent.prototype._moveTowards = function (position) {
-    var distance = this.parent.position.distance(position);
     var angle = this.parent.position.angle(position);
+
+    // Move towards target
+    var distance = this.parent.position.distance(position);
     var targetSpeed = distance / this.game.time.physicsElapsed;
     var magnitude = Math.min(this.speed, targetSpeed);
     this.parent.body.velocity.x = magnitude * Math.cos(angle);
     this.parent.body.velocity.y = magnitude * Math.sin(angle);
+
+    // Rotate towards target
+    this.parent.rotation = angle + (Math.PI / 2);
 };
 
 TargetingComponent.prototype.destroy = function () {

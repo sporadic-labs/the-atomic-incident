@@ -58,7 +58,7 @@ class SnakePathWave extends Wave {
         else if (enemyColor === "green") color = Colors.green;
         else color = Colors.blue;
         const firstPoint = path.getPointAtLength(0);
-        const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y,
+        const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y, "enemies/circle-idle",
             this._enemies, color);
         enemy.setMovementComponent(new TweenPathComp(enemy, path.clone(), this.speed));
     }

@@ -70,7 +70,7 @@ class TargetingWave extends Wave {
                     shieldColor = this.game.rnd.pick([Colors.green, Colors.red])
                 }
             }
-            const enemy = new ShadowEnemy(this.game, pos.x, pos.y,
+            const enemy = new ShadowEnemy(this.game, pos.x, pos.y, "enemies/arrow-idle",
                 this._enemies, color, shieldColor);
             enemy.setMovementComponent(new TargetingComp(enemy, 100));
         }

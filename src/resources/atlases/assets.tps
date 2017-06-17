@@ -197,6 +197,36 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">frames/enemies/arrow-idle.png</key>
+            <key type="filename">frames/enemies/bomber-eye-idle-01.png</key>
+            <key type="filename">frames/enemies/bomber-idle-01.png</key>
+            <key type="filename">frames/enemies/circle-idle.png</key>
+            <key type="filename">frames/light/charging.psd</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,6,13,13</rect>
+                <key>scale9Paddings</key>
+                <rect>6,6,13,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">frames/enemies/outline.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,7,15,15</rect>
+                <key>scale9Paddings</key>
+                <rect>7,7,15,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">frames/enemy01/die-01.png</key>
             <key type="filename">frames/enemy01/die-02.png</key>
             <key type="filename">frames/enemy01/die-03.png</key>
@@ -431,25 +461,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">frames/light/charging.psd</key>
-            <key type="filename">frames/shadow-enemy/bomber-eye-idle-01.png</key>
-            <key type="filename">frames/shadow-enemy/bomber-idle-01.png</key>
-            <key type="filename">frames/shadow-enemy/eye.png</key>
-            <key type="filename">frames/shadow-enemy/tintable-idle.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,6,13,13</rect>
-                <key>scale9Paddings</key>
-                <rect>6,6,13,13</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">frames/light/light.psd</key>
-            <key type="filename">frames/shadow-enemy/idle-01.png</key>
             <key type="filename">frames/weapons/death-beam.png</key>
             <key type="filename">frames/weapons/e-blade-01.png</key>
             <key type="filename">frames/weapons/e-blade-02.png</key>
@@ -466,19 +478,6 @@
                 <rect>5,5,10,10</rect>
                 <key>scale9Paddings</key>
                 <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">frames/shadow-enemy/outline.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>7,7,15,15</rect>
-                <key>scale9Paddings</key>
-                <rect>7,7,15,15</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

@@ -37,13 +37,13 @@ class TweenPathComponent {
         if (destroyOnComplete) this._tween.onComplete.add(this.destroy, this);
 
         // If the level has changed, switch to a targeting component (to be safe)
-        this._levelManager = this.game.globals.levelManager;
-        this._levelManager.levelChangeSignal.add(this._switchToTargeting, this);
+        // this._levelManager = this.game.globals.levelManager;
+        // this._levelManager.levelChangeSignal.add(this._switchToTargeting, this);
     }
 
-    _switchToTargeting() {
-        this.owner.setMovementComponent(new TargetingComponent(this.owner, this.speed));
-    }
+    // _switchToTargeting() {
+    //     this.owner.setMovementComponent(new TargetingComponent(this.owner, this.speed));
+    // }
 
     update() {
         // Start the tween on the first update so that it doesn't run while 
@@ -56,13 +56,13 @@ class TweenPathComponent {
         this.owner.position.copyFrom(point);
 
         // Switch to chasing player if player is visible
-        if (point.distance(this._player.position) <= this._visionRadius) {
-            this._switchToTargeting();
-        }
+        // if (point.distance(this._player.position) <= this._visionRadius) {
+        //     this._switchToTargeting();
+        // }
     }
 
     destroy() {
-        this._levelManager.levelChangeSignal.remove(this._switchToTargeting, this);
+        // this._levelManager.levelChangeSignal.remove(this._switchToTargeting, this);
         this.game.tweens.remove(this._tween);
     }
 }

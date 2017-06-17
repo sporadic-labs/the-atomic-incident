@@ -4,8 +4,8 @@ const AvoidComp = require("../components/avoid-component");
 const TargetingComp = require("../components/targeting-component");
 
 class ShadowEnemy extends BaseEnemy {
-    constructor(game, x, y, parentGroup, color, shieldColor) {
-        super(game, x, y, "assets", "enemies/tintable-idle", 100, parentGroup, 1, color);
+    constructor(game, x, y, atlasKey, parentGroup, color, shieldColor) {
+        super(game, x, y, "assets", atlasKey, 100, parentGroup, 1, color);
 
         // Temp fix: move the health bar above the shadow/light layer
         game.globals.groups.foreground.add(this._healthBar);
@@ -36,9 +36,6 @@ class ShadowEnemy extends BaseEnemy {
             (this.height - diameter) / 2);
         this.body.collideWorldBounds = true;
         this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
-
-        this.body.angularVelocity = this.game.rnd.sign() *
-            this.game.rnd.realInRange(25, 35);
 
         this._dieSound = this.game.globals.soundManager.add("pop");
         this._dieSound.playMultiple = true;
