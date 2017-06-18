@@ -6,8 +6,7 @@ import phaserTiledHull from "phaser-tiled-hull/src/library"; // Allows us to bab
  * 
  * 1) Has the same fixed size
  * 2) Uses a common set of tileset images: 
- *  Image name: "tiles_25", Phaser key: "coloredTiles"
- *  Image name: "wall-tiles", Phaser key: "wallTiles"
+ *  Image name: "tiles", Phaser key: "tiles"
  * 3) Uses two Tiled layers called: "bg" and "walls"
  * 
  * @class LevelManager
@@ -46,49 +45,34 @@ class LevelManager {
     }
 
     /**
+     * Switches to the tilemap indicated by the key and dispatches a message to anyone listening to 
+     * LevelManager#levelChangeSignal.
+     * 
+     * @param {string} key Name of the map in the Phaser cache.
+     * @param {boolean} shouldAnimate Whether or not to animate the transition
+     * 
+     * @memberof LevelManager
+     */
+    switchMapByKey(key, shouldAnimate = true) {
+        const index = this._maps.findIndex(elem => elem.key === key);
+        if (index !== -1) this.switchMapByIndex(index, shouldAnimate);
+    }
+
+    /**
      * Switches to the tilemap indicated by the index (if the index is in range)
      * and dispatches a message to anyone listening to 
      * LevelManager#levelChangeSignal
      * 
      * @param {number} index
+     * @param {boolean} shouldAnimate Whether or not to animate the transition
      * 
      * @memberOf LevelManager
      */
-    switchMap(index) {
+    switchMapByIndex(index, shouldAnimate = true) {
         // Only switch if the index is in range and we aren't already at index
         if (index >= this._maps.length || index === this._loadedMapIndex) return;
-
-        // Grab the maps
-        const lastMap = this._maps[this._loadedMapIndex];
-        const newMap = this._maps[index];
-
-        // Fade the new map in and flash a couple of times at a low opacity
-        newMap.wallLayer.parent.bringToTop(newMap.wallLayer);
-        newMap.wallLayer.visible = true;
-        newMap.wallLayer.alpha = 0;
-        const t1 = this.game.add.tween(newMap.wallLayer)
-            .to({alpha: 0.15}, 100, Phaser.Easing.Quadratic.InOut)
-            .to({alpha: 0.25}, 350, Phaser.Easing.Quadratic.InOut, false, 0, 1, true)
-            .to({alpha: 0.35}, 500, Phaser.Easing.Quadratic.InOut)
-            .start();
-        
-        // When that finishes, tween alphas to switch maps
-        const t2 = this.game.add.tween(newMap.wallLayer).to({alpha: 1}, 400, 
-            Phaser.Easing.Quadratic.InOut);
-        const t3 = this.game.add.tween(lastMap.wallLayer).to({alpha: 0}, 200, 
-            Phaser.Easing.Quadratic.InOut);
-        t1.onComplete.add(() => {
-            t2.start();
-            t3.start();
-        });
-
-        // Finally when the last map has tweened out, we have switching maps    
-        t3.onComplete.add(() => {
-            lastMap.wallLayer.visible = false;
-            this._loadedMapIndex = index;
-            this._navMeshPlugin.switchLevel(this._maps[index].key);
-            this.levelChangeSignal.dispatch(index);
-        });
+        if (shouldAnimate) this._animateSwitchMaps(index)
+        else this._immediatelySwitchMaps(index);
     }
 
     /**
@@ -160,6 +144,61 @@ class LevelManager {
             12.5);
 
         return {key, tilemap, bgLayer, wallLayer, navMesh, walls};
+    }
+
+    /**
+     * Switch immediately and signal
+     */
+    _immediatelySwitchMaps(index) {
+        // Grab the maps
+        const lastMap = this._maps[this._loadedMapIndex];
+        const newMap = this._maps[index];
+        // Turn off the old map
+        lastMap.wallLayer.visible = false;
+        // Turn on the new map
+        newMap.wallLayer.parent.bringToTop(newMap.wallLayer);
+        newMap.wallLayer.visible = true;
+        newMap.wallLayer.alpha = 1;
+        this._navMeshPlugin.switchLevel(this._maps[index].key);
+        this._loadedMapIndex = index;
+        this.levelChangeSignal.dispatch(index);
+    }
+
+    /**
+     * Animate the switch and send the signal
+     */
+    _animateSwitchMaps(index) {
+        // Grab the maps
+        const lastMap = this._maps[this._loadedMapIndex];
+        const newMap = this._maps[index];
+
+        // Fade the new map in and flash a couple of times at a low opacity
+        newMap.wallLayer.parent.bringToTop(newMap.wallLayer);
+        newMap.wallLayer.visible = true;
+        newMap.wallLayer.alpha = 0;
+        const t1 = this.game.add.tween(newMap.wallLayer)
+            .to({alpha: 0.15}, 100, Phaser.Easing.Quadratic.InOut)
+            .to({alpha: 0.25}, 350, Phaser.Easing.Quadratic.InOut, false, 0, 1, true)
+            .to({alpha: 0.35}, 500, Phaser.Easing.Quadratic.InOut)
+            .start();
+        
+        // When that finishes, tween alphas to switch maps
+        const t2 = this.game.add.tween(newMap.wallLayer).to({alpha: 1}, 400, 
+            Phaser.Easing.Quadratic.InOut);
+        const t3 = this.game.add.tween(lastMap.wallLayer).to({alpha: 0}, 200, 
+            Phaser.Easing.Quadratic.InOut);
+        t1.onComplete.add(() => {
+            t2.start();
+            t3.start();
+        });
+
+        // Finally when the last map has tweened out, we have switching maps    
+        t3.onComplete.add(() => {
+            lastMap.wallLayer.visible = false;
+            this._loadedMapIndex = index;
+            this._navMeshPlugin.switchLevel(this._maps[index].key);
+            this.levelChangeSignal.dispatch(index);
+        });
     }
 
 }
