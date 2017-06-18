@@ -9,22 +9,25 @@ class PathTweenWave extends Wave {
     /**
      * Creates an instance of PathTweenWave.
      * @param {Phaser.Game} game
-     * @param {Object} param 
-     * @param {number} param.speed Speed of the enemy's movement during the tween 
-     * 
+     * @param {Object} param
+     * @param {number} param.speed Speed of the enemy's movement during the tween
+     * @param {string[]} param.paths Array of strings that describe the Tiled paths to load. The
+     * strings use a shorthand to describe which directions to move along the path: "pathname:1" for
+     * moving along the direction of the path; "pathname:-1" for the reverse direction.
+     *
      * @memberof PathTweenWave
      */
-    constructor(game, {speed = 100}) {
+    constructor(game, {speed = 100, paths = []}) {
         super(game);
         this.speed = speed;
 
-        this._getPaths();
+        this._paths = this._getPaths(paths);
 
         // If the level has changed, check for paths in the new tilemap
         this._levelManager.levelChangeSignal.add(this._getPaths, this);
     }
 
-    _parseTiledPaths(tiledLayerKey) {
+    _parseTiledPaths(tiledLayerKey, shouldReverse = false) {
         const map = this.game.globals.levelManager.getCurrentTilemap();
         const tiledPaths = map.objects[tiledLayerKey] || [];
         const paths = [];
@@ -38,27 +41,26 @@ class PathTweenWave extends Wave {
                     startX + pathNodes[j][0], startY + pathNodes[j][1]
                 ));
             }
-            paths.push(path);
+            if (shouldReverse) paths.push(path.reverse());
+            else paths.push(path);
         }
         return paths;
     }
 
-    _getPaths() {
-        const vertical = this._parseTiledPaths("vertical-paths");
-        const horizontal = this._parseTiledPaths("horizontal-paths");
-        const verticalReversed = vertical.map(p => p.clone().reverse());
-        const horizontalReversed = vertical.map(p => p.clone().reverse());
-        this._paths = [
-            vertical, horizontal, verticalReversed, horizontalReversed,
-            vertical.concat(verticalReversed),
-            horizontal.concat(horizontalReversed),
-        ];
+    _getPaths(pathNames) {
+        const allPaths = [];
+        for (const pathName of pathNames) {
+            const [tiledName, direction] = pathName.split(":");
+            const shouldReverse = (Number(direction) === -1) ? true : false;
+            const paths = this._parseTiledPaths(tiledName, shouldReverse);
+            allPaths.push(...paths);
+        }
+        return allPaths;
     }
 
     spawn(waveComposition) {
-        const paths = this.game.rnd.pick(this._paths);
         const enemyTypes = waveComposition
-            .setTotal(paths.length)
+            .setTotal(this._paths.length)
             .generate()
             .getEnemiesArray();
         for (const [i, enemyType] of enemyTypes.entries()) {
@@ -66,7 +68,7 @@ class PathTweenWave extends Wave {
             if (enemyType === "red") color = Colors.red;
             else if (enemyType === "green") color = Colors.green;
             else color = Colors.blue;
-            const path = paths[i];
+            const path = this._paths[i];
             const firstPoint = path.getPointAtLength(0);
             const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y,
                 "enemies/circle-idle", this._enemies, color);
