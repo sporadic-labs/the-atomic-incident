@@ -4,12 +4,14 @@ class WaveMeter extends Phaser.Group {
      * Creates an instance of WaveMeter.
      * @param {Phaser.Game} game
      * @param {any} waveManager
+     * @param {Level} level
      *
      * @memberof WaveMeter
      */
-    constructor(game, waveManager) {
+    constructor(game, waveManager, level) {
         super(game, game.globals.groups.hud, "WaveMeter");
         this._waveManager = waveManager;
+        this._level = level;
 
         this._width = 300;
         this._height = 30;
@@ -32,15 +34,15 @@ class WaveMeter extends Phaser.Group {
         this._graphics.beginFill(0x000);
         this._graphics.drawRect(0, 0, this._width, this._height);
 
-        const startSeconds = this._waveManager.getSeconds(); // Time at the start of the meter
+        const startSeconds = this._level.getSeconds(); // Time at the start of the meter
         const endSeconds = startSeconds + this._secondsInMeter; // Time at the end of the meter
 
-        for (const wave of this._waveManager.getWaves()) {
+        for (const wave of this._level.waves) {
             // Skip if the wave has passed or is too far in the future
             if ((wave.endTime <= startSeconds) || (wave.startTime >= endSeconds)) continue;
             // Otherwise, check each enemy group in the wave to see if it should be drawn
             for (const group of wave.enemyGroups) {
-                const groupTime = wave.startTime + wave.delay + group.time;
+                const groupTime = wave.startTime + group.time;
                 // Is this group within the time window of the wave meter?
                 if (groupTime >= startSeconds && groupTime <= endSeconds) {
                     // Find position of the group along the bar (number between 0 and 1)

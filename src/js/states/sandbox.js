@@ -18,6 +18,7 @@ const LevelManager = require("../game-objects/level-manager.js");
 const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
 const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 
+import GetLevel from "../levels/puzzle-1";
 import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 
@@ -74,11 +75,17 @@ Sandbox.prototype.create = function () {
     const levelManager = new LevelManager(game, ...globals.tilemapNames);
     globals.levelManager = levelManager;
 
+    // Load the waves
+    // HACK: correct map needs to be loaded before initializing the level. That's because of the 
+    // path tweening waves. Figure out a better way to do this...
+    levelManager.switchMapByKey("puzzle-map-1", false);
+    const level = GetLevel(this.game);
+
     // Temp: switch between levels with 1 & 2 keys
     var map1 = game.input.keyboard.addKey(Phaser.Keyboard.NINE);
-    map1.onDown.add(() => levelManager.switchMap(0));
+    map1.onDown.add(() => levelManager.switchMapByIndex(0));
     var map2 = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-    map2.onDown.add(() => levelManager.switchMap(1));
+    map2.onDown.add(() => levelManager.switchMapByIndex(1));
 
     // Lighting plugin - needs to be set up after level manager
     globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
@@ -105,7 +112,7 @@ Sandbox.prototype.create = function () {
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, game.width/2, game.height/2, groups.foreground);
+    var player = new Player(game, game.width/2, game.height/2, groups.foreground, level);
     this.camera.follow(player);
     globals.player = player;
 
@@ -122,12 +129,12 @@ Sandbox.prototype.create = function () {
 
     // Waves of pickups and enemies
     const pickupSpawner = new PickupSpawner(game);
-    globals.spawnEnemies = new WaveManager(game, pickupSpawner);
-
+    globals.spawnEnemies = new WaveManager(game, pickupSpawner, level);
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
 
+    level.start();
 
     // // Menu for switching tile maps
     // var menu = [];

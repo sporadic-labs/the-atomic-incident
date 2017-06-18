@@ -1,5 +1,5 @@
 import WaveMeter from "./wave-meter";
-import GenerateLevel from "../../levels/level-1";
+import GenerateLevel from "../../levels/puzzle-1";
 import WaveMenu from "./wave-menu";
 
 const colors = require("../../constants/colors");
@@ -9,16 +9,17 @@ class WaveManager {
      * Creates an instance of WaveManager.
      * @param {Phaser.Game} game 
      * @param {PickupSpawner} pickupSpawner 
+     * @param {Level} level The level with wave data 
      * 
      * @memberof WaveManager
      */
-    constructor(game, pickupSpawner) {
+    constructor(game, pickupSpawner, level) {
         this.game = game;
         this._pickupSpawner = pickupSpawner;
-        const g = game;
+        this._level = level;
 
         // Meter for indicating which waves are coming.
-        this._meter = new WaveMeter(game, this);
+        this._meter = new WaveMeter(game, this, level);
         // Menu to show wave/ammo compisition at the beginning of a wave.
         // this._menu = new WaveMenu(game, this);
 
@@ -29,40 +30,15 @@ class WaveManager {
         this._totalTime = 0;
         this._currentWaveIndex = 0;
 
-        const waves = GenerateLevel(game);
-        for (const [i, wave] of waves.entries()) {
-            let totalWaveTime = 0;
-            const startTime = this._totalTime;
-            for (const enemyGroup of wave.enemyGroups) {
-                if (enemyGroup.time > totalWaveTime) totalWaveTime = enemyGroup.time;
-                // const spawnTime = (startTime + enemyGroup.time) * 1000;
-                // this._timer.add(spawnTime, () => {
-                //     enemyGroup.wave.spawn(enemyGroup.composition);
-                // });
-            }
-            this._totalTime += startTime + wave.delay + totalWaveTime;
-            this._waves.push({
-                startTime,
-                endTime: this._totalTime,
-                delay: wave.delay,
-                enemyGroups: wave.enemyGroups,
-                ammoDrops: wave.ammoDrops
-            });
-            this._timer.add(startTime * 1000, this.onWaveStart.bind(this, i));
-        }
-
-        this._meter = new WaveMeter(game, this);
-
+        // Subscribe to wave start events
+        level.waveStartedSignal.add(this._onWaveStart, this);
     }
 
-    onWaveStart(waveIndex) {
-        this._currentWaveIndex = waveIndex;
-        const wave = this._waves[waveIndex];
-
+    _onWaveStart(waveIndex, wave) {
         // Spawn the enemies
         for (const enemyGroup of wave.enemyGroups) {
             // Enemies get a delay, but ammo does not
-            const relativeMs = (wave.delay + enemyGroup.time) * 1000;
+            const relativeMs = enemyGroup.time * 1000;
             this._timer.add(relativeMs, () => {
                 enemyGroup.wave.spawn(enemyGroup.composition);
             });
@@ -78,15 +54,6 @@ class WaveManager {
                 }
             });
         }
-        this._pickupSpawner.spawnPickup
-    }
-
-    getSeconds() {
-        return this._timer.seconds;
-    }
-
-    getWaves() {
-        return this._waves;
     }
 
     destroy() {

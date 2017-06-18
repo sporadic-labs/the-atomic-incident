@@ -27,12 +27,14 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 /**
  * @param {Phaser.Game} game
  */
-function Player(game, x, y, parentGroup) {
+function Player(game, x, y, parentGroup, level) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
+
+    this._level = level;
 
     this.hearts = 3;
     this._isTakingDamage = false;
@@ -94,7 +96,7 @@ function Player(game, x, y, parentGroup) {
 
     // Lighting for player
     this._lighting = globals.plugins.lighting;
-    var lightSize = 360;
+    var lightSize = (2 * level.waves[0].lightRadius) || 360;
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0),
         new Phaser.Circle(0, 0, lightSize),
         colors.white, colors.red);
