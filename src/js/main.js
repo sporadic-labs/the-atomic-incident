@@ -15,9 +15,10 @@ var game = new Phaser.Game({
 
 // Create the space for globals on the game object
 var globals = game.globals = {};
-globals.tilemapFiles = [
-    "arcade-map.json",
-    "arcade-map-2.json"
+globals.tilemapNames = [
+    "arcade-map",
+    "arcade-map-2",
+    "puzzle-map-1"
 ];
 globals.plugins = {};
 

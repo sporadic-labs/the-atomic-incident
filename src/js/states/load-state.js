@@ -12,8 +12,8 @@ LoadState.prototype.preload = function () {
         "resources/atlases/assets.json");
 
     // Tilemap
-    for (const tilemapName of this.game.globals.tilemapFiles) {
-        const path = `resources/tilemaps/${tilemapName}`;
+    for (const tilemapName of this.game.globals.tilemapNames) {
+        const path = `resources/tilemaps/${tilemapName}.json`;
         const key = tilemapName.split(".")[0];
         this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
     }

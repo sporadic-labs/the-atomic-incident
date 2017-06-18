@@ -71,7 +71,7 @@ Sandbox.prototype.create = function () {
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
     // Level manager
-    const levelManager = new LevelManager(game, "arcade-map", "arcade-map-2");
+    const levelManager = new LevelManager(game, ...globals.tilemapNames);
     globals.levelManager = levelManager;
 
     // Temp: switch between levels with 1 & 2 keys
