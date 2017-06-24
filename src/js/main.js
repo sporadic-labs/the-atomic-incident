@@ -21,11 +21,14 @@ var game = new Phaser.Game({
 $("#hud").css("width", gameDimensions + "px");
 $("#hud").css("height", gameDimensions + "px");
 
+<<<<<<< Updated upstream
 // Hide all of the menus to begin with.
 $("#start-menu").hide();
 $("options-menu").hide();
 $("pause-menu").hide();
 
+=======
+>>>>>>> Stashed changes
 // Create the space for globals on the game object
 var globals = game.globals = {};
 globals.tilemapNames = [
