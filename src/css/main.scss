@@ -10,129 +10,130 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+}
 
-    #hud {
+#game-container canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #EEEEEE;
+    border-radius: 3px;
+    z-index: 10;
+}
+
+#hud {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #D49090;
+    border-radius: 3px;
+    z-index: 12;
+    pointer-events: none;
+    font-family: 'Alfa Slab One', serif;
+
+    // Dunno if this should be set here or not...
+    color: #bcbcbc;
+
+    #score {
+        position: absolute;
+        top: 4%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 32px;
+        color: yellow;
+    }
+
+    #start-menu,
+    #pause-menu,
+    #options-menu,
+    #wave-menu {
+        width: 50%;
+        height: 50%;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid #D49090;
-        border-radius: 3px;
-        z-index: 12;
-        pointer-events: none;
-        font-family: 'Alfa Slab One', serif;
-
-        // Dunno if this should be set here or not...
-        color: #bcbcbc;
-
-        #score {
-            position: absolute;
-            top: 4%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-            color: yellow;
-        }
-
-        #start-menu,
-        #pause-menu,
-        #options-menu,
-        #wave-menu {
-            width: 50%;
-            height: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 1px solid #36247D;
-            border-radius: 6px;
-            background: #E8E8E8;
-            &:hover{
-                cursor: pointer;
-                background-color: blue;
-            }
-
-            .menu-title {
-                margin: 18px auto 48px auto;
-                padding: 12px;
-                font-size: 32px;
-                font-weight: 600;
-                text-align: center;
-            }
-
-            button {
-                display: block;
-                margin: 24px auto;
-                padding: 16px;
-                width: 50%;
-            }
-
-            .btn-close {
-                position: absolute;
-                top: 2%;
-                right: 2%;
-                border: 1px solid #000000;
-                background-color: transparent;
-                font-size: 14px;
-                margin: 0;
-                padding: 0;
-                border-radius: 50%;
-                width: 24px;
-                height: 24px;
-                text-align: center;
-            }
-        }
-
-        #wave-menu {
-            height: 30%;
-
-            .menu-title {
-                margin: 12px auto;
-                font-size: 18px;
-            }
-        }
-
-        #pause-btn {
-            position: absolute;
-            bottom: 1%;
-            right: 1%;
+        border: 1px solid #36247D;
+        border-radius: 6px;
+        background: #E8E8E8;
+        &:hover{
             background-color: blue;
-            border-radius: 3px;
-            width: 32px;
-            height: 32px;
+        }
 
-            .pause-bar {
-                height: 60%;
-                width: 20%;
-                margin: 20% 20%;
-                background-color: #ffffff;
-                display: inline-block;
-                &:nth-child(odd) {
-                    margin-right: 10%;
-                }
-                &:nth-child(even) {
-                    margin-left: 10%;
-                }
+        .menu-title {
+            margin: 18px auto 48px auto;
+            padding: 12px;
+            font-size: 32px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 24px auto;
+            padding: 16px;
+            width: 50%;
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            border: 1px solid #000000;
+            background-color: transparent;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+        }
+    }
+
+    #wave-menu {
+        height: 30%;
+
+        .menu-title {
+            margin: 12px auto;
+            font-size: 18px;
+        }
+    }
+
+    #pause-btn {
+        position: absolute;
+        bottom: 1%;
+        right: 1%;
+        background-color: blue;
+        border-radius: 3px;
+        width: 32px;
+        height: 32px;
+
+        .pause-bar {
+            height: 60%;
+            width: 20%;
+            margin: 20% 20%;
+            background-color: #ffffff;
+            display: inline-block;
+            &:nth-child(odd) {
+                margin-right: 10%;
+            }
+            &:nth-child(even) {
+                margin-left: 10%;
             }
         }
-
-        #debug {
-            position: absolute;
-            bottom: 1%;
-            left: 2%;
-            border-radius: 3px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
     }
-    #game-container canvas {
+
+    #debug {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border: 1px solid #EEEEEE;
+        bottom: 1%;
+        left: 2%;
         border-radius: 3px;
-        z-index: 10;
+        font-size: 18px;
+        font-weight: 600;
     }
+
 }
