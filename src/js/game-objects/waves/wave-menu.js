@@ -10,16 +10,12 @@ class WaveMenu {
      * @memberof WaveMeter
      */
     constructor(game, waveManager, wave) {
-        console.log(wave);
-
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
         var redEnemies = wave ? wave.redAmmo : 0;
         var greenEnemies = wave ? wave.redAmmo : 0;
         var blueEnemies = wave ? wave.redAmmo : 0;
-        var redAmmo = wave ? wave.redAmmo : 0;
-        var greenAmmo = wave ? wave.redAmmo : 0;
-        var blueAmmo = wave ? wave.redAmmo : 0;
+        const {red: redAmmo, green: greenAmmo, blue: blueAmmo} = this._getAmmoTotals(wave);
 
         // Create a timer for controlling how long the menu is displayed.
         const showMenuFor = 500; // Time in ms to show the menu.
@@ -129,6 +125,15 @@ class WaveMenu {
         return newAmmoTemplate;
     }
 
+    _getAmmoTotals(wave) {
+        const ammoTotals = {red: 0, green: 0, blue: 0};
+        for (const ammoDrop of wave.ammoDrops) {
+            for (const [color, amount] of Object.entries(ammoDrop.ammo)) {
+                ammoTotals[color] += amount;
+            }
+        }
+        return ammoTotals;
+    }
 
     destroy() {
         // Toggle the 'hidden' class on the wave menu, to animate it hiding.
