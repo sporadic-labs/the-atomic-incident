@@ -18,7 +18,7 @@ const LevelManager = require("../game-objects/level-manager.js");
 const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
 const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 
-import GetLevel from "../levels/puzzle-1";
+import GetLevel from "../levels/arcade-1";
 import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 
@@ -78,7 +78,7 @@ Sandbox.prototype.create = function () {
     // Load the waves
     // HACK: correct map needs to be loaded before initializing the level. That's because of the 
     // path tweening waves. Figure out a better way to do this...
-    levelManager.switchMapByKey("puzzle-map-1", false);
+    levelManager.switchMapByKey("arcade-map-1", false);
     const level = GetLevel(this.game);
 
     // Temp: switch between levels with 1 & 2 keys
