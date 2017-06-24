@@ -16,8 +16,8 @@ const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
 const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
-const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 
+import PhaserNavmesh from "phaser-navmesh/src/library";
 import GetLevel from "../levels/arcade-1";
 import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
@@ -68,7 +68,7 @@ Sandbox.prototype.create = function () {
     global.plugins = (global.plugins !== undefined) ? global.plugins : {};
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     globals.plugins.effects = game.plugins.add(EffectsPlugin);
-    globals.plugins.navMesh = game.plugins.add(NavMeshPlugin);
+    globals.plugins.navMesh = game.plugins.add(PhaserNavmesh);
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
     // Level manager

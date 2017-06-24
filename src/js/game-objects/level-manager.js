@@ -41,7 +41,6 @@ class LevelManager {
         this._loadedMapIndex = 0;
         // this._maps[this._loadedMapIndex].bgLayer.visible = true;
         this._maps[this._loadedMapIndex].wallLayer.visible = true;
-        this._navMeshPlugin.switchLevel(this._maps[this._loadedMapIndex].key);
     }
 
     /**
@@ -107,6 +106,14 @@ class LevelManager {
         return this._maps[this._loadedMapIndex].walls;
     }
 
+    /**
+     * @returns {NavMesh} Get the navmesh that corresponds to the current level
+     * @memberOf LevelManager
+     */
+    getCurrentNavMesh() {
+        return this._maps[this._loadedMapIndex].navMesh;
+    }
+
     _loadMap(key) {
         const g = this.game;
         const bgGroup = g.globals.groups.background;
@@ -140,8 +147,7 @@ class LevelManager {
         }
         
         // Load the navmesh from the tilemap object layer "navmesh"
-        const navMesh = this._navMeshPlugin.buildMeshFromTiled(key, tilemap, "navmesh-shrunken", 
-            12.5);
+        const navMesh = this._navMeshPlugin.buildMeshFromTiled(tilemap, "navmesh-shrunken", 12.5);
 
         return {key, tilemap, bgLayer, wallLayer, navMesh, walls};
     }
@@ -159,7 +165,6 @@ class LevelManager {
         newMap.wallLayer.parent.bringToTop(newMap.wallLayer);
         newMap.wallLayer.visible = true;
         newMap.wallLayer.alpha = 1;
-        this._navMeshPlugin.switchLevel(this._maps[index].key);
         this._loadedMapIndex = index;
         this.levelChangeSignal.dispatch(index);
     }
@@ -196,7 +201,6 @@ class LevelManager {
         t3.onComplete.add(() => {
             lastMap.wallLayer.visible = false;
             this._loadedMapIndex = index;
-            this._navMeshPlugin.switchLevel(this._maps[index].key);
             this.levelChangeSignal.dispatch(index);
         });
     }
