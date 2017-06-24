@@ -18,6 +18,7 @@ module.exports = {
 		sourceType: "module"
 	},
 	globals: {
-		Phaser: true
+		Phaser: true,
+		$: true
 	}
 }
