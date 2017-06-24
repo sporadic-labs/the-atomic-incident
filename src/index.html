@@ -14,6 +14,41 @@
     </script>
   </head>
   <body>
+    <div id="hud">
+      <!--<div id="score">0</div>-->
+      <div id="start-menu">
+        <div class="menu-title">Octo Chainsaw</div>
+        <button id="start-resume">Start</button>
+        <button id="start-options">Options</button>
+        <button id="start-exit">Exit</button>
+      </div>
+      <div id="pause-menu">
+        <button class="btn-close">x</button>
+        <div class="menu-title">Game Paused</div>
+        <button id="pause-options">Options</button>
+        <button id="pause-resume">Resume Game</button>
+        <button id="pause-exit">Exit Game</button>
+      </div>
+      <div id="options-menu">
+        <button class="btn-close">x</button>
+        <div class="menu-title">Options</div>
+        <button id="options-music">Music Volume</button>
+        <button id="options-fx">FX Volume</button>
+        <button id="options-back">Back</button>
+      </div>
+      <div id="wave-menu">
+        <div class="menu-title">Wave 1</div>
+        <div id=""></div>
+      </div>
+      <!--<div id="pause-btn">
+        <div class="pause-bar"></div>
+        <div class="pause-bar"></div>
+      </div>-->
+      <!--<div id="debug">
+        <div id="fps">60</div>
+        <div id="debug-instructions">Debug ('E' key)</div>
+      </div>-->
+    </div>
     <div id="game-container"></div>
     
     <script src="./js/main.js"></script>

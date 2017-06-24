@@ -18,6 +18,7 @@
     "babelify": "^7.3.0",
     "beepbeep": "^1.2.0",
     "browserify": "^14.3.0",
+    "chibijs": "^3.0.9",
     "del": "^2.2.0",
     "easystarjs": "^0.4.1",
     "express": "^4.13.4",
