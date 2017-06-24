@@ -2,11 +2,11 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin = 
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
-const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
-const NavMeshPlugin = require("../plugins/navmesh-plugin/navmesh-plugin");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
+
+import PhaserNavmesh from "phaser-navmesh/src/library";
 
 class TestState {
     
@@ -57,25 +57,17 @@ class TestState {
         global.plugins = (global.plugins !== undefined) ? global.plugins : {}; 
         globals.plugins.satBody = game.plugins.add(SatBodyPlugin); 
         globals.plugins.effects = game.plugins.add(EffectsPlugin); 
-        globals.plugins.navMesh = game.plugins.add(NavMeshPlugin);
+        globals.plugins.navMesh = game.plugins.add(PhaserNavmesh);
         globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
         // Level manager
-        const levelManager = new LevelManager(game, "arcade-map", "arcade-map-2");
+        const levelManager = new LevelManager(game, ...globals.tilemapNames);
         globals.levelManager = levelManager;
 
         // Lighting plugin - needs to be set up after level manager
         globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground); 
         this.lighting = globals.plugins.lighting;
         this.lighting.setOpacity(0.1);
-
-        // Easystarjs plugin
-        const easyStar = globals.plugins.easyStar = game.plugins.add(EasyStarPlugin);
-        easyStar.setGrid(levelManager.getCurrentWallLayer(), [-1]);
-        // Listen for level changes
-        levelManager.levelChangeSignal.add(() => {
-            globals.plugins.easyStar.setGrid(levelManager.getCurrentWallLayer(), [-1]);
-        });
         
         // Sound manager
         globals.soundManager = new SoundEffectManager(this.game);
@@ -89,126 +81,6 @@ class TestState {
         var player = new Player(game, game.width/2, game.height/2, groups.foreground);
         this.camera.follow(player);
         globals.player = player;
-
-        const graphics = game.add.graphics(0, 0);
-
-        this.startPoint = null;
-        this.endPoint = null;
-        this.game.input.onDown.add(() => {
-            if (!this.startPoint) {
-                this.startPoint = game.input.activePointer.position.clone();
-                graphics.clear();
-                graphics.beginFill(0xffd900);
-                graphics.drawEllipse(this.startPoint.x, this.startPoint.y, 10, 10);
-                graphics.endFill();
-            } else if (!this.endPoint) {
-                this.endPoint = game.input.activePointer.position.clone();
-                globals.plugins.navMesh.findPath(this.startPoint, this.endPoint, true, true);
-                this.startPoint = null;
-                this.endPoint = null;
-            }
-        });
-        
-        // For debugging individual paths, enter path info here:
-        // globals.plugins.navMesh.findPath(
-        //     new Phaser.Point(607.5, 472), 
-        //     new Phaser.Point(682.5, 481), 
-        //     true, true
-        // );
-
-        // Astar vs Navmesh testing
-
-        // const iterations = 10000;
-        // const shortPaths = [];
-        // const longPaths = [];
-        // for (let i = 0; i < (iterations + 1); i += 2) {
-        //     shortPaths.push(...this._getRandomPointsWithDistance(50, 150));
-        //     longPaths.push(...this._getRandomPointsWithDistance(600));
-        // }
-
-        // let start;
-        
-        // start = performance.now();
-        // for (let i = 0; i < iterations - 1; i++) {
-        //     globals.plugins.easyStar.getWorldPath(shortPaths[i], shortPaths[i + 1]);
-        // }
-        // const shortPathEasyStar = performance.now() - start;
-
-        // start = performance.now();
-        // for (let i = 0; i < iterations - 1; i++) {
-        //     globals.plugins.navMesh.findPath(shortPaths[i], shortPaths[i + 1]);
-        // }
-        // const shortPathNavMesh = performance.now() - start;
-
-        // start = performance.now();
-        // for (let i = 0; i < iterations - 1; i++) {
-        //     globals.plugins.easyStar.getWorldPath(longPaths[i], longPaths[i + 1]);
-        // }
-        // const longPathEasyStar = performance.now() - start;
-
-        // start = performance.now();
-        // for (let i = 0; i < iterations - 1; i++) {
-        //     globals.plugins.navMesh.findPath(longPaths[i], longPaths[i + 1]);
-        // }
-        // const longPathNavMesh = performance.now() - start;
-
-
-//         console.log(
-// `Interations: ${iterations}
-// Short Paths (50px - 150px): 
-//     EasyStar: 
-//         Total: ${shortPathEasyStar.toFixed(2)}ms 
-//         Average: ${(shortPathEasyStar / (iterations - 1)).toFixed(2)}ms
-//     NavMesh:
-//         Total: ${shortPathNavMesh.toFixed(2)}ms
-//         Average: ${(shortPathNavMesh / (iterations - 1)).toFixed(2)}ms
-//     NavMesh is ${(shortPathEasyStar/shortPathNavMesh).toFixed(2)}x faster
-// Long Paths (600px and up): 
-//     EasyStar: 
-//         Total: ${longPathEasyStar.toFixed(2)}ms
-//         Average: ${(longPathEasyStar / (iterations - 1)).toFixed(2)}ms
-//     NavMesh: 
-//         Total: ${longPathNavMesh.toFixed(2)}ms
-//         Average: ${(longPathNavMesh / (iterations - 1)).toFixed(2)}ms
-//     NavMesh is ${(longPathEasyStar/longPathNavMesh).toFixed(2)}x faster
-// `
-//         );
-
-    }
-    
-    _getRandomEmptyPoint() {
-        let x = this.game.rnd.integerInRange(0, this.game.width);
-        let y = this.game.rnd.integerInRange(0, this.game.height);
-        while (!this._isTileEmpty(x, y)) {
-            x = this.game.rnd.integerInRange(0, this.game.width);
-            y = this.game.rnd.integerInRange(0, this.game.height);
-        }
-        return new Phaser.Point(x, y);
-    }
-
-    _getRandomPointsWithDistance(minDistance = 0, maxDistance = Number.MAX_VALUE) {
-        let p1 = this._getRandomEmptyPoint();
-        let p2 = this._getRandomEmptyPoint();
-        let d = p1.distance(p2);
-        while (d < minDistance || d > maxDistance) {
-            p1 = this._getRandomEmptyPoint();
-            p2 = this._getRandomEmptyPoint();
-            d = p1.distance(p2);
-        }
-        return [p1, p2];
-    }
-
-    _isTileEmpty(x, y) {
-        const map = this.game.globals.levelManager.getCurrentTilemap();
-        const wallLayer = this.game.globals.levelManager.getCurrentWallLayer();
-        var checkTile = map.getTileWorldXY(x, y, 25, 25, wallLayer, true);
-        // Check if location was out of bounds or invalid (getTileWorldXY returns 
-        // null for invalid locations when nonNull param is true)
-        if (checkTile === null) return false;
-        // Check if tile is empty (getTileWorldXY returns a tile with an index of 
-        // -1 when the nonNull param is true)
-        if (checkTile.index === -1) return true;
-        else return false;
     }
 }
 
