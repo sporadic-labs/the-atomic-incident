@@ -15,7 +15,6 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
-const EasyStarPlugin = require("../plugins/easy-star-plugin.js");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import GetLevel from "../levels/arcade-1";
@@ -91,14 +90,6 @@ Sandbox.prototype.create = function () {
     globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(0.9);
-
-    // Easystarjs plugin
-    const easyStar = globals.plugins.easyStar = game.plugins.add(EasyStarPlugin);
-    easyStar.setGrid(levelManager.getCurrentWallLayer(), [-1]);
-    // Listen for level changes
-    levelManager.levelChangeSignal.add(() => {
-        globals.plugins.easyStar.setGrid(levelManager.getCurrentWallLayer(), [-1]);
-    });
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
