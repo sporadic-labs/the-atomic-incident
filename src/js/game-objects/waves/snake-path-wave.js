@@ -8,12 +8,16 @@ class SnakePathWave extends Wave {
     /**
      * Creates an instance of SnakePathWave.
      * @param {Phaser.Game} game
-     * @param {Object} param 
-     * @param {number} param.speed Speed of the enemy's movement during the tween 
-     * 
+     * @param {Object} param
+     * @param {number} param.speed Speed of the enemy's movement during the tween
+     * @param {string[]} param.paths Array of strings that describe the Tiled paths to load. The
+     * strings use a shorthand to describe which directions to move along the path: "pathname:1" for
+     * moving along the direction of the path; "pathname:-1" for the reverse direction. A single
+     * path from this array will be randomly chosen.
+     *
      * @memberof SnakePathWave
      */
-    constructor(game, {speed = 100}) {
+    constructor(game, {speed = 100, paths = []}) {
         super(game);
         this.game = game;
         this.speed = speed;
@@ -21,13 +25,13 @@ class SnakePathWave extends Wave {
         this._timer = this.game.time.create(false);
         this._timer.start();
 
-        this._getPaths();
+        this._paths = this._getPaths(paths);
 
         // If the level has changed, check for paths in the new tilemap
         this._levelManager.levelChangeSignal.add(this._getPaths, this);
     }
 
-    _parseTiledPaths(tiledLayerKey) {
+    _parseTiledPaths(tiledLayerKey, shouldReverse = false) {
         const map = this.game.globals.levelManager.getCurrentTilemap();
         const tiledPaths = map.objects[tiledLayerKey] || [];
         const paths = [];
@@ -41,15 +45,21 @@ class SnakePathWave extends Wave {
                     startX + pathNodes[j][0], startY + pathNodes[j][1]
                 ));
             }
-            paths.push(path);
+            if (shouldReverse) paths.push(path.reverse());
+            else paths.push(path);
         }
         return paths;
     }
 
-    _getPaths() {
-        const vertical = this._parseTiledPaths("vertical-paths");
-        const horizontal = this._parseTiledPaths("horizontal-paths");
-        this._paths = [...vertical, ...horizontal];
+    _getPaths(pathNames) {
+        const allPaths = [];
+        for (const pathName of pathNames) {
+            const [tiledName, direction] = pathName.split(":");
+            const shouldReverse = (Number(direction) === -1) ? true : false;
+            const paths = this._parseTiledPaths(tiledName, shouldReverse);
+            allPaths.push(...paths);
+        }
+        return allPaths;
     }
 
     _spawn(path, enemyColor) {
