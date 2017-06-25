@@ -26,42 +26,21 @@ class WaveMenu {
         });
 
         // Create a template string for the Wave Menu, to be added to the DOM.
-        let menuTemplate = `<div id="wave-menu" class="hidden">`
-        menuTemplate += `<div class="menu-title">Wave ${waveNum}</div>`;
-
-        // Add a row for the Enemy indicators.
-        menuTemplate += `<div class="wave-menu-row" >`
-
-        if (redEnemies) {
-            menuTemplate += this._colTemplate("enemy", Color.red, redEnemies);
-        }
-
-        if (greenEnemies) {
-            menuTemplate += this._colTemplate("enemy", Color.green, greenEnemies);
-        }
-
-        if (blueEnemies) {
-            menuTemplate += this._colTemplate("enemy", Color.blue, blueEnemies);
-        }
-
-        menuTemplate += `</div>`
-
-        // Add a row for the Ammo Pickup indicators.
-        menuTemplate += `<div class="wave-menu-row" >`
-
-        if (redAmmo) {
-            menuTemplate += this._colTemplate("ammo", Color.red, redAmmo);
-        }
-
-        if (greenAmmo) {
-            menuTemplate += this._colTemplate("ammo", Color.green, greenAmmo);
-        }
-
-        if (blueAmmo) {
-            menuTemplate += this._colTemplate("ammo", Color.blue, blueAmmo);
-        }
-
-        menuTemplate += `</div>`
+        let menuTemplate = `
+            <div id="wave-menu" class="hidden">
+                <div class="menu-title">Wave ${waveNum}</div>
+                    <div class="wave-menu-row">
+                        ${redEnemies ? this._colTemplate("enemy", Color.red, redEnemies) : ""}
+                        ${greenEnemies ? this._colTemplate("enemy", Color.green, greenEnemies) : ""}
+                        ${blueEnemies ? this._colTemplate("enemy", Color.blue, blueEnemies) : ""}
+                    </div>
+                <div class="wave-menu-row">
+                    ${redAmmo ? this._colTemplate("ammo", Color.red, redAmmo) : ""}
+                    ${greenAmmo ? this._colTemplate("ammo", Color.green, redAmmo) : ""}
+                    ${blueAmmo ? this._colTemplate("ammo", Color.blue, redAmmo) : ""}
+                </div>
+            </div>
+        `;
 
         // Add the menu to the DOM.
         $("#hud").htmlAppend(menuTemplate);
