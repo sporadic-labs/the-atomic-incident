@@ -1,0 +1,99 @@
+#hud {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3px;
+    z-index: 12;
+    pointer-events: none;
+    font-family: 'Alfa Slab One', serif;
+
+    // Dunno if this should be set here or not...
+    color: #bcbcbc;
+
+    #start-menu,
+    #pause-menu,
+    #options-menu,
+    #wave-menu {
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid #36247D;
+        border-radius: 6px;
+        background: #E8E8E8;
+        &:hover{
+            background-color: blue;
+        }
+
+        .menu-title {
+            margin: 18px auto 48px auto;
+            padding: 12px;
+            font-size: 32px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 24px auto;
+            padding: 16px;
+            width: 50%;
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            border: 1px solid #000000;
+            background-color: transparent;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+        }
+    }
+
+    // Wave menu specific styling.
+    #wave-menu {
+        height: 30%;
+        opacity: 0.8;
+
+        .menu-title {
+            margin: 12px auto;
+            font-size: 18px;
+        }
+
+        .wave-menu-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 24px;
+
+            .wave-menu-col {
+                text-align: center;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    // Classes for setting the color of the ammo/enemy in the wave menu.
+    .tint-red {
+        background-color: red;
+    }
+
+    .tint-green {
+        background-color: green;
+    }
+
+    .tint-blue {
+        background-color: blue;
+    }
+
+}

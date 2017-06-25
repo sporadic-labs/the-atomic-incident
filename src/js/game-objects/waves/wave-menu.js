@@ -12,12 +12,11 @@ class WaveMenu {
     constructor(game, waveManager, wave) {
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
-
         var { red: redEnemies, green: greenEnemies, blue: blueEnemies } = this._getEnemyTotals(wave);
         var { red: redAmmo, green: greenAmmo, blue: blueAmmo } = this._getAmmoTotals(wave);
 
         // Create a timer for controlling how long the menu is displayed.
-        const showMenuFor = 2000; // Time in ms to show the menu.
+        const showMenuFor = 3000; // Time in ms to show the menu.
         this._timer = game.time.create(false);
         this._timer.start();
         // When the timer is up, destroy the menu.
@@ -29,11 +28,11 @@ class WaveMenu {
         let menuTemplate = `
             <div id="wave-menu" class="hidden">
                 <div class="menu-title">Wave ${waveNum}</div>
-                    <div class="wave-menu-row">
-                        ${redEnemies ? this._colTemplate("enemy", Color.red, redEnemies) : ""}
-                        ${greenEnemies ? this._colTemplate("enemy", Color.green, greenEnemies) : ""}
-                        ${blueEnemies ? this._colTemplate("enemy", Color.blue, blueEnemies) : ""}
-                    </div>
+                <div class="wave-menu-row">
+                    ${redEnemies ? this._colTemplate("enemy", Color.red, redEnemies) : ""}
+                    ${greenEnemies ? this._colTemplate("enemy", Color.green, greenEnemies) : ""}
+                    ${blueEnemies ? this._colTemplate("enemy", Color.blue, blueEnemies) : ""}
+                </div>
                 <div class="wave-menu-row">
                     ${redAmmo ? this._colTemplate("ammo", Color.red, redAmmo) : ""}
                     ${greenAmmo ? this._colTemplate("ammo", Color.green, redAmmo) : ""}
@@ -61,44 +60,39 @@ class WaveMenu {
      * @memberof WaveMenu
      */
     _colTemplate(type, color, amt) {
-        // newAmmoTemplate will be returned after it was constructed.
-        let newAmmoTemplate = `<div class="wave-menu-row" >`;
-        // Create some variables for constructing your ammoTemplage fragment.
-        // const path = `./resources/atlases/frames/shadow-enemy.jpg`;
-        let path = ``;
+        // Sprite image will be determined by the type.
+        let spriteName = ``;
         // Ammo Color class will update based on the color argument.
-        let ammoColorClass = ``;
+        let colorClass = ``;
 
         // Set the image path based on the 'type';
         switch(type) {
             case "ammo":
-                path = `./resources/atlases/frames/shadow-enemy.jpg`;
+                spriteName = `pickups-diamond-01`;
                 break;
             case "enemy":
-                path = `./resources/atlases/frames/shadow-enemy.jpg`;
+                spriteName = `enemies-arrow-idle`;
                 break;
         }
 
         // Set the color class based on the 'Color'.
         switch(color) {
             case Color.red:
-                ammoColorClass = 'ammo-red';
+                colorClass = 'tint-red';
                 break;
             case Color.green:
-                ammoColorClass = 'ammo-green';
+                colorClass = 'tint-green';
                 break;
             case Color.blue:
-                ammoColorClass = 'ammo-blue';
+                colorClass = 'tint-blue';
                 break;
         }
 
         // Add an image element for the pickup sprite.
-        newAmmoTemplate += `<img class="wave-menu-col" src="${path}" />`;
-        // Add a div for the amount of pickups.
-        newAmmoTemplate += `<div class="wave-menu-col ${ammoColorClass}"> x ${amt}</div>`;
-
-        // Close the 'wave-menu-row' div.
-        newAmmoTemplate += `</div>`;
+        const newAmmoTemplate = `
+            <div class="wave-menu-col ${colorClass}"><span class="${spriteName} sprite"></span></div>
+            <div class="wave-menu-col"> x ${amt}</div>
+        `;
 
         return newAmmoTemplate;
     }
