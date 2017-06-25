@@ -1,7 +1,4 @@
-import ModalMenu from '../user-interface/modal-menu'
-
 const Color = require("../../constants/colors");
-
 
 class WaveMenu {
 
@@ -13,6 +10,8 @@ class WaveMenu {
      * @memberof WaveMeter
      */
     constructor(game, waveManager, wave) {
+        console.log(wave);
+
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
         var redEnemies = wave ? wave.redAmmo : 0;
