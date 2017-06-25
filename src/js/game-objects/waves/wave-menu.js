@@ -10,9 +10,15 @@ class WaveMenu {
      * @memberof WaveMeter
      */
     constructor(game, waveManager, wave) {
+        console.log(wave);
+
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
-        var { red: redEnemies, green: greenEnemies, blue: blueEnemies } = this._getEnemyTotals(wave);
+        var {
+            red: redEnemies,
+            green: greenEnemies,
+            blue: blueEnemies
+        } = this._getEnemyTotals(wave);
         var { red: redAmmo, green: greenAmmo, blue: blueAmmo } = this._getAmmoTotals(wave);
 
         // Create a timer for controlling how long the menu is displayed.
@@ -90,7 +96,9 @@ class WaveMenu {
 
         // Add an image element for the pickup sprite.
         const newAmmoTemplate = `
-            <div class="wave-menu-col ${colorClass}"><span class="${spriteName} sprite"></span></div>
+            <div class="wave-menu-col ${colorClass}">
+                <span class="${spriteName} sprite"></span>
+            </div>
             <div class="wave-menu-col"> x ${amt}</div>
         `;
 

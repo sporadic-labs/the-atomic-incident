@@ -1,5 +1,3 @@
-const TargetingComponent = require("../components/targeting-component.js");
-
 /**
  * A component that can move a parent object along a path.
  * 

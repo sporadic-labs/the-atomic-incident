@@ -1,8 +1,5 @@
 import WaveMeter from "./wave-meter";
-import GenerateLevel from "../../levels/puzzle-1";
 import WaveMenu from "./wave-menu";
-
-const colors = require("../../constants/colors");
 
 class WaveManager {
     /**

@@ -2,6 +2,8 @@ const HealthBar = require("./user-interface/health-bar");
 const AbilityIcon = require("./user-interface/ability-icon");
 // const AbilityNames = require("../constants/ability-names");
 
+import PauseMenu from "./user-interface/pause-menu";
+
 module.exports = HeadsUpDisplay;
 
 HeadsUpDisplay.prototype = Object.create(Phaser.Group.prototype);
@@ -41,7 +43,7 @@ function HeadsUpDisplay(game, parentGroup) {
         pauseButton.visible = false;
         this.game.input.onDown.add(unpause, this);
         game.paused = true;
-        // $("#pause-menu").show();
+        new PauseMenu(game);
     }, this, "hud/pause", "hud/pause", "hud/pause", "hud/pause");
     pauseButton.anchor.set(1, 1);
     const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this,

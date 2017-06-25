@@ -24,8 +24,6 @@ $("#hud").css("height", gameDimensions + "px");
 // Hide all of the menus to begin with.
 $("#start-menu").hide();
 $("#options-menu").hide();
-$("#pause-menu").hide();
-$("#wave-menu").hide();
 
 // Create the space for globals on the game object
 var globals = game.globals = {};
