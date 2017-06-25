@@ -12,13 +12,12 @@ class WaveMenu {
     constructor(game, waveManager, wave) {
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
-        var redEnemies = wave ? wave.redAmmo : 0;
-        var greenEnemies = wave ? wave.redAmmo : 0;
-        var blueEnemies = wave ? wave.redAmmo : 0;
-        const {red: redAmmo, green: greenAmmo, blue: blueAmmo} = this._getAmmoTotals(wave);
+
+        var { red: redEnemies, green: greenEnemies, blue: blueEnemies } = this._getEnemyTotals(wave);
+        var { red: redAmmo, green: greenAmmo, blue: blueAmmo } = this._getAmmoTotals(wave);
 
         // Create a timer for controlling how long the menu is displayed.
-        const showMenuFor = 500; // Time in ms to show the menu.
+        const showMenuFor = 2000; // Time in ms to show the menu.
         this._timer = game.time.create(false);
         this._timer.start();
         // When the timer is up, destroy the menu.
@@ -133,6 +132,17 @@ class WaveMenu {
             }
         }
         return ammoTotals;
+    }
+
+    _getEnemyTotals(wave) {
+        const enemyTotals = {red: 0, green: 0, blue: 0};
+        for (const enemyGroup of wave.enemyGroups) {
+            const comp = enemyGroup.composition._composition;
+            for (const [color, amount] of Object.entries(comp)) {
+                enemyTotals[color] += amount;
+            }
+        }
+        return enemyTotals;
     }
 
     destroy() {
