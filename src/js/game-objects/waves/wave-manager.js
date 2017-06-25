@@ -54,6 +54,9 @@ class WaveManager {
                 }
             });
         }
+
+        // Create a new wave menu.  This will handle showing/hiding itself.
+        new WaveMenu(this.game, this, wave);
     }
 
     destroy() {
