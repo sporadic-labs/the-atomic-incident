@@ -1,15 +1,9 @@
 import ModalMenu from '../user-interface/modal-menu'
 
-const colors = require("../../constants/colors");
+const Color = require("../../constants/colors");
 
-let color = {
-    h: 1,
-    s: 1,
-    l: 0.5,
-    a: 1
-};
 
-class WaveMenu extends ModalMenu {
+class WaveMenu {
 
     /**
      * Creates an instance of WaveMenu.
@@ -18,106 +12,135 @@ class WaveMenu extends ModalMenu {
      *
      * @memberof WaveMeter
      */
-    constructor(game, waveManager) {
-        super(game, game.globals.groups.hud, "WaveMenu");
-        this.game = game;
-        this._waveManager = waveManager;
-        
-        this._currentWaveIndex = 0;
+    constructor(game, waveManager, wave) {
+        // Get the number of enemies and pickups generated during this wave.
+        var waveNum = wave ? wave.waveNumber : 0;
+        var redEnemies = wave ? wave.redAmmo : 0;
+        var greenEnemies = wave ? wave.redAmmo : 0;
+        var blueEnemies = wave ? wave.redAmmo : 0;
+        var redAmmo = wave ? wave.redAmmo : 0;
+        var greenAmmo = wave ? wave.redAmmo : 0;
+        var blueAmmo = wave ? wave.redAmmo : 0;
 
-        // Shorthands
-        var globals = game.globals;
-        var SlickUI = globals.plugins.SlickUI;
+        // Create a timer for controlling how long the menu is displayed.
+        const showMenuFor = 500; // Time in ms to show the menu.
+        this._timer = game.time.create(false);
+        this._timer.start();
+        // When the timer is up, destroy the menu.
+        this._timer.add(showMenuFor, () => {
+            this.destroy();
+        });
 
-        // Shorthand for panel dimensions
-        const spacing = 4;
-        const pH = (this.panel.height / 10) + spacing;
-        const pW = this.panel.width / 2;
+        // Create a template string for the Wave Menu, to be added to the DOM.
+        let menuTemplate = `<div id="wave-menu" class="hidden">`
+        menuTemplate += `<div class="menu-title">Wave ${waveNum}</div>`;
 
-        // Add some things to the panel.
-        // Title w/ Current Wave Number
-        this._title = this.addTitle(`Wave ${this._currentWaveIndex + 1}`, 0, 6);
+        // Add a row for the Enemy indicators.
+        menuTemplate += `<div class="wave-menu-row" >`
 
-        // Enemy composition
-        const redEnemySprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 2,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
-        this.panel.add(redEnemySprite);
-        const redEnemies = new SlickUI.Element.Text(pW, pH * 2, `: 1`);
-        this.panel.add(redEnemies);
-        this._redEnemies = redEnemies;
+        if (redEnemies) {
+            menuTemplate += this._colTemplate("enemy", Color.red, redEnemies);
+        }
 
-        const greenEnemySprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 3,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
-        this.panel.add(greenEnemySprite);
-        const greenEnemies = new SlickUI.Element.Text(pW, pH * 3, `: 1`);
-        this.panel.add(greenEnemies);
-        this._greenEnemies = greenEnemies;
+        if (greenEnemies) {
+            menuTemplate += this._colTemplate("enemy", Color.green, greenEnemies);
+        }
 
-        const blueEnemySprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 4,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
-        this.panel.add(blueEnemySprite);
-        const blueEnemies = new SlickUI.Element.Text(pW, pH * 4, `: 1`);
-        this.panel.add(blueEnemies);
-        this._blueEnemies = blueEnemies;
+        if (blueEnemies) {
+            menuTemplate += this._colTemplate("enemy", Color.blue, blueEnemies);
+        }
 
-        // Ammo composition
-        const redAmmoSprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 5,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
-        this.panel.add(redAmmoSprite);
-        const redAmmo = new SlickUI.Element.Text(pW, pH * 5, `: 1`);
-        this.panel.add(redAmmo);
-        this._redAmmo = redAmmo;
+        menuTemplate += `</div>`
 
-        const greenAmmoSprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 6,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
-        this.panel.add(greenAmmoSprite);
-        const greenAmmo = new SlickUI.Element.Text(pW, pH * 6, `: 1`);
-        this.panel.add(greenAmmo);
-        this._greenAmmo = greenAmmo;
+        // Add a row for the Ammo Pickup indicators.
+        menuTemplate += `<div class="wave-menu-row" >`
 
-        const blueAmmoSprite = new SlickUI.Element.DisplayObject(pW - 36, pH * 7,
-            game.make.sprite(0, 0, "assets", "shadow-enemy/tintable-idle"));
-        this.panel.add(blueAmmoSprite);
-        const blueAmmo = new SlickUI.Element.Text(pW, pH * 7, `: 1`);
-        this.panel.add(blueAmmo);
-        this._blueAmmo = blueAmmo;
+        if (redAmmo) {
+            menuTemplate += this._colTemplate("ammo", Color.red, redAmmo);
+        }
 
-        console.log(this.panel)
+        if (greenAmmo) {
+            menuTemplate += this._colTemplate("ammo", Color.green, greenAmmo);
+        }
+
+        if (blueAmmo) {
+            menuTemplate += this._colTemplate("ammo", Color.blue, blueAmmo);
+        }
+
+        menuTemplate += `</div>`
+
+        // Add the menu to the DOM.
+        $("#hud").htmlAppend(menuTemplate);
+        // Toggle the hidden class to show the menu.
+        $("#wave-manager").toggleClass("hidden");
+        // TODO(rex): Add a class to the #hud for dimming the background.
+
     }
 
-    update() {}
-
     /**
-     * Update the content of the Wave Menu.
+     * Create a new Column Template for the wave menu.
      * 
-     * @method updateValues
-     * 
-     * @param {number} [waveNum=0] 
-     * @param {number} [redEnemies=0] 
-     * @param {number} [greenEnemies=0] 
-     * @param {number} [blueEnemies=0] 
-     * @param {number} [redAmmo=0] 
-     * @param {number} [greenAmmo=0] 
-     * @param {number} [blueAmmo=0] 
+     * @param {string} type - Can be 'ammo' or 'enemy'.
+     * @param {Color} color 
+     * @param {int} amt 
+     * @returns 
      * 
      * @memberof WaveMenu
      */
-    updateValues(waveNum = 0, redEnemies = 0, greenEnemies = 0, blueEnemies = 0, redAmmo = 0, greenAmmo = 0, blueAmmo = 0) {
-        // Title
-        this._title = `Wave ${waveNum}`;
-        console.log(this._title);
-        // Enemy composition
-        this._redEnemies = `: ${redEnemies}`;
-        this._greenEnemies = `: ${greenEnemies}`;
-        this._blueEnemies = `: ${blueEnemies}`;
-        // Ammo composition
-        this._redAmmo = `: ${redAmmo}`;
-        this._greenAmmo = `: ${greenAmmo}`;
-        this._blueAmmo = `: ${blueAmmo}`;
+    _colTemplate(type, color, amt) {
+        // newAmmoTemplate will be returned after it was constructed.
+        let newAmmoTemplate = `<div class="wave-menu-row" >`;
+        // Create some variables for constructing your ammoTemplage fragment.
+        // const path = `./resources/atlases/frames/shadow-enemy.jpg`;
+        let path = ``;
+        // Ammo Color class will update based on the color argument.
+        let ammoColorClass = ``;
+
+        // Set the image path based on the 'type';
+        switch(type) {
+            case "ammo":
+                path = `./resources/atlases/frames/shadow-enemy.jpg`;
+                break;
+            case "enemy":
+                path = `./resources/atlases/frames/shadow-enemy.jpg`;
+                break;
+        }
+
+        // Set the color class based on the 'Color'.
+        switch(color) {
+            case Color.red:
+                ammoColorClass = 'ammo-red';
+                break;
+            case Color.green:
+                ammoColorClass = 'ammo-green';
+                break;
+            case Color.blue:
+                ammoColorClass = 'ammo-blue';
+                break;
+        }
+
+        // Add an image element for the pickup sprite.
+        newAmmoTemplate += `<img class="wave-menu-col" src="${path}" />`;
+        // Add a div for the amount of pickups.
+        newAmmoTemplate += `<div class="wave-menu-col ${ammoColorClass}"> x ${amt}</div>`;
+
+        // Close the 'wave-menu-row' div.
+        newAmmoTemplate += `</div>`;
+
+        return newAmmoTemplate;
     }
 
+
     destroy() {
-        super.destroy()
+        // Toggle the 'hidden' class on the wave menu, to animate it hiding.
+        $("wave-menu").toggleClass("hidden");
+        // Remove the 'wave-menu' element from the DOM.
+        $("#wave-menu").remove();
+        // TODO(rex): Remove the class dimming the #hud element.
+
+        // Destroy the timer.
+        this._timer.destroy();
+        
     }
 }
 
