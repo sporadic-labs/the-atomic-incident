@@ -1,5 +1,6 @@
 const Ability = require("./ability");
 const spriteUtils = require("../../helpers/sprite-utilities.js");
+const Colors = require("../../constants/colors.js");
 
 class PulseAbility extends Ability {
 
@@ -25,20 +26,24 @@ class PulseAbility extends Ability {
         this._pulseSound.playMultiple = true;
 
         this._ammoManager = game.globals.ammoManager;
+        
+        const keyboard = game.input.keyboard;
+        const KEYCODE = Phaser.KeyCode;
+        this._redKey = keyboard.addKey(KEYCODE.ONE);
+        this._greenKey = keyboard.addKey(KEYCODE.TWO);
+        this._blueKey = keyboard.addKey(KEYCODE.THREE);
     }
 
-    _fire() {
-        if (this._ammoManager.ammo() > 0) {
-            const color = this._ammoManager.activeAmmo;
+    _fire(color) {
+        const colorAmmo = this._ammoManager.getAmmoByColor(color);
+        if (colorAmmo > 0) {
             this._flashlight.pulseColor = color;
             this._effects.lightFlash(color.getRgbColorInt());
             this._flashlight.startPulse();
             this.game.globals.postProcessor.startWave(this._player.position);
             this._pulseSound.play();
-
-            this._ammoManager.shoot();
+            this._ammoManager.incrementAmmoByColor(color, -1);
         }
-
     }
 
     update() {
@@ -64,22 +69,19 @@ class PulseAbility extends Ability {
                 }
             }
         }, this);
-
-        // Trigger pickups when the lights collide.
-        // spriteUtils.forEachRecursive(this._pickups, function (pickup) {
-        //     // MH: why does world position not work here...
-        //     var inLight = this._flashlight.isPointInPulse(pickup.position);
-        //     if (inLight) pickup.destroy();
-        // }, this);
     }
 
     activate() {
-        this._pointer.leftButton.onDown.add(this._fire, this);
+        this._redKey.onDown.add(() => this._fire(Colors.red), this);
+        this._greenKey.onDown.add(() => this._fire(Colors.green), this);
+        this._blueKey.onDown.add(() => this._fire(Colors.blue), this);
         super.activate();
     }
 
     deactivate() {
-        this._pointer.leftButton.onDown.remove(this._fire, this);
+        this._redKey.onDown.removeAll(this);
+        this._greenKey.onDown.removeAll(this);
+        this._blueKey.onDown.removeAll(this);
         super.deactivate();
     }
 

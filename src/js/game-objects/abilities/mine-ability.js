@@ -1,5 +1,6 @@
 const Ability = require("./ability");
 const spriteUtils = require("../../helpers/sprite-utilities.js");
+const Colors = require("../../constants/colors.js");
 
 class MineAbility extends Ability {
 
@@ -22,29 +23,37 @@ class MineAbility extends Ability {
         this._pointer = game.input.activePointer;
 
         this._mineGroup = game.make.group(undefined, "Mines");
+
+        const keyboard = game.input.keyboard;
+        const KEYCODE = Phaser.KeyCode;
+        this._redKey = keyboard.addKey(KEYCODE.ONE);
+        this._greenKey = keyboard.addKey(KEYCODE.TWO);
+        this._blueKey = keyboard.addKey(KEYCODE.THREE);
     }
 
-    _placeMine() {
-        if (this._ammoManager.ammo() > 0) {
-            const color = this._ammoManager.activeAmmo;
+    _placeMine(color) {
+        const colorAmmo = this._ammoManager.getAmmoByColor(color);
+        if (colorAmmo > 0) {
             const pos = this._player.position;
-
             const speed = Phaser.Point.subtract(this._pointer.position, pos)
                 .setMagnitude(this._throwSpeed);
             new Mine(this.game, pos, this._mineGroup, speed, color, this._mineDamage,
                 this._explosionSpeed, this._explosionRadius);
-
-            this._ammoManager.shoot();
+            this._ammoManager.incrementAmmoByColor(color, -1);
         }
     }
 
     activate() {
-        this._pointer.leftButton.onDown.add(this._placeMine, this);
+        this._redKey.onDown.add(() => this._placeMine(Colors.red), this);
+        this._greenKey.onDown.add(() => this._placeMine(Colors.green), this);
+        this._blueKey.onDown.add(() => this._placeMine(Colors.blue), this);
         super.activate();
     }
 
     deactivate() {
-        this._pointer.leftButton.onDown.remove(this._placeMine, this);
+        this._redKey.onDown.removeAll(this);
+        this._greenKey.onDown.removeAll(this);
+        this._blueKey.onDown.removeAll(this);
         super.deactivate();
     }
 

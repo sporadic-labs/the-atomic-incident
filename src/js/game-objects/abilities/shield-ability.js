@@ -50,12 +50,17 @@ class ShieldAbility extends Ability {
         // Cooldown component for shield duration.
         this._shieldCooldown = new CooldownAbility(this.game, duration, 0, "shield");
         this._shieldTween = null;
+
+        const keyboard = game.input.keyboard;
+        const KEYCODE = Phaser.KeyCode;
+        this._redKey = keyboard.addKey(KEYCODE.ONE);
+        this._greenKey = keyboard.addKey(KEYCODE.TWO);
+        this._blueKey = keyboard.addKey(KEYCODE.THREE);
     }
 
-    _trigger() {
-        if (this._ammoManager.ammo() > 0) {
-            // Grab the first color off of the ammo stack.
-            const color = this._ammoManager.activeAmmo;
+    _trigger(color) {
+        const colorAmmo = this._ammoManager.getAmmoByColor(color);
+        if (colorAmmo > 0) {
             // Set the shield color based on the current ammo.
             this._shield.baseColor = color;
             this._shield.baseColor.setTo({a: 155});
@@ -73,7 +78,7 @@ class ShieldAbility extends Ability {
             this._shieldCooldown.activate()
             this._pulseSound.play();
 
-            this._ammoManager.shoot();
+            this._ammoManager.incrementAmmoByColor(color, -1);
         }
     }
 
@@ -119,12 +124,16 @@ class ShieldAbility extends Ability {
     }
 
     activate() {
-        this._pointer.leftButton.onDown.add(this._trigger, this);
+        this._redKey.onDown.add(() => this._trigger(colors.red), this);
+        this._greenKey.onDown.add(() => this._trigger(colors.green), this);
+        this._blueKey.onDown.add(() => this._trigger(colors.blue), this);
         super.activate();
     }
 
     deactivate() {
-        this._pointer.leftButton.onDown.remove(this._trigger, this);
+        this._redKey.onDown.removeAll(this);
+        this._greenKey.onDown.removeAll(this);
+        this._blueKey.onDown.removeAll(this);
         super.deactivate();
     }
 

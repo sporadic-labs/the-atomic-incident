@@ -65,16 +65,11 @@ function Player(game, x, y, parentGroup, level) {
     this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Setup animations
-    var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4,
-        "", 2);
-    var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4,
-        "", 2);
-    var attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2,
-        4, "", 2);
-    var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4,
-        "", 2);
-    var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4,
-        "", 2);
+    var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
+    var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, "", 2);
+    var attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2, 4, "", 2);
+    var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, "", 2);
+    var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, "", 2);
     this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
     this.animations.add(ANIM_NAMES.MOVE, moveFrames, 4, true);
     this.animations.add(ANIM_NAMES.ATTACK, attackFrames, 10, true);
@@ -101,18 +96,14 @@ function Player(game, x, y, parentGroup, level) {
         new Phaser.Circle(0, 0, lightSize),
         colors.white, colors.red);
     this.flashlight.enabled = true;
-    // Array for player ammo
-    this.ammo = [];
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
     this._compass.scale.setTo(0.64, 0.64);
     // Set the anchor, position and rotation.
     this._compass.anchor.copyFrom(this.anchor);
-    var cX = this.position.x + (0.6 * this.width) *
-        Math.cos(this.rotation - (Math.PI/2));
-    var cY = this.position.y + (0.6 * this.width) *
-        Math.sin(this.rotation - (Math.PI/2));
+    var cX = this.position.x + (0.6 * this.width) * Math.cos(this.rotation - (Math.PI/2));
+    var cY = this.position.y + (0.6 * this.width) * Math.sin(this.rotation - (Math.PI/2));
     this._compass.position.copyFrom(new Phaser.Point(cX, cY));
     this._compass.rotation = this.rotation;
     // Add it to the foreground (so it is visible).
@@ -121,7 +112,6 @@ function Player(game, x, y, parentGroup, level) {
     // Player controls
     this._controls = new Controller(this.game.input);
     var P = Phaser.Pointer;
-    this._controls.addMouseDownControl("pulse", [P.LEFT_BUTTON]);
     this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
     // Player Sound fx
     this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
@@ -291,12 +281,7 @@ Player.prototype._onCollideWithPickup = function (self, pickup) {
         }
     } else if (pickup instanceof LightPickup) {
         this.game.globals.scoreKeeper.incrementScore(1);
-        // Add the pickup color to the ammo array. NOTE(rex): Currently you can only have 1 shot at
-        // a time, so just replace the previous ammo entry with the new one. In the future, we may
-        // support multiple shots/ammo cartridges for color mixing or something...
-        // this.ammo.push(pickup.color);
-        this.ammo = [ pickup.color ];
-        this._ammoManager.addAmmo(pickup.color);
+        this._ammoManager.incrementAmmoByColor(pickup.color, 1);
     }
     this.pickupSound.play();
     pickup.pickUp();
