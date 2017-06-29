@@ -11,6 +11,9 @@ class PauseMenu {
         // Store a ref to the game.
         this.game = game;
 
+        this.game.paused = true;
+        this.unpauseSignal = new Phaser.Signal();
+
         // Create a template string for the Pause Menu, to be added to the DOM.
         let menuTemplate = `
             <div id="pause-menu">
@@ -29,23 +32,25 @@ class PauseMenu {
         // TODO(rex): Add a class to the #hud for dimming the background.
 
         // Setup the event listeners for the Pause Menu.
-        $(".btn-close").on("click", () => {
-            console.log("close!");
-            this.game.paused = false;
+        $("#pause-menu .btn-close").on("click", () => {
+            this._unpause();
             this.destroy();
         });
-        $("#pause-options").on("click", () => {
+        $("#pause-menu #pause-options").on("click", () => {
             console.log("options!");
         });
-        $("#pause-resume").on("click", () => {
-            console.log("resume!");
-            this.game.paused = false;
+        $("#pause-menu #pause-resume").on("click", () => {
+            this._unpause();
             this.destroy();
         });
-        $("#pause-exit").on("click", () => {
+        $("#pause-menu #pause-exit").on("click", () => {
             console.log("exit!");
         });
+    }
 
+    _unpause() {
+        this.game.paused = false;
+        this.unpauseSignal.dispatch();
     }
 
     destroy() {
@@ -54,7 +59,7 @@ class PauseMenu {
         // Remove the 'pause-menu' element from the DOM.
         $("#pause-menu").remove();
         // TODO(rex): Remove the class dimming the #hud element.
-       
+        this.unpauseSignal.removeAll();       
     }
 }
 
