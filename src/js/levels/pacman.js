@@ -2,7 +2,7 @@ import Composition from "../game-objects/waves/wave-composition";
 import PathTweenWave from "../game-objects/waves/path-tween-wave";
 import GenericLevel from "./generic-level";
 
-const mapName = "pacman";
+export const mapName = "pacman";
 const lightRadius = 400;
 
 /**
@@ -11,7 +11,7 @@ const lightRadius = 400;
  * @param {Phaser.Game} g 
  * @returns {Level}
  */
-export default function makeLevel(game) {
+export function makeLevel(game) {
     const level = new GenericLevel(game, mapName);
     addWaves(game, level);
     return level;

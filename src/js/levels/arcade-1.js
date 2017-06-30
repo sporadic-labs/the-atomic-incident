@@ -4,7 +4,7 @@ import PathTweenWave from "../game-objects/waves/path-tween-wave";
 import SnakePathWave from "../game-objects/waves/snake-path-wave";
 import GenericLevel from "./generic-level";
 
-const mapName = "arcade-map";
+export const mapName = "arcade-map";
 const lightRadius = 200;
 
 /**
@@ -13,7 +13,7 @@ const lightRadius = 200;
  * @param {Phaser.Game} g 
  * @returns {Level}
  */
-export default function makeLevel(game) {
+export function makeLevel(game) {
     const level = new GenericLevel(game, mapName);
     addWaves(game, level);
     return level;
