@@ -2,7 +2,7 @@ import Wave from "./wave";
 const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TweenPathComp = require("../components/tween-path-component.js");
 const Colors = require("../../constants/colors.js");
-const Path = require("../../helpers/path.js");
+import {parsePathLayers} from "../../helpers/parse-tiled-paths";
 
 class SnakePathWave extends Wave {
     /**
@@ -25,41 +25,16 @@ class SnakePathWave extends Wave {
         this._timer = this.game.time.create(false);
         this._timer.start();
 
-        this._paths = this._getPaths(paths);
+        this._getPaths(paths);
 
         // If the level has changed, check for paths in the new tilemap
         this._levelManager.levelChangeSignal.add(this._getPaths, this);
     }
 
-    _parseTiledPaths(tiledLayerKey, shouldReverse = false) {
-        const map = this.game.globals.levelManager.getCurrentTilemap();
-        const tiledPaths = map.objects[tiledLayerKey] || [];
-        const paths = [];
-        for (var i = 0; i < tiledPaths.length; i++) {
-            var pathNodes = tiledPaths[i].polyline || [];
-            var startX = tiledPaths[i].x;
-            var startY = tiledPaths[i].y;
-            var path = new Path();
-            for (var j = 0; j < pathNodes.length; j++) {
-                path.addPoint(new Phaser.Point(
-                    startX + pathNodes[j][0], startY + pathNodes[j][1]
-                ));
-            }
-            if (shouldReverse) paths.push(path.reverse());
-            else paths.push(path);
-        }
-        return paths;
-    }
-
     _getPaths(pathNames) {
-        const allPaths = [];
-        for (const pathName of pathNames) {
-            const [tiledName, direction] = pathName.split(":");
-            const shouldReverse = (Number(direction) === -1) ? true : false;
-            const paths = this._parseTiledPaths(tiledName, shouldReverse);
-            allPaths.push(...paths);
-        }
-        return allPaths;
+        const map = this.game.globals.levelManager.getCurrentTilemap();
+        this._paths = parsePathLayers(map, pathNames);
+        if (this._paths.length === 0) console.warn(`No paths found for ${pathNames}`);
     }
 
     _spawn(path, enemyColor) {
@@ -75,6 +50,7 @@ class SnakePathWave extends Wave {
 
     spawn(waveComposition) {
         const path = this.game.rnd.pick(this._paths);
+        if (!path) return;
         const enemyTypes = waveComposition.generate().getEnemiesArray();
         for (const [i, enemyType] of enemyTypes.entries()) {
             this._timer.add(i * 600, this._spawn, this, path, enemyType);

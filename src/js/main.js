@@ -30,7 +30,8 @@ var globals = game.globals = {};
 globals.tilemapNames = [
     "arcade-map",
     "arcade-map-2",
-    "puzzle-map-1"
+    "puzzle-map-1",
+    "pacman"
 ];
 globals.plugins = {};
 

@@ -14,7 +14,7 @@ const lightRadius = 200;
  * @returns {Level}
  */
 export default function makeLevel(game) {
-    const level = new GenericLevel(game, "Arcade Map");
+    const level = new GenericLevel(game, mapName);
     addWaves(game, level);
     return level;
 }

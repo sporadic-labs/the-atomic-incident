@@ -17,7 +17,7 @@ const EffectsPlugin =
 const LevelManager = require("../game-objects/level-manager.js");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
-import GetLevel from "../levels/arcade-1";
+import GetLevel from "../levels/pacman";
 import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 
@@ -77,7 +77,7 @@ Sandbox.prototype.create = function () {
     // Load the waves
     // HACK: correct map needs to be loaded before initializing the level. That's because of the 
     // path tweening waves. Figure out a better way to do this...
-    levelManager.switchMapByKey("arcade-map-1", false);
+    levelManager.switchMapByKey("pacman", false);
     const level = GetLevel(this.game);
 
     // Temp: switch between levels with 1 & 2 keys
