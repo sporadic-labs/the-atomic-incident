@@ -15,6 +15,7 @@
     "phaser-tiled-hull": "^1.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.25.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "babelify": "^7.3.0",
