@@ -17,7 +17,9 @@ class PauseMenu {
         // Create a template string for the Pause Menu, to be added to the DOM.
         let menuTemplate = `
             <div id="pause-menu">
-                <button class="btn-close">x</button>
+                <button class="btn-close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
                 <div class="menu-title">Game Paused</div>
                 <button id="pause-options">Options</button>
                 <button id="pause-resume">Resume Game</button>

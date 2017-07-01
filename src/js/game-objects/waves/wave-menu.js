@@ -12,6 +12,12 @@ class WaveMenu {
     constructor(game, waveManager, wave) {
         console.log(wave);
 
+        // Store a reference to the game object.
+        this.game = game;
+
+        // Pause the game when the WaveMenu is created.
+        this.game.paused = true;
+
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
         var {
@@ -50,8 +56,14 @@ class WaveMenu {
         // Add the menu to the DOM.
         $("#hud").htmlAppend(menuTemplate);
         // Toggle the hidden class to show the menu.
-        $("#wave-manager").toggleClass("hidden");
+        $("#wave-menu").toggleClass("hidden");
         // TODO(rex): Add a class to the #hud for dimming the background.
+
+        // Setup an event listener that unpauses the game when the user clicks on the wave menu.
+        $("#wave-menu").on("click", () => {
+            this.game.paused = false;
+            this.destroy();
+        });
 
     }
 

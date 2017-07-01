@@ -27,12 +27,12 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid #36247D;
+        border: 1px solid black;
         border-radius: 6px;
+        // box-shadow: 2px 2px 4px #4f4f4f;
         background: #E8E8E8;
-        &:hover{
-            background-color: blue;
-        }
+        pointer-events: initial;
+        cursor: default;
 
         .menu-title {
             margin: 18px auto 48px auto;
@@ -47,21 +47,33 @@
             margin: 24px auto;
             padding: 16px;
             width: 50%;
+
+            &:hover {
+                // TODO(rt): Make this better.
+                cursor: pointer;
+                color: black;
+                background: #eeeeee;
+            }
         }
 
         .btn-close {
             position: absolute;
             top: 2%;
             right: 2%;
-            border: 1px solid #000000;
-            background-color: transparent;
             font-size: 14px;
+            border: none;
+            background: none;
             margin: 0;
             padding: 0;
             border-radius: 50%;
             width: 24px;
             height: 24px;
             text-align: center;
+
+            &:hover {
+                // border: 1px solid black;
+                color: #4f4f4f;
+            }
         }
     }
 
