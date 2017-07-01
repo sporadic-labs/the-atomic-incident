@@ -28,13 +28,17 @@ class WaveMenu {
         var { red: redAmmo, green: greenAmmo, blue: blueAmmo } = this._getAmmoTotals(wave);
 
         // Create a timer for controlling how long the menu is displayed.
-        const showMenuFor = 3000; // Time in ms to show the menu.
-        this._timer = game.time.create(false);
-        this._timer.start();
+        // NOTE(rex): The timer for the pause menu cannot be linked to phaser,
+        // as it gets paused while the game is paused.
+        const showMenuFor = 6000; // Time in ms to show the menu.
         // When the timer is up, destroy the menu.
-        this._timer.add(showMenuFor, () => {
+        const startTime = this.time = Date.now();
+        this._timer = setTimeout(() => {
+            this.time = Date.now() - startTime;
+            $("#wave-time-value").textContent = this.time;
+            this.game.paused = false;
             this.destroy();
-        });
+        }, showMenuFor);
 
         // Create a template string for the Wave Menu, to be added to the DOM.
         let menuTemplate = `
@@ -50,6 +54,9 @@ class WaveMenu {
                     ${greenAmmo ? this._colTemplate("ammo", Color.green, redAmmo) : ""}
                     ${blueAmmo ? this._colTemplate("ammo", Color.blue, redAmmo) : ""}
                 </div>
+                <div class="wave-menu-row">
+                    <div id="#wave-time">Next Wave in: <span id="wave-time-value">${this.time}</span></div>
+                </div>
             </div>
         `;
 
@@ -59,8 +66,14 @@ class WaveMenu {
         $("#wave-menu").toggleClass("hidden");
         // TODO(rex): Add a class to the #hud for dimming the background.
 
-        // Setup an event listener that unpauses the game when the user clicks on the wave menu.
-        $("#wave-menu").on("click", () => {
+        // Setup an event listener that unpauses the game when the user clicks on the hud.
+        $("#hud").on("click", () => {
+            this.game.paused = false;
+            this.destroy();
+        });
+        // TODO(rt): Escape pauses too.
+        $("#hud").on("keydown", (e) => {
+            console.log(e);
             this.game.paused = false;
             this.destroy();
         });
@@ -146,7 +159,7 @@ class WaveMenu {
         // TODO(rex): Remove the class dimming the #hud element.
 
         // Destroy the timer.
-        this._timer.destroy();
+        clearTimeout(this._timer);
         
     }
 }
