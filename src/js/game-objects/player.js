@@ -2,7 +2,6 @@ module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
-var Reticule = require("./reticule.js");
 var colors = require("../constants/colors.js");
 var CooldownAbility = require("./components/cooldown-ability.js");
 const AbilityPickup = require("./pickups/ability-pickup.js");
@@ -60,9 +59,6 @@ function Player(game, x, y, parentGroup, level) {
     // Timer for flipping cooldown
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
-
-    // Reticle
-    this._reticule = new Reticule(game, globals.groups.foreground);
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
@@ -227,9 +223,9 @@ Player.prototype.update = function () {
     Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
     this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
 
-    // Update the rotation of the player based on the reticule
-    this.rotation = this.position.angle(this._reticule.position) +
-        (Math.PI/2);
+    // Update the rotation of the player based on the mouse
+    var mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
+    this.rotation = this.position.angle(mousePos) + (Math.PI/2);
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies,
@@ -316,7 +312,6 @@ Player.prototype.takeDamage = function () {
 
 Player.prototype.destroy = function () {
     this._pulseAbility.destroy();
-    this._reticule.destroy();
     this._timer.destroy();
     this._cooldownTimer.destroy();
     this.game.tweens.removeFrom(this);

@@ -31,7 +31,6 @@ class TestState {
         game.time.advancedTiming = true;
         
         // Canvas styling
-        game.canvas.style.cursor = "none";
         game.canvas.addEventListener("contextmenu", function(e) {
             e.preventDefault();
         });

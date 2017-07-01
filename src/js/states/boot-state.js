@@ -13,8 +13,6 @@ BootState.prototype.create = function () {
     this.add.text(0, 0, "a", { font:"1px 'Alfa Slab One'", fill:"#FFF" });
     // Take care of any global game settings that need to be set up
     this.game.renderer.renderSession.roundPixels = false;
-    // Disable cursor
-    this.game.canvas.style.cursor = "none";
     // Disable the built-in pausing. This is useful for debugging, but may also
     // be useful for the game logic
     this.stage.disableVisibilityChange = true;
