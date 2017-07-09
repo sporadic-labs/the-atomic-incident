@@ -30,7 +30,6 @@ function HeadsUpDisplay(game, parentGroup) {
 
     // Play/pause
     const unpause = () => {
-        console.log("hi")
         pauseButton.visible = true;
         playButton.visible = false;
     }

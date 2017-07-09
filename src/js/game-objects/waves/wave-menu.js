@@ -24,7 +24,6 @@ class WaveMenu {
         this.time = 6000; // in ms
 
         // Get the number of enemies and pickups generated during this wave.
-        var waveNum = wave ? wave.waveNumber : 0;
         var {
             red: redEnemies,
             green: greenEnemies,
@@ -35,7 +34,7 @@ class WaveMenu {
         // Create a template string for the Wave Menu, to be added to the DOM.
         let menuTemplate = `
             <div id="wave-menu" class="hidden">
-                <div class="menu-title">Wave ${waveNum}</div>
+                <div class="menu-title">Wave ${waveManager.getWaveNumber()}</div>
                 <div class="wave-menu-row">
                     ${redEnemies ? this._colTemplate("enemy", Color.red, redEnemies) : ""}
                     ${greenEnemies ? this._colTemplate("enemy", Color.green, greenEnemies) : ""}
@@ -161,6 +160,8 @@ class WaveMenu {
         }
         return enemyTotals;
     }
+
+    
 
     destroy() {
         // Toggle the 'hidden' class on the wave menu, to animate it hiding.

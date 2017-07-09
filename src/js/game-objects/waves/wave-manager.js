@@ -17,8 +17,6 @@ class WaveManager {
 
         // Meter for indicating which waves are coming.
         this._meter = new WaveMeter(game, this, level);
-        // Menu to show wave/ammo compisition at the beginning of a wave.
-        // this._menu = new WaveMenu(game, this);
 
         this._timer = game.time.create(false);
         this._timer.start();
@@ -26,6 +24,7 @@ class WaveManager {
         this._waves = [];
         this._totalTime = 0;
         this._currentWaveIndex = 0;
+        this._currentWaveNumber = 0;
 
         // Subscribe to wave start events
         level.waveStartedSignal.add(this._onWaveStart, this);
@@ -52,8 +51,14 @@ class WaveManager {
             });
         }
 
+        this._currentWaveNumber++;
         // Create a new wave menu.  This will handle showing/hiding itself.
         new WaveMenu(this.game, this, wave);
+    }
+
+    // Returns the Current Wave number, used in the Wave Menu.
+    getWaveNumber() {
+        return this._currentWaveNumber;
     }
 
     destroy() {
