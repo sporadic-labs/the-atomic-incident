@@ -73,6 +73,11 @@ Sandbox.prototype.create = function () {
     const levelManager = new LevelManager(game, ...globals.tilemapNames);
     globals.levelManager = levelManager;
 
+    // Lighting plugin - needs to be set up after level manager
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
+    this.lighting = globals.plugins.lighting;
+    this.lighting.setOpacity(0.9);
+
     // Load the waves
     // HACK: correct map needs to be loaded before initializing the level. That's because of the 
     // path tweening waves. Figure out a better way to do this...
@@ -84,11 +89,6 @@ Sandbox.prototype.create = function () {
     map1.onDown.add(() => levelManager.switchMapByIndex(0));
     var map2 = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
     map2.onDown.add(() => levelManager.switchMapByIndex(1));
-
-    // Lighting plugin - needs to be set up after level manager
-    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
-    this.lighting = globals.plugins.lighting;
-    this.lighting.setOpacity(0.9);
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
