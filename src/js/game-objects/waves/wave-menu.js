@@ -10,13 +10,18 @@ class WaveMenu {
      * @memberof WaveMeter
      */
     constructor(game, waveManager, wave) {
-        console.log(wave);
-
         // Store a reference to the game object.
         this.game = game;
 
         // Pause the game when the WaveMenu is created.
         this.game.paused = true;
+
+        // Store the time that the menu was created.
+        // NOTE(rex): This isn't used anywhere, currently...
+        const startTime = Date.now();
+        // Create a variable to store the current time in this menus lifecycle.
+        // NOTE(rex): Start at the full time allowed for this menu.
+        this.time = 6000; // in ms
 
         // Get the number of enemies and pickups generated during this wave.
         var waveNum = wave ? wave.waveNumber : 0;
@@ -26,19 +31,6 @@ class WaveMenu {
             blue: blueEnemies
         } = this._getEnemyTotals(wave);
         var { red: redAmmo, green: greenAmmo, blue: blueAmmo } = this._getAmmoTotals(wave);
-
-        // Create a timer for controlling how long the menu is displayed.
-        // NOTE(rex): The timer for the pause menu cannot be linked to phaser,
-        // as it gets paused while the game is paused.
-        const showMenuFor = 6000; // Time in ms to show the menu.
-        // When the timer is up, destroy the menu.
-        const startTime = this.time = Date.now();
-        this._timer = setTimeout(() => {
-            this.time = Date.now() - startTime;
-            $("#wave-time-value").textContent = this.time;
-            this.game.paused = false;
-            this.destroy();
-        }, showMenuFor);
 
         // Create a template string for the Wave Menu, to be added to the DOM.
         let menuTemplate = `
@@ -55,7 +47,9 @@ class WaveMenu {
                     ${blueAmmo ? this._colTemplate("ammo", Color.blue, redAmmo) : ""}
                 </div>
                 <div class="wave-menu-row">
-                    <div id="#wave-time">Next Wave in: <span id="wave-time-value">${this.time}</span></div>
+                    <div class="wave-menu-col">
+                        <div id="#wave-time">Next Wave in: <span id="wave-time-value">${this.time / 1000}</span></div>
+                    </div>
                 </div>
             </div>
         `;
@@ -77,6 +71,23 @@ class WaveMenu {
             this.game.paused = false;
             this.destroy();
         });
+
+        // Create a timer for controlling how long the menu is displayed.
+        // When the timer is up, destroy the menu.
+        // NOTE(rex): The timer for the pause menu cannot be linked to phaser,
+        // as it gets paused while the game is paused.
+        const timerInterval = 1000; // in ms.
+        this._countdownTimer = setInterval(() => {
+            // Decrement the timer and update the menu.
+            this.time -= timerInterval;
+            $("#wave-time-value").html(this.time / 1000);
+            // If the timer has reached 0, destroy the menu.
+            if (this.time <= 0) {
+                this.game.paused = false;
+                this.destroy();
+            }
+
+        }, timerInterval)
 
     }
 
@@ -159,8 +170,7 @@ class WaveMenu {
         // TODO(rex): Remove the class dimming the #hud element.
 
         // Destroy the timer.
-        clearTimeout(this._timer);
-        
+        clearInterval(this._countdownTimer);
     }
 }
 
