@@ -10,6 +10,10 @@ LoadState.prototype.preload = function () {
     // Images
     this.load.atlasJSONHash("assets", "resources/atlases/assets.png", 
         "resources/atlases/assets.json");
+    this.load.atlasJSONHash("glowing-light", "resources/atlases/glowing-light.png", 
+        "resources/atlases/glowing-light.json");
+    this.load.atlasJSONHash("echo-light", "resources/atlases/echo-light.png", 
+        "resources/atlases/echo-light.json");
 
     // Tilemap
     for (const tilemapName of this.game.globals.tilemapNames) {

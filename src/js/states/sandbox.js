@@ -15,6 +15,8 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
+var colors = require("../constants/colors.js");
+const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import {mapName, makeLevel} from "../levels/pacman";
@@ -123,6 +125,11 @@ Sandbox.prototype.create = function () {
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
+
+    // Testing sprite lights!
+    const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
+        new Phaser.Circle(0, 0, 200), colors.white, colors.red);
+    this.lighting.addExistingLight(light);
 
     level.start();
 
