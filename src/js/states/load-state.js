@@ -22,6 +22,7 @@ LoadState.prototype.preload = function () {
         this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
     }
     this.load.image("tiles", "resources/tilemaps/tiles.png");
+    this.load.image("dungeon", "resources/tilemaps/dungeon-tileMap.png");
 
     // Sounds
     this.load.audio("pop", "resources/audio/pop.mp3");

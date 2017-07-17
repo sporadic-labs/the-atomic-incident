@@ -19,7 +19,7 @@ var colors = require("../constants/colors.js");
 const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
-import {mapName, makeLevel} from "../levels/pacman";
+import {mapName, makeLevel} from "../levels/arcade-1";
 import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 

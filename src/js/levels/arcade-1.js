@@ -4,7 +4,7 @@ import PathTweenWave from "../game-objects/waves/path-tween-wave";
 import SnakePathWave from "../game-objects/waves/snake-path-wave";
 import GenericLevel from "./generic-level";
 
-export const mapName = "arcade-map";
+export const mapName = "dungeon-arcade-1";
 const lightRadius = 200;
 
 /**

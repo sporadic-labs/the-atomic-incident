@@ -126,6 +126,7 @@ class LevelManager {
         // Set up the tilesets. First parameter is name of tileset in Tiled and 
         // second paramter is name of tileset image in Phaser's cache
         const wallTileset = tilemap.addTilesetImage("tiles", "tiles");
+        // const wallTileset = tilemap.addTilesetImage("dungeon", "dungeon");
 
         // Create the background and wall layers
         const bgLayer = tilemap.createLayer("bg", g.width, g.height, bgGroup);
