@@ -1,4 +1,5 @@
 import phaserTiledHull from "phaser-tiled-hull/src/library"; // Allows us to babelify ourselves
+const Color = require("../helpers/Color");
 
 /**
  * A class for managing and switching between multiple maps. It assumes that 
@@ -39,7 +40,7 @@ class LevelManager {
 
         // Show the first map
         this._loadedMapIndex = 0;
-        // this._maps[this._loadedMapIndex].bgLayer.visible = true;
+        this._maps[this._loadedMapIndex].bgLayer.visible = true;
         this._maps[this._loadedMapIndex].wallLayer.visible = true;
     }
 
@@ -128,8 +129,7 @@ class LevelManager {
 
         // Create the background and wall layers
         const bgLayer = tilemap.createLayer("bg", g.width, g.height, bgGroup);
-        const wallLayer = tilemap.createLayer("walls", g.width, g.height, 
-            fgGroup);
+        const wallLayer = tilemap.createLayer("walls", g.width, g.height, fgGroup);
         bgLayer.visible = false;
         wallLayer.visible = false;
         
@@ -152,6 +152,25 @@ class LevelManager {
         return {key, tilemap, bgLayer, wallLayer, navMesh, walls};
     }
 
+    _loadLights(index) {
+        const lighting = this.game.globals.plugins.lighting;
+        const tilemap = this._maps[index].tilemap;
+        const lights = tilemap.objects.lights || [];
+        for (const light of lights) {
+            // Only ellipses are supported.
+            if (light.ellipse) {
+                const r = light.width / 2;
+                // (x, y) from tiled are the top left corner
+                const cx = light.x + r;
+                const cy = light.y + r;
+                // Lights need a custom property called color that is RGBA hex
+                const color = Color.fromTiled(light.properties.color);
+                lighting.addLight(new Phaser.Point(cx, cy), new Phaser.Circle(0, 0, 2 * r), color,
+                    color);
+            }
+        }
+    }
+ 
     /**
      * Switch immediately and signal
      */
@@ -165,6 +184,7 @@ class LevelManager {
         newMap.wallLayer.parent.bringToTop(newMap.wallLayer);
         newMap.wallLayer.visible = true;
         newMap.wallLayer.alpha = 1;
+        this._loadLights(index);
         this._loadedMapIndex = index;
         this.levelChangeSignal.dispatch(index);
     }
@@ -200,6 +220,7 @@ class LevelManager {
         // Finally when the last map has tweened out, we have switching maps    
         t3.onComplete.add(() => {
             lastMap.wallLayer.visible = false;
+            this._loadLights(index);
             this._loadedMapIndex = index;
             this.levelChangeSignal.dispatch(index);
         });

@@ -11,6 +11,7 @@ const abilityNames = require("../constants/ability-names.js");
 const PulseAbility = require("./abilities/pulse-ability");
 const MineAbility = require("./abilities/mine-ability");
 const ShieldAbility = require("./abilities/shield-ability");
+const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -88,10 +89,13 @@ function Player(game, x, y, parentGroup, level) {
     // Lighting for player
     this._lighting = globals.plugins.lighting;
     var lightSize = (2 * level.waves[0].lightRadius) || 360;
+    // Normal light:
     this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0),
-        new Phaser.Circle(0, 0, lightSize),
-        colors.white, colors.red);
-    this.flashlight.enabled = true;
+        new Phaser.Circle(0, 0, lightSize), colors.white, colors.red);
+    // Or, animated light:
+    // this.flashlight = new SpriteLight(this.game, this._lighting.parent, new Phaser.Point(0, 0),
+    //     new Phaser.Circle(0, 0, lightSize), colors.white, colors.red);
+    // this._lighting.addExistingLight(this.flashlight);
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");

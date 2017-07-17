@@ -15,6 +15,8 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
+var colors = require("../constants/colors.js");
+const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import {mapName, makeLevel} from "../levels/pacman";
@@ -73,6 +75,11 @@ Sandbox.prototype.create = function () {
     const levelManager = new LevelManager(game, ...globals.tilemapNames);
     globals.levelManager = levelManager;
 
+    // Lighting plugin - needs to be set up after level manager
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
+    this.lighting = globals.plugins.lighting;
+    this.lighting.setOpacity(0.9);
+
     // Load the waves
     // HACK: correct map needs to be loaded before initializing the level. That's because of the 
     // path tweening waves. Figure out a better way to do this...
@@ -84,11 +91,6 @@ Sandbox.prototype.create = function () {
     map1.onDown.add(() => levelManager.switchMapByIndex(0));
     var map2 = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
     map2.onDown.add(() => levelManager.switchMapByIndex(1));
-
-    // Lighting plugin - needs to be set up after level manager
-    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
-    this.lighting = globals.plugins.lighting;
-    this.lighting.setOpacity(0.9);
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
@@ -123,6 +125,11 @@ Sandbox.prototype.create = function () {
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
+
+    // Testing sprite lights!
+    const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
+        new Phaser.Circle(0, 0, 200), colors.white, colors.red);
+    this.lighting.addExistingLight(light);
 
     level.start();
 
