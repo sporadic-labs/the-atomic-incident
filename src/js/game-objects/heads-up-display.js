@@ -32,13 +32,16 @@ function HeadsUpDisplay(game, parentGroup) {
     const unpause = () => {
         pauseButton.visible = true;
         playButton.visible = false;
+        // game.globals.onUnPause.dispatch();
     }
     const playPos = new Phaser.Point(game.width - 10, game.height - 10);
     const pauseButton = game.add.button(playPos.x, playPos.y, "assets", () => {
         playButton.visible = true;
         pauseButton.visible = false;
         const menu = new PauseMenu(game);
-        menu.unpauseSignal.add(unpause);
+        // menu.unpauseSignal.add(unpause);
+        game.globals.onUnPause.add(unpause);
+        game.globals.onPause.dispatch();
     }, this, "hud/pause", "hud/pause", "hud/pause", "hud/pause");
     pauseButton.anchor.set(1, 1);
     const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this,

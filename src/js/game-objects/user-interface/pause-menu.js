@@ -11,8 +11,10 @@ class PauseMenu {
         // Store a ref to the game.
         this.game = game;
 
+        // If the game gets paused from an outside source, this flag will be set.
+        this.gamePausedFromOutsideSource = false;
+
         this.game.paused = true;
-        this.unpauseSignal = new Phaser.Signal();
 
         // Create a template string for the Pause Menu, to be added to the DOM.
         let menuTemplate = `
@@ -52,7 +54,8 @@ class PauseMenu {
 
     _unpause() {
         this.game.paused = false;
-        this.unpauseSignal.dispatch();
+        // this.unpauseSignal.dispatch();
+        this.game.globals.onUnPause.dispatch();
     }
 
     destroy() {
@@ -61,7 +64,7 @@ class PauseMenu {
         // Remove the 'pause-menu' element from the DOM.
         $("#pause-menu").remove();
         // TODO(rex): Remove the class dimming the #hud element.
-        this.unpauseSignal.removeAll();       
+        // this.unpauseSignal.removeAll();
     }
 }
 

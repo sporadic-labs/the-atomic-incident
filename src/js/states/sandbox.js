@@ -47,6 +47,10 @@ Sandbox.prototype.create = function () {
         e.preventDefault();
     });
 
+    // Create signals for the Pausing/Unpausing events.
+    globals.onPause = new Phaser.Signal();
+    globals.onUnPause = new Phaser.Signal();
+
     // Groups for z-index sorting and for collisions
     const groups = {
         game: game.add.group(this.world, "game"),

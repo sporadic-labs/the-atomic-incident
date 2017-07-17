@@ -13,15 +13,24 @@ class WaveMenu {
         // Store a reference to the game object.
         this.game = game;
 
+        // If the game is paused from the outside, use this flag.
+        this.gamePausedFromOutside = false;
         // Pause the game when the WaveMenu is created.
         this.game.paused = true;
+        // Set the Pause signal (as the game is paused...).
+        game.globals.onPause.dispatch();
 
         // Store the time that the menu was created.
         // NOTE(rex): This isn't used anywhere, currently...
-        const startTime = Date.now();
+        this.startTime = Date.now();
         // Create a variable to store the current time in this menus lifecycle.
         // NOTE(rex): Start at the full time allowed for this menu.
         this.time = 6000; // in ms
+
+        // Add a callback for dealing with the pause button being selected while the game is already paused.
+        game.globals.onPause.add(this._onPause, this);
+        // And resuming too...
+        game.globals.onUnPause.add(this._onResume, this);
 
         // Get the number of enemies and pickups generated during this wave.
         var {
@@ -61,10 +70,14 @@ class WaveMenu {
 
         // Setup an event listener that unpauses the game when the user clicks on the hud.
         $("#hud").on("click", () => {
-            this.game.paused = false;
-            this.destroy();
+            if (!this.gamePausedFromOutside) {
+                console.log("was it this already though?");
+                this.game.paused = false;
+                this.destroy();
+            }
         });
         // TODO(rt): Escape pauses too.
+        // NOTE(rex): This doesn't work...
         $("#hud").on("keydown", (e) => {
             console.log(e);
             this.game.paused = false;
@@ -79,15 +92,13 @@ class WaveMenu {
         this._countdownTimer = setInterval(() => {
             // Decrement the timer and update the menu.
             this.time -= timerInterval;
-            $("#wave-time-value").html(this.time / 1000);
+            $("#wave-time-value").html(Math.round(this.time / 1000));
             // If the timer has reached 0, destroy the menu.
             if (this.time <= 0) {
                 this.game.paused = false;
                 this.destroy();
             }
-
-        }, timerInterval)
-
+        }, timerInterval);
     }
 
     /**
@@ -161,7 +172,29 @@ class WaveMenu {
         return enemyTotals;
     }
 
-    
+    _onResume(){
+        const timerInterval = 1000; // in ms.
+        this._countdownTimer = setInterval(() => {
+            // Give this a tick so you don't destroy the menu immediately.
+            this.gamePausedFromOutside = false;
+            // Decrement the timer and update the menu.
+            this.time -= timerInterval;
+            $("#wave-time-value").html(Math.round(this.time / 1000));
+            // If the timer has reached 0, destroy the menu.
+            if (this.time <= 0) {
+                this.game.paused = false;
+                this.destroy();
+            }
+        }, timerInterval);
+    }
+
+    _onPause() {
+        console.log("Paused from Wave Menu!");
+        this.gamePausedFromOutside = true;
+        this.time = Math.round(6000 - (Date.now() - this.startTime)) + 1;
+        console.log(this.time);
+        clearInterval(this._countdownTimer);
+    }
 
     destroy() {
         // Toggle the 'hidden' class on the wave menu, to animate it hiding.
@@ -172,6 +205,8 @@ class WaveMenu {
 
         // Destroy the timer.
         clearInterval(this._countdownTimer);
+
+        this.game.globals.onPause.remove(this._onPause, this);
     }
 }
 
