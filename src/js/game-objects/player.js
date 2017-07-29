@@ -77,7 +77,7 @@ function Player(game, x, y, parentGroup, level) {
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, 
-        {startRadius: 300, minRadius: this.width, shrinkSpeed: 25});
+        {startRadius: 400, minRadius: this.width, shrinkSpeed: 10});
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
