@@ -6,11 +6,12 @@ const SpriteUtils = require("../../helpers/sprite-utilities.js");
 
 module.exports = TargetingComponent;
 
-function TargetingComponent(parent, speed) {
+function TargetingComponent(parent, speed, visionRadius = null) {
     this.game = parent.game;
     this.parent = parent;
     this.speed = speed;
     this.target = this.game.globals.player;
+    this._visionRadius = visionRadius;
     this._levelManager = this.game.globals.levelManager;
 }
 
@@ -19,6 +20,12 @@ TargetingComponent.prototype.update = function () {
 
     // Stop moving
     this.parent.body.velocity.set(0);
+    
+    // Vision check, stop early if target is out of range
+    if (this._visionRadius !== null) {
+        const d = this.parent.position.distance(this.target.position);
+        if (d > this._visionRadius) return this._target;
+    }
 
     // Calculate path
     const path = this._levelManager.getCurrentNavMesh()
