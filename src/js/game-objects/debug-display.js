@@ -19,6 +19,11 @@ function DebugDisplay(game, parentGroup) {
     this.visible = false;
     debugToggleKey.onDown.add(function () {
         this.visible = !this.visible;
+        if (this.visible) {
+            globals.plugins.lighting.setOpacity(0.5);
+        } else {            
+            globals.plugins.lighting.setOpacity(1);
+        }
     }, this);
 
     var textStyle = {

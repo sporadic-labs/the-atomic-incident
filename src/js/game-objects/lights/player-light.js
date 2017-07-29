@@ -13,7 +13,7 @@ export default class PlayerLight {
         
         this._lighting = game.globals.plugins.lighting;
         this._light = this._lighting.addLight(new Phaser.Point(0, 0), 
-            new Phaser.Circle(0, 0, this._radius), color, color);
+            new Phaser.Circle(0, 0, 2 * this._radius), color, color);
     }
 
     centerOnPlayer() {
@@ -32,7 +32,7 @@ export default class PlayerLight {
 
     update() {
         this.incrementRadius(-this._shrinkSpeed * this.game.time.physicsElapsed);
-        this._light.setShape(new Phaser.Circle(0, 0, this._radius));
+        this._light.setShape(new Phaser.Circle(0, 0, 2 * this._radius));
     }
 
     isPointInShadow(point) {

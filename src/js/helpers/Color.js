@@ -108,3 +108,11 @@ Color.prototype.rgbaEquals = function (c) {
 Color.prototype.rgbEquals = function (c) {
     return this.r === c.r && this.g === c.g && this.b === c.b;
 };
+
+/* Static color constants */
+Color.red = new Color("#FF4136");
+Color.green = new Color("#01FF70");
+Color.yellow = new Color("#FFDC00");
+Color.blue = new Color("#0074D9");
+Color.purple = new Color("#F012BE");
+Color.white = new Color("#FFFFFF");
