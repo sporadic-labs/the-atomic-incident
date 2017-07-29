@@ -2,16 +2,9 @@ module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
-var colors = require("../constants/colors.js");
-var CooldownAbility = require("./components/cooldown-ability.js");
-const AbilityPickup = require("./pickups/ability-pickup.js");
 const LightPickup = require("./pickups/light-pickup.js");
-const abilityNames = require("../constants/ability-names.js");
 
-const PulseAbility = require("./abilities/pulse-ability");
-const MineAbility = require("./abilities/mine-ability");
-const ShieldAbility = require("./abilities/shield-ability");
-const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
+import PlayerLight from "./lights/player-light";
 
 var ANIM_NAMES = {
     IDLE: "idle",
@@ -87,15 +80,8 @@ function Player(game, x, y, parentGroup, level) {
     this.satBody = globals.plugins.satBody.addCircleBody(this);
 
     // Lighting for player
-    this._lighting = globals.plugins.lighting;
-    var lightSize = (2 * level.waves[0].lightRadius) || 360;
-    // Normal light:
-    this.flashlight = this._lighting.addLight(new Phaser.Point(0, 0),
-        new Phaser.Circle(0, 0, lightSize), colors.white, colors.red);
-    // Or, animated light:
-    // this.flashlight = new SpriteLight(this.game, this._lighting.parent, new Phaser.Point(0, 0),
-    //     new Phaser.Circle(0, 0, lightSize), colors.white, colors.red);
-    // this._lighting.addExistingLight(this.flashlight);
+    this._playerLight = new PlayerLight(game, this, 
+        {startRadius: 300, minRadius: this.width, shrinkSpeed: 25});
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -112,7 +98,6 @@ function Player(game, x, y, parentGroup, level) {
     // Player controls
     this._controls = new Controller(this.game.input);
     var P = Phaser.Pointer;
-    this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
     // Player Sound fx
     this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
     this._hitSoud.playMultiple = true;
@@ -120,26 +105,12 @@ function Player(game, x, y, parentGroup, level) {
     this._dashSound.playMultiple = true;
     this.pickupSound = this.game.globals.soundManager.add("whoosh");
 
-    // Player abilities
-    const names = abilityNames;
-    this._abilities = {
-        [names.DASH]: new CooldownAbility(this.game, 3500, 300, names.DASH),
-        [names.SLOW_MOTION]: new CooldownAbility(this.game, 3500, 3000, names.SLOW_MOTION),
-        [names.GHOST]: new CooldownAbility(this.game, 3500, 6000, names.GHOST)
-    }
-    // this._pulseAbility = new CooldownAbility(this.game, 1600, 200);
-    this._activeAbility = null;
-
-    this._pulseAbility = new PulseAbility(this.game, this, 10000);
-    this._mineAbility = new MineAbility(this.game, this, 10000, 100, 400);
-    this._shieldAbility = new ShieldAbility(this.game, this, 10000, 96, 4000);
-    this._ability = this._pulseAbility;
-    this._ability.activate();
-
     this._velocity = new Phaser.Point(0, 0);
 }
 
 Player.prototype.update = function () {
+    this._playerLight.update();
+
     // Update keyboard/mouse inputs
     this._controls.update();
 
@@ -153,66 +124,6 @@ Player.prototype.update = function () {
 
     // Speed limit
     var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
-
-    if (this._activeAbility) {
-        const ability = this._activeAbility;
-        const shouldActivate = this._controls.isControlActive("ability");
-        switch (ability.name) {
-            case abilityNames.DASH:
-                if (ability.isReady() && shouldActivate) {
-                    ability.activate();
-                    this._dashSound.play();
-                    this._dashHeading = heading;
-                    this._invulnerable = true;
-                    this.alpha = 0.5;
-                    ability.onDeactivation.addOnce(function () {
-                        this._invulnerable = false;
-                        this.alpha = 1;
-                        this._activeAbility = null;
-                        ability.reset();
-                    }, this);
-                }
-                if (ability.isActive()) {
-                    maxDistance *= 5;
-                    destination = this.body.position.clone();
-                    destination.add(
-                        1000 * Math.cos(this._dashHeading),
-                        1000 * Math.sin(this._dashHeading)
-                    );
-                }
-                break;
-            case abilityNames.SLOW_MOTION:
-                if (ability.isReady() && shouldActivate) {
-                    this.game.time.slowMotion = 3;
-                    ability.activate();
-                    ability.onDeactivation.addOnce(function () {
-                        this.game.time.slowMotion = 1;
-                        this._activeAbility = null;
-                        ability.reset();
-                    }, this);
-                }
-                if (ability.isActive()) {
-                    maxDistance *= 1.5;
-                }
-                break;
-            case abilityNames.GHOST:
-                if (ability.isReady() && shouldActivate) {
-                    this.ghostMode = true;
-                    ability.activate();
-                    ability.onDeactivation.addOnce(function () {
-                        this.ghostMode = false;
-                        this._activeAbility = null;
-                        ability.reset();
-                    }, this);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    // Temp: always update pulse ability. Eventually add ability to switch active ability
-    this._ability.update();
 
     // Move towards the mouse position
     var delta = Phaser.Point.subtract(destination, this.body.position);
@@ -245,9 +156,8 @@ Player.prototype.getVelocity = function () {
 };
 
 Player.prototype.postUpdate = function () {
-    // Update flashlight placement
-    this.flashlight.rotation = this.rotation - (Math.PI / 2);
-    this.flashlight.position.copyFrom(this.position);
+    // Update light placement
+    this._playerLight.centerOnPlayer();
 
     // Update compass position and rotation
     var cX = this.position.x + (0.6 * this.width) *
@@ -271,15 +181,7 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
-    if (pickup instanceof AbilityPickup) {
-        if (pickup.abilityName === abilityNames.DASH) {
-            this._activeAbility = this._abilities[abilityNames.DASH];
-        } else if (pickup.abilityName === abilityNames.SLOW_MOTION) {
-            this._activeAbility = this._abilities[abilityNames.SLOW_MOTION];
-        } else if (pickup.abilityName === abilityNames.GHOST) {
-            this._activeAbility = this._abilities[abilityNames.GHOST];
-        }
-    } else if (pickup instanceof LightPickup) {
+    if (pickup instanceof LightPickup) {
         this.game.globals.scoreKeeper.incrementScore(1);
         this._ammoManager.incrementAmmoByColor(pickup.color, 1);
     }
@@ -315,7 +217,6 @@ Player.prototype.takeDamage = function () {
 };
 
 Player.prototype.destroy = function () {
-    this._pulseAbility.destroy();
     this._timer.destroy();
     this._cooldownTimer.destroy();
     this.game.tweens.removeFrom(this);
