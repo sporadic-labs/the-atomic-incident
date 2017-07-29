@@ -82,7 +82,7 @@ Sandbox.prototype.create = function () {
     // Lighting plugin - needs to be set up after level manager
     globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
     this.lighting = globals.plugins.lighting;
-    this.lighting.setOpacity(0.9);
+    this.lighting.setOpacity(1);
 
     // Load the waves
     // HACK: correct map needs to be loaded before initializing the level. That's because of the 
@@ -131,9 +131,9 @@ Sandbox.prototype.create = function () {
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
 
     // Testing sprite lights!
-    const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
-        new Phaser.Circle(0, 0, 200), colors.white, colors.red);
-    this.lighting.addExistingLight(light);
+    // const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
+    //     new Phaser.Circle(0, 0, 200), colors.white, colors.red);
+    // this.lighting.addExistingLight(light);
 
     level.start();
 
