@@ -102,7 +102,7 @@ Sandbox.prototype.create = function () {
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, game.width/2, game.height/2, groups.foreground, level);
+    var player = new Player(game, game.width/2, game.height/2, groups.foreground);
     this.camera.follow(player);
     globals.player = player;
 

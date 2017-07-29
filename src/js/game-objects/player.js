@@ -20,14 +20,12 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 /**
  * @param {Phaser.Game} game
  */
-function Player(game, x, y, parentGroup, level) {
+function Player(game, x, y, parentGroup) {
     // Call the sprite constructor, but instead of it creating a new object, it
     // modifies the current "this" object
     Phaser.Sprite.call(this, game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
-
-    this._level = level;
 
     this.hearts = 3;
     this._isTakingDamage = false;
