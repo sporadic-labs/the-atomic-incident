@@ -3,6 +3,8 @@ const Color = require("../../helpers/Color.js");
 const AvoidComp = require("../components/avoid-component");
 const TargetingComp = require("../components/targeting-component");
 
+import EnergyPickup from "../pickups/energy-pickup";
+
 class ShadowEnemy extends BaseEnemy {
     constructor(game, x, y, atlasKey, parentGroup, color, shieldColor) {
         super(game, x, y, "assets", atlasKey, 100, parentGroup, 1, color);
@@ -95,6 +97,10 @@ class ShadowEnemy extends BaseEnemy {
     }
 
     destroy(...args) {
+        // Spawn pickup
+        const pickupGroup = this.game.globals.groups.pickups;
+        new EnergyPickup(this.game, this.position.x, this.position.y, pickupGroup, 100, 3);
+
         this._timer.destroy();
         this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
         this._dieSound.play();

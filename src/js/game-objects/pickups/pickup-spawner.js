@@ -7,8 +7,7 @@ import EnergyPickup from "./energy-pickup";
 
 class PickupSpawner extends Phaser.Group {
     constructor(game) {
-        var pickupGroup = game.globals.groups.pickups;
-        super(game, pickupGroup, "pickup-spawner");
+        super(game, game.globals.groups.pickups, "pickup-spawner");
         this._findSpawnLocations();
 
         this._levelManager = game.globals.levelManager;
