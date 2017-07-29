@@ -1,4 +1,3 @@
-var calculateHullsFromTiles = require("./hull-from-tiles.js");
 var Light = require("./light.js");
 
 module.exports = Phaser.Plugin.Lighting = function (game, manager) {
@@ -85,8 +84,7 @@ Phaser.Plugin.Lighting.prototype.destroy = function () {
     Phaser.Plugin.prototype.destroy.apply(this, arguments);
 };
 
-Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
-    shadowOpacity) {
+Phaser.Plugin.Lighting.prototype.init = function (parent, shadowOpacity) {
     this.parent = parent; 
     this.shadowOpacity = (shadowOpacity !== undefined) ? shadowOpacity : 1;
 
@@ -101,14 +99,8 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     
     this._bitmap = bitmap;
     this._image = image;
-    this._tileSize = tilemapLayer.map.tileWidth;
-    this._wallClusters = calculateHullsFromTiles(tilemapLayer);
-    this._walls = [];
-    for (var i = 0; i < this._wallClusters.length; i++) {
-        for (var j = 0; j < this._wallClusters[i].length; j++) {
-            this._walls.push(this._wallClusters[i][j]);
-        }
-    }
+    this._levelManager = this.game.globals.levelManager;
+    this._walls = this._levelManager.getCurrentWalls();
 
     this._debugBitmap = this.game.add.bitmapData(game.width, game.height);
     this._debugImage = this._debugBitmap.addToWorld(0, 0);
@@ -117,9 +109,8 @@ Phaser.Plugin.Lighting.prototype.init = function (parent, tilemapLayer,
     this._debugImage.visible = false;
 };
 
-Phaser.Plugin.Lighting.prototype.update = function () {    
-    var walls = this._walls;
-    // walls = walls.concat(this._getPlayerLines());
+Phaser.Plugin.Lighting.prototype.update = function () {
+    this._walls = this._levelManager.getCurrentWalls();
 
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
@@ -133,7 +124,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         if (!light.enabled) continue;
         light.update();
         if (light.needsRedraw) {
-            var points = this._castLight(light);
+            let points = this._castLight(light);
             light.redraw(points); // World coordinates
         }
         this._drawLight(light);
@@ -143,7 +134,7 @@ Phaser.Plugin.Lighting.prototype.update = function () {
         if (this._debugEnabled && (i === this._debugLightIndex)) {
             // Recalculate the points in case the light didn't need to be
             // redrawn
-            var points = this._castLight(light);
+            let points = this._castLight(light);
             var localPoints = points.map(this._convertWorldPointToLocal, this);
             var lightPoint = this._convertWorldPointToLocal(light.position);
             for(var k = 0; k < localPoints.length; k++) {
@@ -157,9 +148,9 @@ Phaser.Plugin.Lighting.prototype.update = function () {
 
     // Draw the wall normals
     if (this._debugEnabled) {
-        for (var w = 0; w < walls.length; w++) {
-            var mp = this._convertWorldPointToLocal(walls[w].midpoint);
-            var norm = walls[w].normal.setMagnitude(10);          
+        for (var w = 0; w < this._walls.length; w++) {
+            var mp = this._convertWorldPointToLocal(this._walls[w].midpoint);
+            var norm = this._walls[w].normal.setMagnitude(10);          
             this._debugBitmap.line(mp.x , mp.y, mp.x + norm.x, mp.y + norm.y,
                 "rgb(255, 255, 255)", 3);
         }

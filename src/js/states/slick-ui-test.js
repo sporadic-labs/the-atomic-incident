@@ -17,7 +17,7 @@ SlickTestUI.prototype.preload = function () {
     // Slick UI theme need to be preloaded in the state that uses it:
     //  https://github.com/Flaxis/slick-ui/issues/8#issuecomment-251337961
     var globals = this.game.globals;
-    globals.plugins.slickUI.load("resources/themes/kenny/kenney.json");
+    globals.plugins.slickUI.load("src/resources/themes/kenny/kenney.json");
 };
 
 SlickTestUI.prototype.create = function () {
@@ -44,11 +44,14 @@ SlickTestUI.prototype.create = function () {
     sSlider.onDrag.add((value) => color.s = value); 
     lSlider.onDrag.add((value) => color.l = value); 
     aSlider.onDrag.add((value) => color.a = value);
+
+    this.add(slickUI);
 };
 
 
 
 SlickTestUI.prototype.update = function () {
     var c = Phaser.Color.HSLtoRGB(color.h, color.s, color.l);
-    this.game.stage.backgroundColor = `rgb(${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)})`;
+    this.game.stage.backgroundColor = 
+        `rgb(${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)})`;
 };

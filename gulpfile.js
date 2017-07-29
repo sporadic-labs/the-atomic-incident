@@ -37,7 +37,7 @@ var paths = {
     },
     js: {
     	entry: "src/js/main.js",
-    	src: ["src/js/**/*.js"],
+    	src: ["src/js/**/*.{js,glsl}"],
     	outputFile: "main.js",
     	dest: dest + "/js"
     },
@@ -88,6 +88,7 @@ var plumber = require("gulp-plumber");
 var eslint = require("gulp-eslint");
 var watchify = require("watchify");
 var babel = require("babelify");
+var glslify = require("glslify");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
@@ -165,9 +166,10 @@ var jsBundle = browserify({
         require.resolve("phaser-ce/build/custom/p2"),
         require.resolve("phaser-ce/build/custom/pixi")
     ],
+    transform: [glslify, babel],
     debug: true, // Allow debugger statements
     cache: {}, packageCache: {}, plugin: [watchify] // Required for watchify
-}).transform(babel);
+});
 // Task now incrementally builds
 gulp.task("js-browserify", function () {
     return jsBundle.bundle()    
@@ -188,7 +190,7 @@ gulp.task("js-browserify", function () {
 
 // Lint only our custom JS.
 gulp.task("js-lint", function() {
-    return gulp.src(paths.js.src)    
+    return gulp.src([...paths.js.src, "!**/*.glsl"])    
         .pipe(plumber({ errorHandler: beepLogError }))
         .pipe(eslint())
         .pipe(eslint.format());
@@ -283,6 +285,9 @@ gulp.task("clean:publish", function () {
     return del(["./.publish"]);
 });
 
+gulp.task("clean", function () {
+    return del(["./public"]);
+});
 
 // -- DEFAULT TASK -------------------------------------------------------------
 // This gulp task runs automatically when you don't specify task.

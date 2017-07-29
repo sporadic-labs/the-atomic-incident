@@ -1,0 +1,117 @@
+#hud {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3px;
+    z-index: 12;
+    font-family: 'Alfa Slab One', serif;
+
+    // Dunno if this should be set here or not...
+    color: #bcbcbc;
+
+    // Disable pointer events on the HUD container, but re-enable on children
+    pointer-events: none;
+    & > * {
+        pointer-events: initial;
+    }
+
+    #start-menu,
+    #pause-menu,
+    #options-menu,
+    #wave-menu {
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid black;
+        border-radius: 6px;
+        // box-shadow: 2px 2px 4px #4f4f4f;
+        background: #E8E8E8;
+        pointer-events: initial;
+        cursor: default;
+
+        .menu-title {
+            margin: 18px auto 48px auto;
+            padding: 12px;
+            font-size: 32px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 24px auto;
+            padding: 16px;
+            width: 50%;
+
+            &:hover {
+                // TODO(rt): Make this better.
+                cursor: pointer;
+                color: black;
+                background: #eeeeee;
+            }
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            font-size: 14px;
+            border: none;
+            background: none;
+            margin: 0;
+            padding: 0;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+
+            &:hover {
+                // border: 1px solid black;
+                color: #4f4f4f;
+            }
+        }
+    }
+
+    // Wave menu specific styling.
+    #wave-menu {
+        height: 40%;
+
+        .menu-title {
+            margin: 12px auto;
+            font-size: 18px;
+        }
+
+        .wave-menu-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 24px;
+
+            .wave-menu-col {
+                max-width: 50%;
+                text-align: center;
+                vertical-align: middle;
+                margin: auto;
+            }
+        }
+    }
+
+    // Classes for setting the color of the ammo/enemy in the wave menu.
+    .tint-red {
+        background-color: red;
+    }
+
+    .tint-green {
+        background-color: green;
+    }
+
+    .tint-blue {
+        background-color: blue;
+    }
+
+}

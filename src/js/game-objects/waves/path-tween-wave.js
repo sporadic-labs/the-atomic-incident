@@ -1,30 +1,41 @@
+import Wave from "./wave";
 const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TweenPathComp = require("../components/tween-path-component.js");
 const Colors = require("../../constants/colors.js");
+import {parsePathLayers} from "../../helpers/parse-tiled-paths";
 
-class PathTweenWave {
-    constructor(game, waveComposition, speed) {
-        this.game = game;
+class PathTweenWave extends Wave {
+
+    /**
+     * Creates an instance of PathTweenWave.
+     * @param {Phaser.Game} game
+     * @param {Object} param
+     * @param {number} param.speed Speed of the enemy's movement during the tween
+     * @param {string[]} param.paths Array of strings that describe the Tiled paths to load. The
+     * strings use a shorthand to describe which directions to move along the path: "pathname:1" for
+     * moving along the direction of the path; "pathname:-1" for the reverse direction.
+     *
+     * @memberof PathTweenWave
+     */
+    constructor(game, {speed = 100, paths = []}) {
+        super(game);
         this.speed = speed;
-        this._waveComposition = waveComposition;
-        this._enemies = game.globals.groups.enemies;
 
-        // Construct some possible choices for subsets of paths
-        const vertical = game.globals.paths.vertical;
-        const horizontal = game.globals.paths.horizontal;
-        const verticalReversed = vertical.map(p => p.clone().reverse());
-        const horizontalReversed = vertical.map(p => p.clone().reverse());
-        this._pathOptions = [
-            vertical, horizontal, verticalReversed, horizontalReversed,
-            vertical.concat(verticalReversed),
-            horizontal.concat(horizontalReversed),
-        ];
+        this._getPaths(paths);
+
+        // If the level has changed, check for paths in the new tilemap
+        this._levelManager.levelChangeSignal.add(this._getPaths, this);
     }
 
-    spawn() {
-        const paths = this.game.rnd.pick(this._pathOptions);
-        const enemyTypes = this._waveComposition
-            .setTotalEnemies(paths.length)
+    _getPaths(pathNames) {
+        const map = this.game.globals.levelManager.getCurrentTilemap();
+        this._paths = parsePathLayers(map, pathNames);
+        if (this._paths.length === 0) console.warn(`No paths found for ${pathNames}`);
+    }
+
+    spawn(waveComposition) {
+        const enemyTypes = waveComposition
+            .setTotal(this._paths.length)
             .generate()
             .getEnemiesArray();
         for (const [i, enemyType] of enemyTypes.entries()) {
@@ -32,14 +43,17 @@ class PathTweenWave {
             if (enemyType === "red") color = Colors.red;
             else if (enemyType === "green") color = Colors.green;
             else color = Colors.blue;
-            const path = paths[i];
+            const path = this._paths[i];
             const firstPoint = path.getPointAtLength(0);
             const enemy = new ShadowEnemy(this.game, firstPoint.x, firstPoint.y,
-                this._enemies, color);
-            const comp = new TweenPathComp(enemy, path.clone(), this.speed);
-            enemy.addComponent(comp);
+                "enemies/circle-idle", this._enemies, color);
+            enemy.setMovementComponent(new TweenPathComp(enemy, path.clone(), this.speed));
         }
+    }
+
+    destroy() {
+        this._levelManager.levelChangeSignal.remove(this._getPaths, this);
     }
 }
 
-module.exports = PathTweenWave;
+export default PathTweenWave;

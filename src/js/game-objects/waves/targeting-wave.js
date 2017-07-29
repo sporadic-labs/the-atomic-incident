@@ -1,35 +1,85 @@
+import Wave from "./wave";
 const ShadowEnemy = require("../enemies/shadow-enemy.js");
 const TargetingComp = require("../components/targeting-component.js");
 const Colors = require("../../constants/colors.js");
 
-class TargetingWave {
+import {CircleWave, TunnelWave, CrossWave} from "./wave-shapes";
+
+class TargetingWave extends Wave {
+    /**
+     * Creates an instance of TargetingWave.
+     * @param {Object} waveShape 
+     * 
+     * @memberof TargetingWave
+     */
     constructor(game, waveShape) {
-        this.game = game;
-        this._enemies = game.globals.groups.enemies;
+        super(game);
         this._waveShape = waveShape;
     }
 
-    spawn() {
-        for (const enemyInfo of this._waveShape.enemies()) {
+    /**
+     * @static
+     * @param {Object} options 
+     * @param {number} [options.radius = 80] Radius of the circle wave
+     * @returns {TargetingWave}
+     * 
+     * @memberof TargetingWave
+     */
+    static createCircle(game, {radius = 80}) {
+        const shape = new CircleWave(game, radius);
+        return new TargetingWave(game, shape);
+    }
+
+    static createTunnel(game, {width = 100, length = 300, angle = 90}) {
+        const shape = new TunnelWave(game, width, length, angle);
+        return new TargetingWave(game, shape);
+    }
+
+    static createCross(game, {length = 100}) {
+        const shape = new CrossWave(game, length);
+        return new TargetingWave(game, shape);
+    }
+
+    spawn(waveComposition) {
+        for (const enemyInfo of this._waveShape.enemies(waveComposition)) {
             const pos = enemyInfo.position;
             // Skip spawn point if the tile is occupied
             if (!this._isTileEmpty(pos.x, pos.y)) continue;
             // Spawn the enemy based on the type
             let color;
-            if (enemyInfo.type === "red") color = Colors.red;
-            else if (enemyInfo.type === "green") color = Colors.green;
-            else color = Colors.blue;
-            const enemy = new ShadowEnemy(this.game, pos.x, pos.y, 
-                this._enemies, color);
-            const targetingComp = new TargetingComp(enemy, 100);
-            enemy.addComponent(targetingComp);
+            let shieldColor;
+            if (enemyInfo.type === "red") {
+                color = Colors.red;
+                // If the shield flag was set when the wave was generated, choose
+                // a random colored shield that does NOT match the enemy color.
+                if (enemyInfo.shield) {
+                    shieldColor = this.game.rnd.pick([Colors.green, Colors.blue])
+                }
+            } else if (enemyInfo.type === "green") {
+                color = Colors.green;
+                // If the shield flag was set when the wave was generated, choose
+                // a random colored shield that does NOT match the enemy color.
+                if (enemyInfo.shield) {
+                    shieldColor = this.game.rnd.pick([Colors.red, Colors.blue])
+                }
+            } else {
+                color = Colors.blue;
+                // If the shield flag was set when the wave was generated, choose
+                // a random colored shield that does NOT match the enemy color.
+                if (enemyInfo.shield) {
+                    shieldColor = this.game.rnd.pick([Colors.green, Colors.red])
+                }
+            }
+            const enemy = new ShadowEnemy(this.game, pos.x, pos.y, "enemies/arrow-idle",
+                this._enemies, color, shieldColor);
+            enemy.setMovementComponent(new TargetingComp(enemy, 100));
         }
     }
-    
+
     _isTileEmpty(x, y) {
-        var map = this.game.globals.tileMap;
-        var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, 
-            this.game.globals.tileMapLayer, true); 
+        const map = this._levelManager.getCurrentTilemap();
+        const wallLayer = this._levelManager.getCurrentWallLayer();
+        var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, wallLayer, true);
         // null for invalid locations
         if (checkTile === null) return false;
         // Index of -1 is empty
@@ -38,4 +88,4 @@ class TargetingWave {
     }
 }
 
-module.exports = TargetingWave;
+export default TargetingWave;
