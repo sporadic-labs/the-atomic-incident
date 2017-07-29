@@ -105,10 +105,27 @@ function Player(game, x, y, parentGroup, level) {
     // Add it to the foreground (so it is visible).
     game.globals.groups.midground.add(this._compass);
 
-    // Player controls
+    /** PLAYER CONTROLS */
     this._controls = new Controller(this.game.input);
+    var Kb = Phaser.Keyboard;
     var P = Phaser.Pointer;
+
+    // movement
+    // wasd
+    this._controls.addKeyboardControl("move-up", [Kb.W]);
+    this._controls.addKeyboardControl("move-left", [Kb.A]);
+    this._controls.addKeyboardControl("move-right", [Kb.D]);
+    this._controls.addKeyboardControl("move-down", [Kb.S]);
+    // arrows
+    this._controls.addKeyboardControl("arrow-up", [Kb.UP]);
+    this._controls.addKeyboardControl("arrow-left", [Kb.LEFT]);
+    this._controls.addKeyboardControl("arrow-right", [Kb.RIGHT]);
+    this._controls.addKeyboardControl("arrow-down", [Kb.DOWN]);
+
+    // primary attack
+    this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
     this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
+
     // Player Sound fx
     this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
     this._hitSoud.playMultiple = true;
@@ -136,87 +153,61 @@ function Player(game, x, y, parentGroup, level) {
 }
 
 Player.prototype.update = function () {
+
+    var g = this.game;
+
     // Update keyboard/mouse inputs
     this._controls.update();
 
-    // Calculate the destination and heading from the mouse
-    var g = this.game;
-    var destination = new Phaser.Point(
-        g.input.mousePointer.x + g.camera.x - this.body.width / 2,
-        g.input.mousePointer.y + g.camera.y - this.body.height / 2
-    );
-    var heading = this.body.position.angle(destination);
+    // Calculate the acceleration and heading from the keyboard.
+    var acceleration = new Phaser.Point(0, 0);
+    if (this._controls.isControlActive("move-left") ||
+        this._controls.isControlActive("arrow-left")) {
+        acceleration.x += -1;
+    } else if (this._controls.isControlActive("move-right") ||
+               this._controls.isControlActive("arrow-right")) {
+        acceleration.x += 1;
+    }
+    if (this._controls.isControlActive("move-up") ||
+        this._controls.isControlActive("arrow-up")) {
+        acceleration.y += -1;
+    } else if (this._controls.isControlActive("move-down") ||
+               this._controls.isControlActive("arrow-down")) {
+        acceleration.y += 1;
+    }
 
-    // Speed limit
-    var maxDistance = 110 * this.game.time.physicsElapsed; // 110 px/s
+    // Normalize the acceleration and set the magnitude. This makes it so that
+    // the player moves in the same speed in all directions.
+    acceleration = acceleration.setMagnitude(this._maxAcceleration);
+    this.body.acceleration.copyFrom(acceleration);
 
-    if (this._activeAbility) {
-        const ability = this._activeAbility;
-        const shouldActivate = this._controls.isControlActive("ability");
-        switch (ability.name) {
-            case abilityNames.DASH:
-                if (ability.isReady() && shouldActivate) {
-                    ability.activate();
-                    this._dashSound.play();
-                    this._dashHeading = heading;
-                    this._invulnerable = true;
-                    this.alpha = 0.5;
-                    ability.onDeactivation.addOnce(function () {
-                        this._invulnerable = false;
-                        this.alpha = 1;
-                        this._activeAbility = null;
-                        ability.reset();
-                    }, this);
-                }
-                if (ability.isActive()) {
-                    maxDistance *= 5;
-                    destination = this.body.position.clone();
-                    destination.add(
-                        1000 * Math.cos(this._dashHeading),
-                        1000 * Math.sin(this._dashHeading)
-                    );
-                }
-                break;
-            case abilityNames.SLOW_MOTION:
-                if (ability.isReady() && shouldActivate) {
-                    this.game.time.slowMotion = 3;
-                    ability.activate();
-                    ability.onDeactivation.addOnce(function () {
-                        this.game.time.slowMotion = 1;
-                        this._activeAbility = null;
-                        ability.reset();
-                    }, this);
-                }
-                if (ability.isActive()) {
-                    maxDistance *= 1.5;
-                }
-                break;
-            case abilityNames.GHOST:
-                if (ability.isReady() && shouldActivate) {
-                    this.ghostMode = true;
-                    ability.activate();
-                    ability.onDeactivation.addOnce(function () {
-                        this.ghostMode = false;
-                        this._activeAbility = null;
-                        ability.reset();
-                    }, this);
-                }
-                break;
-            default:
-                break;
+    // Cap the velocity. Phaser physics's max velocity caps the velocity in the
+    // x & y dimensions separately. This allows the sprite to move faster along
+    // a diagonal than it would along the x or y axis. To fix that, we need to
+    // cap the velocity based on it's magnitude.
+    if (this.body.velocity.getMagnitude() > this._maxSpeed) {
+        this.body.velocity.setMagnitude(this._maxSpeed);
+    }
+
+    // Custom drag. Arcade drag runs the calculation on each axis separately. 
+    // This leads to more drag in the diagonal than in other directions.  To fix
+    // that, we need to apply drag ourselves.
+    // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
+    if (acceleration.isZero() && !this.body.velocity.isZero()) {
+        var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
+        if (this.body.velocity.getMagnitude() < dragMagnitude) {
+            // Snap to 0 velocity so that we avoid the drag causing the velocity
+            // to flip directions and end up oscillating
+            this.body.velocity.set(0);
+        } else {
+            // Apply drag in opposite direction of velocity
+            var drag = this.body.velocity.clone()
+                .setMagnitude(-1 * dragMagnitude); 
+            this.body.velocity.add(drag.x, drag.y);
         }
     }
 
-    // Temp: always update pulse ability. Eventually add ability to switch active ability
-    this._ability.update();
-
-    // Move towards the mouse position
-    var delta = Phaser.Point.subtract(destination, this.body.position);
-    var targetDistance = delta.getMagnitude();
-    if (targetDistance > maxDistance) {
-        delta.setMagnitude(maxDistance);
-    }
-    this.body.position.add(delta.x, delta.y);
+    // Check collisions with Tilemap.
     this.game.physics.arcade.collide(this, this._levelManager.getCurrentWallLayer());
 
     // Update velocity after collision
