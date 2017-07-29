@@ -2,8 +2,8 @@ module.exports = Player;
 
 var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
-const LightPickup = require("./pickups/light-pickup.js");
 
+import EnergyPickup from "./pickups/energy-pickup";
 import PlayerLight from "./lights/player-light";
 
 var ANIM_NAMES = {
@@ -77,7 +77,7 @@ function Player(game, x, y, parentGroup, level) {
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, 
-        {startRadius: 400, minRadius: this.width, shrinkSpeed: 10});
+        {startRadius: 400, minRadius: this.width, shrinkSpeed: 15});
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -226,9 +226,8 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
 };
 
 Player.prototype._onCollideWithPickup = function (self, pickup) {
-    if (pickup instanceof LightPickup) {
-        this.game.globals.scoreKeeper.incrementScore(1);
-        this._ammoManager.incrementAmmoByColor(pickup.color, 1);
+    if (pickup instanceof EnergyPickup) {
+        this._playerLight.incrementRadius(pickup.getEnergy());
     }
     this.pickupSound.play();
     pickup.pickUp();
