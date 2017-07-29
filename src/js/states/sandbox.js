@@ -90,12 +90,6 @@ Sandbox.prototype.create = function () {
     levelManager.switchMapByKey(mapName, false);
     const level = makeLevel(this.game);
 
-    // Temp: switch between levels with 1 & 2 keys
-    var map1 = game.input.keyboard.addKey(Phaser.Keyboard.NINE);
-    map1.onDown.add(() => levelManager.switchMapByIndex(0));
-    var map2 = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-    map2.onDown.add(() => levelManager.switchMapByIndex(1));
-
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
 
