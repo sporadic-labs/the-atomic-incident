@@ -123,8 +123,7 @@ function Player(game, x, y, parentGroup, level) {
 }
 
 Player.prototype.update = function () {
-
-    var g = this.game;
+    this._playerLight.update();
 
     // Update keyboard/mouse inputs
     this._controls.update();
