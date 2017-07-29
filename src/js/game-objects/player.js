@@ -57,10 +57,6 @@ function Player(game, x, y, parentGroup, level) {
     this._levelManager = globals.levelManager;
     this._ammoManager = globals.ammoManager;
 
-    // Timer for flipping cooldown
-    this._cooldownTimer = this.game.time.create(false);
-    this._cooldownTimer.start();
-
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
     var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, "", 2);
@@ -317,7 +313,6 @@ Player.prototype.takeDamage = function () {
 Player.prototype.destroy = function () {
     this._pulseAbility.destroy();
     this._timer.destroy();
-    this._cooldownTimer.destroy();
     this.game.tweens.removeFrom(this);
     for (var key in this._weapons) {
         this._weapons[key].destroy();
