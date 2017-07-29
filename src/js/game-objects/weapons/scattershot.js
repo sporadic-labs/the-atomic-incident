@@ -45,7 +45,7 @@ export default class Scattershot extends BaseWeapon {
             (perpendicularOffset * Math.sin(perpAngle));
         // shotgun blast is made up of a bunch of slugs at half size.
         var p = new Projectile(this.game, x, y, "assets", "weapons/slug", this,
-            this._player, 24, angle, speed);
+            this._player, 35, angle, speed);
         p.scale.setTo(0.5, 0.5);
         var rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
         p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);

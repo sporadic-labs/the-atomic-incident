@@ -21,7 +21,7 @@ export default class EnemySpawner {
     }
 
     _spawnCircleWave() {
-        const shape = new CircleWave(this.game, 80);
+        const shape = new CircleWave(this.game, 120);
         const composition = new Composition({red: 10});
         for (const enemyInfo of shape.enemies(composition)) {
             const pos = enemyInfo.position;
@@ -30,7 +30,7 @@ export default class EnemySpawner {
                 this._enemies, Color.blue);
             enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));
         }
-        this._circleWaveTimer.add(this.game.rnd.integerInRange(4000, 7000), 
+        this._circleWaveTimer.add(this.game.rnd.integerInRange(7000, 12000), 
             () => this._spawnCircleWave());
     }
 
