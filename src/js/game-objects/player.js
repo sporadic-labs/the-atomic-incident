@@ -4,6 +4,8 @@ var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 const LightPickup = require("./pickups/light-pickup.js");
 
+import Scattershot from "./weapons/scattershot";
+
 import PlayerLight from "./lights/player-light";
 
 var ANIM_NAMES = {
@@ -41,6 +43,8 @@ function Player(game, x, y, parentGroup, level) {
 
     // NOTE(rex): Not quite sure if this should be a part of the player or not...
     this.damage = 10000;
+
+    this.weapon = new Scattershot(game, parentGroup, this);
 
     // Shorthand
     var globals = this.game.globals;
@@ -110,6 +114,8 @@ function Player(game, x, y, parentGroup, level) {
 
     // primary attack
     this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
+    
+    // TODO(rex): What to do with abilities?
     this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
 
     // Player Sound fx
@@ -186,6 +192,13 @@ Player.prototype.update = function () {
     // Update the rotation of the player based on the mouse
     var mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     this.rotation = this.position.angle(mousePos) + (Math.PI/2);
+
+
+    if (this._controls.isControlActive("attack") && this.weapon.isAbleToAttack() &&
+        !this.weapon.isAmmoEmpty()) {
+        this.weapon.fire(this.position.angle(mousePos));
+    }
+
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies,
