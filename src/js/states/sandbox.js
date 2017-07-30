@@ -19,9 +19,8 @@ var colors = require("../constants/colors.js");
 const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
-import {mapName, makeLevel} from "../levels/dungeon-arcade-1";
-import WaveManager from "../game-objects/waves/wave-manager";
 import { AmmoManager } from '../game-objects/components/ammo-manager.js';
+import EnemySpawner from "../game-objects/enemy-spawner";
 
 function Sandbox() {}
 
@@ -84,12 +83,6 @@ Sandbox.prototype.create = function () {
     this.lighting = globals.plugins.lighting;
     this.lighting.setOpacity(1);
 
-    // Load the waves
-    // HACK: correct map needs to be loaded before initializing the level. That's because of the 
-    // path tweening waves. Figure out a better way to do this...
-    levelManager.switchMapByKey(mapName, false);
-    const level = makeLevel(this.game);
-
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
 
@@ -118,8 +111,8 @@ Sandbox.prototype.create = function () {
     globals.waveNum = waveNum;
 
     // Waves of pickups and enemies
-    const pickupSpawner = new PickupSpawner(game);
-    globals.spawnEnemies = new WaveManager(game, pickupSpawner, level);
+    new PickupSpawner(game);
+    new EnemySpawner(game, player);
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
@@ -128,8 +121,6 @@ Sandbox.prototype.create = function () {
     // const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
     //     new Phaser.Circle(0, 0, 200), colors.white, colors.red);
     // this.lighting.addExistingLight(light);
-
-    level.start();
 
     // // Menu for switching tile maps
     // var menu = [];
