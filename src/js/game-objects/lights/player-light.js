@@ -35,6 +35,10 @@ export default class PlayerLight {
         this._light.setShape(new Phaser.Circle(0, 0, this._radius));
     }
 
+    isPointInShadow(point) {
+        return !this._light.isPointInLight(point);
+    }
+
     destroy() {
         this._game = null;
         this._light.destroy();

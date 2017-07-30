@@ -15,7 +15,7 @@ export default class Scattershot extends BaseWeapon {
     fire(angle) {
         if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
             // Find trajectory
-            var pelletNum = this.game.rnd.integerInRange(16, 24);
+            var pelletNum = this.game.rnd.integerInRange(12, 18);
 
             // randomize the trajectory of every bullet in the shotgun blast
             for (var i=0; i<pelletNum; i++) {

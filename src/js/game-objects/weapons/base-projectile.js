@@ -40,6 +40,10 @@ export default class BaseProjectile extends Phaser.Sprite {
         // Check overlap
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
+        // If the bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
+        if (this._player._playerLight.isPointInShadow(this.position)) {
+            this.destroy();
+        }
     }
 
     destroy () {
@@ -48,17 +52,13 @@ export default class BaseProjectile extends Phaser.Sprite {
 
     // eslint-disable-next-line no-unused-vars
     _onCollideWithMap (self, map) {
-        if (self._isDestructable) {
-            self._remove = true;
-        }
+        this.destroy();
     }
 
     _onCollideWithEnemy (self, enemy) {
         var isKilled = enemy.takeDamage(this._damage);
         // TODO(rex): Combos?
         // if (isKilled) this._player.incrementCombo(1);
-        if (self._isDestructable && !self._canPierce) {
-            self._remove = true;
-        }
+        this.destroy();
     }
 }
