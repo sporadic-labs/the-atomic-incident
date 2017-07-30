@@ -197,88 +197,88 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">frames/glowing-light/light_00000.png</key>
-            <key type="filename">frames/glowing-light/light_00001.png</key>
-            <key type="filename">frames/glowing-light/light_00002.png</key>
-            <key type="filename">frames/glowing-light/light_00003.png</key>
-            <key type="filename">frames/glowing-light/light_00004.png</key>
-            <key type="filename">frames/glowing-light/light_00005.png</key>
-            <key type="filename">frames/glowing-light/light_00006.png</key>
-            <key type="filename">frames/glowing-light/light_00007.png</key>
-            <key type="filename">frames/glowing-light/light_00008.png</key>
-            <key type="filename">frames/glowing-light/light_00009.png</key>
-            <key type="filename">frames/glowing-light/light_00010.png</key>
-            <key type="filename">frames/glowing-light/light_00011.png</key>
-            <key type="filename">frames/glowing-light/light_00012.png</key>
-            <key type="filename">frames/glowing-light/light_00013.png</key>
-            <key type="filename">frames/glowing-light/light_00014.png</key>
-            <key type="filename">frames/glowing-light/light_00015.png</key>
-            <key type="filename">frames/glowing-light/light_00016.png</key>
-            <key type="filename">frames/glowing-light/light_00017.png</key>
-            <key type="filename">frames/glowing-light/light_00018.png</key>
-            <key type="filename">frames/glowing-light/light_00019.png</key>
-            <key type="filename">frames/glowing-light/light_00020.png</key>
-            <key type="filename">frames/glowing-light/light_00021.png</key>
-            <key type="filename">frames/glowing-light/light_00022.png</key>
-            <key type="filename">frames/glowing-light/light_00023.png</key>
-            <key type="filename">frames/glowing-light/light_00024.png</key>
-            <key type="filename">frames/glowing-light/light_00025.png</key>
-            <key type="filename">frames/glowing-light/light_00026.png</key>
-            <key type="filename">frames/glowing-light/light_00027.png</key>
-            <key type="filename">frames/glowing-light/light_00028.png</key>
-            <key type="filename">frames/glowing-light/light_00029.png</key>
-            <key type="filename">frames/glowing-light/light_00030.png</key>
-            <key type="filename">frames/glowing-light/light_00031.png</key>
-            <key type="filename">frames/glowing-light/light_00032.png</key>
-            <key type="filename">frames/glowing-light/light_00033.png</key>
-            <key type="filename">frames/glowing-light/light_00034.png</key>
-            <key type="filename">frames/glowing-light/light_00035.png</key>
-            <key type="filename">frames/glowing-light/light_00036.png</key>
-            <key type="filename">frames/glowing-light/light_00037.png</key>
-            <key type="filename">frames/glowing-light/light_00038.png</key>
-            <key type="filename">frames/glowing-light/light_00039.png</key>
-            <key type="filename">frames/glowing-light/light_00040.png</key>
-            <key type="filename">frames/glowing-light/light_00041.png</key>
-            <key type="filename">frames/glowing-light/light_00042.png</key>
-            <key type="filename">frames/glowing-light/light_00043.png</key>
-            <key type="filename">frames/glowing-light/light_00044.png</key>
-            <key type="filename">frames/glowing-light/light_00045.png</key>
-            <key type="filename">frames/glowing-light/light_00046.png</key>
-            <key type="filename">frames/glowing-light/light_00047.png</key>
-            <key type="filename">frames/glowing-light/light_00048.png</key>
-            <key type="filename">frames/glowing-light/light_00049.png</key>
-            <key type="filename">frames/glowing-light/light_00050.png</key>
-            <key type="filename">frames/glowing-light/light_00051.png</key>
-            <key type="filename">frames/glowing-light/light_00052.png</key>
-            <key type="filename">frames/glowing-light/light_00053.png</key>
-            <key type="filename">frames/glowing-light/light_00054.png</key>
-            <key type="filename">frames/glowing-light/light_00055.png</key>
-            <key type="filename">frames/glowing-light/light_00056.png</key>
-            <key type="filename">frames/glowing-light/light_00057.png</key>
-            <key type="filename">frames/glowing-light/light_00058.png</key>
-            <key type="filename">frames/glowing-light/light_00059.png</key>
-            <key type="filename">frames/glowing-light/light_00060.png</key>
-            <key type="filename">frames/glowing-light/light_00061.png</key>
-            <key type="filename">frames/glowing-light/light_00062.png</key>
-            <key type="filename">frames/glowing-light/light_00063.png</key>
-            <key type="filename">frames/glowing-light/light_00064.png</key>
-            <key type="filename">frames/glowing-light/light_00065.png</key>
+            <key type="filename">light-frames/glowing-light/light_00000.png</key>
+            <key type="filename">light-frames/glowing-light/light_00001.png</key>
+            <key type="filename">light-frames/glowing-light/light_00002.png</key>
+            <key type="filename">light-frames/glowing-light/light_00003.png</key>
+            <key type="filename">light-frames/glowing-light/light_00004.png</key>
+            <key type="filename">light-frames/glowing-light/light_00005.png</key>
+            <key type="filename">light-frames/glowing-light/light_00006.png</key>
+            <key type="filename">light-frames/glowing-light/light_00007.png</key>
+            <key type="filename">light-frames/glowing-light/light_00008.png</key>
+            <key type="filename">light-frames/glowing-light/light_00009.png</key>
+            <key type="filename">light-frames/glowing-light/light_00010.png</key>
+            <key type="filename">light-frames/glowing-light/light_00011.png</key>
+            <key type="filename">light-frames/glowing-light/light_00012.png</key>
+            <key type="filename">light-frames/glowing-light/light_00013.png</key>
+            <key type="filename">light-frames/glowing-light/light_00014.png</key>
+            <key type="filename">light-frames/glowing-light/light_00015.png</key>
+            <key type="filename">light-frames/glowing-light/light_00016.png</key>
+            <key type="filename">light-frames/glowing-light/light_00017.png</key>
+            <key type="filename">light-frames/glowing-light/light_00018.png</key>
+            <key type="filename">light-frames/glowing-light/light_00019.png</key>
+            <key type="filename">light-frames/glowing-light/light_00020.png</key>
+            <key type="filename">light-frames/glowing-light/light_00021.png</key>
+            <key type="filename">light-frames/glowing-light/light_00022.png</key>
+            <key type="filename">light-frames/glowing-light/light_00023.png</key>
+            <key type="filename">light-frames/glowing-light/light_00024.png</key>
+            <key type="filename">light-frames/glowing-light/light_00025.png</key>
+            <key type="filename">light-frames/glowing-light/light_00026.png</key>
+            <key type="filename">light-frames/glowing-light/light_00027.png</key>
+            <key type="filename">light-frames/glowing-light/light_00028.png</key>
+            <key type="filename">light-frames/glowing-light/light_00029.png</key>
+            <key type="filename">light-frames/glowing-light/light_00030.png</key>
+            <key type="filename">light-frames/glowing-light/light_00031.png</key>
+            <key type="filename">light-frames/glowing-light/light_00032.png</key>
+            <key type="filename">light-frames/glowing-light/light_00033.png</key>
+            <key type="filename">light-frames/glowing-light/light_00034.png</key>
+            <key type="filename">light-frames/glowing-light/light_00035.png</key>
+            <key type="filename">light-frames/glowing-light/light_00036.png</key>
+            <key type="filename">light-frames/glowing-light/light_00037.png</key>
+            <key type="filename">light-frames/glowing-light/light_00038.png</key>
+            <key type="filename">light-frames/glowing-light/light_00039.png</key>
+            <key type="filename">light-frames/glowing-light/light_00040.png</key>
+            <key type="filename">light-frames/glowing-light/light_00041.png</key>
+            <key type="filename">light-frames/glowing-light/light_00042.png</key>
+            <key type="filename">light-frames/glowing-light/light_00043.png</key>
+            <key type="filename">light-frames/glowing-light/light_00044.png</key>
+            <key type="filename">light-frames/glowing-light/light_00045.png</key>
+            <key type="filename">light-frames/glowing-light/light_00046.png</key>
+            <key type="filename">light-frames/glowing-light/light_00047.png</key>
+            <key type="filename">light-frames/glowing-light/light_00048.png</key>
+            <key type="filename">light-frames/glowing-light/light_00049.png</key>
+            <key type="filename">light-frames/glowing-light/light_00050.png</key>
+            <key type="filename">light-frames/glowing-light/light_00051.png</key>
+            <key type="filename">light-frames/glowing-light/light_00052.png</key>
+            <key type="filename">light-frames/glowing-light/light_00053.png</key>
+            <key type="filename">light-frames/glowing-light/light_00054.png</key>
+            <key type="filename">light-frames/glowing-light/light_00055.png</key>
+            <key type="filename">light-frames/glowing-light/light_00056.png</key>
+            <key type="filename">light-frames/glowing-light/light_00057.png</key>
+            <key type="filename">light-frames/glowing-light/light_00058.png</key>
+            <key type="filename">light-frames/glowing-light/light_00059.png</key>
+            <key type="filename">light-frames/glowing-light/light_00060.png</key>
+            <key type="filename">light-frames/glowing-light/light_00061.png</key>
+            <key type="filename">light-frames/glowing-light/light_00062.png</key>
+            <key type="filename">light-frames/glowing-light/light_00063.png</key>
+            <key type="filename">light-frames/glowing-light/light_00064.png</key>
+            <key type="filename">light-frames/glowing-light/light_00065.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>63,63,125,125</rect>
+                <rect>50,50,100,100</rect>
                 <key>scale9Paddings</key>
-                <rect>63,63,125,125</rect>
+                <rect>50,50,100,100</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>frames/glowing-light</filename>
+            <filename>light-frames/glowing-light</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
