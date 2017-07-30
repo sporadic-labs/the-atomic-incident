@@ -7,15 +7,15 @@ export default class Scattershot extends BaseWeapon {
 
         // Initial weapon settings:
         //  Ammo               - 24 shots / clip
-        //  Time between shots - 600 ms
-        //  Reload time        - 3600 ms
-        this.init(24, 600, 3600);
+        //  Time between shots - 400 ms
+        //  Reload time        - 2400 ms
+        this.init(24, 480, 2400);
     }
 
     fire(angle) {
         if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
             // Find trajectory
-            var pelletNum = this.game.rnd.integerInRange(12, 18);
+            var pelletNum = this.game.rnd.integerInRange(16, 24);
 
             // randomize the trajectory of every bullet in the shotgun blast
             for (var i=0; i<pelletNum; i++) {
@@ -45,7 +45,7 @@ export default class Scattershot extends BaseWeapon {
             (perpendicularOffset * Math.sin(perpAngle));
         // shotgun blast is made up of a bunch of slugs at half size.
         var p = new Projectile(this.game, x, y, "assets", "weapons/slug", this,
-            this._player, 16, angle, speed);
+            this._player, 24, angle, speed);
         p.scale.setTo(0.5, 0.5);
         var rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
         p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
