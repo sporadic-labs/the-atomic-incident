@@ -33,6 +33,16 @@ export default class BaseWeapon extends Phaser.Group {
         return this._ableToAttack;
     }
 
+    _reload() {
+        console.log("reloading!");
+        if (!this._ableToAttack) return;
+        this._ableToAttack = false;
+        this._cooldownTimer.add(this._reloadTime, function() {
+            this.fillAmmo();
+            this._ableToAttack = true;
+        }, this);
+    }
+
     _startCooldown(time) {
         if (!this._ableToAttack) return;
         this._ableToAttack = false;

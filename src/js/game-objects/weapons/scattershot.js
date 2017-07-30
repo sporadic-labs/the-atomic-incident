@@ -29,7 +29,11 @@ export default class Scattershot extends BaseWeapon {
 
             this.incrementAmmo(-1);
 
-            this._startCooldown(this._cooldownTime);
+            if (this.getAmmo() > 0) {
+                this._startCooldown(this._cooldownTime);
+            } else {
+                this._reload();
+            }
         }
     }
 
