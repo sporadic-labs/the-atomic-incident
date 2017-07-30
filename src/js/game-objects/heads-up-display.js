@@ -74,6 +74,11 @@ function HeadsUpDisplay(game, parentGroup) {
     this._scoreText.anchor.setTo(0.5);
     this.add(this._scoreText);
 
+    this._ammoText = game.make.text(24, 84, "", {
+        font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center"
+    });
+    this.add(this._ammoText);
+
     this._debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
         font: "18px 'Alfa Slab One'", fill: "#9C9C9C", align: "left"
     });
@@ -90,6 +95,9 @@ function HeadsUpDisplay(game, parentGroup) {
 HeadsUpDisplay.prototype.update = function () {
     this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
+
+    this._ammoText.setText(this._player.weapon.getAmmo() + " / " +
+        this._player.weapon._totalAmmo);
 
     this._fpsText.setText(this.game.time.fps);
 
