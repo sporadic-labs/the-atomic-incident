@@ -1,6 +1,4 @@
 const HealthBar = require("./user-interface/health-bar");
-const AbilityIcon = require("./user-interface/ability-icon");
-// const AbilityNames = require("../constants/ability-names");
 
 import PauseMenu from "./user-interface/pause-menu";
 
@@ -69,7 +67,7 @@ function HeadsUpDisplay(game, parentGroup) {
     this._scoreText.anchor.setTo(0.5);
     this.add(this._scoreText);
 
-    this._ammoText = game.make.text(24, 84, "", {
+    this._ammoText = game.make.text(20, 45, "", {
         font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center"
     });
     this.add(this._ammoText);

@@ -19,7 +19,6 @@ var colors = require("../constants/colors.js");
 const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
-import { AmmoManager } from '../game-objects/components/ammo-manager.js';
 import EnemySpawner from "../game-objects/enemy-spawner";
 
 function Sandbox() {}
@@ -89,9 +88,6 @@ Sandbox.prototype.create = function () {
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
-
-    // Ammo Manager
-    globals.ammoManager = new AmmoManager(game, groups.hud);
 
     // Player
     // Setup a new player, and attach it to the global variabls object.

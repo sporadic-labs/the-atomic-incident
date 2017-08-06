@@ -50,7 +50,6 @@ function Player(game, x, y, parentGroup) {
     this._pickups = globals.groups.pickups;
     this._effects = this.game.globals.plugins.effects;
     this._levelManager = globals.levelManager;
-    this._ammoManager = globals.ammoManager;
 
     // Setup animations
     var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
