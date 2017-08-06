@@ -116,6 +116,13 @@ Sandbox.prototype.create = function () {
 
     const PostProcessor = require("../game-objects/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
+    
+    // Toggle the lighting system transparency with L key
+    let opacityToggled = false; 
+    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => {
+        opacityToggled = !opacityToggled;
+        this.lighting.setOpacity(opacityToggled ? 0.5 : 1);
+    });
 
     // Testing sprite lights!
     // const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
