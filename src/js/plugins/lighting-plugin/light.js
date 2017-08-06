@@ -2,6 +2,18 @@ const Color = require("../../helpers/Color.js");
 
 let instances = 0;
 
+/**
+ * A class representing a Light instance. It maintains an internal bitmap that it uses to calculate
+ * this light's contribution to the rest of the world's lighting. Light/shadow is calculated using
+ * "destination-in" canvas blending mode. Draw the light without shadows, then draw a mask that
+ * keeps only the regions within the bounds of the light rays that were cast.
+ * 
+ * The light's bitmap is centered over this.position. The light's shape can either be a circle or a
+ * polygon. When the light is first initialized, a bitmap is created that matches the light's shape.
+ * For performance reasons, that bitmap will not change size unless explicitly told to do so.
+ * 
+ * @class Light
+ */
 class Light {
     /**
      * Creates an instance of Light.
@@ -17,6 +29,7 @@ class Light {
         this.game = game;
         this.parent = parent;
         this.shape = shape;
+        /** @member {Phaser.Point} position - center of the Light's shape and bitmap */
         this.position = position.clone();
         this.baseColor = (baseColor instanceof Color) ? baseColor : new Color(baseColor);
         this.pulseColor = (pulseColor instanceof Color) ? pulseColor : new Color(pulseColor);
@@ -35,27 +48,41 @@ class Light {
         this._bitmap = null;
         this._boundingRadius = null;
         this._debugGraphics = null;
-        this.setShape(shape);
+        this.setShape(shape, true); // Force bitmap creation
     }
 
-    setShape(shape) {
-        this.shape = shape;
+    /**
+     * Set the underlying bitmap to a specified size, or create one at the specified size if there
+     * isn't one yet.
+     * 
+     * @param {Number} width 
+     * @param {Number} height 
+     * @memberof Light
+     */
+    resizeBitmap(width, height) {
+        if (this._bitmap) this._bitmap.resize(width, height);
+        else this._bitmap = this.game.add.bitmapData(width, height);
+        this.needsRedraw = true;
+    }
 
-        // Figure out the appropriate bounding radius and bitmap size depending on the shape
-        let bitmapWidth = 0;
-        let bitmapHeight = 0;
+    /**
+     * Set the shape of the Light. Optionally, force the bitmap's size to match the new shape. Note:
+     * for performance reasons, this defaults to false.
+     * 
+     * @param {Phaser.Circle|Phaser.Polygon} shape 
+     * @param {boolean} [forceBitmapResize=false] 
+     * @memberof Light
+     */
+    setShape(shape, forceBitmapResize = false) {
+        this.shape = shape;
+        this.needsRedraw = true;
+
+        // Figure out the appropriate bounding radius and handle any init that the shape needs. The
+        // bounding radius needs to be large enough to accomodate rotating the shape.
         let boundingRadius = 0;
         if (shape instanceof Phaser.Circle) {
-            // For a circlular light, the bitmap is set to be the size of the
-            // circle. The light should then be drawn in the center of the bitmap.
-            bitmapWidth = shape.diameter;
-            bitmapHeight = shape.diameter;
             boundingRadius = shape.radius;
         } else if (shape instanceof Phaser.Polygon) {
-            // For a polygon light, the bitmap is set to be the size of bounding
-            // circle around the polygon. That means that the polygon can rotate
-            // without a point going beyond the bitmap. That also means that we need
-            // to make sure the polygon's scale doesn't get increased anywhere!
             const points = shape.toNumberArray();
             // Cache the original shape for the purposes of rotating
             this._originalShape = shape.clone();
@@ -66,20 +93,17 @@ class Light {
                 const p = new Phaser.Point(points[i], points[i + 1]);
                 this._originalPoints.push(p);
                 const d = center.distance(p);
-                if (d > this._boundingRadius) boundingRadius = d;
+                if (d > boundingRadius) boundingRadius = d;
             }
-            bitmapWidth = 2 * this._boundingRadius;
-            bitmapHeight = 2 * this._boundingRadius;
             this._setRotation(0);
         } else {
             throw Error("Unsupported shape used with Light");
         }
-
-        // Update the bounding radius and bitmap dimensions
         this._boundingRadius = boundingRadius;
-        if (this._bitmap) this._bitmap.resize(bitmapWidth, bitmapHeight);
-        else this._bitmap = this.game.add.bitmapData(bitmapWidth, bitmapHeight);
-        this.needsRedraw = true; // Flag as dirty
+
+        if (forceBitmapResize) {
+            this.resizeBitmap(2 * this._boundingRadius, 2 * this._boundingRadius);
+        }
     }
 
     enableDebug() {
@@ -132,6 +156,7 @@ class Light {
      */
     isPointInLight(worldPosition) {
         if (!this.enabled) return false; // Exit if light is disabled
+
         // Check if the position is within range of the light's shape
         const lightRelativePos = Phaser.Point.subtract(worldPosition, this.position);
         const inShape = this.shape.contains(lightRelativePos.x, lightRelativePos.y);
@@ -258,20 +283,10 @@ class Light {
      * @memberof Light
      */
     getTopLeft() {
-        if (this.shape instanceof Phaser.Circle) {
-            return new Phaser.Point(
-                this.position.x - this.shape.radius,
-                this.position.y - this.shape.radius
-            );
-        } else if (this.shape instanceof Phaser.Polygon) {
-            // Polygon bitmap is set to be the size of the bounding circle. The light's position is
-            // in the center of the bitmap, so to get from the position to the top left, simply
-            // shift by the circle radius.
-            return new Phaser.Point(
-                this.position.x - this._boundingRadius,
-                this.position.y - this._boundingRadius
-            );
-        }
+        return new Phaser.Point(
+            this.position.x - (this._bitmap.width / 2),
+            this.position.y - (this._bitmap.height / 2)
+        );
     }
 
     destroy() {
@@ -281,17 +296,15 @@ class Light {
     }
 
     _redrawLight() {
-        // Draw the circular gradient for the light. This is the light without
-        // factoring in shadows
+        // Draw the circular gradient for the light. This is the light without factoring in shadows.
         this._bitmap.cls();
         this._bitmap.blendSourceOver(); // Default blend mode
 
-        var shape = this.shape;
-        if (shape instanceof Phaser.Circle) {
-            // Light as a simple circle
-            var cx = shape.radius;
-            var cy = shape.radius;
-            this._bitmap.circle(cx, cy, shape.radius, this.baseColor.getWebColor());
+        const cx = this._bitmap.width / 2;
+        const cy = this._bitmap.height / 2;
+        if (this.shape instanceof Phaser.Circle) {
+            // Light as a simple circle centered in the bitmap
+            this._bitmap.circle(cx, cy, this.shape.radius, this.baseColor.getWebColor());
             // Pulse - draw two arcs, one filled and one unfilled to get a doughnut
             if (this.isPulseActive()) {
                 var startRadius = Math.max(this._pulse.position - this._pulse.width, 0);
@@ -302,19 +315,16 @@ class Light {
                 this._bitmap.ctx.arc(cx, cy, startRadius, 0, 2 * Math.PI, true); // Unfilled
                 this._bitmap.ctx.fill();
             }
-        } else if (shape instanceof Phaser.Polygon) {
-            // Draw the polygon using the underlying bitmap. The points are relative
-            // to the center of the bitmap (light.position is the center of the
-            // bitmap). The center of the bitmap is at the location
-            // (boundingRadius, boundingRadius), so shift each point by the radius
+        } else if (this.shape instanceof Phaser.Polygon) {
+            // Draw the polygon using the underlying bitmap. The points are relative to the center
+            // of the bitmap (light.position is the center of the bitmap). The center of the bitmap
+            // is at the location (boundingRadius, boundingRadius), so shift each point by the
+            // radius
             this._bitmap.ctx.fillStyle = this.baseColor.getWebColor();
             this._bitmap.ctx.beginPath();
-            this._bitmap.ctx.moveTo(this._boundingRadius + this._points[0].x,
-                this._boundingRadius + this._points[0].y);
+            this._bitmap.ctx.moveTo(cx + this._points[0].x, cy + this._points[0].y);
             for (var i = 1; i < this._points.length; i += 1) {
-                this._bitmap.ctx.lineTo(
-                    this._boundingRadius + this._points[i].x,
-                    this._boundingRadius + this._points[i].y);
+                this._bitmap.ctx.lineTo(cx + this._points[i].x, cy + this._points[i].y);
             }
             this._bitmap.ctx.closePath();
             this._bitmap.ctx.fill();
@@ -322,8 +332,8 @@ class Light {
     }
 
     _redrawShadow(points) {
-        // Destination in blend mode - the next thing drawn acts as a mask for the
-        // existing canvas content
+        // Destination in blend mode - the next thing drawn acts as a mask for the existing canvas
+        // content
         this._bitmap.blendDestinationIn();
 
         // Draw the "light rays"
@@ -331,8 +341,8 @@ class Light {
         this._bitmap.ctx.fillStyle = "white";
         this._bitmap.ctx.strokeStyle = "white";
 
-        // Figure out the offset needed to convert the world positions of the light
-        // points to local coordinates within the bitmap
+        // Figure out the offset needed to convert the world positions of the light points to local
+        // coordinates within the bitmap
         const off = this.getTopLeft();
         this._bitmap.ctx.moveTo(points[0].x - off.x, points[0].y - off.y);
         for (const p of points) {
