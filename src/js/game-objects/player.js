@@ -116,8 +116,8 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
 
     // Player Sound fx
-    this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
-    this._hitSoud.playMultiple = true;
+    // this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
+    // this._hitSoud.playMultiple = true;
     this._dashSound = this.game.globals.soundManager.add("warp");
     this._dashSound.playMultiple = true;
     this.pickupSound = this.game.globals.soundManager.add("whoosh");
@@ -229,7 +229,7 @@ Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
         this.game.camera.shake(0.01, 200);
-        this._hitSoud.play();
+        // this._hitSoud.play();
         // Trigger a red flash to indicate damage!
         this._effects.lightFlash(0XF2CECE);
     }
