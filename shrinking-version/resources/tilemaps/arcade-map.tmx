@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="394">
+ <tileset firstgid="1" name="tiles" tilewidth="25" tileheight="25" tilecount="144" columns="16">
+  <image source="tiles.png" width="400" height="225"/>
+  <tile id="0">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+   <objectgroup draworder="index">
+    <object id="1" x="8" y="8" width="10" height="10"/>
+   </objectgroup>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="145" name="tiles" tilewidth="25" tileheight="25" tilecount="144" columns="16">
+  <image source="tiles.png" width="400" height="225"/>
+  <tile id="0">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+   <objectgroup draworder="index">
+    <object id="1" x="8" y="8" width="10" height="10"/>
+   </objectgroup>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="bg" width="30" height="30">
+  <data encoding="csv">
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134
+</data>
+ </layer>
+ <layer name="walls" width="30" height="30">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,6,6,6,10,0,0,0,0,0,0,9,6,6,6,10,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,8,6,6,6,11,0,0,0,0,0,0,8,6,6,6,11,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,9,10,0,0,0,0,0,0,0,0,0,9,10,0,0,0,0,0,0,0,0,0,9,10,0,0,0,
+0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,
+0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,
+0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,
+0,0,0,8,11,0,0,0,0,0,0,0,0,0,8,11,0,0,0,0,0,0,0,0,0,8,11,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,6,6,6,10,0,0,0,0,0,0,9,6,6,6,10,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,8,6,6,6,11,0,0,0,0,0,0,8,6,6,6,11,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,9,10,0,0,0,0,0,0,0,0,0,9,10,0,0,0,0,0,0,0,0,0,9,10,0,0,0,
+0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,
+0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,
+0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,0,0,7,7,0,0,0,
+0,0,0,8,11,0,0,0,0,0,0,0,0,0,8,11,0,0,0,0,0,0,0,0,0,8,11,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,6,6,6,10,0,0,0,0,0,0,9,6,6,6,10,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,8,6,6,6,11,0,0,0,0,0,0,8,6,6,6,11,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="navmesh" visible="0">
+  <object id="264" x="0" y="0" width="175" height="175"/>
+  <object id="265" x="300" y="0" width="150" height="175"/>
+  <object id="266" x="575" y="0" width="175" height="175"/>
+  <object id="267" x="175" y="0" width="125" height="75"/>
+  <object id="268" x="450" y="0" width="125" height="75"/>
+  <object id="269" x="0" y="300" width="175" height="150"/>
+  <object id="270" x="0" y="175" width="75" height="125"/>
+  <object id="271" x="0" y="450" width="75" height="125"/>
+  <object id="272" x="0" y="575" width="175" height="175"/>
+  <object id="273" x="300" y="575" width="150" height="175"/>
+  <object id="274" x="575" y="575" width="175" height="175"/>
+  <object id="275" x="575" y="300" width="175" height="150"/>
+  <object id="276" x="675" y="175" width="75" height="125"/>
+  <object id="277" x="675" y="450" width="75" height="125"/>
+  <object id="278" x="175" y="675" width="125" height="75"/>
+  <object id="279" x="450" y="675" width="125" height="75"/>
+  <object id="280" x="175" y="125" width="125" height="225"/>
+  <object id="281" x="450" y="125" width="125" height="225"/>
+  <object id="282" x="175" y="400" width="125" height="225"/>
+  <object id="283" x="450" y="400" width="125" height="225"/>
+  <object id="284" x="575" y="175" width="50" height="125"/>
+  <object id="285" x="575" y="450" width="50" height="125"/>
+  <object id="286" x="125" y="450" width="50" height="125"/>
+  <object id="287" x="125" y="175" width="50" height="125"/>
+  <object id="288" x="400" y="175" width="50" height="400"/>
+  <object id="289" x="300" y="175" width="50" height="400"/>
+  <object id="290" x="350" y="300" width="50" height="150"/>
+ </objectgroup>
+ <objectgroup name="navmesh-shrunken" visible="0">
+  <object id="367" x="0" y="0" width="162.5" height="162.5"/>
+  <object id="368" x="312.5" y="0" width="125" height="162.5"/>
+  <object id="369" x="587.5" y="0" width="162.5" height="162.5"/>
+  <object id="370" x="162.5" y="0" width="150" height="62.5"/>
+  <object id="371" x="437.5" y="0" width="150" height="62.5"/>
+  <object id="372" x="0" y="312.5" width="162.5" height="125"/>
+  <object id="373" x="0" y="162.5" width="62.5" height="150"/>
+  <object id="374" x="0" y="437.5" width="62.5" height="150"/>
+  <object id="375" x="0" y="587.5" width="162.5" height="162.5"/>
+  <object id="376" x="312.5" y="587.5" width="125" height="162.5"/>
+  <object id="377" x="587.5" y="587.5" width="162.5" height="162.5"/>
+  <object id="378" x="587.5" y="312.5" width="162.5" height="125"/>
+  <object id="379" x="687.5" y="162.5" width="62.5" height="150"/>
+  <object id="380" x="687.5" y="437.5" width="62.5" height="150"/>
+  <object id="381" x="162.5" y="687.5" width="150" height="62.5"/>
+  <object id="382" x="437.5" y="687.5" width="150" height="62.5"/>
+  <object id="383" x="162.5" y="137.5" width="150" height="200"/>
+  <object id="384" x="437.5" y="137.5" width="150" height="200"/>
+  <object id="385" x="162.5" y="412.5" width="150" height="200"/>
+  <object id="386" x="437.5" y="412.5" width="150" height="200"/>
+  <object id="387" x="587.5" y="162.5" width="25" height="150"/>
+  <object id="388" x="587.5" y="437.5" width="25" height="150"/>
+  <object id="389" x="137.5" y="437.5" width="25" height="150"/>
+  <object id="390" x="137.5" y="162.5" width="25" height="150"/>
+  <object id="391" x="412.5" y="162.5" width="25" height="425"/>
+  <object id="392" x="312.5" y="162.5" width="25" height="425"/>
+  <object id="393" x="337.5" y="312.5" width="75" height="125"/>
+ </objectgroup>
+ <objectgroup name="vertical-paths" visible="0">
+  <object id="98" x="150" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="99" x="600" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="100" x="323" y="23">
+   <polyline points="0,0 2,702"/>
+  </object>
+  <object id="101" x="425" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="102" x="37" y="25">
+   <polyline points="0,0 0,701"/>
+  </object>
+  <object id="103" x="700" y="26">
+   <polyline points="0,0 2,699"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="horizontal-paths" visible="0">
+  <object id="110" x="25" y="25">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="111" x="25" y="325">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="112" x="25" y="425">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="113" x="25" y="725">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="114" x="25" y="150">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="115" x="25" y="600">
+   <polyline points="0,0 700,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="pickups" visible="0">
+  <object id="136" name="1" x="225" y="225" width="25" height="25"/>
+  <object id="137" name="2" x="500" y="225" width="25" height="25"/>
+  <object id="138" name="3" x="225" y="500" width="25" height="25"/>
+  <object id="139" name="4" x="500" y="500" width="25" height="25"/>
+  <object id="140" name="5" x="362.5" y="87.5" width="25" height="25"/>
+  <object id="141" name="6" x="637.5" y="368.75" width="25" height="25"/>
+  <object id="142" name="7" x="362.5" y="637.5" width="25" height="25"/>
+  <object id="143" name="8" x="87.5" y="362.5" width="25" height="25"/>
+  <object id="144" name="9" x="362.5" y="362.5" width="25" height="25"/>
+ </objectgroup>
+</map>
