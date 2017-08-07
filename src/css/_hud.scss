@@ -1,4 +1,16 @@
 #hud {
+
+    // Button reset
+    button {
+        background: none;
+        border: 0;
+        color: inherit;
+        font: inherit;
+        line-height: normal;
+        overflow: visible;
+        padding: 0;
+    }
+
     cursor: pointer;
     position: absolute;
     top: 50%;
@@ -7,9 +19,7 @@
     border-radius: 3px;
     z-index: 12;
     font-family: 'Alfa Slab One', serif;
-
-    // Dunno if this should be set here or not...
-    color: #bcbcbc;
+    color: white;
 
     // Disable pointer events on the HUD container, but re-enable on children
     pointer-events: none;
@@ -27,12 +37,11 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid black;
-        border-radius: 6px;
+        border-radius: 10px;
         // box-shadow: 2px 2px 4px #4f4f4f;
-        background: #E8E8E8;
         pointer-events: initial;
         cursor: default;
+        background-color: #3C98F0; 
 
         .menu-title {
             margin: 18px auto 48px auto;
@@ -47,19 +56,22 @@
             margin: 24px auto;
             padding: 16px;
             width: 50%;
+            color: #3C98F0;
+            background-color: white;
+            border-radius: 5px;
 
             &:hover {
                 // TODO(rt): Make this better.
                 cursor: pointer;
                 color: black;
-                background: #eeeeee;
+                background-color: #ebefff; 
             }
         }
 
         .btn-close {
             position: absolute;
-            top: 2%;
-            right: 2%;
+            top: 3%;
+            right: 3%;
             font-size: 14px;
             border: none;
             background: none;
@@ -69,10 +81,13 @@
             width: 24px;
             height: 24px;
             text-align: center;
+            color: #3C98F0;
+            background-color: white;
+            padding-left: 0.5px;
 
             &:hover {
                 // border: 1px solid black;
-                color: #4f4f4f;
+                color: black;
             }
         }
     }
