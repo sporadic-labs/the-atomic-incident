@@ -27,7 +27,7 @@ class WaveMenu {
         // NOTE(rex): Start at the full time allowed for this menu.
         this.time = 6000; // in ms
 
-        // Add a callback for dealing with the pause button being selected while the game is already paused.
+        // Add a callback for dealing with pause button being selected while game is already paused.
         game.globals.onPause.add(this._onPause, this);
         // And resuming too...
         game.globals.onUnPause.add(this._onResume, this);

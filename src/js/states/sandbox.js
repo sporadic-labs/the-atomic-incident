@@ -15,8 +15,8 @@ const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
-var colors = require("../constants/colors.js");
-const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
+// var colors = require("../constants/colors.js");
+// const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import EnemySpawner from "../game-objects/enemy-spawner";

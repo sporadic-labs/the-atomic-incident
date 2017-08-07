@@ -1,5 +1,4 @@
-var colors = require("../../constants/colors.js");
-const LightPickup = require("./light-pickup.js");
+// var colors = require("../../constants/colors.js");
 const AbilityPickup = require("./ability-pickup.js");
 const abilities = require("../../constants/ability-names.js");
 
@@ -16,7 +15,7 @@ class PickupSpawner extends Phaser.Group {
 
     spawnPickup(colorName, amount = 1) {
         for (let i = 0; i < amount; i++) {
-            const color = colors[colorName];
+            // const color = colors[colorName];
             const point = this._getSpawnPoint();
             // new LightPickup(this.game, point.x, point.y, this, color);
             new EnergyPickup(this.game, point.x, point.y, this, 100, 3);

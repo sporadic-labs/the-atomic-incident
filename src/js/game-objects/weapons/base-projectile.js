@@ -14,7 +14,7 @@ export default class BaseProjectile extends Phaser.Sprite {
         this._initialPos = this.position.clone();
         this._remove = false; // check if BaseProjectile should be removed?
 
-        // NOTE(rex): We need to rotate this sprite 90 degrees on setup for it to be oriented correctly.
+        // NOTE(rex): We need to rotate 90 degrees on setup for it to be oriented correctly.
         this.rotation = angle + (Math.PI / 2); // Radians
 
         this.game.physics.arcade.enable(this);
@@ -40,7 +40,7 @@ export default class BaseProjectile extends Phaser.Sprite {
         // Check overlap
         SpriteUtils.checkOverlapWithGroup(this, this._enemies, 
             this._onCollideWithEnemy, this);
-        // If the bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
+        // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
         if (this._player._playerLight.isPointInShadow(this.position)) {
             this.destroy();
         }
@@ -56,7 +56,7 @@ export default class BaseProjectile extends Phaser.Sprite {
     }
 
     _onCollideWithEnemy (self, enemy) {
-        var isKilled = enemy.takeDamage(this._damage);
+        enemy.takeDamage(this._damage);
         // TODO(rex): Combos?
         // if (isKilled) this._player.incrementCombo(1);
         this.destroy();

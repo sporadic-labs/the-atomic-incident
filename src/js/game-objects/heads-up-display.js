@@ -31,7 +31,7 @@ function HeadsUpDisplay(game, parentGroup) {
     const pauseButton = game.add.button(playPos.x, playPos.y, "assets", () => {
         playButton.visible = true;
         pauseButton.visible = false;
-        const menu = new PauseMenu(game);
+        new PauseMenu(game);
         // menu.unpauseSignal.add(unpause);
         game.globals.onUnPause.add(unpause);
         game.globals.onPause.dispatch();
