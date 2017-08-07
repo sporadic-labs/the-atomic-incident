@@ -61,11 +61,11 @@ function HeadsUpDisplay(game, parentGroup) {
     else unmuteButton.visible = false;
 
     // Text for HUD
-    this._scoreText = game.make.text(this.game.width / 2, 34, "", {
-        font: "30px 'Alfa Slab One'", fill: "#ffd800", align: "center"
-    });
-    this._scoreText.anchor.setTo(0.5);
-    this.add(this._scoreText);
+    // this._scoreText = game.make.text(this.game.width / 2, 34, "", {
+    //     font: "30px 'Alfa Slab One'", fill: "#ffd800", align: "center"
+    // });
+    // this._scoreText.anchor.setTo(0.5);
+    // this.add(this._scoreText);
 
     this._ammoText = game.make.text(15, 10, "", {
         font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center"
@@ -86,11 +86,15 @@ function HeadsUpDisplay(game, parentGroup) {
 }
 
 HeadsUpDisplay.prototype.update = function () {
-    this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
+    // this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     Phaser.Group.prototype.update.apply(this, arguments);
 
-    this._ammoText.setText(this._player.weapon.getAmmo() + " / " +
-        this._player.weapon._totalAmmo);
+    if (!this._player.weapon._isReloading) {
+        this._ammoText.setText(this._player.weapon.getAmmo() + " / " +
+            this._player.weapon._totalAmmo);
+    } else {
+        this._ammoText.setText("Reloading...");
+    }
 
     this._fpsText.setText(this.game.time.fps);
 
