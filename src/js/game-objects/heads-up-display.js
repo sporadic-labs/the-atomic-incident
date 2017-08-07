@@ -1,4 +1,4 @@
-const HealthBar = require("./user-interface/health-bar");
+// const HealthBar = require("./user-interface/health-bar");
 
 import PauseMenu from "./user-interface/pause-menu";
 
@@ -19,7 +19,7 @@ function HeadsUpDisplay(game, parentGroup) {
     this._satBodyPlugin = this.game.globals.plugins.satBody;
     this.fixedToCamera = true;
 
-    new HealthBar(game, 20, 15, this);
+    // new HealthBar(game, 20, 15, this);
 
     // Play/pause
     const unpause = () => {
@@ -67,7 +67,7 @@ function HeadsUpDisplay(game, parentGroup) {
     this._scoreText.anchor.setTo(0.5);
     this.add(this._scoreText);
 
-    this._ammoText = game.make.text(20, 45, "", {
+    this._ammoText = game.make.text(15, 10, "", {
         font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center"
     });
     this.add(this._ammoText);

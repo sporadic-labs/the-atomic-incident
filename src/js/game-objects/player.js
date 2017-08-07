@@ -29,7 +29,7 @@ function Player(game, x, y, parentGroup) {
     this.anchor.set(0.5);
     parentGroup.add(this);
 
-    this.hearts = 3;
+    // this.hearts = 3;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);
@@ -78,7 +78,7 @@ function Player(game, x, y, parentGroup) {
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, 
-        {startRadius: 300, minRadius: this.width, shrinkSpeed: 10});
+        {startRadius: 300, minRadius: 100, shrinkSpeed: 10});
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -248,11 +248,13 @@ Player.prototype.takeDamage = function () {
     if (this._isTakingDamage) return;
 
     // Lose a heart & restart the game if no hearts remain
-    this.hearts -= 1;
-    if (this.hearts <= 0) {
-        this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
-        this.game.state.restart();
-    }
+    // this.hearts -= 1;
+    // if (this.hearts <= 0) {
+    //     this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
+    //     this.game.state.restart();
+    // }
+
+    this._playerLight.incrementRadius(-50);
 
     // Speed boost on damage
     var originalSpeed = this._maxSpeed;

@@ -99,7 +99,7 @@ class ShadowEnemy extends BaseEnemy {
     destroy(...args) {
         // Spawn pickup
         const pickupGroup = this.game.globals.groups.pickups;
-        new EnergyPickup(this.game, this.position.x, this.position.y, pickupGroup, 100, 3);
+        new EnergyPickup(this.game, this.position.x, this.position.y, pickupGroup, 15, 3);
 
         this._timer.destroy();
         this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
