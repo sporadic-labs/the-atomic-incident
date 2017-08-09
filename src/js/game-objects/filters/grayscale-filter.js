@@ -6,24 +6,16 @@ export default class GrayscaleFilter extends Phaser.Filter {
 
         this.fragmentSrc = glslify.file("./grayscale-filter.glsl");
         this.uniforms.factor = {type: "1f", value: 0};
-    }
-
-    fadeToGray(time) {
-        this._tween = this.game.tweens.create(this.uniforms.factor)
-            .to({value: 1}, time, Phaser.Easing.Quadratic.InOut)
+        
+        this.game.tweens.create(this.uniforms.factor)
+            .to({value: 1}, 2000, Phaser.Easing.Linear.In, false, 2000)
+            .to({value: 0}, 2000, Phaser.Easing.Linear.Out, false, 2000)
+            .repeatAll(-1)
+            // .yoyo(true, 0, -1)
             .start();
     }
 
-    fadeToNormal(time) {
-        if (this._tween) {
-            this._tween.stop()
-                .to({factor: 0}, time, Phaser.Easing.Quadratic.InOut)
-                .start();
-        }
-    }
-
     update(...args) {
-        console.log(this.uniforms.factor.value);
         super.update(...args);
     }
 }

@@ -15,7 +15,6 @@ class PostProcessor extends Phaser.Sprite {
         this.postTarget = postTarget;
 
         this.grayscaleFilter = new GrayscaleFilter(game);
-        this.grayscaleFilter.uniforms.factor.value = 0.5;
         this.vignetteFilter = new VignetteFilter(game);
         this.rgbFilter = new RgbFilter(game);
 
