@@ -8,7 +8,7 @@ uniform vec2 resolution; // Resolution of the screen
 uniform float time; // Seconds, provided by Phaser
 uniform float displacement; // Pixels
 
-// Source: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+// Pseudo random: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 float rand(float n) { return fract(sin(n) * 43758.5453123); }
 
 void main() {

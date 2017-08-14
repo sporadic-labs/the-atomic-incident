@@ -59,7 +59,8 @@ export default class RgbSplitFilter extends Phaser.Filter {
     }
 
     /**
-     * Trigger an RGB split animation immediately and set it to loop indefinitely
+     * Trigger an RGB split animation immediately and set it to loop indefinitely. It's safe to call
+     * this function repeatedly, becuase if the filter is already looping, this won't do anything.
      * 
      * @returns {this}
      * @memberof RgbSplitFilter
