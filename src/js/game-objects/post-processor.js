@@ -1,6 +1,6 @@
 import GrayscaleFilter from "./filters/grayscale-filter";
 import VignetteFilter from "./filters/vignette-filter";
-import RgbFilter from "./filters/rgb-filter";
+import RgbSplitFilter from "./filters/rgb-split-filter";
 
 class PostProcessor extends Phaser.Sprite {
     constructor(game, postTarget) {
@@ -16,9 +16,9 @@ class PostProcessor extends Phaser.Sprite {
 
         this.grayscaleFilter = new GrayscaleFilter(game);
         this.vignetteFilter = new VignetteFilter(game);
-        this.rgbFilter = new RgbFilter(game);
+        this.rgbSplitFilter = new RgbSplitFilter(game);
 
-        this.filters = [this.rgbFilter];
+        this.filters = [this.rgbSplitFilter];
     }
 
     update() {

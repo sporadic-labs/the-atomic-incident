@@ -188,12 +188,10 @@ Player.prototype.update = function () {
     var mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     this.rotation = this.position.angle(mousePos) + (Math.PI/2);
 
-
     if (this._controls.isControlActive("attack") && this.weapon.isAbleToAttack() &&
         !this.weapon.isAmmoEmpty()) {
         this.weapon.fire(this.position.angle(mousePos));
     }
-
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies,
@@ -202,6 +200,22 @@ Player.prototype.update = function () {
     // Light pickups
     spriteUtils.checkOverlapWithGroup(this, this._pickups,
         this._onCollideWithPickup, this);
+
+    // HACK: testing idea of using post processor to indicate dying
+    const postProcessor = this.game.globals.postProcessor;
+    if (this._playerLight.getLightRemaining() <= 0) {
+        postProcessor.rgbSplitFilter
+            .setDisplacement(40)
+            .setLoopInterval(500)
+            .loopSplit();
+    } else if (this._playerLight.getLightRemaining() <= 0.25) {
+        postProcessor.rgbSplitFilter
+            .setDisplacement(20)
+            .setLoopInterval(1000)
+            .loopSplit();
+    } else {
+        postProcessor.rgbSplitFilter.stopSplit();
+    }
 };
 
 Player.prototype.getVelocity = function () {
