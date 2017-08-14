@@ -1,11 +1,12 @@
-// See built-in uniforms: https://photonstorm.github.io/phaser-ce/Phaser.Filter.html
-
 precision mediump float;
 
-varying vec2 vTextureCoord; // UV coorindates provided by Phaser, in range 0 - 1
-uniform sampler2D uSampler; // Texture, provided by Phaser
+// Phaser built-in uniforms: https://photonstorm.github.io/phaser-ce/Phaser.Filter.html
+varying vec2 vTextureCoord; // UV coorindates, in range 0 - 1
+uniform sampler2D uSampler; // Texture
+uniform float time; // Seconds
+
+// Custom uniforms
 uniform vec2 resolution; // Resolution of the screen
-uniform float time; // Seconds, provided by Phaser
 uniform float displacement; // Pixels
 
 // Pseudo random: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83

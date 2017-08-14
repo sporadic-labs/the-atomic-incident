@@ -18,7 +18,7 @@ class PostProcessor extends Phaser.Sprite {
         this.vignetteFilter = new VignetteFilter(game);
         this.rgbSplitFilter = new RgbSplitFilter(game);
 
-        this.filters = [this.rgbSplitFilter];
+        this.filters = [this.rgbSplitFilter, this.vignetteFilter];
     }
 
     update() {
