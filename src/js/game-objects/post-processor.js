@@ -25,12 +25,14 @@ class PostProcessor extends Phaser.Sprite {
         for (const filter of this.filters) {
             if (filter.update) filter.update();
         }
-        // Clear with opaque white so that this sprite covers up everything else
-        this._clear(1, 1, 1, 1);
-        // Draw severything that is targeted
-        this.renderTexture.renderXY(this.postTarget, 0, 0, false);
+        // Draw severything that is targeted. Screen shake is baked into Phaser's rendering process,
+        // so in order to preserve it, we need to offset the target by the shake amount.
+        const shake = this.game.camera._shake || {x: 0, y: 0};
+        this.renderTexture.renderXY(this.postTarget, shake.x, shake.y, true);
     }
 
+    // This was used to force a screen clear on the render texture before drawing, but I don't
+    // believe it is necessary anymore.
     _clear(r, g, b, a) {
         // A bit of a hack - reach into the webgl context to clear the render texture
         const rt = this.renderTexture;
