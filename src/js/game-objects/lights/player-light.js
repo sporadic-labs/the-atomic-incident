@@ -16,6 +16,10 @@ export default class PlayerLight {
             new Phaser.Circle(0, 0, 2 * this._radius), color, color);
     }
 
+    getRadius() {
+        return this._radius;
+    }
+
     getLightRemaining() {
         return (this._radius - this._minRadius) / (this._maxRadius - this._minRadius);
     }

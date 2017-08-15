@@ -13,12 +13,25 @@ export default class VignetteFilter extends Phaser.Filter {
         this.uniforms.color = {type: "3f", value: {x: 0, y: 0, z: 0}}; // Testing out as black
     }
 
+    opacity(value = undefined) {
+        if (value !== undefined) this.uniforms.opacity.value = value;
+        return this.uniforms.opacity.value;
+    }
+
+    radius(value = undefined) {
+        if (value !== undefined) this.uniforms.radius.value = value;
+        return this.uniforms.radius.value;
+    }
+    
+    center(value = undefined) {
+        if (value !== undefined) {
+            this.uniforms.center.value.x = value.x;
+            this.uniforms.center.value.y = value.y;
+        }
+        return this.uniforms.center.value;
+    }
+
     update(...args) {
-        this.uniforms.center.value.x = this.game.globals.player.position.x;
-        this.uniforms.center.value.y = this.game.globals.player.position.y;
-        // Hacky for now: match radius to light and opacity to player health
-        this.uniforms.radius.value = 1.5 * this.game.globals.player._playerLight._radius;
-        this.uniforms.opacity.value = 1 - this.game.globals.player._playerLight.getLightRemaining();
         super.update(...args);
     }
 }

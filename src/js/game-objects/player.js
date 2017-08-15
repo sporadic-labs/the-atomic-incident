@@ -46,7 +46,8 @@ function Player(game, x, y, parentGroup) {
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
-    this._effects = this.game.globals.plugins.effects;
+    this._enemies = globals.groups.enemies;
+    this._postProcessor = globals.postProcessor;
     this._levelManager = globals.levelManager;
 
     // Setup animations
@@ -76,7 +77,7 @@ function Player(game, x, y, parentGroup) {
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, 
-        {startRadius: 300, minRadius: 100, shrinkSpeed: 30});
+        {startRadius: 300, minRadius: 100, shrinkSpeed: 10});
 
     // Directional arrow, for dev purposes
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
@@ -114,8 +115,8 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
 
     // Player Sound fx
-    this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
-    this._hitSoud.playMultiple = true;
+    this._hitSound = this.game.globals.soundManager.add("smash", 0.03);
+    this._hitSound.playMultiple = true;
     this._dashSound = this.game.globals.soundManager.add("warp");
     this._dashSound.playMultiple = true;
     this.pickupSound = this.game.globals.soundManager.add("whoosh");
@@ -201,21 +202,16 @@ Player.prototype.update = function () {
     spriteUtils.checkOverlapWithGroup(this, this._pickups,
         this._onCollideWithPickup, this);
 
-    // HACK: testing idea of using post processor to indicate dying
-    const postProcessor = this.game.globals.postProcessor;
-    if (this._playerLight.getLightRemaining() <= 0) {
-        postProcessor.rgbSplitFilter
-            .setDisplacement(40)
-            .setLoopInterval(500)
-            .loopSplit();
-    } else if (this._playerLight.getLightRemaining() <= 0.25) {
-        postProcessor.rgbSplitFilter
-            .setDisplacement(20)
-            .setLoopInterval(1000)
-            .loopSplit();
-    } else {
-        postProcessor.rgbSplitFilter.stopSplit();
-    }
+    const health = this._playerLight.getLightRemaining();
+    this._postProcessor.onHealthUpdate(health);
+};
+
+Player.prototype.getHealth = function () {
+    return this._playerLight.getLightRemaining();
+};
+
+Player.prototype.getLightRadius = function () {
+    return this._playerLight.getRadius();
 };
 
 Player.prototype.getVelocity = function () {
@@ -240,10 +236,8 @@ Player.prototype.postUpdate = function () {
 Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
-        this.game.camera.shake(0.01, 200);
-        this._hitSoud.play();
-        // Trigger a red flash to indicate damage!
-        this._effects.lightFlash(0XF2CECE);
+        this._hitSound.play();
+        this._postProcessor.onPlayerDamage();
     }
 };
 
