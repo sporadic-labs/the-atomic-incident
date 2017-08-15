@@ -6,10 +6,16 @@ window.PIXI = require("phaser-ce/build/custom/pixi");
 window.p2 = require("phaser-ce/build/custom/p2");
 window.Phaser = require("phaser-ce/build/custom/phaser-split");
 
+// Import and require don't play well together timing-wise. When we switch to webpack we can inject
+// the globals and go with an import here.
+const BootState = require("./states/boot-state.js").default;
+const LoadState = require("./states/load-state.js").default;
+const SandboxState = require("./states/sandbox.js").default;
+
 const gameDimensions = 750;
 
 // Keep this on CANVAS until Phaser 3 for performance reasons?
-var game = new Phaser.Game({
+const game = new Phaser.Game({
     width: gameDimensions, 
     height: gameDimensions, 
     renderer: Phaser.WEBGL,
@@ -26,7 +32,7 @@ $("#start-menu").hide();
 $("#options-menu").hide();
 
 // Create the space for globals on the game object
-var globals = game.globals = {};
+const globals = game.globals = {};
 globals.tilemapNames = [
     "dungeon-arcade-1",
     // "arcade-map",
@@ -36,10 +42,7 @@ globals.tilemapNames = [
 ];
 globals.plugins = {};
 
-game.state.add("boot", require("./states/boot-state.js"));
-game.state.add("load", require("./states/load-state.js"));
-game.state.add("start", require("./states/start-screen.js"));
-game.state.add("sandbox", require("./states/sandbox.js"));
-game.state.add("test", require("./states/test-state.js"));
-game.state.add("slick-ui-test", require("./states/slick-ui-test.js"));
+game.state.add("boot", BootState);
+game.state.add("load", LoadState);
+game.state.add("sandbox", SandboxState);
 game.state.start("boot");
