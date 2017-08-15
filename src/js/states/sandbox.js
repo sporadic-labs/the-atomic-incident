@@ -23,15 +23,6 @@ import EnemySpawner from "../game-objects/enemy-spawner";
 
 function Sandbox() {}
 
-Sandbox.prototype.preload = function () {
-    // Slick UI theme need to be preloaded in the state that uses it:
-    //  https://github.com/Flaxis/slick-ui/issues/8#issuecomment-251337961
-    // NOTE(rex): Created in boot-state.js.
-    var globals = this.game.globals;
-    globals.plugins.slickUI = this.game.plugins.add(Phaser.Plugin.SlickUI);
-    globals.plugins.slickUI.load("resources/themes/kenny/kenney.json");
-};
-
 Sandbox.prototype.create = function () {
     // Shorthands
     var game = this.game;
