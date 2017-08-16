@@ -4,7 +4,6 @@ var Controller = require("../helpers/controller.js");
 var spriteUtils = require("../helpers/sprite-utilities.js");
 
 import Scattershot from "./weapons/scattershot";
-
 import EnergyPickup from "./pickups/energy-pickup";
 import PlayerLight from "./lights/player-light";
 
@@ -29,7 +28,6 @@ function Player(game, x, y, parentGroup) {
     this.anchor.set(0.5);
     parentGroup.add(this);
 
-    // this.hearts = 3;
     this._isTakingDamage = false;
 
     this._timer = this.game.time.create(false);
@@ -48,7 +46,8 @@ function Player(game, x, y, parentGroup) {
     var globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
-    this._effects = this.game.globals.plugins.effects;
+    this._enemies = globals.groups.enemies;
+    this._postProcessor = globals.postProcessor;
     this._levelManager = globals.levelManager;
 
     // Setup animations
@@ -116,8 +115,8 @@ function Player(game, x, y, parentGroup) {
     this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
 
     // Player Sound fx
-    // this._hitSoud = this.game.globals.soundManager.add("smash", 0.03);
-    // this._hitSoud.playMultiple = true;
+    this._hitSound = this.game.globals.soundManager.add("smash", 0.03);
+    this._hitSound.playMultiple = true;
     this._dashSound = this.game.globals.soundManager.add("warp");
     this._dashSound.playMultiple = true;
     this.pickupSound = this.game.globals.soundManager.add("whoosh");
@@ -190,12 +189,10 @@ Player.prototype.update = function () {
     var mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     this.rotation = this.position.angle(mousePos) + (Math.PI/2);
 
-
     if (this._controls.isControlActive("attack") && this.weapon.isAbleToAttack() &&
         !this.weapon.isAmmoEmpty()) {
         this.weapon.fire(this.position.angle(mousePos));
     }
-
 
     // Enemy collisions
     spriteUtils.checkOverlapWithGroup(this, this._enemies,
@@ -204,6 +201,17 @@ Player.prototype.update = function () {
     // Light pickups
     spriteUtils.checkOverlapWithGroup(this, this._pickups,
         this._onCollideWithPickup, this);
+
+    const health = this._playerLight.getLightRemaining();
+    this._postProcessor.onHealthUpdate(health);
+};
+
+Player.prototype.getHealth = function () {
+    return this._playerLight.getLightRemaining();
+};
+
+Player.prototype.getLightRadius = function () {
+    return this._playerLight.getRadius();
 };
 
 Player.prototype.getVelocity = function () {
@@ -228,10 +236,8 @@ Player.prototype.postUpdate = function () {
 Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
-        this.game.camera.shake(0.01, 200);
-        // this._hitSoud.play();
-        // Trigger a red flash to indicate damage!
-        this._effects.lightFlash(0XF2CECE);
+        // this._hitSound.play();
+        this._postProcessor.onPlayerDamage();
     }
 };
 
@@ -247,14 +253,12 @@ Player.prototype.takeDamage = function () {
     // If player is already taking damage, nothing else to do
     if (this._isTakingDamage) return;
 
-    // Lose a heart & restart the game if no hearts remain
-    // this.hearts -= 1;
-    // if (this.hearts <= 0) {
-    //     this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
-    //     this.game.state.restart();
-    // }
-
-    this._playerLight.incrementRadius(-50);
+    if (this._playerLight.getLightRemaining() <= 0) {
+        this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
+        this.game.state.restart();
+    } else {
+        this._playerLight.incrementRadius(-50);
+    }
 
     // Speed boost on damage
     var originalSpeed = this._maxSpeed;

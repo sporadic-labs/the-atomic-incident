@@ -14,10 +14,13 @@ var color = {
 function SlickTestUI() {}
 
 SlickTestUI.prototype.preload = function () {
+    // Load the Slick UI plugin - moved from boot state to here since we no longer use slick
+    var globals = this.game.globals;
+    globals.plugins.SlickUI = require("../plugins/slick-ui");
+
     // Slick UI theme need to be preloaded in the state that uses it:
     //  https://github.com/Flaxis/slick-ui/issues/8#issuecomment-251337961
-    var globals = this.game.globals;
-    globals.plugins.slickUI.load("src/resources/themes/kenny/kenney.json");
+    globals.plugins.SlickUI.load("src/resources/themes/kenny/kenney.json");
 };
 
 SlickTestUI.prototype.create = function () {
