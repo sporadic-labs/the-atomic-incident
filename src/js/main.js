@@ -34,8 +34,8 @@ $("#options-menu").hide();
 // Create the space for globals on the game object
 const globals = game.globals = {};
 globals.tilemapNames = [
-    "dungeon-arcade-1",
-    // "arcade-map",
+    // "dungeon-arcade-1",
+    "arcade-map",
     // "arcade-map-2",
     // "puzzle-map-1",
     // "pacman"

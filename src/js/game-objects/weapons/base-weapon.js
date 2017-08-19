@@ -27,6 +27,7 @@ export default class BaseWeapon extends Phaser.Group {
         this._cooldownTime = cooldownTime;
         // Time for reload.
         this._reloadTime = reloadTime;
+        this._isReloading = false;
     }
 
     isAbleToAttack() {
@@ -34,12 +35,13 @@ export default class BaseWeapon extends Phaser.Group {
     }
 
     _reload() {
-        console.log("reloading!");
         if (!this._ableToAttack) return;
+        this._isReloading = true;
         this._ableToAttack = false;
         this._cooldownTimer.add(this._reloadTime, function() {
             this.fillAmmo();
             this._ableToAttack = true;
+            this._isReloading = false;
         }, this);
     }
 

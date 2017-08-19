@@ -236,7 +236,7 @@ Player.prototype.postUpdate = function () {
 Player.prototype._onCollideWithEnemy = function (self, enemy) {
     if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
         this.takeDamage();
-        this._hitSound.play();
+        // this._hitSound.play();
         this._postProcessor.onPlayerDamage();
     }
 };
