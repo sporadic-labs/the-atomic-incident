@@ -79,7 +79,12 @@ class Radar {
         // TODO(rex): Change the color of the arrow.
         // NOTE(rex): Pretty sure this arrow is black, so tinting it is having no effect...
         arrowImg.tint = Color.white;
-        
+
+        // If the enemy is in light, hide this tracker.
+        if (!player._playerLight._light.isPointInLight(enemy.position)) {
+            arrowImg.visible = false;
+        }
+
         // Add the Arrow Image to the HUD group.
         hud.add(arrowImg);
 
@@ -132,14 +137,27 @@ class Radar {
         const entry = this.enemyTrackers.find((e) => {
             return e.enemy === enemy;
         });
-                
-        // Position
-        var { x: cX, y: cY } = this._getTrackerPosition(enemy);
-        entry.image.position.copyFrom(new Phaser.Point(cX, cY));
-        
-        // Rotation
-        const angle = player.position.angle(enemy.position);
-        entry.image.rotation = angle + (Math.PI/2);
+
+        // If the enemy is in light, hide this tracker.
+        if (!player._playerLight._light.isPointInLight(enemy.position)) {
+            entry.image.visible = false;
+        } else {
+            // If the enemy is in the dark, show the arrow an update it's position.
+            entry.image.visible = true;
+            
+            // Position
+            var { x: cX, y: cY } = this._getTrackerPosition(enemy);
+            entry.image.position.copyFrom(new Phaser.Point(cX, cY));
+    
+            // Rotation
+            const angle = player.position.angle(enemy.position);
+            entry.image.rotation = angle + (Math.PI/2);
+
+            // TODO(rex): If the icon is in shadow, tint it so it is visible.
+            if (player._playerLight._light.isPointInLight(entry.image.position)) {
+                entry.image.tint = Color.white;
+            }
+        }
     }
 
     /**
