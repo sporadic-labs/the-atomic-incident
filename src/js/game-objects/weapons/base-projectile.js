@@ -56,7 +56,9 @@ export default class BaseProjectile extends Phaser.Sprite {
     }
 
     _onCollideWithEnemy (self, enemy) {
-        enemy.takeDamage(this._damage);
+        if (enemy._spawned) {
+            enemy.takeDamage(this._damage);
+        }
         // TODO(rex): Combos?
         // if (isKilled) this._player.incrementCombo(1);
         this.destroy();
