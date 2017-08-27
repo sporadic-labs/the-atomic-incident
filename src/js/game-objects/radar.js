@@ -139,7 +139,7 @@ class Radar {
         });
 
         // If the enemy is in light, hide this tracker.
-        if (!player._playerLight._light.isPointInLight(enemy.position)) {
+        if (player._playerLight._light.isPointInLight(enemy.position)) {
             entry.image.visible = false;
         } else {
             // If the enemy is in the dark, show the arrow an update it's position.
