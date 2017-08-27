@@ -203,7 +203,7 @@ class Radar {
         const normalizedDist = dist / this.game.width;
 
         // Calculate a base scale percentage based on the Quadratic Ease-Out function.
-        const scalePercent = 1 - Phaser.Easing.Quadratic.InOut(normalizedDist);
+        const scalePercent = 1 - Phaser.Easing.Quadratic.In(normalizedDist);
 
         return scalePercent;
         
