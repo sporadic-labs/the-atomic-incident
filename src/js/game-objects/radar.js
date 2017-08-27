@@ -172,16 +172,26 @@ class Radar {
         // Shorthand.
         const player = this.game.globals.player;
 
-        // The tracker should be placed around the radius of the light,
-        // between the enemy and the player.
-        const angle = player.position.angle(enemy.position);
-        const radiusModifier = 5;
-        var x = player.position.x + (radiusModifier + player._playerLight.getRadius()) *
-            Math.cos(angle);
-        var y = player.position.y + (radiusModifier + player._playerLight.getRadius()) *
-            Math.sin(angle);
+        // Find the distance between the player and the enemy.
+        const dist = player.position.distance(enemy.position);
 
-        return { x, y };
+        // If the distance between player/enemy is less than the light radius,
+        // but the enemy is still in the dark, this means they are behind some wall.
+        // So use the position of the enemy instead of a point in between.
+        if (dist < player._playerLight.getRadius()) {
+            return { x: enemy.position.x, y: enemy.position.y}
+        } else {
+            // The tracker should be placed around the radius of the light,
+            // between the enemy and the player.
+            const angle = player.position.angle(enemy.position);
+            const radiusModifier = 5;
+            var x = player.position.x + (radiusModifier + player._playerLight.getRadius()) *
+                Math.cos(angle);
+            var y = player.position.y + (radiusModifier + player._playerLight.getRadius()) *
+                Math.sin(angle);
+    
+            return { x, y };
+        }
     }
 
     /**
