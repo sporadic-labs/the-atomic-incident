@@ -69,7 +69,7 @@ class Radar {
         const hud = this.game.globals.hud;
 
         // Calculate initial position of the Enemy Tracker.
-        var { x: x, x: y } = this._getTrackerPosition(enemy);
+        var { x, y } = this._getTrackerPosition(enemy);
 
         // Create the Arrow Image for the Enemy Tracker.
         const arrowImg = this.game.make.image(x, y, "assets", "hud/targeting-arrow");
