@@ -25,6 +25,9 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
     this._healthBar = new HealthBar(game, this, parentGroup, cx, cy, 20, 4);
     this._healthBar.initHealth(health);
 
+    // Register Enemies with the HUD for tracking.
+    this.game.globals.hud.radar.registerEnemy(this);
+            
     this._spawned = false; // use check if the enemy is fully spawned!
 
     var tween = this.game.make.tween(this)
