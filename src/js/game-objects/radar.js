@@ -152,6 +152,10 @@ class Radar {
             const angle = player.position.angle(enemy.position);
             entry.image.rotation = angle + (Math.PI/2);
 
+            // Scale
+            const scale = this._getTrackerScale(enemy);
+            entry.image.scale.setTo(scale, scale);
+
             // TODO(rex): If the icon is in shadow, tint it so it is visible.
             if (player._playerLight._light.isPointInLight(entry.image.position)) {
                 entry.image.tint = Color.white;
@@ -174,13 +178,38 @@ class Radar {
         // The tracker should be placed around the radius of the light,
         // between the enemy and the player.
         const angle = player.position.angle(enemy.position);
-        const radiusModifier = 0.9;
+        const radiusModifier = 1.2;
         var x = player.position.x + (radiusModifier * player._playerLight.getRadius()) *
             Math.cos(angle);
         var y = player.position.y + (radiusModifier * player._playerLight.getRadius()) *
             Math.sin(angle);
 
         return { x, y };
+    }
+
+    /**
+     * Determine the scale of the Tracker arrow based on the
+     * distance of the enemy from the player.
+     * 
+     * @param {BaseEnemy} enemy 
+     * @returns 0 - 1 value to set the Arrow Scale to.
+     * @memberof Radar
+     */
+    _getTrackerScale(enemy) {
+        // Shorthand.
+        const player = this.game.globals.player;
+
+        // Calculate the distance between the enemy and the player.
+        const dist = player.position.distance(enemy.position);
+
+        // Normalize the distance based on the radius of the players light.
+        const normalizedDist = dist / this.game.width;
+
+        // Calculate a base scale percentage based on the Quadratic Ease-Out function.
+        const scalePercent = 1 - Phaser.Easing.Quadratic.InOut(normalizedDist);
+
+        return scalePercent;
+        
     }
 }
 
