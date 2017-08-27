@@ -194,7 +194,7 @@
 },
 "enemy02/die-04":
 {
-	"frame": {"x":689,"y":230,"w":12,"h":8},
+	"frame": {"x":801,"y":93,"w":12,"h":8},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":12,"y":14,"w":12,"h":8},
@@ -314,7 +314,7 @@
 },
 "enemy03/die-03":
 {
-	"frame": {"x":717,"y":230,"w":8,"h":12},
+	"frame": {"x":970,"y":231,"w":8,"h":12},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":14,"y":12,"w":8,"h":12},
@@ -570,11 +570,11 @@
 },
 "hud/targeting-arrow":
 {
-	"frame": {"x":801,"y":93,"w":12,"h":6},
+	"frame": {"x":689,"y":230,"w":20,"h":11},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":6},
-	"sourceSize": {"w":12,"h":6}
+	"spriteSourceSize": {"x":0,"y":0,"w":20,"h":11},
+	"sourceSize": {"w":20,"h":11}
 },
 "pickups/box-01":
 {
@@ -938,7 +938,7 @@
 },
 "weapons/circle":
 {
-	"frame": {"x":703,"y":230,"w":12,"h":12},
+	"frame": {"x":711,"y":230,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
@@ -1095,6 +1095,6 @@
 	"format": "RGBA8888",
 	"size": {"w":1016,"h":244},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:54b89d198b7743e64096d3b5fb519244:2612b0d1c3bdf9c5557a5a591f8d0212:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:fe21bb3faf5c7f1b37eb2cee9617ddab:48e082c0eef4d419fca34d7e93ae91d9:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
