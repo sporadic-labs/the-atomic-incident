@@ -78,11 +78,8 @@ class Radar {
         arrowImg.scale.setTo(scale, scale);
         // Color of arrow should match color of enemy.
         arrowImg.tint = enemy.tint;
-
-        // If the enemy is in light, hide this tracker.
-        if (!player._playerLight._light.isPointInLight(enemy.position)) {
-            arrowImg.visible = false;
-        }
+        // Arrow starts off hidden.
+        arrowImg.visible = false;
 
         // Add the Arrow Image to the HUD group.
         hud.add(arrowImg);
