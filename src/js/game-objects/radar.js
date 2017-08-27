@@ -76,9 +76,8 @@ class Radar {
         arrowImg.anchor.copyFrom(player.anchor);
         const scale = 0.86;
         arrowImg.scale.setTo(scale, scale);
-        // TODO(rex): Change the color of the arrow.
-        // NOTE(rex): Pretty sure this arrow is black, so tinting it is having no effect...
-        arrowImg.tint = Color.white;
+        // Color of arrow should match color of enemy.
+        arrowImg.tint = enemy.tint;
 
         // If the enemy is in light, hide this tracker.
         if (!player._playerLight._light.isPointInLight(enemy.position)) {
