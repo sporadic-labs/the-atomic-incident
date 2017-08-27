@@ -30,7 +30,7 @@ export default class EnemySpawner {
                 this._enemies, Color.blue);
             enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));
             // Register Enemies with the HUD for tracking.
-            this.game.globals.hud.registerEnemy(enemy);
+            this.game.globals.hud.radar.registerEnemy(enemy);
     }
         this._circleWaveTimer.add(this.game.rnd.integerInRange(7000, 12000), 
             () => this._spawnCircleWave());
@@ -46,7 +46,7 @@ export default class EnemySpawner {
             this._enemies, Color.red, null);
         enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));
         // Register Enemies with the HUD for tracking.
-        this.game.globals.hud.registerEnemy(enemy);
+        this.game.globals.hud.radar.registerEnemy(enemy);
         this._ambientEnemyTimer.add(this.game.rnd.integerInRange(500, 1000), 
             () => this._spawnRandomEnemy());
     }

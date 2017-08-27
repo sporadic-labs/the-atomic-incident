@@ -1,4 +1,6 @@
 import PauseMenu from "./user-interface/pause-menu";
+import Color from "../constants/colors";
+import Radar from "./radar";
 
 /**
  * Player Heads Up Display.
@@ -24,8 +26,10 @@ class HeadsUpDisplay extends Phaser.Group {
         this._satBodyPlugin = this.game.globals.plugins.satBody;
         this.fixedToCamera = true;
     
-        this.registeredEnemies = [];
-        this.enemyTrackers = [];
+        this.radar = new Radar(game);
+
+        // this.registeredEnemies = [];
+        // this.enemyTrackers = [];
     
         // Play/pause
         const unpause = () => {
@@ -108,137 +112,140 @@ class HeadsUpDisplay extends Phaser.Group {
         this._fpsText.setText(this.game.time.fps);
 
         // Update Enemy Trackers
-        for (let enemy of this.registeredEnemies) {
-            this._updateEnemyTrackerPosition(enemy);
-        }
+        this.radar.update();
+
+        // for (let enemy of this.registeredEnemies) {
+        //     this._updateEnemyTrackerPosition(enemy);
+        // }
     }
 
-    /**
-     * When a new Enemy is created, register it with the HUD, and an Enemy Tracker will be created.
-     * 
-     * @param {any} enemy 
-     * @memberof HeadsUpDisplay
-     */
-    registerEnemy(enemy) {
-        this.registeredEnemies.push(enemy);
-        this._addEnemyTracker(enemy);
-    }
+    // /**
+    //  * When a new Enemy is created, register it with the HUD, and an Enemy Tracker will be created.
+    //  * 
+    //  * @param {any} enemy 
+    //  * @memberof HeadsUpDisplay
+    //  */
+    // registerEnemy(enemy) {
+    //     this.registeredEnemies.push(enemy);
+    //     this._addEnemyTracker(enemy);
+    // }
 
-    /**
-     * When an Enemy dies, remove it from the Registry and remove the Enemy Tracker.
-     * 
-     * @param {any} enemy 
-     * @memberof HeadsUpDisplay
-     */
-    removeEnemy(enemy) {
-        this.registeredEnemies.filter((e) => {
-            return e !== enemy;
-        });
-        this._removeEnemyTracker(enemy);
-    }
+    // /**
+    //  * When an Enemy dies, remove it from the Registry and remove the Enemy Tracker.
+    //  * 
+    //  * @param {any} enemy 
+    //  * @memberof HeadsUpDisplay
+    //  */
+    // removeEnemy(enemy) {
+    //     this.registeredEnemies.filter((e) => {
+    //         return e !== enemy;
+    //     });
+    //     this._removeEnemyTracker(enemy);
+    // }
 
-    /**
-     * Add a Tracker entry to the list of EnemyTrackers, and create the HUD image.
-     * 
-     * @param {any} enemy 
-     * @memberof HeadsUpDisplay
-     */
-    _addEnemyTracker(enemy) {
-        // Shorthand.
-        const player = this.game.globals.player;
+    // /**
+    //  * Add a Tracker entry to the list of EnemyTrackers, and create the HUD image.
+    //  * 
+    //  * @param {any} enemy 
+    //  * @memberof HeadsUpDisplay
+    //  */
+    // _addEnemyTracker(enemy) {
+    //     // Shorthand.
+    //     const player = this.game.globals.player;
 
-        // Calculate initial position of the Enemy Tracker.
-        var { x: x, x: y } = this._getTrackerPosition(enemy);
-        // Create the Arrow Image for the Enemy Tracker.
-        const arrowImg = this.game.make.image(x, y, "assets", "hud/targeting-arrow");
-        arrowImg.anchor.copyFrom(player.anchor);
-        const scale = 0.86;
-        arrowImg.scale.setTo(scale, scale);
-        // TODO(rex): Change the color of the arrow.
-        // arrowImg.tint(Color.white);
+    //     // Calculate initial position of the Enemy Tracker.
+    //     var { x: x, x: y } = this._getTrackerPosition(enemy);
+    //     // Create the Arrow Image for the Enemy Tracker.
+    //     const arrowImg = this.game.make.image(x, y, "assets", "hud/targeting-arrow");
+    //     arrowImg.anchor.copyFrom(player.anchor);
+    //     const scale = 0.86;
+    //     arrowImg.scale.setTo(scale, scale);
+    //     // TODO(rex): Change the color of the arrow.
+    //     // NOTE(rex): Pretty sure this arrow is black, so tinting it is having no effect...
+    //     arrowImg.tint = Color.white;
         
-        // Add the Arrow Image to the HUD group.
-        this.add(arrowImg);
+    //     // Add the Arrow Image to the HUD group.
+    //     this.add(arrowImg);
 
-        // And add a Tracking entry, which will be useful for updating the position.
-        this.enemyTrackers.push({
-            "enemy": enemy,
-            "image": arrowImg,
-        });
-    }
+    //     // And add a Tracking entry, which will be useful for updating the position.
+    //     this.enemyTrackers.push({
+    //         "enemy": enemy,
+    //         "image": arrowImg,
+    //     });
+    // }
 
-    /**
-     * Remove a Tracker from the HUD, and remove it's entry form the list of EnemyTrackers.
-     * 
-     * @param {any} enemy 
-     * @memberof HeadsUpDisplay
-     */
-    _removeEnemyTracker(enemy) {
-        // Find the Tracker entry associated with this enemy.
-        const eT = this.enemyTrackers.find((e) => {
-            return e.enemy === enemy;
-        });
+    // /**
+    //  * Remove a Tracker from the HUD, and remove it's entry form the list of EnemyTrackers.
+    //  * 
+    //  * @param {any} enemy 
+    //  * @memberof HeadsUpDisplay
+    //  */
+    // _removeEnemyTracker(enemy) {
+    //     // Find the Tracker entry associated with this enemy.
+    //     const eT = this.enemyTrackers.find((e) => {
+    //         return e.enemy === enemy;
+    //     });
 
-        // Remove the Image from the Phaser Group.
-        this.remove(eT);
+    //     // Remove the Image from the Phaser Group.
+    //     this.remove(eT);
 
-        // Destroy the Tracker arrow image.
-        eT.image.destroy();
+    //     // Destroy the Tracker arrow image.
+    //     eT.image.destroy();
 
-        // Then remove the Tracker from the list.
-        this.enemyTrackers.filter((e) => {
-            return e.enemy === enemy;
-        });
-    }
+    //     // Then remove the Tracker from the list.
+    //     this.enemyTrackers.filter((e) => {
+    //         return e.enemy === enemy;
+    //     });
+    // }
 
-    /**
-     * Update the position of the Tracker Image based on the position of the
-     * enemy, player, and light.
-     * 
-     * @param {any} enemy 
-     * @memberof HeadsUpDisplay
-     */
-    _updateEnemyTrackerPosition(enemy) {
-        //Shorthand
-        const player = this.game.globals.player;
+    // /**
+    //  * Update the position of the Tracker Image based on the position of the
+    //  * enemy, player, and light.
+    //  * 
+    //  * @param {any} enemy 
+    //  * @memberof HeadsUpDisplay
+    //  */
+    // _updateEnemyTrackerPosition(enemy) {
+    //     //Shorthand
+    //     const player = this.game.globals.player;
 
-        // Get the Tracking Entry for the requested enemy.
-        const entry = this.enemyTrackers.find((e) => {
-            return e.enemy === enemy;
-        });
+    //     // Get the Tracking Entry for the requested enemy.
+    //     const entry = this.enemyTrackers.find((e) => {
+    //         return e.enemy === enemy;
+    //     });
                 
-        // Position
-        var { x: cX, y: cY } = this._getTrackerPosition(enemy);
-        entry.image.position.copyFrom(new Phaser.Point(cX, cY));
+    //     // Position
+    //     var { x: cX, y: cY } = this._getTrackerPosition(enemy);
+    //     entry.image.position.copyFrom(new Phaser.Point(cX, cY));
         
-        // Rotation
-        const angle = player.position.angle(enemy.position);
-        entry.image.rotation = angle + (Math.PI/2);
-    }
+    //     // Rotation
+    //     const angle = player.position.angle(enemy.position);
+    //     entry.image.rotation = angle + (Math.PI/2);
+    // }
 
-    /**
-     * Calculate the position of the Arrow Image based on the player
-     * position and the enemy position.
-     * 
-     * @param {any} entry 
-     * @returns { x : int, y: int }
-     * @memberof HeadsUpDisplay
-     */
-    _getTrackerPosition(enemy) {
-        // Shorthand.
-        const player = this.game.globals.player;
+    // /**
+    //  * Calculate the position of the Arrow Image based on the player
+    //  * position and the enemy position.
+    //  * 
+    //  * @param {any} entry 
+    //  * @returns { x : int, y: int }
+    //  * @memberof HeadsUpDisplay
+    //  */
+    // _getTrackerPosition(enemy) {
+    //     // Shorthand.
+    //     const player = this.game.globals.player;
 
-        // The tracker should be placed around the radius of the light,
-        // between the enemy and the player.
-        const angle = player.position.angle(enemy.position);
-        const radiusModifier = 0.9;
-        var x = player.position.x + (radiusModifier * player._playerLight.getRadius()) *
-            Math.cos(angle);
-        var y = player.position.y + (radiusModifier * player._playerLight.getRadius()) *
-            Math.sin(angle);
+    //     // The tracker should be placed around the radius of the light,
+    //     // between the enemy and the player.
+    //     const angle = player.position.angle(enemy.position);
+    //     const radiusModifier = 0.9;
+    //     var x = player.position.x + (radiusModifier * player._playerLight.getRadius()) *
+    //         Math.cos(angle);
+    //     var y = player.position.y + (radiusModifier * player._playerLight.getRadius()) *
+    //         Math.sin(angle);
 
-        return { x, y };
-    }
+    //     return { x, y };
+    // }
 
 }
 

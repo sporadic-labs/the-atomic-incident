@@ -42,7 +42,7 @@ function BaseEnemy(game, x, y, key, frame, health, parentGroup, pointValue, colo
 BaseEnemy.prototype.takeDamage = function (damage) {
     var newHealth = this._healthBar.incrementHealth(-damage);
     if (newHealth <= 0) {
-        this.game.globals.hud.removeEnemy(this);
+        this.game.globals.hud.radar.removeEnemy(this);
         this.destroy();
         return true;
     }
