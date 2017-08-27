@@ -175,10 +175,10 @@ class Radar {
         // The tracker should be placed around the radius of the light,
         // between the enemy and the player.
         const angle = player.position.angle(enemy.position);
-        const radiusModifier = 1.2;
-        var x = player.position.x + (radiusModifier * player._playerLight.getRadius()) *
+        const radiusModifier = 5;
+        var x = player.position.x + (radiusModifier + player._playerLight.getRadius()) *
             Math.cos(angle);
-        var y = player.position.y + (radiusModifier * player._playerLight.getRadius()) *
+        var y = player.position.y + (radiusModifier + player._playerLight.getRadius()) *
             Math.sin(angle);
 
         return { x, y };
