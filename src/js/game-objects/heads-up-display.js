@@ -95,7 +95,7 @@ class HeadsUpDisplay extends Phaser.Group {
      */
     update() {
         // this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
-        Phaser.Group.prototype.update.apply(this, arguments);
+        super.update(arguments);
     
         if (!this._player.weapon._isReloading) {
             this._ammoText.setText(this._player.weapon.getAmmo() + " / " +
