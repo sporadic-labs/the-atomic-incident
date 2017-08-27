@@ -84,7 +84,7 @@ function Player(game, x, y, parentGroup) {
     this._compass = game.make.image(0, 0, "assets", "hud/targeting-arrow");
     this._compass.scale.setTo(0.56, 0.56);
     // Tint the compass black.
-    this._compass.tint = Color.black;
+    this._compass.tint = Color.black.getRgbColorInt();
     // Set the anchor, position and rotation.
     this._compass.anchor.copyFrom(this.anchor);
     var cX = this.position.x + (0.6 * this.width) * Math.cos(this.rotation - (Math.PI/2));

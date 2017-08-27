@@ -6,5 +6,6 @@ module.exports = {
     yellow: new Color("#FFDC00"),
     blue: new Color("#0074D9"),
     purple: new Color("#F012BE"),
-    white: new Color("#FFFFFF")
+    white: new Color("#FFFFFF"),
+    black: new Color("#000000")
 };
