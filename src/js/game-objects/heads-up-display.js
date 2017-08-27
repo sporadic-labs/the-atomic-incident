@@ -1,5 +1,4 @@
 import PauseMenu from "./user-interface/pause-menu";
-import Color from "../constants/colors";
 import Radar from "./radar";
 
 /**
