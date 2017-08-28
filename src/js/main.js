@@ -1,10 +1,9 @@
 require("babel-polyfill");
-// DOM manipulation lib (NOT jQuery)
-require("chibijs");
 
 window.PIXI = require("phaser-ce/build/custom/pixi");
 window.p2 = require("phaser-ce/build/custom/p2");
 window.Phaser = require("phaser-ce/build/custom/phaser-split");
+import gameData from "./game-data";
 
 // Import and require don't play well together timing-wise. When we switch to webpack we can inject
 // the globals and go with an import here.
@@ -23,13 +22,17 @@ const game = new Phaser.Game({
     parent: "game-container"
 });
 
-// Set HUD layer dimensions to match canvas.
-$("#hud").css("width", gameDimensions + "px");
-$("#hud").css("height", gameDimensions + "px");
-
-// Hide all of the menus to begin with.
-$("#start-menu").hide();
-$("#options-menu").hide();
+// Set up the menu system
+import Menu from "./menu-components/menu";
+import {h, render} from "preact";
+render(
+    <Menu 
+        gameData={gameData} 
+        width={gameDimensions} 
+        height={gameDimensions}
+    />, 
+    document.body
+);
 
 // Create the space for globals on the game object
 const globals = game.globals = {};

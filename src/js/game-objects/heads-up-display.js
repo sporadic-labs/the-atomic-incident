@@ -1,5 +1,6 @@
-import PauseMenu from "./user-interface/pause-menu";
 import Radar from "./radar";
+import {autorun} from "mobx";
+import gameData from "../game-data";
 
 /**
  * Player Heads Up Display.
@@ -27,24 +28,29 @@ class HeadsUpDisplay extends Phaser.Group {
     
         this.radar = new Radar(game);
     
-        // Play/pause
-        const unpause = () => {
-            pauseButton.visible = true;
-            playButton.visible = false;
-        }
         const playPos = new Phaser.Point(game.width - 10, game.height - 10);
         const pauseButton = game.add.button(playPos.x, playPos.y, "assets", () => {
-            playButton.visible = true;
-            pauseButton.visible = false;
-            new PauseMenu(game);
-            game.globals.onUnPause.add(unpause);
-            game.globals.onPause.dispatch();
+            gameData.setPause(true);
         }, this, "hud/pause", "hud/pause", "hud/pause", "hud/pause");
         pauseButton.anchor.set(1, 1);
-        const playButton = game.add.button(playPos.x, playPos.y, "assets", unpause, this,
-            "hud/play", "hud/play", "hud/play", "hud/play");
+        const playButton = game.add.button(playPos.x, playPos.y, "assets", () => {
+            gameData.setPause(false);
+        }, this, "hud/play", "hud/play", "hud/play", "hud/play");
         playButton.anchor.set(1, 1);
         playButton.visible = false;
+
+        // Observe the game data's pause/unpause
+        autorun(() => {
+            if (gameData.currentGame.isPaused) {
+                game.paused = true;
+                pauseButton.visible = false;
+                playButton.visible = true;
+            } else {
+                game.paused = false;
+                pauseButton.visible = true;
+                playButton.visible = false;
+            }
+        });
     
         // Mute/unmute
         const mutePos = new Phaser.Point(game.width - 10, 10);

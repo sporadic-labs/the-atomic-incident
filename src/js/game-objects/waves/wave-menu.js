@@ -1,4 +1,6 @@
 const Color = require("../../constants/colors");
+import {autorun} from "mobx";
+import gameData from "../game-data";
 
 class WaveMenu {
 
@@ -13,12 +15,8 @@ class WaveMenu {
         // Store a reference to the game object.
         this.game = game;
 
-        // If the game is paused from the outside, use this flag.
-        this.gamePausedFromOutside = false;
         // Pause the game when the WaveMenu is created.
-        this.game.paused = true;
-        // Set the Pause signal (as the game is paused...).
-        game.globals.onPause.dispatch();
+        gameData.currentGame.setPause(true);
 
         // Store the time that the menu was created.
         // NOTE(rex): This isn't used anywhere, currently...
@@ -26,11 +24,15 @@ class WaveMenu {
         // Create a variable to store the current time in this menus lifecycle.
         // NOTE(rex): Start at the full time allowed for this menu.
         this.time = 6000; // in ms
-
-        // Add a callback for dealing with pause button being selected while game is already paused.
-        game.globals.onPause.add(this._onPause, this);
-        // And resuming too...
-        game.globals.onUnPause.add(this._onResume, this);
+        
+        // Observe the game data's pause/unpause
+        autorun(() => {
+            if (gameData.currentGame.isPaused) {
+                this._onPause()
+            } else {
+                this._onResume();
+            }
+        });
 
         // Get the number of enemies and pickups generated during this wave.
         var {
@@ -72,7 +74,6 @@ class WaveMenu {
         $("#hud").on("click", () => {
             if (!this.gamePausedFromOutside) {
                 console.log("was it this already though?");
-                this.game.paused = false;
                 this.destroy();
             }
         });
@@ -80,7 +81,6 @@ class WaveMenu {
         // NOTE(rex): This doesn't work...
         $("#hud").on("keydown", (e) => {
             console.log(e);
-            this.game.paused = false;
             this.destroy();
         });
 
@@ -205,8 +205,6 @@ class WaveMenu {
 
         // Destroy the timer.
         clearInterval(this._countdownTimer);
-
-        this.game.globals.onPause.remove(this._onPause, this);
     }
 }
 
