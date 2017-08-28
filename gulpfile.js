@@ -89,6 +89,7 @@ var eslint = require("gulp-eslint");
 var watchify = require("watchify");
 var babel = require("babelify");
 var glslify = require("glslify");
+var aliasify = require("aliasify");
 
 // Check the command line to see if this is a production build
 var isProduction = (gutil.env.p || gutil.env.production);
@@ -166,10 +167,19 @@ var jsBundle = browserify({
         require.resolve("phaser-ce/build/custom/p2"),
         require.resolve("phaser-ce/build/custom/pixi")
     ],
-    transform: [glslify, babel],
     debug: true, // Allow debugger statements
     cache: {}, packageCache: {}, plugin: [watchify] // Required for watchify
-});
+})
+    .transform(babel)
+    .transform(aliasify, {
+        aliases: {
+            "react": "preact-compat",
+            "react-dom": "preact-compat"
+        },
+        verbose: false,
+        global: true
+    })
+    .transform(glslify)
 // Task now incrementally builds
 gulp.task("js-browserify", function () {
     return jsBundle.bundle()    
