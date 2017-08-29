@@ -12,7 +12,8 @@ class GameData {
             currentGame: {
                 score: 0,
                 isPaused: false,
-                difficulty: "normal"
+                difficulty: "normal",
+                menuName: null
             },
             debugSettings: {
                 shadowOpacity: 1,
@@ -21,8 +22,11 @@ class GameData {
             },
 
             // Actions - these mutate the state
-            setPause: action(function(pauseState) {
+            setPause: action(function(pauseState = true) {
                 this.currentGame.isPaused = pauseState;
+            }),
+            setMenu: action(function(menuName = null) {
+                this.currentGame.menuName = menuName;
             })
         });
     }

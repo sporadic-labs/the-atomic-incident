@@ -27,10 +27,17 @@
         pointer-events: initial;
     }
 
+    label {
+        text-align: center;
+        display: block;
+        margin-bottom: 20px;
+    }
+
     #start-menu,
     #pause-menu,
     #options-menu,
-    #wave-menu {
+    #wave-menu,
+    #debug-menu {
         width: 50%;
         height: 50%;
         position: absolute;

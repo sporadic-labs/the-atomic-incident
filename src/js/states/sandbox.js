@@ -8,7 +8,6 @@ var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
-var DebugDisplay = require("../game-objects/debug-display.js");
 const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin =
     require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
@@ -16,6 +15,8 @@ const LevelManager = require("../game-objects/level-manager.js");
 // var colors = require("../constants/colors.js");
 // const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
+import gameData from "../game-data";
+import {autorun} from "mobx";
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import EnemySpawner from "../game-objects/enemy-spawner";
 
@@ -87,7 +88,6 @@ export default class Sandbox extends Phaser.State {
 
         // HUD
         globals.hud = new HeadsUpDisplay(game, groups.hud);
-        globals.debugDisplay = new DebugDisplay(game, groups.hud);
 
         // Keep track of what wave the player is on using the globals object.
         var waveNum = 0;
@@ -97,11 +97,18 @@ export default class Sandbox extends Phaser.State {
         new PickupSpawner(game);
         new EnemySpawner(game, player);
 
-        // Toggle the lighting system transparency with L key
-        let opacityToggled = false; 
-        game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => {
-            opacityToggled = !opacityToggled;
-            this.lighting.setOpacity(opacityToggled ? 0.5 : 1);
+        // Subscribe to the debug settings
+        autorun(() => {
+            this.lighting.setOpacity(gameData.debugSettings.shadowOpacity);
+            if (gameData.debugSettings.physicsDebug) globals.plugins.satBody.enableDebugAll();
+            else globals.plugins.satBody.disableDebugAll();
+            globals.postProcessor.visible = gameData.debugSettings.shadersEnabled;
+        })
+        
+        // Debug menu
+        game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
+            gameData.setMenu("debug");
+            gameData.setPause(true);
         });
 
         // Testing sprite lights!

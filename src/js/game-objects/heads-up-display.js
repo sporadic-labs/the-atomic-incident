@@ -30,10 +30,12 @@ class HeadsUpDisplay extends Phaser.Group {
     
         const playPos = new Phaser.Point(game.width - 10, game.height - 10);
         const pauseButton = game.add.button(playPos.x, playPos.y, "assets", () => {
+            gameData.setMenu("pause");
             gameData.setPause(true);
         }, this, "hud/pause", "hud/pause", "hud/pause", "hud/pause");
         pauseButton.anchor.set(1, 1);
         const playButton = game.add.button(playPos.x, playPos.y, "assets", () => {
+            gameData.setMenu(null);
             gameData.setPause(false);
         }, this, "hud/play", "hud/play", "hud/play", "hud/play");
         playButton.anchor.set(1, 1);
