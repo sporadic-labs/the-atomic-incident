@@ -1,3 +1,4 @@
+import "../css/main.scss";
 require("babel-polyfill");
 
 window.PIXI = require("phaser-ce/build/custom/pixi");

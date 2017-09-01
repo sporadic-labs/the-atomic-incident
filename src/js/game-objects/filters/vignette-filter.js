@@ -1,10 +1,10 @@
-const glslify = require("glslify"); // Bug requires CommonJS import: https://github.com/stackgl/glslify/issues/49
+import fragmentSrc from "./vignette.glsl";
 
 export default class VignetteFilter extends Phaser.Filter {
     constructor(game) {
         super(game);
 
-        this.fragmentSrc = glslify.file("./vignette.glsl");
+        this.fragmentSrc = fragmentSrc;
         this.uniforms.opacity = {type: "1f", value: 1};
         this.uniforms.resolution = {type: "2f", value: {x: game.width, y: game.height}};
         this.uniforms.center = {type: "2f", value: {x: game.width / 2, y: game.height / 2}};

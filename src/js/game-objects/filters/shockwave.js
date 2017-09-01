@@ -1,10 +1,10 @@
-const glslify = require("glslify");
+import fragmentSrc from "./shockwave.glsl";
 
 class Shockwave extends Phaser.Filter {
     constructor(game) {
         super(game);
 
-        this.fragmentSrc = glslify.file("./shockwave.glsl");
+        this.fragmentSrc = fragmentSrc;
         this.uniforms.wavePos = {type: "1f", value: 0};
         this.uniforms.waveSize = {type: "1f", value: 0.1};
         this.uniforms.center = {type: "2f", value: {x: 0.5, y: 0.5}};
