@@ -1,21 +1,13 @@
 module.exports = {
   plugins: ["react", "prettier"],
   // Enable core eslint rules, see: http://eslint.org/docs/rules/
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "prettier",
-    "prettier/react"
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended", "prettier", "prettier/react"],
   // Additional rules
   rules: {
     "brace-style": ["warn", "1tbs"],
+    "no-unused-vars": ["error", { args: "after-used" }],
     indent: ["warn", 2, { SwitchCase: 1 }],
-    "max-len": [
-      "warn",
-      100,
-      { ignoreUrls: true, ignoreTemplateLiterals: true }
-    ],
+    "max-len": ["warn", 100, { ignoreUrls: true, ignoreTemplateLiterals: true }],
     "no-console": "off",
     "react/prop-types": "off",
     "react/no-unknown-property": "off"

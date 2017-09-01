@@ -7,18 +7,18 @@
  * @class SoundEffectManager
  */
 class SoundEffectManager {
-    /**
+  /**
      * Creates an instance of SoundEffectManager.
      * @param {Phaser.Game} game 
      * 
      * @memberOf SoundEffectManager
      */
-    constructor(game) {
-        this.game = game;
-        this._soundsLoaded = {};
-    }
+  constructor(game) {
+    this.game = game;
+    this._soundsLoaded = {};
+  }
 
-    /**
+  /**
      * Add a sound by its key if it hasn't already been loaded. Parameters match 
      * Phaser.SoundManger#add
      * 
@@ -31,14 +31,14 @@ class SoundEffectManager {
      * 
      * @memberOf SoundEffectManager
      */
-    add(key, volume, loop, connect) {
-        if (!this._soundsLoaded[key]) {
-            this._soundsLoaded[key] = this.game.add.audio(key, volume, loop, connect);
-        }
-        return this._soundsLoaded[key];
+  add(key, volume, loop, connect) {
+    if (!this._soundsLoaded[key]) {
+      this._soundsLoaded[key] = this.game.add.audio(key, volume, loop, connect);
     }
+    return this._soundsLoaded[key];
+  }
 
-    /**
+  /**
      * Play the sound associated with the given key
      * 
      * @param {string} key 
@@ -48,26 +48,26 @@ class SoundEffectManager {
      * 
      * @memberOf SoundEffectManager
      */
-    play(key, ...playArguments) {
-        if (this._soundsLoaded[key]) {
-            this._soundsLoaded[key].play(...playArguments);
-        } else {
-            this.add(key);
-            this._soundsLoaded[key].play(...playArguments)
-        }
-        return this._soundsLoaded[key];
+  play(key, ...playArguments) {
+    if (this._soundsLoaded[key]) {
+      this._soundsLoaded[key].play(...playArguments);
+    } else {
+      this.add(key);
+      this._soundsLoaded[key].play(...playArguments);
     }
+    return this._soundsLoaded[key];
+  }
 
-    /**
+  /**
      * Destroys all the sounds that were loaded
      * 
      * @memberOf SoundEffectManager
      */
-    destroy() {
-        for (const sound of this._soundsLoaded) {
-            sound.destroy();
-        }
+  destroy() {
+    for (const sound of this._soundsLoaded) {
+      sound.destroy();
     }
+  }
 }
 
 module.exports = SoundEffectManager;

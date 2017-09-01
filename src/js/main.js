@@ -16,33 +16,26 @@ const gameDimensions = 750;
 
 // Keep this on CANVAS until Phaser 3 for performance reasons?
 const game = new Phaser.Game({
-    width: gameDimensions, 
-    height: gameDimensions, 
-    renderer: Phaser.WEBGL,
-    enableDebug: true, // We can turn off debug when deploying - using debug causes a hit on webgl 
-    parent: "game-container"
+  width: gameDimensions,
+  height: gameDimensions,
+  renderer: Phaser.WEBGL,
+  enableDebug: true, // We can turn off debug when deploying - using debug causes a hit on webgl
+  parent: "game-container"
 });
 
 // Set up the menu system
 import Menu from "./menu-components/menu";
-import {h, render} from "preact";
-render(
-    <Menu 
-        gameData={gameData} 
-        width={gameDimensions} 
-        height={gameDimensions}
-    />, 
-    document.body
-);
+import { h, render } from "preact";
+render(<Menu gameData={gameData} width={gameDimensions} height={gameDimensions} />, document.body);
 
 // Create the space for globals on the game object
-const globals = game.globals = {};
+const globals = (game.globals = {});
 globals.tilemapNames = [
-    // "dungeon-arcade-1",
-    "arcade-map",
-    // "arcade-map-2",
-    // "puzzle-map-1",
-    // "pacman"
+  // "dungeon-arcade-1",
+  "arcade-map"
+  // "arcade-map-2",
+  // "puzzle-map-1",
+  // "pacman"
 ];
 globals.plugins = {};
 
