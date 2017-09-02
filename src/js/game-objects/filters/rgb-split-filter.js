@@ -1,10 +1,10 @@
-const glslify = require("glslify"); // Bug requires CommonJS import: https://github.com/stackgl/glslify/issues/49
+import fragmentSrc from "./rgb-split.glsl";
 
 export default class RgbSplitFilter extends Phaser.Filter {
     constructor(game) {
         super(game);
 
-        this.fragmentSrc = glslify.file("./rgb-split.glsl");
+        this.fragmentSrc = fragmentSrc;
         this.uniforms.displacement = {type: "1f", value: 0};
         this.uniforms.resolution = {type: "2f", value: {x: game.width, y: game.height}};
 

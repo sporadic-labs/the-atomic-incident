@@ -1,10 +1,10 @@
-const glslify = require("glslify"); // Bug requires CommonJS import: https://github.com/stackgl/glslify/issues/49
+import fragmentSrc from "./grayscale-filter.glsl";
 
 export default class GrayscaleFilter extends Phaser.Filter {
     constructor(game) {
         super(game);
 
-        this.fragmentSrc = glslify.file("./grayscale-filter.glsl");
+        this.fragmentSrc = fragmentSrc;
         this.uniforms.factor = {type: "1f", value: 0};
         
         this.game.tweens.create(this.uniforms.factor)

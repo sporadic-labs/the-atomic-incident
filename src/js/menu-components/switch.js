@@ -10,9 +10,9 @@
  * 
  * Item1 would be returned.
  */
-export default function Switch({children, ...props}) {
-    const propName = Object.keys(props)[0];
-    const targetValue = props[propName];
-    const match = children.find(child => child.props[propName] === targetValue);
-    return match !== undefined ? match : null
+export default function Switch({ children, ...props }) {
+  const propName = Object.keys(props)[0];
+  const targetValue = props[propName];
+  const match = children.find(child => child.props[propName] === targetValue);
+  return match !== undefined ? match : null;
 }

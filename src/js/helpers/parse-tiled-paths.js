@@ -12,40 +12,38 @@ const Path = require("./path.js");
  * @returns {Path[]}
  */
 export function parsePathLayer(map, layerKey, shouldReverse = false, selection = "all") {
-    const tiledPaths = map.objects[layerKey] || [];
-    const paths = [];
+  const tiledPaths = map.objects[layerKey] || [];
+  const paths = [];
 
-    // Loop over odd numbered, even numbered or all paths
-    let start = 0;
-    let end = tiledPaths.length;
-    let increment = 1;
-    selection = selection.toLocaleLowerCase();
-    if (selection === "odd") {
-        start = 1;
-        end = tiledPaths.length;
-        increment = 2;
-    } else if (selection === "even") {
-        start = 0;
-        end = tiledPaths.length - 1;
-        increment = 2;
-    }
+  // Loop over odd numbered, even numbered or all paths
+  let start = 0;
+  let end = tiledPaths.length;
+  let increment = 1;
+  selection = selection.toLocaleLowerCase();
+  if (selection === "odd") {
+    start = 1;
+    end = tiledPaths.length;
+    increment = 2;
+  } else if (selection === "even") {
+    start = 0;
+    end = tiledPaths.length - 1;
+    increment = 2;
+  }
 
-    for (var i = start; i < end; i += increment) {
-        var pathNodes = tiledPaths[i].polyline || [];
-        var startX = tiledPaths[i].x;
-        var startY = tiledPaths[i].y;
-        var path = new Path();
-        for (var j = 0; j < pathNodes.length; j++) {
-            path.addPoint(new Phaser.Point(
-                startX + pathNodes[j][0], startY + pathNodes[j][1]
-            ));
-        }
-        if (shouldReverse) paths.push(path.reverse());
-        else paths.push(path);
+  for (var i = start; i < end; i += increment) {
+    var pathNodes = tiledPaths[i].polyline || [];
+    var startX = tiledPaths[i].x;
+    var startY = tiledPaths[i].y;
+    var path = new Path();
+    for (var j = 0; j < pathNodes.length; j++) {
+      path.addPoint(new Phaser.Point(startX + pathNodes[j][0], startY + pathNodes[j][1]));
     }
-    return paths;
+    if (shouldReverse) paths.push(path.reverse());
+    else paths.push(path);
+  }
+  return paths;
 }
-    
+
 /**
  * A function that can look up an array of layers in a Phaser.Tilemap object and parse the paths
  * into one array. Shorthand string format for use with parsePathLayer:
@@ -58,12 +56,12 @@ export function parsePathLayer(map, layerKey, shouldReverse = false, selection =
  * @returns 
  */
 export function parsePathLayers(map, pathLayerShorthands) {
-    const allPaths = [];
-    for (const pathName of pathLayerShorthands) {
-        const [tiledName, direction, selection] = pathName.split(":");
-        const shouldReverse = (Number(direction) === -1) ? true : false;
-        const paths = parsePathLayer(map, tiledName, shouldReverse, selection);
-        allPaths.push(...paths);
-    }
-    return allPaths;
+  const allPaths = [];
+  for (const pathName of pathLayerShorthands) {
+    const [tiledName, direction, selection] = pathName.split(":");
+    const shouldReverse = Number(direction) === -1 ? true : false;
+    const paths = parsePathLayer(map, tiledName, shouldReverse, selection);
+    allPaths.push(...paths);
+  }
+  return allPaths;
 }

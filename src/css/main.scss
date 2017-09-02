@@ -1,17 +1,7 @@
 @import "variables";
 @import "font-awesome";
-
 @import "hud";
-
-// TexturePacker export for CSS
-@import "../resources/atlases/css-assets.css";
-// Override the sprite class to have the proper url
-.sprite {
-    display: inline-block;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    background-image: url(../resources/atlases/css-assets.png);
-}
+// @import "css-atlas";
 
 * {
     box-sizing: border-box;
