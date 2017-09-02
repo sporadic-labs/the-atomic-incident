@@ -42,10 +42,10 @@ export default class Sandbox extends Phaser.State {
     groups.background = game.add.group(groups.game, "background");
     groups.midground = game.add.group(groups.game, "midground");
     groups.foreground = game.add.group(groups.game, "foreground");
-    (groups.enemies = game.add.group(groups.midground, "enemies")),
-      (groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding")),
-      (groups.pickups = game.add.group(groups.foreground, "pickups")),
-      (globals.groups = groups);
+    groups.enemies = game.add.group(groups.midground, "enemies");
+    groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding");
+    groups.pickups = game.add.group(groups.foreground, "pickups");
+    globals.groups = groups;
 
     // Initializing the world
     this.stage.backgroundColor = "#FFF";
