@@ -1,15 +1,15 @@
-class HealthBar extends Phaser.Group {
+class Hearts extends Phaser.Group {
   /**
-     * Creates an instance of HealthBar.
+     * Creates an instance of Hearts.
      * @param {Phaser.Game} game 
      * @param {number} x 
      * @param {number} y 
      * @param {Phaser.Group} parentGroup 
      * 
-     * @memberOf HealthBar
+     * @memberOf Hearts
      */
   constructor(game, x, y, parentGroup) {
-    super(game, parentGroup, "health-bar");
+    super(game, parentGroup, "hearts");
     this.position.set(x, y);
     this._player = this.game.globals.player;
     this._fullHeartName = "hud/heart";
@@ -33,4 +33,4 @@ class HealthBar extends Phaser.Group {
   }
 }
 
-module.exports = HealthBar;
+module.exports = Hearts;
