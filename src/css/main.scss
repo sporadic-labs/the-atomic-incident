@@ -1,38 +1,38 @@
-@import "variables";
 @import "font-awesome";
 @import "hud";
 // @import "css-atlas";
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #instructions {
-    position: fixed;
-    top: 0;
-    left: 0;
-    font-family: "Saira";
-    line-height: 1.1;
-    font-size: 18px;
-    padding: 5px 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-family: "Saira";
+  line-height: 1.1;
+  font-size: 18px;
+  padding: 5px 5px;
 }
 
 #game-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 #game-container canvas {
-    border: 1px solid #EEEEEE;
-    border-radius: 3px;
+  border: 1px solid #eeeeee;
+  border-radius: 3px;
 }
