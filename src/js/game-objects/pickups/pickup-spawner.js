@@ -1,6 +1,3 @@
-const AbilityPickup = require("./ability-pickup.js");
-const abilities = require("../../constants/ability-names.js");
-
 import EnergyPickup from "./energy-pickup";
 
 class PickupSpawner extends Phaser.Group {
@@ -15,7 +12,6 @@ class PickupSpawner extends Phaser.Group {
   spawnPickup(colorName, amount = 1) {
     for (let i = 0; i < amount; i++) {
       const point = this._getSpawnPoint();
-      // new LightPickup(this.game, point.x, point.y, this, color);
       new EnergyPickup(this.game, point.x, point.y, this, 100, 3);
     }
   }
@@ -35,12 +31,6 @@ class PickupSpawner extends Phaser.Group {
         new Phaser.Point(pickups[i].x + pickups[i].width / 2, pickups[i].y + pickups[i].height / 2)
       );
     }
-  }
-
-  _spawnAbilityPickup() {
-    const point = this._getSpawnPoint();
-    const name = this.game.rnd.pick([abilities.DASH, abilities.SLOW_MOTION, abilities.GHOST]);
-    new AbilityPickup(this.game, point.x, point.y, this, name);
   }
 
   _getSpawnPoint() {
