@@ -63,6 +63,9 @@ BaseEnemy.prototype.postUpdate = function() {
 };
 
 BaseEnemy.prototype.destroy = function() {
+  // Update the comboTracker.
+  this.game.globals.comboTracker.incrementCombo(1, 0.1);
+  // And destroy this enemy.
   this.game.tweens.removeFrom(this);
   this._healthBar.destroy();
   Phaser.Sprite.prototype.destroy.apply(this, arguments);
