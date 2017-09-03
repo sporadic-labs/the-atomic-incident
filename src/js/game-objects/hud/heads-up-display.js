@@ -82,44 +82,6 @@ export default class HeadsUpDisplay extends Phaser.Group {
       }
     });
 
-    // Mute/unmute
-    const mutePos = new Phaser.Point(game.width - 48, game.height - 10);
-    const muteButton = game.add.button(
-      mutePos.x,
-      mutePos.y,
-      "assets",
-      () => {
-        unmuteButton.visible = true;
-        muteButton.visible = false;
-        game.sound.mute = true;
-      },
-      this,
-      "hud/sound",
-      "hud/sound",
-      "hud/sound",
-      "hud/sound"
-    );
-    muteButton.anchor.set(1, 1);
-    const unmuteButton = game.add.button(
-      mutePos.x,
-      mutePos.y,
-      "assets",
-      () => {
-        unmuteButton.visible = false;
-        muteButton.visible = true;
-        game.sound.mute = false;
-      },
-      this,
-      "hud/mute",
-      "hud/mute",
-      "hud/mute",
-      "hud/mute"
-    );
-    unmuteButton.anchor.set(1, 0);
-    // Show the appropriate button based on sound manager's state
-    if (game.sound.mute) muteButton.visible = false;
-    else unmuteButton.visible = false;
-
     // Text for HUD
     // Score
     this._scoreText = game.make.text(this.game.width / 2, 32, "", {
