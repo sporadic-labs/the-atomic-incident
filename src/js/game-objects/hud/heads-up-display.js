@@ -143,7 +143,7 @@ export default class HeadsUpDisplay extends Phaser.Group {
     });
     this.add(this._comboModifierMask);
     // Combo modifier mask is hidden by default.
-    // this._comboModifierMask.visible = false;
+    this._comboModifierMask.visible = false;
     this._comboScoreText = game.make.text(this.game.width - 84, 42, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
