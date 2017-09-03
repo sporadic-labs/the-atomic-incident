@@ -113,12 +113,31 @@ class HeadsUpDisplay extends Phaser.Group {
     else unmuteButton.visible = false;
 
     // Text for HUD
-    // this._scoreText = game.make.text(this.game.width / 2, 34, "", {
-    //     font: "30px 'Alfa Slab One'", fill: "#ffd800", align: "center"
-    // });
-    // this._scoreText.anchor.setTo(0.5);
-    // this.add(this._scoreText);
+    // Score
+    this._scoreText = game.make.text(this.game.width / 2, 34, "", {
+      font: "30px 'Alfa Slab One'",
+      fill: "#ffd800",
+      align: "center"
+    });
+    this._scoreText.anchor.setTo(0.5);
+    this.add(this._scoreText);
+    // Combo
+    this._comboModifierText = game.make.text(this.game.width / 2 + 226, 34, "", {
+      font: "30px 'Alfa Slab One'",
+      fill: "#ffd800",
+      align: "center"
+    });
+    this._comboModifierText.anchor.setTo(0.5);
+    this.add(this._comboModifierText);
+    this._comboScoreText = game.make.text(this.game.width / 2 + 242, 72, "", {
+      font: "30px 'Alfa Slab One'",
+      fill: "#ffd800",
+      align: "center"
+    });
+    this._comboScoreText.anchor.setTo(0.5);
+    this.add(this._comboScoreText);
 
+    // Ammo
     this._ammoText = game.make.text(15, 10, "", {
       font: "24px 'Alfa Slab One'",
       fill: "#ffd800",
@@ -126,6 +145,7 @@ class HeadsUpDisplay extends Phaser.Group {
     });
     this.add(this._ammoText);
 
+    // Debug
     this._debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
       font: "18px 'Alfa Slab One'",
       fill: "#9C9C9C",
@@ -152,6 +172,10 @@ class HeadsUpDisplay extends Phaser.Group {
     // this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
     super.update(arguments);
 
+    // Shorthand
+    const scoreKeeper = this.game.globals.scoreKeeper;
+    const comboTracker = this.game.globals.comboTracker;
+
     if (!this._player.weapon._isReloading) {
       this._ammoText.setText(
         this._player.weapon.getAmmo() + " / " + this._player.weapon._totalAmmo
@@ -161,6 +185,11 @@ class HeadsUpDisplay extends Phaser.Group {
     }
 
     this._fpsText.setText(this.game.time.fps);
+
+    // Update score and combo.
+    this._scoreText.setText(scoreKeeper.getScore());
+    this._comboModifierText.setText("x" + comboTracker.getComboModifier().toFixed(1));
+    this._comboScoreText.setText("+" + comboTracker.getComboScore());
 
     // Update Enemy Trackers
     this.radar.update();
