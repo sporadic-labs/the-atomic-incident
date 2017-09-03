@@ -6,7 +6,6 @@ var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
-var HeadsUpDisplay = require("../game-objects/hud/heads-up-display.js");
 const SoundEffectManager = require("../game-objects/fx/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/components/level-manager.js");
@@ -18,6 +17,7 @@ import PhaserNavmesh from "phaser-navmesh/src/library";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 import ScoreKeeper from "../game-objects/components/score-keeper";
 import ComboTracker from "../game-objects/components/combo-tracker";
+import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
 
 export default class Sandbox extends Phaser.State {
   create() {
