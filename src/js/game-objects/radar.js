@@ -1,4 +1,4 @@
-import Color from "../constants/colors";
+import Color from "../helpers/color";
 
 /**
  * Player Radar.
@@ -154,7 +154,7 @@ class Radar {
 
       // TODO(rex): If the icon is in shadow, tint it so it is visible.
       if (player._playerLight._light.isPointInLight(entry.image.position)) {
-        entry.image.tint = Color.white;
+        entry.image.tint = Color.white();
       }
     }
   }

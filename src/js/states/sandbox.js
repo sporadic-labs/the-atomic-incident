@@ -11,7 +11,7 @@ var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
 const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
-// var colors = require("../constants/colors.js");
+// import Color from "../helpers/color";
 // const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import gameData from "../game-data";
@@ -112,7 +112,7 @@ export default class Sandbox extends Phaser.State {
 
     // Testing sprite lights!
     // const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
-    //     new Phaser.Circle(0, 0, 200), colors.white, colors.red);
+    //     new Phaser.Circle(0, 0, 200), Color.white(), Color.red());
     // this.lighting.addExistingLight(light);
 
     // // Menu for switching tile maps

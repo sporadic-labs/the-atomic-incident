@@ -1,6 +1,6 @@
 import ShadowEnemy from "./enemies/shadow-enemy";
 import TargetingComp from "./components/targeting-component";
-import Color from "../helpers/Color";
+import Color from "../helpers/color";
 import Composition from "./waves/wave-composition";
 import { CircleWave } from "./waves/wave-shapes";
 
@@ -32,7 +32,7 @@ export default class EnemySpawner {
         pos.y,
         "enemies/arrow-idle",
         this._enemies,
-        Color.blue
+        Color.blue()
       );
       enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));
     }
@@ -53,7 +53,7 @@ export default class EnemySpawner {
       y,
       "enemies/arrow-idle",
       this._enemies,
-      Color.red,
+      Color.red(),
       null
     );
     enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));

@@ -1,5 +1,5 @@
 import phaserTiledHull from "phaser-tiled-hull/src/library"; // Allows us to babelify ourselves
-const Color = require("../helpers/Color");
+import Color from "../helpers/color";
 
 /**
  * A class for managing and switching between multiple maps. It assumes that 
