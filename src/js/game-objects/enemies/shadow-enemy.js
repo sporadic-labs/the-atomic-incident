@@ -1,12 +1,11 @@
 import Color from "../../helpers/color";
 
 const BaseEnemy = require("./base-enemy.js");
-const TargetingComp = require("../components/targeting-component");
 
 import EnergyPickup from "../pickups/energy-pickup";
 
 class ShadowEnemy extends BaseEnemy {
-  constructor(game, x, y, atlasKey, parentGroup, color, shieldColor) {
+  constructor(game, x, y, atlasKey, parentGroup, color) {
     super(game, x, y, "assets", atlasKey, 100, parentGroup, 1, color);
 
     // Temp fix: move the health bar above the shadow/light layer
@@ -16,21 +15,6 @@ class ShadowEnemy extends BaseEnemy {
     this._inGhostMode = false;
 
     this._damage = 10; // 10 units per second
-
-    // If there wasn't a shieldColor provided, set the shieldColor and shield to null.
-    if (!shieldColor) {
-      this._shieldColor = null;
-      this._shield = null;
-    } else {
-      // If a shieldColor param was provided, you want a shield!
-      // Add the shield as a child sprite of the shadow enemy.
-      this._shield = game.add.sprite(0, 0, "assets", "enemies/outline");
-      this._shield.anchor.set(0.5);
-      // Also tint the shield based on the shield color!
-      this._shieldColor = shieldColor instanceof Color ? shieldColor : new Color(shieldColor);
-      this._shield.tint = this._shieldColor.getRgbColorInt();
-      this.addChild(this._shield);
-    }
 
     // Override from BaseEnemy
     const diameter = 0.1 * this.width; // Fudge factor - body smaller than sprite
@@ -72,29 +56,8 @@ class ShadowEnemy extends BaseEnemy {
     const lm = this.game.globals.levelManager;
     this.game.physics.arcade.collide(this, lm.getCurrentWallLayer());
 
-    // // Switching into or out of ghost mode
-    // // if (this._player.ghostMode && !(this._movementComponent instanceof AvoidComp)) {
-    //   const dist = this._player.position.distance(this.position);
-    //   if (dist < 300) {
-    //     const speed = this._movementComponent ? this._movementComponent.speed : 100;
-    //     // this.setMovementComponent(new AvoidComp(this, this._player, speed));
-    //     this._inGhostMode = true;
-    //   }
-    // } else if (this._inGhostMode && !this._player.ghostMode) {
-    //   const speed = this._movementComponent ? this._movementComponent.speed : 100;
-    //   this.setMovementComponent(new TargetingComp(this, speed));
-    //   this._inGhostMode = false;
-    // }
-
     if (this._movementComponent) this._movementComponent.update();
     super.update();
-  }
-
-  damageShield() {
-    // Destroy the shield sprite.
-    this._shield.destroy();
-    this._shield = null;
-    this._shieldColor = null;
   }
 
   destroy(...args) {
@@ -105,8 +68,6 @@ class ShadowEnemy extends BaseEnemy {
     this._timer.destroy();
     this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
     this._dieSound.play();
-
-    if (this._shield) this._shield.destroy();
 
     if (this._movementComponent) this._movementComponent.destroy();
     super.destroy(...args);
