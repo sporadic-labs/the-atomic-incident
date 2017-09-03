@@ -7,12 +7,10 @@ var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../helpers/score-keeper.js");
-var HeadsUpDisplay = require("../game-objects/heads-up-display.js");
+var HeadsUpDisplay = require("../game-objects/hud/heads-up-display.js");
 const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 const LevelManager = require("../game-objects/level-manager.js");
-// import Color from "../helpers/color";
-// const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
 import MENU_STATES from "../menu/menu-states";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
@@ -110,25 +108,6 @@ export default class Sandbox extends Phaser.State {
       gameStore.setMenuState(MENU_STATES.DEBUG);
       gameStore.pause();
     });
-
-    // Testing sprite lights!
-    // const light = new SpriteLight(this.game, this.lighting.parent, new Phaser.Point(150, 200),
-    //     new Phaser.Circle(0, 0, 200), Color.white(), Color.red());
-    // this.lighting.addExistingLight(light);
-
-    // // Menu for switching tile maps
-    // var menu = [];
-    // var x = game.width - 36;
-    // for (var i = 0; i < globals.tilemapFiles.length; i++) {
-    //     // The callback needs a reference to the value of i on each iteration,
-    //     // so create a callback with binding
-    //     var cb = game.state.start.bind(game.state, "load", true, true,
-    //         "resources/tilemaps/" + globals.tilemapFiles[i]);
-    //     var b = game.add.button(x, (36 * i) + 4, "button", cb);
-    //     b.fixedToCamera = true;
-    //     menu.push(b);
-    // }
-    // this.menu = menu;
   }
 
   getMapPoints(key) {
