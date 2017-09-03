@@ -6,7 +6,6 @@ var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
 var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
 var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
-var ScoreKeeper = require("../game-objects/components/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/hud/heads-up-display.js");
 const SoundEffectManager = require("../game-objects/fx/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
@@ -17,6 +16,8 @@ import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
+import ScoreKeeper from "../game-objects/components/score-keeper";
+import ComboTracker from "../game-objects/components/combo-tracker";
 
 export default class Sandbox extends Phaser.State {
   create() {
@@ -82,7 +83,8 @@ export default class Sandbox extends Phaser.State {
     globals.player = player;
 
     // Score
-    globals.scoreKeeper = new ScoreKeeper();
+    globals.scoreKeeper = new ScoreKeeper(game);
+    globals.comboTracker = new ComboTracker(game, 2500);
 
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.hud);

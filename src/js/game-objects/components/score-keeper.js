@@ -4,8 +4,9 @@
  * @export
  * @class ScoreKeeper
  */
-class ScoreKeeper {
-  constructor() {
+export default class ScoreKeeper {
+  constructor(game) {
+    this.game = game;
     this._score = 0;
   }
 
@@ -18,9 +19,10 @@ class ScoreKeeper {
    */
   incrementScore(points) {
     // If the point value isn't a number, or isn't defined, then bail!
-    if (points === undefined || points === null || !isNaN(points)) {
+    if (points === undefined || points === null || isNaN(points)) {
       return;
     }
+    console.log("we doin this?");
 
     // If the point value is defined, add it to the score.
     this._score += points;
@@ -46,5 +48,3 @@ class ScoreKeeper {
     this._score = score || 0;
   }
 }
-
-module.exports = ScoreKeeper;
