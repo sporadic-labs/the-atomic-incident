@@ -107,6 +107,7 @@ export default class Sandbox extends Phaser.State {
     // Note: pausing and unpausing mutes/unmutes Phaser's sound manager. Changing the volume while
     // muted will be ignored. Instead, sync volume any time the game is unmuted.
     this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
+    this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
 
     // Debug menu
     game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
