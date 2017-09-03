@@ -1,8 +1,8 @@
-import ShadowEnemy from "./enemies/shadow-enemy";
-import TargetingComp from "./components/targeting-component";
-import Color from "../helpers/color";
-import Composition from "./waves/wave-composition";
-import { CircleWave } from "./waves/wave-shapes";
+import ShadowEnemy from "./shadow-enemy";
+import TargetingComp from "../components/targeting-component";
+import Color from "../../helpers/color";
+import Composition from "../waves/wave-composition";
+import { CircleWave } from "../waves/wave-shapes";
 
 export default class EnemySpawner {
   constructor(game, player) {
