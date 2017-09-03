@@ -270,7 +270,7 @@ Player.prototype.takeDamage = function() {
   this._maxSpeed = 2 * this._maxSpeed;
 
   // Reset the score and combo.
-  this.game.globals.comboTracker.resetCombo();
+  this.game.globals.comboTracker.updateScoreAndResetCombo();
 
   // Flicker tween to indicate when player is invulnerable
   this._isTakingDamage = true;

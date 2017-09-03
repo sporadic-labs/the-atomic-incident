@@ -55,8 +55,8 @@ export default class ComboTracker {
 
   /**
    * Reset the combo.
-   * This probably happens when the player gets hit
-   * and the score is lost.
+   * NOTE(rex): Feels better if you keep whatever score you have
+   * earned before you got hit.
    * 
    * @memberof ComboTracker
    */
@@ -64,6 +64,22 @@ export default class ComboTracker {
     this._comboModifier = 0;
     this._killStreak = 0;
     this._comboScore = 0;
+  }
+
+  /**
+   * Update the Score and Reset the combo.
+   * This probably happens when the player gets hit
+   * and the score is lost.
+   * 
+   * @memberof ComboTracker
+   */
+  updateScoreAndResetCombo() {
+    // Shorthand
+    const scoreKeeper = this.game.globals.scoreKeeper;
+    // Update the score.
+    scoreKeeper.incrementScore(this._comboScore);
+    // And reset the combo variables.
+    this.resetCombo();
   }
 
   /**
@@ -75,7 +91,6 @@ export default class ComboTracker {
      */
   incrementCombo(killValue, modValue) {
     // Shorthand
-    const scoreKeeper = this.game.globals.scoreKeeper;
     const hud = this.game.globals.hud;
     // Update the combo modifier, kill streak, and score.
     this._comboModifier += utils.default(modValue, 0.1);
@@ -90,10 +105,7 @@ export default class ComboTracker {
      */
     this._comboTimer.removeAll();
     this._comboTimer.add(this._comboTimeout, () => {
-      // Update the score.
-      scoreKeeper.incrementScore(this._comboScore);
-      // And reset the combo variables.
-      this.resetCombo();
+      this.updateScoreAndResetCombo();
     });
   }
 
