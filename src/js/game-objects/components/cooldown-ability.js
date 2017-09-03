@@ -10,62 +10,70 @@ module.exports = CooldownAbility;
  * @param {number} activeTime - the duration over which the ability is active
  */
 function CooldownAbility(game, cooldownTime, activeTime, name) {
-    this.name = name;
-    
-    this._cooldownTime = cooldownTime;
-    this._activeTime = activeTime;
-    this._ableToUseAbility = true;
-    this._isAbilityActive = false;
-    this._startTime = 0;
-    
-    this.onReady = new Phaser.Signal();
-    this.onActivation = new Phaser.Signal();
-    this.onDeactivation = new Phaser.Signal();
+  this.name = name;
 
-    this._timer = game.time.create(false);
-    this._timer.start();
+  this._cooldownTime = cooldownTime;
+  this._activeTime = activeTime;
+  this._ableToUseAbility = true;
+  this._isAbilityActive = false;
+  this._startTime = 0;
+
+  this.onReady = new Phaser.Signal();
+  this.onActivation = new Phaser.Signal();
+  this.onDeactivation = new Phaser.Signal();
+
+  this._timer = game.time.create(false);
+  this._timer.start();
 }
 
-CooldownAbility.prototype.activate = function () {
-    this.onActivation.dispatch();
-    this._startTime = this._timer.ms;
+CooldownAbility.prototype.activate = function() {
+  this.onActivation.dispatch();
+  this._startTime = this._timer.ms;
 
-    this._ableToUseAbility = false;
-    this._timer.add(this._cooldownTime, function () {
-        this._ableToUseAbility = true;
-        this.onReady.dispatch();
-        this._startTime = 0;
-    }, this);
-    
-    this._isAbilityActive = true;
-    this._timer.add(this._activeTime, function () {
-        this._isAbilityActive = false;
-        this.onDeactivation.dispatch();
-    }, this);
+  this._ableToUseAbility = false;
+  this._timer.add(
+    this._cooldownTime,
+    function() {
+      this._ableToUseAbility = true;
+      this.onReady.dispatch();
+      this._startTime = 0;
+    },
+    this
+  );
 
-    return this._ableToUseAbility;
+  this._isAbilityActive = true;
+  this._timer.add(
+    this._activeTime,
+    function() {
+      this._isAbilityActive = false;
+      this.onDeactivation.dispatch();
+    },
+    this
+  );
+
+  return this._ableToUseAbility;
 };
 
-CooldownAbility.prototype.isReady = function () {
-    return this._ableToUseAbility;
+CooldownAbility.prototype.isReady = function() {
+  return this._ableToUseAbility;
 };
 
-CooldownAbility.prototype.isActive = function () {
-    return this._isAbilityActive;
+CooldownAbility.prototype.isActive = function() {
+  return this._isAbilityActive;
 };
 
-CooldownAbility.prototype.reset = function () {
-    this._ableToUseAbility = true;
-    this._isAbilityActive = false;
-    this._timer.clearPendingEvents();
+CooldownAbility.prototype.reset = function() {
+  this._ableToUseAbility = true;
+  this._isAbilityActive = false;
+  this._timer.clearPendingEvents();
 };
 
 /** Returns a number between 0 (cooldown hasn't started) and 1 (cooldown complete) */
-CooldownAbility.prototype.getCooldownProgress = function () {
-    if (this._ableToUseAbility) return 1;
-    return (this._timer.ms - this._startTime) / this._cooldownTime;
+CooldownAbility.prototype.getCooldownProgress = function() {
+  if (this._ableToUseAbility) return 1;
+  return (this._timer.ms - this._startTime) / this._cooldownTime;
 };
 
-CooldownAbility.prototype.destroy = function () {
-    this._timer.destroy();
+CooldownAbility.prototype.destroy = function() {
+  this._timer.destroy();
 };

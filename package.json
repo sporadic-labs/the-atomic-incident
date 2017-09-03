@@ -2,10 +2,7 @@
   "name": "octo-chainsaw",
   "description": "Octo-Chainsaw, a Game-in-Progress",
   "version": "0.0.0",
-  "authors": [
-    "Rex Twedt",
-    "Mike Hadley"
-  ],
+  "authors": ["Rex Twedt", "Mike Hadley"],
   "license": "MIT",
   "main": "gulpfile.js",
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
@@ -61,13 +58,11 @@
     "clean": "rm -rf ./public",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d public",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prettier": "prettier --write ./src/js/**/*.{js,jsx,json}"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
