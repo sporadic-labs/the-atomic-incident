@@ -1,62 +1,54 @@
-import { h, Component } from "preact";
+import { h } from "preact";
 
-export default class DebugMenu extends Component {
-  constructor({ preferencesStore }) {
-    super();
-    const { shadowOpacity, shadersEnabled, physicsDebug } = preferencesStore;
-    this.state = { shadowOpacity, shadersEnabled, physicsDebug };
-  }
+import InputFix from "./input-fix";
 
-  onOpacityChange(shadowOpacity) {
-    this.props.preferencesStore.setShadowOpacity(shadowOpacity);
-    this.setState({ shadowOpacity });
-  }
+export default function DebugMenu({ preferencesStore }) {
+  const { volume, shadowOpacity, shadersEnabled, physicsDebug } = preferencesStore;
+  return (
+    <div id="debug-menu">
+      <form>
+        <label>
+          Volume
+          <InputFix
+            type="range"
+            value={volume}
+            min="0"
+            max="1"
+            step="0.05"
+            onChange={e => preferencesStore.setVolume(e.target.value)}
+          />
+        </label>
 
-  onShaderChange(value) {
-    this.props.preferencesStore.setShadersEnabled(value);
-    this.setState({ shadersEnabled: value });
-  }
+        <label>
+          Shadow Opacity
+          <InputFix
+            type="range"
+            value={shadowOpacity}
+            min="0"
+            max="1"
+            step="0.05"
+            onChange={e => preferencesStore.setShadowOpacity(e.target.value)}
+          />
+        </label>
 
-  onPhysicsChange(value) {
-    this.props.preferencesStore.setPhysicsDebug(value);
-    this.setState({ physicsDebug: value });
-  }
+        <label>
+          Shaders Enabled:
+          <input
+            type="checkbox"
+            checked={shadersEnabled}
+            onClick={() => preferencesStore.setShadersEnabled(!shadersEnabled)}
+          />
+        </label>
 
-  render({ preferencesStore }, { shadowOpacity, shadersEnabled, physicsDebug }) {
-    return (
-      <div id="debug-menu">
-        <form>
-          <label>
-            Shadow Opacity
-            <input
-              type="range"
-              value={shadowOpacity}
-              min="0"
-              max="1"
-              step="0.05"
-              onChange={e => this.onOpacityChange(e.target.value)}
-            />
-          </label>
-
-          <label>
-            Shaders Enabled:
-            <input
-              type="checkbox"
-              checked={shadersEnabled}
-              onClick={() => this.onShaderChange(!shadersEnabled)}
-            />
-          </label>
-
-          <label>
-            Debug Physics:
-            <input
-              type="checkbox"
-              checked={physicsDebug}
-              onClick={() => this.onPhysicsChange(!physicsDebug)}
-            />
-          </label>
-        </form>
-      </div>
-    );
-  }
+        <label>
+          Debug Physics:
+          <input
+            type="checkbox"
+            checked={physicsDebug}
+            onClick={() => preferencesStore.setPhysicsDebug(!physicsDebug)}
+          />
+        </label>
+      </form>
+    </div>
+  );
 }
