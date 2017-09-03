@@ -1,4 +1,5 @@
 module.exports = {
+  parser: "babel-eslint",
   plugins: ["react", "prettier"],
   // Enable core eslint rules, see: http://eslint.org/docs/rules/
   extends: ["eslint:recommended", "plugin:react/recommended", "prettier", "prettier/react"],

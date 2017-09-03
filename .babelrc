@@ -11,6 +11,7 @@
   ],
   "plugins": [
     ["transform-react-jsx", { "pragma": "h" }],
+    ["transform-class-properties", { "loose": true }],
     "transform-object-rest-spread"
   ]
 }
