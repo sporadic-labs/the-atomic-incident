@@ -1,7 +1,7 @@
 import Radar from "./radar";
 import { autorun } from "mobx";
-import { gameStore } from "../game-data/observable-stores";
-import MENU_STATES from "../menu/menu-states";
+import { gameStore } from "../../game-data/observable-stores";
+import MENU_STATES from "../../menu/menu-states";
 
 /**
  * Player Heads Up Display.
