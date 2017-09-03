@@ -1,7 +1,6 @@
 import Color from "../../helpers/color";
 
 const BaseEnemy = require("./base-enemy.js");
-const AvoidComp = require("../components/avoid-component");
 const TargetingComp = require("../components/targeting-component");
 
 import EnergyPickup from "../pickups/energy-pickup";
@@ -73,19 +72,19 @@ class ShadowEnemy extends BaseEnemy {
     const lm = this.game.globals.levelManager;
     this.game.physics.arcade.collide(this, lm.getCurrentWallLayer());
 
-    // Switching into or out of ghost mode
-    if (this._player.ghostMode && !(this._movementComponent instanceof AvoidComp)) {
-      const dist = this._player.position.distance(this.position);
-      if (dist < 300) {
-        const speed = this._movementComponent ? this._movementComponent.speed : 100;
-        this.setMovementComponent(new AvoidComp(this, this._player, speed));
-        this._inGhostMode = true;
-      }
-    } else if (this._inGhostMode && !this._player.ghostMode) {
-      const speed = this._movementComponent ? this._movementComponent.speed : 100;
-      this.setMovementComponent(new TargetingComp(this, speed));
-      this._inGhostMode = false;
-    }
+    // // Switching into or out of ghost mode
+    // // if (this._player.ghostMode && !(this._movementComponent instanceof AvoidComp)) {
+    //   const dist = this._player.position.distance(this.position);
+    //   if (dist < 300) {
+    //     const speed = this._movementComponent ? this._movementComponent.speed : 100;
+    //     // this.setMovementComponent(new AvoidComp(this, this._player, speed));
+    //     this._inGhostMode = true;
+    //   }
+    // } else if (this._inGhostMode && !this._player.ghostMode) {
+    //   const speed = this._movementComponent ? this._movementComponent.speed : 100;
+    //   this.setMovementComponent(new TargetingComp(this, speed));
+    //   this._inGhostMode = false;
+    // }
 
     if (this._movementComponent) this._movementComponent.update();
     super.update();
