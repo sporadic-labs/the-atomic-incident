@@ -122,7 +122,7 @@ export default class HeadsUpDisplay extends Phaser.Group {
 
     // Text for HUD
     // Score
-    this._scoreText = game.make.text(this.game.width / 2, 34, "", {
+    this._scoreText = game.make.text(this.game.width / 2, 32, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
       align: "center"
@@ -130,28 +130,25 @@ export default class HeadsUpDisplay extends Phaser.Group {
     this._scoreText.anchor.setTo(0.5);
     this.add(this._scoreText);
     // Combo
-    this._comboModifierText = game.make.text(this.game.width - 48, 34, "", {
+    this._comboModifierText = game.make.text(this.game.width - 84, 10, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
       align: "center"
     });
-    this._comboModifierText.anchor.setTo(0.5);
     this.add(this._comboModifierText);
-    this._comboModifierMask = game.make.text(this.game.width - 48, 34, "", {
+    this._comboModifierMask = game.make.text(this.game.width - 84, 10, "", {
       font: "30px 'Alfa Slab One'",
-      fill: "#ffffff",
+      fill: "#a59640",
       align: "center"
     });
-    this._comboModifierMask.anchor.setTo(0.5);
     this.add(this._comboModifierMask);
     // Combo modifier mask is hidden by default.
-    this._comboModifierMask.visible = false;
-    this._comboScoreText = game.make.text(this.game.width - 32, 72, "", {
+    // this._comboModifierMask.visible = false;
+    this._comboScoreText = game.make.text(this.game.width - 84, 42, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
       align: "center"
     });
-    this._comboScoreText.anchor.setTo(0.5);
     this.add(this._comboScoreText);
 
     // Ammo
@@ -217,12 +214,16 @@ export default class HeadsUpDisplay extends Phaser.Group {
 
     // Update score and combo.
     this._scoreText.setText(scoreKeeper.getScore());
+    this._comboModifierText.setText("x" + comboTracker.getComboModifier().toFixed(1));
+    this._comboModifierMask.setText("x" + comboTracker.getComboModifier().toFixed(1));
+    this._comboScoreText.setText("+" + comboTracker.getComboScore());
+    // And play animations if necessary.
     if (this._playReloadAnimation) {
       this._hudReloadAnimation();
     }
-    this._comboModifierMask.setText("x" + comboTracker.getComboModifier().toFixed(1));
-    this._comboModifierText.setText("x" + comboTracker.getComboModifier().toFixed(1));
-    this._comboScoreText.setText("+" + comboTracker.getComboScore());
+    if (this._playComboAnimation) {
+      this._hudComboAnimation();
+    }
 
     // Update Enemy Trackers
     this.radar.update();
@@ -253,11 +254,12 @@ export default class HeadsUpDisplay extends Phaser.Group {
     const currentTime = Date.now();
     const diff = currentTime - this._reloadAnimationStartTime;
     if (diff < this._reloadAnimationDuration) {
-      // TODO(rex): Update the reload mask.
+      // Update the reload mask.
       const fractionMasked = diff / this._reloadAnimationDuration;
       const cropAmount = fractionMasked * this._ammoText.width;
-      this._ammoText.crop(new Phaser.Rectangle(0, 0, cropAmount, this._ammoMask.height));
+      this._ammoText.crop(new Phaser.Rectangle(0, 0, cropAmount, this._ammoText.height));
     } else {
+      // The animation has ended, reset animation variables.
       this._playReloadAnimation = false;
       this._reloadAnimationStartTime = 0;
       this._reloadAnimationDuration = 0; // TODO(rex): This...?
@@ -268,10 +270,15 @@ export default class HeadsUpDisplay extends Phaser.Group {
   /**
    * Start the hud combo animation.
    * 
+   * @param {any} duration 
    * @memberof HeadsUpDisplay
    */
-  startHudComboAnimation() {
-    // TODO(rex): Update the combo mask.
+  startHudComboAnimation(duration) {
+    // Set variables used for the HUD combo animation.
+    this._comboAnimationDuration = duration; // TODO(rex): Default.
+    this._comboAnimationStartTime = Date.now();
+    this._playComboAnimation = true;
+    this._comboModifierMask.visible = true;
   }
 
   /**
@@ -280,7 +287,24 @@ export default class HeadsUpDisplay extends Phaser.Group {
    * @memberof HeadsUpDisplay
    */
   _hudComboAnimation() {
-    // TODO(rex): Update the combo mask.
+    // Get the current time, figure our progress through the animation timer,
+    // and update the hud accordingly.
+    const currentTime = Date.now();
+    const diff = currentTime - this._comboAnimationStartTime;
+    if (diff < this._comboAnimationDuration) {
+      // Update the combo mask.
+      const fractionMasked = diff / this._comboAnimationDuration;
+      const cropAmount = fractionMasked * this._comboModifierMask.width;
+      this._comboModifierMask.crop(
+        new Phaser.Rectangle(0, 0, cropAmount, this._comboModifierMask.height)
+      );
+    } else {
+      // The animation has ended, reset animation variables.
+      this._playComboAnimation = false;
+      this._comboAnimationStartTime = 0;
+      this._comboAnimationDuration = 0; // TODO(rex): This...?
+      this._comboModifierMask.visible = false;
+    }
   }
 
   /**

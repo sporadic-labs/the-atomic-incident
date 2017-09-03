@@ -76,10 +76,14 @@ export default class ComboTracker {
   incrementCombo(killValue, modValue) {
     // Shorthand
     const scoreKeeper = this.game.globals.scoreKeeper;
+    const hud = this.game.globals.hud;
     // Update the combo modifier, kill streak, and score.
     this._comboModifier += utils.default(modValue, 0.1);
     this._killStreak += utils.default(killValue, 1);
     this._comboScore = Math.round(this._killStreak * this._comboModifier);
+
+    // Start the HUD combo animation.
+    hud.startHudComboAnimation(this._comboTimeout);
 
     /* Reset the timer.  If the timer runs out, update the current score,
      * and reset the combo variables.
