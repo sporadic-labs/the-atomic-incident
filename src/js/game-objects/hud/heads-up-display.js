@@ -75,7 +75,7 @@ class HeadsUpDisplay extends Phaser.Group {
     });
 
     // Mute/unmute
-    const mutePos = new Phaser.Point(game.width - 10, 10);
+    const mutePos = new Phaser.Point(game.width - 48, game.height - 10);
     const muteButton = game.add.button(
       mutePos.x,
       mutePos.y,
@@ -91,7 +91,7 @@ class HeadsUpDisplay extends Phaser.Group {
       "hud/sound",
       "hud/sound"
     );
-    muteButton.anchor.set(1, 0);
+    muteButton.anchor.set(1, 1);
     const unmuteButton = game.add.button(
       mutePos.x,
       mutePos.y,
@@ -122,14 +122,14 @@ class HeadsUpDisplay extends Phaser.Group {
     this._scoreText.anchor.setTo(0.5);
     this.add(this._scoreText);
     // Combo
-    this._comboModifierText = game.make.text(this.game.width / 2 + 226, 34, "", {
+    this._comboModifierText = game.make.text(this.game.width - 48, 34, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
       align: "center"
     });
     this._comboModifierText.anchor.setTo(0.5);
     this.add(this._comboModifierText);
-    this._comboScoreText = game.make.text(this.game.width / 2 + 242, 72, "", {
+    this._comboScoreText = game.make.text(this.game.width - 32, 72, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
       align: "center"
