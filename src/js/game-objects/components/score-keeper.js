@@ -1,18 +1,50 @@
-module.exports = ScoreKeeper;
+/**
+ * Keep track of the players current score.
+ * 
+ * @export
+ * @class ScoreKeeper
+ */
+class ScoreKeeper {
+  constructor() {
+    this._score = 0;
+  }
 
-function ScoreKeeper() {
-  this._score = 0;
+  /**
+   * Add the provided value to the current Score.
+   * 
+   * @param {any} points 
+   * @returns 
+   * @memberof ScoreKeeper
+   */
+  incrementScore(points) {
+    // If the point value isn't a number, or isn't defined, then bail!
+    if (points === undefined || points === null || !isNaN(points)) {
+      return;
+    }
+
+    // If the point value is defined, add it to the score.
+    this._score += points;
+  }
+
+  /**
+   * Getter for the current Score.
+   * 
+   * @returns 
+   * @memberof ScoreKeeper
+   */
+  getScore() {
+    return this._score;
+  }
+
+  /**
+   * Setter for the current Score.
+   * 
+   * @param {any} score 
+   * @memberof ScoreKeeper
+   */
+  setScore(score) {
+    this._score = score || 0;
+  }
 }
 
-ScoreKeeper.prototype.incrementScore = function(points) {
-  if (points === undefined) return;
-  this._score += points;
-};
-
-ScoreKeeper.prototype.setScore = function(points) {
-  this._score = points || 0;
-};
-
-ScoreKeeper.prototype.getScore = function() {
-  return this._score;
-};
+module.exports = ScoreKeeper;
