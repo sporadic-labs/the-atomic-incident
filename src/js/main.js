@@ -4,7 +4,7 @@ require("babel-polyfill");
 window.PIXI = require("phaser-ce/build/custom/pixi");
 window.p2 = require("phaser-ce/build/custom/p2");
 window.Phaser = require("phaser-ce/build/custom/phaser-split");
-import gameData from "./game-data";
+import { gameStore, preferencesStore } from "./game-data/observable-stores";
 
 // Import and require don't play well together timing-wise. When we switch to webpack we can inject
 // the globals and go with an import here.
@@ -24,9 +24,17 @@ const game = new Phaser.Game({
 });
 
 // Set up the menu system
-import Menu from "./menu-components/menu";
+import MenuApp from "./menu/menu-app";
 import { h, render } from "preact";
-render(<Menu gameData={gameData} width={gameDimensions} height={gameDimensions} />, document.body);
+render(
+  <MenuApp
+    gameStore={gameStore}
+    preferencesStore={preferencesStore}
+    width={gameDimensions}
+    height={gameDimensions}
+  />,
+  document.body
+);
 
 // Create the space for globals on the game object
 const globals = (game.globals = {});

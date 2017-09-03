@@ -14,7 +14,8 @@ const LevelManager = require("../game-objects/level-manager.js");
 // import Color from "../helpers/color";
 // const SpriteLight = require("../plugins/lighting-plugin/sprite-light");
 
-import gameData from "../game-data";
+import MENU_STATES from "../menu/menu-states";
+import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import PhaserNavmesh from "phaser-navmesh/src/library";
 import EnemySpawner from "../game-objects/enemy-spawner";
@@ -98,16 +99,16 @@ export default class Sandbox extends Phaser.State {
 
     // Subscribe to the debug settings
     autorun(() => {
-      this.lighting.setOpacity(gameData.debugSettings.shadowOpacity);
-      if (gameData.debugSettings.physicsDebug) globals.plugins.satBody.enableDebugAll();
+      this.lighting.setOpacity(preferencesStore.shadowOpacity);
+      if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
       else globals.plugins.satBody.disableDebugAll();
-      globals.postProcessor.visible = gameData.debugSettings.shadersEnabled;
+      globals.postProcessor.visible = preferencesStore.shadersEnabled;
     });
 
     // Debug menu
     game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
-      gameData.setMenu("debug");
-      gameData.setPause(true);
+      gameStore.setMenuState(MENU_STATES.DEBUG);
+      gameStore.pause();
     });
 
     // Testing sprite lights!

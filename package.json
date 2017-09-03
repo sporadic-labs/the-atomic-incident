@@ -2,7 +2,10 @@
   "name": "octo-chainsaw",
   "description": "Octo-Chainsaw, a Game-in-Progress",
   "version": "0.0.0",
-  "authors": ["Rex Twedt", "Mike Hadley"],
+  "authors": [
+    "Rex Twedt",
+    "Mike Hadley"
+  ],
   "license": "MIT",
   "main": "gulpfile.js",
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
@@ -43,6 +46,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
     "sat": "^0.6.0",
+    "store": "^2.0.12",
     "style-loader": "^0.18.2",
     "typescript": "^2.5.2",
     "webpack": "^3.5.5",
@@ -62,7 +66,10 @@
     "prettier": "prettier --write ./src/js/**/*.{js,jsx,json}"
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "git add"]
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",

@@ -1,28 +1,28 @@
 import { h, Component } from "preact";
 
 export default class DebugMenu extends Component {
-  constructor({ gameData }) {
+  constructor({ preferencesStore }) {
     super();
-    const { shadowOpacity, shadersEnabled, physicsDebug } = gameData.debugSettings;
+    const { shadowOpacity, shadersEnabled, physicsDebug } = preferencesStore;
     this.state = { shadowOpacity, shadersEnabled, physicsDebug };
   }
 
   onOpacityChange(shadowOpacity) {
-    this.props.gameData.debugSettings.shadowOpacity = shadowOpacity;
+    this.props.preferencesStore.setShadowOpacity(shadowOpacity);
     this.setState({ shadowOpacity });
   }
 
   onShaderChange(value) {
-    this.props.gameData.debugSettings.shadersEnabled = value;
+    this.props.preferencesStore.setShadersEnabled(value);
     this.setState({ shadersEnabled: value });
   }
 
   onPhysicsChange(value) {
-    this.props.gameData.debugSettings.physicsDebug = value;
+    this.props.preferencesStore.setPhysicsDebug(value);
     this.setState({ physicsDebug: value });
   }
 
-  render({ gameData }, { shadowOpacity, shadersEnabled, physicsDebug }) {
+  render({ preferencesStore }, { shadowOpacity, shadersEnabled, physicsDebug }) {
     return (
       <div id="debug-menu">
         <form>

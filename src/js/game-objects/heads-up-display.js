@@ -1,6 +1,7 @@
 import Radar from "./radar";
 import { autorun } from "mobx";
-import gameData from "../game-data";
+import { gameStore } from "../game-data/observable-stores";
+import MENU_STATES from "../menu/menu-states";
 
 /**
  * Player Heads Up Display.
@@ -33,8 +34,8 @@ class HeadsUpDisplay extends Phaser.Group {
       playPos.y,
       "assets",
       () => {
-        gameData.setMenu("pause");
-        gameData.setPause(true);
+        gameStore.setMenuState(MENU_STATES.PAUSE);
+        gameStore.pause();
       },
       this,
       "hud/pause",
@@ -48,8 +49,8 @@ class HeadsUpDisplay extends Phaser.Group {
       playPos.y,
       "assets",
       () => {
-        gameData.setMenu(null);
-        gameData.setPause(false);
+        gameStore.setMenuState(MENU_STATES.NONE);
+        gameStore.unpause();
       },
       this,
       "hud/play",
@@ -62,7 +63,7 @@ class HeadsUpDisplay extends Phaser.Group {
 
     // Observe the game data's pause/unpause
     autorun(() => {
-      if (gameData.currentGame.isPaused) {
+      if (gameStore.isPaused) {
         game.paused = true;
         pauseButton.visible = false;
         playButton.visible = true;
