@@ -8,8 +8,8 @@ export default class Scattershot extends BaseWeapon {
     // Initial weapon settings:
     //  Ammo               - 24 shots / clip
     //  Time between shots - 400 ms
-    //  Reload time        - 2400 ms
-    this.init(24, 480, 2400);
+    //  Reload time        - 1800 ms
+    this.init(24, 480, 1800);
   }
 
   fire(angle) {

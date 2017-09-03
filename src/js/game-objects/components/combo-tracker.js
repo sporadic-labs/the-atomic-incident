@@ -93,7 +93,7 @@ export default class ComboTracker {
     // Shorthand
     const hud = this.game.globals.hud;
     // Update the combo modifier, kill streak, and score.
-    this._comboModifier += utils.default(modValue, 0.1);
+    this._comboModifier += utils.default(modValue, 0.2);
     this._killStreak += utils.default(killValue, 1);
     this._comboScore = Math.round(this._killStreak * this._comboModifier);
 
