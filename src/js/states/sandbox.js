@@ -8,15 +8,15 @@ var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
 var ScoreKeeper = require("../game-objects/components/score-keeper.js");
 var HeadsUpDisplay = require("../game-objects/hud/heads-up-display.js");
-const SoundEffectManager = require("../game-objects/sound-effect-manager.js");
+const SoundEffectManager = require("../game-objects/fx/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
-const LevelManager = require("../game-objects/level-manager.js");
+const LevelManager = require("../game-objects/components/level-manager.js");
 
 import MENU_STATES from "../menu/menu-states";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import PhaserNavmesh from "phaser-navmesh/src/library";
-import EnemySpawner from "../game-objects/enemy-spawner";
+import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 
 export default class Sandbox extends Phaser.State {
   create() {
@@ -72,7 +72,7 @@ export default class Sandbox extends Phaser.State {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    const PostProcessor = require("../game-objects/post-processor.js");
+    const PostProcessor = require("../game-objects/fx/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
 
     // Player
