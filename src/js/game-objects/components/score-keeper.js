@@ -22,7 +22,6 @@ export default class ScoreKeeper {
     if (points === undefined || points === null || isNaN(points)) {
       return;
     }
-    console.log("we doin this?");
 
     // If the point value is defined, add it to the score.
     this._score += points;

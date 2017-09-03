@@ -78,11 +78,8 @@ export default class ComboTracker {
     const scoreKeeper = this.game.globals.scoreKeeper;
     // Update the combo modifier, kill streak, and score.
     this._comboModifier += utils.default(modValue, 0.1);
-    console.log(this._comboModifier);
     this._killStreak += utils.default(killValue, 1);
-    console.log(this._killStreak);
     this._comboScore = Math.round(this._killStreak * this._comboModifier);
-    console.log(this._comboScore);
 
     /* Reset the timer.  If the timer runs out, update the current score,
      * and reset the combo variables.
