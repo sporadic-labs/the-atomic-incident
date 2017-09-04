@@ -14,8 +14,8 @@ import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import MapManager from "../game-objects/level-manager";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
-import ScoreKeeper from "../game-objects/components/score-keeper";
-import ComboTracker from "../game-objects/components/combo-tracker";
+import ScoreKeeper from "../game-objects/stats/score-keeper";
+import ComboTracker from "../game-objects/stats/combo-tracker";
 import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
 
 export default class Sandbox extends Phaser.State {
