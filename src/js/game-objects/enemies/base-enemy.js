@@ -3,7 +3,7 @@ module.exports = BaseEnemy;
 import Color from "../../helpers/color";
 
 var utils = require("../../helpers/utilities.js");
-var HealthBar = require("../components/health-bar.js");
+import HealthBar from "../components/health-bar.js";
 
 BaseEnemy.prototype = Object.create(Phaser.Sprite.prototype);
 
