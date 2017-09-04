@@ -27,7 +27,7 @@ class Radar {
      */
   update() {
     // Update Enemy Trackers
-    for (let enemy of this.registeredEnemies) {
+    for (const enemy of this.registeredEnemies) {
       this._updateEnemyTrackerPosition(enemy);
     }
   }
@@ -68,7 +68,7 @@ class Radar {
     const hud = this.game.globals.hud;
 
     // Calculate initial position of the Enemy Tracker.
-    var { x, y } = this._getTrackerPosition(enemy);
+    const { x, y } = this._getTrackerPosition(enemy);
 
     // Create the Arrow Image for the Enemy Tracker.
     const arrowImg = this.game.make.image(x, y, "assets", "hud/targeting-arrow");
@@ -141,7 +141,7 @@ class Radar {
       entry.image.visible = true;
 
       // Position
-      var { x: cX, y: cY } = this._getTrackerPosition(enemy);
+      const { x: cX, y: cY } = this._getTrackerPosition(enemy);
       entry.image.position.copyFrom(new Phaser.Point(cX, cY));
 
       // Rotation
@@ -184,9 +184,9 @@ class Radar {
       // between the enemy and the player.
       const angle = player.position.angle(enemy.position);
       const radiusModifier = 5;
-      var x =
+      const x =
         player.position.x + (radiusModifier + player._playerLight.getRadius()) * Math.cos(angle);
-      var y =
+      const y =
         player.position.y + (radiusModifier + player._playerLight.getRadius()) * Math.sin(angle);
 
       return { x, y };

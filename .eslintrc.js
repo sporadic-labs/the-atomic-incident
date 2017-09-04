@@ -5,6 +5,7 @@ module.exports = {
   extends: ["eslint:recommended", "plugin:react/recommended", "prettier", "prettier/react"],
   // Additional rules
   rules: {
+    "no-var": 1,
     "brace-style": ["warn", "1tbs"],
     "no-unused-vars": ["error", { args: "after-used" }],
     indent: ["warn", 2, { SwitchCase: 1 }],

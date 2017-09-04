@@ -2,10 +2,10 @@
  * Sandbox - this is the main level for now
  */
 
-var PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
-var SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
-var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
-var Player = require("../game-objects/player.js");
+const PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
+const SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
+const LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
+const Player = require("../game-objects/player.js");
 const SoundEffectManager = require("../game-objects/fx/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
 
@@ -21,8 +21,8 @@ import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
 export default class Sandbox extends Phaser.State {
   create() {
     // Shorthands
-    var game = this.game;
-    var globals = game.globals;
+    const game = this.game;
+    const globals = game.globals;
 
     // Debugging FPS
     game.time.advancedTiming = true;
@@ -80,7 +80,7 @@ export default class Sandbox extends Phaser.State {
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
-    var player = new Player(game, game.width / 2, game.height / 2, groups.foreground);
+    const player = new Player(game, game.width / 2, game.height / 2, groups.foreground);
     this.camera.follow(player);
     globals.player = player;
 
@@ -92,7 +92,7 @@ export default class Sandbox extends Phaser.State {
     globals.hud = new HeadsUpDisplay(game, groups.hud);
 
     // Keep track of what wave the player is on using the globals object.
-    var waveNum = 0;
+    const waveNum = 0;
     globals.waveNum = waveNum;
 
     // Waves of pickups and enemies

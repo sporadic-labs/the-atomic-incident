@@ -64,7 +64,7 @@ export default class MapManager {
    */
   isLocationEmpty(x, y) {
     const map = this.tilemap;
-    var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, this.wallLayer, true);
+    const checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, this.wallLayer, true);
     // Null is returned for invalid locations
     if (checkTile === null) return false;
     // Index of -1 is an empty tile
@@ -83,7 +83,7 @@ export default class MapManager {
    */
   isTileEmpty(tileX, tileY) {
     const map = this.tilemap;
-    var checkTile = map.getTile(tileX, tileY, this.wallLayer, true);
+    const checkTile = map.getTile(tileX, tileY, this.wallLayer, true);
     // Null is returned for invalid locations
     if (checkTile === null) return false;
     // Index of -1 is an empty tile

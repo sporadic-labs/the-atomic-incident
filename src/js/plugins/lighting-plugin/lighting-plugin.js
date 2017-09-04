@@ -1,4 +1,4 @@
-var Light = require("./light.js");
+const Light = require("./light.js");
 
 module.exports = Phaser.Plugin.Lighting = function(game, manager) {
   this.game = game;
@@ -11,7 +11,7 @@ module.exports = Phaser.Plugin.Lighting = function(game, manager) {
 Phaser.Plugin.Lighting.prototype = Object.create(Phaser.Plugin.prototype);
 
 Phaser.Plugin.Lighting.prototype.addLight = function(...lightParameters) {
-  var light = new Light(this.game, this.parent, ...lightParameters);
+  const light = new Light(this.game, this.parent, ...lightParameters);
   this.lights.push(light);
   if (this._debugEnabled) light.enableDebug();
   return light;
@@ -24,7 +24,7 @@ Phaser.Plugin.Lighting.prototype.addExistingLight = function(light) {
 };
 
 Phaser.Plugin.Lighting.prototype.removeLight = function(light) {
-  var i = this.lights.indexOf(light);
+  const i = this.lights.indexOf(light);
   if (i !== -1) this.lights.splice(i, 1);
 };
 
@@ -39,7 +39,7 @@ Phaser.Plugin.Lighting.prototype.setOpacity = function(opacity) {
 Phaser.Plugin.Lighting.prototype.enableDebug = function() {
   this._debugEnabled = true;
   this._debugImage.visible = true;
-  for (var i = 0; i < this.lights.length; i++) {
+  for (let i = 0; i < this.lights.length; i++) {
     this.lights[i].enableDebug();
   }
   // Hack: cycle through lights by enabling/disabling the debug mode
@@ -55,14 +55,14 @@ Phaser.Plugin.Lighting.prototype.enableDebug = function() {
 Phaser.Plugin.Lighting.prototype.disableDebug = function() {
   this._debugEnabled = false;
   this._debugImage.visible = false;
-  for (var i = 0; i < this.lights.length; i++) {
+  for (let i = 0; i < this.lights.length; i++) {
     this.lights[i].disableDebug();
   }
   this.shadowOpacity = this._originalShadowOpacity;
 };
 
 Phaser.Plugin.Lighting.prototype.isPointInShadow = function(worldPoint) {
-  var localPoint = this._convertWorldPointToLocal(worldPoint);
+  const localPoint = this._convertWorldPointToLocal(worldPoint);
   localPoint.x = Math.round(localPoint.x);
   localPoint.y = Math.round(localPoint.y);
   if (
@@ -74,7 +74,7 @@ Phaser.Plugin.Lighting.prototype.isPointInShadow = function(worldPoint) {
     // Returns true if outside of bitmap bounds...
     return true;
   }
-  var color = this._bitmap.getPixel(localPoint.x, localPoint.y);
+  const color = this._bitmap.getPixel(localPoint.x, localPoint.y);
   if (color.r !== 0 || color.g !== 0 || color.b !== 0) return false;
   return true;
 };
@@ -91,11 +91,11 @@ Phaser.Plugin.Lighting.prototype.init = function(parent, walls, shadowOpacity) {
   this.parent = parent;
   this.shadowOpacity = shadowOpacity !== undefined ? shadowOpacity : 1;
 
-  var game = this.game;
+  const game = this.game;
   // Create a bitmap and image that can be used for dynamic lighting
-  var bitmap = game.add.bitmapData(game.width, game.height);
+  const bitmap = game.add.bitmapData(game.width, game.height);
   bitmap.fill(0, 0, 0, this.shadowOpacity);
-  var image = bitmap.addToWorld(0, 0);
+  const image = bitmap.addToWorld(0, 0);
   image.blendMode = Phaser.blendModes.MULTIPLY;
   image.fixedToCamera = true;
   parent.addChild(image);
@@ -119,12 +119,12 @@ Phaser.Plugin.Lighting.prototype.update = function() {
 
   if (this._debugEnabled) this._debugBitmap.clear();
 
-  for (var i = 0; i < this.lights.length; i++) {
-    var light = this.lights[i];
+  for (let i = 0; i < this.lights.length; i++) {
+    const light = this.lights[i];
     if (!light.enabled) continue;
     light.update();
     if (light.needsRedraw) {
-      let points = this._castLight(light);
+      const points = this._castLight(light);
       light.redraw(points); // World coordinates
     }
     this._drawLight(light);
@@ -134,11 +134,11 @@ Phaser.Plugin.Lighting.prototype.update = function() {
     if (this._debugEnabled && i === this._debugLightIndex) {
       // Recalculate the points in case the light didn't need to be
       // redrawn
-      let points = this._castLight(light);
-      var localPoints = points.map(this._convertWorldPointToLocal, this);
-      var lightPoint = this._convertWorldPointToLocal(light.position);
-      for (var k = 0; k < localPoints.length; k++) {
-        var p = localPoints[k];
+      const points = this._castLight(light);
+      const localPoints = points.map(this._convertWorldPointToLocal, this);
+      const lightPoint = this._convertWorldPointToLocal(light.position);
+      for (let k = 0; k < localPoints.length; k++) {
+        const p = localPoints[k];
         this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y, "rgb(255, 255, 255)", 1);
         this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 255, 255)");
       }
@@ -147,9 +147,9 @@ Phaser.Plugin.Lighting.prototype.update = function() {
 
   // Draw the wall normals
   if (this._debugEnabled) {
-    for (var w = 0; w < this._walls.length; w++) {
-      var mp = this._convertWorldPointToLocal(this._walls[w].midpoint);
-      var norm = this._walls[w].normal.setMagnitude(10);
+    for (let w = 0; w < this._walls.length; w++) {
+      const mp = this._convertWorldPointToLocal(this._walls[w].midpoint);
+      const norm = this._walls[w].normal.setMagnitude(10);
       this._debugBitmap.line(mp.x, mp.y, mp.x + norm.x, mp.y + norm.y, "rgb(255, 255, 255)", 3);
     }
   }
@@ -163,19 +163,19 @@ Phaser.Plugin.Lighting.prototype.update = function() {
 };
 
 Phaser.Plugin.Lighting.prototype._castLight = function(light) {
-  var points = [];
-  var backWalls = light.intersectingWalls;
+  const points = [];
+  const backWalls = light.intersectingWalls;
 
   // Only cast light at the walls that face away from the light. MH: this
   // appears to work well when it comes to our current, single screen design.
   // We'll need to do some testing to see if this breaks moving lights and/or
   // maps larger than the screen.
-  for (var w = 0; w < backWalls.length; w++) {
+  for (let w = 0; w < backWalls.length; w++) {
     // Get start and end point for each wall.
-    var wall = backWalls[w];
+    const wall = backWalls[w];
 
-    var startAngle = light.position.angle(wall.line.start);
-    var endAngle = light.position.angle(wall.line.end);
+    const startAngle = light.position.angle(wall.line.start);
+    const endAngle = light.position.angle(wall.line.end);
 
     // Check for an intersection at each angle, and +/- 0.001
     // Add the intersection to the points array.
@@ -189,9 +189,9 @@ Phaser.Plugin.Lighting.prototype._castLight = function(light) {
 
   // Hack for now: add additional samples to better approximate a circular
   // radius of light
-  var samples = 60;
-  var delta = Phaser.Math.PI2 / samples;
-  for (var a = 0; a < Phaser.Math.PI2; a += delta) {
+  const samples = 60;
+  const delta = Phaser.Math.PI2 / samples;
+  for (let a = 0; a < Phaser.Math.PI2; a += delta) {
     points.push(checkRayIntersection(this, a));
   }
 
@@ -201,9 +201,9 @@ Phaser.Plugin.Lighting.prototype._castLight = function(light) {
   // which it intersects the edge of the stage.
   function checkRayIntersection(ctx, angle) {
     // Create a ray from the light to a point on the circle
-    var ray = light.getLightRay(angle);
+    const ray = light.getLightRay(angle);
     // Check if the ray intersected any walls
-    var intersection = ctx._getWallIntersection(ray, backWalls, light.id);
+    const intersection = ctx._getWallIntersection(ray, backWalls, light.id);
     if (intersection) return intersection;
     return ray.end;
   }
@@ -213,20 +213,20 @@ Phaser.Plugin.Lighting.prototype._castLight = function(light) {
 };
 
 Phaser.Plugin.Lighting.prototype._drawLight = function(light) {
-  var r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
-  var p = this._convertWorldPointToLocal(light.getTopLeft());
+  const r = new Phaser.Rectangle(0, 0, light._bitmap.width, light._bitmap.height);
+  const p = this._convertWorldPointToLocal(light.getTopLeft());
   this._bitmap.copyRect(light._bitmap, r, p.x, p.y);
 };
 
 Phaser.Plugin.Lighting.prototype._getPlayerLines = function() {
   // Player "walls"
-  var playerLines = [];
-  var player = this.game.globals.player;
-  var lastX = player.x + player.body.radius;
-  var lastY = player.y;
-  for (var a = 0; a <= Phaser.Math.PI2; a += Phaser.Math.PI2 / 10) {
-    var x = player.x + Math.cos(a) * player.body.radius;
-    var y = player.y + Math.sin(a) * player.body.radius;
+  const playerLines = [];
+  const player = this.game.globals.player;
+  let lastX = player.x + player.body.radius;
+  let lastY = player.y;
+  for (let a = 0; a <= Phaser.Math.PI2; a += Phaser.Math.PI2 / 10) {
+    const x = player.x + Math.cos(a) * player.body.radius;
+    const y = player.y + Math.sin(a) * player.body.radius;
     playerLines.push(new Phaser.Line(lastX, lastY, x, y));
     lastX = x;
     lastY = y;
@@ -245,23 +245,28 @@ Phaser.Plugin.Lighting.prototype._convertWorldPointToLocal = function(point) {
 Phaser.Plugin.Lighting.prototype._sortPoints = function(points, target) {
   // TODO: make more efficient by sorting and caching the angle calculations
   points.sort(function(p1, p2) {
-    var angle1 = Phaser.Point.angle(target, p1);
-    var angle2 = Phaser.Point.angle(target, p2);
+    const angle1 = Phaser.Point.angle(target, p1);
+    const angle2 = Phaser.Point.angle(target, p2);
     return angle1 - angle2;
   });
 };
 
 // Find the closest wall that faces away from the light
 Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls, lightId) {
-  var distanceToWall = Number.POSITIVE_INFINITY;
-  var closestIntersection = null;
-  for (var i = 0; i < walls.length; i++) {
+  let distanceToWall = Number.POSITIVE_INFINITY;
+  let closestIntersection = null;
+  for (let i = 0; i < walls.length; i++) {
     // Check if wall faces away from the selected light
     if (walls[i].backFacings[lightId]) {
-      var intersect = Phaser.Line.intersects(ray, walls[i].line);
+      const intersect = Phaser.Line.intersects(ray, walls[i].line);
       if (intersect) {
         // Find the closest intersection
-        var distance = this.game.math.distance(ray.start.x, ray.start.y, intersect.x, intersect.y);
+        const distance = this.game.math.distance(
+          ray.start.x,
+          ray.start.y,
+          intersect.x,
+          intersect.y
+        );
         if (distance < distanceToWall) {
           distanceToWall = distance;
           closestIntersection = intersect;
@@ -274,14 +279,14 @@ Phaser.Plugin.Lighting.prototype._getWallIntersection = function(ray, walls, lig
 
 // Return the closest wall that this ray intersects.
 Phaser.Plugin.Lighting.prototype._getClosestWall = function(ray, walls) {
-  var distanceToWall = Number.POSITIVE_INFINITY;
-  var closestWall = null;
+  let distanceToWall = Number.POSITIVE_INFINITY;
+  let closestWall = null;
 
-  for (var i = 0; i < walls.length; i++) {
-    var intersect = Phaser.Line.intersects(ray, walls[i]);
+  for (let i = 0; i < walls.length; i++) {
+    const intersect = Phaser.Line.intersects(ray, walls[i]);
     if (intersect) {
       // Find the closest intersection
-      var distance = this.game.math.distance(ray.start.x, ray.start.y, intersect.x, intersect.y);
+      const distance = this.game.math.distance(ray.start.x, ray.start.y, intersect.x, intersect.y);
       if (distance < distanceToWall) {
         distanceToWall = distance;
         closestWall = walls[i];

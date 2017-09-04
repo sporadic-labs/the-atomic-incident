@@ -8,7 +8,7 @@ module.exports = Controller;
  * with the button's numerical ID.
  * @type {Object}
  */
-var POINTER_BUTTONS_LOOKUP = {};
+const POINTER_BUTTONS_LOOKUP = {};
 POINTER_BUTTONS_LOOKUP[Phaser.Pointer.LEFT_BUTTON] = "leftButton";
 POINTER_BUTTONS_LOOKUP[Phaser.Pointer.MIDDLE_BUTTON] = "middleButton";
 POINTER_BUTTONS_LOOKUP[Phaser.Pointer.RIGHT_BUTTON] = "rightButton";
@@ -44,19 +44,19 @@ Controller.prototype.update = function() {
   this._activeControls = {};
 
   // Check for any registered mouse controls that have been activated
-  var activePointer = this._input.activePointer;
-  for (var buttonName in this._mouseMap) {
-    var mouseControls = this._mouseMap[buttonName];
-    var buttonPropertyName = POINTER_BUTTONS_LOOKUP[buttonName];
-    var pointerButton = activePointer[buttonPropertyName];
+  const activePointer = this._input.activePointer;
+  for (const buttonName in this._mouseMap) {
+    const mouseControls = this._mouseMap[buttonName];
+    const buttonPropertyName = POINTER_BUTTONS_LOOKUP[buttonName];
+    const pointerButton = activePointer[buttonPropertyName];
     if (pointerButton.isDown) {
       this._activateControls(mouseControls);
     }
   }
 
   // Check for any registered keyboard controls that have been activated
-  for (var keyCode in this._keyboardMap) {
-    var keyboardControls = this._keyboardMap[keyCode];
+  for (const keyCode in this._keyboardMap) {
+    const keyboardControls = this._keyboardMap[keyCode];
     if (this._input.keyboard.isDown(keyCode)) {
       this._activateControls(keyboardControls);
     }
@@ -84,8 +84,8 @@ Controller.prototype.isControlActive = function(controlName) {
  */
 Controller.prototype.addKeyboardControl = function(controlName, keyCodes) {
   if (!Array.isArray(keyCodes)) keyCodes = [keyCodes];
-  for (var i = 0; i < keyCodes.length; i += 1) {
-    var keyCode = keyCodes[i];
+  for (let i = 0; i < keyCodes.length; i += 1) {
+    const keyCode = keyCodes[i];
     if (this._keyboardMap[keyCode]) {
       this._keyboardMap[keyCode].push(controlName);
     } else {
@@ -115,8 +115,8 @@ Controller.prototype.addMouseDownControl = function(controlName, mouseButton) {
  * @private
  */
 Controller.prototype._activateControls = function(controls) {
-  for (var i = 0; i < controls.length; i += 1) {
-    var controlName = controls[i];
+  for (let i = 0; i < controls.length; i += 1) {
+    const controlName = controls[i];
     this._activeControls[controlName] = true;
   }
 };

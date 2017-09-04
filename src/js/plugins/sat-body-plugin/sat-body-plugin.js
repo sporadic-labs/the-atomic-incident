@@ -1,4 +1,4 @@
-var SatBody = require("./sat-body.js");
+const SatBody = require("./sat-body.js");
 
 module.exports = Phaser.Plugin.SatBody = function(game, parent) {
   this.game = game;
@@ -18,7 +18,7 @@ Phaser.Plugin.SatBody.prototype = Object.create(Phaser.Plugin.prototype);
  * @returns {SatBody}
  */
 Phaser.Plugin.SatBody.prototype.addBoxBody = function(sprite) {
-  var body = new SatBody(sprite).initBox();
+  const body = new SatBody(sprite).initBox();
   if (this._isDebug) body.enableDebug();
   this._bodies.push(body);
   return body;
@@ -33,7 +33,7 @@ Phaser.Plugin.SatBody.prototype.addBoxBody = function(sprite) {
  * @returns {SatBody}
  */
 Phaser.Plugin.SatBody.prototype.addCircleBody = function(sprite) {
-  var body = new SatBody(sprite).initCircle();
+  const body = new SatBody(sprite).initCircle();
   if (this._isDebug) body.enableDebug();
   this._bodies.push(body);
   return body;
@@ -47,7 +47,7 @@ Phaser.Plugin.SatBody.prototype.addCircleBody = function(sprite) {
  * @returns {SatBody}
  */
 Phaser.Plugin.SatBody.prototype.addPolygonBody = function(sprite, points) {
-  var body = new SatBody(sprite).initPolygon(points);
+  const body = new SatBody(sprite).initPolygon(points);
   if (this._isDebug) body.enableDebug();
   this._bodies.push(body);
   return body;
@@ -59,14 +59,14 @@ Phaser.Plugin.SatBody.prototype.isDebugAllEnabled = function() {
 
 Phaser.Plugin.SatBody.prototype.enableDebugAll = function() {
   this._isDebug = true;
-  for (var i = 0; i < this._bodies.length; i += 1) {
+  for (let i = 0; i < this._bodies.length; i += 1) {
     this._bodies[i].enableDebug();
   }
 };
 
 Phaser.Plugin.SatBody.prototype.disableDebugAll = function() {
   this._isDebug = false;
-  for (var i = 0; i < this._bodies.length; i += 1) {
+  for (let i = 0; i < this._bodies.length; i += 1) {
     this._bodies[i].disableDebug();
   }
 };
@@ -77,13 +77,13 @@ Phaser.Plugin.SatBody.prototype.disableDebugAll = function() {
  * plugin manager. See Phaser/core/Game#updateLogic for the lifecycle.
  */
 Phaser.Plugin.SatBody.prototype.postUpdate = function() {
-  for (var i = 0; i < this._bodies.length; i += 1) {
+  for (let i = 0; i < this._bodies.length; i += 1) {
     this._bodies[i].postUpdate();
   }
 };
 
 Phaser.Plugin.SatBody.prototype.removeBody = function(body) {
-  for (var i = 0; i < this._bodies.length; i += 1) {
+  for (let i = 0; i < this._bodies.length; i += 1) {
     if (body === this._bodies[i]) {
       this._bodies.splice(i, 1);
       break;
@@ -92,7 +92,7 @@ Phaser.Plugin.SatBody.prototype.removeBody = function(body) {
 };
 
 Phaser.Plugin.SatBody.prototype.destroy = function() {
-  for (var i = 0; i < this._bodies.length; i += 1) {
+  for (let i = 0; i < this._bodies.length; i += 1) {
     this._bodies[i].destroy();
   }
 };

@@ -33,8 +33,8 @@ export default class TargetingComponent {
       if (path.length > 1) {
         // If there are multiple steps in the path, head towards the second
         // point. This allows the sprite to skip the tile it is currently in.
-        var nextNode = path[1];
-        var nextTargetPoint = new Phaser.Point(nextNode.x, nextNode.y);
+        const nextNode = path[1];
+        const nextTargetPoint = new Phaser.Point(nextNode.x, nextNode.y);
         this._moveTowards(nextTargetPoint);
       } else {
         // If there aren't multiple steps, sprite is close enough to directly head
@@ -47,12 +47,12 @@ export default class TargetingComponent {
   }
 
   _moveTowards(position) {
-    var angle = this.parent.position.angle(position);
+    const angle = this.parent.position.angle(position);
 
     // Move towards target
-    var distance = this.parent.position.distance(position);
-    var targetSpeed = distance / this.game.time.physicsElapsed;
-    var magnitude = Math.min(this.speed, targetSpeed);
+    const distance = this.parent.position.distance(position);
+    const targetSpeed = distance / this.game.time.physicsElapsed;
+    const magnitude = Math.min(this.speed, targetSpeed);
     this.parent.body.velocity.x = magnitude * Math.cos(angle);
     this.parent.body.velocity.y = magnitude * Math.sin(angle);
 

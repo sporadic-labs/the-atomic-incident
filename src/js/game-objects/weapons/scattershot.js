@@ -15,14 +15,14 @@ export default class Scattershot extends BaseWeapon {
   fire(angle) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
       // Find trajectory
-      var pelletNum = this.game.rnd.integerInRange(16, 24);
+      const pelletNum = this.game.rnd.integerInRange(16, 24);
 
-      // randomize the trajectory of every bullet in the shotgun blast
-      for (var i = 0; i < pelletNum; i++) {
-        var mod = this.game.rnd.integerInRange(0, 30) * (Math.PI / 180) * this.game.rnd.sign();
-        var rndAngle = angle + mod;
-        var speed = this.game.rnd.integerInRange(364, 376);
-        var perpendicularOffset = this.game.rnd.integerInRange(-5, 5);
+      // randomize the trajectory of every bulconst in the shotgun blast
+      for (let i = 0; i < pelletNum; i++) {
+        const mod = this.game.rnd.integerInRange(0, 30) * (Math.PI / 180) * this.game.rnd.sign();
+        const rndAngle = angle + mod;
+        const speed = this.game.rnd.integerInRange(364, 376);
+        const perpendicularOffset = this.game.rnd.integerInRange(-5, 5);
         this._createProjectile(rndAngle, 24, perpendicularOffset, speed);
       }
 
@@ -37,13 +37,13 @@ export default class Scattershot extends BaseWeapon {
   }
 
   _createProjectile(angle, playerDistance, perpendicularOffset, speed) {
-    var perpAngle = angle - Math.PI / 2;
-    var x =
+    const perpAngle = angle - Math.PI / 2;
+    const x =
       this._player.x + playerDistance * Math.cos(angle) - perpendicularOffset * Math.cos(perpAngle);
-    var y =
+    const y =
       this._player.y + playerDistance * Math.sin(angle) - perpendicularOffset * Math.sin(perpAngle);
     // shotgun blast is made up of a bunch of slugs at half size.
-    var p = new Projectile(
+    const p = new Projectile(
       this.game,
       x,
       y,
@@ -56,7 +56,7 @@ export default class Scattershot extends BaseWeapon {
       speed
     );
     p.scale.setTo(0.5, 0.5);
-    var rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
+    const rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
   }
 }

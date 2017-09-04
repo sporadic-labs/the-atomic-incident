@@ -74,7 +74,7 @@ class Light {
       this._originalPoints = [];
       const center = new Phaser.Point(0, 0); // Points are relative to (0, 0)
       // Convert the points to Phaser.Point and find the bounding radius
-      for (var i = 0; i < points.length; i += 2) {
+      for (let i = 0; i < points.length; i += 2) {
         const p = new Phaser.Point(points[i], points[i + 1]);
         this._originalPoints.push(p);
         const d = center.distance(p);
@@ -346,27 +346,27 @@ class Light {
   }
 
   _recalculateWalls() {
-    var walls = this.game.globals.plugins.lighting.getWalls();
+    const walls = this.game.globals.plugins.lighting.getWalls();
 
     // Determine which walls have normals that face away from the light - these are the walls
     // that intersect light rights
-    var intersectingWalls = [];
-    for (var w = 0; w < walls.length; w++) {
-      var wall = walls[w];
+    const intersectingWalls = [];
+    for (let w = 0; w < walls.length; w++) {
+      const wall = walls[w];
 
       // Ignore walls that are not within range of the light. MH: this is essentially checking
       // whether two circles intersect. Circle 1 is the the light. Circle 2 is a circle that
       // circumscribes the wall (e.g. placed at the midpoint, with a radius of half wall
       // length). There are more accurate circle vs line collision detection algorithms that
       // we could use if needed...
-      var dist = wall.midpoint.distance(this.position);
+      const dist = wall.midpoint.distance(this.position);
       if (dist > this._boundingRadius + wall.length / 2) continue;
 
       // Shift the light so that its origin is at the wall midpoint, then calculate the dot of
       // the that and the normal. This way both vectors have the same origin point.
-      var relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
-      var dot = wall.normal.dot(relativePos);
-      var isBackFacing = dot < 0;
+      const relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
+      const dot = wall.normal.dot(relativePos);
+      const isBackFacing = dot < 0;
 
       // Add some information to the wall to indicate whether it is back facing or not. Walls
       // are passed around by reference, so each light does not have its own unique copy.
@@ -391,7 +391,7 @@ class Light {
     this.rotation = angle;
     if (!(this.shape instanceof Phaser.Polygon)) return;
     this._points = [];
-    for (var i = 0; i < this._originalPoints.length; i++) {
+    for (let i = 0; i < this._originalPoints.length; i++) {
       const newPoint = this._originalPoints[i].clone().rotate(0, 0, angle);
       this._points.push(newPoint);
     }

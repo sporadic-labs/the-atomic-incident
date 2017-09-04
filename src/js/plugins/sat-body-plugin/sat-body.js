@@ -13,25 +13,25 @@
 
 module.exports = SatBody;
 
-var SAT = require("sat");
+const SAT = require("sat");
 
-var BODY_TYPE = {
+const BODY_TYPE = {
   BOX: "box",
   CIRCLE: "circle",
   POLYGON: "polygon"
 };
 
 // Helper Object Factories
-var vec = function(x, y) {
+const vec = function(x, y) {
   return new SAT.Vector(x, y);
 };
-var box = function(pos, w, h) {
+const box = function(pos, w, h) {
   return new SAT.Box(pos, w, h);
 };
-var circle = function(pos, r) {
+const circle = function(pos, r) {
   return new SAT.Circle(pos, r);
 };
-var polygon = function(pos, points) {
+const polygon = function(pos, points) {
   return new SAT.Polygon(pos, points);
 };
 
@@ -40,7 +40,7 @@ function SatBody(sprite) {
   this._sprite = sprite;
   // Check for an arcade body, then get the correct sprite reference
   // for calculating the dimensions
-  var b = this._sprite.body ? this._sprite.body : this._sprite;
+  const b = this._sprite.body ? this._sprite.body : this._sprite;
   this._lastBodySize = { w: b.width, h: b.height };
   this.disableDebug();
 
@@ -61,7 +61,7 @@ function SatBody(sprite) {
  */
 SatBody.prototype.initBox = function() {
   this._bodyType = BODY_TYPE.BOX;
-  var b = this._sprite.body ? this._sprite.body : this._sprite;
+  const b = this._sprite.body ? this._sprite.body : this._sprite;
   this._boxBody = box(vec(b.x, b.y), b.width, b.height);
   this._body = this._boxBody.toPolygon();
   // Update position of sat body differently based on
@@ -72,7 +72,7 @@ SatBody.prototype.initBox = function() {
     // the SAT points to the center before rotation is applied.
     this._body.setOffset(vec(-b.width / 2, -b.height / 2));
   } else {
-    var anchor = this._sprite.anchor;
+    const anchor = this._sprite.anchor;
     // this._body.translate(-anchor.x * b.width, -anchor.y * b.height);
     this._body.translate(-anchor.x, -anchor.y * (b.height / 2));
   }
@@ -95,8 +95,8 @@ SatBody.prototype.initBox = function() {
  */
 SatBody.prototype.initCircle = function() {
   this._bodyType = BODY_TYPE.CIRCLE;
-  var b = this._sprite.body ? this._sprite.body : this._sprite;
-  var r = b.radius ? b.radius : b.width / 2;
+  const b = this._sprite.body ? this._sprite.body : this._sprite;
+  const r = b.radius ? b.radius : b.width / 2;
   this._body = circle(vec(b.x, b.y), r);
   return this;
 };
@@ -133,7 +133,7 @@ SatBody.prototype.initPolygon = function(points) {
   // This function would be more convient if it took an array or parsed the
   // arguments variable to construct the points
   this._bodyType = BODY_TYPE.POLYGON;
-  var s = this._sprite;
+  const s = this._sprite;
   this._body = polygon(vec(s.x, s.y), points);
   return this;
 };
@@ -147,15 +147,15 @@ SatBody.prototype.getBodyType = function() {
 };
 
 SatBody.prototype.getAxisAlignedBounds = function() {
-  var left = null,
+  let left = null,
     right = null,
     top = null,
     bottom = null;
   if (this._bodyType === BODY_TYPE.POLYGON || this._bodyType === BODY_TYPE.BOX) {
-    var points = this._body.calcPoints;
-    for (var i = 0; i < points.length; i++) {
-      var x = points[i].x + this._body.pos.x;
-      var y = points[i].y + this._body.pos.y;
+    const points = this._body.calcPoints;
+    for (let i = 0; i < points.length; i++) {
+      const x = points[i].x + this._body.pos.x;
+      const y = points[i].y + this._body.pos.y;
       if (left === undefined || x < left) left = x;
       if (right === undefined || x > right) right = x;
       if (top === undefined || y < top) top = y;
@@ -178,8 +178,8 @@ SatBody.prototype.getAxisAlignedBounds = function() {
 
 SatBody.prototype.testOverlap = function(otherBody) {
   // Handy boolean shorthands
-  var thisIsCircle = this._bodyType === BODY_TYPE.CIRCLE;
-  var otherIsCircle = otherBody._bodyType === BODY_TYPE.CIRCLE;
+  const thisIsCircle = this._bodyType === BODY_TYPE.CIRCLE;
+  const otherIsCircle = otherBody._bodyType === BODY_TYPE.CIRCLE;
 
   // Determine the appropriate collision body comparison
   if (thisIsCircle && otherIsCircle) {
@@ -195,7 +195,7 @@ SatBody.prototype.testOverlap = function(otherBody) {
 
 SatBody.prototype.testOverlapVsRectangle = function(rect) {
   // Convert rectangle to a SAT body
-  var satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
+  const satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
 
   // Determine the appropriate collision body comparison
   if (this._bodyType === BODY_TYPE.CIRCLE) {
@@ -207,11 +207,11 @@ SatBody.prototype.testOverlapVsRectangle = function(rect) {
 
 SatBody.prototype.collideVsRectangle = function(rect) {
   // Convert rectangle to a SAT body
-  var satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
-  var response = new SAT.Response();
+  const satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
+  const response = new SAT.Response();
 
   // Determine the appropriate collision body comparison
-  var isCollision;
+  let isCollision;
   if (this._bodyType === BODY_TYPE.CIRCLE) {
     isCollision = SAT.testPolygonCircle(satRect, this._body, response);
   } else {
@@ -235,8 +235,8 @@ SatBody.prototype.postUpdate = function() {
   // Check the sprite's body (or the sprite itself),
   // to see if the scale has changed, and if so,
   // update the SAT body to match
-  var b = this._sprite.body ? this._sprite.body : this._sprite;
-  var newBodySize = { w: b.width, h: b.height };
+  const b = this._sprite.body ? this._sprite.body : this._sprite;
+  const newBodySize = { w: b.width, h: b.height };
   if (this._lastBodySize.w !== newBodySize.w || this._lastBodySize.h !== newBodySize.h) {
     this._lastBodySize = newBodySize;
     if (this._bodyType === BODY_TYPE.BOX) this.initBox();
@@ -259,7 +259,7 @@ SatBody.prototype.postUpdate = function() {
 SatBody.prototype.updateFromArcadeBody = function() {
   // Update the position of the SAT body using the arcade body. Arcade bodies
   // are positions are relative to the top left of the body.
-  var arcadeBody = this._sprite.body;
+  const arcadeBody = this._sprite.body;
   if (this._bodyType === BODY_TYPE.CIRCLE) {
     // The arcade body position for a circle is anchored at the top left,
     // but SAT circles are anchored at the center, so shift the position.

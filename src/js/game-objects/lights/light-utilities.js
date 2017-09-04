@@ -7,13 +7,13 @@
  * @param {any} range Length of spotlight
  */
 module.exports.generateSpotlightPolygon = function(orientation, span, range) {
-  var lightOrientation = orientation * Math.PI / 180;
-  var lightArcAngle = span * Math.PI / 180;
-  var arcSamples = 6;
-  var lightPoints = [new Phaser.Point(0, 0)];
-  for (var i = 0; i <= arcSamples; i += 1) {
-    var percent = i / arcSamples;
-    var currentAngle = lightArcAngle / 2 - lightArcAngle * percent;
+  const lightOrientation = orientation * Math.PI / 180;
+  const lightArcAngle = span * Math.PI / 180;
+  const arcSamples = 6;
+  const lightPoints = [new Phaser.Point(0, 0)];
+  for (let i = 0; i <= arcSamples; i += 1) {
+    const percent = i / arcSamples;
+    const currentAngle = lightArcAngle / 2 - lightArcAngle * percent;
     lightPoints.push(
       new Phaser.Point(
         Math.cos(lightOrientation + currentAngle) * range,
@@ -21,6 +21,6 @@ module.exports.generateSpotlightPolygon = function(orientation, span, range) {
       )
     );
   }
-  var polygon = new Phaser.Polygon(lightPoints);
+  const polygon = new Phaser.Polygon(lightPoints);
   return polygon;
 };

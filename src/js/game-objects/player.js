@@ -1,14 +1,14 @@
 module.exports = Player;
 
-var Controller = require("../helpers/controller.js");
-var spriteUtils = require("../helpers/sprite-utilities.js");
+const Controller = require("../helpers/controller.js");
+const spriteUtils = require("../helpers/sprite-utilities.js");
 
 import Scattershot from "./weapons/scattershot";
 import EnergyPickup from "./pickups/energy-pickup";
 import PlayerLight from "./lights/player-light";
 import Color from "../helpers/color";
 
-var ANIM_NAMES = {
+const ANIM_NAMES = {
   IDLE: "idle",
   MOVE: "move",
   ATTACK: "attack",
@@ -44,7 +44,7 @@ function Player(game, x, y, parentGroup) {
   this.weapon = new Scattershot(game, parentGroup, this);
 
   // Shorthand
-  var globals = this.game.globals;
+  const globals = this.game.globals;
   this._enemies = globals.groups.enemies;
   this._pickups = globals.groups.pickups;
   this._enemies = globals.groups.enemies;
@@ -52,11 +52,11 @@ function Player(game, x, y, parentGroup) {
   this._mapManager = globals.mapManager;
 
   // Setup animations
-  var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
-  var moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, "", 2);
-  var attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2, 4, "", 2);
-  var hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, "", 2);
-  var dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, "", 2);
+  const idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
+  const moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, "", 2);
+  const attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2, 4, "", 2);
+  const hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, "", 2);
+  const dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, "", 2);
   this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
   this.animations.add(ANIM_NAMES.MOVE, moveFrames, 4, true);
   this.animations.add(ANIM_NAMES.ATTACK, attackFrames, 10, true);
@@ -70,7 +70,7 @@ function Player(game, x, y, parentGroup) {
   this._maxAcceleration = 5000;
   game.physics.arcade.enable(this);
   this.body.collideWorldBounds = true;
-  var diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
+  const diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
   this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
 
   this.satBody = globals.plugins.satBody.addCircleBody(this);
@@ -89,8 +89,8 @@ function Player(game, x, y, parentGroup) {
   this._compass.tint = Color.black().getRgbColorInt();
   // Set the anchor, position and rotation.
   this._compass.anchor.copyFrom(this.anchor);
-  var cX = this.position.x + 0.6 * this.width * Math.cos(this.rotation - Math.PI / 2);
-  var cY = this.position.y + 0.6 * this.width * Math.sin(this.rotation - Math.PI / 2);
+  const cX = this.position.x + 0.6 * this.width * Math.cos(this.rotation - Math.PI / 2);
+  const cY = this.position.y + 0.6 * this.width * Math.sin(this.rotation - Math.PI / 2);
   this._compass.position.copyFrom(new Phaser.Point(cX, cY));
   this._compass.rotation = this.rotation;
   // Add it to the foreground (so it is visible).
@@ -98,8 +98,8 @@ function Player(game, x, y, parentGroup) {
 
   /** PLAYER CONTROLS */
   this._controls = new Controller(this.game.input);
-  var Kb = Phaser.Keyboard;
-  var P = Phaser.Pointer;
+  const Kb = Phaser.Keyboard;
+  const P = Phaser.Pointer;
 
   // movement
   // wasd
@@ -136,7 +136,7 @@ Player.prototype.update = function() {
   this._controls.update();
 
   // Calculate the acceleration and heading from the keyboard.
-  var acceleration = new Phaser.Point(0, 0);
+  let acceleration = new Phaser.Point(0, 0);
   if (this._controls.isControlActive("move-left") || this._controls.isControlActive("arrow-left")) {
     acceleration.x += -1;
   } else if (
@@ -172,14 +172,14 @@ Player.prototype.update = function() {
   // that, we need to apply drag ourselves.
   // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
   if (acceleration.isZero() && !this.body.velocity.isZero()) {
-    var dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
+    const dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
     if (this.body.velocity.getMagnitude() < dragMagnitude) {
       // Snap to 0 velocity so that we avoid the drag causing the velocity
       // to flip directions and end up oscillating
       this.body.velocity.set(0);
     } else {
       // Apply drag in opposite direction of velocity
-      var drag = this.body.velocity.clone().setMagnitude(-1 * dragMagnitude);
+      const drag = this.body.velocity.clone().setMagnitude(-1 * dragMagnitude);
       this.body.velocity.add(drag.x, drag.y);
     }
   }
@@ -192,7 +192,7 @@ Player.prototype.update = function() {
   this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
 
   // Update the rotation of the player based on the mouse
-  var mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
+  const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
   this.rotation = this.position.angle(mousePos) + Math.PI / 2;
 
   if (
@@ -230,8 +230,8 @@ Player.prototype.postUpdate = function() {
   this._playerLight.centerOnPlayer();
 
   // Update compass position and rotation
-  var cX = this.position.x + 0.6 * this.width * Math.cos(this.rotation - Math.PI / 2);
-  var cY = this.position.y + 0.6 * this.width * Math.sin(this.rotation - Math.PI / 2);
+  const cX = this.position.x + 0.6 * this.width * Math.cos(this.rotation - Math.PI / 2);
+  const cY = this.position.y + 0.6 * this.width * Math.sin(this.rotation - Math.PI / 2);
   this._compass.position.copyFrom(new Phaser.Point(cX, cY));
   this._compass.rotation = this.rotation;
 
@@ -266,7 +266,7 @@ Player.prototype.takeDamage = function() {
   }
 
   // Speed boost on damage
-  var originalSpeed = this._maxSpeed;
+  const originalSpeed = this._maxSpeed;
   this._maxSpeed = 2 * this._maxSpeed;
 
   // Reset the score and combo.
@@ -274,7 +274,7 @@ Player.prototype.takeDamage = function() {
 
   // Flicker tween to indicate when player is invulnerable
   this._isTakingDamage = true;
-  var tween = this.game.make
+  const tween = this.game.make
     .tween(this)
     .to({ alpha: 0.25 }, 100, "Quad.easeInOut", true, 0, 5, true);
 
@@ -288,7 +288,7 @@ Player.prototype.takeDamage = function() {
 Player.prototype.destroy = function() {
   this._timer.destroy();
   this.game.tweens.removeFrom(this);
-  for (var key in this._weapons) {
+  for (const key in this._weapons) {
     this._weapons[key].destroy();
   }
   Phaser.Sprite.prototype.destroy.apply(this, arguments);

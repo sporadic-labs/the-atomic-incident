@@ -60,7 +60,7 @@ export default class Color {
       this.b = arguments[2] || 0;
       this.a = arguments[3] !== undefined ? arguments[3] : 255;
     } else {
-      var colorObject = PColor.valueToColor(color);
+      const colorObject = PColor.valueToColor(color);
       this.r = colorObject.r;
       this.g = colorObject.g;
       this.b = colorObject.b;
