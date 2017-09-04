@@ -1,7 +1,4 @@
-import Color from "../../helpers/color";
-
-const BaseEnemy = require("./base-enemy.js");
-
+import BaseEnemy from "./base-enemy.js";
 import EnergyPickup from "../pickups/energy-pickup";
 
 class ShadowEnemy extends BaseEnemy {
