@@ -25,27 +25,10 @@ class ShadowEnemy extends BaseEnemy {
     this._dieSound = this.game.globals.soundManager.add("pop");
     this._dieSound.playMultiple = true;
 
-    // If the level has changed, make sure the enemy is not inside of a wall
-    this._levelManager = game.globals.levelManager;
-    this._levelManager.levelChangeSignal.add(this._checkCollision, this);
+    this._mapManager = game.globals.mapManager;
 
     this._timer = game.time.create(false);
     this._timer.start();
-  }
-
-  _checkCollision() {
-    const wallLayer = this._levelManager.getCurrentWallLayer();
-
-    // Get all colliding tiles that are within range and destroy if there are any
-    const pad = 0;
-    const tiles = wallLayer.getTiles(
-      this.position.x - pad,
-      this.position.y - pad,
-      this.width + pad,
-      this.height + pad,
-      true
-    );
-    if (tiles.length > 0) this.destroy();
   }
 
   update() {
@@ -53,8 +36,7 @@ class ShadowEnemy extends BaseEnemy {
     if (!this._spawned) return;
 
     // Collisions with the tilemap
-    const lm = this.game.globals.levelManager;
-    this.game.physics.arcade.collide(this, lm.getCurrentWallLayer());
+    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
 
     if (this._movementComponent) this._movementComponent.update();
     super.update();
@@ -66,7 +48,6 @@ class ShadowEnemy extends BaseEnemy {
     new EnergyPickup(this.game, this.position.x, this.position.y, pickupGroup, 15, 3);
 
     this._timer.destroy();
-    this._levelManager.levelChangeSignal.remove(this._checkCollision, this);
     this._dieSound.play();
 
     if (this._movementComponent) this._movementComponent.destroy();

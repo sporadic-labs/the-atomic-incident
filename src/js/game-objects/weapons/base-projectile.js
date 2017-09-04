@@ -28,7 +28,7 @@ export default class BaseProjectile extends Phaser.Sprite {
     // Make sure the projectile isn't spawning in a wall
     SpriteUtils.satSpriteVsTilemap(
       this,
-      this.game.globals.levelManager.getCurrentWallLayer(),
+      this.game.globals.mapManager.wallLayer,
       this._onCollideWithMap,
       this,
       6
@@ -39,7 +39,7 @@ export default class BaseProjectile extends Phaser.Sprite {
     // Collisions with the tilemap
     SpriteUtils.satSpriteVsTilemap(
       this,
-      this.game.globals.levelManager.getCurrentWallLayer(),
+      this.game.globals.mapManager.wallLayer,
       this._onCollideWithMap,
       this,
       6

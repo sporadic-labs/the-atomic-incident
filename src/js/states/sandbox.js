@@ -8,12 +8,11 @@ var LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
 var Player = require("../game-objects/player.js");
 const SoundEffectManager = require("../game-objects/fx/sound-effect-manager.js");
 const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
-const LevelManager = require("../game-objects/components/level-manager.js");
 
 import MENU_STATES from "../menu/menu-states";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
-import PhaserNavmesh from "phaser-navmesh/src/library";
+import MapManager from "../game-objects/level-manager";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 import ScoreKeeper from "../game-objects/components/score-keeper";
 import ComboTracker from "../game-objects/components/combo-tracker";
@@ -54,17 +53,20 @@ export default class Sandbox extends Phaser.State {
     global.plugins = global.plugins !== undefined ? global.plugins : {};
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     globals.plugins.effects = game.plugins.add(EffectsPlugin);
-    globals.plugins.navMesh = game.plugins.add(PhaserNavmesh);
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
     // Level manager
-    const levelManager = new LevelManager(game, ...globals.tilemapNames);
-    globals.levelManager = levelManager;
+    const mapName = globals.tilemapNames[0];
+    const mapManager = new MapManager(game, mapName, groups.background, groups.foreground);
+    globals.mapManager = mapManager;
 
     // Lighting plugin - needs to be set up after level manager
-    globals.plugins.lighting = game.plugins.add(LightingPlugin, groups.foreground);
+    globals.plugins.lighting = game.plugins.add(
+      LightingPlugin,
+      groups.foreground,
+      mapManager.walls
+    );
     this.lighting = globals.plugins.lighting;
-    this.lighting.setOpacity(1);
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);

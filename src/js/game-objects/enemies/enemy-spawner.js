@@ -8,7 +8,7 @@ export default class EnemySpawner {
   constructor(game, player) {
     this.game = game;
     this._player = player;
-    this._levelManager = game.globals.levelManager;
+    this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
     this._circleWaveTimer = this.game.time.create(false);
@@ -25,7 +25,7 @@ export default class EnemySpawner {
     const composition = new Composition({ red: 10 });
     for (const enemyInfo of shape.enemies(composition)) {
       const pos = enemyInfo.position;
-      if (!this._isTileEmpty(pos.x, pos.y)) continue;
+      if (!this._mapManager.isLocationEmpty(pos.x, pos.y)) continue;
       const enemy = new ShadowEnemy(
         this.game,
         pos.x,
@@ -46,7 +46,7 @@ export default class EnemySpawner {
     do {
       x = this.game.rnd.realInRange(0, this.game.width);
       y = this.game.rnd.realInRange(0, this.game.width);
-    } while (!this._isTileEmpty(x, y));
+    } while (!this._mapManager.isLocationEmpty(x, y));
     const enemy = new ShadowEnemy(
       this.game,
       x,
@@ -60,16 +60,5 @@ export default class EnemySpawner {
     this._ambientEnemyTimer.add(this.game.rnd.integerInRange(500, 1000), () =>
       this._spawnRandomEnemy()
     );
-  }
-
-  _isTileEmpty(x, y) {
-    const map = this._levelManager.getCurrentTilemap();
-    const wallLayer = this._levelManager.getCurrentWallLayer();
-    var checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, wallLayer, true);
-    // null for invalid locations
-    if (checkTile === null) return false;
-    // Index of -1 is empty
-    if (checkTile.index === -1) return true;
-    else return false;
   }
 }

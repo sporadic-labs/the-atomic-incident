@@ -49,7 +49,7 @@ function Player(game, x, y, parentGroup) {
   this._pickups = globals.groups.pickups;
   this._enemies = globals.groups.enemies;
   this._postProcessor = globals.postProcessor;
-  this._levelManager = globals.levelManager;
+  this._mapManager = globals.mapManager;
 
   // Setup animations
   var idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
@@ -185,7 +185,7 @@ Player.prototype.update = function() {
   }
 
   // Check collisions with Tilemap.
-  this.game.physics.arcade.collide(this, this._levelManager.getCurrentWallLayer());
+  this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
 
   // Update velocity after collision
   Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);

@@ -8,7 +8,7 @@ class Wave {
   constructor(game) {
     this.game = game;
     this.composition = null;
-    this._levelManager = game.globals.levelManager;
+    this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
   }
 

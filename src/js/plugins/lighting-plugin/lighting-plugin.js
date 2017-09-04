@@ -87,7 +87,7 @@ Phaser.Plugin.Lighting.prototype.destroy = function() {
   Phaser.Plugin.prototype.destroy.apply(this, arguments);
 };
 
-Phaser.Plugin.Lighting.prototype.init = function(parent, shadowOpacity) {
+Phaser.Plugin.Lighting.prototype.init = function(parent, walls, shadowOpacity) {
   this.parent = parent;
   this.shadowOpacity = shadowOpacity !== undefined ? shadowOpacity : 1;
 
@@ -102,8 +102,7 @@ Phaser.Plugin.Lighting.prototype.init = function(parent, shadowOpacity) {
 
   this._bitmap = bitmap;
   this._image = image;
-  this._levelManager = this.game.globals.levelManager;
-  this._walls = this._levelManager.getCurrentWalls();
+  this._walls = walls;
 
   this._debugBitmap = this.game.add.bitmapData(game.width, game.height);
   this._debugImage = this._debugBitmap.addToWorld(0, 0);
@@ -113,8 +112,6 @@ Phaser.Plugin.Lighting.prototype.init = function(parent, shadowOpacity) {
 };
 
 Phaser.Plugin.Lighting.prototype.update = function() {
-  this._walls = this._levelManager.getCurrentWalls();
-
   // Clear and draw a shadow everywhere
   this._bitmap.blendSourceOver();
   this._bitmap.cls(); // Clear so shadow opacity works again

@@ -10,7 +10,7 @@ export default class TargetingComponent {
     this.speed = speed;
     this.target = this.game.globals.player;
     this._visionRadius = visionRadius;
-    this._levelManager = this.game.globals.levelManager;
+    this._mapManager = this.game.globals.mapManager;
   }
 
   update() {
@@ -26,9 +26,7 @@ export default class TargetingComponent {
     }
 
     // Calculate path
-    const path = this._levelManager
-      .getCurrentNavMesh()
-      .findPath(this.parent.position, this.target.position);
+    const path = this._mapManager.navMesh.findPath(this.parent.position, this.target.position);
 
     // Check if there is a path that was found
     if (path) {
