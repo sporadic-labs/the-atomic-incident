@@ -103,6 +103,7 @@ export default class Sandbox extends Phaser.State {
       if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
       else globals.plugins.satBody.disableDebugAll();
       globals.postProcessor.visible = preferencesStore.shadersEnabled;
+      game.paused = gameStore.isPaused;
     });
     // Note: pausing and unpausing mutes/unmutes Phaser's sound manager. Changing the volume while
     // muted will be ignored. Instead, sync volume any time the game is unmuted.
@@ -116,28 +117,8 @@ export default class Sandbox extends Phaser.State {
     });
   }
 
-  getMapPoints(key) {
-    // There could be more than 1 map point per type...
-    var mapPoints = [];
-    // We are searching the current tile map layer.
-    var map = this.game.globals.tileMap;
-    // If the current key exists...
-    if (map.objects[key]) {
-      // For each object with the current key.
-      var objects = map.objects[key];
-      for (var i = 0; i < objects.length; i++) {
-        mapPoints.push({
-          x: objects[i].x,
-          y: objects[i].y
-        });
-      }
-    }
-    return mapPoints;
-  }
-
   shutdown() {
-    // Destroy all plugins (MH: should we be doing this or more selectively
-    // removing plugins?)
+    // Destroy all plugins (MH: should we be doing this or more selectively removing plugins?)
     this.game.plugins.removeAll();
   }
 }

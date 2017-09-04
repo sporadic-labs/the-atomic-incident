@@ -4,12 +4,18 @@ import MENU_STATES from "./menu-states";
 import PauseMenu from "./components/pause-menu";
 import DebugMenu from "./components/debug-menu";
 import Switch from "./components/switch";
+import PlayPauseToggle from "./components/play-pause-toggle";
 
 const Menu = observer(
   class Menu extends Component {
     resume() {
       this.props.gameStore.unpause();
       this.props.gameStore.setMenuState(MENU_STATES.NONE);
+    }
+
+    pause() {
+      this.props.gameStore.pause();
+      this.props.gameStore.setMenuState(MENU_STATES.PAUSE);
     }
 
     render() {
@@ -25,6 +31,11 @@ const Menu = observer(
             />
             <DebugMenu menuName={MENU_STATES.DEBUG} preferencesStore={preferencesStore} />
           </Switch>
+          <PlayPauseToggle
+            isPaused={gameStore.isPaused}
+            onPause={() => this.pause()}
+            onResume={() => this.resume()}
+          />
         </div>
       );
     }

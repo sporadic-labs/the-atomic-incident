@@ -32,6 +32,35 @@
     margin-bottom: 20px;
   }
 
+  #pause-controls {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 26px;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3c98f0;
+    color: white;
+    transition: all 0.1s ease;
+
+    .fa-pause {
+      margin-left: 1px;
+    }
+
+    .fa-play {
+      margin-left: 3px;
+    }
+
+    &:hover {
+      background-color: darken(#3c98f0, 10%);
+      color: darken(white, 10%);
+    }
+  }
+
   #start-menu,
   #pause-menu,
   #options-menu,
