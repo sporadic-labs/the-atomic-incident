@@ -1,6 +1,6 @@
-const SatBody = require("./sat-body.js");
+import SatBody from "./sat-body.js";
 
-module.exports = Phaser.Plugin.SatBody = function(game, parent) {
+Phaser.Plugin.SatBody = function(game, parent) {
   this.game = game;
   this.parent = parent;
   this._bodies = [];
@@ -96,3 +96,5 @@ Phaser.Plugin.SatBody.prototype.destroy = function() {
     this._bodies[i].destroy();
   }
 };
+
+export default Phaser.Plugin.SatBody;

@@ -8,7 +8,7 @@ import Color from "../../helpers/color";
  * 
  * @class Radar
  */
-class Radar {
+export default class Radar {
   /**
      * @param {Phaser.Game} game
      */
@@ -217,5 +217,3 @@ class Radar {
     return scalePercent;
   }
 }
-
-module.exports = Radar;

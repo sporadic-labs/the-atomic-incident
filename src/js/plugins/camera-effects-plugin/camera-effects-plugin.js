@@ -1,4 +1,4 @@
-class Effects extends Phaser.Plugin {
+export default class Effects extends Phaser.Plugin {
   /**
      * Creates an instance of Effects.
      * @param {Phaser.Game} game 
@@ -51,4 +51,3 @@ class Effects extends Phaser.Plugin {
 }
 
 Phaser.Plugin.CameraEffects = Effects; // Expose the plugin on the global Phaser
-module.exports = Effects;

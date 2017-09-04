@@ -1,6 +1,6 @@
 import EnergyPickup from "./energy-pickup";
 
-class PickupSpawner extends Phaser.Group {
+export default class PickupSpawner extends Phaser.Group {
   constructor(game) {
     super(game, game.globals.groups.pickups, "pickup-spawner");
     this._spawnLocations = this._findSpawnLocations(game.globals.mapManager.tilemap);
@@ -47,5 +47,3 @@ class PickupSpawner extends Phaser.Group {
     console.warn("Not enough places found to spawn pickups.");
   }
 }
-
-module.exports = PickupSpawner;

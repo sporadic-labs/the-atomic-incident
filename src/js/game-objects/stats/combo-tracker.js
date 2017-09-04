@@ -1,5 +1,3 @@
-import utils from "../../helpers/utilities";
-
 /**
  * Keep track of the players Current Combo, and handle updates to the Score.
  * 
@@ -7,7 +5,7 @@ import utils from "../../helpers/utilities";
  * @class ComboTracker
  */
 export default class ComboTracker {
-  constructor(game, comboTimeout) {
+  constructor(game, comboTimeout = 2500) {
     // Store the game.
     this.game = game;
     //Current combo value.
@@ -18,7 +16,7 @@ export default class ComboTracker {
     this._comboScore = 0;
 
     // Timer to determine when the combo resets.
-    this._comboTimeout = utils.default(comboTimeout, 2500);
+    this._comboTimeout = comboTimeout;
     this._comboTimer = game.time.create(false); // Doesn't autodestroy
     this._comboTimer.start();
   }
@@ -89,12 +87,12 @@ export default class ComboTracker {
      * @param {any} increment combo modifier
      * @memberof ComboTracker
      */
-  incrementCombo(killValue, modValue) {
+  incrementCombo(killValue = 1, modValue = 0.2) {
     // Shorthand
     const hud = this.game.globals.hud;
     // Update the combo modifier, kill streak, and score.
-    this._comboModifier += utils.default(modValue, 0.2);
-    this._killStreak += utils.default(killValue, 1);
+    this._comboModifier += modValue;
+    this._killStreak += killValue;
     this._comboScore = Math.round(this._killStreak * this._comboModifier);
 
     // Start the HUD combo animation.

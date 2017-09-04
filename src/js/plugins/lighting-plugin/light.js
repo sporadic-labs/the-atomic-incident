@@ -14,7 +14,7 @@ let instances = 0;
  * 
  * @class Light
  */
-class Light {
+export default class Light {
   /**
      * Creates an instance of Light.
      * @param {Phaser.Game} game
@@ -426,5 +426,3 @@ class Light {
     this.shape = new Phaser.Polygon(this._points);
   }
 }
-
-module.exports = Light;

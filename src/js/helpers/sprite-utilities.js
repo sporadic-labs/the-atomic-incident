@@ -1,16 +1,16 @@
-exports.applyRandomLightnessTint = function(sprite, h, s, l) {
+export function applyRandomLightnessTint(sprite, h, s, l) {
   l += sprite.game.rnd.realInRange(-0.1, 0.1);
   const rgb = Phaser.Color.HSLtoRGB(h, s, l);
   sprite.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
-};
+}
 
-exports.checkOverlapWithGroup = function(sprite, group, callback, context) {
+export function checkOverlapWithGroup(sprite, group, callback, context) {
   // Loop through children in group
   for (let i = 0; i < group.children.length; i += 1) {
     const child = group.children[i];
     if (child instanceof Phaser.Group) {
       // If child is a group, recursion time
-      exports.checkOverlapWithGroup(sprite, child, callback, context);
+      checkOverlapWithGroup(sprite, child, callback, context);
     } else {
       // If child is not a group, make sure it has a SAT body
       if (!child.satBody) continue;
@@ -19,41 +19,41 @@ exports.checkOverlapWithGroup = function(sprite, group, callback, context) {
       if (isOverlap) callback.call(context, sprite, child);
     }
   }
-};
+}
 
 /**
  * Recursively collide a sprite against a group using arcade physics
  */
-exports.arcadeRecursiveCollide = function(sprite, group, callback, context) {
+export function arcadeRecursiveCollide(sprite, group, callback, context) {
   // Loop through children in group
   for (let i = 0; i < group.children.length; i += 1) {
     const child = group.children[i];
     if (child instanceof Phaser.Group) {
       // If child is a group, recursion time
-      exports.arcadeRecursiveCollide(sprite, child, callback, context);
+      arcadeRecursiveCollide(sprite, child, callback, context);
     } else {
       const arcade = sprite.game.physics.arcade;
       arcade.collide(sprite, child, callback, null, context);
     }
   }
-};
+}
 
 /**
  * Recursively iterate through a group to find all non-Phaser.Group children
  */
-exports.forEachRecursive = function(group, callback, context) {
+export function forEachRecursive(group, callback, context) {
   // Loop through children in group
   for (let i = 0; i < group.children.length; i += 1) {
     const child = group.children[i];
     if (child instanceof Phaser.Group) {
       // If child is a group, recursion time
-      exports.forEachRecursive(child, callback, context);
+      forEachRecursive(child, callback, context);
     } else {
       const exitEarly = callback.call(context, child);
       if (exitEarly) return;
     }
   }
-};
+}
 
 /**
  * Check a sprite's overlap against a tilemap layer using SAT bodies. This
@@ -70,7 +70,7 @@ exports.forEachRecursive = function(group, callback, context) {
  * number of pixels and a negative value will inflate the tile size.
  * @returns {boolean} Whether or not a collision was detected.
  */
-exports.satSpriteVsTilemap = function(sprite, tilemapLayer, callback, context, fudgeFactor) {
+export function satSpriteVsTilemap(sprite, tilemapLayer, callback, context, fudgeFactor) {
   fudgeFactor = fudgeFactor || 0;
   let isOverlapDetected = false;
   const b = sprite.satBody.getAxisAlignedBounds();
@@ -91,4 +91,4 @@ exports.satSpriteVsTilemap = function(sprite, tilemapLayer, callback, context, f
     } else return isOverlapDetected;
   }
   return isOverlapDetected;
-};
+}

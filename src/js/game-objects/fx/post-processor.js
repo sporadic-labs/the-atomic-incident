@@ -2,7 +2,7 @@ import GrayscaleFilter from "./filters/grayscale-filter";
 import VignetteFilter from "./filters/vignette-filter";
 import RgbSplitFilter from "./filters/rgb-split-filter";
 
-class PostProcessor extends Phaser.Sprite {
+export default class PostProcessor extends Phaser.Sprite {
   constructor(game, postTarget) {
     // Create a sprite at top left of screen that sits above the game but below the HUD
     super(game, 0, 0);
@@ -86,5 +86,3 @@ class PostProcessor extends Phaser.Sprite {
     gl.clear(gl.COLOR_BUFFER_BIT);
   }
 }
-
-module.exports = PostProcessor;

@@ -6,7 +6,7 @@
  * @param {any} span Degrees that the light should span (in degrees)
  * @param {any} range Length of spotlight
  */
-module.exports.generateSpotlightPolygon = function(orientation, span, range) {
+export function generateSpotlightPolygon(orientation, span, range) {
   const lightOrientation = orientation * Math.PI / 180;
   const lightArcAngle = span * Math.PI / 180;
   const arcSamples = 6;
@@ -23,4 +23,4 @@ module.exports.generateSpotlightPolygon = function(orientation, span, range) {
   }
   const polygon = new Phaser.Polygon(lightPoints);
   return polygon;
-};
+}

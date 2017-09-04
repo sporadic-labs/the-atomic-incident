@@ -6,7 +6,7 @@
  * 
  * @class SoundEffectManager
  */
-class SoundEffectManager {
+export default class SoundEffectManager {
   /**
      * Creates an instance of SoundEffectManager.
      * @param {Phaser.Game} game 
@@ -69,5 +69,3 @@ class SoundEffectManager {
     }
   }
 }
-
-module.exports = SoundEffectManager;

@@ -1,4 +1,4 @@
-import SpriteUtils from "../../helpers/sprite-utilities";
+import { satSpriteVsTilemap, checkOverlapWithGroup } from "../../helpers/sprite-utilities";
 
 export default class BaseProjectile extends Phaser.Sprite {
   constructor(game, x, y, key, frame, parentGroup, player, damage, angle, speed) {
@@ -26,7 +26,7 @@ export default class BaseProjectile extends Phaser.Sprite {
     this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
 
     // Make sure the projectile isn't spawning in a wall
-    SpriteUtils.satSpriteVsTilemap(
+    satSpriteVsTilemap(
       this,
       this.game.globals.mapManager.wallLayer,
       this._onCollideWithMap,
@@ -37,7 +37,7 @@ export default class BaseProjectile extends Phaser.Sprite {
 
   update() {
     // Collisions with the tilemap
-    SpriteUtils.satSpriteVsTilemap(
+    satSpriteVsTilemap(
       this,
       this.game.globals.mapManager.wallLayer,
       this._onCollideWithMap,
@@ -50,7 +50,7 @@ export default class BaseProjectile extends Phaser.Sprite {
     // Update arcade physics
     Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
     // Check overlap
-    SpriteUtils.checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
+    checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
     if (this._player._playerLight.isPointInShadow(this.position)) {
       this.destroy();

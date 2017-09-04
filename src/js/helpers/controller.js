@@ -1,7 +1,7 @@
 /**
  * @module Controller
  */
-module.exports = Controller;
+export default Controller;
 
 /**
  * This object can be used to look up the mouse button property that corresponds

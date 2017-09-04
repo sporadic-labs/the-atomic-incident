@@ -1,6 +1,6 @@
 import fragmentSrc from "./shockwave.glsl";
 
-class Shockwave extends Phaser.Filter {
+export default class Shockwave extends Phaser.Filter {
   constructor(game) {
     super(game);
 
@@ -32,5 +32,3 @@ class Shockwave extends Phaser.Filter {
     return this.uniforms.wavePos.value;
   }
 }
-
-module.exports = Shockwave;

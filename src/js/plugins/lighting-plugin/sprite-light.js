@@ -399,4 +399,4 @@ class Light {
   }
 }
 
-module.exports = Light;
+export default Light;

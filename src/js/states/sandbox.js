@@ -2,13 +2,13 @@
  * Sandbox - this is the main level for now
  */
 
-const PickupSpawner = require("../game-objects/pickups/pickup-spawner.js");
-const SatBodyPlugin = require("../plugins/sat-body-plugin/sat-body-plugin.js");
-const LightingPlugin = require("../plugins/lighting-plugin/lighting-plugin.js");
-const Player = require("../game-objects/player.js");
-const SoundEffectManager = require("../game-objects/fx/sound-effect-manager.js");
-const EffectsPlugin = require("../plugins/camera-effects-plugin/camera-effects-plugin.js");
-
+import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
+import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
+import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
+import Player from "../game-objects/player.js";
+import SoundEffectManager from "../game-objects/fx/sound-effect-manager.js";
+import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
+import PostProcessor from "../game-objects/fx/post-processor.js";
 import MENU_STATES from "../menu/menu-states";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
@@ -75,7 +75,6 @@ export default class Sandbox extends Phaser.State {
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
 
-    const PostProcessor = require("../game-objects/fx/post-processor.js");
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
 
     // Player

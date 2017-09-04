@@ -1,6 +1,6 @@
-const Light = require("./light.js");
+import Light from "./light.js";
 
-module.exports = Phaser.Plugin.Lighting = function(game, manager) {
+Phaser.Plugin.Lighting = function(game, manager) {
   this.game = game;
   this.camera = this.game.camera;
   this.lights = [];
@@ -295,3 +295,5 @@ Phaser.Plugin.Lighting.prototype._getClosestWall = function(ray, walls) {
   }
   return closestWall;
 };
+
+export default Phaser.Plugin.Lighting;

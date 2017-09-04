@@ -1,7 +1,7 @@
 import BaseEnemy from "./base-enemy.js";
 import EnergyPickup from "../pickups/energy-pickup";
 
-class ShadowEnemy extends BaseEnemy {
+export default class ShadowEnemy extends BaseEnemy {
   constructor(game, x, y, atlasKey, parentGroup, color) {
     super(game, x, y, "assets", atlasKey, 100, parentGroup, 1, color);
 
@@ -60,5 +60,3 @@ class ShadowEnemy extends BaseEnemy {
     return this._movementComponent;
   }
 }
-
-module.exports = ShadowEnemy;

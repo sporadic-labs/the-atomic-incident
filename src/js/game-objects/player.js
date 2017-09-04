@@ -1,8 +1,7 @@
-module.exports = Player;
+export default Player;
 
-const Controller = require("../helpers/controller.js");
-const spriteUtils = require("../helpers/sprite-utilities.js");
-
+import Controller from "../helpers/controller.js";
+import { checkOverlapWithGroup } from "../helpers/sprite-utilities.js";
 import Scattershot from "./weapons/scattershot";
 import EnergyPickup from "./pickups/energy-pickup";
 import PlayerLight from "./lights/player-light";
@@ -204,10 +203,10 @@ Player.prototype.update = function() {
   }
 
   // Enemy collisions
-  spriteUtils.checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
+  checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
 
   // Light pickups
-  spriteUtils.checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+  checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
 
   const health = this._playerLight.getLightRemaining();
   this._postProcessor.onHealthUpdate(health);

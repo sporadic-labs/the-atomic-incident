@@ -11,9 +11,9 @@
  * - Do we need to consider scale and pivot?
  */
 
-module.exports = SatBody;
+export default SatBody;
 
-const SAT = require("sat");
+import SAT from "sat";
 
 const BODY_TYPE = {
   BOX: "box",
