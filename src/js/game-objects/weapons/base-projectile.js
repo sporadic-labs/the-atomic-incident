@@ -11,7 +11,6 @@ export default class BaseProjectile extends Phaser.Sprite {
     this._damage = damage;
     this._speed = speed;
     this._initialPos = this.position.clone();
-    this._remove = false; // check if BaseProjectile should be removed?
 
     // NOTE(rex): We need to rotate 90 degrees on setup for it to be oriented correctly.
     this.rotation = angle + Math.PI / 2; // Radians

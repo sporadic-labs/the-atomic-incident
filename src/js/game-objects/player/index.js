@@ -75,16 +75,10 @@ export default class Player extends Phaser.Sprite {
     const P = Phaser.Pointer;
 
     // movement
-    // wasd
-    this._controls.addKeyboardControl("move-up", [Kb.W]);
-    this._controls.addKeyboardControl("move-left", [Kb.A]);
-    this._controls.addKeyboardControl("move-right", [Kb.D]);
-    this._controls.addKeyboardControl("move-down", [Kb.S]);
-    // arrows
-    this._controls.addKeyboardControl("arrow-up", [Kb.UP]);
-    this._controls.addKeyboardControl("arrow-left", [Kb.LEFT]);
-    this._controls.addKeyboardControl("arrow-right", [Kb.RIGHT]);
-    this._controls.addKeyboardControl("arrow-down", [Kb.DOWN]);
+    this._controls.addKeyboardControl("move-up", [Kb.W, Kb.UP]);
+    this._controls.addKeyboardControl("move-left", [Kb.A, Kb.LEFT]);
+    this._controls.addKeyboardControl("move-right", [Kb.D, Kb.RIGHT]);
+    this._controls.addKeyboardControl("move-down", [Kb.S, Kb.DOWN]);
 
     // primary attack
     this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
@@ -110,23 +104,14 @@ export default class Player extends Phaser.Sprite {
 
     // Calculate the acceleration and heading from the keyboard.
     let acceleration = new Phaser.Point(0, 0);
-    if (
-      this._controls.isControlActive("move-left") ||
-      this._controls.isControlActive("arrow-left")
-    ) {
+    if (this._controls.isControlActive("move-left")) {
       acceleration.x += -1;
-    } else if (
-      this._controls.isControlActive("move-right") ||
-      this._controls.isControlActive("arrow-right")
-    ) {
+    } else if (this._controls.isControlActive("move-right")) {
       acceleration.x += 1;
     }
-    if (this._controls.isControlActive("move-up") || this._controls.isControlActive("arrow-up")) {
+    if (this._controls.isControlActive("move-up")) {
       acceleration.y += -1;
-    } else if (
-      this._controls.isControlActive("move-down") ||
-      this._controls.isControlActive("arrow-down")
-    ) {
+    } else if (this._controls.isControlActive("move-down")) {
       acceleration.y += 1;
     }
 
