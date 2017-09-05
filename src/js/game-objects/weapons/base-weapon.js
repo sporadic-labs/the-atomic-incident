@@ -12,13 +12,13 @@ export default class BaseWeapon extends Phaser.Group {
   }
 
   /**
-     * Setup ammo amount, time between shots, and time for reload.
-     * 
-     * @param {any} totalAmmo 
-     * @param {any} cooldownTime 
-     * @param {any} reloadTime 
-     * @memberof BaseWeapon
-     */
+   * Setup ammo amount, time between shots, and time for reload.
+   * 
+   * @param {any} totalAmmo 
+   * @param {any} cooldownTime 
+   * @param {any} reloadTime 
+   * @memberof BaseWeapon
+   */
   init(totalAmmo, cooldownTime, reloadTime) {
     // Ammo amounts.
     this._totalAmmo = totalAmmo;
@@ -86,10 +86,10 @@ export default class BaseWeapon extends Phaser.Group {
     return this._currentAmmo <= 0;
   }
 
-  destroy() {
+  destroy(...args) {
     this._cooldownTimer.destroy();
 
     // Call the super class and pass along any arugments
-    super.destroy(this, arguments);
+    super.destroy(...args);
   }
 }

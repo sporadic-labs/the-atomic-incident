@@ -46,9 +46,9 @@ export default class BaseProjectile extends Phaser.Sprite {
     );
   }
 
-  postUpdate() {
+  postUpdate(...args) {
     // Update arcade physics
-    Phaser.Sprite.prototype.postUpdate.apply(this, arguments);
+    super.postUpdate(...args);
     // Check overlap
     checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
@@ -57,8 +57,8 @@ export default class BaseProjectile extends Phaser.Sprite {
     }
   }
 
-  destroy() {
-    Phaser.Sprite.prototype.destroy.apply(this, arguments);
+  destroy(...args) {
+    super.destroy(...args);
   }
 
   // eslint-disable-next-line no-unused-vars

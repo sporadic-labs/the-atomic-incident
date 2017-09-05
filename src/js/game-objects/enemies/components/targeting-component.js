@@ -1,7 +1,7 @@
 // MH: if we end up using a component pattern often, we may want to create a BaseComponent class
 // that enforces that components have the standard lifecycle methods of update/destroy/etc.
 
-import { arcadeRecursiveCollide } from "../../helpers/sprite-utilities.js";
+import { arcadeRecursiveCollide } from "../../../helpers/sprite-utilities.js";
 
 export default class TargetingComponent {
   constructor(parent, speed, visionRadius = null) {

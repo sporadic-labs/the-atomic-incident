@@ -10,8 +10,8 @@ import Color from "../../helpers/color";
  */
 export default class Radar {
   /**
-     * @param {Phaser.Game} game
-     */
+   * @param {Phaser.Game} game
+   */
   constructor(game) {
     this.game = game;
 
@@ -21,10 +21,10 @@ export default class Radar {
   }
 
   /**
-     * Update the position and rotation of each enemy registered with the radar.
-     * 
-     * @memberof Radar
-     */
+   * Update the position and rotation of each enemy registered with the radar.
+   * 
+   * @memberof Radar
+   */
   update() {
     // Update Enemy Trackers
     for (const enemy of this.registeredEnemies) {
@@ -33,22 +33,22 @@ export default class Radar {
   }
 
   /**
-     * When a new Enemy is created, register it with the HUD, and an Enemy Tracker will be created.
-     * 
-     * @param {any} enemy 
-     * @memberof Radar
-     */
+   * When a new Enemy is created, register it with the HUD, and an Enemy Tracker will be created.
+   * 
+   * @param {any} enemy 
+   * @memberof Radar
+   */
   registerEnemy(enemy) {
     this.registeredEnemies.push(enemy);
     this._addEnemyTracker(enemy);
   }
 
   /**
-     * When an Enemy dies, remove it from the Registry and remove the Enemy Tracker.
-     * 
-     * @param {any} enemy 
-     * @memberof Radar
-     */
+   * When an Enemy dies, remove it from the Registry and remove the Enemy Tracker.
+   * 
+   * @param {any} enemy 
+   * @memberof Radar
+   */
   removeEnemy(enemy) {
     this.registeredEnemies.filter(e => {
       return e !== enemy;
@@ -57,11 +57,11 @@ export default class Radar {
   }
 
   /**
-     * Add a Tracker entry to the list of EnemyTrackers, and create the HUD image.
-     * 
-     * @param {any} enemy 
-     * @memberof Radar
-     */
+   * Add a Tracker entry to the list of EnemyTrackers, and create the HUD image.
+   * 
+   * @param {any} enemy 
+   * @memberof Radar
+   */
   _addEnemyTracker(enemy) {
     // Shorthand.
     const player = this.game.globals.player;
@@ -91,11 +91,11 @@ export default class Radar {
   }
 
   /**
-     * Remove a Tracker from the HUD, and remove it's entry form the list of EnemyTrackers.
-     * 
-     * @param {any} enemy 
-     * @memberof Radar
-     */
+   * Remove a Tracker from the HUD, and remove it's entry form the list of EnemyTrackers.
+   * 
+   * @param {any} enemy 
+   * @memberof Radar
+   */
   _removeEnemyTracker(enemy) {
     // Shorthand
     const hud = this.game.globals.hud;
@@ -118,12 +118,12 @@ export default class Radar {
   }
 
   /**
-     * Update the position of the Tracker Image based on the position of the
-     * enemy, player, and light.
-     * 
-     * @param {any} enemy 
-     * @memberof Radar
-     */
+   * Update the position of the Tracker Image based on the position of the
+   * enemy, player, and light.
+   * 
+   * @param {any} enemy 
+   * @memberof Radar
+   */
   _updateEnemyTrackerPosition(enemy) {
     //Shorthand
     const player = this.game.globals.player;
@@ -160,13 +160,13 @@ export default class Radar {
   }
 
   /**
-     * Calculate the position of the Arrow Image based on the player
-     * position and the enemy position.
-     * 
-     * @param {any} entry 
-     * @returns { x : int, y: int }
-     * @memberof Radar
-     */
+   * Calculate the position of the Arrow Image based on the player
+   * position and the enemy position.
+   * 
+   * @param {any} entry 
+   * @returns { x : int, y: int }
+   * @memberof Radar
+   */
   _getTrackerPosition(enemy) {
     // Shorthand.
     const player = this.game.globals.player;
@@ -194,13 +194,13 @@ export default class Radar {
   }
 
   /**
-     * Determine the scale of the Tracker arrow based on the
-     * distance of the enemy from the player.
-     * 
-     * @param {BaseEnemy} enemy 
-     * @returns 0 - 1 value to set the Arrow Scale to.
-     * @memberof Radar
-     */
+   * Determine the scale of the Tracker arrow based on the
+   * distance of the enemy from the player.
+   * 
+   * @param {BaseEnemy} enemy 
+   * @returns 0 - 1 value to set the Arrow Scale to.
+   * @memberof Radar
+   */
   _getTrackerScale(enemy) {
     // Shorthand.
     const player = this.game.globals.player;

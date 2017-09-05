@@ -22,11 +22,11 @@ export default class ComboTracker {
   }
 
   /**
-     * Getter for the Combo modifier value.
-     * 
-     * @returns 
-     * @memberof ComboTracker
-     */
+   * Getter for the Combo modifier value.
+   * 
+   * @returns 
+   * @memberof ComboTracker
+   */
   getComboModifier() {
     return this._comboModifier;
   }
@@ -81,12 +81,12 @@ export default class ComboTracker {
   }
 
   /**
-     * Increment the Combo by the value provided.
-     * 
-     * @param {any} increment kill streak
-     * @param {any} increment combo modifier
-     * @memberof ComboTracker
-     */
+   * Increment the Combo by the value provided.
+   * 
+   * @param {any} increment kill streak
+   * @param {any} increment combo modifier
+   * @memberof ComboTracker
+   */
   incrementCombo(killValue = 1, modValue = 0.2) {
     // Shorthand
     const hud = this.game.globals.hud;
@@ -108,10 +108,10 @@ export default class ComboTracker {
   }
 
   /**
-     * Cleanup the cooldownTimer when this component is destroyed.
-     * 
-     * @memberof ComboTracker
-     */
+   * Cleanup the cooldownTimer when this component is destroyed.
+   * 
+   * @memberof ComboTracker
+   */
   destroy() {
     this._comboTimer.destroy();
   }

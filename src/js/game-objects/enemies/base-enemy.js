@@ -1,5 +1,5 @@
 import Color from "../../helpers/color";
-import HealthBar from "../components/health-bar.js";
+import HealthBar from "./components/health-bar.js";
 
 export default class BaseEnemy extends Phaser.Sprite {
   constructor(game, x, y, key, frame, health, parentGroup, pointValue = 1, color) {

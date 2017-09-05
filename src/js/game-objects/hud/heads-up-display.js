@@ -105,7 +105,6 @@ export default class HeadsUpDisplay extends Phaser.Group {
      */
   update() {
     // this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
-    super.update(arguments);
 
     // Shorthand
     const scoreKeeper = this.game.globals.scoreKeeper;
@@ -140,6 +139,8 @@ export default class HeadsUpDisplay extends Phaser.Group {
 
     // Update Enemy Trackers
     this.radar.update();
+
+    super.update();
   }
 
   /**
@@ -225,7 +226,7 @@ export default class HeadsUpDisplay extends Phaser.Group {
    * 
    * @memberof HeadsUpDisplay
    */
-  destroy() {
-    super.destroy();
+  destroy(...args) {
+    super.destroy(...args);
   }
 }

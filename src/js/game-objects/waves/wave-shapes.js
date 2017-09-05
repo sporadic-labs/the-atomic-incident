@@ -7,29 +7,29 @@
  *
  * @class CircleWave
  */
-class CircleWave {
+export class CircleWave {
   /**
-     * Creates an instance of CircleWave.
-     * @param {Phaser.Game} game
-     * @param {number} radius The radius of the circle
-     *
-     * @memberOf CircleWave
-     */
+   * Creates an instance of CircleWave.
+   * @param {Phaser.Game} game
+   * @param {number} radius The radius of the circle
+   *
+   * @memberOf CircleWave
+   */
   constructor(game, radius) {
     this.game = game;
     this.radius = radius;
   }
 
   /**
-     * Generator that yields an object representing the enemy in the form: {type: string name of
-     * color from WaveComposition, position}
-     *
-     * @param {WaveComposition} waveComposition The types of enemies to use for generation
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a new set of enemies
-     * from the WaveComposition.
-     *
-     * @memberOf CircleWave
-     */
+   * Generator that yields an object representing the enemy in the form: {type: string name of
+   * color from WaveComposition, position}
+   *
+   * @param {WaveComposition} waveComposition The types of enemies to use for generation
+   * @param {boolean} [regenerateEnemies=true] Whether or not to generate a new set of enemies
+   * from the WaveComposition.
+   *
+   * @memberOf CircleWave
+   */
   *enemies(waveComposition, regenerateEnemies = true) {
     // Spawn in front of the player
     const player = this.game.globals.player;
@@ -58,16 +58,16 @@ class CircleWave {
  *
  * @class LineWave
  */
-class LineWave {
+export class LineWave {
   /**
-     * Creates an instance of LineWave.
-     * @param {Phaser.Game} game
-     * @param {number} playerOffset The distance of the line from the player
-     * @param {number} length The length of the line
-     * @param {number} angle Orientation in degrees (counter-clockwise)
-     *
-     * @memberOf LineWave
-     */
+   * Creates an instance of LineWave.
+   * @param {Phaser.Game} game
+   * @param {number} playerOffset The distance of the line from the player
+   * @param {number} length The length of the line
+   * @param {number} angle Orientation in degrees (counter-clockwise)
+   *
+   * @memberOf LineWave
+   */
   constructor(game, playerOffset, length, angle) {
     this.game = game;
     this.length = length;
@@ -122,16 +122,16 @@ class LineWave {
  *
  * @class TunnelWave
  */
-class TunnelWave {
+export class TunnelWave {
   /**
-     * Creates an instance of TunnelWave.
-     * @param {Phaser.Game} game
-     * @param {number} width Width of the opening of the tunnel
-     * @param {number} length Depth of the tunnel
-     * @param {number} angle Orientation in degrees (counter-clockwise)
-     *
-     * @memberOf TunnelWave
-     */
+   * Creates an instance of TunnelWave.
+   * @param {Phaser.Game} game
+   * @param {number} width Width of the opening of the tunnel
+   * @param {number} length Depth of the tunnel
+   * @param {number} angle Orientation in degrees (counter-clockwise)
+   *
+   * @memberOf TunnelWave
+   */
   constructor(game, width, length, angle) {
     this.game = game;
     this._width = width;
@@ -140,15 +140,15 @@ class TunnelWave {
   }
 
   /**
-     * Generator that yields an object representing the enemy in the form:
-     * {type: string name of color from WaveComposition, position}
-     *
-     * @param {WaveComposition} waveComposition The types of enemies to use for generation
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
-     * new set of enemies from the WaveComposition.
-     *
-     * @memberOf TunnelWave
-     */
+   * Generator that yields an object representing the enemy in the form:
+   * {type: string name of color from WaveComposition, position}
+   *
+   * @param {WaveComposition} waveComposition The types of enemies to use for generation
+   * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
+   * new set of enemies from the WaveComposition.
+   *
+   * @memberOf TunnelWave
+   */
   *enemies(waveComposition, regenerateEnemies = true) {
     // Allow the TunnelWave to be in charge of generating enemies from the
     // WaveComposition instances
@@ -166,29 +166,29 @@ class TunnelWave {
  *
  * @class CrossWave
  */
-class CrossWave {
+export class CrossWave {
   /**
-     * Creates an instance of CrossWave.
-     * @param {Phaser.Game} game
-     * @param {number} length Length of the lines forming the X
-     *
-     * @memberOf CrossWave
-     */
+   * Creates an instance of CrossWave.
+   * @param {Phaser.Game} game
+   * @param {number} length Length of the lines forming the X
+   *
+   * @memberOf CrossWave
+   */
   constructor(game, length) {
     this.game = game;
     this._length = length;
   }
 
   /**
-     * Generator that yields an object representing the enemy in the form:
-     * {type: string name of color from WaveComposition, position}
-     *
-     * @param {WaveComposition} waveComposition The types of enemies to use for generation
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
-     * new set of enemies from the WaveComposition.
-     *
-     * @memberOf CrossWave
-     */
+   * Generator that yields an object representing the enemy in the form:
+   * {type: string name of color from WaveComposition, position}
+   *
+   * @param {WaveComposition} waveComposition The types of enemies to use for generation
+   * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
+   * new set of enemies from the WaveComposition.
+   *
+   * @memberOf CrossWave
+   */
   *enemies(waveComposition, regenerateEnemies = true) {
     // Allow the CrossWave to be in charge of generating enemies from the
     // WaveComposition instances
@@ -199,5 +199,3 @@ class CrossWave {
     yield* line2.enemies(waveComposition, false);
   }
 }
-
-export { CircleWave, LineWave, TunnelWave, CrossWave };

@@ -17,13 +17,7 @@ export default class ScoreKeeper {
    * @returns 
    * @memberof ScoreKeeper
    */
-  incrementScore(points) {
-    // If the point value isn't a number, or isn't defined, then bail!
-    if (points === undefined || points === null || isNaN(points)) {
-      return;
-    }
-
-    // If the point value is defined, add it to the score.
+  incrementScore(points = 0) {
     this._score += points;
   }
 
@@ -43,7 +37,7 @@ export default class ScoreKeeper {
    * @param {any} score 
    * @memberof ScoreKeeper
    */
-  setScore(score) {
-    this._score = score || 0;
+  setScore(score = 0) {
+    this._score = score;
   }
 }

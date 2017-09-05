@@ -6,18 +6,18 @@ import Color from "../../helpers/color";
  *
  * @class WaveComposition
  */
-class WaveComposition {
+export default class WaveComposition {
   /**
-     * Creates an instance of WaveComposition.
-     * @param {Object} options The parameters for the wave's composition
-     * @param {number} [options.red = 0] The number of red enemies
-     * @param {number} [options.green = 0] The number of green enemies
-     * @param {number} [options.blue = 0] The number of green enemies
-     * @param {boolean} [options.randomize = false] Whether or not to shuffle the enemy types
-     * @param {Color|null} [options.shield = null] The color of the shield
-     * 
-     * @memberof WaveComposition
-     */
+   * Creates an instance of WaveComposition.
+   * @param {Object} options The parameters for the wave's composition
+   * @param {number} [options.red = 0] The number of red enemies
+   * @param {number} [options.green = 0] The number of green enemies
+   * @param {number} [options.blue = 0] The number of green enemies
+   * @param {boolean} [options.randomize = false] Whether or not to shuffle the enemy types
+   * @param {Color|null} [options.shield = null] The color of the shield
+   * 
+   * @memberof WaveComposition
+   */
   constructor({ red = 0, green = 0, blue = 0, randomize = false, shield = null } = {}) {
     this._composition = { red, green, blue };
     this._randomize = randomize;
@@ -26,13 +26,13 @@ class WaveComposition {
   }
 
   /**
-     * Rescales the composition so that there are exactly enough enemies to match the newTotal.
-     * 
-     * @param {number} newTotal 
-     * @returns {this} For chaining
-     * 
-     * @memberof WaveComposition
-     */
+   * Rescales the composition so that there are exactly enough enemies to match the newTotal.
+   * 
+   * @param {number} newTotal 
+   * @returns {this} For chaining
+   * 
+   * @memberof WaveComposition
+   */
   setTotal(newTotal) {
     const total = this.getTotal();
     let { red, green, blue } = this._composition;
@@ -52,34 +52,34 @@ class WaveComposition {
   }
 
   /**
-     * Get the total number of enemies in the wave
-     * 
-     * @returns {number}
-     * 
-     * @memberof WaveComposition
-     */
+   * Get the total number of enemies in the wave
+   * 
+   * @returns {number}
+   * 
+   * @memberof WaveComposition
+   */
   getTotal() {
     return this._composition.red + this._composition.green + this._composition.blue;
   }
 
   /**
-     * Get the color of the shield, or null if there is no shield
-     * 
-     * @returns {Color|null}
-     * 
-     * @memberof WaveComposition
-     */
+   * Get the color of the shield, or null if there is no shield
+   * 
+   * @returns {Color|null}
+   * 
+   * @memberof WaveComposition
+   */
   getShield() {
     return this._shield;
   }
 
   /**
-     * Get the color of this wave (assumes that the wave can only contain a single type)
-     * 
-     * @returns {Color}
-     * 
-     * @memberof WaveComposition
-     */
+   * Get the color of this wave (assumes that the wave can only contain a single type)
+   * 
+   * @returns {Color}
+   * 
+   * @memberof WaveComposition
+   */
   getColor() {
     if (this._composition.red) return Color.red();
     else if (this._composition.blue) return Color.blue();
@@ -87,10 +87,10 @@ class WaveComposition {
   }
 
   /**
-     * Regenerate the enemies in a random order
-     *
-     * @memberOf WaveComposition
-     */
+   * Regenerate the enemies in a random order
+   *
+   * @memberOf WaveComposition
+   */
   generate() {
     // Randomly shuffle enemy ratios if needed
     if (this._randomize) {
@@ -117,15 +117,13 @@ class WaveComposition {
   }
 
   /**
-     * Generator that yields the enemy types in the current wave
-     *
-     * @memberOf WaveComposition
-     */
+   * Generator that yields the enemy types in the current wave
+   *
+   * @memberOf WaveComposition
+   */
   *enemies() {
     for (const enemy of this._enemies) {
       yield enemy;
     }
   }
 }
-
-export default WaveComposition;
