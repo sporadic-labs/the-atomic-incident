@@ -2,7 +2,7 @@ import { h } from "preact";
 
 export default function PauseMenu({ onOptions, onResume, onMainMenu }) {
   return (
-    <div id="pause-menu">
+    <div id="pause-menu" class="menu">
       <button class="btn-close" onClick={onResume}>
         <i class="fa fa-times" aria-hidden="true" />
       </button>

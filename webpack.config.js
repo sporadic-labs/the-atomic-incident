@@ -56,7 +56,7 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({ template: "./index.html" }),
-    new ExtractTextPlugin("[name].[contenthash].css"),
+    new ExtractTextPlugin({ filename: "[name].[contenthash].css", allChunks: true }),
 
     // Instead of using imports & file loader for Phaser assets, just copy over all resources
     new CopyWebpackPlugin([

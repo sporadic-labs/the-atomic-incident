@@ -29,7 +29,11 @@ const Menu = observer(
               onOptions={() => console.log("options!")}
               onMainMenu={() => console.log("main menu!")}
             />
-            <DebugMenu menuName={MENU_STATES.DEBUG} preferencesStore={preferencesStore} />
+            <DebugMenu
+              menuName={MENU_STATES.DEBUG}
+              preferencesStore={preferencesStore}
+              onResume={() => this.resume()}
+            />
           </Switch>
           <PlayPauseToggle
             isPaused={gameStore.isPaused}

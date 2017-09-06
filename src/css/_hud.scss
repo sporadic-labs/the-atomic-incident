@@ -1,24 +1,16 @@
 #hud {
-  // Button reset
-  button {
-    background: none;
-    border: 0;
-    color: inherit;
-    font: inherit;
-    line-height: normal;
-    overflow: visible;
-    padding: 0;
-  }
-
   cursor: pointer;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 3px;
-  z-index: 12;
+  z-index: 1000;
   font-family: "Alfa Slab One", serif;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   // Disable pointer events on the HUD container, but re-enable on children
   pointer-events: none;
@@ -30,6 +22,30 @@
     text-align: center;
     display: block;
     margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .slider {
+    width: 60%;
+    display: block;
+    margin: 10px auto 0 auto;
+  }
+
+  button {
+    display: block;
+    margin: 24px auto;
+    padding: 16px;
+    width: 50%;
+    color: #3c98f0;
+    background-color: white;
+    border-radius: 5px;
+
+    &:hover {
+      // TODO(rt): Make this better.
+      cursor: pointer;
+      color: black;
+      background-color: #ebefff;
+    }
   }
 
   #pause-controls {
@@ -57,46 +73,21 @@
     }
   }
 
-  #start-menu,
-  #pause-menu,
-  #options-menu,
-  #wave-menu,
-  #debug-menu {
+  .menu {
     width: 50%;
     height: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     border-radius: 10px;
-    // box-shadow: 2px 2px 4px #4f4f4f;
     pointer-events: initial;
     cursor: default;
     background-color: #3c98f0;
 
     .menu-title {
-      margin: 18px auto 48px auto;
+      margin: 18px auto 20px auto;
       padding: 12px;
       font-size: 32px;
       font-weight: 600;
       text-align: center;
-    }
-
-    button {
-      display: block;
-      margin: 24px auto;
-      padding: 16px;
-      width: 50%;
-      color: #3c98f0;
-      background-color: white;
-      border-radius: 5px;
-
-      &:hover {
-        // TODO(rt): Make this better.
-        cursor: pointer;
-        color: black;
-        background-color: #ebefff;
-      }
     }
 
     .btn-close {
@@ -104,66 +95,20 @@
       top: 3%;
       right: 3%;
       font-size: 14px;
-      border: none;
-      background: none;
       margin: 0;
       padding: 0;
       border-radius: 50%;
       width: 24px;
       height: 24px;
-      text-align: center;
       color: #3c98f0;
       background-color: white;
-      padding-left: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:hover {
-        // border: 1px solid black;
         color: black;
       }
-
-      i {
-        position: absolute;
-        top: 52%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
     }
-  }
-
-  // Wave menu specific styling.
-  #wave-menu {
-    height: 40%;
-
-    .menu-title {
-      margin: 12px auto;
-      font-size: 18px;
-    }
-
-    .wave-menu-row {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      padding: 24px;
-
-      .wave-menu-col {
-        max-width: 50%;
-        text-align: center;
-        vertical-align: middle;
-        margin: auto;
-      }
-    }
-  }
-
-  // Classes for setting the color of the ammo/enemy in the wave menu.
-  .tint-red {
-    background-color: red;
-  }
-
-  .tint-green {
-    background-color: green;
-  }
-
-  .tint-blue {
-    background-color: blue;
   }
 }

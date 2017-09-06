@@ -2,10 +2,14 @@ import { h } from "preact";
 
 import InputFix from "./input-fix";
 
-export default function DebugMenu({ preferencesStore }) {
+export default function DebugMenu({ preferencesStore, onResume }) {
   const { volume, shadowOpacity, shadersEnabled, physicsDebug } = preferencesStore;
   return (
-    <div id="debug-menu">
+    <div id="debug-menu" class="menu">
+      <button class="btn-close" onClick={onResume}>
+        <i class="fa fa-times" aria-hidden="true" />
+      </button>
+      <div class="menu-title">Debug Menu</div>
       <form>
         <label>
           Volume
@@ -15,6 +19,7 @@ export default function DebugMenu({ preferencesStore }) {
             min="0"
             max="1"
             step="0.05"
+            class="slider"
             onChange={e => preferencesStore.setVolume(e.target.value)}
           />
         </label>
@@ -27,6 +32,7 @@ export default function DebugMenu({ preferencesStore }) {
             min="0"
             max="1"
             step="0.05"
+            class="slider"
             onChange={e => preferencesStore.setShadowOpacity(e.target.value)}
           />
         </label>
