@@ -1,9 +1,17 @@
 {
-    "presets": [
-        ["env", {
-            "targets": {
-                "browsers": ["last 2 versions"]
-            }
-        }]
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions"]
+        }
+      }
     ]
+  ],
+  "plugins": [
+    ["transform-react-jsx", { "pragma": "h" }],
+    ["transform-class-properties", { "loose": true }],
+    "transform-object-rest-spread"
+  ]
 }

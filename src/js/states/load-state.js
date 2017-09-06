@@ -2,59 +2,71 @@
  * LoadState - this is the loading screen
  */
 
-module.exports = LoadState;
-
-function LoadState() {}
-
-LoadState.prototype.preload = function () {    
+export default class LoadState extends Phaser.State {
+  preload() {
     // Images
-    this.load.atlasJSONHash("assets", "resources/atlases/assets.png", 
-        "resources/atlases/assets.json");
-    this.load.atlasJSONHash("glowing-light", "resources/atlases/glowing-light.png", 
-        "resources/atlases/glowing-light.json");
-    this.load.atlasJSONHash("echo-light", "resources/atlases/echo-light.png", 
-        "resources/atlases/echo-light.json");
-    this.load.atlasJSONHash("rotating-light", "resources/atlases/rotating-light.png", 
-        "resources/atlases/rotating-light.json");
+    const atlasPath = `resources/atlases`;
+    this.load.atlasJSONHash("assets", `${atlasPath}/assets.png`, `${atlasPath}/assets.json`);
+    this.load.atlasJSONHash(
+      "glowing-light",
+      `${atlasPath}/glowing-light.png`,
+      `${atlasPath}/glowing-light.json`
+    );
+    this.load.atlasJSONHash(
+      "echo-light",
+      `${atlasPath}/echo-light.png`,
+      `${atlasPath}/echo-light.json`
+    );
+    this.load.atlasJSONHash(
+      "rotating-light",
+      `${atlasPath}/rotating-light.png`,
+      `${atlasPath}/rotating-light.json`
+    );
 
     // Tilemap
     for (const tilemapName of this.game.globals.tilemapNames) {
-        const path = `resources/tilemaps/${tilemapName}.json`;
-        const key = tilemapName.split(".")[0];
-        this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
+      const path = `resources/tilemaps/${tilemapName}.json`;
+      const key = tilemapName.split(".")[0];
+      this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
     }
     this.load.image("tiles", "resources/tilemaps/tiles.png");
     this.load.image("dungeon-tiles", "resources/tilemaps/dungeon-tiles.png");
 
     // Sounds
-    this.load.audio("pop", "resources/audio/pop.mp3");
-    this.load.audio("whoosh", "resources/audio/whoosh.mp3");
-    this.load.audio("whoosh-2", "resources/audio/whoosh-2.mp3");
-    this.load.audio("warp", "resources/audio/warp.mp3");
-    this.load.audio("warp-2", "resources/audio/warp-2.mp3");
-    this.load.audio("impact", "resources/audio/impact.mp3");
-    this.load.audio("impact-2", "resources/audio/impact-2.mp3");
-    this.load.audio("smash", "resources/audio/smash.mp3");
+    const audioPath = "resources/audio";
+    const audioFiles = [
+      "pop.mp3",
+      "whoosh.mp3",
+      "whoosh-2.mp3",
+      "warp.mp3",
+      "warp-2.mp3",
+      "impact.mp3",
+      "impact-2.mp3",
+      "smash.mp3"
+    ];
+    audioFiles.forEach(filename => {
+      const name = filename.slice(0, -4); // Remove extension
+      this.load.audio(name, `${audioPath}/${filename}`);
+    });
 
     // Stand-in for a loading bar
-    this.loadingText = this.add.text(this.world.centerX, this.world.centerY, 
-        "0%", { 
-            font: "200px Arial", 
-            fill: "#000", 
-            align: "center" 
-        });
+    this.loadingText = this.add.text(this.world.centerX, this.world.centerY, "0%", {
+      font: "200px Arial",
+      fill: "#000",
+      align: "center"
+    });
     this.loadingText.anchor.set(0.5);
-};
+  }
 
-LoadState.prototype.loadRender = function () {
+  loadRender() {
     this.loadingText.setText(this.load.progress + "%");
-};
+  }
 
-LoadState.prototype.create = function () {
+  create() {
     // Since load progress might not reach 100 in the load loop, manually do it
     this.loadingText.setText("100%");
 
     // this.game.state.start("start"); // start screen
     this.game.state.start("sandbox"); // for testing
-    // this.game.state.start("slick-ui-test"); // for testing
-};
+  }
+}

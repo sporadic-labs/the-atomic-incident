@@ -1,0 +1,86 @@
+// Range.css styling
+input[type="range"].slider {
+  -webkit-appearance: none;
+  // width: 100%;
+  // margin: 2.95px 0;
+}
+input[type="range"].slider:focus {
+  outline: none;
+}
+input[type="range"].slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 21.1px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 1.8px;
+  border: 0.1px solid #000101;
+}
+input[type="range"].slider::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px rgba(103, 0, 0, 0), 0px 0px 0px rgba(129, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  height: 27px;
+  width: 20px;
+  border-radius: 1px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -3.05px;
+}
+input[type="range"].slider:focus::-webkit-slider-runnable-track {
+  background: rgba(13, 13, 13, 0.21);
+}
+input[type="range"].slider::-moz-range-track {
+  width: 100%;
+  height: 21.1px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 1.8px;
+  border: 0.1px solid #000101;
+}
+input[type="range"].slider::-moz-range-thumb {
+  box-shadow: 0px 0px 0px rgba(103, 0, 0, 0), 0px 0px 0px rgba(129, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  height: 27px;
+  width: 20px;
+  border-radius: 1px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type="range"].slider::-ms-track {
+  width: 100%;
+  height: 21.1px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type="range"].slider::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.21);
+  border: 0.1px solid #000101;
+  border-radius: 3.6px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+}
+input[type="range"].slider::-ms-fill-upper {
+  background: rgba(0, 0, 0, 0.21);
+  border: 0.1px solid #000101;
+  border-radius: 3.6px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+}
+input[type="range"].slider::-ms-thumb {
+  box-shadow: 0px 0px 0px rgba(103, 0, 0, 0), 0px 0px 0px rgba(129, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  height: 27px;
+  width: 20px;
+  border-radius: 1px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 21.1px;
+}
+input[type="range"].slider:focus::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.21);
+}
+input[type="range"].slider:focus::-ms-fill-upper {
+  background: rgba(13, 13, 13, 0.21);
+}

@@ -1,38 +1,6 @@
-@import "variables";
 @import "font-awesome";
-
+@import "normalize";
+@import "range";
+@import "game";
 @import "hud";
-
-// TexturePacker export for CSS
-@import "../resources/atlases/css-assets.css";
-// Override the sprite class to have the proper url
-.sprite {
-    display: inline-block;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    background-image: url(../resources/atlases/css-assets.png);
-}
-
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-#game-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-#game-container canvas {
-    border: 1px solid #EEEEEE;
-    border-radius: 3px;
-}
+// @import "css-atlas";
