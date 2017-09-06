@@ -53,7 +53,6 @@ export default class Sandbox extends Phaser.State {
     global.plugins = global.plugins !== undefined ? global.plugins : {};
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     globals.plugins.effects = game.plugins.add(EffectsPlugin);
-    globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
 
     // Level manager
     const mapName = globals.tilemapNames[0];

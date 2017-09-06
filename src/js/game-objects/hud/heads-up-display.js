@@ -20,7 +20,6 @@ export default class HeadsUpDisplay extends Phaser.Group {
     this.game = game;
     this._scoreKeeper = this.game.globals.scoreKeeper;
     this._player = this.game.globals.player;
-    this._satBodyPlugin = this.game.globals.plugins.satBody;
     this.fixedToCamera = true;
 
     this.radar = new Radar(game);

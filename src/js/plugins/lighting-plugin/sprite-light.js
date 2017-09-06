@@ -2,17 +2,17 @@ import Color from "../../helpers/color";
 
 let instances = 0;
 
-class Light {
+export default class Light {
   /**
-     * Creates an instance of Light.
-     * @param {Phaser.Game} game
-     * @param {Phaser.Group} parent
-     * @param {Phaser.Point} position
-     * @param {Phaser.Circle|Phaser.Polygon} shape
-     * @param {Color|hex} color
-     *
-     * @memberof Light
-     */
+   * Creates an instance of Light.
+   * @param {Phaser.Game} game
+   * @param {Phaser.Group} parent
+   * @param {Phaser.Point} position
+   * @param {Phaser.Circle|Phaser.Polygon} shape
+   * @param {Color|hex} color
+   *
+   * @memberof Light
+   */
   constructor(game, parent, position, shape, baseColor, pulseColor) {
     this.game = game;
     this.parent = parent;
@@ -58,16 +58,16 @@ class Light {
     let bitmapHeight = 0;
     let boundingRadius = 0;
     if (shape instanceof Phaser.Circle) {
-      // For a circlular light, the bitmap is set to be the size of the
-      // circle. The light should then be drawn in the center of the bitmap.
+      // For a circlular light, the bitmap is set to be the size of the circle. The light should
+      // then be drawn in the center of the bitmap.
       bitmapWidth = shape.diameter;
       bitmapHeight = shape.diameter;
       boundingRadius = shape.radius;
     } else if (shape instanceof Phaser.Polygon) {
-      // For a polygon light, the bitmap is set to be the size of bounding
-      // circle around the polygon. That means that the polygon can rotate
-      // without a point going beyond the bitmap. That also means that we need
-      // to make sure the polygon's scale doesn't get increased anywhere!
+      // For a polygon light, the bitmap is set to be the size of bounding circle around the
+      // polygon. That means that the polygon can rotate without a point going beyond the bitmap.
+      // That also means that we need to make sure the polygon's scale doesn't get increased
+      // anywhere!
       const points = shape.toNumberArray();
       // Cache the original shape for the purposes of rotating
       this._originalShape = shape.clone();
@@ -152,8 +152,8 @@ class Light {
     const inShape = this.shape.contains(lightRelativePos.x, lightRelativePos.y);
     if (!inShape) return false;
 
-    // If position is in the shape, do the more detailed work of checking the
-    // appropriate pixel in the light's bitmap
+    // If position is in the shape, do the more detailed work of checking the appropriate pixel in
+    // the light's bitmap
     const bitmapPos = this.getTopLeft();
     const bitmapRelativePos = Phaser.Point.subtract(worldPosition, bitmapPos);
     // Round to pixel position
@@ -224,9 +224,9 @@ class Light {
       .to({ position: endPosition }, duration, Phaser.Easing.Linear.None)
       .to({ position: endPosition }, 0)
       .start();
-    // Note: adding an extra 0s tween to keep the tween going 1x frame past when it would
-    // normally end. This gives update a chance to catch up and draw the final tweened value
-    // before the tween is no longer running (which stops the light from redrawing).
+    // Note: adding an extra 0s tween to keep the tween going 1x frame past when it would normally
+    // end. This gives update a chance to catch up and draw the final tweened value before the tween
+    // is no longer running (which stops the light from redrawing).
   }
 
   /**
@@ -247,9 +247,8 @@ class Light {
       );
       return ray;
     } else if (this.shape instanceof Phaser.Polygon) {
-      // Hacky for now: cast the ray beyond the polygon's shape. See logic
-      // from old rectangle shape code in this commit:
-      //  e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
+      // Hacky for now: cast the ray beyond the polygon's shape. See logic from old rectangle shape
+      // code in this commit: e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
       ray.end.setTo(
         this.position.x + Math.cos(angle) * this._boundingRadius,
         this.position.y + Math.sin(angle) * this._boundingRadius
@@ -259,8 +258,8 @@ class Light {
   }
 
   redraw(points) {
-    // Light is expecting these points to be in world coordinates, since its own
-    // position is in world coordinates
+    // Light is expecting these points to be in world coordinates, since its own position is in
+    // world coordinates
     if (this.needsRedraw) {
       // Clear offscreen buffer
       this._redrawLight();
@@ -301,16 +300,15 @@ class Light {
   }
 
   _redrawLight() {
-    // Draw the circular gradient for the light. This is the light without
-    // factoring in shadows
+    // Draw the circular gradient for the light. This is the light without factoring in shadows
     this._bitmap.cls();
     this._bitmap.blendSourceOver(); // Default blend mode
     this._bitmap.draw(this._sprite);
   }
 
   _redrawShadow(points) {
-    // Destination in blend mode - the next thing drawn acts as a mask for the
-    // existing canvas content
+    // Destination in blend mode - the next thing drawn acts as a mask for the existing canvas
+    // content
     this._bitmap.blendDestinationIn();
 
     // Draw the "light rays"
@@ -318,8 +316,8 @@ class Light {
     this._bitmap.ctx.fillStyle = "white";
     this._bitmap.ctx.strokeStyle = "white";
 
-    // Figure out the offset needed to convert the world positions of the light
-    // points to local coordinates within the bitmap
+    // Figure out the offset needed to convert the world positions of the light points to local
+    // coordinates within the bitmap
     const off = this.getTopLeft();
     this._bitmap.ctx.moveTo(points[0].x - off.x, points[0].y - off.y);
     for (const p of points) {
@@ -330,8 +328,8 @@ class Light {
   }
 
   _updateDebug() {
-    // The debug canvas is draw at the light's current position, so all debug
-    // shapes drawn need to be drawn at (0, 0) to match the light
+    // The debug canvas is draw at the light's current position, so all debug shapes drawn need to
+    // be drawn at (0, 0) to match the light
     this._debugGraphics.position.copyFrom(this.position);
     this._debugGraphics.clear();
     this._debugGraphics.lineStyle(5, 0xff00ff, 0.6);
@@ -348,8 +346,8 @@ class Light {
   _recalculateWalls() {
     const walls = this.game.globals.plugins.lighting.getWalls();
 
-    // Determine which walls have normals that face away from the light - these are the walls
-    // that intersect light rights
+    // Determine which walls have normals that face away from the light - these are the walls that
+    // intersect light rights
     const intersectingWalls = [];
     for (let w = 0; w < walls.length; w++) {
       const wall = walls[w];
@@ -398,5 +396,3 @@ class Light {
     this.shape = new Phaser.Polygon(this._points);
   }
 }
-
-export default Light;

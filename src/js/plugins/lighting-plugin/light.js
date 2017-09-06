@@ -234,9 +234,9 @@ export default class Light {
       .to({ position: endPosition }, duration, Phaser.Easing.Linear.None)
       .to({ position: endPosition }, 0)
       .start();
-    // Note: adding an extra 0s tween to keep the tween going 1x frame past when it would
-    // normally end. This gives update a chance to catch up and draw the final tweened value
-    // before the tween is no longer running (which stops the light from redrawing).
+    // Note: adding an extra 0s tween to keep the tween going 1x frame past when it would normally
+    // end. This gives update a chance to catch up and draw the final tweened value before the tween
+    // is no longer running (which stops the light from redrawing).
   }
 
   /**
@@ -257,9 +257,8 @@ export default class Light {
       );
       return ray;
     } else if (this.shape instanceof Phaser.Polygon) {
-      // Hacky for now: cast the ray beyond the polygon's shape. See logic
-      // from old rectangle shape code in this commit:
-      //  e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
+      // Hacky for now: cast the ray beyond the polygon's shape. See logic from old rectangle shape
+      // code in this commit: e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
       ray.end.setTo(
         this.position.x + Math.cos(angle) * this._boundingRadius,
         this.position.y + Math.sin(angle) * this._boundingRadius
@@ -269,8 +268,8 @@ export default class Light {
   }
 
   redraw(points) {
-    // Light is expecting these points to be in world coordinates, since its own
-    // position is in world coordinates
+    // Light is expecting these points to be in world coordinates, since its own position is in
+    // world coordinates
     if (this.needsRedraw) {
       // Clear offscreen buffer
       this._redrawLight();
@@ -321,10 +320,9 @@ export default class Light {
         this._bitmap.ctx.fill();
       }
     } else if (this.shape instanceof Phaser.Polygon) {
-      // Draw the polygon using the underlying bitmap. The points are relative to the center
-      // of the bitmap (light.position is the center of the bitmap). The center of the bitmap
-      // is at the location (boundingRadius, boundingRadius), so shift each point by the
-      // radius
+      // Draw the polygon using the underlying bitmap. The points are relative to the center of the
+      // bitmap (light.position is the center of the bitmap). The center of the bitmap is at the
+      // location (boundingRadius, boundingRadius), so shift each point by the radius
       this._bitmap.ctx.fillStyle = this.baseColor.getWebColor();
       this._bitmap.ctx.beginPath();
       this._bitmap.ctx.moveTo(cx + this._points[0].x, cy + this._points[0].y);
@@ -376,29 +374,29 @@ export default class Light {
   _recalculateWalls() {
     const walls = this.game.globals.plugins.lighting.getWalls();
 
-    // Determine which walls have normals that face away from the light - these are the walls
-    // that intersect light rights
+    // Determine which walls have normals that face away from the light - these are the walls that
+    // intersect light rights
     const intersectingWalls = [];
     for (let w = 0; w < walls.length; w++) {
       const wall = walls[w];
 
       // Ignore walls that are not within range of the light. MH: this is essentially checking
       // whether two circles intersect. Circle 1 is the the light. Circle 2 is a circle that
-      // circumscribes the wall (e.g. placed at the midpoint, with a radius of half wall
-      // length). There are more accurate circle vs line collision detection algorithms that
-      // we could use if needed...
+      // circumscribes the wall (e.g. placed at the midpoint, with a radius of half wall length).
+      // There are more accurate circle vs line collision detection algorithms that we could use if
+      // needed...
       const dist = wall.midpoint.distance(this.position);
       if (dist > this._boundingRadius + wall.length / 2) continue;
 
-      // Shift the light so that its origin is at the wall midpoint, then calculate the dot of
-      // the that and the normal. This way both vectors have the same origin point.
+      // Shift the light so that its origin is at the wall midpoint, then calculate the dot of the
+      // that and the normal. This way both vectors have the same origin point.
       const relativePos = Phaser.Point.subtract(this.position, wall.midpoint);
       const dot = wall.normal.dot(relativePos);
       const isBackFacing = dot < 0;
 
-      // Add some information to the wall to indicate whether it is back facing or not. Walls
-      // are passed around by reference, so each light does not have its own unique copy.
-      // Thus, the information needs to be stored under an id unique to the specific light.
+      // Add some information to the wall to indicate whether it is back facing or not. Walls are
+      // passed around by reference, so each light does not have its own unique copy. Thus, the
+      // information needs to be stored under an id unique to the specific light.
       wall.backFacings = wall.backFacings || {};
       wall.backFacings[this.id] = isBackFacing;
 
