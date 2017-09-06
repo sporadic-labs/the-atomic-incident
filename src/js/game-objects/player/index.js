@@ -1,3 +1,4 @@
+import MovementController from "./movement-controller";
 import Controller from "../../helpers/controller.js";
 import { checkOverlapWithGroup } from "../../helpers/sprite-utilities.js";
 import Scattershot from "../weapons/scattershot";
@@ -52,14 +53,10 @@ export default class Player extends Phaser.Sprite {
     this.animations.play(ANIM_NAMES.IDLE);
 
     // Configure player physics
-    this._maxSpeed = 50;
-    this._customDrag = 1000;
-    this._maxAcceleration = 5000;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     const diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
-
     this.satBody = globals.plugins.satBody.addCircleBody(this);
 
     // Lighting for player
@@ -69,22 +66,10 @@ export default class Player extends Phaser.Sprite {
       shrinkSpeed: 10
     });
 
-    /** PLAYER CONTROLS */
-    this._controls = new Controller(this.game.input);
-    const Kb = Phaser.Keyboard;
-    const P = Phaser.Pointer;
-
-    // movement
-    this._controls.addKeyboardControl("move-up", [Kb.W, Kb.UP]);
-    this._controls.addKeyboardControl("move-left", [Kb.A, Kb.LEFT]);
-    this._controls.addKeyboardControl("move-right", [Kb.D, Kb.RIGHT]);
-    this._controls.addKeyboardControl("move-down", [Kb.S, Kb.DOWN]);
-
-    // primary attack
-    this._controls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
-
-    // TODO(rex): What to do with abilities?
-    this._controls.addMouseDownControl("ability", [P.RIGHT_BUTTON]);
+    // Controls
+    this._movementController = new MovementController(this.body, 50, 5000, 100);
+    this._attackControls = new Controller(this.game.input);
+    this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
     // Player Sound fx
     this._hitSound = this.game.globals.soundManager.add("smash", 0.03);
@@ -98,52 +83,8 @@ export default class Player extends Phaser.Sprite {
 
   update() {
     this._playerLight.update();
-
-    // Update keyboard/mouse inputs
-    this._controls.update();
-
-    // Calculate the acceleration and heading from the keyboard.
-    let acceleration = new Phaser.Point(0, 0);
-    if (this._controls.isControlActive("move-left")) {
-      acceleration.x += -1;
-    } else if (this._controls.isControlActive("move-right")) {
-      acceleration.x += 1;
-    }
-    if (this._controls.isControlActive("move-up")) {
-      acceleration.y += -1;
-    } else if (this._controls.isControlActive("move-down")) {
-      acceleration.y += 1;
-    }
-
-    // Normalize the acceleration and set the magnitude. This makes it so that
-    // the player moves in the same speed in all directions.
-    acceleration = acceleration.setMagnitude(this._maxAcceleration);
-    this.body.acceleration.copyFrom(acceleration);
-
-    // Cap the velocity. Phaser physics's max velocity caps the velocity in the
-    // x & y dimensions separately. This allows the sprite to move faster along
-    // a diagonal than it would along the x or y axis. To fix that, we need to
-    // cap the velocity based on it's magnitude.
-    if (this.body.velocity.getMagnitude() > this._maxSpeed) {
-      this.body.velocity.setMagnitude(this._maxSpeed);
-    }
-
-    // Custom drag. Arcade drag runs the calculation on each axis separately.
-    // This leads to more drag in the diagonal than in other directions.  To fix
-    // that, we need to apply drag ourselves.
-    // Based on: https://github.com/photonstorm/phaser/blob/v2.4.8/src/physics/arcade/World.js#L257
-    if (acceleration.isZero() && !this.body.velocity.isZero()) {
-      const dragMagnitude = this._customDrag * this.game.time.physicsElapsed;
-      if (this.body.velocity.getMagnitude() < dragMagnitude) {
-        // Snap to 0 velocity so that we avoid the drag causing the velocity
-        // to flip directions and end up oscillating
-        this.body.velocity.set(0);
-      } else {
-        // Apply drag in opposite direction of velocity
-        const drag = this.body.velocity.clone().setMagnitude(-1 * dragMagnitude);
-        this.body.velocity.add(drag.x, drag.y);
-      }
-    }
+    this._movementController.update();
+    this._attackControls.update();
 
     // Check collisions with Tilemap.
     this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
@@ -157,7 +98,7 @@ export default class Player extends Phaser.Sprite {
     this.rotation = this.position.angle(mousePos) + Math.PI / 2;
 
     if (
-      this._controls.isControlActive("attack") &&
+      this._attackControls.isControlActive("attack") &&
       this.weapon.isAbleToAttack() &&
       !this.weapon.isAmmoEmpty()
     ) {
