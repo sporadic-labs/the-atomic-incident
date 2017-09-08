@@ -1,5 +1,3 @@
-**Note**: Repo moved to [sporadic-labs/octo-chainsaw](https://github.com/sporadic-labs/octo-chainsaw). This repo is here purely for making sure previous links don't get broken.
-
 # Untitled Game #
 
 A work in progress game about light and shadows.
