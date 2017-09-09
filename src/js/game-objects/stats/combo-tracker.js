@@ -9,7 +9,7 @@ export default class ComboTracker {
     // Store the game.
     this.game = game;
     //Current combo value.
-    this._comboModifier = 0;
+    this._comboModifier = 1;
     // Current kill streak.
     this._killStreak = 0;
     // Current score, kill streak x combo modifier.
@@ -59,7 +59,7 @@ export default class ComboTracker {
    * @memberof ComboTracker
    */
   resetCombo() {
-    this._comboModifier = 0;
+    this._comboModifier = 1;
     this._killStreak = 0;
     this._comboScore = 0;
   }
