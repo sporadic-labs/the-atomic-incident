@@ -34,49 +34,30 @@ export default class HeadsUpDisplay extends Phaser.Group {
 
     // Text for HUD
     // Score
-    this._scoreText = game.make.text(this.game.width / 2, 32, "", {
+    this._scoreText = game.make.text(this.game.width - 18, 32, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
-      align: "center"
+      align: "right"
     });
-    this._scoreText.anchor.setTo(0.5);
+    this._scoreText.anchor.setTo(1, 0.5);
     this.add(this._scoreText);
+
     // Combo
-    this._comboModifierText = game.make.text(this.game.width - 84, 10, "", {
+    this._comboModifierText = game.make.text(this.game.width - 18, 64, "", {
       font: "30px 'Alfa Slab One'",
       fill: "#ffd800",
-      align: "center"
+      align: "right"
     });
+    this._comboModifierText.anchor.setTo(1, 0.5);
     this.add(this._comboModifierText);
-    this._comboModifierMask = game.make.text(this.game.width - 84, 10, "", {
-      font: "30px 'Alfa Slab One'",
-      fill: "#a59640",
-      align: "center"
-    });
-    this.add(this._comboModifierMask);
-    // Combo modifier mask is hidden by default.
-    this._comboModifierMask.visible = false;
-    this._comboScoreText = game.make.text(this.game.width - 84, 42, "", {
-      font: "30px 'Alfa Slab One'",
-      fill: "#ffd800",
-      align: "center"
-    });
-    this.add(this._comboScoreText);
 
     // Ammo
-    this._ammoMask = game.make.text(15, 10, "", {
-      font: "24px 'Alfa Slab One'",
-      fill: "#a59640",
-      align: "center"
-    });
-    this.add(this._ammoMask);
-    // NOTE(rex): Mask is hidden to begin with.
-    this._ammoMask.visible = false;
-    this._ammoText = game.make.text(15, 10, "", {
+    this._ammoText = game.make.text(18, 32, "", {
       font: "24px 'Alfa Slab One'",
       fill: "#ffd800",
-      align: "center"
+      align: "left"
     });
+    this._ammoText.anchor.setTo(0, 0.5);
     this.add(this._ammoText);
 
     // Debug
@@ -103,38 +84,24 @@ export default class HeadsUpDisplay extends Phaser.Group {
      * @memberof HeadsUpDisplay
      */
   update() {
-    // this._scoreText.setText(this.game.globals.scoreKeeper.getScore());
-
     // Shorthand
     const scoreKeeper = this.game.globals.scoreKeeper;
     const comboTracker = this.game.globals.comboTracker;
 
     if (!this._player.weapon._isReloading) {
-      this._ammoMask.setText(
-        this._player.weapon.getAmmo() + " / " + this._player.weapon._totalAmmo
-      );
       this._ammoText.setText(
         this._player.weapon.getAmmo() + " / " + this._player.weapon._totalAmmo
       );
     } else {
-      this._ammoMask.setText("Reloading...");
       this._ammoText.setText("Reloading...");
     }
 
     this._fpsText.setText(this.game.time.fps);
 
     // Update score and combo.
-    this._scoreText.setText(scoreKeeper.getScore());
-    this._comboModifierText.setText("x" + comboTracker.getComboModifier().toFixed(1));
-    this._comboModifierMask.setText("x" + comboTracker.getComboModifier().toFixed(1));
-    this._comboScoreText.setText("+" + comboTracker.getComboScore());
-    // And play animations if necessary.
-    if (this._playReloadAnimation) {
-      this._hudReloadAnimation();
-    }
-    if (this._playComboAnimation) {
-      this._hudComboAnimation();
-    }
+    const txt = this._padText(scoreKeeper.getScore(), 3, "0");
+    this._scoreText.setText(txt);
+    this._comboModifierText.setText(comboTracker.getComboModifier().toFixed(1) + "x");
 
     // Update Enemy Trackers
     this.radar.update();
@@ -144,6 +111,7 @@ export default class HeadsUpDisplay extends Phaser.Group {
 
   /**
    * Start the hud reload animation.
+   * TODO(rex): Do something better here...
    * 
    * @param {int} duration
    * @memberof HeadsUpDisplay
@@ -153,11 +121,11 @@ export default class HeadsUpDisplay extends Phaser.Group {
     this._reloadAnimationDuration = duration; // TODO(rex): Default.
     this._reloadAnimationStartTime = Date.now();
     this._playReloadAnimation = true;
-    this._ammoMask.visible = true;
   }
 
   /**
    * Manually updating the mask around the reload text.
+   * TODO(rex): This isn't being used right now...
    * 
    * @memberof HeadsUpDisplay
    */
@@ -182,6 +150,7 @@ export default class HeadsUpDisplay extends Phaser.Group {
 
   /**
    * Start the hud combo animation.
+   * TODO(rex): Do something better here...
    * 
    * @param {any} duration 
    * @memberof HeadsUpDisplay
@@ -191,11 +160,11 @@ export default class HeadsUpDisplay extends Phaser.Group {
     this._comboAnimationDuration = duration; // TODO(rex): Default.
     this._comboAnimationStartTime = Date.now();
     this._playComboAnimation = true;
-    this._comboModifierMask.visible = true;
   }
 
   /**
    * Manually updating the mask around the combo text.
+   * TODO(rex): This isn't being used right now...
    * 
    * @memberof HeadsUpDisplay
    */
@@ -218,6 +187,36 @@ export default class HeadsUpDisplay extends Phaser.Group {
       this._comboAnimationDuration = 0; // TODO(rex): This...?
       this._comboModifierMask.visible = false;
     }
+  }
+
+  /**
+   * Pad the text value by a certain number of digits.
+   * 
+   * @param {any} value - Value to include in this padded text string.
+   * @param {int} digits - Total digits the returned text should be.
+   * @param {string} char - Character to pad the text with, defaults to "0".
+   * @returns {string} - Padded text with the appropriate number of digits!
+   * @memberof HeadsUpDisplay
+   */
+  _padText(value, digits, char) {
+    // Provide a default character of 0, if no character was provided.
+    const charToPadWith = char ? char : "0";
+    // Provide a default value to pad, in case it wasn't passed in...
+    const valueToPad = value ? (value += "") : "0";
+    // Provide a default number of characters to pad.
+    const totalDigits = digits ? digits : 4;
+    // Figure out how many padding digits need to be added.
+    const numOfDigitsToPad = totalDigits >= valueToPad.length ? totalDigits - valueToPad.length : 0;
+    // Create an accumulator for this new padded text.
+    let paddedText = "";
+    // For each digit to pad, add the character to pad with to the accumulator.
+    for (let i = 0; i < numOfDigitsToPad; i++) {
+      paddedText += charToPadWith;
+    }
+    // Finally, add the value to the accumulated text.
+    paddedText += valueToPad;
+    // And return the padded text.
+    return paddedText;
   }
 
   /**
