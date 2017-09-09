@@ -2,6 +2,8 @@
  * LoadState - this is the loading screen
  */
 
+import { GAME_STATE_NAMES } from "./index.js";
+
 export default class LoadState extends Phaser.State {
   preload() {
     // Images
@@ -66,7 +68,6 @@ export default class LoadState extends Phaser.State {
     // Since load progress might not reach 100 in the load loop, manually do it
     this.loadingText.setText("100%");
 
-    // this.game.state.start("start"); // start screen
-    this.game.state.start("sandbox"); // for testing
+    this.game.state.start(GAME_STATE_NAMES.START_MENU);
   }
 }

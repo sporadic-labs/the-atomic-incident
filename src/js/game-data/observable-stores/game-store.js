@@ -1,6 +1,7 @@
 import { extendObservable, action } from "mobx";
 import storageAutosync from "./sync-to-storage";
-import MENU_STATES from "../../menu/menu-states";
+import { MENU_STATE_NAMES } from "../../menu";
+import { GAME_STATE_NAMES } from "../../states";
 
 class GameStore {
   constructor() {
@@ -9,7 +10,8 @@ class GameStore {
       score: 0,
       highScore: 0,
       isPaused: false,
-      menuState: MENU_STATES.NONE,
+      menuState: MENU_STATE_NAMES.CLOSED,
+      gameState: GAME_STATE_NAMES.START_MENU,
 
       // Actions - these mutate the state
       setScore: action(function(score) {
@@ -29,6 +31,9 @@ class GameStore {
       }),
       setMenuState: action(function(newMenuState) {
         this.menuState = newMenuState;
+      }),
+      setGameState: action(function(newGameState) {
+        this.gameState = newGameState;
       })
     });
   }

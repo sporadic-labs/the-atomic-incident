@@ -9,7 +9,7 @@ import Player from "../game-objects/player";
 import SoundEffectManager from "../game-objects/fx/sound-effect-manager.js";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import PostProcessor from "../game-objects/fx/post-processor.js";
-import MENU_STATES from "../menu/menu-states";
+import { MENU_STATE_NAMES } from "../menu";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import MapManager from "../game-objects/level-manager";
@@ -18,19 +18,13 @@ import ScoreKeeper from "../game-objects/stats/score-keeper";
 import ComboTracker from "../game-objects/stats/combo-tracker";
 import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
 
-export default class Sandbox extends Phaser.State {
+export default class PlayState extends Phaser.State {
   create() {
+    gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
+
     // Shorthands
     const game = this.game;
     const globals = game.globals;
-
-    // Debugging FPS
-    game.time.advancedTiming = true;
-
-    // Canvas styling
-    game.canvas.addEventListener("contextmenu", function(e) {
-      e.preventDefault();
-    });
 
     // Groups for z-index sorting and for collisions
     const groups = {
@@ -98,7 +92,7 @@ export default class Sandbox extends Phaser.State {
     new EnemySpawner(game, player);
 
     // Subscribe to the debug settings
-    autorun(() => {
+    this.storeUnsubscribe = autorun(() => {
       this.lighting.setOpacity(preferencesStore.shadowOpacity);
       if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
       else globals.plugins.satBody.disableDebugAll();
@@ -112,12 +106,13 @@ export default class Sandbox extends Phaser.State {
 
     // Debug menu
     game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
-      gameStore.setMenuState(MENU_STATES.DEBUG);
+      gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
       gameStore.pause();
     });
   }
 
   shutdown() {
+    this.storeUnsubscribe();
     // Destroy all plugins (MH: should we be doing this or more selectively removing plugins?)
     this.game.plugins.removeAll();
   }

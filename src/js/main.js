@@ -4,9 +4,7 @@ import "phaser-ce/build/custom/pixi";
 import "phaser-ce/build/custom/p2";
 import "phaser-ce/build/custom/phaser-split";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
-import BootState from "./states/boot-state.js";
-import LoadState from "./states/load-state.js";
-import SandboxState from "./states/sandbox.js";
+import { Boot, Load, StartMenu, Play, GAME_STATE_NAMES } from "./states";
 
 const gameDimensions = 750;
 // Keep this on CANVAS until Phaser 3 for performance reasons?
@@ -19,7 +17,7 @@ const game = new Phaser.Game({
 });
 
 // Set up the menu system
-import MenuApp from "./menu/menu-app";
+import { MenuApp } from "./menu";
 import { h, render } from "preact";
 render(
   <MenuApp
@@ -42,7 +40,13 @@ globals.tilemapNames = [
 ];
 globals.plugins = {};
 
-game.state.add("boot", BootState);
-game.state.add("load", LoadState);
-game.state.add("sandbox", SandboxState);
-game.state.start("boot");
+// Hook up the game store's state to automatically be updated when the game state changes
+game.state.onStateChange.add(stateName => {
+  gameStore.setGameState(stateName);
+});
+
+game.state.add(GAME_STATE_NAMES.BOOT, Boot);
+game.state.add(GAME_STATE_NAMES.LOAD, Load);
+game.state.add(GAME_STATE_NAMES.START_MENU, StartMenu);
+game.state.add(GAME_STATE_NAMES.PLAY, Play);
+game.state.start(GAME_STATE_NAMES.BOOT);
