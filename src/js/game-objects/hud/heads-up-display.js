@@ -41,6 +41,13 @@ export default class HeadsUpDisplay extends Phaser.Group {
     });
     this._scoreText.anchor.setTo(1, 0.5);
     this.add(this._scoreText);
+    this._scorePadText = game.make.text(this.game.width - this._scoreText.width - 18, 32, "", {
+      font: "30px 'Alfa Slab One'",
+      fill: "#a0976a",
+      align: "right"
+    });
+    this._scorePadText.anchor.setTo(1, 0.5);
+    this.add(this._scorePadText);
 
     // Combo
     this._comboModifierText = game.make.text(this.game.width - 18, 64, "", {
@@ -99,8 +106,10 @@ export default class HeadsUpDisplay extends Phaser.Group {
     this._fpsText.setText(this.game.time.fps);
 
     // Update score and combo.
-    const txt = this._padText(scoreKeeper.getScore(), 3, "0");
-    this._scoreText.setText(txt);
+    this._scoreText.setText(scoreKeeper.getScore());
+    this._scorePadText.x = this.game.width - this._scoreText.width - 18;
+    const pad = this._getTextPadding(scoreKeeper.getScore(), 6, "0");
+    this._scorePadText.setText(pad);
     this._comboModifierText.setText(comboTracker.getComboModifier().toFixed(1) + "x");
 
     // Update Enemy Trackers
@@ -216,6 +225,34 @@ export default class HeadsUpDisplay extends Phaser.Group {
     // Finally, add the value to the accumulated text.
     paddedText += valueToPad;
     // And return the padded text.
+    return paddedText;
+  }
+
+  /**
+   * Get the padding prefix for the score, based on the number and character provided.
+   * 
+   * @param {any} value - Value to include in this padded text string.
+   * @param {int} digits - Total digits the returned text should be.
+   * @param {string} char - Character to pad the text with, defaults to "0".
+   * @returns {string} - Padded text with the appropriate number of digits!
+   * @memberof HeadsUpDisplay
+   */
+  _getTextPadding(value, digits, char) {
+    // Provide a default character of 0, if no character was provided.
+    const charToPadWith = char ? char : "0";
+    // Provide a default value to pad, in case it wasn't passed in...
+    const valueToPad = value ? (value += "") : "0";
+    // Provide a default number of characters to pad.
+    const totalDigits = digits ? digits : 4;
+    // Figure out how many padding digits need to be added.
+    const numOfDigitsToPad = totalDigits >= valueToPad.length ? totalDigits - valueToPad.length : 0;
+    // Create an accumulator for this new padded text.
+    let paddedText = "";
+    // For each digit to pad, add the character to pad with to the accumulator.
+    for (let i = 0; i < numOfDigitsToPad; i++) {
+      paddedText += charToPadWith;
+    }
+    // And return the padding prefix text.
     return paddedText;
   }
 
