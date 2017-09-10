@@ -143,11 +143,6 @@ export default class Radar {
       // Scale
       const scale = this._getTrackerScale(enemy);
       entry.image.scale.setTo(scale, scale);
-
-      // TODO(rex): If the icon is in shadow, tint it so it is visible.
-      if (player._playerLight._light.isPointInLight(entry.image.position)) {
-        entry.image.tint = Color.white();
-      }
     }
   }
 
