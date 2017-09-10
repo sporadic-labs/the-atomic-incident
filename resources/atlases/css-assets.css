@@ -1,0 +1,151 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:934b34510422c5e01d1787fa39edbfb7:83b04d2c52a82e0499a0ea6fe3103b7a:86cd4970837c3f1d53019950e48bb9fd$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(css-assets.png);}
+
+.enemies-arrow-idle {width:25px; height:25px; background-position: -790px -169px}
+.enemies-bomber-eye-idle-01 {width:25px; height:25px; background-position: -727px -201px}
+.enemies-bomber-idle-01 {width:25px; height:25px; background-position: -817px -161px}
+.enemies-circle-idle {width:25px; height:25px; background-position: -853px -143px}
+.enemies-outline {width:29px; height:29px; background-position: -759px -169px}
+.enemy01-die-01 {width:24px; height:24px; background-position: -1043px -1px}
+.enemy01-die-02 {width:24px; height:24px; background-position: -1043px -27px}
+.enemy01-die-03 {width:24px; height:24px; background-position: -1043px -53px}
+.enemy01-die-04 {width:24px; height:24px; background-position: -509px -221px}
+.enemy01-idle-01 {width:24px; height:24px; background-position: -1043px -1px}
+.enemy01-idle-02 {width:24px; height:24px; background-position: -535px -221px}
+.enemy01-idle-03 {width:24px; height:24px; background-position: -1043px -1px}
+.enemy01-idle-04 {width:24px; height:24px; background-position: -561px -221px}
+.enemy01-move-01 {width:24px; height:24px; background-position: -1043px -1px}
+.enemy01-move-02 {width:24px; height:24px; background-position: -587px -221px}
+.enemy01-move-03 {width:24px; height:24px; background-position: -613px -221px}
+.enemy01-move-04 {width:24px; height:24px; background-position: -587px -221px}
+.enemy02-attack-01 {width:36px; height:36px; background-position: -363px -209px}
+.enemy02-attack-02 {width:36px; height:36px; background-position: -401px -209px}
+.enemy02-attack-03 {width:36px; height:36px; background-position: -439px -209px}
+.enemy02-attack-04 {width:36px; height:36px; background-position: -477px -175px}
+.enemy02-die-01 {width:36px; height:36px; background-position: -363px -209px}
+.enemy02-die-02 {width:36px; height:36px; background-position: -689px -149px}
+.enemy02-die-03 {width:36px; height:36px; background-position: -689px -187px}
+.enemy02-die-04 {width:36px; height:36px; background-position: -739px -93px}
+.enemy02-move-01 {width:36px; height:36px; background-position: -363px -209px}
+.enemy02-move-02 {width:36px; height:36px; background-position: -777px -93px}
+.enemy02-move-03 {width:36px; height:36px; background-position: -815px -85px}
+.enemy02-move-04 {width:36px; height:36px; background-position: -853px -67px}
+.enemy03-aim-01 {width:36px; height:36px; background-position: -891px -67px}
+.enemy03-aim-02 {width:36px; height:36px; background-position: -929px -67px}
+.enemy03-aim-03 {width:36px; height:36px; background-position: -967px -67px}
+.enemy03-aim-04 {width:36px; height:36px; background-position: -1005px -67px}
+.enemy03-attack-01 {width:36px; height:36px; background-position: -891px -67px}
+.enemy03-attack-02 {width:36px; height:36px; background-position: -739px -131px}
+.enemy03-attack-03 {width:36px; height:36px; background-position: -777px -131px}
+.enemy03-attack-04 {width:36px; height:36px; background-position: -815px -123px}
+.enemy03-die-01 {width:36px; height:36px; background-position: -891px -67px}
+.enemy03-die-02 {width:36px; height:36px; background-position: -853px -105px}
+.enemy03-die-03 {width:36px; height:36px; background-position: -891px -105px}
+.enemy03-die-04 {width:36px; height:36px; background-position: -929px -105px}
+.enemy03-move-01 {width:36px; height:36px; background-position: -891px -67px}
+.enemy03-move-02 {width:36px; height:36px; background-position: -967px -105px}
+.enemy03-move-03 {width:36px; height:36px; background-position: -891px -67px}
+.enemy03-move-04 {width:36px; height:36px; background-position: -1005px -105px}
+.fx-hit-01 {width:16px; height:16px; background-position: -719px -228px}
+.fx-hit-02 {width:16px; height:16px; background-position: -737px -228px}
+.fx-hit-03 {width:16px; height:16px; background-position: -755px -227px}
+.fx-hit-04 {width:16px; height:16px; background-position: -773px -227px}
+.fx-hit-05 {width:16px; height:16px; background-position: -896px -226px}
+.fx-hit-06 {width:16px; height:16px; background-position: -914px -226px}
+.fx-swoosh-01 {width:8px; height:16px; background-position: -1030px -197px}
+.fx-swoosh-02 {width:8px; height:16px; background-position: -727px -149px}
+.fx-swoosh-03 {width:8px; height:16px; background-position: -1030px -215px}
+.fx-trail-01 {width:48px; height:16px; background-position: -747px -57px}
+.fx-trail-02 {width:48px; height:16px; background-position: -747px -75px}
+.fx-trail-03 {width:48px; height:16px; background-position: -797px -67px}
+.hud-dash {width:30px; height:30px; background-position: -1px -215px}
+.hud-ghost {width:30px; height:30px; background-position: -33px -215px}
+.hud-grid {width:150px; height:150px; background-position: -363px -23px}
+.hud-health-bar {width:26px; height:3px; background-position: -898px -197px}
+.hud-health-bar-frame {width:36px; height:5px; background-position: -844px -170px}
+.hud-heart {width:30px; height:30px; background-position: -97px -215px}
+.hud-heart-open {width:30px; height:30px; background-position: -65px -215px}
+.hud-mute {width:30px; height:30px; background-position: -129px -215px}
+.hud-pause {width:30px; height:30px; background-position: -161px -215px}
+.hud-play {width:30px; height:30px; background-position: -193px -215px}
+.hud-pulse {width:30px; height:30px; background-position: -225px -215px}
+.hud-reticule {width:24px; height:24px; background-position: -639px -221px}
+.hud-slow-motion {width:30px; height:30px; background-position: -257px -215px}
+.hud-sound {width:30px; height:30px; background-position: -289px -215px}
+.hud-targeting-arrow {width:12px; height:6px; background-position: -797px -85px}
+.light-charging {width:25px; height:25px; background-position: -880px -143px}
+.light-light {width:20px; height:20px; background-position: -675px -225px}
+.pickups-box-01 {width:24px; height:24px; background-position: -1043px -79px}
+.pickups-box-02 {width:24px; height:24px; background-position: -1043px -105px}
+.pickups-box-03 {width:24px; height:24px; background-position: -1043px -131px}
+.pickups-box-04 {width:24px; height:24px; background-position: -844px -204px}
+.pickups-dash {width:30px; height:30px; background-position: -321px -215px}
+.pickups-diamond-01 {width:24px; height:24px; background-position: -870px -204px}
+.pickups-diamond-02 {width:24px; height:24px; background-position: -817px -215px}
+.pickups-diamond-03 {width:24px; height:24px; background-position: -1040px -184px}
+.pickups-diamond-04 {width:24px; height:24px; background-position: -754px -201px}
+.pickups-diamond-05 {width:24px; height:24px; background-position: -926px -197px}
+.pickups-diamond-06 {width:24px; height:24px; background-position: -952px -197px}
+.pickups-ghost {width:30px; height:30px; background-position: -477px -213px}
+.pickups-slow-motion {width:30px; height:30px; background-position: -727px -169px}
+.player-attack-01 {width:25px; height:25px; background-position: -907px -143px}
+.player-attack-02 {width:25px; height:25px; background-position: -934px -143px}
+.player-attack-03 {width:25px; height:25px; background-position: -961px -143px}
+.player-attack-04 {width:25px; height:25px; background-position: -988px -143px}
+.player-die-01 {width:25px; height:25px; background-position: -907px -143px}
+.player-die-02 {width:25px; height:25px; background-position: -1015px -143px}
+.player-die-03 {width:25px; height:25px; background-position: -1042px -157px}
+.player-die-04 {width:25px; height:25px; background-position: -844px -177px}
+.player-hit-01 {width:25px; height:25px; background-position: -907px -143px}
+.player-hit-02 {width:25px; height:25px; background-position: -817px -188px}
+.player-hit-03 {width:25px; height:25px; background-position: -790px -196px}
+.player-hit-04 {width:25px; height:25px; background-position: -871px -177px}
+.player-idle-01 {width:25px; height:25px; background-position: -907px -143px}
+.player-idle-02 {width:25px; height:25px; background-position: -898px -170px}
+.player-idle-03 {width:25px; height:25px; background-position: -925px -170px}
+.player-idle-04 {width:25px; height:25px; background-position: -952px -170px}
+.player-move-01 {width:25px; height:25px; background-position: -979px -170px}
+.player-move-02 {width:25px; height:25px; background-position: -907px -143px}
+.player-move-03 {width:25px; height:25px; background-position: -1006px -170px}
+.player-move-04 {width:25px; height:25px; background-position: -907px -143px}
+.startScreen-logo {width:360px; height:190px; background-position: -1px -23px}
+.startScreen-options-down {width:172px; height:64px; background-position: -515px -23px}
+.startScreen-options-up {width:172px; height:64px; background-position: -515px -89px}
+.startScreen-play-down {width:172px; height:64px; background-position: -803px -1px}
+.startScreen-play-up {width:172px; height:64px; background-position: -515px -155px}
+.test-box {width:24px; height:24px; background-position: -978px -197px}
+.test-bullet {width:12px; height:29px; background-position: -463px -175px}
+.test-diamond {width:24px; height:24px; background-position: -1004px -197px}
+.weapons-arrow {width:5px; height:24px; background-position: -1033px -170px}
+.weapons-beam {width:800px; height:20px; background-position: -1px -1px}
+.weapons-beam {width:800px; height:20px; background-position: -1px -1px}
+.weapons-circle {width:12px; height:12px; background-position: -843px -230px}
+.weapons-death-beam {width:20px; height:20px; background-position: -697px -225px}
+.weapons-e-blade-01 {width:20px; height:20px; background-position: -1040px -210px}
+.weapons-e-blade-02 {width:20px; height:20px; background-position: -791px -223px}
+.weapons-e-burst-01 {width:48px; height:32px; background-position: -363px -175px}
+.weapons-e-burst-02 {width:48px; height:32px; background-position: -689px -81px}
+.weapons-e-saw-01 {width:20px; height:20px; background-position: -896px -204px}
+.weapons-e-saw-02 {width:20px; height:20px; background-position: -932px -223px}
+.weapons-e-star-01 {width:20px; height:20px; background-position: -954px -223px}
+.weapons-e-star-02 {width:20px; height:20px; background-position: -976px -223px}
+.weapons-fireball-01 {width:48px; height:32px; background-position: -747px -23px}
+.weapons-fireball-02 {width:48px; height:32px; background-position: -413px -175px}
+.weapons-fireball-03 {width:48px; height:32px; background-position: -689px -115px}
+.weapons-hammer {width:56px; height:56px; background-position: -689px -23px}
+.weapons-laser-01 {width:8px; height:24px; background-position: -353px -215px}
+.weapons-laser-02 {width:8px; height:24px; background-position: -665px -221px}
+.weapons-laser-03 {width:8px; height:24px; background-position: -780px -200px}
+.weapons-slug {width:16px; height:20px; background-position: -998px -223px}
+.weapons-sword {width:64px; height:64px; background-position: -977px -1px}

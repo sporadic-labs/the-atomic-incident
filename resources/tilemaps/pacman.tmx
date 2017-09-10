@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="25" tileheight="25" nextobjectid="255">
+ <tileset firstgid="1" name="tiles" tilewidth="25" tileheight="25" tilecount="144" columns="16">
+  <image source="tiles.png" width="400" height="225"/>
+  <tile id="0">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="isOpaque" value="true"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+   <objectgroup draworder="index">
+    <object id="1" x="8" y="8" width="10" height="10"/>
+   </objectgroup>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="isOpaque" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="bg" width="30" height="30">
+  <data encoding="csv">
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,
+49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,49,50,51,52,53,54,
+65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,65,66,67,68,69,70,
+81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,81,82,83,84,85,86,
+97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,97,98,99,100,101,102,
+113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,113,114,115,116,117,118,
+129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134,129,130,131,132,133,134
+</data>
+ </layer>
+ <objectgroup name="lights-DISABLED" visible="0">
+  <object id="250" type="light" x="-112.5" y="425" width="400" height="400">
+   <properties>
+    <property name="color" type="color" value="#8cffffff"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="251" type="light" x="443.75" y="431.25" width="400" height="400">
+   <properties>
+    <property name="color" type="color" value="#8cffffff"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="253" type="light" x="-100" y="-87.5" width="400" height="400">
+   <properties>
+    <property name="color" type="color" value="#8cffffff"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="254" type="light" x="456.25" y="-81.25" width="400" height="400">
+   <properties>
+    <property name="color" type="color" value="#8cffffff"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <layer name="walls" width="30" height="30">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,9,14,14,14,10,0,0,0,0,0,0,9,14,14,14,10,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,16,12,12,11,0,0,0,0,0,0,8,12,12,16,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,0,0,0,0,0,13,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,13,16,14,14,14,14,14,14,14,14,14,14,14,14,16,15,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,8,12,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="navmesh-shrunken" visible="0">
+  <object id="111" x="0" y="0" width="750" height="237.5"/>
+  <object id="113" x="0" y="512.5" width="750" height="237.5"/>
+  <object id="119" x="0" y="237.5" width="162.5" height="275"/>
+  <object id="205" x="587.5" y="237.5" width="162.5" height="275"/>
+  <object id="206" x="312.5" y="250" width="125" height="50"/>
+  <object id="207" x="235" y="312.5" width="280" height="125"/>
+ </objectgroup>
+ <objectgroup name="pickups" visible="0">
+  <object id="87" name="1" x="662.5" y="87.5" width="25" height="25"/>
+  <object id="93" name="5" x="62.5" y="87.5" width="25" height="25"/>
+  <object id="141" name="1" x="262.5" y="362.5" width="25" height="25"/>
+  <object id="142" name="5" x="62.5" y="637.5" width="25" height="25"/>
+  <object id="143" name="1" x="462.5" y="362.5" width="25" height="25"/>
+  <object id="144" name="1" x="662.5" y="637.5" width="25" height="25"/>
+ </objectgroup>
+ <objectgroup name="spawn-points" visible="0">
+  <object id="240" name="1" x="662.5" y="87.5" width="25" height="25"/>
+  <object id="241" name="5" x="62.5" y="87.5" width="25" height="25"/>
+  <object id="242" name="1" x="262.5" y="362.5" width="25" height="25"/>
+  <object id="243" name="5" x="62.5" y="637.5" width="25" height="25"/>
+  <object id="244" name="1" x="462.5" y="362.5" width="25" height="25"/>
+  <object id="245" name="1" x="662.5" y="637.5" width="25" height="25"/>
+  <object id="246" x="362.5" y="362.5" width="25" height="25">
+   <ellipse/>
+  </object>
+  <object id="248" x="312.5" y="362.5" width="25" height="25">
+   <ellipse/>
+  </object>
+  <object id="249" x="412.5" y="362.5" width="25" height="25">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="paths-left" visible="0">
+  <object id="227" x="25" y="25">
+   <polyline points="0,0 0,693.75"/>
+  </object>
+  <object id="228" x="50" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="229" x="75" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="230" x="100" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="231" x="125" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="232" x="150" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="paths-right" visible="0">
+  <object id="234" x="600" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="235" x="625" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="236" x="650" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="237" x="675" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="238" x="700" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+  <object id="239" x="725" y="25">
+   <polyline points="0,0 0,700"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="paths-top" visible="0">
+  <object id="173" x="25" y="28.4483">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="174" x="22.5862" y="52.5862">
+   <polyline points="2.41379,0 702.414,0"/>
+  </object>
+  <object id="208" x="25" y="76.7241">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="209" x="25" y="100.862">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="210" x="25" y="125">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="211" x="25" y="149.138">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="212" x="25" y="173.276">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="213" x="25" y="197.414">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="214" x="25" y="221.552">
+   <polyline points="0,0 700,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="paths-bottom" visible="0">
+  <object id="215" x="25" y="528.448">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="216" x="22.5862" y="552.586">
+   <polyline points="2.41379,0 702.414,0"/>
+  </object>
+  <object id="217" x="25" y="576.724">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="218" x="25" y="600.862">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="219" x="25" y="625">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="220" x="25" y="649.138">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="221" x="25" y="673.276">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="222" x="25" y="697.414">
+   <polyline points="0,0 700,0"/>
+  </object>
+  <object id="223" x="25" y="721.552">
+   <polyline points="0,0 700,0"/>
+  </object>
+ </objectgroup>
+</map>
