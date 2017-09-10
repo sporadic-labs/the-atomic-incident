@@ -1,10 +1,7 @@
-import Color from "../../helpers/color";
-
 /**
- * Player Radar.
- * Keep track of enemy position.  Display an arrow
- * pointing in their general direction, relative to the player light.
- * If the enemy is in light, no need for the arrow.  Use your eyes!
+ * Player Radar. Keep track of enemy position.  Display an arrow pointing in their general
+ * direction, relative to the player light. If the enemy is in light, no need for the arrow.  Use
+ * your eyes!
  * 
  * @class Radar
  */
@@ -14,10 +11,7 @@ export default class Radar {
    */
   constructor(game) {
     this.game = game;
-
-    // Keep track of enemies and trackers.
-    this.registeredEnemies = [];
-    this.enemyTrackers = [];
+    this._trackedEnemies = [];
   }
 
   /**
@@ -26,9 +20,26 @@ export default class Radar {
    * @memberof Radar
    */
   update() {
+    const player = this.game.globals.player;
+
     // Update Enemy Trackers
-    for (const enemy of this.registeredEnemies) {
-      this._updateEnemyTrackerPosition(enemy);
+    for (const { enemy, tracker } of this._trackedEnemies) {
+      // If the enemy is in light, hide this tracker.
+      if (player._playerLight._light.isPointInLight(enemy.position)) {
+        tracker.visible = false;
+      } else {
+        // If the enemy is in the dark, show the arrow an update it's position.
+        tracker.visible = true;
+        // Position
+        const { x: cX, y: cY } = this._getTrackerPosition(enemy);
+        tracker.position.copyFrom(new Phaser.Point(cX, cY));
+        // Rotation
+        const angle = player.position.angle(enemy.position);
+        tracker.rotation = angle + Math.PI / 2;
+        // Scale
+        const scale = this._getTrackerScale(enemy);
+        tracker.scale.setTo(scale, scale);
+      }
     }
   }
 
@@ -39,28 +50,6 @@ export default class Radar {
    * @memberof Radar
    */
   registerEnemy(enemy) {
-    this.registeredEnemies.push(enemy);
-    this._addEnemyTracker(enemy);
-  }
-
-  /**
-   * When an Enemy dies, remove it from the Registry and remove the Enemy Tracker.
-   * 
-   * @param {any} enemy 
-   * @memberof Radar
-   */
-  removeEnemy(enemy) {
-    this.registeredEnemies.filter(e => e !== enemy);
-    this._removeEnemyTracker(enemy);
-  }
-
-  /**
-   * Add a Tracker entry to the list of EnemyTrackers, and create the HUD image.
-   * 
-   * @param {any} enemy 
-   * @memberof Radar
-   */
-  _addEnemyTracker(enemy) {
     // Shorthand.
     const player = this.game.globals.player;
     const hud = this.game.globals.hud;
@@ -82,73 +71,23 @@ export default class Radar {
     hud.add(arrowImg);
 
     // And add a Tracking entry, which will be useful for updating the position.
-    this.enemyTrackers.push({
-      enemy: enemy,
-      image: arrowImg
-    });
+    this._trackedEnemies.push({ enemy: enemy, tracker: arrowImg });
   }
 
   /**
-   * Remove a Tracker from the HUD, and remove it's entry form the list of EnemyTrackers.
+   * When an Enemy dies, remove it from the Registry and remove the Enemy Tracker.
    * 
-   * @param {any} enemy 
+   * @param {any} enemyToRemove 
    * @memberof Radar
    */
-  _removeEnemyTracker(enemy) {
-    // Shorthand
-    const hud = this.game.globals.hud;
-
-    // Find the Tracker entry associated with this enemy.
-    const eT = this.enemyTrackers.find(e => e.enemy === enemy);
-
-    // Remove the Image from the Phaser Group.
-    hud.remove(eT);
-
-    // Destroy the Tracker arrow image.
-    eT.image.destroy();
-
-    // Then remove the Tracker from the list.
-    this.enemyTrackers.filter(e => e.enemy === enemy);
+  removeEnemy(enemy) {
+    const i = this._trackedEnemies.findIndex(elem => elem.enemy === enemy);
+    this._trackedEnemies[i].tracker.destroy();
+    this._trackedEnemies.splice(i, 1);
   }
 
   /**
-   * Update the position of the Tracker Image based on the position of the
-   * enemy, player, and light.
-   * 
-   * @param {any} enemy 
-   * @memberof Radar
-   */
-  _updateEnemyTrackerPosition(enemy) {
-    //Shorthand
-    const player = this.game.globals.player;
-
-    // Get the Tracking Entry for the requested enemy.
-    const entry = this.enemyTrackers.find(e => e.enemy === enemy);
-
-    // If the enemy is in light, hide this tracker.
-    if (player._playerLight._light.isPointInLight(enemy.position)) {
-      entry.image.visible = false;
-    } else {
-      // If the enemy is in the dark, show the arrow an update it's position.
-      entry.image.visible = true;
-
-      // Position
-      const { x: cX, y: cY } = this._getTrackerPosition(enemy);
-      entry.image.position.copyFrom(new Phaser.Point(cX, cY));
-
-      // Rotation
-      const angle = player.position.angle(enemy.position);
-      entry.image.rotation = angle + Math.PI / 2;
-
-      // Scale
-      const scale = this._getTrackerScale(enemy);
-      entry.image.scale.setTo(scale, scale);
-    }
-  }
-
-  /**
-   * Calculate the position of the Arrow Image based on the player
-   * position and the enemy position.
+   * Calculate the position of the Arrow Image based on the player position and the enemy position.
    * 
    * @param {any} entry 
    * @returns { x : int, y: int }
@@ -161,14 +100,14 @@ export default class Radar {
     // Find the distance between the player and the enemy.
     const dist = player.position.distance(enemy.position);
 
-    // If the distance between player/enemy is less than the light radius,
-    // but the enemy is still in the dark, this means they are behind some wall.
-    // So use the position of the enemy instead of a point in between.
+    // If the distance between player/enemy is less than the light radius, but the enemy is still in
+    // the dark, this means they are behind some wall. So use the position of the enemy instead of a
+    // point in between.
     if (dist < player._playerLight.getRadius()) {
       return { x: enemy.position.x, y: enemy.position.y };
     } else {
-      // The tracker should be placed around the radius of the light,
-      // between the enemy and the player.
+      // The tracker should be placed around the radius of the light, between the enemy and the
+      // player.
       const angle = player.position.angle(enemy.position);
       const radiusModifier = 5;
       const x =
@@ -181,8 +120,7 @@ export default class Radar {
   }
 
   /**
-   * Determine the scale of the Tracker arrow based on the
-   * distance of the enemy from the player.
+   * Determine the scale of the Tracker arrow based on the distance of the enemy from the player.
    * 
    * @param {BaseEnemy} enemy 
    * @returns 0 - 1 value to set the Arrow Scale to.
