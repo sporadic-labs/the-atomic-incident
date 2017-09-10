@@ -50,9 +50,7 @@ export default class Radar {
    * @memberof Radar
    */
   removeEnemy(enemy) {
-    this.registeredEnemies.filter(e => {
-      return e !== enemy;
-    });
+    this.registeredEnemies.filter(e => e !== enemy);
     this._removeEnemyTracker(enemy);
   }
 
@@ -101,9 +99,7 @@ export default class Radar {
     const hud = this.game.globals.hud;
 
     // Find the Tracker entry associated with this enemy.
-    const eT = this.enemyTrackers.find(e => {
-      return e.enemy === enemy;
-    });
+    const eT = this.enemyTrackers.find(e => e.enemy === enemy);
 
     // Remove the Image from the Phaser Group.
     hud.remove(eT);
@@ -112,9 +108,7 @@ export default class Radar {
     eT.image.destroy();
 
     // Then remove the Tracker from the list.
-    this.enemyTrackers.filter(e => {
-      return e.enemy === enemy;
-    });
+    this.enemyTrackers.filter(e => e.enemy === enemy);
   }
 
   /**
@@ -129,9 +123,7 @@ export default class Radar {
     const player = this.game.globals.player;
 
     // Get the Tracking Entry for the requested enemy.
-    const entry = this.enemyTrackers.find(e => {
-      return e.enemy === enemy;
-    });
+    const entry = this.enemyTrackers.find(e => e.enemy === enemy);
 
     // If the enemy is in light, hide this tracker.
     if (player._playerLight._light.isPointInLight(enemy.position)) {
