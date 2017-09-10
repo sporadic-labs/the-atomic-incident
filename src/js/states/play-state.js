@@ -9,6 +9,7 @@ import Player from "../game-objects/player";
 import SoundEffectManager from "../game-objects/fx/sound-effect-manager.js";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import PostProcessor from "../game-objects/fx/post-processor.js";
+import { GAME_STATE_NAMES } from "../states";
 import { MENU_STATE_NAMES } from "../menu";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
@@ -98,6 +99,9 @@ export default class PlayState extends Phaser.State {
       else globals.plugins.satBody.disableDebugAll();
       globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
+      if (gameStore.gameState === GAME_STATE_NAMES.START_MENU) {
+        this.game.state.start(GAME_STATE_NAMES.START_MENU);
+      }
     });
     // Note: pausing and unpausing mutes/unmutes Phaser's sound manager. Changing the volume while
     // muted will be ignored. Instead, sync volume any time the game is unmuted.

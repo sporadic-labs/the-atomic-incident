@@ -11,7 +11,7 @@ class GameStore {
       highScore: 0,
       isPaused: false,
       menuState: MENU_STATE_NAMES.CLOSED,
-      gameState: GAME_STATE_NAMES.START_MENU,
+      gameState: GAME_STATE_NAMES.BOOT,
 
       // Actions - these mutate the state
       setScore: action(function(score) {
