@@ -63,7 +63,7 @@ module.exports = {
       {
         from: "./resources",
         to: "resources/",
-        ignore: ["audio/audacity/**/*", "atlases/frames/**/*"]
+        ignore: ["audio/audacity/**/*", "atlases/*-frames/**/*"]
       }
     ])
   ],
