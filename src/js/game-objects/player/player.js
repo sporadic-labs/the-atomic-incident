@@ -151,7 +151,7 @@ export default class Player extends Phaser.Sprite {
     this._maxSpeed = 2 * this._maxSpeed;
 
     // Reset the score and combo.
-    this.game.globals.comboTracker.updateScoreAndResetCombo();
+    this.game.globals.comboTracker.resetCombo();
 
     // Flicker tween to indicate when player is invulnerable
     this._isTakingDamage = true;
