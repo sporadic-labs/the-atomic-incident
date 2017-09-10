@@ -3,7 +3,7 @@ import Controller from "../../helpers/controller.js";
 import { checkOverlapWithGroup } from "../../helpers/sprite-utilities.js";
 import Scattershot from "../weapons/scattershot";
 import EnergyPickup from "../pickups/energy-pickup";
-import PlayerLight from "../lights/player-light";
+import PlayerLight from "./player-light";
 import Compass from "./compass";
 
 const ANIM_NAMES = {
