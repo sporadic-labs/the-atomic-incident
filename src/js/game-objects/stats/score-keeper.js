@@ -1,3 +1,5 @@
+import { gameStore } from "../../game-data/observable-stores";
+
 /**
  * Keep track of the players current score.
  * 
@@ -8,6 +10,7 @@ export default class ScoreKeeper {
   constructor(game) {
     this.game = game;
     this._score = 0;
+    gameStore.setScore(this._score);
   }
 
   /**
@@ -19,6 +22,7 @@ export default class ScoreKeeper {
    */
   incrementScore(points = 0) {
     this._score += points;
+    gameStore.setScore(this._score);
   }
 
   /**
@@ -39,5 +43,6 @@ export default class ScoreKeeper {
    */
   setScore(score = 0) {
     this._score = score;
+    gameStore.setScore(this._score);
   }
 }
