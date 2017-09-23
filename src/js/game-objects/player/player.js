@@ -5,6 +5,9 @@ import Scattershot from "../weapons/scattershot";
 import EnergyPickup from "../pickups/energy-pickup";
 import PlayerLight from "./player-light";
 import Compass from "./compass";
+import { GAME_STATE_NAMES } from "../../states";
+import { MENU_STATE_NAMES } from "../../menu";
+import { gameStore, preferencesStore } from "../../game-data/observable-stores";
 
 const ANIM_NAMES = {
   IDLE: "idle",
@@ -141,7 +144,8 @@ export default class Player extends Phaser.Sprite {
 
     if (this._playerLight.getLightRemaining() <= 0) {
       this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
-      this.game.state.restart();
+      gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
+      // this.game.state.restart();
     } else {
       this._playerLight.incrementRadius(-50);
     }

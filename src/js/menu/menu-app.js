@@ -6,6 +6,7 @@ import StartMenu from "./components/start-menu";
 import PauseMenu from "./components/pause-menu";
 import DebugMenu from "./components/debug-menu";
 import OptionsMenu from "./components/options-menu";
+import GameOverMenu from "./components/game-over-menu";
 import Switch from "./components/switch";
 import PlayPauseToggle from "./components/play-pause-toggle";
 
@@ -74,6 +75,12 @@ const Menu = observer(
       this.addMenuState(MENU_STATE_NAMES.OPTIONS);
     }
 
+    gameOver() {
+      this.props.gameStore.unpause();
+      this.addMenuState(MENU_STATE_NAMES.GAME_OVER);
+      // this.props.gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
+    }
+
     resume() {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
@@ -119,6 +126,12 @@ const Menu = observer(
               preferencesStore={preferencesStore}
               onResume={() => this.resume()}
               onBack={() => this.goBackOneState()}
+            />
+            <GameOverMenu
+              menuName={MENU_STATE_NAMES.GAME_OVER}
+              gameStore={gameStore}
+              onMainMenu={() => this.goToStartMenu()}
+              onRestart={() => this.startGame()}
             />
           </Switch>
 
