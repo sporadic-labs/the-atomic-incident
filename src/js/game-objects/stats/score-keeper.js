@@ -22,7 +22,7 @@ export default class ScoreKeeper {
    */
   incrementScore(points = 0) {
     this._score += points;
-    gameStore.setScore(this._score);
+    gameStore.incrementScore(points);
   }
 
   /**
