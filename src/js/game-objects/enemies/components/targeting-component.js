@@ -14,6 +14,7 @@ export default class TargetingComponent {
   }
 
   update() {
+    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
     arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
 
     // Stop moving

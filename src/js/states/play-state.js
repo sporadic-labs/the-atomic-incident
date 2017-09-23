@@ -18,6 +18,8 @@ import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 import ScoreKeeper from "../game-objects/stats/score-keeper";
 import ComboTracker from "../game-objects/stats/combo-tracker";
 import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
+import EnemyGroup from "../game-objects/enemies/enemy-group";
+import EnergyPickup from "../game-objects/pickups/energy-pickup";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -36,7 +38,7 @@ export default class PlayState extends Phaser.State {
     groups.background = game.add.group(groups.game, "background");
     groups.midground = game.add.group(groups.game, "midground");
     groups.foreground = game.add.group(groups.game, "foreground");
-    groups.enemies = game.add.group(groups.midground, "enemies");
+    groups.enemies = new EnemyGroup(game, groups.midground);
     groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding");
     groups.pickups = game.add.group(groups.foreground, "pickups");
     globals.groups = groups;
@@ -79,7 +81,7 @@ export default class PlayState extends Phaser.State {
 
     // Score
     globals.scoreKeeper = new ScoreKeeper(game);
-    globals.comboTracker = new ComboTracker(game, 2500);
+    globals.comboTracker = new ComboTracker(game, globals.groups.enemies, 2500);
 
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.hud);
@@ -91,6 +93,10 @@ export default class PlayState extends Phaser.State {
     // Waves of pickups and enemies
     new PickupSpawner(game);
     new EnemySpawner(game, player);
+
+    globals.groups.enemies.onEnemyKilled.add(enemy => {
+      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, 15, 3);
+    });
 
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {

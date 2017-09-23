@@ -22,7 +22,7 @@ export default class HeadsUpDisplay extends Phaser.Group {
     this._player = this.game.globals.player;
     this.fixedToCamera = true;
 
-    this.radar = new Radar(game);
+    this.radar = new Radar(game, this.game.globals.groups.enemies);
 
     // HUD animation variables.
     this._comboAnimationStartTime = 0;
