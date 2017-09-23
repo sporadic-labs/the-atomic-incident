@@ -3,6 +3,7 @@
  */
 
 import { GAME_STATE_NAMES } from "./index.js";
+import { gameStore } from "../game-data/observable-stores";
 
 export default class LoadState extends Phaser.State {
   preload() {
@@ -68,6 +69,7 @@ export default class LoadState extends Phaser.State {
     // Since load progress might not reach 100 in the load loop, manually do it
     this.loadingText.setText("100%");
 
-    this.game.state.start(GAME_STATE_NAMES.START_MENU);
+    // this.game.state.start(GAME_STATE_NAMES.START_MENU);
+    gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
   }
 }

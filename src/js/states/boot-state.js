@@ -5,6 +5,7 @@
  */
 
 import { GAME_STATE_NAMES } from "./index.js";
+import { gameStore } from "../game-data/observable-stores";
 
 export default class BootState extends Phaser.State {
   create() {
@@ -28,6 +29,7 @@ export default class BootState extends Phaser.State {
     // Debugging FPS
     this.game.time.advancedTiming = true;
 
-    this.game.state.start(GAME_STATE_NAMES.LOAD);
+    // this.game.state.start(GAME_STATE_NAMES.LOAD);
+    gameStore.setGameState(GAME_STATE_NAMES.LOAD);
   }
 }

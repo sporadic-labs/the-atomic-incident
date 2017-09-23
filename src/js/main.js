@@ -3,6 +3,7 @@ import "babel-polyfill";
 import "phaser-ce/build/custom/pixi";
 import "phaser-ce/build/custom/p2";
 import "phaser-ce/build/custom/phaser-split";
+import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Boot, Load, StartMenu, Play, GAME_STATE_NAMES } from "./states";
 
@@ -40,13 +41,13 @@ globals.tilemapNames = [
 ];
 globals.plugins = {};
 
-// Hook up the game store's state to automatically be updated when the game state changes
-game.state.onStateChange.add(stateName => {
-  gameStore.setGameState(stateName);
-});
-
 game.state.add(GAME_STATE_NAMES.BOOT, Boot);
 game.state.add(GAME_STATE_NAMES.LOAD, Load);
 game.state.add(GAME_STATE_NAMES.START_MENU, StartMenu);
 game.state.add(GAME_STATE_NAMES.PLAY, Play);
-game.state.start(GAME_STATE_NAMES.BOOT);
+
+gameStore.setGameState(GAME_STATE_NAMES.BOOT);
+
+autorun(() => {
+  game.state.start(gameStore.gameState);
+});
