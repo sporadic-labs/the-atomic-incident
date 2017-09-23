@@ -7,7 +7,7 @@ import PlayerLight from "./player-light";
 import Compass from "./compass";
 import { GAME_STATE_NAMES } from "../../states";
 import { MENU_STATE_NAMES } from "../../menu";
-import { gameStore, preferencesStore } from "../../game-data/observable-stores";
+import { gameStore } from "../../game-data/observable-stores";
 
 const ANIM_NAMES = {
   IDLE: "idle",
@@ -143,9 +143,11 @@ export default class Player extends Phaser.Sprite {
     if (this._isTakingDamage) return;
 
     if (this._playerLight.getLightRemaining() <= 0) {
+      // If the player has died, reset the camera, show the Game Over menu, and pause the game.
       this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
       gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
-      // this.game.state.restart();
+      // TODO(rex): Player death animation and something interactive, instead of just pausing the game...
+      gameStore.pause();
     } else {
       this._playerLight.incrementRadius(-50);
     }
