@@ -9,8 +9,11 @@ export default class Radar {
   /**
    * @param {Phaser.Game} game
    */
-  constructor(game) {
+  constructor(game, enemyGroup) {
     this.game = game;
+
+    enemyGroup.onEnemyAdded.add(enemy => this.registerEnemy(enemy));
+    enemyGroup.onEnemyKilled.add(enemy => this.removeEnemy(enemy));
     this._trackedEnemies = [];
   }
 

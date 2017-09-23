@@ -5,7 +5,7 @@
  * @class ComboTracker
  */
 export default class ComboTracker {
-  constructor(game, comboTimeout = 2500) {
+  constructor(game, enemyGroup, comboTimeout = 2500) {
     // Store the game.
     this.game = game;
     //Current combo value.
@@ -14,6 +14,8 @@ export default class ComboTracker {
     this._killStreak = 0;
     // Current score, kill streak x combo modifier.
     this._comboScore = 0;
+
+    enemyGroup.onEnemyKilled.add(() => this.incrementCombo(1, 0.2));
 
     // Timer to determine when the combo resets.
     this._comboTimeout = comboTimeout;
