@@ -64,6 +64,12 @@ const Menu = observer(
       this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
     }
 
+    restartGame() {
+      this.props.gameStore.unpause();
+      this.addMenuState(MENU_STATE_NAMES.CLOSED);
+      this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
+    }
+
     goToStartMenu() {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
@@ -76,9 +82,8 @@ const Menu = observer(
     }
 
     gameOver() {
-      this.props.gameStore.unpause();
+      this.props.gameStore.pause();
       this.addMenuState(MENU_STATE_NAMES.GAME_OVER);
-      // this.props.gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
     }
 
     resume() {
@@ -131,7 +136,7 @@ const Menu = observer(
               menuName={MENU_STATE_NAMES.GAME_OVER}
               gameStore={gameStore}
               onMainMenu={() => this.goToStartMenu()}
-              onRestart={() => this.startGame()}
+              onRestart={() => this.restartGame()}
             />
           </Switch>
 
