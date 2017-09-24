@@ -197,7 +197,20 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">asset-frames/enemies/arrow-idle.png</key>
+            <key type="filename">asset-frames/enemies/arrow-big.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>15,15,30,30</rect>
+                <key>scale9Paddings</key>
+                <rect>15,15,30,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/enemies/arrow-small.png</key>
             <key type="filename">asset-frames/enemies/bomber-eye-idle-01.png</key>
             <key type="filename">asset-frames/enemies/bomber-idle-01.png</key>
             <key type="filename">asset-frames/enemies/circle-idle.png</key>
