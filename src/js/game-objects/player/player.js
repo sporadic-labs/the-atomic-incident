@@ -23,6 +23,8 @@ export default class Player extends Phaser.Sprite {
     this.anchor.set(0.5);
     parentGroup.add(this);
 
+    this.onDamage = new Phaser.Signal();
+
     this._compass = new Compass(game, parentGroup, this.width * 0.6);
 
     this._isTakingDamage = false;
@@ -156,9 +158,6 @@ export default class Player extends Phaser.Sprite {
     const originalSpeed = this._maxSpeed;
     this._maxSpeed = 2 * this._maxSpeed;
 
-    // Reset the score and combo.
-    this.game.globals.comboTracker.resetCombo();
-
     // Flicker tween to indicate when player is invulnerable
     this._isTakingDamage = true;
     const tween = this.game.make
@@ -170,6 +169,8 @@ export default class Player extends Phaser.Sprite {
       this._isTakingDamage = false;
       this._maxSpeed = originalSpeed;
     }, this);
+
+    this.onDamage.dispatch();
   }
 
   _onCollideWithEnemy(self, enemy) {
@@ -189,6 +190,7 @@ export default class Player extends Phaser.Sprite {
   }
 
   destroy(...args) {
+    this.onDamage.dispose();
     this._timer.destroy();
     this.game.tweens.removeFrom(this);
     for (const key in this._weapons) {

@@ -5,12 +5,12 @@
  * 
  * @class Radar
  */
-export default class Radar {
+export default class Radar extends Phaser.Group {
   /**
    * @param {Phaser.Game} game
    */
-  constructor(game, enemyGroup) {
-    this.game = game;
+  constructor(game, parent, enemyGroup) {
+    super(game, parent, "radar");
 
     enemyGroup.onEnemyAdded.add(enemy => this.registerEnemy(enemy));
     enemyGroup.onEnemyKilled.add(enemy => this.removeEnemy(enemy));
@@ -55,7 +55,6 @@ export default class Radar {
   registerEnemy(enemy) {
     // Shorthand.
     const player = this.game.globals.player;
-    const hud = this.game.globals.hud;
 
     // Calculate initial position of the Enemy Tracker.
     const { x, y } = this._getTrackerPosition(enemy);
@@ -71,7 +70,7 @@ export default class Radar {
     arrowImg.visible = false;
 
     // Add the Arrow Image to the HUD group.
-    hud.add(arrowImg);
+    this.add(arrowImg);
 
     // And add a Tracking entry, which will be useful for updating the position.
     this._trackedEnemies.push({ enemy: enemy, tracker: arrowImg });

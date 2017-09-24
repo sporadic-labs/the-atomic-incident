@@ -9,17 +9,17 @@ import Player from "../game-objects/player";
 import SoundEffectManager from "../game-objects/fx/sound-effect-manager.js";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import PostProcessor from "../game-objects/fx/post-processor.js";
-import { GAME_STATE_NAMES } from "../states";
 import { MENU_STATE_NAMES } from "../menu";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import MapManager from "../game-objects/level-manager";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
-import ScoreKeeper from "../game-objects/stats/score-keeper";
-import ComboTracker from "../game-objects/stats/combo-tracker";
 import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
 import EnemyGroup from "../game-objects/enemies/enemy-group";
 import EnergyPickup from "../game-objects/pickups/energy-pickup";
+import Score from "../game-objects/hud/score";
+import Combo from "../game-objects/hud/combo";
+import Radar from "../game-objects/hud/radar";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -35,6 +35,7 @@ export default class PlayState extends Phaser.State {
       gameOverlay: game.add.group(this.world, "game-overlay"),
       hud: game.add.group(this.world, "hud")
     };
+    groups.hud.fixedToCamera = true;
     groups.background = game.add.group(groups.game, "background");
     groups.midground = game.add.group(groups.game, "midground");
     groups.foreground = game.add.group(groups.game, "foreground");
@@ -79,12 +80,14 @@ export default class PlayState extends Phaser.State {
     this.camera.follow(player);
     globals.player = player;
 
-    // Score
-    globals.scoreKeeper = new ScoreKeeper(game);
-    globals.comboTracker = new ComboTracker(game, globals.groups.enemies, 2500);
-
     // HUD
     globals.hud = new HeadsUpDisplay(game, groups.hud);
+    new Radar(game, groups.hud, this.game.globals.groups.enemies);
+
+    const score = new Score(game, groups.hud);
+    score.position.set(this.game.width - 18, 13);
+    const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
+    combo.position.set(this.game.width - 18, 45);
 
     // Keep track of what wave the player is on using the globals object.
     const waveNum = 0;
@@ -112,10 +115,28 @@ export default class PlayState extends Phaser.State {
     this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
 
     // Debug menu
+    const debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
+      font: "18px 'Alfa Slab One'",
+      fill: "#9C9C9C"
+    });
+    debugText.anchor.set(0, 1);
+    groups.hud.add(debugText);
     game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
       gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
       gameStore.pause();
     });
+
+    // FPS
+    this._fpsText = game.make.text(15, game.height - 25, "60", {
+      font: "18px 'Alfa Slab One'",
+      fill: "#9C9C9C"
+    });
+    this._fpsText.anchor.set(0, 1);
+    groups.hud.add(this._fpsText);
+  }
+
+  update() {
+    this._fpsText.setText(this.game.time.fps);
   }
 
   shutdown() {
