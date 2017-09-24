@@ -7,7 +7,8 @@ export default class Enemy extends Phaser.Sprite {
     const enemy = new Enemy(game, "assets", "enemies/arrow-big", position, enemyGroup, {
       color: Color.blue(),
       health: 500,
-      speed: 50
+      speed: 50,
+      visionRadius: null
     });
     return enemy;
   }
@@ -16,7 +17,8 @@ export default class Enemy extends Phaser.Sprite {
     const enemy = new Enemy(game, "assets", "enemies/arrow-small", position, enemyGroup, {
       color: Color.red(),
       health: 100,
-      speed: 100
+      speed: 100,
+      visionRadius: null
     });
     return enemy;
   }
