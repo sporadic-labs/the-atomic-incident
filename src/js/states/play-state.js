@@ -14,12 +14,12 @@ import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";
 import MapManager from "../game-objects/level-manager";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
-import HeadsUpDisplay from "../game-objects/hud/heads-up-display.js";
 import EnemyGroup from "../game-objects/enemies/enemy-group";
 import EnergyPickup from "../game-objects/pickups/energy-pickup";
 import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar";
+import Ammo from "../game-objects/hud/ammo";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -81,13 +81,13 @@ export default class PlayState extends Phaser.State {
     globals.player = player;
 
     // HUD
-    globals.hud = new HeadsUpDisplay(game, groups.hud);
     new Radar(game, groups.hud, this.game.globals.groups.enemies);
-
     const score = new Score(game, groups.hud);
     score.position.set(this.game.width - 18, 13);
     const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
     combo.position.set(this.game.width - 18, 45);
+    const ammo = new Ammo(game, groups.hud, player);
+    ammo.position.set(18, 13);
 
     // Keep track of what wave the player is on using the globals object.
     const waveNum = 0;

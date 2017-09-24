@@ -38,8 +38,6 @@ export default class BaseWeapon extends Phaser.Group {
     if (!this._ableToAttack) return;
     this._isReloading = true;
     this._ableToAttack = false;
-    // Start reload animation in HUD.
-    this.game.globals.hud.startHudReloadAnimation(this._reloadTime);
     // TODO(rex): Reload animation for the weapon.
     this._cooldownTimer.add(this._reloadTime, () => {
       this.fillAmmo();
