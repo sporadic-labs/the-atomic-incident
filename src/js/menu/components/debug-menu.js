@@ -3,7 +3,7 @@ import { h } from "preact";
 import InputFix from "./input-fix";
 
 export default function DebugMenu({ preferencesStore, onResume }) {
-  const { volume, shadowOpacity, shadersEnabled, physicsDebug } = preferencesStore;
+  const { volume, shadowOpacity, shadersEnabled, physicsDebug, skipMenu } = preferencesStore;
   return (
     <div id="debug-menu" class="menu">
       <button class="btn-close" onClick={onResume}>
@@ -52,6 +52,15 @@ export default function DebugMenu({ preferencesStore, onResume }) {
             type="checkbox"
             checked={physicsDebug}
             onClick={() => preferencesStore.setPhysicsDebug(!physicsDebug)}
+          />
+        </label>
+
+        <label>
+          Skip main menu:
+          <input
+            type="checkbox"
+            checked={skipMenu}
+            onClick={() => preferencesStore.setSkipMenu(!skipMenu)}
           />
         </label>
       </form>
