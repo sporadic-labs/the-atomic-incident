@@ -50,4 +50,5 @@ gameStore.setGameState(GAME_STATE_NAMES.BOOT);
 
 autorun(() => {
   game.state.start(gameStore.gameState);
+  if (gameStore.pendingGameRestart) game.state.start(gameStore.gameState);
 });

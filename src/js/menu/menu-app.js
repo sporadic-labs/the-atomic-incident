@@ -65,8 +65,10 @@ const Menu = observer(
     }
 
     restartGame() {
-      // TODO(rex): Do something that restarts the game.
-      this.startGame();
+      this.props.gameStore.unpause();
+      this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
+      this.props.gameStore.restartGame();
+      this.addMenuState(MENU_STATE_NAMES.CLOSED);
     }
 
     goToStartMenu() {

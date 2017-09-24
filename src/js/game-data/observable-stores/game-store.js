@@ -12,6 +12,7 @@ class GameStore {
       isPaused: false,
       menuState: MENU_STATE_NAMES.CLOSED,
       gameState: GAME_STATE_NAMES.BOOT,
+      pendingGameRestart: false,
 
       // Actions - these mutate the state
       setScore: action(function(score) {
@@ -34,6 +35,9 @@ class GameStore {
       }),
       setGameState: action(function(newGameState) {
         this.gameState = newGameState;
+      }),
+      restartGame: action(function() {
+        this.pendingGameRestart = true;
       })
     });
   }
