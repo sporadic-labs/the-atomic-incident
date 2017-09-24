@@ -75,6 +75,7 @@
 
   .menu {
     min-width: 50%;
+    padding: 20px;
     position: relative;
     border-radius: 10px;
     pointer-events: initial;
@@ -82,7 +83,7 @@
     background-color: #3c98f0;
 
     .menu-title {
-      margin: 18px auto 20px auto;
+      margin: 0 auto 20px auto;
       padding: 12px;
       font-size: 32px;
       font-weight: 600;
