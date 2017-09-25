@@ -20,6 +20,7 @@ import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar";
 import Ammo from "../game-objects/hud/ammo";
+import Enemy from "../game-objects/enemies/enemy.js";
 
 export default class PlayState extends Phaser.State {
   create() {

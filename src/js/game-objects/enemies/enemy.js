@@ -1,6 +1,8 @@
 import Color from "../../helpers/color";
 import HealthBar from "./components/health-bar.js";
 import TargetingComp from "./components/targeting-component";
+import SAT from "sat";
+import { debugShape } from "../../helpers/sprite-utilities";
 
 export default class Enemy extends Phaser.Sprite {
   static MakeBig(game, position, enemyGroup) {
@@ -58,11 +60,21 @@ export default class Enemy extends Phaser.Sprite {
     enemyGroup.addEnemy(this);
 
     // Config arcade and SAT body physics
+    // - Arcade physics hitbox is small. It is used to allow enemies to move without jostling one
+    //   another and to be conservative when checking if enemy has reached the player.
+    // - SAT body hitbox is used for the bullet to be liberal with determining when a bullet has hit
+    //   an enemy
     game.physics.arcade.enable(this);
     const diameter = 0.2 * this.width; // Fudge factor - body smaller than sprite
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
     this.body.collideWorldBounds = true;
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
+    // Counter-clockwise points defined in pixel coordinates of 45 x 45 pixel image, then scaled to
+    // the current image dimensions and shifted relative to the origin. Hacky for now.
+    const points = [{ x: 22.5, y: 8 }, { x: 36, y: 40 }, { x: 8, y: 40 }].map(p => ({
+      x: p.x / 45 * this.width - this.width / 2,
+      y: p.y / 45 * this.height - this.height / 2
+    }));
+    this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
   }
 
   takeDamage(damage) {

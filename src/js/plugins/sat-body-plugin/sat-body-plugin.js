@@ -65,7 +65,7 @@ export default class SatBodyPlugin extends Phaser.Plugin {
   }
 
   /** 
-   * Update the SAT bodies after the final arcade physics calculations are run ( which happens in
+   * Update the SAT bodies after the final arcade physics calculations are run (which happens in
    * stage.postUpdate). This is automatically called by the plugin manager. See
    * Phaser/core/Game#updateLogic for the lifecycle.
    */

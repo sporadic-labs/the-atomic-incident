@@ -32,6 +32,14 @@ export default class SatBody {
     sprite.events.onDestroy.add(() => this.destroy());
   }
 
+  // MH: Needs better testing before being used widely!
+  initPolygon(points) {
+    this._bodyType = SatBody.BODY_TYPE.POLYGON;
+    const b = this._sprite.body ? this._sprite.body : this._sprite;
+    this._body = polygon(vec(b.x, b.y), points.map(p => vec(p.x, p.y)));
+    return this;
+  }
+
   /**
    * Creates a SAT box for the sprite. If there is an arcade body, it is used as reference for the
    * sat body position, width and height. The SAT box has an offset to ensure rotation works
@@ -98,17 +106,6 @@ export default class SatBody {
    */
   setPivot(x, y) {
     this._body.setOffset(vec(-x, -y));
-    return this;
-  }
-
-  // MH: Needs testing before being used!
-  initPolygon(points) {
-    console.warn("Untested polygon SAT body!");
-    // This function would be more convient if it took an array or parsed the arguments variable to
-    // construct the points
-    this._bodyType = SatBody.BODY_TYPE.SatBody.BODY_TYPEPOLYGON;
-    const s = this._sprite;
-    this._body = polygon(vec(s.x, s.y), points);
     return this;
   }
 
@@ -191,8 +188,8 @@ export default class SatBody {
   }
 
   postUpdate() {
-    // Update the position of the sat body differently based
-    // on whether an arcade body exists or not.
+    // Update the position of the sat body differently based on whether an arcade body exists or
+    // not.
     if (this._sprite.body) {
       // Update the body based on the latest arcade body physics
       this.updateFromArcadeBody();
@@ -242,8 +239,8 @@ export default class SatBody {
       this._body.setAngle(this._sprite.rotation); // MH: World rotation?
     } else if (this._bodyType === SatBody.BODY_TYPE.POLYGON) {
       // MH: Not yet sure what needs to happen here
-      this._body.pos.x = arcadeBody.x + -this._body.offset.x;
-      this._body.pos.y = arcadeBody.y + -this._body.offset.y;
+      this._body.pos.x = arcadeBody.x + arcadeBody.halfWidth + -this._body.offset.x;
+      this._body.pos.y = arcadeBody.y + arcadeBody.halfHeight + -this._body.offset.y;
       this._body.setAngle(this._sprite.rotation); // MH: World rotation?
     }
   }
@@ -313,8 +310,9 @@ export default class SatBody {
   _updateDebug() {
     this._debugGraphics.position.copyFrom(this._body.pos);
     this._debugGraphics.clear();
-    this._debugGraphics.lineStyle(1, this._debugColor, 0.6);
-    this._debugGraphics.beginFill(this._debugColor, 0.4);
+    this._debugGraphics.lineStyle(1, this._debugColor, 0.8);
+    this._debugGraphics.beginFill(this._debugColor, 0.6);
+    this._debugGraphics.drawCircle(0, 0, 1); // Center
     if (this._bodyType === SatBody.BODY_TYPE.CIRCLE) {
       this._debugGraphics.drawCircle(0, 0, 2 * this._body.r);
     } else if (

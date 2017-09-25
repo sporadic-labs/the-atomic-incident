@@ -51,7 +51,7 @@ export default class Scattershot extends BaseWeapon {
       "weapons/slug",
       this,
       this._player,
-      35,
+      10,
       angle,
       speed
     );

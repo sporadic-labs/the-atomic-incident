@@ -1,3 +1,12 @@
+export function debugShape(game, position, parent, shape) {
+  const g = game.make.graphics(position.x, position.y);
+  parent.add(g);
+  g.beginFill(0xff0000, 0.5);
+  g.drawShape(shape);
+  g.endFill();
+  return g;
+}
+
 export function applyRandomLightnessTint(sprite, h, s, l) {
   l += sprite.game.rnd.realInRange(-0.1, 0.1);
   const rgb = Phaser.Color.HSLtoRGB(h, s, l);
