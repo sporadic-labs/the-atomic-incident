@@ -2,7 +2,7 @@ import { h } from "preact";
 
 import InputFix from "./input-fix";
 
-export default function DebugMenu({ preferencesStore, onResume }) {
+export default function DebugMenu({ preferencesStore, gameStore, onResume }) {
   const { volume, shadowOpacity, shadersEnabled, physicsDebug, skipMenu } = preferencesStore;
   return (
     <div id="debug-menu" class="menu">
@@ -10,7 +10,7 @@ export default function DebugMenu({ preferencesStore, onResume }) {
         <i class="fa fa-times" aria-hidden="true" />
       </button>
       <div class="menu-title">Debug Menu</div>
-      <form>
+      <div>
         <label>
           Volume
           <InputFix
@@ -63,7 +63,8 @@ export default function DebugMenu({ preferencesStore, onResume }) {
             onClick={() => preferencesStore.setSkipMenu(!skipMenu)}
           />
         </label>
-      </form>
+        <button onClick={() => gameStore.resetHighScore()}>Reset High Score</button>
+      </div>
     </div>
   );
 }
