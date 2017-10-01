@@ -38,6 +38,9 @@ class GameStore {
       }),
       restartGame: action(function() {
         this.pendingGameRestart = true;
+      }),
+      markRestartComplete: action(function() {
+        this.pendingGameRestart = false;
       })
     });
   }
