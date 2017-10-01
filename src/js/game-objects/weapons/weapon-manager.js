@@ -10,7 +10,7 @@ export default class WeaponManager extends Phaser.Group {
 
     this._scattershot = new Scattershot(game, this, player, enemies);
     this._rapidFire = new RapidFire(game, this, player, enemies);
-    this._activeWeapon = this._scattershot;
+    this._activeWeapon = this._rapidFire;
   }
 
   getActiveWeapon() {
