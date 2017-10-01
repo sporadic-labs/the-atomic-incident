@@ -13,10 +13,9 @@ export default class Ammo extends Phaser.Group {
   }
 
   update() {
-    if (!this._player.weapon._isReloading) {
-      this._ammoText.setText(
-        this._player.weapon.getAmmo() + " / " + this._player.weapon._totalAmmo
-      );
+    const weapon = this._player.weaponManager.getActiveWeapon();
+    if (!weapon._isReloading) {
+      this._ammoText.setText(weapon.getAmmo() + " / " + weapon._totalAmmo);
     } else {
       this._ammoText.setText("Reloading...");
     }

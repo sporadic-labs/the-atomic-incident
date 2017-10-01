@@ -2,25 +2,17 @@ import BaseWeapon from "./base-weapon";
 import Projectile from "./base-projectile";
 import WEAPON_TYPES from "./weapon-types";
 
-export default class Scattershot extends BaseWeapon {
+export default class RapidFire extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 5, 480, 1800);
-    this._damage = 20;
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.RAPID_FIRE, 100, 25, 1800);
+    this._damage = 10;
+    this._speed = 500;
   }
 
   fire(angle) {
-    if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
-      // Find trajectory
-      const pelletNum = this.game.rnd.integerInRange(16, 24);
-
-      // randomize the trajectory of every bulconst in the shotgun blast
-      for (let i = 0; i < pelletNum; i++) {
-        const mod = this.game.rnd.integerInRange(0, 30) * (Math.PI / 180) * this.game.rnd.sign();
-        const rndAngle = angle + mod;
-        const speed = this.game.rnd.integerInRange(350, 400);
-        this._createProjectile(rndAngle, 24, speed);
-      }
-
+    if (this.isAbleToAttack()) {
+      const randomAngle = this.game.rnd.realInRange(-3, 3) * (Math.PI / 180);
+      this._createProjectile(angle + randomAngle, 24, this._speed);
       this.incrementAmmo(-1);
       if (this.getAmmo() > 0) this._startCooldown(this._cooldownTime);
       else this._reload();
@@ -42,8 +34,8 @@ export default class Scattershot extends BaseWeapon {
       angle,
       speed
     );
-    p.scale.setTo(0.5, 0.5);
-    const rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
+    p.scale.setTo(0.4, 0.4);
+    const rgb = Phaser.Color.HSLtoRGB(0, 1, 0);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
   }
 }
