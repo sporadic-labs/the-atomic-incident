@@ -16,11 +16,11 @@ import MapManager from "../game-objects/level-manager";
 import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 import EnemyGroup from "../game-objects/enemies/enemy-group";
 import EnergyPickup from "../game-objects/pickups/energy-pickup";
+import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
 import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar";
 import Ammo from "../game-objects/hud/ammo";
-import Enemy from "../game-objects/enemies/enemy.js";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -97,6 +97,7 @@ export default class PlayState extends Phaser.State {
     // Waves of pickups and enemies
     new PickupSpawner(game);
     new EnemySpawner(game, player);
+    new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     globals.groups.enemies.onEnemyKilled.add(enemy => {
       new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, 15, 3);

@@ -17,6 +17,10 @@ export default class WeaponManager extends Phaser.Group {
     return this._activeWeapon;
   }
 
+  getActiveType() {
+    return this._activeWeapon._type;
+  }
+
   isAbleToAttack() {
     if (this._activeWeapon && this._activeWeapon.isAbleToAttack()) return true;
     return false;

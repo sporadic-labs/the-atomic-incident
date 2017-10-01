@@ -1,8 +1,8 @@
 export default class BaseWeapon extends Phaser.Group {
-  constructor(game, parentGroup, player, enemies, weaponName, totalAmmo, cooldownTime, reloadTime) {
-    super(game, parentGroup, weaponName);
+  constructor(game, parentGroup, player, enemies, weaponType, totalAmmo, cooldownTime, reloadTime) {
+    super(game, parentGroup, weaponType);
 
-    this._name = weaponName;
+    this._type = weaponType;
     this._player = player;
     this._enemies = enemies;
     this._ableToAttack = true;

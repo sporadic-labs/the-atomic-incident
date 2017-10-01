@@ -54,6 +54,19 @@ export default class MapManager {
   }
 
   /**
+   * Parses the "pickup" object layer from the tilemap and returns an array of points
+   * 
+   * @returns {Phaser.Point[]}
+   * @memberof MapManager
+   */
+  getPickupLocations() {
+    const pickups = this.tilemap.objects["pickups"] || [];
+    return pickups.map(
+      pickup => new Phaser.Point(pickup.x + pickup.width / 2, pickup.y + pickup.height / 2)
+    );
+  }
+
+  /**
    * Check if the position (in world, pixel coordinates) in the tilemap is empty. This specifically
    * checks the wall layer, where all the colliding tiles are.
    * 
