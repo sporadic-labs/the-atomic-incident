@@ -5,7 +5,6 @@ import Scattershot from "../weapons/scattershot";
 import EnergyPickup from "../pickups/energy-pickup";
 import PlayerLight from "./player-light";
 import Compass from "./compass";
-import { GAME_STATE_NAMES } from "../../states";
 import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 
@@ -18,7 +17,7 @@ const ANIM_NAMES = {
 };
 
 export default class Player extends Phaser.Sprite {
-  constructor(game, x, y, parentGroup) {
+  constructor(game, x, y, parentGroup, enemies) {
     super(game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -35,14 +34,14 @@ export default class Player extends Phaser.Sprite {
     // NOTE(rex): Not quite sure if this should be a part of the player or not...
     this.damage = 10000;
 
-    this.weapon = new Scattershot(game, parentGroup, this);
-
     // Shorthand
     const globals = this.game.globals;
     this._enemies = globals.groups.enemies;
     this._pickups = globals.groups.pickups;
     this._postProcessor = globals.postProcessor;
     this._mapManager = globals.mapManager;
+
+    this.weapon = new Scattershot(game, parentGroup, this, enemies);
 
     // Setup animations
     const idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);

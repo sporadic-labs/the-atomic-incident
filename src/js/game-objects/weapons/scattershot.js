@@ -2,14 +2,9 @@ import BaseWeapon from "./base-weapon";
 import Projectile from "./base-projectile";
 
 export default class Scattershot extends BaseWeapon {
-  constructor(game, parentGroup, player) {
-    super(game, parentGroup, "Scattershot", player);
-
-    // Initial weapon settings:
-    //  Ammo               - 24 shots / clip
-    //  Time between shots - 400 ms
-    //  Reload time        - 1800 ms
-    this.init(24, 480, 1800);
+  constructor(game, parentGroup, player, enemies) {
+    super(game, parentGroup, player, enemies, "Scattershot", 5, 480, 1800);
+    this._damage = 20;
   }
 
   fire(angle) {
@@ -21,9 +16,8 @@ export default class Scattershot extends BaseWeapon {
       for (let i = 0; i < pelletNum; i++) {
         const mod = this.game.rnd.integerInRange(0, 30) * (Math.PI / 180) * this.game.rnd.sign();
         const rndAngle = angle + mod;
-        const speed = this.game.rnd.integerInRange(364, 376);
-        const perpendicularOffset = this.game.rnd.integerInRange(-5, 5);
-        this._createProjectile(rndAngle, 24, perpendicularOffset, speed);
+        const speed = this.game.rnd.integerInRange(350, 400);
+        this._createProjectile(rndAngle, 24, speed);
       }
 
       this.incrementAmmo(-1);
@@ -36,13 +30,9 @@ export default class Scattershot extends BaseWeapon {
     }
   }
 
-  _createProjectile(angle, playerDistance, perpendicularOffset, speed) {
-    const perpAngle = angle - Math.PI / 2;
-    const x =
-      this._player.x + playerDistance * Math.cos(angle) - perpendicularOffset * Math.cos(perpAngle);
-    const y =
-      this._player.y + playerDistance * Math.sin(angle) - perpendicularOffset * Math.sin(perpAngle);
-    // shotgun blast is made up of a bunch of slugs at half size.
+  _createProjectile(angle, playerDistance, speed) {
+    const x = this._player.x + playerDistance * Math.cos(angle);
+    const y = this._player.y + playerDistance * Math.sin(angle);
     const p = new Projectile(
       this.game,
       x,
@@ -51,7 +41,7 @@ export default class Scattershot extends BaseWeapon {
       "weapons/slug",
       this,
       this._player,
-      10,
+      this._damage,
       angle,
       speed
     );
