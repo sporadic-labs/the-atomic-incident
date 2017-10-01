@@ -2,6 +2,7 @@ import { gameStore } from "../../game-data/observable-stores";
 import { autorun } from "mobx";
 
 const baseTextStyle = { font: "30px 'Alfa Slab One'", fill: "#ffd800" };
+const toastTextStyle = { font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center" };
 const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#a0976a" });
 
 /**
@@ -23,7 +24,7 @@ export default class Score extends Phaser.Group {
     this._scorePadText.anchor.setTo(1, 0);
     this.add(this._scorePadText);
 
-    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "", baseTextStyle);
+    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "", toastTextStyle);
     this._highScoreMsgText.anchor.setTo(0.5, 0);
     this.add(this._highScoreMsgText);
 
@@ -31,6 +32,7 @@ export default class Score extends Phaser.Group {
     this._scoreUnsubscribe = autorun(() => {
       this._updateDisplay(gameStore.score);
       this._showHighScoreMessage(gameStore.score, gameStore.highScore);
+      this._showHighScoreIcon();
     });
   }
 
@@ -51,6 +53,12 @@ export default class Score extends Phaser.Group {
       setTimeout(() => {
         this._highScoreMsgText.setText("");
       }, 3000);
+    }
+  }
+
+  _showHighScoreIcon() {
+    if (gameStore.newHighScore) {
+      // TODO(rex): show an icon if the player has a new score!
     }
   }
 
