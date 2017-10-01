@@ -112,11 +112,13 @@ const Menu = observer(
           <Switch menuName={gameStore.menuState}>
             <StartMenu
               menuName={MENU_STATE_NAMES.START_MENU}
+              gameStore={gameStore}
               onOptions={() => this.goToOptionsMenu()}
               onStart={() => this.startGame()}
             />
             <PauseMenu
               menuName={MENU_STATE_NAMES.PAUSE}
+              gameStore={gameStore}
               onMainMenu={() => this.goToStartMenu()}
               onOptions={() => this.goToOptionsMenu()}
               onResume={() => this.resume()}
