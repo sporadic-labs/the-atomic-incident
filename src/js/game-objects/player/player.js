@@ -148,6 +148,7 @@ export default class Player extends Phaser.Sprite {
       // If the player has died, reset the camera, show the Game Over menu, and pause the game.
       this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
       gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
+      gameStore.updateHighScore();
       // TODO(rex): Player death animation and something interactive, instead of just pausing the game...
       gameStore.pause();
     } else {

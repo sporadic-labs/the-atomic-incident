@@ -23,9 +23,14 @@ export default class Score extends Phaser.Group {
     this._scorePadText.anchor.setTo(1, 0);
     this.add(this._scorePadText);
 
+    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "", baseTextStyle);
+    this._highScoreMsgText.anchor.setTo(0.5, 0);
+    this.add(this._highScoreMsgText);
+
     gameStore.setScore(0);
     this._scoreUnsubscribe = autorun(() => {
       this._updateDisplay(gameStore.score);
+      this._showHighScoreMessage(gameStore.score, gameStore.highScore);
     });
   }
 
@@ -36,6 +41,21 @@ export default class Score extends Phaser.Group {
     const scoreDigits = String(score).length;
     const padText = scoreDigits <= 6 ? "0".repeat(6 - scoreDigits) : "";
     this._scorePadText.setText(padText);
+  }
+
+  _showHighScoreMessage(score, highScore) {
+    if (!gameStore.newHighScore && score > highScore) {
+      gameStore.newHighScore = true;
+      this._highScoreMsgText.setText("New high score!");
+
+      setTimeout(() => {
+        this._highScoreMsgText.setText("");
+      }, 3000);
+    }
+  }
+
+  newHighScore() {
+    return this._newHighScore;
   }
 
   destroy(...args) {
