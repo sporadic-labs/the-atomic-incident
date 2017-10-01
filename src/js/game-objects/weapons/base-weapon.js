@@ -17,7 +17,7 @@ export default class BaseWeapon extends Phaser.Group {
   }
 
   isAbleToAttack() {
-    return this._ableToAttack;
+    return this._ableToAttack && !this.isAmmoEmpty();
   }
 
   _reload() {

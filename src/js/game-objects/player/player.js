@@ -1,12 +1,12 @@
 import MovementController from "./movement-controller";
 import Controller from "../../helpers/controller.js";
 import { checkOverlapWithGroup } from "../../helpers/sprite-utilities.js";
-import Scattershot from "../weapons/scattershot";
 import EnergyPickup from "../pickups/energy-pickup";
 import PlayerLight from "./player-light";
 import Compass from "./compass";
 import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
+import WeaponManager from "../weapons/weapon-manager";
 
 const ANIM_NAMES = {
   IDLE: "idle",
@@ -17,7 +17,7 @@ const ANIM_NAMES = {
 };
 
 export default class Player extends Phaser.Sprite {
-  constructor(game, x, y, parentGroup, enemies) {
+  constructor(game, x, y, parentGroup) {
     super(game, x, y, "assets", "player/idle-01");
     this.anchor.set(0.5);
     parentGroup.add(this);
@@ -41,7 +41,7 @@ export default class Player extends Phaser.Sprite {
     this._postProcessor = globals.postProcessor;
     this._mapManager = globals.mapManager;
 
-    this.weapon = new Scattershot(game, parentGroup, this, enemies);
+    this.weaponManager = new WeaponManager(game, parentGroup, this, this._enemies);
 
     // Setup animations
     const idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
@@ -101,12 +101,8 @@ export default class Player extends Phaser.Sprite {
     const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     this.rotation = this.position.angle(mousePos) + Math.PI / 2;
 
-    if (
-      this._attackControls.isControlActive("attack") &&
-      this.weapon.isAbleToAttack() &&
-      !this.weapon.isAmmoEmpty()
-    ) {
-      this.weapon.fire(this.position.angle(mousePos));
+    if (this._attackControls.isControlActive("attack") && this.weaponManager.isAbleToAttack()) {
+      this.weaponManager.fire(this.position.angle(mousePos));
     }
 
     // Enemy collisions
@@ -192,9 +188,6 @@ export default class Player extends Phaser.Sprite {
     this.onDamage.dispose();
     this._timer.destroy();
     this.game.tweens.removeFrom(this);
-    for (const key in this._weapons) {
-      this._weapons[key].destroy();
-    }
     this._compass.destroy();
     super.destroy(...args);
   }

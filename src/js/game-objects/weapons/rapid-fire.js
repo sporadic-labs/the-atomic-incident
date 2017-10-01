@@ -2,10 +2,11 @@ import BaseWeapon from "./base-weapon";
 import Projectile from "./base-projectile";
 import WEAPON_TYPES from "./weapon-types";
 
-export default class Scattershot extends BaseWeapon {
+export default class RapidFire extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 5, 480, 1800);
-    this._damage = 20;
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.RAPID_FIRE, 40, 480, 1800);
+    this._damage = 5;
+    this._speed = 500;
   }
 
   fire(angle) {

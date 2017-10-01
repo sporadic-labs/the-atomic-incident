@@ -1,0 +1,4 @@
+export default {
+  SCATTERSHOT: "SCATTERSHOT",
+  RAPID_FIRE: "RAPID_FIRE"
+};
