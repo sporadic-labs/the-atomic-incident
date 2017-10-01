@@ -124,6 +124,7 @@ const Menu = observer(
             <DebugMenu
               menuName={MENU_STATE_NAMES.DEBUG}
               preferencesStore={preferencesStore}
+              gameStore={gameStore}
               onResume={() => this.resume()}
             />
             <OptionsMenu
