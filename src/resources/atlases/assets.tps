@@ -214,6 +214,7 @@
             <key type="filename">asset-frames/enemies/bomber-eye-idle-01.png</key>
             <key type="filename">asset-frames/enemies/bomber-idle-01.png</key>
             <key type="filename">asset-frames/enemies/circle-idle.png</key>
+            <key type="filename">asset-frames/pickups/box.png</key>
             <key type="filename">asset-frames/player/attack-01.png</key>
             <key type="filename">asset-frames/player/attack-02.png</key>
             <key type="filename">asset-frames/player/attack-03.png</key>
