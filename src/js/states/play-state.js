@@ -40,9 +40,9 @@ export default class PlayState extends Phaser.State {
     groups.background = game.add.group(groups.game, "background");
     groups.midground = game.add.group(groups.game, "midground");
     groups.foreground = game.add.group(groups.game, "foreground");
+    groups.pickups = game.add.group(groups.midground, "pickups");
     groups.enemies = new EnemyGroup(game, groups.midground);
     groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding");
-    groups.pickups = game.add.group(groups.foreground, "pickups");
     globals.groups = groups;
 
     // Initializing the world
