@@ -9,8 +9,11 @@ export default class Radar extends Phaser.Group {
   /**
    * @param {Phaser.Game} game
    */
-  constructor(game, parent, enemyGroup) {
+  constructor(game, parent, enemyGroup, pickupSpawner) {
     super(game, parent, "radar");
+
+    this._pickupSpawner = pickupSpawner;
+    this._weaponPickupHud = new WeaponPickupHud(game, this);
 
     enemyGroup.onEnemyAdded.add(enemy => this.registerEnemy(enemy));
     enemyGroup.onEnemyKilled.add(enemy => this.removeEnemy(enemy));
@@ -24,6 +27,21 @@ export default class Radar extends Phaser.Group {
    */
   update() {
     const player = this.game.globals.player;
+
+    const hudIcon = this._weaponPickupHud;
+    if (this._pickupSpawner.children.length === 0) {
+      hudIcon.visible = false;
+    } else {
+      const weapon = this._pickupSpawner.children[0];
+      if (player._playerLight._light.isPointInLight(weapon.position)) {
+        hudIcon.visible = false;
+      } else {
+        hudIcon.visible = true;
+        const pos = this._getTrackerPosition(weapon, 20);
+        hudIcon.position.copyFrom(pos);
+        hudIcon.pointTowards(weapon.position);
+      }
+    }
 
     // Update Enemy Trackers
     for (const { enemy, tracker } of this._trackedEnemies) {
@@ -95,7 +113,7 @@ export default class Radar extends Phaser.Group {
    * @returns { x : int, y: int }
    * @memberof Radar
    */
-  _getTrackerPosition(enemy) {
+  _getTrackerPosition(enemy, radiusOffset = 5) {
     // Shorthand.
     const player = this.game.globals.player;
 
@@ -111,11 +129,10 @@ export default class Radar extends Phaser.Group {
       // The tracker should be placed around the radius of the light, between the enemy and the
       // player.
       const angle = player.position.angle(enemy.position);
-      const radiusModifier = 5;
       const x =
-        player.position.x + (radiusModifier + player._playerLight.getRadius()) * Math.cos(angle);
+        player.position.x + (radiusOffset + player._playerLight.getRadius()) * Math.cos(angle);
       const y =
-        player.position.y + (radiusModifier + player._playerLight.getRadius()) * Math.sin(angle);
+        player.position.y + (radiusOffset + player._playerLight.getRadius()) * Math.sin(angle);
 
       return { x, y };
     }
@@ -142,5 +159,27 @@ export default class Radar extends Phaser.Group {
     const scalePercent = 1 - Phaser.Easing.Quadratic.In(normalizedDist);
 
     return scalePercent;
+  }
+}
+
+class WeaponPickupHud extends Phaser.Group {
+  constructor(game, parent) {
+    super(game, parent, "WeaponPickup");
+
+    const indicator = this.game.make.sprite(0, 0, "assets", "hud/goal-indicator");
+    indicator.anchor.set(20 / 40, 24 / 40);
+    indicator.rotation = Math.PI / 4;
+    this.add(indicator);
+    this._indicator = indicator;
+
+    const box = this.game.make.sprite(0, 0, "assets", "pickups/box");
+    box.scale.set(16 / 25);
+    box.anchor.set(0.5);
+    this.add(box);
+  }
+
+  pointTowards(pos) {
+    const angle = this.position.angle(pos);
+    this._indicator.rotation = angle + Math.PI / 2;
   }
 }
