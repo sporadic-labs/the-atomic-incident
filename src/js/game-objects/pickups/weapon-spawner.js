@@ -7,16 +7,16 @@ export default class PickupSpawner extends Phaser.Group {
     this._spawnLocations = levelManager.getPickupLocations();
     this._player = player;
 
+    this.onPickupCollected = new Phaser.Signal();
     this.onPickupSpawned = new Phaser.Signal();
     this.onPickupDestroyed = new Phaser.Signal();
   }
 
   spawnPickup(type) {
     const point = this._getSpawnPoint(this._spawnLocations);
-    const pickup = new WeaponPickup(this.game, point.x, point.y, this._player, type);
+    const pickup = new WeaponPickup(this.game, point.x, point.y, this._player, type, this);
     this.add(pickup);
     this.onPickupSpawned.dispatch(pickup);
-    pickup.events.onDestroy.addOnce(() => this.onPickupDestroyed.dispatch(pickup));
   }
 
   update() {
@@ -30,6 +30,7 @@ export default class PickupSpawner extends Phaser.Group {
 
   destroy(...args) {
     this.onPickupSpawned.dispose();
+    this.onPickupCollected.dispose();
     this.onPickupDestroyed.dispose();
     super.destroy(...args);
   }
@@ -63,19 +64,27 @@ export default class PickupSpawner extends Phaser.Group {
 }
 
 class WeaponPickup extends Phaser.Sprite {
-  constructor(game, x, y, player, type) {
+  constructor(game, x, y, player, type, pickupSpawner) {
     super(game, x, y, "assets", "pickups/box");
     this.anchor.set(0.5);
 
     this._player = player;
     this._type = type;
+    this._onPickupCollected = pickupSpawner.onPickupCollected;
+    this._onPickupDestroyed = pickupSpawner.onPickupDestroyed;
 
     game.physics.arcade.enable(this);
     this.satBody = game.globals.plugins.satBody.addBoxBody(this);
   }
 
   pickUp() {
+    this._onPickupCollected.dispatch();
     this._player.weaponManager.switchWeapon(this._type);
     this.destroy();
+  }
+
+  destroy(...args) {
+    this._onPickupDestroyed.dispatch();
+    super.destroy(...args);
   }
 }

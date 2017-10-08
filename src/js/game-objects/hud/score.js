@@ -1,5 +1,4 @@
 import { gameStore } from "../../game-data/observable-stores";
-import { autorun } from "mobx";
 
 const baseTextStyle = { font: "30px 'Alfa Slab One'", fill: "#ffd800" };
 const toastTextStyle = { font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center" };
@@ -13,8 +12,11 @@ const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#a0976a" });
  * @extends {Phaser.Group}
  */
 export default class Score extends Phaser.Group {
-  constructor(game, parent) {
+  constructor(game, parent, enemies, combo) {
     super(game, parent, "score");
+
+    this._score = 0;
+    this._hasSetNewHighScore = false;
 
     this._scoreText = game.make.text(0, 0, "0", baseTextStyle);
     this._scoreText.anchor.setTo(1, 0);
@@ -24,50 +26,43 @@ export default class Score extends Phaser.Group {
     this._scorePadText.anchor.setTo(1, 0);
     this.add(this._scorePadText);
 
-    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "", toastTextStyle);
+    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "New high score!", toastTextStyle);
     this._highScoreMsgText.anchor.setTo(0.5, 0);
+    this._highScoreMsgText.visible = false;
     this.add(this._highScoreMsgText);
 
-    gameStore.setScore(0);
-    this._scoreUnsubscribe = autorun(() => {
-      this._updateDisplay(gameStore.score);
-      this._showHighScoreMessage(gameStore.score, gameStore.highScore);
-      this._showHighScoreIcon();
-    });
+    enemies.onEnemyKilled.add(() => this.incrementScore(combo.getCombo()));
+
+    this._setScore(this._score);
   }
 
-  _updateDisplay(score) {
-    this._scoreText.setText(score);
+  incrementScore(delta) {
+    this._setScore(this._score + delta);
+  }
 
+  _setScore(score) {
+    this._score = score;
+    gameStore.setScore(this._score);
+    this._updateDisplay();
+    if (!this._hasSetNewHighScore && this._score > gameStore.highScore) {
+      this._hasSetNewHighScore = true;
+      this._onNewHighScore();
+    }
+  }
+
+  _updateDisplay() {
+    this._scoreText.setText(this._score);
     this._scorePadText.x = this._scoreText.x - this._scoreText.width;
-    const scoreDigits = String(score).length;
+    const scoreDigits = String(this._score).length;
     const padText = scoreDigits <= 6 ? "0".repeat(6 - scoreDigits) : "";
     this._scorePadText.setText(padText);
   }
 
-  _showHighScoreMessage(score, highScore) {
-    if (!gameStore.newHighScore && score > highScore) {
-      gameStore.newHighScore = true;
-      this._highScoreMsgText.setText("New high score!");
-
-      setTimeout(() => {
-        this._highScoreMsgText.setText("");
-      }, 3000);
-    }
-  }
-
-  _showHighScoreIcon() {
-    if (gameStore.newHighScore) {
-      // TODO(rex): show an icon if the player has a new score!
-    }
-  }
-
-  newHighScore() {
-    return this._newHighScore;
-  }
-
-  destroy(...args) {
-    this._scoreUnsubscribe();
-    super.destroy(...args);
+  _onNewHighScore() {
+    this._highScoreMsgText.visible = true;
+    const timer = this.game.time.create(true);
+    timer.add(3000, () => (this._highScoreMsgText.visible = false));
+    timer.start();
+    // TODO: Show some icon as well
   }
 }

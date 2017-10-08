@@ -1,53 +1,49 @@
-import { gameStore } from "../../game-data/observable-stores";
-
 const baseTextStyle = { font: "30px 'Alfa Slab One'", fill: "#ffd800" };
 
 export default class Score extends Phaser.Group {
-  constructor(game, parent, player, enemyGroup, comboTimeout = 3500) {
+  constructor(game, parent, player, weaponSpawner) {
     super(game, parent, "score");
 
-    this._comboTimeout = comboTimeout;
-    this._comboIncrement = 0.2;
-    this._comboMultiplier = 0;
-    this._comboTimeout = comboTimeout;
+    this._comboMultiplier = 1;
+    this._comboTimeout = 8000;
+    this._comboTimer = game.time.create(false);
+    this._comboTimer.start();
 
     this._comboModifierText = game.make.text(0, 0, "", baseTextStyle);
     this._comboModifierText.anchor.setTo(1, 0);
     this.add(this._comboModifierText);
 
-    this._comboTimer = game.time.create(false);
-    this._comboTimer.start();
-
     player.onDamage.add(this._resetCombo, this);
-    enemyGroup.onEnemyKilled.add(this._onKill, this);
+    weaponSpawner.onPickupCollected.add(this._incrementCombo, this);
 
     this._updateDisplay();
+  }
+
+  getCombo() {
+    return this._comboMultiplier;
   }
 
   _resetCombo() {
     this._comboTimer.removeAll();
-    this._comboMultiplier = 0;
+    this._comboMultiplier = 1;
     this._updateDisplay();
   }
 
-  _onKill() {
-    // First kill, combo starts at 1x
-    if (this._comboMultiplier <= 0) this._comboMultiplier = 1;
-    else this._comboMultiplier += this._comboIncrement;
-
-    // Only apply combo at whole numbers - MH: maybe we shouldn't show the player fractional combos?
-    const points = Math.floor(this._comboMultiplier);
-    gameStore.incrementScore(points);
-    this._updateDisplay();
-
-    // Reset cooldown
+  _incrementCombo() {
     this._comboTimer.removeAll();
-    this._comboTimer.add(this._comboTimeout, this._resetCombo, this);
+    this._comboMultiplier += 1;
+    this._comboTimer.add(this._comboTimeout, () => this._resetCombo());
+    this._comboModifierText.alpha = 1;
+    this.game.tweens.removeFrom(this._comboModifierText);
+    this.game.make
+      .tween(this._comboModifierText)
+      .to({ alpha: 0 }, this._comboTimeout, Phaser.Easing.Linear.None, true);
+    this._updateDisplay();
   }
 
   _updateDisplay() {
-    this._comboModifierText.visible = this._comboMultiplier > 0;
-    this._comboModifierText.setText(this._comboMultiplier.toFixed(1) + "x");
+    this._comboModifierText.visible = this._comboMultiplier > 1;
+    this._comboModifierText.setText(`${this._comboMultiplier}x`);
   }
 
   destroy(...args) {
