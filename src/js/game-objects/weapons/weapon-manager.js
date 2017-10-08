@@ -12,7 +12,7 @@ export default class WeaponManager extends Phaser.Group {
     this._scattershot = new Scattershot(game, this, player, enemies);
     this._rapidFire = new RapidFire(game, this, player, enemies);
     this._piercingShot = new PiercingShot(game, this, player, enemies);
-    this._activeWeapon = this._piercingShot;
+    this.switchWeapon(this.game.rnd.pick(Object.values(WEAPON_TYPES)));
   }
 
   getActiveWeapon() {
