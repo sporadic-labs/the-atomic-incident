@@ -43,7 +43,7 @@ export class RadarIndicator extends Phaser.Group {
   }
 
   _updateRotation(offset) {
-    const angle = this.position.angle(this._target.position);
+    const angle = this._player.position.angle(this._target.position);
     this.rotation = angle + offset;
   }
 
