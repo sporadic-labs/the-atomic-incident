@@ -1,5 +1,5 @@
 import BaseWeapon from "./base-weapon";
-import Projectile from "./base-projectile";
+import Projectile from "./projectile";
 import WEAPON_TYPES from "./weapon-types";
 
 export default class Scattershot extends BaseWeapon {
@@ -28,20 +28,10 @@ export default class Scattershot extends BaseWeapon {
   }
 
   _createProjectile(angle, playerDistance, speed) {
-    const x = this._player.x + playerDistance * Math.cos(angle);
-    const y = this._player.y + playerDistance * Math.sin(angle);
-    const p = new Projectile(
-      this.game,
-      x,
-      y,
-      "assets",
-      "weapons/slug",
-      this,
-      this._player,
-      this._damage,
-      angle,
-      speed
-    );
+    const player = this._player;
+    const x = player.x + playerDistance * Math.cos(angle);
+    const y = player.y + playerDistance * Math.sin(angle);
+    const p = Projectile.makeBullet(this.game, x, y, this, player, this._damage, angle, speed);
     p.scale.setTo(0.5, 0.5);
     const rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
     p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
