@@ -31,7 +31,13 @@ export default class Radar extends Phaser.Group {
       this._enemyIndicators.push(indicator);
     });
     enemyGroup.onEnemyKilled.add(enemy => {
-      this._enemyIndicators = this._enemyIndicators.filter(elem => elem.getTarget() !== enemy);
+      this._enemyIndicators = this._enemyIndicators.filter(indicator => {
+        if (indicator.getTarget() === enemy) {
+          indicator.destroy();
+          return false;
+        }
+        return true;
+      });
     });
   }
 
