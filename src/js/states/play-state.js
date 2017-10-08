@@ -19,7 +19,7 @@ import EnergyPickup from "../game-objects/pickups/energy-pickup";
 import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
 import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
-import Radar from "../game-objects/hud/radar";
+import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
 
 export default class PlayState extends Phaser.State {
@@ -87,7 +87,7 @@ export default class PlayState extends Phaser.State {
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
-    new Radar(game, groups.hud, this.game.globals.groups.enemies, weaponSpawner);
+    new Radar(game, groups.hud, player, this.game.globals.groups.enemies, weaponSpawner);
     const score = new Score(game, groups.hud);
     score.position.set(this.game.width - 18, 13);
     const combo = new Combo(game, groups.hud, player, globals.groups.enemies);

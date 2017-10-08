@@ -6,11 +6,17 @@ export default class PickupSpawner extends Phaser.Group {
     super(game, parent, "pickup-spawner");
     this._spawnLocations = levelManager.getPickupLocations();
     this._player = player;
+
+    this.onPickupSpawned = new Phaser.Signal();
+    this.onPickupDestroyed = new Phaser.Signal();
   }
 
   spawnPickup(type) {
     const point = this._getSpawnPoint(this._spawnLocations);
-    this.add(new WeaponPickup(this.game, point.x, point.y, this._player, type));
+    const pickup = new WeaponPickup(this.game, point.x, point.y, this._player, type);
+    this.add(pickup);
+    this.onPickupSpawned.dispatch(pickup);
+    pickup.events.onDestroy.addOnce(() => this.onPickupDestroyed.dispatch(pickup));
   }
 
   update() {
@@ -20,6 +26,12 @@ export default class PickupSpawner extends Phaser.Group {
       const type = this.game.rnd.pick(possibleTypes);
       this.spawnPickup(type);
     }
+  }
+
+  destroy(...args) {
+    this.onPickupSpawned.dispose();
+    this.onPickupDestroyed.dispose();
+    super.destroy(...args);
   }
 
   /**
