@@ -1,6 +1,7 @@
 import Scattershot from "./scattershot";
 import RapidFire from "./rapid-fire";
 import PiercingShot from "./piercing-shot";
+import HomingShot from "./homing-shot";
 import WEAPON_TYPES from "./weapon-types";
 
 export default class WeaponManager extends Phaser.Group {
@@ -12,6 +13,7 @@ export default class WeaponManager extends Phaser.Group {
     this._scattershot = new Scattershot(game, this, player, enemies);
     this._rapidFire = new RapidFire(game, this, player, enemies);
     this._piercingShot = new PiercingShot(game, this, player, enemies);
+    this._homingShot = new HomingShot(game, this, player, enemies);
     this.switchWeapon(this.game.rnd.pick(Object.values(WEAPON_TYPES)));
   }
 
@@ -32,6 +34,7 @@ export default class WeaponManager extends Phaser.Group {
     if (type === WEAPON_TYPES.RAPID_FIRE) this._activeWeapon = this._rapidFire;
     else if (type === WEAPON_TYPES.SCATTERSHOT) this._activeWeapon = this._scattershot;
     else if (type === WEAPON_TYPES.PIERCING_SHOT) this._activeWeapon = this._piercingShot;
+    else if (type === WEAPON_TYPES.HOMING_SHOT) this._activeWeapon = this._homingShot;
   }
 
   fire() {
