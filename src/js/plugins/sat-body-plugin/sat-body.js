@@ -291,7 +291,7 @@ export default class SatBody {
     if (!this._debugGraphics) {
       // Only create debug graphics if it is needed, for performance reasons
       this._debugGraphics = this.game.add.graphics(0, 0);
-      this._sprite.parent.add(this._debugGraphics);
+      if (this._sprite.parent) this._sprite.parent.add(this._debugGraphics);
     }
     this._debugGraphics.visible = true;
     this.setDebugColor(debugColor);
