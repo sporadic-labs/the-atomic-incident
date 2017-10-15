@@ -7,6 +7,7 @@ import Compass from "./compass";
 import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
+import MOVEMENT_TYPES from "./movement-types";
 
 const ANIM_NAMES = {
   IDLE: "idle",
@@ -27,6 +28,7 @@ export default class Player extends Phaser.Sprite {
     this._compass = new Compass(game, parentGroup, this.width * 0.6);
 
     this._isTakingDamage = false;
+    this._isDashing = false;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
@@ -98,7 +100,12 @@ export default class Player extends Phaser.Sprite {
     this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
 
     // Update the rotation of the player based on the mouse
-    const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
+    let mousePos = 0;
+    if (this._movementController._fixedAngle) {
+      mousePos = this._movementController._fixedAngle;
+    } else {
+      mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
+    }
     this.rotation = this.position.angle(mousePos) + Math.PI / 2;
 
     if (this._attackControls.isControlActive("attack") && this.weaponManager.isAbleToAttack()) {
@@ -169,8 +176,23 @@ export default class Player extends Phaser.Sprite {
     this.onDamage.dispatch();
   }
 
+  startDash(angle) {
+    this._movementController.setMovementType(MOVEMENT_TYPES.DASH);
+    this._movementController.setFixedAngle(angle);
+    this._isDashing = true;
+  }
+
+  endDash() {
+    this._movementController.setMovementType(MOVEMENT_TYPES.WALK);
+    this._movementController.removeFixedAngle();
+    this._isDashing = false;
+  }
+
   _onCollideWithEnemy(self, enemy) {
-    if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
+    if (this._isDashing) {
+      const damage = this.weaponManager.getActiveWeapon.damage;
+      enemy.takeDamage(damage);
+    } else if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
       this.takeDamage();
       // this._hitSound.play();
       this._postProcessor.onPlayerDamage();

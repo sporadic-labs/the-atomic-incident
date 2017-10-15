@@ -1,12 +1,39 @@
 import Controller from "../../helpers/controller.js";
+import MOVEMENT_TYPES from "./movement-types.js";
+
+const MAX_SPEED_VALUES = {
+  WALK: 50,
+  DASH: 240
+};
+
+const MAX_ACCELERATION_VALUES = {
+  WALK: 5000,
+  DASH: 12000
+};
+
+const MAX_DRAG_VALUES = {
+  WALK: 1000,
+  DASH: 400
+};
 
 export default class MovementContoller {
-  constructor(body, maxSpeed = 50, maxAcceleration = 5000, drag = 1000) {
+  constructor(
+    body,
+    maxSpeed = MAX_SPEED_VALUES.WALK,
+    maxAcceleration = MAX_ACCELERATION_VALUES.WALK,
+    drag = MAX_DRAG_VALUES.WALK
+  ) {
     this.body = body;
     this.game = body.game;
     this._maxSpeed = maxSpeed;
     this._customDrag = drag;
     this._maxAcceleration = maxAcceleration;
+
+    // Use this for the dash attack.
+    this._fixedAngle;
+
+    // this.setMovementType(MOVEMENT_TYPES.WALK);
+    this.setMovementType(MOVEMENT_TYPES.DASH);
 
     const Kb = Phaser.Keyboard;
     this._controls = new Controller(this.game.input);
@@ -26,15 +53,10 @@ export default class MovementContoller {
 
     // Calculate the acceleration and heading from the keyboard input
     let acceleration = new Phaser.Point(0, 0);
-    if (this._controls.isControlActive("move-left")) {
-      acceleration.x += -1;
-    } else if (this._controls.isControlActive("move-right")) {
-      acceleration.x += 1;
-    }
-    if (this._controls.isControlActive("move-up")) {
-      acceleration.y += -1;
-    } else if (this._controls.isControlActive("move-down")) {
-      acceleration.y += 1;
+    if (this._movementType === MOVEMENT_TYPES.WALK) {
+      acceleration = this._calculateWalkAcceleration();
+    } else if (this._movementType === MOVEMENT_TYPES.DASH) {
+      acceleration = this._calculateDashAcceleration(this._fixedAngle);
     }
 
     // Normalize the acceleration and set the magnitude. This makes it so that the player moves in
@@ -64,5 +86,70 @@ export default class MovementContoller {
         this.body.velocity.add(drag.x, drag.y);
       }
     }
+  }
+
+  setMovementType(type) {
+    this._movementType = type;
+
+    switch (type) {
+      case MOVEMENT_TYPES.WALK:
+        // Update default settings for this movement type.
+        this._maxSpeed = MAX_SPEED_VALUES.WALK;
+        this._customDrag = MAX_DRAG_VALUES.WALK;
+        this._maxAcceleration = MAX_ACCELERATION_VALUES.WALK;
+
+        break;
+      case MOVEMENT_TYPES.DASH:
+        // Update default settings for this movement type.
+        this._maxSpeed = MAX_SPEED_VALUES.DASH;
+        this._customDrag = MAX_DRAG_VALUES.DASH;
+        this._maxAcceleration = MAX_ACCELERATION_VALUES.DASH;
+
+        break;
+      default:
+        console.log("No movement type by that name!");
+        // If there was an invalid movement type provided, default to Walk...
+
+        this._maxSpeed = MAX_SPEED_VALUES.WALK;
+        this._customDrag = MAX_DRAG_VALUES.WALK;
+        this._maxAcceleration = MAX_ACCELERATION_VALUES.WALK;
+
+        this._movementType = MOVEMENT_TYPES.WALK;
+        break;
+    }
+  }
+
+  setFixedAngle(angle) {
+    this._fixedAngle = angle;
+  }
+
+  removeFixedAngle() {
+    this._fixedAngle = null;
+  }
+
+  _calculateWalkAcceleration() {
+    const accelMod = 1;
+    let accel = new Phaser.Point(0, 0);
+    if (this._controls.isControlActive("move-left")) {
+      accel.x += -accelMod;
+    } else if (this._controls.isControlActive("move-right")) {
+      accel.x += accelMod;
+    }
+    if (this._controls.isControlActive("move-up")) {
+      accel.y += -accelMod;
+    } else if (this._controls.isControlActive("move-down")) {
+      accel.y += accelMod;
+    }
+    return accel;
+  }
+
+  _calculateDashAcceleration(angle) {
+    const accelMod = 42;
+
+    let accel = new Phaser.Point(0, 0);
+    accel.x = Math.cos(angle) * accelMod;
+    accel.y = Math.sin(angle) * accelMod;
+
+    return accel;
   }
 }
