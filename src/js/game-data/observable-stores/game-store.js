@@ -13,7 +13,6 @@ class GameStore {
       menuState: MENU_STATE_NAMES.CLOSED,
       gameState: GAME_STATE_NAMES.BOOT,
       pendingGameRestart: false,
-      newHighScore: false,
 
       // Actions - these mutate the state
       setScore: action(function(score) {
@@ -50,7 +49,6 @@ class GameStore {
       }),
       markRestartComplete: action(function() {
         this.pendingGameRestart = false;
-        this.newHighScore = false;
       })
     });
   }

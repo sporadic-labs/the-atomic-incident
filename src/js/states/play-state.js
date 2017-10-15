@@ -19,7 +19,7 @@ import EnergyPickup from "../game-objects/pickups/energy-pickup";
 import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
 import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
-import Radar from "../game-objects/hud/radar";
+import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
 
 export default class PlayState extends Phaser.State {
@@ -81,23 +81,23 @@ export default class PlayState extends Phaser.State {
     this.camera.follow(player);
     globals.player = player;
 
+    // Waves of pickups and enemies
+    new PickupSpawner(game);
+    new EnemySpawner(game, player);
+    const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
+
     // HUD
-    new Radar(game, groups.hud, this.game.globals.groups.enemies);
-    const score = new Score(game, groups.hud);
-    score.position.set(this.game.width - 18, 13);
-    const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
+    new Radar(game, groups.hud, player, this.game.globals.groups.enemies, weaponSpawner);
+    const combo = new Combo(game, groups.hud, player, weaponSpawner);
     combo.position.set(this.game.width - 18, 45);
+    const score = new Score(game, groups.hud, globals.groups.enemies, combo);
+    score.position.set(this.game.width - 18, 13);
     const ammo = new Ammo(game, groups.hud, player);
     ammo.position.set(18, 13);
 
     // Keep track of what wave the player is on using the globals object.
     const waveNum = 0;
     globals.waveNum = waveNum;
-
-    // Waves of pickups and enemies
-    new PickupSpawner(game);
-    new EnemySpawner(game, player);
-    new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     globals.groups.enemies.onEnemyKilled.add(enemy => {
       new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, 15, 3);
