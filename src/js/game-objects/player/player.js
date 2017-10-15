@@ -100,13 +100,12 @@ export default class Player extends Phaser.Sprite {
     this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
 
     // Update the rotation of the player based on the mouse
-    let mousePos = 0;
+    let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     if (this._movementController._fixedAngle) {
-      mousePos = this._movementController._fixedAngle;
+      this.rotation = this._movementController._fixedAngle + Math.PI / 2;
     } else {
-      mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
+      this.rotation = this.position.angle(mousePos) + Math.PI / 2;
     }
-    this.rotation = this.position.angle(mousePos) + Math.PI / 2;
 
     if (this._attackControls.isControlActive("attack") && this.weaponManager.isAbleToAttack()) {
       this.weaponManager.fire(this.position.angle(mousePos));
@@ -190,8 +189,9 @@ export default class Player extends Phaser.Sprite {
 
   _onCollideWithEnemy(self, enemy) {
     if (this._isDashing) {
-      const damage = this.weaponManager.getActiveWeapon.damage;
-      enemy.takeDamage(damage);
+      const damage = this.weaponManager.getActiveWeapon()._damage;
+      console.log(damage);
+      if (enemy._spawned) enemy.takeDamage(damage);
     } else if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
       this.takeDamage();
       // this._hitSound.play();

@@ -32,8 +32,7 @@ export default class MovementContoller {
     // Use this for the dash attack.
     this._fixedAngle;
 
-    // this.setMovementType(MOVEMENT_TYPES.WALK);
-    this.setMovementType(MOVEMENT_TYPES.DASH);
+    this.setMovementType(MOVEMENT_TYPES.WALK);
 
     const Kb = Phaser.Keyboard;
     this._controls = new Controller(this.game.input);
