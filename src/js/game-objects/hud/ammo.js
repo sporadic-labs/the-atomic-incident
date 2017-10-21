@@ -1,24 +1,26 @@
+const style = {
+  font: "24px 'Alfa Slab One'",
+  fill: "#ffd800"
+};
 export default class Ammo extends Phaser.Group {
   constructor(game, parentGroup, player) {
     super(game, parentGroup, "ammo");
 
     this._player = player;
 
-    this._ammoText = game.make.text(0, 0, "", {
-      font: "24px 'Alfa Slab One'",
-      fill: "#ffd800"
-    });
+    this._nameText = game.make.text(0, 0, "", style);
+    this._nameText.anchor.setTo(0, 0);
+    this.add(this._nameText);
+
+    this._ammoText = game.make.text(0, 32, "", style);
     this._ammoText.anchor.setTo(0, 0);
     this.add(this._ammoText);
   }
 
   update() {
-    const weapon = this._player.weaponManager.getActiveWeapon();
-    if (!weapon._isReloading) {
-      this._ammoText.setText(weapon.getAmmo() + " / " + weapon._totalAmmo);
-    } else {
-      this._ammoText.setText("Reloading...");
-    }
+    const w = this._player.weaponManager.getActiveWeapon();
+    this._nameText.setText(w.getName());
+    this._ammoText.setText(w.isReloading() ? `Reloading...` : `${w.getAmmo()} / ${w.getMaxAmmo()}`);
     super.update();
   }
 

@@ -3,7 +3,7 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class DashMelee extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.DASH_MELEE, 4, 720, 1200);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.DASH, 4, 720, 1200);
     this._damage = 25;
     this._maxDistance = 56;
     this._maxSpeed = 120;

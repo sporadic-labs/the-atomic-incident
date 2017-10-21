@@ -35,7 +35,7 @@ export default class WeaponManager extends Phaser.Group {
   switchWeapon(type) {
     if (type === WEAPON_TYPES.RAPID_FIRE) this._activeWeapon = this._rapidFire;
     else if (type === WEAPON_TYPES.SCATTERSHOT) this._activeWeapon = this._scattershot;
-    else if (type === WEAPON_TYPES.DASH_MELEE) this._activeWeapon = this._dashMelee;
+    else if (type === WEAPON_TYPES.DASH) this._activeWeapon = this._dashMelee;
     else if (type === WEAPON_TYPES.PIERCING_SHOT) this._activeWeapon = this._piercingShot;
     else if (type === WEAPON_TYPES.HOMING_SHOT) this._activeWeapon = this._homingShot;
     // New weapons should start with full ammo.

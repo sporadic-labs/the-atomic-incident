@@ -1,3 +1,5 @@
+import { getFormattedType } from "./weapon-types";
+
 export default class BaseWeapon extends Phaser.Group {
   constructor(game, parentGroup, player, enemies, weaponType, totalAmmo, cooldownTime, reloadTime) {
     super(game, parentGroup, weaponType);
@@ -14,6 +16,18 @@ export default class BaseWeapon extends Phaser.Group {
 
     this._cooldownTimer = this.game.time.create(false);
     this._cooldownTimer.start();
+  }
+
+  isReloading() {
+    return this._isReloading;
+  }
+
+  getMaxAmmo() {
+    return this._totalAmmo;
+  }
+
+  getName() {
+    return getFormattedType(this._type);
   }
 
   isAbleToAttack() {

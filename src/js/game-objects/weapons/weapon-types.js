@@ -3,5 +3,13 @@ export default {
   RAPID_FIRE: "RAPID_FIRE",
   PIERCING_SHOT: "PIERCING_SHOT",
   HOMING_SHOT: "HOMING_SHOT",
-  DASH_MELEE: "DASH_MELEE"
+  DASH: "DASH"
 };
+
+export function getFormattedType(type) {
+  return type
+    .toLowerCase()
+    .split("_")
+    .map(word => word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+    .join(" ");
+}
