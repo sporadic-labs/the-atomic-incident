@@ -5,7 +5,7 @@ export default class Score extends Phaser.Group {
     super(game, parent, "score");
 
     this._comboMultiplier = 1;
-    this._comboTimeout = 8000;
+    this._comboTimeout = 16000; // ms
     this._comboTimer = game.time.create(false);
     this._comboTimer.start();
 
