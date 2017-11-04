@@ -213,6 +213,9 @@
             <key type="filename">asset-frames/enemies/arrow-small.png</key>
             <key type="filename">asset-frames/enemies/bomber-eye-idle-01.png</key>
             <key type="filename">asset-frames/enemies/bomber-idle-01.png</key>
+            <key type="filename">asset-frames/enemies/characters_01_25px.png</key>
+            <key type="filename">asset-frames/enemies/characters_02_25px.png</key>
+            <key type="filename">asset-frames/enemies/characters_03_25px.png</key>
             <key type="filename">asset-frames/enemies/circle-idle.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
             <key type="filename">asset-frames/pickups/box.png</key>
@@ -248,6 +251,35 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/enemies/characters_01_50px.png</key>
+            <key type="filename">asset-frames/enemies/characters_02_50px.png</key>
+            <key type="filename">asset-frames/enemies/characters_03_50px.png</key>
+            <key type="filename">asset-frames/enemies/teal-cell.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,13,25,25</rect>
+                <key>scale9Paddings</key>
+                <rect>13,13,25,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/enemies/green-cell.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,13,13,25</rect>
+                <key>scale9Paddings</key>
+                <rect>6,13,13,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/enemies/outline.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -261,80 +293,16 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemy01/die-01.png</key>
-            <key type="filename">asset-frames/enemy01/die-02.png</key>
-            <key type="filename">asset-frames/enemy01/die-03.png</key>
-            <key type="filename">asset-frames/enemy01/die-04.png</key>
-            <key type="filename">asset-frames/enemy01/idle-01.png</key>
-            <key type="filename">asset-frames/enemy01/idle-02.png</key>
-            <key type="filename">asset-frames/enemy01/idle-03.png</key>
-            <key type="filename">asset-frames/enemy01/idle-04.png</key>
-            <key type="filename">asset-frames/enemy01/move-01.png</key>
-            <key type="filename">asset-frames/enemy01/move-02.png</key>
-            <key type="filename">asset-frames/enemy01/move-03.png</key>
-            <key type="filename">asset-frames/enemy01/move-04.png</key>
-            <key type="filename">asset-frames/hud/reticule.png</key>
-            <key type="filename">asset-frames/pickups/box-01.png</key>
-            <key type="filename">asset-frames/pickups/box-02.png</key>
-            <key type="filename">asset-frames/pickups/box-03.png</key>
-            <key type="filename">asset-frames/pickups/box-04.png</key>
-            <key type="filename">asset-frames/pickups/diamond-01.png</key>
-            <key type="filename">asset-frames/pickups/diamond-02.png</key>
-            <key type="filename">asset-frames/pickups/diamond-03.png</key>
-            <key type="filename">asset-frames/pickups/diamond-04.png</key>
-            <key type="filename">asset-frames/pickups/diamond-05.png</key>
-            <key type="filename">asset-frames/pickups/diamond-06.png</key>
-            <key type="filename">asset-frames/test/box.png</key>
-            <key type="filename">asset-frames/test/diamond.png</key>
+            <key type="filename">asset-frames/enemies/purple-cell.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>6,6,12,12</rect>
+                <rect>10,10,20,20</rect>
                 <key>scale9Paddings</key>
-                <rect>6,6,12,12</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/enemy02/attack-01.png</key>
-            <key type="filename">asset-frames/enemy02/attack-02.png</key>
-            <key type="filename">asset-frames/enemy02/attack-03.png</key>
-            <key type="filename">asset-frames/enemy02/attack-04.png</key>
-            <key type="filename">asset-frames/enemy02/die-01.png</key>
-            <key type="filename">asset-frames/enemy02/die-02.png</key>
-            <key type="filename">asset-frames/enemy02/die-03.png</key>
-            <key type="filename">asset-frames/enemy02/die-04.png</key>
-            <key type="filename">asset-frames/enemy02/move-01.png</key>
-            <key type="filename">asset-frames/enemy02/move-02.png</key>
-            <key type="filename">asset-frames/enemy02/move-03.png</key>
-            <key type="filename">asset-frames/enemy02/move-04.png</key>
-            <key type="filename">asset-frames/enemy03/aim-01.png</key>
-            <key type="filename">asset-frames/enemy03/aim-02.png</key>
-            <key type="filename">asset-frames/enemy03/aim-03.png</key>
-            <key type="filename">asset-frames/enemy03/aim-04.png</key>
-            <key type="filename">asset-frames/enemy03/attack-01.png</key>
-            <key type="filename">asset-frames/enemy03/attack-02.png</key>
-            <key type="filename">asset-frames/enemy03/attack-03.png</key>
-            <key type="filename">asset-frames/enemy03/attack-04.png</key>
-            <key type="filename">asset-frames/enemy03/die-01.png</key>
-            <key type="filename">asset-frames/enemy03/die-02.png</key>
-            <key type="filename">asset-frames/enemy03/die-03.png</key>
-            <key type="filename">asset-frames/enemy03/die-04.png</key>
-            <key type="filename">asset-frames/enemy03/move-01.png</key>
-            <key type="filename">asset-frames/enemy03/move-02.png</key>
-            <key type="filename">asset-frames/enemy03/move-03.png</key>
-            <key type="filename">asset-frames/enemy03/move-04.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>9,9,18,18</rect>
-                <key>scale9Paddings</key>
-                <rect>9,9,18,18</rect>
+                <rect>10,10,20,20</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -451,6 +419,31 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/hud/reticule.png</key>
+            <key type="filename">asset-frames/pickups/box-01.png</key>
+            <key type="filename">asset-frames/pickups/box-02.png</key>
+            <key type="filename">asset-frames/pickups/box-03.png</key>
+            <key type="filename">asset-frames/pickups/box-04.png</key>
+            <key type="filename">asset-frames/pickups/diamond-01.png</key>
+            <key type="filename">asset-frames/pickups/diamond-02.png</key>
+            <key type="filename">asset-frames/pickups/diamond-03.png</key>
+            <key type="filename">asset-frames/pickups/diamond-04.png</key>
+            <key type="filename">asset-frames/pickups/diamond-05.png</key>
+            <key type="filename">asset-frames/pickups/diamond-06.png</key>
+            <key type="filename">asset-frames/test/box.png</key>
+            <key type="filename">asset-frames/test/diamond.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,6,12,12</rect>
+                <key>scale9Paddings</key>
+                <rect>6,6,12,12</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/hud/targeting-arrow.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -461,35 +454,6 @@
                 <rect>3,2,6,3</rect>
                 <key>scale9Paddings</key>
                 <rect>3,2,6,3</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/startScreen/logo.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>90,48,180,95</rect>
-                <key>scale9Paddings</key>
-                <rect>90,48,180,95</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/startScreen/options-down.png</key>
-            <key type="filename">asset-frames/startScreen/options-up.png</key>
-            <key type="filename">asset-frames/startScreen/play-down.png</key>
-            <key type="filename">asset-frames/startScreen/play-up.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>43,16,86,32</rect>
-                <key>scale9Paddings</key>
-                <rect>43,16,86,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -506,110 +470,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/weapons/arrow.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>1,6,3,12</rect>
-                <key>scale9Paddings</key>
-                <rect>1,6,3,12</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/beam.png</key>
-            <key type="filename">asset-frames/weapons/beam.psd</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>200,5,400,10</rect>
-                <key>scale9Paddings</key>
-                <rect>200,5,400,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/circle.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>3,3,6,6</rect>
-                <key>scale9Paddings</key>
-                <rect>3,3,6,6</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/death-beam.png</key>
-            <key type="filename">asset-frames/weapons/e-blade-01.png</key>
-            <key type="filename">asset-frames/weapons/e-blade-02.png</key>
-            <key type="filename">asset-frames/weapons/e-saw-01.png</key>
-            <key type="filename">asset-frames/weapons/e-saw-02.png</key>
-            <key type="filename">asset-frames/weapons/e-star-01.png</key>
-            <key type="filename">asset-frames/weapons/e-star-02.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/e-burst-01.png</key>
-            <key type="filename">asset-frames/weapons/e-burst-02.png</key>
-            <key type="filename">asset-frames/weapons/fireball-01.png</key>
-            <key type="filename">asset-frames/weapons/fireball-02.png</key>
-            <key type="filename">asset-frames/weapons/fireball-03.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9Paddings</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/hammer.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>14,14,28,28</rect>
-                <key>scale9Paddings</key>
-                <rect>14,14,28,28</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/laser-01.png</key>
-            <key type="filename">asset-frames/weapons/laser-02.png</key>
-            <key type="filename">asset-frames/weapons/laser-03.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>2,6,4,12</rect>
-                <key>scale9Paddings</key>
-                <rect>2,6,4,12</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">asset-frames/weapons/slug.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -620,19 +480,6 @@
                 <rect>4,5,8,10</rect>
                 <key>scale9Paddings</key>
                 <rect>4,5,8,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/sword.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,16,32,32</rect>
-                <key>scale9Paddings</key>
-                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

@@ -5,6 +5,60 @@ import SAT from "sat";
 import { debugShape } from "../../helpers/sprite-utilities";
 
 export default class Enemy extends Phaser.Sprite {
+  static MakeGreenCell(game, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", "enemies/green-cell", position, enemyGroup, {
+      health: 500,
+      speed: 50,
+      visionRadius: null
+    });
+    return enemy;
+  }
+
+  static MakeTealCell(game, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", "enemies/teal-cell", position, enemyGroup, {
+      health: 500,
+      speed: 50,
+      visionRadius: null
+    });
+    return enemy;
+  }
+
+  static MakePurpleCell(game, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", "enemies/purple-cell", position, enemyGroup, {
+      health: 500,
+      speed: 50,
+      visionRadius: null
+    });
+    return enemy;
+  }
+
+  static MakeRex1(game, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", "enemies/characters_01_50px", position, enemyGroup, {
+      health: 500,
+      speed: 50,
+      visionRadius: null
+    });
+    return enemy;
+  }
+
+  static MakeRex2(game, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", "enemies/characters_02_50px", position, enemyGroup, {
+      health: 500,
+      speed: 50,
+      visionRadius: null
+    });
+    return enemy;
+  }
+
+  static MakeRex3(game, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", "enemies/characters_03_50px", position, enemyGroup, {
+      health: 500,
+      speed: 50,
+      visionRadius: null
+    });
+    return enemy;
+  }
+
   static MakeBig(game, position, enemyGroup) {
     const enemy = new Enemy(game, "assets", "enemies/arrow-big", position, enemyGroup, {
       color: Color.blue(),
@@ -65,7 +119,8 @@ export default class Enemy extends Phaser.Sprite {
     // - SAT body hitbox is used for the bullet to be liberal with determining when a bullet has hit
     //   an enemy
     game.physics.arcade.enable(this);
-    const diameter = 0.2 * this.width; // Fudge factor - body smaller than sprite
+    // const diameter = 0.2 * this.width; // Fudge factor - body smaller than sprite
+    const diameter = 1 * this.width; // Temp
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
     this.body.collideWorldBounds = true;
     // Counter-clockwise points defined in pixel coordinates of 45 x 45 pixel image, then scaled to
