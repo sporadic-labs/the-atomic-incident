@@ -5,75 +5,10 @@ import SAT from "sat";
 import { debugShape } from "../../helpers/sprite-utilities";
 
 export default class Enemy extends Phaser.Sprite {
-  static MakeGreenCell(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/green-cell", position, enemyGroup, {
+  static MakeTestEnemy(game, key, position, enemyGroup) {
+    const enemy = new Enemy(game, "assets", key, position, enemyGroup, {
       health: 500,
       speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakeTealCell(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/teal-cell", position, enemyGroup, {
-      health: 500,
-      speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakePurpleCell(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/purple-cell", position, enemyGroup, {
-      health: 500,
-      speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakeRex1(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/characters_01_50px", position, enemyGroup, {
-      health: 500,
-      speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakeRex2(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/characters_02_50px", position, enemyGroup, {
-      health: 500,
-      speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakeRex3(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/characters_03_50px", position, enemyGroup, {
-      health: 500,
-      speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakeBig(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/arrow-big", position, enemyGroup, {
-      color: Color.blue(),
-      health: 500,
-      speed: 50,
-      visionRadius: null
-    });
-    return enemy;
-  }
-
-  static MakeSmall(game, position, enemyGroup) {
-    const enemy = new Enemy(game, "assets", "enemies/arrow-small", position, enemyGroup, {
-      color: Color.red(),
-      health: 100,
-      speed: 100,
       visionRadius: null
     });
     return enemy;

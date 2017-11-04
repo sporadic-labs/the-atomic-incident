@@ -57,15 +57,20 @@ export default class EnemySpawner {
         .clone()
         .add(radius * Math.cos(enemyAngle), radius * Math.sin(enemyAngle));
       if (!this._mapManager.isLocationEmpty(pos.x, pos.y)) continue;
-      if (enemyType === ENEMY_TYPES.SMALL) Enemy.MakeSmall(this.game, pos, this._enemies);
+      if (enemyType === ENEMY_TYPES.SMALL) Enemy.MakeTestEnemy(this.game, pos, this._enemies);
       else if (enemyType === ENEMY_TYPES.BIG) Enemy.MakeBig(this.game, pos, this._enemies);
       else if (enemyType === ENEMY_TYPES.GREEN_CELL)
-        Enemy.MakeGreenCell(this.game, pos, this._enemies);
+        Enemy.MakeTestEnemy(this.game, "enemies/green-cell", pos, this._enemies);
       else if (enemyType === ENEMY_TYPES.PURPLE_CELL)
-        Enemy.MakePurpleCell(this.game, pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.REX1) Enemy.MakeRex1(this.game, pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.REX2) Enemy.MakeRex2(this.game, pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.REX3) Enemy.MakeRex3(this.game, pos, this._enemies);
+        Enemy.MakeTestEnemy(this.game, "enemies/purple-cell", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.TEAL_CELL)
+        Enemy.MakeTestEnemy(this.game, "enemies/teal-cell", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.REX1)
+        Enemy.MakeTestEnemy(this.game, "enemies/characters_01_50px", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.REX2)
+        Enemy.MakeTestEnemy(this.game, "enemies/characters_02_50px", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.REX3)
+        Enemy.MakeTestEnemy(this.game, "enemies/characters_03_50px", pos, this._enemies);
     }
   }
 
