@@ -7,9 +7,12 @@ const ENEMY_TYPES = {
   GREEN_CELL: "GREEN CELL",
   PURPLE_CELL: "PURPLE CELL",
   TEAL_CELL: "TEAL CELL",
-  REX1: "REX 1",
-  REX2: "REX 2",
-  REX3: "REX 3"
+  AMOEBA: "AMOEBA",
+  BACTERIA: "BACTERIA",
+  BEETLE: "BEETLE",
+  GORILLA: "GORILLA",
+  SNAIL: "SNAIL",
+  TURTLE: "TURTLE"
 };
 const COMPOSITIONS = [
   { [ENEMY_TYPES.SMALL]: 4, [ENEMY_TYPES.BIG]: 0, name: "all small" },
@@ -19,9 +22,12 @@ const TEST_COMPOSITION = {
   [ENEMY_TYPES.GREEN_CELL]: 1,
   [ENEMY_TYPES.PURPLE_CELL]: 1,
   [ENEMY_TYPES.TEAL_CELL]: 1,
-  [ENEMY_TYPES.REX1]: 1,
-  [ENEMY_TYPES.REX2]: 1,
-  [ENEMY_TYPES.REX3]: 1,
+  [ENEMY_TYPES.AMOEBA]: 1,
+  [ENEMY_TYPES.BACTERIA]: 1,
+  [ENEMY_TYPES.BEETLE]: 1,
+  [ENEMY_TYPES.GORILLA]: 1,
+  [ENEMY_TYPES.SNAIL]: 1,
+  [ENEMY_TYPES.TURTLE]: 1,
   name: "test"
 };
 
@@ -65,12 +71,18 @@ export default class EnemySpawner {
         Enemy.MakeTestEnemy(this.game, "enemies/purple-cell", pos, this._enemies);
       else if (enemyType === ENEMY_TYPES.TEAL_CELL)
         Enemy.MakeTestEnemy(this.game, "enemies/teal-cell", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.REX1)
-        Enemy.MakeTestEnemy(this.game, "enemies/characters_01_50px", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.REX2)
-        Enemy.MakeTestEnemy(this.game, "enemies/characters_02_50px", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.REX3)
-        Enemy.MakeTestEnemy(this.game, "enemies/characters_03_50px", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.AMOEBA)
+        Enemy.MakeTestEnemy(this.game, "enemies/amoeba_50", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.BACTERIA)
+        Enemy.MakeTestEnemy(this.game, "enemies/bacteria_50", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.BEETLE)
+        Enemy.MakeTestEnemy(this.game, "enemies/beetle_50", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.GORILLA)
+        Enemy.MakeTestEnemy(this.game, "enemies/gorilla_50", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.SNAIL)
+        Enemy.MakeTestEnemy(this.game, "enemies/snail_50", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.TURTLE)
+        Enemy.MakeTestEnemy(this.game, "enemies/turtle_50", pos, this._enemies);
     }
   }
 
