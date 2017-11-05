@@ -19,13 +19,14 @@ const ANIM_NAMES = {
 
 export default class Player extends Phaser.Sprite {
   constructor(game, x, y, parentGroup) {
-    super(game, x, y, "assets", "player/idle-01");
+    super(game, x, y, "assets", "player/player");
     this.anchor.set(0.5);
     parentGroup.add(this);
 
     this.onDamage = new Phaser.Signal();
 
     this._compass = new Compass(game, parentGroup, this.width * 0.6);
+    this._compass.visible = false;
 
     this._isTakingDamage = false;
     this._isDashing = false;
@@ -44,19 +45,6 @@ export default class Player extends Phaser.Sprite {
     this._mapManager = globals.mapManager;
 
     this.weaponManager = new WeaponManager(game, parentGroup, this, this._enemies);
-
-    // Setup animations
-    const idleFrames = Phaser.Animation.generateFrameNames("player/idle-", 1, 4, "", 2);
-    const moveFrames = Phaser.Animation.generateFrameNames("player/move-", 1, 4, "", 2);
-    const attackFrames = Phaser.Animation.generateFrameNames("player/attack-", 2, 4, "", 2);
-    const hitFrames = Phaser.Animation.generateFrameNames("player/hit-", 1, 4, "", 2);
-    const dieFrames = Phaser.Animation.generateFrameNames("player/die-", 1, 4, "", 2);
-    this.animations.add(ANIM_NAMES.IDLE, idleFrames, 10, true);
-    this.animations.add(ANIM_NAMES.MOVE, moveFrames, 4, true);
-    this.animations.add(ANIM_NAMES.ATTACK, attackFrames, 10, true);
-    this.animations.add(ANIM_NAMES.HIT, hitFrames, 10, false);
-    this.animations.add(ANIM_NAMES.DIE, dieFrames, 10, false);
-    this.animations.play(ANIM_NAMES.IDLE);
 
     // Configure player physics
     game.physics.arcade.enable(this);
