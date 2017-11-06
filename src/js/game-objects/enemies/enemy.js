@@ -7,8 +7,8 @@ import { debugShape } from "../../helpers/sprite-utilities";
 export default class Enemy extends Phaser.Sprite {
   static MakeTestEnemy(game, key, position, enemyGroup) {
     const enemy = new Enemy(game, "assets", key, position, enemyGroup, {
-      health: 500,
-      speed: 50,
+      health: 100,
+      speed: 100,
       visionRadius: null
     });
     return enemy;
