@@ -219,26 +219,7 @@
             <key type="filename">asset-frames/enemies/circle-idle.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
             <key type="filename">asset-frames/pickups/box.png</key>
-            <key type="filename">asset-frames/player/attack-01.png</key>
-            <key type="filename">asset-frames/player/attack-02.png</key>
-            <key type="filename">asset-frames/player/attack-03.png</key>
-            <key type="filename">asset-frames/player/attack-04.png</key>
-            <key type="filename">asset-frames/player/die-01.png</key>
-            <key type="filename">asset-frames/player/die-02.png</key>
-            <key type="filename">asset-frames/player/die-03.png</key>
-            <key type="filename">asset-frames/player/die-04.png</key>
-            <key type="filename">asset-frames/player/hit-01.png</key>
-            <key type="filename">asset-frames/player/hit-02.png</key>
-            <key type="filename">asset-frames/player/hit-03.png</key>
-            <key type="filename">asset-frames/player/hit-04.png</key>
-            <key type="filename">asset-frames/player/idle-01.png</key>
-            <key type="filename">asset-frames/player/idle-02.png</key>
-            <key type="filename">asset-frames/player/idle-03.png</key>
-            <key type="filename">asset-frames/player/idle-04.png</key>
-            <key type="filename">asset-frames/player/move-01.png</key>
-            <key type="filename">asset-frames/player/move-02.png</key>
-            <key type="filename">asset-frames/player/move-03.png</key>
-            <key type="filename">asset-frames/player/move-04.png</key>
+            <key type="filename">asset-frames/player/player.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
