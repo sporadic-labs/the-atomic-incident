@@ -19,7 +19,8 @@ const ANIM_NAMES = {
 
 export default class Player extends Phaser.Sprite {
   constructor(game, x, y, parentGroup) {
-    super(game, x, y, "assets", "player/player");
+    // super(game, x, y, "assets", "player/player");
+    super(game, x, y, "assets", "enemies/player_v2_25");
     this.anchor.set(0.5);
     parentGroup.add(this);
 

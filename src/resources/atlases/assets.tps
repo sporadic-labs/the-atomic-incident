@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.3</string>
+        <string>4.5.0</string>
         <key>fileName</key>
-        <string>C:/Users/micha/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,6 +172,8 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
+        <key>autodetectAnimations</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -197,6 +199,29 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">asset-frames/enemies/amoeba_50.png</key>
+            <key type="filename">asset-frames/enemies/bacteria_50.png</key>
+            <key type="filename">asset-frames/enemies/beetle_50.png</key>
+            <key type="filename">asset-frames/enemies/characters_01_50px.png</key>
+            <key type="filename">asset-frames/enemies/characters_02_50px.png</key>
+            <key type="filename">asset-frames/enemies/characters_03_50px.png</key>
+            <key type="filename">asset-frames/enemies/characters_50.psd</key>
+            <key type="filename">asset-frames/enemies/gorilla_50.png</key>
+            <key type="filename">asset-frames/enemies/snail_50.png</key>
+            <key type="filename">asset-frames/enemies/teal-cell.png</key>
+            <key type="filename">asset-frames/enemies/turtle_50.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,13,25,25</rect>
+                <key>scale9Paddings</key>
+                <rect>13,13,25,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/enemies/arrow-big.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -213,10 +238,11 @@
             <key type="filename">asset-frames/enemies/arrow-small.png</key>
             <key type="filename">asset-frames/enemies/bomber-eye-idle-01.png</key>
             <key type="filename">asset-frames/enemies/bomber-idle-01.png</key>
-            <key type="filename">asset-frames/enemies/characters_01_25px.png</key>
-            <key type="filename">asset-frames/enemies/characters_02_25px.png</key>
-            <key type="filename">asset-frames/enemies/characters_03_25px.png</key>
+            <key type="filename">asset-frames/enemies/characters_25.psd</key>
             <key type="filename">asset-frames/enemies/circle-idle.png</key>
+            <key type="filename">asset-frames/enemies/player_v1_25.png</key>
+            <key type="filename">asset-frames/enemies/player_v2_25.png</key>
+            <key type="filename">asset-frames/enemies/player_v3_25.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
             <key type="filename">asset-frames/pickups/box.png</key>
             <key type="filename">asset-frames/player/player.png</key>
@@ -229,22 +255,6 @@
                 <rect>6,6,13,13</rect>
                 <key>scale9Paddings</key>
                 <rect>6,6,13,13</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/enemies/characters_01_50px.png</key>
-            <key type="filename">asset-frames/enemies/characters_02_50px.png</key>
-            <key type="filename">asset-frames/enemies/characters_03_50px.png</key>
-            <key type="filename">asset-frames/enemies/teal-cell.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>13,13,25,25</rect>
-                <key>scale9Paddings</key>
-                <rect>13,13,25,25</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
