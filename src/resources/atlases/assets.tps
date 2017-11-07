@@ -205,6 +205,8 @@
             <key type="filename">asset-frames/enemies/characters_03_50px.png</key>
             <key type="filename">asset-frames/enemies/characters_50.psd</key>
             <key type="filename">asset-frames/enemies/gorilla_50.png</key>
+            <key type="filename">asset-frames/enemies/particle-creature-dark.png</key>
+            <key type="filename">asset-frames/enemies/particle-creature.png</key>
             <key type="filename">asset-frames/enemies/snail_50.png</key>
             <key type="filename">asset-frames/enemies/teal-cell.png</key>
             <key type="filename">asset-frames/enemies/turtle_50.png</key>

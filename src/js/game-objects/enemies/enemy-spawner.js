@@ -1,9 +1,9 @@
 import Enemy from "./enemy";
 import { shuffleArray } from "../../helpers/utilities";
 
+// Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
+// will cycle through the types from last key through first when spawning.
 const ENEMY_TYPES = {
-  SMALL: "SMALL",
-  BIG: "BIG",
   GREEN_CELL: "GREEN CELL",
   PURPLE_CELL: "PURPLE CELL",
   TEAL_CELL: "TEAL CELL",
@@ -14,26 +14,28 @@ const ENEMY_TYPES = {
   SNAIL: "SNAIL",
   TURTLE: "TURTLE",
   VIRUS: "VIRUS",
-  VIRUS_DARK: "VIRUS_DARK"
+  VIRUS_DARK: "VIRUS_DARK",
+  PARTICLE: "PARTICLE",
+  PARTICLE_DARK: "PARTICLE_DARK"
 };
 const COMPOSITIONS = [
-  { [ENEMY_TYPES.SMALL]: 4, [ENEMY_TYPES.BIG]: 0, name: "all small" },
-  { [ENEMY_TYPES.SMALL]: 2, [ENEMY_TYPES.BIG]: 1, name: "big + small" }
+  {
+    [ENEMY_TYPES.GREEN_CELL]: 1,
+    [ENEMY_TYPES.PURPLE_CELL]: 1,
+    [ENEMY_TYPES.TEAL_CELL]: 1,
+    [ENEMY_TYPES.AMOEBA]: 1,
+    [ENEMY_TYPES.BACTERIA]: 1,
+    [ENEMY_TYPES.BEETLE]: 1,
+    [ENEMY_TYPES.GORILLA]: 1,
+    [ENEMY_TYPES.SNAIL]: 1,
+    [ENEMY_TYPES.TURTLE]: 1,
+    [ENEMY_TYPES.VIRUS]: 1,
+    [ENEMY_TYPES.VIRUS_DARK]: 1,
+    [ENEMY_TYPES.PARTICLE]: 1,
+    [ENEMY_TYPES.PARTICLE_DARK]: 1,
+    name: "test"
+  }
 ];
-const TEST_COMPOSITION = {
-  [ENEMY_TYPES.GREEN_CELL]: 1,
-  [ENEMY_TYPES.PURPLE_CELL]: 1,
-  [ENEMY_TYPES.TEAL_CELL]: 1,
-  [ENEMY_TYPES.AMOEBA]: 1,
-  [ENEMY_TYPES.BACTERIA]: 1,
-  [ENEMY_TYPES.BEETLE]: 1,
-  [ENEMY_TYPES.GORILLA]: 1,
-  [ENEMY_TYPES.SNAIL]: 1,
-  [ENEMY_TYPES.TURTLE]: 1,
-  [ENEMY_TYPES.VIRUS]: 1,
-  [ENEMY_TYPES.VIRUS_DARK]: 1,
-  name: "test"
-};
 
 export default class EnemySpawner {
   constructor(game, player) {
@@ -48,7 +50,7 @@ export default class EnemySpawner {
 
     this._timer = this.game.time.create(false);
     this._timer.start();
-    this._timer.add(500, this._spawnWave, this);
+    this._timer.add(500, this._spawnTesterWave, this);
   }
 
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5) {
@@ -91,6 +93,10 @@ export default class EnemySpawner {
         Enemy.MakeTestEnemy(this.game, "enemies/virus", pos, this._enemies);
       else if (enemyType === ENEMY_TYPES.VIRUS_DARK)
         Enemy.MakeTestEnemy(this.game, "enemies/virus-dark", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.PARTICLE)
+        Enemy.MakeTestEnemy(this.game, "enemies/particle-creature", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.PARTICLE_DARK)
+        Enemy.MakeTestEnemy(this.game, "enemies/particle-creature-dark", pos, this._enemies);
     }
   }
 
@@ -103,12 +109,31 @@ export default class EnemySpawner {
     return enemies;
   }
 
+  _spawnTesterWave() {
+    if (!this._testerTypePool) this._testerTypePool = Object.keys(ENEMY_TYPES);
+
+    const numWavelets = Math.floor(this._waveDifficulty);
+
+    for (let i = 0; i < numWavelets; i++) {
+      const order = [];
+      for (let j = 0; j < 5; j++) {
+        if (this._testerTypePool.length === 0) this._testerTypePool = Object.keys(ENEMY_TYPES);
+        const type = this._testerTypePool.pop();
+        order.push(type);
+      }
+      this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
+    }
+
+    const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
+    this._timer.add(nextWaveDelay, this._spawnTesterWave, this);
+    this._waveDifficulty += 1 / 3;
+  }
+
   _spawnWave() {
     const numWavelets = Math.floor(this._waveDifficulty);
 
     for (let i = 0; i < numWavelets; i++) {
-      // const comp = this.game.rnd.pick(COMPOSITIONS);
-      const comp = TEST_COMPOSITION;
+      const comp = this.game.rnd.pick(COMPOSITIONS);
       const order = this._generateEnemyOrder(comp);
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
