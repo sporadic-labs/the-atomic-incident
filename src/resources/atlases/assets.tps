@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.5.0</string>
+        <string>4.3.3</string>
         <key>fileName</key>
-        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,8 +172,6 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
-        <key>autodetectAnimations</key>
-        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -210,6 +208,8 @@
             <key type="filename">asset-frames/enemies/snail_50.png</key>
             <key type="filename">asset-frames/enemies/teal-cell.png</key>
             <key type="filename">asset-frames/enemies/turtle_50.png</key>
+            <key type="filename">asset-frames/enemies/virus-dark.png</key>
+            <key type="filename">asset-frames/enemies/virus.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
