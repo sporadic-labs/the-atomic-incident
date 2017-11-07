@@ -12,7 +12,9 @@ const ENEMY_TYPES = {
   BEETLE: "BEETLE",
   GORILLA: "GORILLA",
   SNAIL: "SNAIL",
-  TURTLE: "TURTLE"
+  TURTLE: "TURTLE",
+  VIRUS: "VIRUS",
+  VIRUS_DARK: "VIRUS_DARK"
 };
 const COMPOSITIONS = [
   { [ENEMY_TYPES.SMALL]: 4, [ENEMY_TYPES.BIG]: 0, name: "all small" },
@@ -28,6 +30,8 @@ const TEST_COMPOSITION = {
   [ENEMY_TYPES.GORILLA]: 1,
   [ENEMY_TYPES.SNAIL]: 1,
   [ENEMY_TYPES.TURTLE]: 1,
+  [ENEMY_TYPES.VIRUS]: 1,
+  [ENEMY_TYPES.VIRUS_DARK]: 1,
   name: "test"
 };
 
@@ -83,6 +87,10 @@ export default class EnemySpawner {
         Enemy.MakeTestEnemy(this.game, "enemies/snail_50", pos, this._enemies);
       else if (enemyType === ENEMY_TYPES.TURTLE)
         Enemy.MakeTestEnemy(this.game, "enemies/turtle_50", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.VIRUS)
+        Enemy.MakeTestEnemy(this.game, "enemies/virus", pos, this._enemies);
+      else if (enemyType === ENEMY_TYPES.VIRUS_DARK)
+        Enemy.MakeTestEnemy(this.game, "enemies/virus-dark", pos, this._enemies);
     }
   }
 
