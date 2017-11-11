@@ -19,8 +19,7 @@ const ANIM_NAMES = {
 
 export default class Player extends Phaser.Sprite {
   constructor(game, x, y, parentGroup) {
-    // super(game, x, y, "assets", "player/player");
-    super(game, x, y, "assets", "enemies/player_v2_25");
+    super(game, x, y, "assets", "player/player");
     this.anchor.set(0.5);
     parentGroup.add(this);
 
@@ -62,7 +61,7 @@ export default class Player extends Phaser.Sprite {
     });
 
     // Controls
-    this._movementController = new MovementController(this.body, 50, 5000, 100);
+    this._movementController = new MovementController(this.body, 50, 5000, 300);
     this._attackControls = new Controller(this.game.input);
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
@@ -74,6 +73,18 @@ export default class Player extends Phaser.Sprite {
     this.pickupSound = this.game.globals.soundManager.add("whoosh");
 
     this._velocity = new Phaser.Point(0, 0);
+
+    this._emitter = this.game.add.emitter(0, 0, 100);
+    this._emitter.makeParticles("assets", "player/player-trail");
+    this._emitter.lifespan = 1000;
+    this._emitter.minRotation = 180;
+    this._emitter.maxRotation = 180;
+    this._emitter.gravity = 0;
+    this._emitter.setScale(0.5, 1.2, 0.5, 1.2, 500, Phaser.Easing.Quadratic.In);
+    this._emitter.setAlpha(1, 0.5, 1000, Phaser.Easing.Linear.None);
+    this._emitter.setXSpeed(-50, 50);
+    this._emitter.setYSpeed(-50, 50);
+    globals.groups.background.add(this._emitter);
   }
 
   update() {
@@ -87,6 +98,9 @@ export default class Player extends Phaser.Sprite {
     // Update velocity after collision
     Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
     this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
+
+    if (this._velocity.getMagnitude() > 50)
+      this._emitter.emitParticle(this.x, this.y, "assets", "player/player-trail");
 
     // Update the rotation of the player based on the mouse
     let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
