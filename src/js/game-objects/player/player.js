@@ -8,6 +8,7 @@ import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
 import MOVEMENT_TYPES from "./movement-types";
+import SmokeTrail from "./smoke-trail";
 
 const ANIM_NAMES = {
   IDLE: "idle",
@@ -75,17 +76,8 @@ export default class Player extends Phaser.Sprite {
 
     this._velocity = new Phaser.Point(0, 0);
 
-    this._emitter = this.game.add.emitter(0, 0, 100);
-    this._emitter.makeParticles("assets", "player/player-trail");
-    this._emitter.lifespan = 1000;
-    this._emitter.minRotation = 180;
-    this._emitter.maxRotation = 180;
-    this._emitter.gravity = 0;
-    this._emitter.setScale(0.5, 1.2, 0.5, 1.2, 500, Phaser.Easing.Quadratic.In);
-    this._emitter.setAlpha(1, 0.5, 1000, Phaser.Easing.Linear.None);
-    this._emitter.setXSpeed(-50, 50);
-    this._emitter.setYSpeed(-50, 50);
-    globals.groups.background.add(this._emitter);
+    this._trail = new SmokeTrail(game, globals.groups.background);
+    this._trail.setRate(25);
   }
 
   update() {
@@ -100,9 +92,6 @@ export default class Player extends Phaser.Sprite {
     Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
     this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
 
-    if (this._velocity.getMagnitude() > 50)
-      this._emitter.emitParticle(this.x, this.y, "assets", "player/player-trail");
-
     // Update the rotation of the player based on the mouse
     let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     if (this._movementController._fixedAngle) {
@@ -114,6 +103,16 @@ export default class Player extends Phaser.Sprite {
     if (this._attackControls.isControlActive("attack") && this.weaponManager.isAbleToAttack()) {
       this.weaponManager.fire(this.position.angle(mousePos));
     }
+
+    // "Engine" position trail
+    const angleToEngine = this.rotation + Math.PI / 2;
+    const offset = 10 * this.scale.x;
+    const enginePosition = this.position
+      .clone()
+      .add(Math.cos(angleToEngine) * offset, Math.sin(angleToEngine) * offset);
+    this._trail.setEmitPosition(enginePosition.x, enginePosition.y);
+    // Hacky for now:
+    this._trail.setRate(this._movementController._accelerationFraction * 30);
 
     // Enemy collisions
     checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
