@@ -2,7 +2,7 @@ import Controller from "../../helpers/controller.js";
 import MOVEMENT_TYPES from "./movement-types.js";
 
 const MAX_SPEED_VALUES = {
-  WALK: 50,
+  WALK: 120,
   DASH: 240
 };
 
