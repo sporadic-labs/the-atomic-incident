@@ -24,7 +24,6 @@ export default class DashMelee extends BaseWeapon {
   }
 
   _startDashAttack(angle) {
-    // this._player._movementController.setMovementType(MOVEMENT_TYPES.DASH);
     this._player.startDash(angle);
 
     this._dashTimer.add(this._dashTime, () => {

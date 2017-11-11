@@ -23,9 +23,7 @@ export default class RapidFire extends BaseWeapon {
     const player = this._player;
     const x = player.x + playerDistance * Math.cos(angle);
     const y = player.y + playerDistance * Math.sin(angle);
-    const p = Projectile.makeBullet(this.game, x, y, this, player, this._damage, angle, speed);
-    p.scale.setTo(0.4, 0.4);
-    const rgb = Phaser.Color.HSLtoRGB(0, 1, 0);
-    p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
+    const p = Projectile.makeSlug(this.game, x, y, this, player, this._damage, angle, speed);
+    p.scale.setTo(0.6, 0.8);
   }
 }

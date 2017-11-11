@@ -9,9 +9,23 @@ export default class Projectile extends Phaser.Sprite {
     return bullet;
   }
 
-  static makeBullet(game, x, y, parent, player, damage, angle, speed) {
+  static makeSlug(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
-    const frame = "weapons/slug";
+    const frame = "weapons/machine_gun_15";
+    return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
+  }
+  static makeScatterShot(game, x, y, parent, player, damage, angle, speed) {
+    const key = "assets";
+    const frame = "weapons/shotgun_15";
+    return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
+  }
+  static makeHomingShot(game, x, y, parent, player, damage, angle, speed) {
+    const key = "assets";
+    const frame = "weapons/tracking_15";
+    return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
+  }
+
+  static makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed) {
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.init(new CollisionLogic(bullet, damage));
     return bullet;

@@ -6,7 +6,7 @@ export default class PiercingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.PIERCING_SHOT, 15, 300, 1000);
     this._damage = 40;
-    this._speed = 200;
+    this._speed = 320;
   }
 
   fire(angle) {

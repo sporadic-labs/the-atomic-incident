@@ -57,10 +57,8 @@ export default class HomingShot extends BaseWeapon {
     const player = this._player;
     const x = player.x + playerDistance * Math.cos(angle);
     const y = player.y + playerDistance * Math.sin(angle);
-    const p = Projectile.makeBullet(this.game, x, y, this, player, this._damage, angle, speed);
-    p.scale.setTo(0.4, 1);
-    const rgb = Phaser.Color.HSLtoRGB(18 / 360, 1, 0.5);
-    p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
+    const p = Projectile.makeHomingShot(this.game, x, y, this, player, this._damage, angle, speed);
+    p.scale.setTo(1.2, 1.2);
     return p;
   }
 }
