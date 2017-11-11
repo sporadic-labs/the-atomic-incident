@@ -2,32 +2,25 @@ import Controller from "../../helpers/controller.js";
 import MOVEMENT_TYPES from "./movement-types.js";
 
 const MAX_SPEED_VALUES = {
-  WALK: 120,
+  WALK: 200,
   DASH: 240
 };
 
 const MAX_ACCELERATION_VALUES = {
-  WALK: 5000,
+  WALK: 3000,
   DASH: 12000
 };
 
 const MAX_DRAG_VALUES = {
-  WALK: 1000,
+  WALK: 300,
   DASH: 400
 };
 
 export default class MovementContoller {
-  constructor(
-    body,
-    maxSpeed = MAX_SPEED_VALUES.WALK,
-    maxAcceleration = MAX_ACCELERATION_VALUES.WALK,
-    drag = MAX_DRAG_VALUES.WALK
-  ) {
+  constructor(body) {
     this.body = body;
     this.game = body.game;
-    this._maxSpeed = maxSpeed;
-    this._customDrag = drag;
-    this._maxAcceleration = maxAcceleration;
+    this._accelerationFraction = 0;
 
     // Use this for the dash attack.
     this._fixedAngle;
@@ -60,7 +53,7 @@ export default class MovementContoller {
 
     // Normalize the acceleration and set the magnitude. This makes it so that the player moves in
     // the same speed in all directions.
-    acceleration = acceleration.setMagnitude(this._maxAcceleration);
+    acceleration = acceleration.setMagnitude(this._accelerationFraction * this._maxAcceleration);
     this.body.acceleration.copyFrom(acceleration);
 
     // Cap the velocity. Phaser physics's max velocity caps the velocity in the x & y dimensions
@@ -129,16 +122,30 @@ export default class MovementContoller {
   _calculateWalkAcceleration() {
     const accelMod = 1;
     let accel = new Phaser.Point(0, 0);
-    if (this._controls.isControlActive("move-left")) {
+    const moveLeft = this._controls.isControlActive("move-left");
+    const moveRight = this._controls.isControlActive("move-right");
+    const moveUp = this._controls.isControlActive("move-up");
+    const moveDown = this._controls.isControlActive("move-down");
+
+    if (moveLeft) {
       accel.x += -accelMod;
-    } else if (this._controls.isControlActive("move-right")) {
+    } else if (moveRight) {
       accel.x += accelMod;
     }
-    if (this._controls.isControlActive("move-up")) {
+
+    if (moveUp) {
       accel.y += -accelMod;
-    } else if (this._controls.isControlActive("move-down")) {
+    } else if (moveDown) {
       accel.y += accelMod;
     }
+
+    if (moveLeft || moveRight || moveUp || moveDown) {
+      this._accelerationFraction += 3 * this.game.time.physicsElapsed;
+      if (this._accelerationFraction > 1) this._accelerationFraction = 1;
+    } else {
+      this._accelerationFraction = 0;
+    }
+
     return accel;
   }
 
