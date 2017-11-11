@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.3</string>
+        <string>4.5.0</string>
         <key>fileName</key>
-        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,6 +172,8 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
+        <key>autodetectAnimations</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -225,6 +227,7 @@
                 <false/>
             </struct>
             <key type="filename">asset-frames/enemies/arrow-big.png</key>
+            <key type="filename">asset-frames/weapons/dash_60.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -242,12 +245,12 @@
             <key type="filename">asset-frames/enemies/bomber-idle-01.png</key>
             <key type="filename">asset-frames/enemies/characters_25.psd</key>
             <key type="filename">asset-frames/enemies/circle-idle.png</key>
-            <key type="filename">asset-frames/enemies/player_v1_25.png</key>
-            <key type="filename">asset-frames/enemies/player_v2_25.png</key>
-            <key type="filename">asset-frames/enemies/player_v3_25.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
             <key type="filename">asset-frames/pickups/box.png</key>
             <key type="filename">asset-frames/player/player.png</key>
+            <key type="filename">asset-frames/player/player_v1_25.png</key>
+            <key type="filename">asset-frames/player/player_v2_25.png</key>
+            <key type="filename">asset-frames/player/player_v3_25.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -306,6 +309,10 @@
             <key type="filename">asset-frames/fx/hit-05.png</key>
             <key type="filename">asset-frames/fx/hit-06.png</key>
             <key type="filename">asset-frames/pickups/energy-pickup.png</key>
+            <key type="filename">asset-frames/weapons/machine_gun_15.png</key>
+            <key type="filename">asset-frames/weapons/rocket_15.png</key>
+            <key type="filename">asset-frames/weapons/shotgun_15.png</key>
+            <key type="filename">asset-frames/weapons/tracking_15.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -450,7 +457,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/player/player-trail.png</key>
+            <key type="filename">asset-frames/player/player_35.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
