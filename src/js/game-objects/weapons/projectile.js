@@ -1,36 +1,111 @@
 import { satSpriteVsTilemap, checkOverlapWithGroup } from "../../helpers/sprite-utilities";
 
+/**
+ * @class Projectile
+ */
 export default class Projectile extends Phaser.Sprite {
+  /**
+   * 
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
   static makePiercing(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
-    const frame = "weapons/slug";
+    const frame = "weapons/machine_gun_15";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.init(new PiercingCollisionLogic(bullet, damage));
     return bullet;
   }
-
+  /**
+   * 
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
   static makeSlug(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
-    const frame = "weapons/machine_gun_15";
+    const frame = "weapons/slug";
     return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
   }
+  /**
+   * 
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
   static makeScatterShot(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
     const frame = "weapons/shotgun_15";
     return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
   }
+  /**
+   * 
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
   static makeHomingShot(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
     const frame = "weapons/tracking_15";
     return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
   }
-
+  /**
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {string} key - Key for sprite in asset sheet.
+   * @param {string} frame - Frame for sprite in asset sheet.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
   static makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed) {
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.init(new CollisionLogic(bullet, damage));
     return bullet;
   }
 
+  /**
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {string} key - Key for sprite in asset sheet.
+   * @param {string} frame - Frame for sprite in asset sheet.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @constructor
+   */
   constructor(game, x, y, key, frame, parent, player, angle, speed) {
     super(game, x, y, key, frame);
     this.anchor.set(0.5);
@@ -93,6 +168,11 @@ class CollisionLogic {
   }
 }
 
+/**
+ * Piercing projectiles damage an enemy but are not destroyed on contact. 
+ * 
+ * @class PiercingCollisionLogic
+ */
 class PiercingCollisionLogic extends CollisionLogic {
   constructor(projectile, damage) {
     super(projectile, damage);
