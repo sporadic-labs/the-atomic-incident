@@ -17,6 +17,7 @@ import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 import EnemyGroup from "../game-objects/enemies/enemy-group";
 import EnergyPickup from "../game-objects/pickups/energy-pickup";
 import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
+import WEAPON_TYPES from "../game-objects/weapons/weapon-types";
 import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar/";
@@ -117,25 +118,74 @@ export default class PlayState extends Phaser.State {
     this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
     this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
 
-    // Debug menu
-    const debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
-      font: "18px 'Alfa Slab One'",
-      fill: "#9C9C9C"
-    });
-    debugText.anchor.set(0, 1);
-    groups.hud.add(debugText);
-    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
-      gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
-      gameStore.pause();
-    });
+    /* If 'enableDebug' flag is set, add debug menu, pause w/o menus,
+     * switch weapons, fps text.
+     */
+    if (!this.game.debug.isDisabled) {
+      // Debug menu
+      const debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
+        font: "18px 'Alfa Slab One'",
+        fill: "#9C9C9C"
+      });
+      debugText.anchor.set(0, 1);
+      groups.hud.add(debugText);
+      game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
+        gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
+        gameStore.pause();
+      });
 
-    // FPS
-    this._fpsText = game.make.text(15, game.height - 25, "60", {
-      font: "18px 'Alfa Slab One'",
-      fill: "#9C9C9C"
-    });
-    this._fpsText.anchor.set(0, 1);
-    groups.hud.add(this._fpsText);
+      // Pause without menus showing up.
+      game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => {
+        // NOTE(rex): Only allowed if all menus are closed already.
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED && gameStore.isPaused) {
+          gameStore.unpause();
+        } else if (gameStore.menuState === MENU_STATE_NAMES.CLOSED && !gameStore.isPaused) {
+          gameStore.pause();
+        }
+      });
+
+      /* Manually switch weapons with the number keys.
+       * NOTE(rex): Only allowed when menus are closed.
+       * 1 - Scattershot
+       * 2 - Rapid fire
+       * 3 - Homing Shot
+       * 4 - Piercing Shot
+       * 5 - Dash
+       */
+      game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() => {
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+          player.weaponManager.switchWeapon(WEAPON_TYPES.SCATTERSHOT);
+        }
+      });
+      game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() => {
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+          player.weaponManager.switchWeapon(WEAPON_TYPES.RAPID_FIRE);
+        }
+      });
+      game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => {
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+          player.weaponManager.switchWeapon(WEAPON_TYPES.HOMING_SHOT);
+        }
+      });
+      game.input.keyboard.addKey(Phaser.Keyboard.FOUR).onDown.add(() => {
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+          player.weaponManager.switchWeapon(WEAPON_TYPES.PIERCING_SHOT);
+        }
+      });
+      game.input.keyboard.addKey(Phaser.Keyboard.FIVE).onDown.add(() => {
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+          player.weaponManager.switchWeapon(WEAPON_TYPES.DASH);
+        }
+      });
+
+      // FPS
+      this._fpsText = game.make.text(15, game.height - 25, "60", {
+        font: "18px 'Alfa Slab One'",
+        fill: "#9C9C9C"
+      });
+      this._fpsText.anchor.set(0, 1);
+      groups.hud.add(this._fpsText);
+    }
   }
 
   update() {
