@@ -104,6 +104,17 @@ export default class PlayState extends Phaser.State {
       new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, 15, 3);
     });
 
+    // Use the 'P' button to pause/unpause, as well as the button on the HUD.
+    game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
+      if (gameStore.isPaused) {
+        gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
+        gameStore.unpause();
+      } else {
+        gameStore.setMenuState(MENU_STATE_NAMES.PAUSE);
+        gameStore.pause();
+      }
+    });
+
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
       this.lighting.setOpacity(preferencesStore.shadowOpacity);
