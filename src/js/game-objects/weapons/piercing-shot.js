@@ -23,8 +23,6 @@ export default class PiercingShot extends BaseWeapon {
     const x = player.x + playerDistance * Math.cos(angle);
     const y = player.y + playerDistance * Math.sin(angle);
     const p = Projectile.makePiercing(this.game, x, y, this, player, this._damage, angle, speed);
-    p.scale.setTo(0.7, 1);
-    const rgb = Phaser.Color.HSLtoRGB(0, 1, 0);
-    p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
+    p.scale.setTo(0.8, 1.2);
   }
 }

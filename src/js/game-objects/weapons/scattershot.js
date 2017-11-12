@@ -11,7 +11,7 @@ export default class Scattershot extends BaseWeapon {
   fire(angle) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
       // Find trajectory
-      const pelletNum = this.game.rnd.integerInRange(16, 24);
+      const pelletNum = this.game.rnd.integerInRange(14, 20);
 
       // randomize the trajectory of every bulconst in the shotgun blast
       for (let i = 0; i < pelletNum; i++) {
@@ -32,6 +32,6 @@ export default class Scattershot extends BaseWeapon {
     const x = player.x + playerDistance * Math.cos(angle);
     const y = player.y + playerDistance * Math.sin(angle);
     const p = Projectile.makeScatterShot(this.game, x, y, this, player, this._damage, angle, speed);
-    p.scale.setTo(0.75, 0.75);
+    p.scale.setTo(0.64, 0.64);
   }
 }
