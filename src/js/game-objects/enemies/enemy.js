@@ -3,7 +3,7 @@ import HealthBar from "./components/health-bar.js";
 import TargetingComp from "./components/targeting-component";
 import SAT from "sat";
 import { debugShape } from "../../helpers/sprite-utilities";
-import FlashSilhouette from "./components/flash-silhouette";
+import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 
 export default class Enemy extends Phaser.Sprite {
   static MakeTestEnemy(game, key, position, enemyGroup) {
@@ -67,12 +67,13 @@ export default class Enemy extends Phaser.Sprite {
     }));
     this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
 
-    this._flash = new FlashSilhouette(this);
+    this._flashFilter = new FlashSilhouetteFilter(game);
+    this.filters = [this._flashFilter];
   }
 
   takeDamage(damage) {
     const newHealth = this._healthBar.incrementHealth(-damage);
-    this._flash.startFlash();
+    this._flashFilter.startFlash();
     if (newHealth <= 0) {
       this.destroy();
       return true;
