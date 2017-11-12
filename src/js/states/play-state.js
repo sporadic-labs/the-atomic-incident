@@ -200,7 +200,9 @@ export default class PlayState extends Phaser.State {
   }
 
   update() {
-    this._fpsText.setText(this.game.time.fps);
+    if (this._fpsText) {
+      this._fpsText.setText(this.game.time.fps);
+    }
   }
 
   shutdown() {

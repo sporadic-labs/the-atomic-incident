@@ -7,13 +7,15 @@ import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Boot, Load, StartMenu, Play, GAME_STATE_NAMES } from "./states";
 
+// Enable/disable Debug.
+const enableDebug = true;
 const gameDimensions = 750;
 // Keep this on CANVAS until Phaser 3 for performance reasons?
 const game = new Phaser.Game({
   width: gameDimensions,
   height: gameDimensions,
   renderer: Phaser.WEBGL,
-  enableDebug: true, // We can turn off debug when deploying - using debug causes a hit on webgl
+  enableDebug: enableDebug, // We can turn off debug when deploying - using debug causes a hit on webgl
   parent: "game-container"
 });
 
@@ -47,6 +49,12 @@ game.state.add(GAME_STATE_NAMES.START_MENU, StartMenu);
 game.state.add(GAME_STATE_NAMES.PLAY, Play);
 
 gameStore.setGameState(GAME_STATE_NAMES.BOOT);
+
+// If the game isn't in debug mode, remove the instructions from the dom.
+if (!enableDebug) {
+  const debugInstructionsElement = document.getElementById("debug-instructions");
+  debugInstructionsElement.innerHTML = "";
+}
 
 autorun(() => {
   game.state.start(gameStore.gameState);
