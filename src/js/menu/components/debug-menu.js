@@ -63,7 +63,10 @@ export default function DebugMenu({ preferencesStore, gameStore, onResume }) {
             onClick={() => preferencesStore.setSkipMenu(!skipMenu)}
           />
         </label>
-        <button onClick={() => gameStore.resetHighScore()}>Reset High Score</button>
+        <button class="text-btn" onClick={() => gameStore.resetHighScore()}>
+          Reset High Score
+        </button>
+        <button onClick={onResume}>Resume Game</button>
       </div>
     </div>
   );

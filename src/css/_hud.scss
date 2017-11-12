@@ -124,5 +124,16 @@
       font-size: 14px;
       padding: 6px;
     }
+
+    .text-btn {
+      background: none;
+      color: #fff;
+      margin: 0px auto;
+      padding: 0px;
+
+      &:hover {
+        color: #e6e6e6;
+      }
+    }
   }
 }
