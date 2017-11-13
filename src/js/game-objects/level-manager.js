@@ -104,6 +104,20 @@ export default class MapManager {
     else return false;
   }
 
+  isLocationInNavMesh(x, y) {
+    const map = this.tilemap;
+    // Check if the tile is occupied
+    const checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, this.wallLayer);
+    if (checkTile !== null) return false;
+    // Check if the location is inside the navmesh
+    const meshRects = map.objects["navmesh-shrunken"] || [];
+    for (const r of meshRects) {
+      if (!r.rectangle) continue;
+      if (x >= r.x && x <= r.x + r.width && y >= r.y && y <= r.y + r.height) return true;
+    }
+    return false;
+  }
+
   /**
    * Calculate an array of walls for lighting calculations
    * 

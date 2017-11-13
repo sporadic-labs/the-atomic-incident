@@ -3,36 +3,12 @@ import { shuffleArray } from "../../helpers/utilities";
 
 // Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
 // will cycle through the types from last key through first when spawning.
-const ENEMY_TYPES = {
-  GREEN_CELL: "GREEN CELL",
-  PURPLE_CELL: "PURPLE CELL",
-  TEAL_CELL: "TEAL CELL",
-  AMOEBA: "AMOEBA",
-  BACTERIA: "BACTERIA",
-  BEETLE: "BEETLE",
-  GORILLA: "GORILLA",
-  SNAIL: "SNAIL",
-  TURTLE: "TURTLE",
-  VIRUS: "VIRUS",
-  VIRUS_DARK: "VIRUS_DARK",
-  PARTICLE: "PARTICLE",
-  PARTICLE_DARK: "PARTICLE_DARK"
-};
+const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
   {
     [ENEMY_TYPES.GREEN_CELL]: 1,
-    [ENEMY_TYPES.PURPLE_CELL]: 1,
     [ENEMY_TYPES.TEAL_CELL]: 1,
-    [ENEMY_TYPES.AMOEBA]: 1,
-    [ENEMY_TYPES.BACTERIA]: 1,
-    [ENEMY_TYPES.BEETLE]: 1,
-    [ENEMY_TYPES.GORILLA]: 1,
-    [ENEMY_TYPES.SNAIL]: 1,
-    [ENEMY_TYPES.TURTLE]: 1,
-    [ENEMY_TYPES.VIRUS]: 1,
-    [ENEMY_TYPES.VIRUS_DARK]: 1,
-    [ENEMY_TYPES.PARTICLE]: 1,
-    [ENEMY_TYPES.PARTICLE_DARK]: 1,
+    [ENEMY_TYPES.TURTLE]: 3,
     name: "test"
   }
 ];
@@ -50,7 +26,7 @@ export default class EnemySpawner {
 
     this._timer = this.game.time.create(false);
     this._timer.start();
-    this._timer.add(500, this._spawnTesterWave, this);
+    this._timer.add(500, this._spawnWave, this);
   }
 
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5) {
@@ -68,35 +44,51 @@ export default class EnemySpawner {
       const pos = this._player.position
         .clone()
         .add(radius * Math.cos(enemyAngle), radius * Math.sin(enemyAngle));
-      if (!this._mapManager.isLocationEmpty(pos.x, pos.y)) continue;
-      if (enemyType === ENEMY_TYPES.SMALL) Enemy.MakeTestEnemy(this.game, pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.BIG) Enemy.MakeBig(this.game, pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.GREEN_CELL)
-        Enemy.MakeTestEnemy(this.game, "enemies/green-cell", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.PURPLE_CELL)
-        Enemy.MakeTestEnemy(this.game, "enemies/purple-cell", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.TEAL_CELL)
-        Enemy.MakeTestEnemy(this.game, "enemies/teal-cell", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.AMOEBA)
-        Enemy.MakeTestEnemy(this.game, "enemies/amoeba_50", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.BACTERIA)
-        Enemy.MakeTestEnemy(this.game, "enemies/bacteria_50", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.BEETLE)
-        Enemy.MakeTestEnemy(this.game, "enemies/beetle_50", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.GORILLA)
-        Enemy.MakeTestEnemy(this.game, "enemies/gorilla_50", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.SNAIL)
-        Enemy.MakeTestEnemy(this.game, "enemies/snail_50", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.TURTLE)
-        Enemy.MakeTestEnemy(this.game, "enemies/turtle_50", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.VIRUS)
-        Enemy.MakeTestEnemy(this.game, "enemies/virus", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.VIRUS_DARK)
-        Enemy.MakeTestEnemy(this.game, "enemies/virus-dark", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.PARTICLE)
-        Enemy.MakeTestEnemy(this.game, "enemies/particle-creature", pos, this._enemies);
-      else if (enemyType === ENEMY_TYPES.PARTICLE_DARK)
-        Enemy.MakeTestEnemy(this.game, "enemies/particle-creature-dark", pos, this._enemies);
+
+      if (!this._mapManager.isLocationInNavMesh(pos.x, pos.y)) continue;
+
+      switch (enemyType) {
+        case ENEMY_TYPES.GREEN_CELL:
+          Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
+          break;
+        case ENEMY_TYPES.TURTLE:
+          Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
+          break;
+        case ENEMY_TYPES.TEAL_CELL:
+          Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
+          break;
+        default:
+          break;
+      }
+
+      // if (enemyType === ENEMY_TYPES.SMALL) Enemy.MakeEnemyType(this.game, pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.BIG) Enemy.MakeBig(this.game, pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.GREEN_CELL)
+      //   Enemy.MakeEnemyType(this.game, "enemies/green-cell", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.PURPLE_CELL)
+      //   Enemy.MakeEnemyType(this.game, "enemies/purple-cell", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.TEAL_CELL)
+      //   Enemy.MakeEnemyType(this.game, "enemies/teal-cell", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.AMOEBA)
+      //   Enemy.MakeEnemyType(this.game, "enemies/amoeba_50", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.BACTERIA)
+      //   Enemy.MakeEnemyType(this.game, "enemies/bacteria_50", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.BEETLE)
+      //   Enemy.MakeEnemyType(this.game, "enemies/beetle_50", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.GORILLA)
+      //   Enemy.MakeEnemyType(this.game, "enemies/gorilla_50", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.SNAIL)
+      //   Enemy.MakeEnemyType(this.game, "enemies/snail_50", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.TURTLE)
+      //   Enemy.MakeEnemyType(this.game, "enemies/turtle_50", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.VIRUS)
+      //   Enemy.MakeEnemyType(this.game, "enemies/virus", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.VIRUS_DARK)
+      //   Enemy.MakeEnemyType(this.game, "enemies/virus-dark", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.PARTICLE)
+      //   Enemy.MakeEnemyType(this.game, "enemies/particle-creature", pos, this._enemies);
+      // else if (enemyType === ENEMY_TYPES.PARTICLE_DARK)
+      //   Enemy.MakeEnemyType(this.game, "enemies/particle-creature-dark", pos, this._enemies);
     }
   }
 
