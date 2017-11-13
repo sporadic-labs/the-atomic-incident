@@ -193,7 +193,6 @@ export default class Player extends Phaser.Sprite {
   _onCollideWithEnemy(self, enemy) {
     if (this._isDashing) {
       const damage = this.weaponManager.getActiveWeapon()._damage;
-      console.log(damage);
       if (enemy._spawned) enemy.takeDamage(damage);
     } else if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
       this.takeDamage();
