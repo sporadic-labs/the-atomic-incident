@@ -1,16 +1,19 @@
 import Color from "../../helpers/color";
 import HealthBar from "./components/health-bar.js";
 import TargetingComp from "./components/targeting-component";
-import SAT from "sat";
 import { debugShape } from "../../helpers/sprite-utilities";
 import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
+import { ENEMY_INFO } from "./enemy-info";
 
 export default class Enemy extends Phaser.Sprite {
-  static MakeTestEnemy(game, key, position, enemyGroup) {
+  static MakeEnemyType(game, type, position, enemyGroup) {
+    const info = ENEMY_INFO[type] || {};
+    const key = info.key || "";
     const enemy = new Enemy(game, "assets", key, position, enemyGroup, {
       health: 100,
       speed: 160,
-      visionRadius: null
+      visionRadius: null,
+      collisionPoints: info.collisionPoints || []
     });
     return enemy;
   }
@@ -21,7 +24,7 @@ export default class Enemy extends Phaser.Sprite {
     frame,
     position,
     enemyGroup,
-    { health = 100, color = 0xffffff, speed = 100, visionRadius = 200 } = {}
+    { health = 100, color = 0xffffff, speed = 100, visionRadius = 200, collisionPoints = [] } = {}
   ) {
     super(game, position.x, position.y, key, frame);
     this.anchor.set(0.5);
@@ -56,14 +59,14 @@ export default class Enemy extends Phaser.Sprite {
     //   an enemy
     game.physics.arcade.enable(this);
     // const diameter = 0.2 * this.width; // Fudge factor - body smaller than sprite
-    const diameter = 1 * this.width; // Temp
+    const diameter = 0.5 * this.width; // Temp
     this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
     this.body.collideWorldBounds = true;
-    // Counter-clockwise points defined in pixel coordinates of 45 x 45 pixel image, then scaled to
-    // the current image dimensions and shifted relative to the origin. Hacky for now.
-    const points = [{ x: 22.5, y: 8 }, { x: 36, y: 40 }, { x: 8, y: 40 }].map(p => ({
-      x: p.x / 45 * this.width - this.width / 2,
-      y: p.y / 45 * this.height - this.height / 2
+    // Counter-clockwise points (in range [0, 1]) need to be shifted so that the center is in the
+    // middle of the graphic and then scaled to match sprite's scale.
+    const points = collisionPoints.map(p => ({
+      x: (p[0] - 0.5) * this.width,
+      y: (p[1] - 0.5) * this.height
     }));
     this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
 
