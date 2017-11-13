@@ -54,9 +54,9 @@ export default class SatBodyPlugin extends Phaser.Plugin {
     return this._isDebug === true;
   }
 
-  enableDebugAll() {
+  enableDebugAll(debugColor = 0x00ff00, parent = null) {
     this._isDebug = true;
-    this._bodies.forEach(body => body.enableDebug());
+    this._bodies.forEach(body => body.enableDebug(debugColor, parent));
   }
 
   disableDebugAll() {

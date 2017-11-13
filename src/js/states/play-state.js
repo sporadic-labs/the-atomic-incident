@@ -106,7 +106,8 @@ export default class PlayState extends Phaser.State {
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
       this.lighting.setOpacity(preferencesStore.shadowOpacity);
-      if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
+      if (preferencesStore.physicsDebug)
+        globals.plugins.satBody.enableDebugAll(0x00ff00, groups.foreground);
       else globals.plugins.satBody.disableDebugAll();
       globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
