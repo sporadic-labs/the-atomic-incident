@@ -26,7 +26,7 @@ export default class EnemySpawner {
 
     this._timer = this.game.time.create(false);
     this._timer.start();
-    this._timer.add(500, this._spawnWave, this);
+    this._timer.add(500, this._spawnTesterWave, this);
   }
 
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5) {
@@ -47,48 +47,11 @@ export default class EnemySpawner {
 
       if (!this._mapManager.isLocationInNavMesh(pos.x, pos.y)) continue;
 
-      switch (enemyType) {
-        case ENEMY_TYPES.GREEN_CELL:
-          Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
-          break;
-        case ENEMY_TYPES.TURTLE:
-          Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
-          break;
-        case ENEMY_TYPES.TEAL_CELL:
-          Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
-          break;
-        default:
-          break;
+      if (enemyType in ENEMY_TYPES) {
+        Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
+      } else {
+        console.warn(`Unknown enemy type spawned: ${enemyType}`);
       }
-
-      // if (enemyType === ENEMY_TYPES.SMALL) Enemy.MakeEnemyType(this.game, pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.BIG) Enemy.MakeBig(this.game, pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.GREEN_CELL)
-      //   Enemy.MakeEnemyType(this.game, "enemies/green-cell", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.PURPLE_CELL)
-      //   Enemy.MakeEnemyType(this.game, "enemies/purple-cell", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.TEAL_CELL)
-      //   Enemy.MakeEnemyType(this.game, "enemies/teal-cell", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.AMOEBA)
-      //   Enemy.MakeEnemyType(this.game, "enemies/amoeba_50", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.BACTERIA)
-      //   Enemy.MakeEnemyType(this.game, "enemies/bacteria_50", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.BEETLE)
-      //   Enemy.MakeEnemyType(this.game, "enemies/beetle_50", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.GORILLA)
-      //   Enemy.MakeEnemyType(this.game, "enemies/gorilla_50", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.SNAIL)
-      //   Enemy.MakeEnemyType(this.game, "enemies/snail_50", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.TURTLE)
-      //   Enemy.MakeEnemyType(this.game, "enemies/turtle_50", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.VIRUS)
-      //   Enemy.MakeEnemyType(this.game, "enemies/virus", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.VIRUS_DARK)
-      //   Enemy.MakeEnemyType(this.game, "enemies/virus-dark", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.PARTICLE)
-      //   Enemy.MakeEnemyType(this.game, "enemies/particle-creature", pos, this._enemies);
-      // else if (enemyType === ENEMY_TYPES.PARTICLE_DARK)
-      //   Enemy.MakeEnemyType(this.game, "enemies/particle-creature-dark", pos, this._enemies);
     }
   }
 
