@@ -160,7 +160,7 @@ class CollisionLogic {
     this._damage = damage;
   }
   onCollideWithEnemy(enemy) {
-    if (enemy._spawned) enemy.takeDamage(this._damage);
+    if (enemy._spawned) enemy.takeDamage(this._damage, this._projectile);
     this._projectile.destroy();
   }
   onCollideWithWall() {
@@ -181,7 +181,7 @@ class PiercingCollisionLogic extends CollisionLogic {
 
   onCollideWithEnemy(enemy) {
     if (enemy._spawned && !this._enemiesDamaged.includes(enemy)) {
-      enemy.takeDamage(this._damage);
+      enemy.takeDamage(this._damage, this._projectile);
       this._enemiesDamaged.push(enemy);
     }
   }

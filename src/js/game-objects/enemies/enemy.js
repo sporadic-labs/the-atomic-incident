@@ -51,6 +51,7 @@ export default class Enemy extends Phaser.Sprite {
     this._dieSound.playMultiple = true;
 
     enemyGroup.addEnemy(this);
+    this.enemyGroup = enemyGroup;
 
     // Config arcade and SAT body physics
     // - Arcade physics hitbox is small. It is used to allow enemies to move without jostling one
@@ -74,10 +75,15 @@ export default class Enemy extends Phaser.Sprite {
     this.filters = [this._flashFilter];
   }
 
-  takeDamage(damage) {
+  takeDamage(damage, projectile) {
     const newHealth = this._healthBar.incrementHealth(-damage);
     this._flashFilter.startFlash();
     if (newHealth <= 0) {
+      if (projectile) {
+        // NOTE: need to handle player dash since that's not a projectile
+        const angle = Math.atan2(projectile.body.velocity.y, projectile.body.velocity.x);
+        this.enemyGroup.emitDeathParticles(projectile.position, angle);
+      }
       this.destroy();
       return true;
     }

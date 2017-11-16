@@ -200,9 +200,6 @@
             <key type="filename">asset-frames/enemies/amoeba_50.png</key>
             <key type="filename">asset-frames/enemies/bacteria_50.png</key>
             <key type="filename">asset-frames/enemies/beetle_50.png</key>
-            <key type="filename">asset-frames/enemies/characters_01_50px.png</key>
-            <key type="filename">asset-frames/enemies/characters_02_50px.png</key>
-            <key type="filename">asset-frames/enemies/characters_03_50px.png</key>
             <key type="filename">asset-frames/enemies/characters_50.psd</key>
             <key type="filename">asset-frames/enemies/gorilla_50.png</key>
             <key type="filename">asset-frames/enemies/particle-creature-dark.png</key>
@@ -258,6 +255,19 @@
                 <rect>6,6,13,13</rect>
                 <key>scale9Paddings</key>
                 <rect>6,6,13,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/enemies/death-particles.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,5,5</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,5,5</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
