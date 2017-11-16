@@ -79,8 +79,8 @@ export default class Enemy extends Phaser.Sprite {
     const newHealth = this._healthBar.incrementHealth(-damage);
     this._flashFilter.startFlash();
     if (newHealth <= 0) {
-      if (projectile) {
-        // NOTE: need to handle player dash since that's not a projectile
+      if (projectile && projectile.body) {
+        // Bugs: sometimes projectile is destroyed before the enemy. Also need to handle player dash
         const angle = Math.atan2(projectile.body.velocity.y, projectile.body.velocity.x);
         this.enemyGroup.emitDeathParticles(projectile.position, angle);
       }

@@ -6,6 +6,8 @@ export default class EnemyGroup extends Phaser.Group {
 
     this.deathParticles = new DeathParticles(game, this);
 
+    this.emitDeathParticles({ x: 300, y: 300 }, 0);
+
     this.onEnemyAdded = new Phaser.Signal();
     this.onEnemyKilled = new Phaser.Signal();
   }
