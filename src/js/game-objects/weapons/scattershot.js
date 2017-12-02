@@ -6,6 +6,11 @@ export default class Scattershot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 5, 480, 1800);
     this._damage = 20;
+
+    this._fireSound = game.globals.soundManager.add("chiptone/shotgun-fire");
+    this._fireSound.playMultiple = true;
+    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._reloadSound.playMultiple = true;
   }
 
   fire(angle) {
@@ -22,8 +27,13 @@ export default class Scattershot extends BaseWeapon {
       }
 
       this.incrementAmmo(-1);
-      if (this.getAmmo() > 0) this._startCooldown(this._cooldownTime);
-      else this._reload();
+      if (this.getAmmo() > 0) {
+        this._fireSound.play();
+        this._startCooldown(this._cooldownTime);
+      } else {
+        this._reloadSound.play();
+        this._reload();
+      }
     }
   }
 

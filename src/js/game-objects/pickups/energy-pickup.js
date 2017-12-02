@@ -9,6 +9,9 @@ export default class EnergyPickup extends Phaser.Sprite {
     this._timer = game.time.create(false);
     this._timer.start();
 
+    this._pickupSound = game.globals.soundManager.add("chiptone/energy-pickup");
+    this._pickupSound.playMultiple = true;
+
     // Configure physics
     game.physics.arcade.enable(this);
     this.satBody = game.globals.plugins.satBody.addBoxBody(this);
@@ -29,6 +32,7 @@ export default class EnergyPickup extends Phaser.Sprite {
   }
 
   pickUp() {
+    this._pickupSound.play();
     this.destroy();
   }
 

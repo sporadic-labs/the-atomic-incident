@@ -7,6 +7,11 @@ export default class RapidFire extends BaseWeapon {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.RAPID_FIRE, 100, 25, 1800);
     this._damage = 10;
     this._speed = 500;
+
+    this._fireSound = game.globals.soundManager.add("chiptone/rapid-fire");
+    this._fireSound.playMultiple = true;
+    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._reloadSound.playMultiple = true;
   }
 
   fire(angle) {
@@ -14,8 +19,13 @@ export default class RapidFire extends BaseWeapon {
       const randomAngle = this.game.rnd.realInRange(-3, 3) * (Math.PI / 180);
       this._createProjectile(angle + randomAngle, 24, this._speed);
       this.incrementAmmo(-1);
-      if (this.getAmmo() > 0) this._startCooldown(this._cooldownTime);
-      else this._reload();
+      if (this.getAmmo() > 0) {
+        this._fireSound.play();
+        this._startCooldown(this._cooldownTime);
+      } else {
+        this._reloadSound.play();
+        this._reload();
+      }
     }
   }
 

@@ -7,14 +7,24 @@ export default class PiercingShot extends BaseWeapon {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.PIERCING_SHOT, 15, 300, 1000);
     this._damage = 40;
     this._speed = 320;
+
+    this._fireSound = game.globals.soundManager.add("chiptone/piercing-fire");
+    this._fireSound.playMultiple = true;
+    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._reloadSound.playMultiple = true;
   }
 
   fire(angle) {
     if (this.isAbleToAttack()) {
       this._createProjectile(angle, 24, this._speed);
       this.incrementAmmo(-1);
-      if (this.getAmmo() > 0) this._startCooldown(this._cooldownTime);
-      else this._reload();
+      if (this.getAmmo() > 0) {
+        this._fireSound.play();
+        this._startCooldown(this._cooldownTime);
+      } else {
+        this._reloadSound.play();
+        this._reload();
+      }
     }
   }
 

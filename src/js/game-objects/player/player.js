@@ -68,11 +68,11 @@ export default class Player extends Phaser.Sprite {
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
     // Player Sound fx
-    this._hitSound = this.game.globals.soundManager.add("smash", 0.03);
+    this._hitSound = this.game.globals.soundManager.add("chiptone/player-hit", 0.03);
     this._hitSound.playMultiple = true;
-    this._dashSound = this.game.globals.soundManager.add("warp");
-    this._dashSound.playMultiple = true;
-    this.pickupSound = this.game.globals.soundManager.add("whoosh");
+    this._deathSound = this.game.globals.soundManager.add("chiptone/player-death", 0.03);
+    this._deathSound.playMultiple = true;
+    this._deathSound.onStop.add(this.onGameOver, this);
 
     this._velocity = new Phaser.Point(0, 0);
 
@@ -149,14 +149,14 @@ export default class Player extends Phaser.Sprite {
     if (this._isTakingDamage) return;
 
     if (this._playerLight.getLightRemaining() <= 0) {
-      // If the player has died, reset the camera, show the Game Over menu, and pause the game.
-      this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
-      gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
-      gameStore.updateHighScore();
-      // TODO(rex): Player death animation and something interactive, instead of just pausing the game...
-      gameStore.pause();
+      // If the player has died, play the death sound/animation.
+      // The onGameOver callback will be called once the sound/animation has completed.
+      this._deathSound.play();
+      // TODO(rex): Death animation.
+      // TODO(rex): Prevent controls from doing anything...
     } else {
       this._playerLight.incrementRadius(-50);
+      this._hitSound.play();
     }
 
     // Speed boost on damage
@@ -178,6 +178,15 @@ export default class Player extends Phaser.Sprite {
     this.onDamage.dispatch();
   }
 
+  onGameOver() {
+    // If the player has died, reset the camera, show the Game Over menu, and pause the game.
+    this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
+    gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
+    gameStore.updateHighScore();
+    // TODO(rex): Player death animation and something interactive, instead of just pausing the game...
+    gameStore.pause();
+  }
+
   startDash(angle) {
     this._movementController.setMovementType(MOVEMENT_TYPES.DASH);
     this._movementController.setFixedAngle(angle);
@@ -196,7 +205,6 @@ export default class Player extends Phaser.Sprite {
       if (enemy._spawned) enemy.takeDamage(damage);
     } else if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
       this.takeDamage();
-      // this._hitSound.play();
       this._postProcessor.onPlayerDamage();
     }
   }
@@ -205,7 +213,6 @@ export default class Player extends Phaser.Sprite {
     if (pickup instanceof EnergyPickup) {
       this._playerLight.incrementRadius(pickup.getEnergy());
     }
-    this.pickupSound.play();
     pickup.pickUp();
   }
 

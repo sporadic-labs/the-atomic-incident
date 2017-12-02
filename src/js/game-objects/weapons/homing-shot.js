@@ -7,6 +7,11 @@ export default class HomingShot extends BaseWeapon {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 35, 200, 1500);
     this._damage = 28;
     this._speed = 180;
+
+    this._fireSound = game.globals.soundManager.add("chiptone/homing-fire");
+    this._fireSound.playMultiple = true;
+    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._reloadSound.playMultiple = true;
   }
 
   fire(angle) {
@@ -24,8 +29,13 @@ export default class HomingShot extends BaseWeapon {
       p3._target = closestEnemy;
       p3._targetAcquisitionDelayTime = this.game.time.now + targetAcquisitionDelay;
       this.incrementAmmo(-1);
-      if (this.getAmmo() > 0) this._startCooldown(this._cooldownTime);
-      else this._reload();
+      if (this.getAmmo() > 0) {
+        this._fireSound.play();
+        this._startCooldown(this._cooldownTime);
+      } else {
+        this._reloadSound.play();
+        this._reload();
+      }
     }
   }
 
