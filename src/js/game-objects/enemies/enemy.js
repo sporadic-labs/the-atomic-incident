@@ -5,6 +5,14 @@ import { debugShape } from "../../helpers/sprite-utilities";
 import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO } from "./enemy-info";
 
+const ANIM = {
+  IDLE: "idle",
+  MOVE: "move",
+  ATTACK: "attack",
+  HIT: "hit",
+  DIE: "die"
+};
+
 export default class Enemy extends Phaser.Sprite {
   static MakeEnemyType(game, type, position, enemyGroup) {
     const info = ENEMY_INFO[type] || {};
@@ -40,17 +48,53 @@ export default class Enemy extends Phaser.Sprite {
     this._healthBar = new HealthBar(game, this, fg, cx, cy, 20, 4);
     this._healthBar.initHealth(health);
 
+    // Animations
+    const prefix = "enemies/beetle_green";
+    const moveFrames = Phaser.Animation.generateFrameNames(
+      `${prefix}/beetle_green_move_`,
+      0,
+      15,
+      "",
+      2
+    );
+    const hitFrames = Phaser.Animation.generateFrameNames(
+      `${prefix}/beetle_green_hit_`,
+      0,
+      15,
+      "",
+      2
+    );
+    const dieFrames = Phaser.Animation.generateFrameNames(
+      `${prefix}/beetle_green_die_`,
+      0,
+      15,
+      "",
+      2
+    );
+    this.animations.add(ANIM.MOVE, moveFrames, 24, true);
+    this.animations.add(ANIM.HIT, hitFrames, 64, false).onComplete.add(() => {
+      this.animations.play(ANIM.MOVE);
+    }, this);
+    this.animations.add(ANIM.DIE, dieFrames, 64, false).onComplete.add(() => {
+      this.destroy();
+    });
+
+    // Sound fx
+    this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
+    this._deathSound = this.game.globals.soundManager.add("squish");
+    enemyGroup.addEnemy(this);
+    this.enemyGroup = enemyGroup;
+
+    // Spawn animation
     this._spawned = false; // use check if the enemy is fully spawned!
     const tween = this.game.make
       .tween(this)
       .to({ alpha: 0.25 }, 200, "Quad.easeInOut", true, 0, 2, true);
     // When tween is over, set the spawning flag to false
-    tween.onComplete.add(() => (this._spawned = true));
-
-    this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
-    this._deathSound = this.game.globals.soundManager.add("squish");
-    enemyGroup.addEnemy(this);
-    this.enemyGroup = enemyGroup;
+    tween.onComplete.add(() => {
+      this._spawned = true;
+      this.animations.play(ANIM.MOVE);
+    });
 
     // Config arcade and SAT body physics
     // - Arcade physics hitbox is small. It is used to allow enemies to move without jostling one
@@ -84,9 +128,11 @@ export default class Enemy extends Phaser.Sprite {
         this.enemyGroup.emitDeathParticles(projectile.position, angle);
       }
       this._deathSound.play();
-      this.destroy();
+      this.animations.play(ANIM.DIE);
+      // this.destroy();
       return true;
     }
+    this.animations.play(ANIM.HIT);
     this._hitSound.play();
     return false;
   }

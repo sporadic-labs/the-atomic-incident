@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.3</string>
+        <string>4.5.0</string>
         <key>fileName</key>
-        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,6 +172,8 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
+        <key>autodetectAnimations</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -200,6 +202,54 @@
             <key type="filename">asset-frames/enemies/amoeba_50.png</key>
             <key type="filename">asset-frames/enemies/bacteria_50.png</key>
             <key type="filename">asset-frames/enemies/beetle_50.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_00.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_01.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_02.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_03.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_04.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_05.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_06.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_07.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_08.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_09.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_10.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_11.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_12.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_13.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_14.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_die_15.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_00.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_01.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_02.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_03.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_04.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_05.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_06.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_07.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_08.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_09.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_10.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_11.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_12.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_13.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_14.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_hit_15.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_00.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_01.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_02.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_03.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_04.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_05.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_06.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_07.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_08.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_09.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_10.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_11.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_12.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_13.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_14.png</key>
+            <key type="filename">asset-frames/enemies/beetle_green/beetle_green_move_15.png</key>
             <key type="filename">asset-frames/enemies/characters_50.psd</key>
             <key type="filename">asset-frames/enemies/gorilla_50.png</key>
             <key type="filename">asset-frames/enemies/particle-creature-dark.png</key>
