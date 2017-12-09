@@ -8,9 +8,7 @@ export default class Scattershot extends BaseWeapon {
     this._damage = 20;
 
     this._fireSound = game.globals.soundManager.add("chiptone/shotgun-fire");
-    this._fireSound.playMultiple = true;
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
-    this._reloadSound.playMultiple = true;
   }
 
   fire(angle) {

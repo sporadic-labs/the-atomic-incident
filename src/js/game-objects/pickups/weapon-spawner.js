@@ -73,8 +73,7 @@ class WeaponPickup extends Phaser.Sprite {
     this._onPickupCollected = pickupSpawner.onPickupCollected;
     this._onPickupDestroyed = pickupSpawner.onPickupDestroyed;
 
-    this._pickupSound = game.globals.soundManager.add("chiptone/weapon-box-pickup");
-    this._pickupSound.playMultiple = true;
+    this._pickupSound = game.globals.soundManager.add("crate-pickup");
 
     game.physics.arcade.enable(this);
     this.satBody = game.globals.plugins.satBody.addBoxBody(this);

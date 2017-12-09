@@ -47,8 +47,6 @@ export default class Enemy extends Phaser.Sprite {
     // When tween is over, set the spawning flag to false
     tween.onComplete.add(() => (this._spawned = true));
 
-    this._spawnSound = this.game.globals.soundManager.add("pop");
-    this._spawnSound.playMultiple = true;
     this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
     this._deathSound = this.game.globals.soundManager.add("squish");
     enemyGroup.addEnemy(this);

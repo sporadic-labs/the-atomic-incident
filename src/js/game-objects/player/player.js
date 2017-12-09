@@ -69,9 +69,7 @@ export default class Player extends Phaser.Sprite {
 
     // Player Sound fx
     this._hitSound = this.game.globals.soundManager.add("chiptone/player-hit", 0.03);
-    this._hitSound.playMultiple = true;
     this._deathSound = this.game.globals.soundManager.add("chiptone/player-death", 0.03);
-    this._deathSound.playMultiple = true;
     this._deathSound.onStop.add(this.onGameOver, this);
 
     this._velocity = new Phaser.Point(0, 0);

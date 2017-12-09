@@ -9,9 +9,7 @@ export default class PiercingShot extends BaseWeapon {
     this._speed = 320;
 
     this._fireSound = game.globals.soundManager.add("chiptone/piercing-fire");
-    this._fireSound.playMultiple = true;
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
-    this._reloadSound.playMultiple = true;
   }
 
   fire(angle) {
