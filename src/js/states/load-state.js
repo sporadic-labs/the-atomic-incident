@@ -51,6 +51,7 @@ export default class LoadState extends Phaser.State {
       "chiptone/dash-melee-fire.mp3",
       "chiptone/enemy-death.mp3",
       "chiptone/enemy-hit.mp3",
+      "chiptone/enemy-spawn.mp3",
       "chiptone/energy-pickup.mp3",
       "chiptone/piercing-fire.mp3",
       "chiptone/homing-fire.mp3",
@@ -59,7 +60,8 @@ export default class LoadState extends Phaser.State {
       "chiptone/player-death.mp3",
       "chiptone/player-hit.mp3",
       "chiptone/shotgun-fire.mp3",
-      "chiptone/weapon-box-pickup.mp3"
+      "chiptone/weapon-box-pickup.mp3",
+      "music/Readers_Do_You_Read.mp3"
     ];
     audioFiles.forEach(filename => {
       const name = filename.slice(0, -4); // Remove extension

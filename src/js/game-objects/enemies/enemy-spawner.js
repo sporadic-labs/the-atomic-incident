@@ -27,6 +27,9 @@ export default class EnemySpawner {
     this._timer = this.game.time.create(false);
     this._timer.start();
     this._timer.add(500, this._spawnTesterWave, this);
+
+    this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
+    this._spawnSound.playMultiple = true;
   }
 
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5) {
@@ -35,6 +38,9 @@ export default class EnemySpawner {
     const spawnAngle = this._player.getVelocity().isZero()
       ? this.game.rnd.realInRange(0, 2 * Math.PI)
       : new Phaser.Point(0, 0).angle(this._player.getVelocity());
+
+    // Play the enemy spawn sound.
+    this._spawnSound.play();
 
     // Spawn in an arc
     const step = angleSpan / enemyOrder.length;
