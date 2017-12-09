@@ -8,7 +8,7 @@ export default class RapidFire extends BaseWeapon {
     this._damage = 10;
     this._speed = 500;
 
-    this._fireSound = game.globals.soundManager.add("chiptone/rapid-fire");
+    this._fireSound = game.globals.soundManager.add("chiptone/rapid-fire", 10);
     this._fireSound.playMultiple = true;
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
     this._reloadSound.playMultiple = true;

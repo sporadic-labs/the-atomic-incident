@@ -1,3 +1,27 @@
+class PooledSound extends Phaser.Sound {
+  constructor(game, key, maxSimultaneous = null, volume, loop, connect) {
+    super(game, key, volume, loop, connect);
+    this.game.sound._sounds.push(this);
+    this.allowMultiple = true;
+    this.maxSimultaneous = maxSimultaneous;
+    this.numPlaying = 0;
+    this.onStop.add(this._onStop, this);
+  }
+
+  _onStop() {
+    this.numPlaying -= 1;
+    if (this.numPlaying < 0) this.numPlaying = 0;
+  }
+
+  play(marker, position, volume, loop, forceRestart) {
+    if (this.maxSimultaneous === null || this.numPlaying < this.maxSimultaneous) {
+      this.numPlaying += 1;
+      return super.play(marker, position, volume, loop, forceRestart);
+    }
+    return null;
+  }
+}
+
 /**
  * A small class for managing and playing back sound effects. If a game object 
  * owns creates its own sound effects, it has to be responsible for destroying
@@ -31,9 +55,16 @@ export default class SoundEffectManager {
    * 
    * @memberOf SoundEffectManager
    */
-  add(key, volume, loop, connect) {
+  add(key, maxSimultaneous, volume, poolCount, loop, connect) {
     if (!this._soundsLoaded[key]) {
-      this._soundsLoaded[key] = this.game.add.audio(key, volume, loop, connect);
+      this._soundsLoaded[key] = new PooledSound(
+        this.game,
+        key,
+        maxSimultaneous,
+        volume,
+        loop,
+        connect
+      );
     }
     return this._soundsLoaded[key];
   }
