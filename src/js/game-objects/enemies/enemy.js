@@ -49,9 +49,9 @@ export default class Enemy extends Phaser.Sprite {
 
     this._spawnSound = this.game.globals.soundManager.add("pop");
     this._spawnSound.playMultiple = true;
-    this._hitSound = this.game.globals.soundManager.add("chiptone/enemy-hit");
+    this._hitSound = this.game.globals.soundManager.add("squish-impact-faster");
     this._hitSound.playMultiple = true;
-    this._deathSound = this.game.globals.soundManager.add("chiptone/enemy-death");
+    this._deathSound = this.game.globals.soundManager.add("squish");
     this._deathSound.playMultiple = true;
 
     enemyGroup.addEnemy(this);
@@ -92,7 +92,7 @@ export default class Enemy extends Phaser.Sprite {
       this.destroy();
       return true;
     }
-    this._hitSound.play();
+    if (!this._hitSound.isPlaying) this._hitSound.play();
     return false;
   }
 

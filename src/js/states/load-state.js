@@ -46,6 +46,8 @@ export default class LoadState extends Phaser.State {
       "impact.mp3",
       "impact-2.mp3",
       "smash.mp3",
+      "squish.wav",
+      "squish-impact-faster.wav",
       "chiptone/dash-melee-fire.mp3",
       "chiptone/enemy-death.mp3",
       "chiptone/enemy-hit.mp3",
