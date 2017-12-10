@@ -1,6 +1,8 @@
 // See built-in uniforms: https://photonstorm.github.io/phaser-ce/Phaser.Filter.html
 
-#define PRECISION 0.0001
+#define PRECISION 0.3
+// Hacking this to work *slightly* better for now. The white outline problem seems to be a result of
+// how alpha is handled in screenspace. This hack shrinks the silhouette mask.
 
 precision mediump float;
 
