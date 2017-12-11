@@ -29,6 +29,11 @@ export default class EnemySpawner {
     this._timer.add(500, this._spawnTesterWave, this);
 
     // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
+
+    // Use the 'L' button to force a wavelet to spawn.
+    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => {
+      this._scheduleTesterWavelet(5, 0);
+    });
   }
 
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5) {
@@ -69,20 +74,21 @@ export default class EnemySpawner {
     return enemies;
   }
 
-  _spawnTesterWave() {
+  _scheduleTesterWavelet(numEnemies, time) {
     if (!this._testerTypePool) this._testerTypePool = Object.keys(ENEMY_TYPES);
+    const order = [];
+    for (let j = 0; j < numEnemies; j++) {
+      if (this._testerTypePool.length === 0) this._testerTypePool = Object.keys(ENEMY_TYPES);
+      const type = this._testerTypePool.pop();
+      order.push(type);
+    }
+    this._timer.add(time, () => this._spawnWavelet(order));
+  }
 
+  _spawnTesterWave() {
     const numWavelets = Math.floor(this._waveDifficulty);
 
-    for (let i = 0; i < numWavelets; i++) {
-      const order = [];
-      for (let j = 0; j < 5; j++) {
-        if (this._testerTypePool.length === 0) this._testerTypePool = Object.keys(ENEMY_TYPES);
-        const type = this._testerTypePool.pop();
-        order.push(type);
-      }
-      this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
-    }
+    for (let i = 0; i < numWavelets; i++) this._scheduleTesterWavelet(5, this._waveletInterval * i);
 
     const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
     this._timer.add(nextWaveDelay, this._spawnTesterWave, this);
