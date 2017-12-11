@@ -6,11 +6,9 @@ import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO } from "./enemy-info";
 
 const ANIM = {
-  IDLE: "idle",
   MOVE: "move",
-  ATTACK: "attack",
   HIT: "hit",
-  DIE: "die"
+  DEATH: "death"
 };
 
 export default class Enemy extends Phaser.Sprite {
@@ -34,7 +32,7 @@ export default class Enemy extends Phaser.Sprite {
     enemyGroup,
     { health = 100, color = 0xffffff, speed = 100, visionRadius = 200, collisionPoints = [] } = {}
   ) {
-    super(game, position.x, position.y, key, frame);
+    super(game, position.x, position.y, key, `${frame}/move_00`);
     this.anchor.set(0.5);
 
     this._movementComponent = new TargetingComp(this, speed, visionRadius);
@@ -49,33 +47,14 @@ export default class Enemy extends Phaser.Sprite {
     this._healthBar.initHealth(health);
 
     // Animations
-    const prefix = "enemies/beetle_green";
-    const moveFrames = Phaser.Animation.generateFrameNames(
-      `${prefix}/beetle_green_move_`,
-      0,
-      15,
-      "",
-      2
-    );
-    const hitFrames = Phaser.Animation.generateFrameNames(
-      `${prefix}/beetle_green_hit_`,
-      0,
-      15,
-      "",
-      2
-    );
-    const dieFrames = Phaser.Animation.generateFrameNames(
-      `${prefix}/beetle_green_die_`,
-      0,
-      15,
-      "",
-      2
-    );
+    const moveFrames = Phaser.Animation.generateFrameNames(`${frame}/move_`, 0, 15, "", 2);
+    const hitFrames = Phaser.Animation.generateFrameNames(`${frame}/hit_`, 0, 15, "", 2);
+    const deathFrames = Phaser.Animation.generateFrameNames(`${frame}/death_`, 0, 15, "", 2);
     this.animations.add(ANIM.MOVE, moveFrames, 24, true);
     this.animations.add(ANIM.HIT, hitFrames, 64, false).onComplete.add(() => {
       this.animations.play(ANIM.MOVE);
     }, this);
-    this.animations.add(ANIM.DIE, dieFrames, 64, false).onComplete.add(() => {
+    this.animations.add(ANIM.DEATH, deathFrames, 64, false).onComplete.add(() => {
       this.destroy();
     });
 
@@ -128,7 +107,7 @@ export default class Enemy extends Phaser.Sprite {
         this.enemyGroup.emitDeathParticles(projectile.position, angle);
       }
       this._deathSound.play();
-      this.animations.play(ANIM.DIE);
+      this.animations.play(ANIM.DEATH);
       // this.destroy();
       return true;
     }

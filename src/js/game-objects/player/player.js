@@ -10,18 +10,17 @@ import WeaponManager from "../weapons/weapon-manager";
 import MOVEMENT_TYPES from "./movement-types";
 import SmokeTrail from "./smoke-trail";
 
-const ANIM_NAMES = {
-  IDLE: "idle",
+const ANIM = {
   MOVE: "move",
   ATTACK: "attack",
   HIT: "hit",
-  DIE: "die"
+  DEATH: "DEATH"
 };
 
 export default class Player extends Phaser.Sprite {
   constructor(game, x, y, parentGroup) {
     // super(game, x, y, "assets", "player/player");
-    super(game, x, y, "assets", "player/player_35");
+    super(game, x, y, "assets", "player/move");
     this.anchor.set(0.5);
     parentGroup.add(this);
 
@@ -67,10 +66,34 @@ export default class Player extends Phaser.Sprite {
     this._attackControls = new Controller(this.game.input);
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
+    // Animations
+    const hitFrames = Phaser.Animation.generateFrameNames(`player/hit_`, 0, 15, "", 2);
+    const deathFrames = Phaser.Animation.generateFrameNames(`player/death_`, 0, 15, "", 2);
+    this.animations.add(ANIM.HIT, hitFrames, 64, false).onComplete.add(() => {
+      this.animations.play(ANIM.MOVE);
+    }, this);
+    this.animations.add(ANIM.DEATH, deathFrames, 64, false).onComplete.add(() => {
+      if (this._gameOverFxComplete) {
+        this.onGameOver();
+        this.destroy();
+      } else {
+        this._gameOverFxComplete = true;
+      }
+    });
+
     // Player Sound fx
     this._hitSound = this.game.globals.soundManager.add("chiptone/player-hit", 0.03);
     this._deathSound = this.game.globals.soundManager.add("chiptone/player-death", 0.03);
-    this._deathSound.onStop.add(this.onGameOver, this);
+    this._deathSound.onStop.add(() => {
+      if (this._gameOverFxComplete) {
+        this.onGameOver();
+        this.destroy();
+      } else {
+        this._gameOverFxComplete = true;
+      }
+    }, this);
+
+    this._gameOverFxComplete = false;
 
     this._velocity = new Phaser.Point(0, 0);
 
@@ -150,7 +173,7 @@ export default class Player extends Phaser.Sprite {
       // If the player has died, play the death sound/animation.
       // The onGameOver callback will be called once the sound/animation has completed.
       this._deathSound.play();
-      // TODO(rex): Death animation.
+      this.animations.play(ANIM.DEATH);
       // TODO(rex): Prevent controls from doing anything...
     } else {
       this._playerLight.incrementRadius(-50);
