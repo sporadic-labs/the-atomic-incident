@@ -93,22 +93,27 @@ export default class Enemy extends Phaser.Sprite {
     }));
     this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
 
-    this._flashFilter = new FlashSilhouetteFilter(game);
-    this.filters = [this._flashFilter];
+    // Disabling the hit flash filter. It really tanks performance. When we have this effect baked
+    // into enemy hit animation, it's safe to remove this code.
+    // this._flashFilter = new FlashSilhouetteFilter(game);
+    // this.filters = [this._flashFilter];
+
+    this.isDead = false;
   }
 
   takeDamage(damage, projectile) {
+    if (this.isDead) return false;
     const newHealth = this._healthBar.incrementHealth(-damage);
-    this._flashFilter.startFlash();
+    // this._flashFilter.startFlash();
     if (newHealth <= 0) {
       if (projectile && projectile.body) {
         // Bugs: sometimes projectile is destroyed before the enemy. Also need to handle player dash
         const angle = Math.atan2(projectile.body.velocity.y, projectile.body.velocity.x);
         this.enemyGroup.emitDeathParticles(projectile.position, angle);
       }
+      this.die();
       this._deathSound.play();
       this.animations.play(ANIM.DEATH);
-      // this.destroy();
       return true;
     }
     this.animations.play(ANIM.HIT);
@@ -117,9 +122,15 @@ export default class Enemy extends Phaser.Sprite {
   }
 
   update() {
-    if (!this._spawned) return; // If the enemy hasn't spawned yet, don't move or attack!
+    if (!this._spawned || this.isDead) return;
     this._movementComponent.update();
     super.update();
+  }
+
+  die() {
+    this.isDead = true;
+    this.satBody.destroy();
+    this.body.destroy();
   }
 
   postUpdate(...args) {
