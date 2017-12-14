@@ -114,6 +114,7 @@ export default class Projectile extends Phaser.Sprite {
     this._player = player;
     this._enemies = game.globals.groups.enemies;
     this._wallLayer = this.game.globals.mapManager.wallLayer;
+    this._wallHitSound = game.globals.soundManager.add("wall-hit", 3);
 
     this.rotation = angle + Math.PI / 2;
 
@@ -164,6 +165,7 @@ class CollisionLogic {
     this._projectile.destroy();
   }
   onCollideWithWall() {
+    this._projectile._wallHitSound.play();
     this._projectile.destroy();
   }
 }
