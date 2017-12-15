@@ -22,6 +22,7 @@ import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
+import AudioProcessor from "../game-objects/fx/audio-processor";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -75,6 +76,9 @@ export default class PlayState extends Phaser.State {
     this.physics.arcade.gravity.set(0);
 
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
+    globals.audioProcessor = new AudioProcessor(game);
+
+    this.sound.play("music/hate-bay", 0.09, true);
 
     // Player
     // Setup a new player, and attach it to the global variabls object.

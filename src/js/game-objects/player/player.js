@@ -169,6 +169,8 @@ export default class Player extends Phaser.Sprite {
     // If player is already taking damage, nothing else to do
     if (this._isTakingDamage) return;
 
+    this.game.globals.audioProcessor.runLowPassFilter(500);
+
     if (this._playerLight.getLightRemaining() <= 0) {
       // If the player has died, play the death sound/animation.
       // The onGameOver callback will be called once the sound/animation has completed.

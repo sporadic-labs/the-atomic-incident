@@ -54,7 +54,7 @@ export default class LoadState extends Phaser.State {
       "chiptone/player-hit.mp3",
       "chiptone/shotgun-fire.mp3",
       "chiptone/weapon-box-pickup.mp3",
-      "music/Readers_Do_You_Read.mp3"
+      "music/hate-bay.wav"
     ];
     audioFiles.forEach(filename => {
       const name = filename.slice(0, -4); // Remove extension
