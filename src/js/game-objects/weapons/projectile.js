@@ -1,9 +1,35 @@
 import { satSpriteVsTilemap, checkOverlapWithGroup } from "../../helpers/sprite-utilities";
+import Explosion from "./explosion";
 
 /**
  * @class Projectile
  */
 export default class Projectile extends Phaser.Sprite {
+  /**
+   * 
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
+  static makeRocket(game, x, y, parent, player, damage, angle, speed) {
+    const key = "assets";
+    const frame = "weapons/machine_gun_15";
+    const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
+    bullet.init(new ExplodingCollisionLogic(bullet, damage));
+    if (bullet.game) {
+      bullet.body.velocity.setTo(Math.cos(angle) * speed / 10, Math.sin(angle) * speed / 10);
+      bullet.body.acceleration.setTo(Math.cos(angle) * 1000, Math.sin(angle) * 1000);
+      bullet.body.maxVelocity.setTo(speed);
+    }
+    return bullet;
+  }
+
   /**
    * 
    * @param {Phaser.Game} game - Reference to Phaser.Game.
@@ -142,6 +168,10 @@ export default class Projectile extends Phaser.Sprite {
 
   postUpdate(...args) {
     super.postUpdate(...args); // Update arcade physics
+    // Not a complete fix, but cap the xy velocity by magnitude to achieve consistent speed
+    if (this.body.velocity.getMagnitude() > this.body.maxVelocity.x) {
+      this.body.velocity.setMagnitude(this.body.maxVelocity.x);
+    }
     const logic = this._collisionLogic;
     checkOverlapWithGroup(this, this._enemies, (_, enemy) => logic.onCollideWithEnemy(enemy));
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
@@ -185,6 +215,34 @@ class PiercingCollisionLogic extends CollisionLogic {
     if (enemy._spawned && !this._enemiesDamaged.includes(enemy)) {
       enemy.takeDamage(this._damage, this._projectile);
       this._enemiesDamaged.push(enemy);
+    }
+  }
+}
+
+/**
+ * Exploding projectiles don't do damage themselves, but cause an explosion on contact with a wall
+ * or enemy
+ * 
+ * @class ExplodingCollisionLogic
+ */
+class ExplodingCollisionLogic extends CollisionLogic {
+  constructor(projectile, damage) {
+    super(projectile, damage);
+  }
+
+  onCollideWithWall() {
+    const p = this._projectile;
+    if (!p.game) return; // Note: this check shouldn't be needed...
+    new Explosion(p.game, p.x, p.y, p.parent, this._damage);
+    p.destroy();
+  }
+
+  onCollideWithEnemy(enemy) {
+    if (enemy._spawned) {
+      const p = this._projectile;
+      if (!p.game) return; // Note: this check shouldn't be needed...
+      new Explosion(p.game, p.x, p.y, p.parent, this._damage);
+      p.destroy();
     }
   }
 }

@@ -3,6 +3,7 @@ import RapidFire from "./rapid-fire";
 import DashMelee from "./dash-melee";
 import PiercingShot from "./piercing-shot";
 import HomingShot from "./homing-shot";
+import RocketLauncher from "./rocket-launcher";
 import WEAPON_TYPES from "./weapon-types";
 
 export default class WeaponManager extends Phaser.Group {
@@ -16,6 +17,7 @@ export default class WeaponManager extends Phaser.Group {
     this._dashMelee = new DashMelee(game, this, player, enemies);
     this._piercingShot = new PiercingShot(game, this, player, enemies);
     this._homingShot = new HomingShot(game, this, player, enemies);
+    this._rocketLauncher = new RocketLauncher(game, this, player, enemies);
     this.switchWeapon(this.game.rnd.pick(Object.values(WEAPON_TYPES)));
   }
 
@@ -38,6 +40,7 @@ export default class WeaponManager extends Phaser.Group {
     else if (type === WEAPON_TYPES.DASH) this._activeWeapon = this._dashMelee;
     else if (type === WEAPON_TYPES.PIERCING_SHOT) this._activeWeapon = this._piercingShot;
     else if (type === WEAPON_TYPES.HOMING_SHOT) this._activeWeapon = this._homingShot;
+    else if (type === WEAPON_TYPES.ROCKET_LAUNCHER) this._activeWeapon = this._rocketLauncher;
     // New weapons should start with full ammo.
     this._activeWeapon.fillAmmo();
   }
