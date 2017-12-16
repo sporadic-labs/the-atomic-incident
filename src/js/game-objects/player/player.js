@@ -11,15 +11,14 @@ import MOVEMENT_TYPES from "./movement-types";
 import SmokeTrail from "./smoke-trail";
 
 const ANIM = {
-  MOVE: "move",
-  ATTACK: "attack",
-  HIT: "hit",
+  MOVE: "MOVE",
+  ATTACK: "ATTACK",
+  HIT: "HIT",
   DEATH: "DEATH"
 };
 
 export default class Player extends Phaser.Sprite {
   constructor(game, x, y, parentGroup) {
-    // super(game, x, y, "assets", "player/player");
     super(game, x, y, "assets", "player/move");
     this.anchor.set(0.5);
     parentGroup.add(this);

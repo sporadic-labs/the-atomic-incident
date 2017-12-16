@@ -1,21 +1,22 @@
 import Color from "../../helpers/color";
 import HealthBar from "./components/health-bar.js";
 import TargetingComp from "./components/targeting-component";
+import MoveTargetAttack from "./components/move-target-attack-component";
 import { debugShape } from "../../helpers/sprite-utilities";
 import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
-import { ENEMY_INFO } from "./enemy-info";
+import { ENEMY_INFO, ENEMY_TYPES } from "./enemy-info";
 
 const ANIM = {
-  MOVE: "move",
-  HIT: "hit",
-  DEATH: "death"
+  MOVE: "MOVE",
+  HIT: "HIT",
+  DEATH: "DEATH"
 };
 
 export default class Enemy extends Phaser.Sprite {
   static MakeEnemyType(game, type, position, enemyGroup) {
     const info = ENEMY_INFO[type] || {};
     const key = info.key || "";
-    const enemy = new Enemy(game, "assets", key, position, enemyGroup, {
+    const enemy = new Enemy(game, "assets", key, position, enemyGroup, type, {
       health: 100,
       speed: 160,
       visionRadius: null,
@@ -30,12 +31,30 @@ export default class Enemy extends Phaser.Sprite {
     frame,
     position,
     enemyGroup,
+    type,
     { health = 100, color = 0xffffff, speed = 100, visionRadius = 200, collisionPoints = [] } = {}
   ) {
     super(game, position.x, position.y, key, `${frame}/move_00`);
     this.anchor.set(0.5);
 
-    this._movementComponent = new TargetingComp(this, speed, visionRadius);
+    this.type = type;
+    // Set movement component based on enemy type.
+    switch (this.type) {
+      case ENEMY_TYPES.BACTERIA:
+        this._movementComponent = new TargetingComp(this, speed, visionRadius);
+        break;
+      case ENEMY_TYPES.BEETLE:
+        this._movementComponent = new TargetingComp(this, speed, visionRadius);
+        break;
+      case ENEMY_TYPES.WORM:
+        this._movementComponent = new MoveTargetAttack(this, speed, visionRadius);
+        break;
+      default:
+        console.log("Invalid enemy type specified, using default Targeting Component!");
+        this._movementComponent = new TargetingComp(this, speed, visionRadius);
+        break;
+    }
+    // this._movementComponent = new TargetingComp(this, speed, visionRadius);
 
     const colorObj = color instanceof Color ? color : new Color(color);
     this.tint = colorObj.getRgbColorInt();

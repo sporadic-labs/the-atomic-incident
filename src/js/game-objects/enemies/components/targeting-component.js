@@ -23,6 +23,7 @@ export default class TargetingComponent {
     // Vision check, stop early if target is out of range
     if (this._visionRadius !== null) {
       const d = this.parent.position.distance(this.target.position);
+      // NOTE(rex): What is this._target?
       if (d > this._visionRadius) return this._target;
     }
 
