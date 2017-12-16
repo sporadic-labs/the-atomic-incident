@@ -19,7 +19,7 @@ export default class Projectile extends Phaser.Sprite {
    */
   static makeRocket(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
-    const frame = "weapons/machine_gun_15";
+    const frame = "weapons/rocket_15";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.init(new ExplodingCollisionLogic(bullet, damage));
     if (bullet.game) {
