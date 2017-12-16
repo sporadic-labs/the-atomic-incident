@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.5.0</string>
+        <string>4.3.3</string>
         <key>fileName</key>
-        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,8 +172,6 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
-        <key>autodetectAnimations</key>
-        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -649,6 +647,36 @@
                 <rect>9,9,18,18</rect>
                 <key>scale9Paddings</key>
                 <rect>9,9,18,18</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00000.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00001.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00002.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00003.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00004.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00005.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00006.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00007.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00008.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00009.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00010.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00011.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00012.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00013.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00014.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00015.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00016.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00017.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>38,38,75,75</rect>
+                <key>scale9Paddings</key>
+                <rect>38,38,75,75</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
