@@ -3,10 +3,10 @@ import physicsShapes from "./physics";
 const normalize = (points, width, height) => points.map(p => [p[0] / width, p[1] / height]);
 
 export const ENEMY_TYPES = {
-  AMOEBA: "AMOEBA",
+  // AMOEBA: "AMOEBA",
   BACTERIA: "BACTERIA",
   BEETLE: "BEETLE",
-  TURTLE: "TURTLE",
+  // TURTLE: "TURTLE",
   WORM: "WORM"
 };
 
@@ -16,10 +16,10 @@ export const ENEMY_TYPES = {
  * order (as viewed in photoshop).
  */
 export const ENEMY_INFO = {
-  AMOEBA: {
-    key: "enemies/amoeba",
-    collisionPoints: normalize(physicsShapes["enemies/amoeba_50"] || [], 50, 50)
-  },
+  // AMOEBA: {
+  //   key: "enemies/amoeba",
+  //   collisionPoints: normalize(physicsShapes["enemies/amoeba_50"] || [], 50, 50)
+  // },
   BACTERIA: {
     key: "enemies/bacteria",
     collisionPoints: normalize(physicsShapes["enemies/bacteria_50"] || [], 50, 50)
@@ -28,10 +28,10 @@ export const ENEMY_INFO = {
     key: "enemies/beetle",
     collisionPoints: normalize(physicsShapes["enemies/beetle_50"] || [], 50, 50)
   },
-  TURTLE: {
-    key: "enemies/turtle",
-    collisionPoints: normalize(physicsShapes["enemies/turtle_50"] || [], 50, 50)
-  },
+  // TURTLE: {
+  //   key: "enemies/turtle",
+  //   collisionPoints: normalize(physicsShapes["enemies/turtle_50"] || [], 50, 50)
+  // },
   WORM: {
     key: "enemies/worm",
     collisionPoints: normalize(physicsShapes["enemies/snail_50"] || [], 50, 50)
