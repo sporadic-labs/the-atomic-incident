@@ -3,7 +3,7 @@ import MOVEMENT_TYPES from "./movement-types.js";
 
 const MAX_SPEED_VALUES = {
   WALK: 200,
-  DASH: 240
+  DASH: 600
 };
 
 const MAX_ACCELERATION_VALUES = {

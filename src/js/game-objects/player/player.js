@@ -28,6 +28,7 @@ export default class Player extends Phaser.Sprite {
     this._compass = new Compass(game, parentGroup, this.width * 0.6);
     this._compass.visible = false;
 
+    this.isDead = false;
     this._isTakingDamage = false;
     this._isDashing = false;
 
@@ -101,6 +102,8 @@ export default class Player extends Phaser.Sprite {
   }
 
   update() {
+    if (this.isDead) return;
+
     this._playerLight.update();
     this._movementController.update();
     this._attackControls.update();
@@ -175,7 +178,9 @@ export default class Player extends Phaser.Sprite {
       // The onGameOver callback will be called once the sound/animation has completed.
       this._deathSound.play();
       this.animations.play(ANIM.DEATH);
-      // TODO(rex): Prevent controls from doing anything...
+      this.isDead = true;
+      this.satBody.destroy();
+      this.body.destroy();
     } else {
       this._playerLight.incrementRadius(-50);
       this._hitSound.play();
