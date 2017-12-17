@@ -1,4 +1,4 @@
-import { satSpriteVsTilemap, checkOverlapWithGroup } from "../../../helpers/sprite-utilities";
+import { satSpriteVsTilemap, checkSatOverlapWithGroup } from "../../../helpers/sprite-utilities";
 import { CollisionLogic, ExplodingCollisionLogic, PiercingCollisionLogic } from "./collision-logic";
 
 /**
@@ -173,7 +173,7 @@ export default class Projectile extends Phaser.Sprite {
     }
 
     const logic = this.collisionLogic;
-    checkOverlapWithGroup(this, this._enemies, (_, enemy) => logic.onCollideWithEnemy(enemy));
+    checkSatOverlapWithGroup(this, this._enemies, (_, enemy) => logic.onCollideWithEnemy(enemy));
 
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
     if (this._player._playerLight.isPointInShadow(this.position)) this.destroy();

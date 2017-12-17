@@ -1,4 +1,4 @@
-import { checkOverlapWithGroup } from "../../helpers/sprite-utilities";
+import { checkSatOverlapWithGroup } from "../../helpers/sprite-utilities";
 
 const prefix = "weapons/explosion/explosion-";
 
@@ -43,7 +43,7 @@ export default class Explosion extends Phaser.Sprite {
   }
 
   update() {
-    checkOverlapWithGroup(this, this.enemies, (_, enemy) => {
+    checkSatOverlapWithGroup(this, this.enemies, (_, enemy) => {
       if (!this.enemiesDamaged.includes(enemy)) {
         enemy.takeDamage(this.damage, this);
         this.enemiesDamaged.push(enemy);

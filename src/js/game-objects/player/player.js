@@ -1,6 +1,6 @@
 import MovementController from "./movement-controller";
 import Controller from "../../helpers/controller.js";
-import { checkOverlapWithGroup } from "../../helpers/sprite-utilities.js";
+import { checkSatOverlapWithGroup } from "../../helpers/sprite-utilities.js";
 import EnergyPickup from "../pickups/energy-pickup";
 import PlayerLight from "./player-light";
 import Compass from "./compass";
@@ -138,10 +138,10 @@ export default class Player extends Phaser.Sprite {
     this._trail.setRate(this._movementController._accelerationFraction * 30);
 
     // Enemy collisions
-    checkOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
+    checkSatOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
 
     // Light pickups
-    checkOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+    checkSatOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
 
     const health = this._playerLight.getLightRemaining();
     this._postProcessor.onHealthUpdate(health);
