@@ -1,29 +1,38 @@
-// Wrapper around p2 shapes exported from Physics Editor
+// Wrapper around custom SAT exporter from Physics Editor
+// - Only supports first shape defined in Physics Editor
+// - First shape must be a polygon
+
+// Transformation applied:
+//
+// "beetle": {
+//   "width": "50",
+//   "height": "75",
+//   "shapes": [
+//     {
+//       "type": "POLYGON",
+//       "hull": [ [13, 16], ... ],
+//       "polygons": [ ... ]
+//     }
+//   ]
+// }
+//
+// 1. Extract first shape for each
+// 2. Grab the hull
+// 3. Normalize the hull points
+//
+// ->
+//
+// "beetle": [ [0.1, 0.12], ... ]
+
 import physics from "./enemies.json";
 
 const formattedPhysics = {};
 
 for (const enemyName in physics) {
-  const shape = physics[enemyName][0].shape;
-  const points = [];
-  for (let i = 0; i < shape.length; i += 2) {
-    points.push([shape[i], shape[i + 1]]);
-  }
-  formattedPhysics[`enemies/${enemyName}`] = points;
+  const width = parseInt(physics[enemyName].width, 10);
+  const height = parseInt(physics[enemyName].height, 10);
+  const hull = physics[enemyName].shapes[0].hull;
+  formattedPhysics[enemyName] = hull.map(p => [p[0] / width, p[1] / height]);
 }
 
 export default formattedPhysics;
-
-// "amoeba_50": [
-//     {
-//         "shape": [ 7,20, 24,6, 43,20, 37,43, 11,43 ]
-//     }
-// ]
-//
-// ->
-//
-// "enemies/amoeba_50": [
-//     {
-//         "shape": [ [7,20], [24,6], [43,20], [37,43], [11,43] ]
-//     }
-// ]
