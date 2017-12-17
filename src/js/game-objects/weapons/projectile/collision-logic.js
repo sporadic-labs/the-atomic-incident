@@ -8,16 +8,21 @@ import Explosion from "../explosion";
  */
 export class CollisionLogic {
   constructor(projectile, damage) {
-    this._projectile = projectile;
-    this._damage = damage;
+    this.projectile = projectile;
+    this.damage = damage;
+    this.wallHitSound = projectile.game.globals.soundManager.add("wall-hit", 3);
   }
+
   onCollideWithEnemy(enemy) {
-    if (enemy._spawned) enemy.takeDamage(this._damage, this._projectile);
-    this._projectile.destroy();
+    if (enemy._spawned) enemy.takeDamage(this.damage, this.projectile);
+    this.projectile.destroy();
+    return true; // Don't check against any other enemies within this frame
   }
+
   onCollideWithWall() {
-    this._projectile._wallHitSound.play();
-    this._projectile.destroy();
+    this.wallHitSound.play();
+    this.projectile.destroy();
+    return true; // Don't check against any other walls within this frame
   }
 }
 
@@ -34,9 +39,10 @@ export class PiercingCollisionLogic extends CollisionLogic {
 
   onCollideWithEnemy(enemy) {
     if (enemy._spawned && !this._enemiesDamaged.includes(enemy)) {
-      enemy.takeDamage(this._damage, this._projectile);
+      enemy.takeDamage(this.damage, this.projectile);
       this._enemiesDamaged.push(enemy);
     }
+    return false; // Allow collision against multiple enemies within this frame
   }
 }
 
@@ -47,23 +53,18 @@ export class PiercingCollisionLogic extends CollisionLogic {
  * @class ExplodingCollisionLogic
  */
 export class ExplodingCollisionLogic extends CollisionLogic {
-  constructor(projectile, damage) {
-    super(projectile, damage);
-  }
-
   onCollideWithWall() {
-    const p = this._projectile;
-    if (!p.game) return; // Note: this check shouldn't be needed...
-    new Explosion(p.game, p.x, p.y, p.parent, this._damage);
-    p.destroy();
+    const p = this.projectile;
+    new Explosion(p.game, p.x, p.y, p.parent, this.damage);
+    super.onCollideWithWall();
   }
 
   onCollideWithEnemy(enemy) {
     if (enemy._spawned) {
-      const p = this._projectile;
-      if (!p.game) return; // Note: this check shouldn't be needed...
-      new Explosion(p.game, p.x, p.y, p.parent, this._damage);
+      const p = this.projectile;
+      new Explosion(p.game, p.x, p.y, p.parent, this.damage);
       p.destroy();
+      return true; // Don't check against any other enemies within this frame
     }
   }
 }
