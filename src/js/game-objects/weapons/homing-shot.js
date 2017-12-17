@@ -1,5 +1,5 @@
 import BaseWeapon from "./base-weapon";
-import Projectile from "./projectile";
+import Projectile from "./projectile/";
 import WEAPON_TYPES from "./weapon-types";
 
 export default class HomingShot extends BaseWeapon {

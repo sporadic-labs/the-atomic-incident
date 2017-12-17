@@ -1,12 +1,11 @@
-import { satSpriteVsTilemap, checkOverlapWithGroup } from "../../helpers/sprite-utilities";
-import Explosion from "./explosion";
+import { satSpriteVsTilemap, checkOverlapWithGroup } from "../../../helpers/sprite-utilities";
+import { CollisionLogic, ExplodingCollisionLogic, PiercingCollisionLogic } from "./collision-logic";
 
 /**
  * @class Projectile
  */
 export default class Projectile extends Phaser.Sprite {
   /**
-   * 
    * @param {Phaser.Game} game - Reference to Phaser.Game.
    * @param {number} x - X coordinate in world position.
    * @param {number} y - Y coordinate in world position.
@@ -31,7 +30,6 @@ export default class Projectile extends Phaser.Sprite {
   }
 
   /**
-   * 
    * @param {Phaser.Game} game - Reference to Phaser.Game.
    * @param {number} x - X coordinate in world position.
    * @param {number} y - Y coordinate in world position.
@@ -49,8 +47,8 @@ export default class Projectile extends Phaser.Sprite {
     bullet.init(new PiercingCollisionLogic(bullet, damage));
     return bullet;
   }
+
   /**
-   * 
    * @param {Phaser.Game} game - Reference to Phaser.Game.
    * @param {number} x - X coordinate in world position.
    * @param {number} y - Y coordinate in world position.
@@ -66,8 +64,8 @@ export default class Projectile extends Phaser.Sprite {
     const frame = "weapons/slug";
     return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
   }
+
   /**
-   * 
    * @param {Phaser.Game} game - Reference to Phaser.Game.
    * @param {number} x - X coordinate in world position.
    * @param {number} y - Y coordinate in world position.
@@ -83,8 +81,8 @@ export default class Projectile extends Phaser.Sprite {
     const frame = "weapons/shotgun_15";
     return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
   }
+
   /**
-   * 
    * @param {Phaser.Game} game - Reference to Phaser.Game.
    * @param {number} x - X coordinate in world position.
    * @param {number} y - Y coordinate in world position.
@@ -100,6 +98,7 @@ export default class Projectile extends Phaser.Sprite {
     const frame = "weapons/tracking_15";
     return this.makeBullet(game, key, frame, x, y, parent, player, damage, angle, speed);
   }
+
   /**
    * @param {Phaser.Game} game - Reference to Phaser.Game.
    * @param {string} key - Key for sprite in asset sheet.
@@ -157,92 +156,27 @@ export default class Projectile extends Phaser.Sprite {
    * @memberof Projectile
    */
   init(logic) {
-    this._collisionLogic = logic;
+    this.collisionLogic = logic;
     satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
   }
 
   update() {
-    const logic = this._collisionLogic;
+    const logic = this.collisionLogic;
     satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
   }
 
   postUpdate(...args) {
     super.postUpdate(...args); // Update arcade physics
+
     // Not a complete fix, but cap the xy velocity by magnitude to achieve consistent speed
     if (this.body.velocity.getMagnitude() > this.body.maxVelocity.x) {
       this.body.velocity.setMagnitude(this.body.maxVelocity.x);
     }
-    const logic = this._collisionLogic;
+
+    const logic = this.collisionLogic;
     checkOverlapWithGroup(this, this._enemies, (_, enemy) => logic.onCollideWithEnemy(enemy));
+
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
     if (this._player._playerLight.isPointInShadow(this.position)) this.destroy();
-  }
-}
-
-/**
- * Base class for handling projectile collision with enemies and walls. The default logic is that a
- * projectile is destroyed on colliding with something. 
- * 
- * @class CollisionLogic
- */
-class CollisionLogic {
-  constructor(projectile, damage) {
-    this._projectile = projectile;
-    this._damage = damage;
-  }
-  onCollideWithEnemy(enemy) {
-    if (enemy._spawned) enemy.takeDamage(this._damage, this._projectile);
-    this._projectile.destroy();
-  }
-  onCollideWithWall() {
-    this._projectile._wallHitSound.play();
-    this._projectile.destroy();
-  }
-}
-
-/**
- * Piercing projectiles damage an enemy but are not destroyed on contact. 
- * 
- * @class PiercingCollisionLogic
- */
-class PiercingCollisionLogic extends CollisionLogic {
-  constructor(projectile, damage) {
-    super(projectile, damage);
-    this._enemiesDamaged = [];
-  }
-
-  onCollideWithEnemy(enemy) {
-    if (enemy._spawned && !this._enemiesDamaged.includes(enemy)) {
-      enemy.takeDamage(this._damage, this._projectile);
-      this._enemiesDamaged.push(enemy);
-    }
-  }
-}
-
-/**
- * Exploding projectiles don't do damage themselves, but cause an explosion on contact with a wall
- * or enemy
- * 
- * @class ExplodingCollisionLogic
- */
-class ExplodingCollisionLogic extends CollisionLogic {
-  constructor(projectile, damage) {
-    super(projectile, damage);
-  }
-
-  onCollideWithWall() {
-    const p = this._projectile;
-    if (!p.game) return; // Note: this check shouldn't be needed...
-    new Explosion(p.game, p.x, p.y, p.parent, this._damage);
-    p.destroy();
-  }
-
-  onCollideWithEnemy(enemy) {
-    if (enemy._spawned) {
-      const p = this._projectile;
-      if (!p.game) return; // Note: this check shouldn't be needed...
-      new Explosion(p.game, p.x, p.y, p.parent, this._damage);
-      p.destroy();
-    }
   }
 }
