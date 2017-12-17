@@ -73,8 +73,9 @@ export default class MoveTargetAttackComponent {
       });
     }
 
-    if (this._moveState === MOVE_STATES.ATTACK && this._targetPosition) {
-      this._moveTowards(this._targetPosition);
+    if (this._moveState === MOVE_STATES.ATTACK && this._targetAngle) {
+      // this._moveTowards(this._targetPosition);
+      this._moveFixed(this._targetAngle);
     } else {
       // Calculate path
       const path = this._mapManager.navMesh.findPath(this.parent.position, this.target.position);
@@ -128,31 +129,10 @@ export default class MoveTargetAttackComponent {
     this.parent.rotation = angle + Math.PI / 2;
   }
 
-  _moveFixed(position) {
-    const angle = this.parent.position.angle(position);
-
-    // Move towards target
-    const distance = this.parent.position.distance(position);
-    const targetSpeed = distance / this.game.time.physicsElapsed;
-
-    let speed = this.speed;
-    switch (this._moveState) {
-      case MOVE_STATES.WALK:
-        speed = this.speed;
-        break;
-      case MOVE_STATES.TARGET:
-        speed = 0;
-        break;
-      case MOVE_STATES.ATTACK:
-        break;
-      default:
-        console.log("Invalid move state!");
-        break;
-    }
-    speed = this.attackSpeed;
-    const magnitude = Math.min(speed, targetSpeed);
-    this.parent.body.velocity.x = magnitude * Math.cos(angle);
-    this.parent.body.velocity.y = magnitude * Math.sin(angle);
+  _moveFixed(angle) {
+    const speed = this.attackSpeed;
+    this.parent.body.velocity.x = speed * Math.cos(angle);
+    this.parent.body.velocity.y = speed * Math.sin(angle);
 
     // Rotate towards target
     this.parent.rotation = angle + Math.PI / 2;

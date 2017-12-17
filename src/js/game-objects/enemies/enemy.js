@@ -54,7 +54,6 @@ export default class Enemy extends Phaser.Sprite {
         this._movementComponent = new TargetingComp(this, speed, visionRadius);
         break;
     }
-    // this._movementComponent = new TargetingComp(this, speed, visionRadius);
 
     const colorObj = color instanceof Color ? color : new Color(color);
     this.tint = colorObj.getRgbColorInt();
