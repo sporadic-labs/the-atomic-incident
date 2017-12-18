@@ -33,7 +33,7 @@ export default class MoveTargetAttackComponent {
 
   update() {
     this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
-    arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
+    // arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
 
     // Stop moving
     this.parent.body.velocity.set(0);
