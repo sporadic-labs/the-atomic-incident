@@ -36,7 +36,7 @@ export default class EnemySpawner {
     });
   }
 
-  _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5) {
+  _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5, spawnDelay = 250) {
     // Determine the wave positioning
     const radius = this._player.getLightRadius() - 25;
     const spawnAngle = this._player.getVelocity().isZero()
@@ -58,11 +58,17 @@ export default class EnemySpawner {
       if (!this._mapManager.isLocationInNavMesh(pos.x, pos.y)) continue;
 
       if (enemyType in ENEMY_TYPES) {
-        Enemy.MakeEnemyType(this.game, enemyType, pos, this._enemies);
+        this.spawnWithDelay(i * spawnDelay, enemyType, pos);
       } else {
-        console.warn(`Unknown enemy type spawned: ${enemyType}`);
+        console.warn(`Unknown enemy type: ${enemyType}`);
       }
     }
+  }
+
+  spawnWithDelay(delay, enemyType, position) {
+    this._timer.add(delay, () =>
+      Enemy.MakeEnemyType(this.game, enemyType, position, this._enemies)
+    );
   }
 
   _generateEnemyOrder(composition) {
