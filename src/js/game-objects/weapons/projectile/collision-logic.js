@@ -53,17 +53,26 @@ export class PiercingCollisionLogic extends CollisionLogic {
  * @class ExplodingCollisionLogic
  */
 export class ExplodingCollisionLogic extends CollisionLogic {
+  constructor(projectile, damage) {
+    super(projectile, damage);
+    this.hasExploded = false; // Used to prevent exploding on wall AND enemy in same update tick
+  }
+
   onCollideWithWall() {
+    if (this.hasExploded) return true;
     const p = this.projectile;
     new Explosion(p.game, p.x, p.y, p.parent, this.damage);
     super.onCollideWithWall();
+    this.hasExploded = true;
   }
 
   onCollideWithEnemy(enemy) {
+    if (this.hasExploded) return true;
     if (enemy._spawned) {
       const p = this.projectile;
       new Explosion(p.game, p.x, p.y, p.parent, this.damage);
       p.destroy();
+      this.hasExploded = true;
       return true; // Don't check against any other enemies within this frame
     }
   }
