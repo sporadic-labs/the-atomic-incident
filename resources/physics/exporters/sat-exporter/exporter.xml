@@ -1,0 +1,23 @@
+<exporter>
+	<name>SAT Polygon Exporter</name>
+	<displayName>SAT Polygon Exporter (JSON)</displayName>
+    <description>Exporter for convex SAT polygons, JSON</description>
+	<version>1.0</version>
+	<yAxisDirection>down</yAxisDirection>
+	<physicsEngine>box2d</physicsEngine>
+	<template>sat-exporter.json</template>
+	<fileExtension>json</fileExtension>
+	<anchorPoint>
+		<enabled>no</enabled>
+	</anchorPoint>
+	<origin>
+        <type>fixed</type>
+	    <relX>0.0</relX>
+		<relY>1.0</relY>
+    </origin>
+    <supportsCircles>yes</supportsCircles>
+	<global></global>
+	<body></body>
+	<fixture>
+    </fixture>
+</exporter>
