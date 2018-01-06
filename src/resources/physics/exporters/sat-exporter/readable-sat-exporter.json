@@ -1,0 +1,45 @@
+{ 
+	{% for body in bodies %}
+
+		{% if not forloop.first %}, {% endif %}
+
+		"{{body.name}}": {
+			"width": "{{body.size.width}}",
+			"height": "{{body.size.height}}",
+			"shapes": [
+				{% for fixture in body.fixtures %}
+					
+					{% if not forloop.first %} ,{% endif %}
+
+					{
+						"type": "{{fixture.type}}", 
+						{% if fixture.isCircle %}
+							"radius": {{fixture.radius}},
+							"center": {"x": {{fixture.center.x}}, "y": {{fixture.center.y}} }
+						{% else %}
+							"hull": [ 
+								{% for point in fixture.hull %} 
+									{% if not forloop.first %}, {% endif %} 
+									[{{point.x}}, {{point.y}}] 
+								{% endfor %} 
+							],
+							"polygons": [ 
+								{% for polygon in fixture.polygons %} 
+									{% if not forloop.first %}, {% endif %} 
+									[
+										{% for point in polygon %} 
+											{% if not forloop.first %}, {% endif %} 
+											[{{point.x}}, {{point.y}}] 
+										{% endfor %} 
+									]
+								{% endfor %} 
+							]
+						{% endif %}
+					}
+
+				{% endfor %}
+			]
+		}
+
+	{% endfor %}
+}

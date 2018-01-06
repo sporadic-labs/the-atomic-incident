@@ -1,8 +1,17 @@
-import ShadowEnemy from "./shadow-enemy";
-import TargetingComp from "./components/targeting-component";
-import Color from "../../helpers/color";
-import Composition from "../waves/wave-composition";
-import { CircleWave } from "../waves/wave-shapes";
+import Enemy from "./enemy";
+import { shuffleArray } from "../../helpers/utilities";
+
+// Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
+// will cycle through the types from last key through first when spawning.
+const { ENEMY_TYPES } = require("../enemies/enemy-info");
+const COMPOSITIONS = [
+  {
+    [ENEMY_TYPES.GREEN_CELL]: 1,
+    [ENEMY_TYPES.TEAL_CELL]: 1,
+    [ENEMY_TYPES.TURTLE]: 3,
+    name: "test"
+  }
+];
 
 export default class EnemySpawner {
   constructor(game, player) {
@@ -11,54 +20,98 @@ export default class EnemySpawner {
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._circleWaveTimer = this.game.time.create(false);
-    this._circleWaveTimer.start();
-    this._circleWaveTimer.add(1000, () => this._spawnCircleWave());
+    this._waveDifficulty = 1;
+    this._waveInterval = 5000;
+    this._waveletInterval = 750;
 
-    this._ambientEnemyTimer = this.game.time.create(false);
-    this._ambientEnemyTimer.start();
-    this._ambientEnemyTimer.add(0, () => this._spawnRandomEnemy());
+    this._timer = this.game.time.create(false);
+    this._timer.start();
+    this._timer.add(500, this._spawnTesterWave, this);
+
+    // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
+
+    // Use the 'L' button to force a wavelet to spawn.
+    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => {
+      this._scheduleTesterWavelet(5, 0);
+    });
   }
 
-  _spawnCircleWave() {
-    const shape = new CircleWave(this.game, 120);
-    const composition = new Composition({ red: 10 });
-    for (const enemyInfo of shape.enemies(composition)) {
-      const pos = enemyInfo.position;
-      if (!this._mapManager.isLocationEmpty(pos.x, pos.y)) continue;
-      const enemy = new ShadowEnemy(
-        this.game,
-        pos.x,
-        pos.y,
-        "enemies/arrow-idle",
-        this._enemies,
-        Color.blue()
-      );
-      enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));
+  _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5, spawnDelay = 250) {
+    // Determine the wave positioning
+    const radius = this._player.getLightRadius() - 25;
+    const spawnAngle = this._player.getVelocity().isZero()
+      ? this.game.rnd.realInRange(0, 2 * Math.PI)
+      : new Phaser.Point(0, 0).angle(this._player.getVelocity());
+
+    // Play the enemy spawn sound.
+    // this._spawnSound.play();
+
+    // Spawn in an arc
+    const step = angleSpan / enemyOrder.length;
+    const startAngle = spawnAngle - angleSpan / 2;
+    for (const [i, enemyType] of enemyOrder.entries()) {
+      const enemyAngle = startAngle + step * i;
+      const pos = this._player.position
+        .clone()
+        .add(radius * Math.cos(enemyAngle), radius * Math.sin(enemyAngle));
+
+      if (!this._mapManager.isLocationInNavMesh(pos.x, pos.y)) continue;
+
+      if (enemyType in ENEMY_TYPES) {
+        this.spawnWithDelay(i * spawnDelay, enemyType, pos);
+      } else {
+        console.warn(`Unknown enemy type: ${enemyType}`);
+      }
     }
-    this._circleWaveTimer.add(this.game.rnd.integerInRange(7000, 12000), () =>
-      this._spawnCircleWave()
+  }
+
+  spawnWithDelay(delay, enemyType, position) {
+    this._timer.add(delay, () =>
+      Enemy.MakeEnemyType(this.game, enemyType, position, this._enemies)
     );
   }
 
-  _spawnRandomEnemy() {
-    let x, y;
-    do {
-      x = this.game.rnd.realInRange(0, this.game.width);
-      y = this.game.rnd.realInRange(0, this.game.width);
-    } while (!this._mapManager.isLocationEmpty(x, y));
-    const enemy = new ShadowEnemy(
-      this.game,
-      x,
-      y,
-      "enemies/arrow-idle",
-      this._enemies,
-      Color.red(),
-      null
-    );
-    enemy.setMovementComponent(new TargetingComp(enemy, 100, 200));
-    this._ambientEnemyTimer.add(this.game.rnd.integerInRange(500, 1000), () =>
-      this._spawnRandomEnemy()
-    );
+  _generateEnemyOrder(composition) {
+    const enemies = [];
+    for (const [typeName, numType] of Object.entries(composition)) {
+      enemies.push(...Array(numType).fill(typeName));
+    }
+    shuffleArray(enemies);
+    return enemies;
+  }
+
+  _scheduleTesterWavelet(numEnemies, time) {
+    if (!this._testerTypePool) this._testerTypePool = Object.keys(ENEMY_TYPES);
+    const order = [];
+    for (let j = 0; j < numEnemies; j++) {
+      if (this._testerTypePool.length === 0) this._testerTypePool = Object.keys(ENEMY_TYPES);
+      const type = this._testerTypePool.pop();
+      order.push(type);
+    }
+    this._timer.add(time, () => this._spawnWavelet(order));
+  }
+
+  _spawnTesterWave() {
+    const numWavelets = Math.floor(this._waveDifficulty);
+
+    for (let i = 0; i < numWavelets; i++) this._scheduleTesterWavelet(5, this._waveletInterval * i);
+
+    const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
+    this._timer.add(nextWaveDelay, this._spawnTesterWave, this);
+    this._waveDifficulty += 1 / 3;
+  }
+
+  _spawnWave() {
+    const numWavelets = Math.floor(this._waveDifficulty);
+
+    for (let i = 0; i < numWavelets; i++) {
+      const comp = this.game.rnd.pick(COMPOSITIONS);
+      const order = this._generateEnemyOrder(comp);
+      this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
+    }
+
+    const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
+    this._timer.add(nextWaveDelay, this._spawnWave, this);
+    this._waveDifficulty += 1 / 3;
   }
 }

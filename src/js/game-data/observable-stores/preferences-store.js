@@ -9,6 +9,7 @@ class PreferencesStore {
       shadowOpacity: 1,
       shadersEnabled: true,
       physicsDebug: false,
+      skipMenu: false,
 
       // Actions - these mutate the state
       setVolume: action(function(newVolume) {
@@ -22,6 +23,9 @@ class PreferencesStore {
       }),
       setPhysicsDebug: action(function(physicsDebug) {
         this.physicsDebug = physicsDebug;
+      }),
+      setSkipMenu: action(function(skipMenu) {
+        this.skipMenu = skipMenu;
       })
     });
   }

@@ -10,7 +10,7 @@ export default class PickupSpawner extends Phaser.Group {
   spawnPickup(colorName, amount = 1) {
     for (let i = 0; i < amount; i++) {
       const point = this._getSpawnPoint(this._spawnLocations);
-      new EnergyPickup(this.game, point.x, point.y, this, 100, 3);
+      new EnergyPickup(this.game, point.x, point.y, this, this._player, 100, 3);
     }
   }
 

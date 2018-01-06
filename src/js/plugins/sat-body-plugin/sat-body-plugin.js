@@ -54,9 +54,9 @@ export default class SatBodyPlugin extends Phaser.Plugin {
     return this._isDebug === true;
   }
 
-  enableDebugAll() {
+  enableDebugAll(debugColor = 0x00ff00, parent = null) {
     this._isDebug = true;
-    this._bodies.forEach(body => body.enableDebug());
+    this._bodies.forEach(body => body.enableDebug(debugColor, parent));
   }
 
   disableDebugAll() {
@@ -65,7 +65,7 @@ export default class SatBodyPlugin extends Phaser.Plugin {
   }
 
   /** 
-   * Update the SAT bodies after the final arcade physics calculations are run ( which happens in
+   * Update the SAT bodies after the final arcade physics calculations are run (which happens in
    * stage.postUpdate). This is automatically called by the plugin manager. See
    * Phaser/core/Game#updateLogic for the lifecycle.
    */

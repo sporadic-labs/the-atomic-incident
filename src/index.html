@@ -1,16 +1,35 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>octo-chainsaw!</title>
-    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Saira" rel="stylesheet">
-  </head>
-  <body>
-    <div id="instructions">
-      WASD/Arrow keys to move</br>
-      Left click to fire
+
+<head>
+  <meta charset="UTF-8" />
+  <title>octo-chainsaw!</title>
+  <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Saira" rel="stylesheet">
+</head>
+
+<body>
+  <div id="instructions">
+    WASD/Arrow keys to move</br>
+    Left click to fire</br>
+    P to pause
+    <div id="debug-instructions">
+      Debug</br>
+      E to open debug menu</br>
+      O to pause w/o menus</br>
+      L to spawn enemies</br>
+      Manually Switch Weapons
+      <ol>
+        <li>Scattershot</li>
+        <li>Rapid Shot</li>
+        <li>Homing Shot</li>
+        <li>Piercing Shot</li>
+        <li>Dash</li>
+        <li>Rocket Launcher</li>
+      </ol>
     </div>
-    <div id="game-container"></div>
-  </body>
+  </div>
+  <div id="game-container"></div>
+</body>
+
 </html>

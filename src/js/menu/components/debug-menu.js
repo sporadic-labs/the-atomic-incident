@@ -2,15 +2,15 @@ import { h } from "preact";
 
 import InputFix from "./input-fix";
 
-export default function DebugMenu({ preferencesStore, onResume }) {
-  const { volume, shadowOpacity, shadersEnabled, physicsDebug } = preferencesStore;
+export default function DebugMenu({ preferencesStore, gameStore, onResume }) {
+  const { volume, shadowOpacity, shadersEnabled, physicsDebug, skipMenu } = preferencesStore;
   return (
     <div id="debug-menu" class="menu">
       <button class="btn-close" onClick={onResume}>
         <i class="fa fa-times" aria-hidden="true" />
       </button>
       <div class="menu-title">Debug Menu</div>
-      <form>
+      <div>
         <label>
           Volume
           <InputFix
@@ -54,7 +54,20 @@ export default function DebugMenu({ preferencesStore, onResume }) {
             onClick={() => preferencesStore.setPhysicsDebug(!physicsDebug)}
           />
         </label>
-      </form>
+
+        <label>
+          Skip main menu:
+          <input
+            type="checkbox"
+            checked={skipMenu}
+            onClick={() => preferencesStore.setSkipMenu(!skipMenu)}
+          />
+        </label>
+        <button class="text-btn" onClick={() => gameStore.resetHighScore()}>
+          Reset High Score
+        </button>
+        <button onClick={onResume}>Resume Game</button>
+      </div>
     </div>
   );
 }

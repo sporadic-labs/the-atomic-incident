@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.3.3</string>
         <key>fileName</key>
-        <string>C:/Users/micha/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -197,39 +197,280 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">asset-frames/enemies/arrow-idle.png</key>
-            <key type="filename">asset-frames/enemies/bomber-eye-idle-01.png</key>
-            <key type="filename">asset-frames/enemies/bomber-idle-01.png</key>
-            <key type="filename">asset-frames/enemies/circle-idle.png</key>
-            <key type="filename">asset-frames/player/attack-01.png</key>
-            <key type="filename">asset-frames/player/attack-02.png</key>
-            <key type="filename">asset-frames/player/attack-03.png</key>
-            <key type="filename">asset-frames/player/attack-04.png</key>
-            <key type="filename">asset-frames/player/die-01.png</key>
-            <key type="filename">asset-frames/player/die-02.png</key>
-            <key type="filename">asset-frames/player/die-03.png</key>
-            <key type="filename">asset-frames/player/die-04.png</key>
-            <key type="filename">asset-frames/player/hit-01.png</key>
-            <key type="filename">asset-frames/player/hit-02.png</key>
-            <key type="filename">asset-frames/player/hit-03.png</key>
-            <key type="filename">asset-frames/player/hit-04.png</key>
-            <key type="filename">asset-frames/player/idle-01.png</key>
-            <key type="filename">asset-frames/player/idle-02.png</key>
-            <key type="filename">asset-frames/player/idle-03.png</key>
-            <key type="filename">asset-frames/player/idle-04.png</key>
-            <key type="filename">asset-frames/player/move-01.png</key>
-            <key type="filename">asset-frames/player/move-02.png</key>
-            <key type="filename">asset-frames/player/move-03.png</key>
-            <key type="filename">asset-frames/player/move-04.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_00.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_01.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_02.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_03.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_04.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_05.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_06.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_07.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_08.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_09.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_10.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_11.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_12.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_13.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_14.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/death_15.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_00.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_01.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_02.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_03.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_04.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_05.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_06.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_07.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_08.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_09.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_10.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_11.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_12.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_13.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_14.png</key>
+            <key type="filename">asset-frames/enemies/amoeba/move_15.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_00.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_01.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_02.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_03.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_04.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_05.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_06.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_07.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_08.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_09.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_10.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_11.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_12.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_13.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_14.png</key>
+            <key type="filename">asset-frames/enemies/beetle/death_15.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/beetle/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_00.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_01.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_02.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_03.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_04.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_05.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_06.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_07.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_08.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_09.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_10.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_11.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_12.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_13.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_14.png</key>
+            <key type="filename">asset-frames/enemies/beetle/move_15.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_00.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_01.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_02.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_03.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_04.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_05.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_06.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_07.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_08.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_09.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_10.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_11.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_12.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_13.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_14.png</key>
+            <key type="filename">asset-frames/enemies/turtle/death_15.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/turtle/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_00.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_01.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_02.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_03.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_04.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_05.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_06.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_07.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_08.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_09.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_10.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_11.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_12.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_13.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_14.png</key>
+            <key type="filename">asset-frames/enemies/turtle/move_15.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_00.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_01.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_02.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_03.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_04.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_05.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_06.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_07.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_08.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_09.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_10.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_11.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_12.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_13.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_14.png</key>
+            <key type="filename">asset-frames/enemies/worm/death_15.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/worm/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_00.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_01.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_02.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_03.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_04.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_05.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_06.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_07.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_08.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_09.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_10.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_11.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_12.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_13.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_14.png</key>
+            <key type="filename">asset-frames/enemies/worm/move_15.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>6,6,13,13</rect>
+                <rect>13,13,25,25</rect>
                 <key>scale9Paddings</key>
-                <rect>6,6,13,13</rect>
+                <rect>13,13,25,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/enemies/bacteria/death_00.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_01.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_02.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_03.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_04.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_05.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_06.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_07.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_08.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_09.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_10.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_11.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_12.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_13.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_14.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/death_15.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_00.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_01.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_02.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_03.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_04.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_05.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_06.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_07.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_08.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_09.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_10.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_11.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_12.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_13.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_14.png</key>
+            <key type="filename">asset-frames/enemies/bacteria/move_15.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,19,25,38</rect>
+                <key>scale9Paddings</key>
+                <rect>13,19,25,38</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/enemies/death-particles.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,5,5</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,5,5</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -246,90 +487,29 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemy01/die-01.png</key>
-            <key type="filename">asset-frames/enemy01/die-02.png</key>
-            <key type="filename">asset-frames/enemy01/die-03.png</key>
-            <key type="filename">asset-frames/enemy01/die-04.png</key>
-            <key type="filename">asset-frames/enemy01/idle-01.png</key>
-            <key type="filename">asset-frames/enemy01/idle-02.png</key>
-            <key type="filename">asset-frames/enemy01/idle-03.png</key>
-            <key type="filename">asset-frames/enemy01/idle-04.png</key>
-            <key type="filename">asset-frames/enemy01/move-01.png</key>
-            <key type="filename">asset-frames/enemy01/move-02.png</key>
-            <key type="filename">asset-frames/enemy01/move-03.png</key>
-            <key type="filename">asset-frames/enemy01/move-04.png</key>
-            <key type="filename">asset-frames/hud/reticule.png</key>
-            <key type="filename">asset-frames/pickups/box-01.png</key>
-            <key type="filename">asset-frames/pickups/box-02.png</key>
-            <key type="filename">asset-frames/pickups/box-03.png</key>
-            <key type="filename">asset-frames/pickups/box-04.png</key>
-            <key type="filename">asset-frames/pickups/diamond-01.png</key>
-            <key type="filename">asset-frames/pickups/diamond-02.png</key>
-            <key type="filename">asset-frames/pickups/diamond-03.png</key>
-            <key type="filename">asset-frames/pickups/diamond-04.png</key>
-            <key type="filename">asset-frames/pickups/diamond-05.png</key>
-            <key type="filename">asset-frames/pickups/diamond-06.png</key>
-            <key type="filename">asset-frames/test/box.png</key>
-            <key type="filename">asset-frames/test/diamond.png</key>
+            <key type="filename">asset-frames/enemies/weapons/dash_60.png</key>
+            <key type="filename">asset-frames/weapons/dash_60.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>6,6,12,12</rect>
+                <rect>15,15,30,30</rect>
                 <key>scale9Paddings</key>
-                <rect>6,6,12,12</rect>
+                <rect>15,15,30,30</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemy02/attack-01.png</key>
-            <key type="filename">asset-frames/enemy02/attack-02.png</key>
-            <key type="filename">asset-frames/enemy02/attack-03.png</key>
-            <key type="filename">asset-frames/enemy02/attack-04.png</key>
-            <key type="filename">asset-frames/enemy02/die-01.png</key>
-            <key type="filename">asset-frames/enemy02/die-02.png</key>
-            <key type="filename">asset-frames/enemy02/die-03.png</key>
-            <key type="filename">asset-frames/enemy02/die-04.png</key>
-            <key type="filename">asset-frames/enemy02/move-01.png</key>
-            <key type="filename">asset-frames/enemy02/move-02.png</key>
-            <key type="filename">asset-frames/enemy02/move-03.png</key>
-            <key type="filename">asset-frames/enemy02/move-04.png</key>
-            <key type="filename">asset-frames/enemy03/aim-01.png</key>
-            <key type="filename">asset-frames/enemy03/aim-02.png</key>
-            <key type="filename">asset-frames/enemy03/aim-03.png</key>
-            <key type="filename">asset-frames/enemy03/aim-04.png</key>
-            <key type="filename">asset-frames/enemy03/attack-01.png</key>
-            <key type="filename">asset-frames/enemy03/attack-02.png</key>
-            <key type="filename">asset-frames/enemy03/attack-03.png</key>
-            <key type="filename">asset-frames/enemy03/attack-04.png</key>
-            <key type="filename">asset-frames/enemy03/die-01.png</key>
-            <key type="filename">asset-frames/enemy03/die-02.png</key>
-            <key type="filename">asset-frames/enemy03/die-03.png</key>
-            <key type="filename">asset-frames/enemy03/die-04.png</key>
-            <key type="filename">asset-frames/enemy03/move-01.png</key>
-            <key type="filename">asset-frames/enemy03/move-02.png</key>
-            <key type="filename">asset-frames/enemy03/move-03.png</key>
-            <key type="filename">asset-frames/enemy03/move-04.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>9,9,18,18</rect>
-                <key>scale9Paddings</key>
-                <rect>9,9,18,18</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/fx/hit-01.png</key>
-            <key type="filename">asset-frames/fx/hit-02.png</key>
-            <key type="filename">asset-frames/fx/hit-03.png</key>
-            <key type="filename">asset-frames/fx/hit-04.png</key>
-            <key type="filename">asset-frames/fx/hit-05.png</key>
-            <key type="filename">asset-frames/fx/hit-06.png</key>
+            <key type="filename">asset-frames/enemies/weapons/machine_gun_15.png</key>
+            <key type="filename">asset-frames/enemies/weapons/rocket_15.png</key>
+            <key type="filename">asset-frames/enemies/weapons/shotgun_15.png</key>
+            <key type="filename">asset-frames/enemies/weapons/tracking_15.png</key>
             <key type="filename">asset-frames/pickups/energy-pickup.png</key>
+            <key type="filename">asset-frames/weapons/machine_gun_15.png</key>
+            <key type="filename">asset-frames/weapons/rocket_15.png</key>
+            <key type="filename">asset-frames/weapons/shotgun_15.png</key>
+            <key type="filename">asset-frames/weapons/tracking_15.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -342,71 +522,17 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/fx/swoosh-01.png</key>
-            <key type="filename">asset-frames/fx/swoosh-02.png</key>
-            <key type="filename">asset-frames/fx/swoosh-03.png</key>
+            <key type="filename">asset-frames/hud/goal-indicator.png</key>
+            <key type="filename">asset-frames/pickups/box.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>2,4,4,8</rect>
+                <rect>6,6,13,13</rect>
                 <key>scale9Paddings</key>
-                <rect>2,4,4,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/fx/trail-01.png</key>
-            <key type="filename">asset-frames/fx/trail-02.png</key>
-            <key type="filename">asset-frames/fx/trail-03.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,4,24,8</rect>
-                <key>scale9Paddings</key>
-                <rect>12,4,24,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/hud/dash.png</key>
-            <key type="filename">asset-frames/hud/ghost.png</key>
-            <key type="filename">asset-frames/hud/heart-open.png</key>
-            <key type="filename">asset-frames/hud/heart.png</key>
-            <key type="filename">asset-frames/hud/mute.png</key>
-            <key type="filename">asset-frames/hud/pause.png</key>
-            <key type="filename">asset-frames/hud/play.png</key>
-            <key type="filename">asset-frames/hud/pulse.png</key>
-            <key type="filename">asset-frames/hud/slow-motion.png</key>
-            <key type="filename">asset-frames/hud/sound.png</key>
-            <key type="filename">asset-frames/pickups/dash.png</key>
-            <key type="filename">asset-frames/pickups/ghost.png</key>
-            <key type="filename">asset-frames/pickups/slow-motion.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,8,15,15</rect>
-                <key>scale9Paddings</key>
-                <rect>8,8,15,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/hud/grid.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>38,38,75,75</rect>
-                <key>scale9Paddings</key>
-                <rect>38,38,75,75</rect>
+                <rect>6,6,13,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -436,6 +562,35 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/hud/mute.png</key>
+            <key type="filename">asset-frames/hud/pause.png</key>
+            <key type="filename">asset-frames/hud/play.png</key>
+            <key type="filename">asset-frames/hud/sound.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,15,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/hud/reticule.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,6,12,12</rect>
+                <key>scale9Paddings</key>
+                <rect>6,6,12,12</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/hud/targeting-arrow.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -449,149 +604,79 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/startScreen/logo.png</key>
+            <key type="filename">asset-frames/player/death_00.png</key>
+            <key type="filename">asset-frames/player/death_01.png</key>
+            <key type="filename">asset-frames/player/death_02.png</key>
+            <key type="filename">asset-frames/player/death_03.png</key>
+            <key type="filename">asset-frames/player/death_04.png</key>
+            <key type="filename">asset-frames/player/death_05.png</key>
+            <key type="filename">asset-frames/player/death_06.png</key>
+            <key type="filename">asset-frames/player/death_07.png</key>
+            <key type="filename">asset-frames/player/death_08.png</key>
+            <key type="filename">asset-frames/player/death_09.png</key>
+            <key type="filename">asset-frames/player/death_10.png</key>
+            <key type="filename">asset-frames/player/death_11.png</key>
+            <key type="filename">asset-frames/player/death_12.png</key>
+            <key type="filename">asset-frames/player/death_13.png</key>
+            <key type="filename">asset-frames/player/death_14.png</key>
+            <key type="filename">asset-frames/player/death_15.png</key>
+            <key type="filename">asset-frames/player/hit_00.png</key>
+            <key type="filename">asset-frames/player/hit_01.png</key>
+            <key type="filename">asset-frames/player/hit_02.png</key>
+            <key type="filename">asset-frames/player/hit_03.png</key>
+            <key type="filename">asset-frames/player/hit_04.png</key>
+            <key type="filename">asset-frames/player/hit_05.png</key>
+            <key type="filename">asset-frames/player/hit_06.png</key>
+            <key type="filename">asset-frames/player/hit_07.png</key>
+            <key type="filename">asset-frames/player/hit_08.png</key>
+            <key type="filename">asset-frames/player/hit_09.png</key>
+            <key type="filename">asset-frames/player/hit_10.png</key>
+            <key type="filename">asset-frames/player/hit_11.png</key>
+            <key type="filename">asset-frames/player/hit_12.png</key>
+            <key type="filename">asset-frames/player/hit_13.png</key>
+            <key type="filename">asset-frames/player/hit_14.png</key>
+            <key type="filename">asset-frames/player/hit_15.png</key>
+            <key type="filename">asset-frames/player/move.png</key>
+            <key type="filename">asset-frames/player/player-trail.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>90,48,180,95</rect>
+                <rect>9,9,18,18</rect>
                 <key>scale9Paddings</key>
-                <rect>90,48,180,95</rect>
+                <rect>9,9,18,18</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/startScreen/options-down.png</key>
-            <key type="filename">asset-frames/startScreen/options-up.png</key>
-            <key type="filename">asset-frames/startScreen/play-down.png</key>
-            <key type="filename">asset-frames/startScreen/play-up.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00000.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00001.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00002.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00003.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00004.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00005.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00006.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00007.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00008.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00009.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00010.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00011.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00012.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00013.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00014.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00015.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00016.png</key>
+            <key type="filename">asset-frames/weapons/explosion/explosion-00017.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>43,16,86,32</rect>
+                <rect>38,38,75,75</rect>
                 <key>scale9Paddings</key>
-                <rect>43,16,86,32</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/test/bullet.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>3,7,6,15</rect>
-                <key>scale9Paddings</key>
-                <rect>3,7,6,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/arrow.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>1,6,3,12</rect>
-                <key>scale9Paddings</key>
-                <rect>1,6,3,12</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/beam.png</key>
-            <key type="filename">asset-frames/weapons/beam.psd</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>200,5,400,10</rect>
-                <key>scale9Paddings</key>
-                <rect>200,5,400,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/circle.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>3,3,6,6</rect>
-                <key>scale9Paddings</key>
-                <rect>3,3,6,6</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/death-beam.png</key>
-            <key type="filename">asset-frames/weapons/e-blade-01.png</key>
-            <key type="filename">asset-frames/weapons/e-blade-02.png</key>
-            <key type="filename">asset-frames/weapons/e-saw-01.png</key>
-            <key type="filename">asset-frames/weapons/e-saw-02.png</key>
-            <key type="filename">asset-frames/weapons/e-star-01.png</key>
-            <key type="filename">asset-frames/weapons/e-star-02.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/e-burst-01.png</key>
-            <key type="filename">asset-frames/weapons/e-burst-02.png</key>
-            <key type="filename">asset-frames/weapons/fireball-01.png</key>
-            <key type="filename">asset-frames/weapons/fireball-02.png</key>
-            <key type="filename">asset-frames/weapons/fireball-03.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9Paddings</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/hammer.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>14,14,28,28</rect>
-                <key>scale9Paddings</key>
-                <rect>14,14,28,28</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/laser-01.png</key>
-            <key type="filename">asset-frames/weapons/laser-02.png</key>
-            <key type="filename">asset-frames/weapons/laser-03.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>2,6,4,12</rect>
-                <key>scale9Paddings</key>
-                <rect>2,6,4,12</rect>
+                <rect>38,38,75,75</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -605,19 +690,6 @@
                 <rect>4,5,8,10</rect>
                 <key>scale9Paddings</key>
                 <rect>4,5,8,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/sword.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,16,32,32</rect>
-                <key>scale9Paddings</key>
-                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

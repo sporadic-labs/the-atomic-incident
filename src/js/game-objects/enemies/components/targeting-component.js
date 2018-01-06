@@ -9,12 +9,14 @@ export default class TargetingComponent {
     this.parent = parent;
     this.speed = speed;
     this.target = this.game.globals.player;
+    this.enemies = this.game.globals.groups.enemies;
     this._visionRadius = visionRadius;
     this._mapManager = this.game.globals.mapManager;
   }
 
   update() {
-    arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
+    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
+    // arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
 
     // Stop moving
     this.parent.body.velocity.set(0);
@@ -22,7 +24,7 @@ export default class TargetingComponent {
     // Vision check, stop early if target is out of range
     if (this._visionRadius !== null) {
       const d = this.parent.position.distance(this.target.position);
-      if (d > this._visionRadius) return this._target;
+      if (d > this._visionRadius) return this.target;
     }
 
     // Calculate path
@@ -30,34 +32,57 @@ export default class TargetingComponent {
 
     // Check if there is a path that was found
     if (path) {
+      // Avoidance steering
+      const desiredSeparation = 50;
+      const separationForce = new Phaser.Point();
+      let neighbors = 0;
+      for (const enemy of this.enemies.children) {
+        const d = this.parent.position.distance(enemy.position);
+        if (d < desiredSeparation) {
+          const offset = Phaser.Point
+            .subtract(this.parent.position, enemy.position)
+            .setMagnitude(desiredSeparation - d);
+          separationForce.add(offset.x, offset.y);
+          neighbors++;
+        }
+      }
+      separationForce.divide(neighbors, neighbors);
+
+      let targetPoint;
       if (path.length > 1) {
         // If there are multiple steps in the path, head towards the second
         // point. This allows the sprite to skip the tile it is currently in.
         const nextNode = path[1];
         const nextTargetPoint = new Phaser.Point(nextNode.x, nextNode.y);
-        this._moveTowards(nextTargetPoint);
+        targetPoint = nextTargetPoint;
       } else {
         // If there aren't multiple steps, sprite is close enough to directly head
         // for the target itself
-        this._moveTowards(this.target.position);
+        targetPoint = this.target.position;
       }
+
+      // Note, this isn't exactly the right way to do this. Separation force should be weighted so
+      // that the max speed isn't exceeded & separation force shouldn't push the enemy into a
+      // wall...
+      const body = this.parent.body;
+      const pathVelocity = this.getVelocityTo(targetPoint);
+      body.velocity.setTo(
+        pathVelocity.x + 4 * separationForce.x,
+        pathVelocity.y + 4 * separationForce.y
+      );
+
+      this.parent.rotation = Math.atan2(body.velocity.y, body.velocity.x) + Math.PI / 2;
     }
 
     return this.target;
   }
 
-  _moveTowards(position) {
+  getVelocityTo(position) {
     const angle = this.parent.position.angle(position);
-
-    // Move towards target
     const distance = this.parent.position.distance(position);
     const targetSpeed = distance / this.game.time.physicsElapsed;
     const magnitude = Math.min(this.speed, targetSpeed);
-    this.parent.body.velocity.x = magnitude * Math.cos(angle);
-    this.parent.body.velocity.y = magnitude * Math.sin(angle);
-
-    // Rotate towards target
-    this.parent.rotation = angle + Math.PI / 2;
+    return new Phaser.Point(magnitude * Math.cos(angle), magnitude * Math.sin(angle));
   }
 
   destroy() {

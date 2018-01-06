@@ -1,11 +1,8 @@
 {
   "name": "octo-chainsaw",
   "description": "Octo-Chainsaw, a Game-in-Progress",
-  "version": "0.0.0",
-  "authors": [
-    "Rex Twedt",
-    "Mike Hadley"
-  ],
+  "version": "0.1.0",
+  "authors": ["Rex Twedt", "Mike Hadley"],
   "license": "MIT",
   "main": "gulpfile.js",
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
@@ -20,6 +17,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "eslint": "^4.6.0",
     "eslint-config-prettier": "^2.4.0",
@@ -60,16 +58,17 @@
     "build": "webpack",
     "dev": "webpack-dev-server --open",
     "clean": "rm -rf ./public",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d public",
+    "predeploy": "npm run clean && npm run build",
+    "deploy": "gh-pages --dist public --dest .",
+    "deploy:legacy":
+      "npm run predeploy && gh-pages --dist public --dest ./shrinking-version --repo https://github.com/retwedt/octo-chainsaw.git",
+    "deploy:version":
+      "npm run predeploy && cross-env-shell gh-pages --dist public --dest ./$npm_package_version",
     "precommit": "lint-staged",
     "prettier": "prettier --write ./src/js/**/*.{js,jsx,json}"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",

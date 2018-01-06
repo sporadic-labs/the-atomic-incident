@@ -1,62 +1,45 @@
 import BaseWeapon from "./base-weapon";
-import Projectile from "./base-projectile";
+import Projectile from "./projectile/";
+import WEAPON_TYPES from "./weapon-types";
 
 export default class Scattershot extends BaseWeapon {
-  constructor(game, parentGroup, player) {
-    super(game, parentGroup, "Scattershot", player);
+  constructor(game, parentGroup, player, enemies) {
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 5, 480, 1800);
+    this._damage = 20;
 
-    // Initial weapon settings:
-    //  Ammo               - 24 shots / clip
-    //  Time between shots - 400 ms
-    //  Reload time        - 1800 ms
-    this.init(24, 480, 1800);
+    this._fireSound = game.globals.soundManager.add("multishot", null, 0.1);
+    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
   }
 
   fire(angle) {
     if (this.isAbleToAttack() && !this.isAmmoEmpty()) {
       // Find trajectory
-      const pelletNum = this.game.rnd.integerInRange(16, 24);
+      const pelletNum = this.game.rnd.integerInRange(14, 20);
 
       // randomize the trajectory of every bulconst in the shotgun blast
       for (let i = 0; i < pelletNum; i++) {
         const mod = this.game.rnd.integerInRange(0, 30) * (Math.PI / 180) * this.game.rnd.sign();
         const rndAngle = angle + mod;
-        const speed = this.game.rnd.integerInRange(364, 376);
-        const perpendicularOffset = this.game.rnd.integerInRange(-5, 5);
-        this._createProjectile(rndAngle, 24, perpendicularOffset, speed);
+        const speed = this.game.rnd.integerInRange(350, 400);
+        this._createProjectile(rndAngle, 18, speed);
       }
 
       this.incrementAmmo(-1);
-
       if (this.getAmmo() > 0) {
+        this._fireSound.play();
         this._startCooldown(this._cooldownTime);
       } else {
+        this._reloadSound.play();
         this._reload();
       }
     }
   }
 
-  _createProjectile(angle, playerDistance, perpendicularOffset, speed) {
-    const perpAngle = angle - Math.PI / 2;
-    const x =
-      this._player.x + playerDistance * Math.cos(angle) - perpendicularOffset * Math.cos(perpAngle);
-    const y =
-      this._player.y + playerDistance * Math.sin(angle) - perpendicularOffset * Math.sin(perpAngle);
-    // shotgun blast is made up of a bunch of slugs at half size.
-    const p = new Projectile(
-      this.game,
-      x,
-      y,
-      "assets",
-      "weapons/slug",
-      this,
-      this._player,
-      35,
-      angle,
-      speed
-    );
-    p.scale.setTo(0.5, 0.5);
-    const rgb = Phaser.Color.HSLtoRGB(0.75, 0.36, 0.64);
-    p.tint = Phaser.Color.getColor(rgb.r, rgb.g, rgb.b);
+  _createProjectile(angle, playerDistance, speed) {
+    const player = this._player;
+    const x = player.x + playerDistance * Math.cos(angle);
+    const y = player.y + playerDistance * Math.sin(angle);
+    const p = Projectile.makeScatterShot(this.game, x, y, this, player, this._damage, angle, speed);
+    p.scale.setTo(0.64, 0.64);
   }
 }

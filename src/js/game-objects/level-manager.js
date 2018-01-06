@@ -54,6 +54,19 @@ export default class MapManager {
   }
 
   /**
+   * Parses the "pickup" object layer from the tilemap and returns an array of points
+   * 
+   * @returns {Phaser.Point[]}
+   * @memberof MapManager
+   */
+  getPickupLocations() {
+    const pickups = this.tilemap.objects["pickups"] || [];
+    return pickups.map(
+      pickup => new Phaser.Point(pickup.x + pickup.width / 2, pickup.y + pickup.height / 2)
+    );
+  }
+
+  /**
    * Check if the position (in world, pixel coordinates) in the tilemap is empty. This specifically
    * checks the wall layer, where all the colliding tiles are.
    * 
@@ -89,6 +102,20 @@ export default class MapManager {
     // Index of -1 is an empty tile
     if (checkTile.index === -1) return true;
     else return false;
+  }
+
+  isLocationInNavMesh(x, y) {
+    const map = this.tilemap;
+    // Check if the tile is occupied
+    const checkTile = map.getTileWorldXY(x, y, map.tileWidth, map.tileHeight, this.wallLayer);
+    if (checkTile !== null) return false;
+    // Check if the location is inside the navmesh
+    const meshRects = map.objects["navmesh-shrunken"] || [];
+    for (const r of meshRects) {
+      if (!r.rectangle) continue;
+      if (x >= r.x && x <= r.x + r.width && y >= r.y && y <= r.y + r.height) return true;
+    }
+    return false;
   }
 
   /**
