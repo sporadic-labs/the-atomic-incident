@@ -1,3 +1,5 @@
+import { circle } from "../plugins/sat-body-plugin/sat-factories";
+
 export function randomBoolean() {
   return Boolean(Math.floor(Math.random() * 2));
 }
@@ -51,4 +53,20 @@ export function weightedPick(objects, weightTotal = null, weightProperty = "weig
   }
 
   return objects[objects.length - 1];
+}
+
+/**
+ * Check whether a circle overlaps an axis-aligned rectangle (e.g. unrotated)
+ * Ref: https://yal.cc/rectangle-circle-intersection-test/
+ * @param {Phaser.Circle} circle 
+ * @param {Phaser.Rectangle} rectangle 
+ * @returns {boolean}
+ */
+export function circleVsRectangle(circle, rect) {
+  // Clamp circle's center to the rectangle's bounds
+  const nearestX = Math.max(rect.x, Math.min(circle.x, rect.x + rect.width));
+  const nearestY = Math.max(rect.y, Math.min(circle.y, rect.y + rect.height));
+  // Check if the nearest point is inside the rect
+  const distSquared = Math.pow(circle.x - nearestX, 2) + Math.pow(circle.y - nearestY, 2);
+  return distSquared < Math.pow(circle.radius, 2);
 }
