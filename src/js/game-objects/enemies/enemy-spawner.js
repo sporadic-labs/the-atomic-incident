@@ -43,7 +43,7 @@ export default class EnemySpawner {
     game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => this._spawnWave());
   }
 
-  _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5, spawnDelay = 250) {
+  _spawnWavelet(enemyOrder, spawnDelay = 250) {
     // Determine the wave positioning
     const radius = this._player.getLightRadius() - 25;
 
@@ -78,6 +78,7 @@ export default class EnemySpawner {
       let enemyPosition;
       let attempts = 0;
 
+      // Attempt to find a spawn point nearby the cluster center point
       do {
         const angle = this.game.rnd.realInRange(0, 2 * Math.PI);
         enemyPosition = spawnPosition
