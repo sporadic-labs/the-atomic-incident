@@ -46,26 +46,56 @@ export default class EnemySpawner {
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5, spawnDelay = 250) {
     // Determine the wave positioning
     const radius = this._player.getLightRadius() - 25;
-    const spawnAngle = this._player.getVelocity().isZero()
+
+    // Attempt to place in the direction the player is moving
+    let spawnAngle = this._player.getVelocity().isZero()
       ? this.game.rnd.realInRange(0, 2 * Math.PI)
       : new Phaser.Point(0, 0).angle(this._player.getVelocity());
+    let spawnPosition = this._player.position
+      .clone()
+      .add(radius * Math.cos(spawnAngle), radius * Math.sin(spawnAngle));
+
+    // Fallback: pick a random angle
+    let attempts = 0;
+    while (!this._mapManager.isLocationInNavMesh(spawnPosition.x, spawnPosition.y)) {
+      spawnAngle = this.game.rnd.realInRange(0, 2 * Math.PI);
+      spawnPosition = this._player.position
+        .clone()
+        .add(radius * Math.cos(spawnAngle), radius * Math.sin(spawnAngle));
+      attempts++;
+    }
+    if (attempts >= 25) {
+      console.warn("No valid spawn point found");
+      return;
+    }
 
     // Play the enemy spawn sound.
     // this._spawnSound.play();
 
-    // Spawn in an arc
-    const step = angleSpan / enemyOrder.length;
-    const startAngle = spawnAngle - angleSpan / 2;
+    // Spawn in cluster around spawn point
+    const spawnRadius = 50;
     for (const [i, enemyType] of enemyOrder.entries()) {
-      const enemyAngle = startAngle + step * i;
-      const pos = this._player.position
-        .clone()
-        .add(radius * Math.cos(enemyAngle), radius * Math.sin(enemyAngle));
+      let enemyPosition;
+      let attempts = 0;
 
-      if (!this._mapManager.isLocationInNavMesh(pos.x, pos.y)) continue;
+      do {
+        const angle = this.game.rnd.realInRange(0, 2 * Math.PI);
+        enemyPosition = spawnPosition
+          .clone()
+          .add(spawnRadius * Math.cos(angle), spawnRadius * Math.sin(angle));
+        attempts++;
+      } while (
+        !this._mapManager.isLocationInNavMesh(enemyPosition.x, enemyPosition.y) &&
+        attempts < 25
+      );
+
+      if (attempts >= 25) {
+        console.warn("Unable to place enemy near spawn point");
+        continue;
+      }
 
       if (enemyType in ENEMY_TYPES) {
-        this.spawnWithDelay(i * spawnDelay, enemyType, pos);
+        this.spawnWithDelay(i * spawnDelay, enemyType, enemyPosition);
       } else {
         console.warn(`Unknown enemy type: ${enemyType}`);
       }
