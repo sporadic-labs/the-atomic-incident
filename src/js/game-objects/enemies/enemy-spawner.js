@@ -1,15 +1,24 @@
 import Enemy from "./enemy";
-import { shuffleArray } from "../../helpers/utilities";
+import { shuffleArray, weightedPick } from "../../helpers/utilities";
 
 // Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
 // will cycle through the types from last key through first when spawning.
 const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
   {
-    [ENEMY_TYPES.GREEN_CELL]: 1,
-    [ENEMY_TYPES.TEAL_CELL]: 1,
-    [ENEMY_TYPES.TURTLE]: 3,
-    name: "test"
+    enemies: { [ENEMY_TYPES.BACTERIA]: 3 },
+    weight: 1,
+    name: "Bacteria Wave"
+  },
+  {
+    enemies: { [ENEMY_TYPES.WORM]: 3 },
+    weight: 2,
+    name: "Worm Wave"
+  },
+  {
+    enemies: { [ENEMY_TYPES.BEETLE]: 3 },
+    weight: 1,
+    name: "Beetle Wave"
   }
 ];
 
@@ -26,14 +35,12 @@ export default class EnemySpawner {
 
     this._timer = this.game.time.create(false);
     this._timer.start();
-    this._timer.add(500, this._spawnTesterWave, this);
+    this._timer.add(500, this._spawnWave, this);
 
     // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
 
     // Use the 'L' button to force a wavelet to spawn.
-    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => {
-      this._scheduleTesterWavelet(5, 0);
-    });
+    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => this._spawnWave());
   }
 
   _spawnWavelet(enemyOrder, angleSpan = Math.PI / 5, spawnDelay = 250) {
@@ -73,7 +80,7 @@ export default class EnemySpawner {
 
   _generateEnemyOrder(composition) {
     const enemies = [];
-    for (const [typeName, numType] of Object.entries(composition)) {
+    for (const [typeName, numType] of Object.entries(composition.enemies)) {
       enemies.push(...Array(numType).fill(typeName));
     }
     shuffleArray(enemies);
@@ -105,7 +112,7 @@ export default class EnemySpawner {
     const numWavelets = Math.floor(this._waveDifficulty);
 
     for (let i = 0; i < numWavelets; i++) {
-      const comp = this.game.rnd.pick(COMPOSITIONS);
+      const comp = weightedPick(COMPOSITIONS);
       const order = this._generateEnemyOrder(comp);
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
