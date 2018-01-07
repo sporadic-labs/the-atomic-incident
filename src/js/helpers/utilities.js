@@ -22,3 +22,33 @@ export function shuffleArray(array) {
   }
   return array;
 }
+
+/**
+ * Pick an object from an array of objects using a weighted probability. Pass in an array like:
+ * [
+ *  { fruit: "Apple", weight: 2 },
+ *  { fruit: "Banana", weight: 5.5 },
+ *  { fruit: "Guava", weight: 4 }
+ * ]
+ * @param {objects[]} objects 
+ * @param {number} [weightTotal=null] - The sum of all the weights, if known ahead of time.
+ * @param {string} [weightProperty="weight"] - The property name under an object's weight is stored
+ * @returns {object} One of the objects from the given array.
+ */
+export function weightedPick(objects, weightTotal = null, weightProperty = "weight") {
+  if (weightTotal === null) {
+    weightTotal = 0;
+    for (const object of objects) weightTotal += object[weightProperty] || 0;
+  }
+
+  if (weightTotal <= 0) throw new Error("Weighted pick from invalid array of objects.");
+
+  const rand = Math.random() * weightTotal;
+  let runningTotal = 0;
+  for (const object of objects) {
+    runningTotal += object[weightProperty] || 0;
+    if (rand <= runningTotal) return object;
+  }
+
+  return objects[objects.length - 1];
+}
