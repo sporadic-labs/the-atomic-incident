@@ -81,13 +81,13 @@ class WeaponPickup extends Phaser.Sprite {
 
   pickUp() {
     this._pickupSound.play();
-    this._onPickupCollected.dispatch();
+    this._onPickupCollected.dispatch(this);
     this._player.weaponManager.switchWeapon(this._type);
     this.destroy();
   }
 
   destroy(...args) {
-    this._onPickupDestroyed.dispatch();
+    this._onPickupDestroyed.dispatch(this);
     super.destroy(...args);
   }
 }
