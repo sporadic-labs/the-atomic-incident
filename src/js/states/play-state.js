@@ -23,6 +23,7 @@ import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
 import AudioProcessor from "../game-objects/fx/audio-processor";
+import PopUpText from "../game-objects/hud/pop-up-text";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -99,6 +100,12 @@ export default class PlayState extends Phaser.State {
     score.position.set(this.game.width - 18, 13);
     const ammo = new Ammo(game, groups.hud, player);
     ammo.position.set(18, 13);
+
+    // Combo "toast" messages
+    weaponSpawner.onPickupCollected.add(pickup => {
+      const location = Phaser.Point.add(pickup, new Phaser.Point(0, -30));
+      new PopUpText(game, globals.groups.hud, `${combo.getCombo()}x combo`, location);
+    });
 
     // Keep track of what wave the player is on using the globals object.
     const waveNum = 0;
