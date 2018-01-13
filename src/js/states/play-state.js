@@ -199,6 +199,11 @@ export default class PlayState extends Phaser.State {
           player.weaponManager.switchWeapon(WEAPON_TYPES.ROCKET_LAUNCHER);
         }
       });
+      game.input.keyboard.addKey(Phaser.Keyboard.SIX).onDown.add(() => {
+        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+          player.weaponManager.switchWeapon(WEAPON_TYPES.FLAMETHROWER);
+        }
+      });
 
       // FPS
       this._fpsText = game.make.text(15, game.height - 25, "60", {
