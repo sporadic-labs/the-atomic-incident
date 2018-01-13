@@ -53,9 +53,7 @@ export default class MoveTargetAttackComponent {
       this._timer.add(this._targetDuration, () => {
         this._isDoingSomething = false;
       });
-    }
-
-    if (this._moveState === MOVE_STATES.TARGET && !this._isDoingSomething) {
+    } else if (this._moveState === MOVE_STATES.TARGET && !this._isDoingSomething) {
       this._moveState = MOVE_STATES.ATTACK;
       this._isDoingSomething = true;
       this._targetPosition = this.target.position;
@@ -63,9 +61,21 @@ export default class MoveTargetAttackComponent {
       this._timer.add(this._attackDuration, () => {
         this._isDoingSomething = false;
       });
-    }
-
-    if (this._moveState === MOVE_STATES.ATTACK && !this._isDoingSomething) {
+    } else if (
+      this._moveState === MOVE_STATES.ATTACK &&
+      !this._isDoingSomething &&
+      !this.target._playerLight.isPointInShadow(this.parent.position)
+    ) {
+      this._moveState = MOVE_STATES.TARGET;
+      this._isDoingSomething = true;
+      this._timer.add(this._targetDuration, () => {
+        this._isDoingSomething = false;
+      });
+    } else if (
+      this._moveState === MOVE_STATES.ATTACK &&
+      !this._isDoingSomething &&
+      this.target._playerLight.isPointInShadow(this.parent.position)
+    ) {
       this._moveState = MOVE_STATES.WALK;
       this._isDoingSomething = true;
       this._targetPosition = null;
@@ -78,7 +88,7 @@ export default class MoveTargetAttackComponent {
     if (this._moveState === MOVE_STATES.ATTACK && this._targetAngle) {
       // this._moveTowards(this._targetPosition);
       this._moveFixed(this._targetAngle);
-    } else {
+    } else if (this._moveState === MOVE_STATES.WALK) {
       // Calculate path
       const path = this._mapManager.navMesh.findPath(this.parent.position, this.target.position);
 
