@@ -3,8 +3,7 @@ export default {
   RAPID_FIRE: "RAPID_FIRE",
   PIERCING_SHOT: "PIERCING_SHOT",
   HOMING_SHOT: "HOMING_SHOT",
-  ROCKET_LAUNCHER: "ROCKET_LAUNCHER",
-  DASH: "DASH"
+  ROCKET_LAUNCHER: "ROCKET_LAUNCHER"
 };
 
 export function getFormattedType(type) {

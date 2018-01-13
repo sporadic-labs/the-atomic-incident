@@ -1,6 +1,5 @@
 import Scattershot from "./scattershot";
 import RapidFire from "./rapid-fire";
-import DashMelee from "./dash-melee";
 import PiercingShot from "./piercing-shot";
 import HomingShot from "./homing-shot";
 import RocketLauncher from "./rocket-launcher";
@@ -14,7 +13,6 @@ export default class WeaponManager extends Phaser.Group {
 
     this._scattershot = new Scattershot(game, this, player, enemies);
     this._rapidFire = new RapidFire(game, this, player, enemies);
-    this._dashMelee = new DashMelee(game, this, player, enemies);
     this._piercingShot = new PiercingShot(game, this, player, enemies);
     this._homingShot = new HomingShot(game, this, player, enemies);
     this._rocketLauncher = new RocketLauncher(game, this, player, enemies);
@@ -37,7 +35,6 @@ export default class WeaponManager extends Phaser.Group {
   switchWeapon(type) {
     if (type === WEAPON_TYPES.RAPID_FIRE) this._activeWeapon = this._rapidFire;
     else if (type === WEAPON_TYPES.SCATTERSHOT) this._activeWeapon = this._scattershot;
-    else if (type === WEAPON_TYPES.DASH) this._activeWeapon = this._dashMelee;
     else if (type === WEAPON_TYPES.PIERCING_SHOT) this._activeWeapon = this._piercingShot;
     else if (type === WEAPON_TYPES.HOMING_SHOT) this._activeWeapon = this._homingShot;
     else if (type === WEAPON_TYPES.ROCKET_LAUNCHER) this._activeWeapon = this._rocketLauncher;

@@ -196,11 +196,6 @@ export default class PlayState extends Phaser.State {
       });
       game.input.keyboard.addKey(Phaser.Keyboard.FIVE).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.DASH);
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.SIX).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.ROCKET_LAUNCHER);
         }
       });
