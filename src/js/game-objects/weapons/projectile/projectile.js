@@ -40,6 +40,31 @@ export default class Projectile extends Phaser.Sprite {
    * @param {number} speed - Speed.
    * @static
    */
+  static makeFlame(game, x, y, parent, player, damage, angle, speed, maxAge, color) {
+    const key = "assets";
+    const frame = "weapons/tracking_15";
+    const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
+    bullet.init(new PiercingCollisionLogic(bullet, damage));
+    bullet.tint = color;
+    bullet._setDeathTimer(maxAge);
+    if (bullet.game) {
+      // Flames get a randomized drag to slow the bullets over time.
+      bullet.body.drag.setTo(game.rnd.integerInRange(460, 600));
+    }
+    return bullet;
+  }
+
+  /**
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
   static makePiercing(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
     const frame = "weapons/machine_gun_15";
@@ -142,6 +167,8 @@ export default class Projectile extends Phaser.Sprite {
 
     this.rotation = angle + Math.PI / 2;
 
+    this.deathTimer;
+
     this.game.physics.arcade.enable(this);
     this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, speed, this.body.velocity);
 
@@ -162,6 +189,11 @@ export default class Projectile extends Phaser.Sprite {
   update() {
     const logic = this.collisionLogic;
     satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
+
+    // If the bullet isn't moving, destroy it.
+    if (this.body && this.body.velocity.getMagnitude() <= 0) {
+      this.destroy();
+    }
   }
 
   postUpdate(...args) {
@@ -177,5 +209,21 @@ export default class Projectile extends Phaser.Sprite {
 
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
     if (this._player._playerLight.isPointInShadow(this.position)) this.destroy();
+  }
+
+  _setDeathTimer(maxAge) {
+    this.deathTimer = setTimeout(() => {
+      this.destroy();
+    }, maxAge);
+  }
+
+  /**
+   * Cleanup functions for this Sprite.
+   */
+  destroy() {
+    if (this.deathTimer) {
+      clearTimeout(this.deathTimer);
+    }
+    super.destroy();
   }
 }
