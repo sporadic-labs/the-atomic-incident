@@ -35,9 +35,6 @@ export default class Player extends Phaser.Sprite {
     this._timer = this.game.time.create(false);
     this._timer.start();
 
-    // NOTE(rex): Not quite sure if this should be a part of the player or not...
-    this.damage = 10000;
-
     // Shorthand
     const globals = this.game.globals;
     this._enemies = globals.groups.enemies;
