@@ -9,6 +9,7 @@ import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
 import MOVEMENT_TYPES from "./movement-types";
 import SmokeTrail from "./smoke-trail";
+import CooldownAbility from "./cooldown-ability";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -62,6 +63,8 @@ export default class Player extends Phaser.Sprite {
     this._movementController = new MovementController(this.body, 50, 5000, 300);
     this._attackControls = new Controller(this.game.input);
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
+    this._attackControls.addKeyboardControl("dash", Phaser.Keyboard.SPACEBAR);
+    this._dashCooldown = new CooldownAbility(game, 2000, 200, "dash");
 
     // Animations
     const hitFrames = Phaser.Animation.generateFrameNames(`player/hit_`, 0, 15, "", 2);
@@ -122,6 +125,12 @@ export default class Player extends Phaser.Sprite {
 
     if (this._attackControls.isControlActive("attack") && this.weaponManager.isAbleToAttack()) {
       this.weaponManager.fire(this.position.angle(mousePos));
+    }
+
+    if (this._attackControls.isControlActive("dash") && this._dashCooldown.isReady()) {
+      this._dashCooldown.activate();
+      this.startDash(this.position.angle(mousePos));
+      this._dashCooldown.onDeactivation.addOnce(this.endDash, this);
     }
 
     // "Engine" position trail
