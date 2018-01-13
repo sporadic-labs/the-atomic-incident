@@ -20,7 +20,8 @@ export default class Enemy extends Phaser.Sprite {
       health: 100,
       speed: 160,
       visionRadius: null,
-      collisionPoints: info.collisionPoints || []
+      collisionPoints: info.collisionPoints || [],
+      animated: info.animated
     });
     return enemy;
   }
@@ -32,9 +33,16 @@ export default class Enemy extends Phaser.Sprite {
     position,
     enemyGroup,
     type,
-    { health = 100, color = 0xffffff, speed = 100, visionRadius = 200, collisionPoints = [] } = {}
+    {
+      animated = true,
+      health = 100,
+      color = 0xffffff,
+      speed = 100,
+      visionRadius = 200,
+      collisionPoints = []
+    } = {}
   ) {
-    super(game, position.x, position.y, key, `${frame}/move_00`);
+    super(game, position.x, position.y, key, animated ? `${frame}/move_00` : frame);
     this.anchor.set(0.5);
 
     this.type = type;
@@ -65,9 +73,10 @@ export default class Enemy extends Phaser.Sprite {
     this._healthBar.initHealth(health);
 
     // Animations
-    const moveFrames = Phaser.Animation.generateFrameNames(`${frame}/move_`, 0, 15, "", 2);
-    const hitFrames = Phaser.Animation.generateFrameNames(`${frame}/hit_`, 0, 15, "", 2);
-    const deathFrames = Phaser.Animation.generateFrameNames(`${frame}/death_`, 0, 15, "", 2);
+    const genFrameNames = Phaser.Animation.generateFrameNames;
+    const moveFrames = animated ? genFrameNames(`${frame}/move_`, 0, 15, "", 2) : [frame];
+    const hitFrames = animated ? genFrameNames(`${frame}/hit_`, 0, 15, "", 2) : [frame];
+    const deathFrames = animated ? genFrameNames(`${frame}/death_`, 0, 15, "", 2) : [frame];
     this.animations.add(ANIM.MOVE, moveFrames, 24, true);
     this.animations.add(ANIM.HIT, hitFrames, 64, false).onComplete.add(() => {
       this.animations.play(ANIM.MOVE);

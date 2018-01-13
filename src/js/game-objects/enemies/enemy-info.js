@@ -5,7 +5,8 @@ export const ENEMY_TYPES = {
   BACTERIA: "BACTERIA",
   BEETLE: "BEETLE",
   // TURTLE: "TURTLE",
-  WORM: "WORM"
+  WORM: "WORM",
+  VIRUS: "VIRUS"
 };
 
 /**
@@ -19,10 +20,12 @@ export const ENEMY_INFO = {
   //   collisionPoints: physicsShapes["amoeba"]
   // },
   BACTERIA: {
+    animated: true,
     key: "enemies/bacteria",
     collisionPoints: physicsShapes["bacteria"]
   },
   BEETLE: {
+    animated: true,
     key: "enemies/beetle",
     collisionPoints: physicsShapes["beetle"]
   },
@@ -31,7 +34,13 @@ export const ENEMY_INFO = {
   //   collisionPoints: physicsShapes["turtle"]
   // },
   WORM: {
+    animated: true,
     key: "enemies/worm",
     collisionPoints: physicsShapes["worm"]
+  },
+  VIRUS: {
+    animated: false,
+    key: "enemies/virus/virus-dark",
+    collisionPoints: physicsShapes["virus-dark"]
   }
 };

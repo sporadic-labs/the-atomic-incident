@@ -341,6 +341,7 @@
             <key type="filename">asset-frames/enemies/turtle/move_13.png</key>
             <key type="filename">asset-frames/enemies/turtle/move_14.png</key>
             <key type="filename">asset-frames/enemies/turtle/move_15.png</key>
+            <key type="filename">asset-frames/enemies/virus/virus-dark.png</key>
             <key type="filename">asset-frames/enemies/worm/death_00.png</key>
             <key type="filename">asset-frames/enemies/worm/death_01.png</key>
             <key type="filename">asset-frames/enemies/worm/death_02.png</key>
@@ -484,6 +485,19 @@
                 <rect>7,7,15,15</rect>
                 <key>scale9Paddings</key>
                 <rect>7,7,15,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/enemies/virus/virus-bullet.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>1,1,3,3</rect>
+                <key>scale9Paddings</key>
+                <rect>1,1,3,3</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

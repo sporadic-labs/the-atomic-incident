@@ -19,6 +19,11 @@ const COMPOSITIONS = [
     enemies: { [ENEMY_TYPES.BEETLE]: 3 },
     weight: 1,
     name: "Beetle Wave"
+  },
+  {
+    enemies: { [ENEMY_TYPES.VIRUS]: 2 },
+    weight: 2,
+    name: "Beetle Wave"
   }
 ];
 
