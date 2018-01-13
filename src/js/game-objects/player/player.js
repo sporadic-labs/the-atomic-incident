@@ -63,8 +63,6 @@ export default class Player extends Phaser.Sprite {
     this._movementController = new MovementController(this.body, 50, 5000, 300);
     this._attackControls = new Controller(this.game.input);
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
-    this._attackControls.addKeyboardControl("dash", Phaser.Keyboard.SPACEBAR);
-    this._dashCooldown = new CooldownAbility(game, 2000, 200, "dash");
 
     // Animations
     const hitFrames = Phaser.Animation.generateFrameNames(`player/hit_`, 0, 15, "", 2);
@@ -108,6 +106,8 @@ export default class Player extends Phaser.Sprite {
     this._movementController.update();
     this._attackControls.update();
 
+    this.setInvulnerability(this._movementController.isDashing());
+
     // Check collisions with Tilemap.
     this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
 
@@ -127,21 +127,16 @@ export default class Player extends Phaser.Sprite {
       this.weaponManager.fire(this.position.angle(mousePos));
     }
 
-    if (this._attackControls.isControlActive("dash") && this._dashCooldown.isReady()) {
-      this._dashCooldown.activate();
-      this.startDash(this.position.angle(mousePos));
-      this._dashCooldown.onDeactivation.addOnce(this.endDash, this);
-    }
-
     // "Engine" position trail
+    const mc = this._movementController;
     const angleToEngine = this.rotation + Math.PI / 2;
     const offset = 10 * this.scale.x;
     const enginePosition = this.position
       .clone()
       .add(Math.cos(angleToEngine) * offset, Math.sin(angleToEngine) * offset);
+    let newRate = mc.isDashing() ? 300 : mc.getSpeedFraction() * 30;
     this._trail.setEmitPosition(enginePosition.x, enginePosition.y);
-    // Hacky for now:
-    this._trail.setRate(this._movementController._accelerationFraction * 30);
+    this._trail.setRate(newRate);
 
     // Enemy collisions
     checkSatOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
@@ -220,23 +215,13 @@ export default class Player extends Phaser.Sprite {
     gameStore.pause();
   }
 
-  startDash(angle) {
-    this._movementController.setMovementType(MOVEMENT_TYPES.DASH);
-    this._movementController.setFixedAngle(angle);
-    this._isDashing = true;
-  }
-
-  endDash() {
-    this._movementController.setMovementType(MOVEMENT_TYPES.WALK);
-    this._movementController.removeFixedAngle();
-    this._isDashing = false;
+  setInvulnerability(invulnerableState) {
+    this._invulnerable = invulnerableState;
+    this.alpha = invulnerableState ? 0.25 : 1;
   }
 
   _onCollideWithEnemy(self, enemy) {
-    if (this._isDashing) {
-      const damage = this.weaponManager.getActiveWeapon()._damage;
-      if (enemy._spawned) enemy.takeDamage(damage);
-    } else if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
+    if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
       this.takeDamage();
       this._postProcessor.onPlayerDamage();
     }
