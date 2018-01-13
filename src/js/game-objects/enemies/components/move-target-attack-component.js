@@ -32,7 +32,9 @@ export default class MoveTargetAttackComponent {
   }
 
   update() {
-    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
+    this.game.physics.arcade.collide(this.parent, this._mapManager.wallLayer, () => {
+      this._isDoingSomething = false;
+    });
     // arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
 
     // Stop moving
