@@ -8,6 +8,7 @@ export default class TargetingComponent {
     this.game = parent.game;
     this.parent = parent;
     this.speed = speed;
+    this.isActive = true;
     this.target = this.game.globals.player;
     this.enemies = this.game.globals.groups.enemies;
     this._visionRadius = visionRadius;
@@ -15,6 +16,11 @@ export default class TargetingComponent {
   }
 
   update() {
+    if (!this.isActive) {
+      this.parent.body.velocity.set(0);
+      return null;
+    }
+
     this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
     // arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
 

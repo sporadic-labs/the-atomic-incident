@@ -5,6 +5,7 @@ import MoveTargetAttack from "./components/move-target-attack-component";
 import { debugShape } from "../../helpers/sprite-utilities";
 import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO, ENEMY_TYPES } from "./enemy-info";
+import ProjectileAttackComponent from "./components/projectile-attack-component";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -45,22 +46,32 @@ export default class Enemy extends Phaser.Sprite {
     super(game, position.x, position.y, key, animated ? `${frame}/move_00` : frame);
     this.anchor.set(0.5);
 
+    this._components = [];
     this.type = type;
-    // Set movement component based on enemy type.
     switch (this.type) {
-      case ENEMY_TYPES.BACTERIA:
-        this._movementComponent = new TargetingComp(this, speed, visionRadius);
+      case ENEMY_TYPES.BACTERIA: {
+        this._components.push(new TargetingComp(this, speed, visionRadius));
         break;
-      case ENEMY_TYPES.BEETLE:
-        this._movementComponent = new TargetingComp(this, speed, visionRadius);
+      }
+      case ENEMY_TYPES.BEETLE: {
+        this._components.push(new TargetingComp(this, speed, visionRadius));
         break;
-      case ENEMY_TYPES.WORM:
-        this._movementComponent = new MoveTargetAttack(this, speed, visionRadius);
+      }
+      case ENEMY_TYPES.WORM: {
+        this._components.push(new MoveTargetAttack(this, speed, visionRadius));
         break;
-      default:
+      }
+      case ENEMY_TYPES.VIRUS: {
+        const targeting = new TargetingComp(this, speed, visionRadius);
+        const projectile = new ProjectileAttackComponent(this, targeting);
+        this._components.push(targeting, projectile);
+        break;
+      }
+      default: {
         console.log("Invalid enemy type specified, using default Targeting Component!");
-        this._movementComponent = new TargetingComp(this, speed, visionRadius);
+        this._components.push(new TargetingComp(this, speed, visionRadius));
         break;
+      }
     }
 
     const colorObj = color instanceof Color ? color : new Color(color);
@@ -150,7 +161,7 @@ export default class Enemy extends Phaser.Sprite {
 
   update() {
     if (!this._spawned || this.isDead) return;
-    this._movementComponent.update();
+    for (const component of this._components) component.update();
     super.update();
   }
 
@@ -171,7 +182,7 @@ export default class Enemy extends Phaser.Sprite {
   destroy(...args) {
     this.game.tweens.removeFrom(this);
     this._healthBar.destroy();
-    this._movementComponent.destroy();
+    for (const component of this._components) component.destroy();
     super.destroy(...args);
   }
 }
