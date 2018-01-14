@@ -1,7 +1,7 @@
 import Color from "../../helpers/color";
 import HealthBar from "./components/health-bar.js";
 import TargetingComp from "./components/targeting-component";
-import MoveTargetAttack from "./components/move-target-attack-component";
+import DashAttackComp from "./components/dash-attack-component";
 import { debugShape } from "../../helpers/sprite-utilities";
 import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO, ENEMY_TYPES } from "./enemy-info";
@@ -58,7 +58,9 @@ export default class Enemy extends Phaser.Sprite {
         break;
       }
       case ENEMY_TYPES.WORM: {
-        this._components.push(new MoveTargetAttack(this, speed, visionRadius));
+        const targeting = new TargetingComp(this, speed, visionRadius);
+        const dash = new DashAttackComp(this, 2 * speed, targeting);
+        this._components.push(targeting, dash);
         break;
       }
       case ENEMY_TYPES.VIRUS: {
