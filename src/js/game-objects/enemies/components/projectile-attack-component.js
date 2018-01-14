@@ -4,20 +4,33 @@ export default class ProjectileAttackComponent {
   constructor(parent, targetingComponent) {
     this.game = parent.game;
     this.parent = parent;
+    this.projectileGroup = this.game.add.group(this.game.globals.groups.midground);
     this._targetingComponent = targetingComponent;
-    this.projectileGroup = this.game.add.group(
-      this.game.globals.groups.midground,
-      "enemy-projectiles"
-    );
+
     this._timer = this.game.time.create(false);
     this._timer.start();
     this._fireDelay = 1000;
     this._canFire = true;
+
+    this._isInLight = false;
+    this._enteredLightAt = 0;
+  }
+
+  /**
+   * Check if the parent has been in the light for the specified duration
+   * @param {number} duration Time in ms
+   */
+  hasBeenInLightFor(duration) {
+    const player = this._targetingComponent.target;
+    const wasInLight = this._isInLight;
+    this._isInLight = !player._playerLight.isPointInShadow(this.parent.position);
+    if (this._isInLight && !wasInLight) this._enteredLightAt = this._timer.ms;
+    return this._isInLight && this._timer.ms - this._enteredLightAt > duration;
   }
 
   update() {
     const player = this._targetingComponent.target;
-    if (player._playerLight.isPointInShadow(this.parent.position)) {
+    if (!this.hasBeenInLightFor(250)) {
       this._targetingComponent.isActive = true;
       return;
     }
