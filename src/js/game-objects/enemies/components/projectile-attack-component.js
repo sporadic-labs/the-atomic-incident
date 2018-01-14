@@ -16,17 +16,17 @@ export default class ProjectileAttackComponent {
   }
 
   update() {
-    const target = this._targetingComponent.target;
-    if (target._playerLight.isPointInShadow(this.parent.position)) {
+    const player = this._targetingComponent.target;
+    if (player._playerLight.isPointInShadow(this.parent.position)) {
       this._targetingComponent.isActive = true;
       return;
     }
 
     this._targetingComponent.isActive = false;
     if (this._canFire) {
-      const angle = this.parent.position.angle(target.position);
+      const angle = this.parent.position.angle(player.position);
       const { game, parent, projectileGroup } = this;
-      new EnemyProjectile(game, parent.x, parent.y, projectileGroup, target, angle, 300);
+      new EnemyProjectile(game, parent.x, parent.y, projectileGroup, player, angle, 300);
       this._canFire = false;
       this._timer.add(this._fireDelay, () => {
         this._canFire = true;
