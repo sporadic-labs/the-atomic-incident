@@ -56,7 +56,7 @@ export default class CooldownAbility {
   reset() {
     this._ableToUseAbility = true;
     this._isAbilityActive = false;
-    this._timer.clearPendingEvents();
+    this._timer.removeAll();
   }
 
   /**
