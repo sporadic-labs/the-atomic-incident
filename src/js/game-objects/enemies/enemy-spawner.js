@@ -45,7 +45,7 @@ export default class EnemySpawner {
     // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
 
     // Use the 'L' button to force a wavelet to spawn.
-    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => this._spawnWave());
+    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => this._spawnWave(false));
   }
 
   _spawnWavelet(enemyOrder, spawnDelay = 250) {
@@ -144,7 +144,7 @@ export default class EnemySpawner {
     this._waveDifficulty += 1 / 3;
   }
 
-  _spawnWave() {
+  _spawnWave(scheduleNext = true) {
     const numWavelets = Math.floor(this._waveDifficulty);
 
     for (let i = 0; i < numWavelets; i++) {
@@ -153,8 +153,11 @@ export default class EnemySpawner {
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
 
-    const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
-    this._timer.add(nextWaveDelay, this._spawnWave, this);
+    if (scheduleNext) {
+      const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
+      this._timer.add(nextWaveDelay, this._spawnWave, this);
+    }
+
     this._waveDifficulty += 1 / 3;
   }
 }
