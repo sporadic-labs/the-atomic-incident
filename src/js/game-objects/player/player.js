@@ -54,8 +54,8 @@ export default class Player extends Phaser.Sprite {
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, {
-      startRadius: 300,
-      minRadius: 100,
+      startRadius: 350,
+      minRadius: 175,
       shrinkSpeed: 0
     });
 
