@@ -5,6 +5,7 @@
 import Color from "../helpers/color";
 import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
 import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
+import LightingPluginOptimized from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import { GAME_STATE_NAMES } from "./index";
 import { MENU_STATE_NAMES } from "../menu";
@@ -46,16 +47,17 @@ export default class LightingPerf extends Phaser.State {
     globals.mapManager = mapManager;
 
     // Lighting plugin - needs to be set up after level manager
-    this.lighting = globals.plugins.lighting = game.plugins.add(
-      LightingPlugin,
-      groups.foreground,
-      mapManager.walls
-    );
+    this.lighting = globals.plugins.lighting = game.plugins.add(LightingPluginOptimized, {
+      parent: groups.foreground,
+      walls: mapManager.walls,
+      shouldUpdateImageData: false,
+      shadowOpacity: 1,
+      debugEnabled: false
+    });
     const shape = new Phaser.Circle(0, 0, 625);
     const light = globals.plugins.lighting.addLight(
       new Phaser.Point(game.width / 2 - 175, game.height / 2),
       shape,
-      Color.white(),
       Color.white()
     );
     this.light = light;
@@ -66,7 +68,28 @@ export default class LightingPerf extends Phaser.State {
       .loop(true)
       .yoyo(true)
       .start();
-    // this.lighting.enableDebug();
+    this.light.shouldUpdateImageData = true;
+
+    // for (let i = 0; i < 15; i++) {
+    //   const shape = new Phaser.Circle(0, 0, 300);
+    //   const startingPoint = new Phaser.Point(
+    //     game.rnd.integerInRange(100, game.width - 100),
+    //     300,
+    //   );
+    //   const light = globals.plugins.lighting.addLight(startingPoint, shape, Color.white());
+    //   this.tween = this.game.tweens
+    //     .create(light.position)
+    //     .to({ y: game.height - 300 }, 3000)
+    //     .easing(Phaser.Easing.Quadratic.InOut)
+    //     .loop(true)
+    //     .yoyo(true)
+    //     .start();
+    // }
+
+    game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
+      gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
+      gameStore.pause();
+    });
 
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
@@ -80,6 +103,20 @@ export default class LightingPerf extends Phaser.State {
     // muted will be ignored. Instead, sync volume any time the game is unmuted.
     this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
     this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
+
+    // FPS
+    this._fpsText = game.make.text(15, game.height - 25, "60", {
+      font: "18px 'Alfa Slab One'",
+      fill: "#ff8000"
+    });
+    this._fpsText.anchor.set(0, 1);
+    groups.hud.add(this._fpsText);
+  }
+
+  update() {
+    if (this._fpsText) {
+      this._fpsText.setText(this.game.time.fps);
+    }
   }
 
   shutdown() {
