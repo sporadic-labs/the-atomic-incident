@@ -4,7 +4,8 @@
 
 import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
-import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
+// import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
+import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
 import Player from "../game-objects/player";
 import SoundEffectManager from "../game-objects/fx/sound-effect-manager.js";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
@@ -62,11 +63,13 @@ export default class PlayState extends Phaser.State {
     globals.mapManager = mapManager;
 
     // Lighting plugin - needs to be set up after level manager
-    globals.plugins.lighting = game.plugins.add(
-      LightingPlugin,
-      groups.foreground,
-      mapManager.walls
-    );
+    globals.plugins.lighting = game.plugins.add(LightingPlugin, {
+      parent: groups.foreground,
+      walls: mapManager.walls,
+      shouldUpdateImageData: false,
+      shadowOpacity: 1,
+      debugEnabled: false
+    });
     this.lighting = globals.plugins.lighting;
 
     // Sound manager
@@ -212,12 +215,26 @@ export default class PlayState extends Phaser.State {
       });
       this._fpsText.anchor.set(0, 1);
       groups.hud.add(this._fpsText);
+
+      // this._inLightText = game.make.text(
+      //   game.width - 25, game.height - 100, "Is Mouse In Light: ",
+      //   { font: "18px 'Alfa Slab One'", fill: "#9C9C9C" }
+      // );
+      // this._inLightText.anchor.set(1, 1);
+      // groups.hud.add(this._inLightText);
     }
   }
 
   update() {
     if (this._fpsText) {
       this._fpsText.setText(this.game.time.fps);
+    }
+
+    if (this._inLightText) {
+      const isMouseInShadow = this.game.globals.player._playerLight.isPointInShadow(
+        this.input.mousePointer.position
+      );
+      this._inLightText.setText("Is Mouse In Light: " + (isMouseInShadow ? "No" : "Yes"));
     }
   }
 
