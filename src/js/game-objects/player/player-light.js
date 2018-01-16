@@ -18,7 +18,6 @@ export default class PlayerLight {
     this._light = this._lighting.addLight(
       new Phaser.Point(0, 0),
       new Phaser.Circle(0, 0, 2 * this._radius),
-      color,
       color
     );
   }

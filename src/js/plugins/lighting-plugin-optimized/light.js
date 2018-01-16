@@ -1,4 +1,5 @@
 import Color from "../../helpers/color";
+import inside from "point-in-polygon";
 
 let instances = 0;
 
@@ -25,29 +26,31 @@ export default class Light {
      *
      * @memberof Light
      */
-  constructor(game, parent, position, shape, baseColor, pulseColor) {
+  constructor(game, parent, position, shape, color) {
     this.game = game;
     this.parent = parent;
     this.shape = shape;
-    /** @member {Phaser.Point} position - center of the Light's shape and bitmap */
-    this.position = position.clone();
-    this.baseColor = baseColor instanceof Color ? baseColor : new Color(baseColor);
-    this.pulseColor = pulseColor instanceof Color ? pulseColor : new Color(pulseColor);
+    this.color = color instanceof Color ? color : new Color(color);
     this.enabled = true;
     this.needsRedraw = true;
     this.id = instances++;
-    this._isDebug = false;
+
+    /** @member {Phaser.Point} position - center of the Light's shape and bitmap */
+    this.position = position.clone();
+
+    this.shouldUpdateImageData = false;
+    this._debugEnabled = false;
+
     this.rotation = 0;
     this.intersectingWalls = this._recalculateWalls();
     this.shape = null;
     this._lastRotation = this.rotation;
     this._lastPosition = position.clone();
-    this._lastColor = this.baseColor.clone();
-    this._pulse = null;
-    this._pulseTween = null;
+    this._lastColor = this.color.clone();
     this._bitmap = null;
     this._boundingRadius = null;
     this._debugGraphics = null;
+    this._shadowPoints = [];
     this.setShape(shape, true); // Force bitmap creation
   }
 
@@ -107,14 +110,17 @@ export default class Light {
   }
 
   enableDebug() {
-    this._isDebug = true;
+    this._debugEnabled = true;
+
     // Only create debug graphics if it is needed, for performance reasons
-    this._debugGraphics = this.game.add.graphics(0, 0);
-    this.parent.add(this._debugGraphics);
+    if (!this._debugGraphics) {
+      this._debugGraphics = this.game.add.graphics(0, 0);
+      this.parent.add(this._debugGraphics);
+    }
   }
 
   disableDebug() {
-    this._isDebug = false;
+    this._debugEnabled = false;
     if (this._debugGraphics) {
       this._debugGraphics.destroy();
       this._debugGraphics = null;
@@ -134,16 +140,15 @@ export default class Light {
       this._lastPosition.copyFrom(this.position);
       this.needsRedraw = true;
     }
-    if (!this._lastColor.rgbaEquals(this.baseColor)) {
-      this._lastColor = this.baseColor.clone();
+    if (!this._lastColor.rgbaEquals(this.color)) {
+      this._lastColor = this.color.clone();
       this.needsRedraw = true;
     }
-    if (this.isPulseActive()) this.needsRedraw = true;
 
     // If a redraw is needed, recalculate the walls
     if (this.needsRedraw) this.intersectingWalls = this._recalculateWalls();
 
-    if (this._debugGraphics) this._updateDebug();
+    if (this._debugEnabled) this._updateDebug();
   }
 
   /**
@@ -162,81 +167,28 @@ export default class Light {
     const inShape = this.shape.contains(lightRelativePos.x, lightRelativePos.y);
     if (!inShape) return false;
 
-    // If position is in the shape, do the more detailed work of checking the
-    // appropriate pixel in the light's bitmap
-    const bitmapPos = this.getTopLeft();
-    const bitmapRelativePos = Phaser.Point.subtract(worldPosition, bitmapPos);
-    // Round to pixel position
-    bitmapRelativePos.x = Math.round(bitmapRelativePos.x);
-    bitmapRelativePos.y = Math.round(bitmapRelativePos.y);
-    // If point is outside of light's bitmap, return false
-    if (
-      bitmapRelativePos.x < 0 ||
-      bitmapRelativePos.y < 0 ||
-      bitmapRelativePos.x > this._bitmap.width ||
-      bitmapRelativePos.y > this._bitmap.height
-    ) {
-      return false;
-    }
-    const color = this._bitmap.getPixel(bitmapRelativePos.x, bitmapRelativePos.y);
-    if (color.r !== 0 || color.g !== 0 || color.b !== 0) return true;
-    return false;
-  }
+    return inside([lightRelativePos.x, lightRelativePos.y], this._shadowPoints);
 
-  /**
-     * Returns whether or not a pulse is currently running
-     *
-     * @returns {boolean}
-     *
-     * @memberof Light
-     */
-  isPulseActive() {
-    return this._pulseTween && this._pulseTween.isRunning;
-  }
-
-  /**
-     * Check if a point is in the pulse of the current light.
-     *
-     * @param {Phaser.Point} worldPosition World point to check
-     * @returns {boolean}
-     */
-  isPointInPulse(worldPosition) {
-    // Exit if light is disabled or there is no pulse
-    if (!this.enabled || !this._pulseTween) return false;
-    // Check if the position is within the arc of the pulse
-    const dist = Phaser.Point.distance(worldPosition, this.position);
-    const outerRadius = this._pulse.position;
-    const innerRadius = this._pulse.position - this._pulse.width;
-    if (dist > outerRadius || dist < innerRadius) return false;
-    // Finally, check if the point is actually in light (and not in shadow)
-    return this.isPointInLight(worldPosition);
-  }
-
-  /**
-     *
-     *
-     * @param {number} [speed=400] Speed of the pulse expansion in pixels/second
-     * @param {number} [width=75] Width of the pulse band in pixels
-     *
-     * @memberof Light
-     */
-  startPulse(speed = 400, width = 75) {
-    if (this._pulseTween) this._pulseTween.stop();
-    this._pulse = {
-      position: 0, // position of the outer edge of the pulse
-      color: this.pulseColor.getWebColor(),
-      width
-    };
-    const duration = this._boundingRadius / speed * 1000;
-    const endPosition = this._boundingRadius + width;
-    this._pulseTween = this.game.add
-      .tween(this._pulse)
-      .to({ position: endPosition }, duration, Phaser.Easing.Linear.None)
-      .to({ position: endPosition }, 0)
-      .start();
-    // Note: adding an extra 0s tween to keep the tween going 1x frame past when it would normally
-    // end. This gives update a chance to catch up and draw the final tweened value before the tween
-    // is no longer running (which stops the light from redrawing).
+    // Expensive original pixel check for shadows:
+    // // If position is in the shape, do the more detailed work of checking the
+    // // appropriate pixel in the light's bitmap
+    // const bitmapPos = this.getTopLeft();
+    // const bitmapRelativePos = Phaser.Point.subtract(worldPosition, bitmapPos);
+    // // Round to pixel position
+    // bitmapRelativePos.x = Math.round(bitmapRelativePos.x);
+    // bitmapRelativePos.y = Math.round(bitmapRelativePos.y);
+    // // If point is outside of light's bitmap, return false
+    // if (
+    //   bitmapRelativePos.x < 0 ||
+    //   bitmapRelativePos.y < 0 ||
+    //   bitmapRelativePos.x > this._bitmap.width ||
+    //   bitmapRelativePos.y > this._bitmap.height
+    // ) {
+    //   return false;
+    // }
+    // const color = this._bitmap.getPixel(bitmapRelativePos.x, bitmapRelativePos.y);
+    // if (color.r !== 0 || color.g !== 0 || color.b !== 0) return true;
+    // return false;
   }
 
   /**
@@ -275,7 +227,10 @@ export default class Light {
       this._redrawLight();
       this._redrawShadow(points);
       this.needsRedraw = false;
-      this._bitmap.update(); // Update bitmap so that pixels can be queried
+
+      // Update the bitmap so that pixels are available. This is expensive, but necessary if you want
+      // to pixel test shadows.
+      if (this.shouldUpdateImageData) this._bitmap.update();
     }
   }
 
@@ -308,22 +263,12 @@ export default class Light {
     const cy = this._bitmap.height / 2;
     if (this.shape instanceof Phaser.Circle) {
       // Light as a simple circle centered in the bitmap
-      this._bitmap.circle(cx, cy, this.shape.radius, this.baseColor.getWebColor());
-      // Pulse - draw two arcs, one filled and one unfilled to get a doughnut
-      if (this.isPulseActive()) {
-        const startRadius = Math.max(this._pulse.position - this._pulse.width, 0);
-        const endRadius = Math.min(this._pulse.position, this._boundingRadius);
-        this._bitmap.ctx.beginPath();
-        this._bitmap.ctx.fillStyle = this._pulse.color;
-        this._bitmap.ctx.arc(cx, cy, endRadius, 0, 2 * Math.PI, false); // Filled
-        this._bitmap.ctx.arc(cx, cy, startRadius, 0, 2 * Math.PI, true); // Unfilled
-        this._bitmap.ctx.fill();
-      }
+      this._bitmap.circle(cx, cy, this.shape.radius, this.color.getWebColor());
     } else if (this.shape instanceof Phaser.Polygon) {
       // Draw the polygon using the underlying bitmap. The points are relative to the center of the
       // bitmap (light.position is the center of the bitmap). The center of the bitmap is at the
       // location (boundingRadius, boundingRadius), so shift each point by the radius
-      this._bitmap.ctx.fillStyle = this.baseColor.getWebColor();
+      this._bitmap.ctx.fillStyle = this.color.getWebColor();
       this._bitmap.ctx.beginPath();
       this._bitmap.ctx.moveTo(cx + this._points[0].x, cy + this._points[0].y);
       for (let i = 1; i < this._points.length; i += 1) {
@@ -347,9 +292,11 @@ export default class Light {
     // Figure out the offset needed to convert the world positions of the light points to local
     // coordinates within the bitmap
     const off = this.getTopLeft();
+    this._shadowPoints.length = 0;
     this._bitmap.ctx.moveTo(points[0].x - off.x, points[0].y - off.y);
     for (const p of points) {
       this._bitmap.ctx.lineTo(p.x - off.x, p.y - off.y);
+      this._shadowPoints.push([p.x - this.position.x, p.y - this.position.y]);
     }
     this._bitmap.ctx.closePath();
     this._bitmap.ctx.fill();

@@ -6,8 +6,37 @@ export default class LightingPlugin extends Phaser.Plugin {
     this.game = game;
     this.camera = this.game.camera;
     this.lights = [];
+    this.shouldUpdateImageData = false;
     this._debugEnabled = false;
     this._pluginManager = pluginManager;
+  }
+
+  init(
+    {
+      walls = [],
+      parent = this.game.world,
+      debugEnabled = false,
+      shouldUpdateImageData = false,
+      shadowOpacity = 1
+    } = {}
+  ) {
+    this.parent = parent;
+    this.shouldUpdateImageData = shouldUpdateImageData;
+    this.shadowOpacity = shadowOpacity;
+    this._debugEnabled = debugEnabled;
+    this._walls = walls;
+
+    // Create a bitmap and image that can be used for dynamic lighting
+    const bitmap = this.game.add.bitmapData(this.game.width, this.game.height);
+    bitmap.fill(0, 0, 0, this.shadowOpacity);
+    const image = bitmap.addToWorld(0, 0);
+    image.blendMode = Phaser.blendModes.MULTIPLY;
+    image.fixedToCamera = true;
+    parent.addChild(image);
+    this._bitmap = bitmap;
+    this._image = image;
+
+    if (debugEnabled) this.enableDebug();
   }
 
   addLight(...lightParameters) {
@@ -38,27 +67,30 @@ export default class LightingPlugin extends Phaser.Plugin {
 
   enableDebug() {
     this._debugEnabled = true;
-    this._debugImage.visible = true;
-    for (let i = 0; i < this.lights.length; i++) {
-      this.lights[i].enableDebug();
+
+    if (!this._debugBitmap) {
+      this._debugBitmap = this.game.add.bitmapData(this.game.width, this.game.height);
+      this._debugImage = this._debugBitmap.addToWorld(0, 0);
+      this.parent.addChild(this._debugImage);
+      this._debugImage.fixedToCamera = true;
     }
+
+    this._debugImage.visible = true;
+
+    this.lights.forEach(light => light.enableDebug());
+
     // Hack: cycle through lights by enabling/disabling the debug mode
     if (this._debugLightIndex === undefined || this._debugLightIndex >= this.lights.length - 1) {
       this._debugLightIndex = 0;
     } else {
       this._debugLightIndex++;
     }
-    this._originalShadowOpacity = this.shadowOpacity;
-    this.shadowOpacity = 0.8;
   }
 
   disableDebug() {
     this._debugEnabled = false;
-    this._debugImage.visible = false;
-    for (let i = 0; i < this.lights.length; i++) {
-      this.lights[i].disableDebug();
-    }
-    this.shadowOpacity = this._originalShadowOpacity;
+    if (this._debugImage) this._debugImage.visible = false;
+    this.lights.forEach(light => light.disableDebug());
   }
 
   isPointInShadow(worldPoint) {
@@ -82,33 +114,9 @@ export default class LightingPlugin extends Phaser.Plugin {
   destroy() {
     this._bitmap.destroy();
     this._image.destroy();
-    this._debugBitmap.destroy();
-    this._debugImage.destroy();
+    if (this._debugBitmap) this._debugBitmap.destroy();
+    if (this._debugImage) this._debugImage.destroy();
     Phaser.Plugin.prototype.destroy.apply(this, arguments);
-  }
-
-  init(parent, walls, shadowOpacity) {
-    this.parent = parent;
-    this.shadowOpacity = shadowOpacity !== undefined ? shadowOpacity : 1;
-
-    const game = this.game;
-    // Create a bitmap and image that can be used for dynamic lighting
-    const bitmap = game.add.bitmapData(game.width, game.height);
-    bitmap.fill(0, 0, 0, this.shadowOpacity);
-    const image = bitmap.addToWorld(0, 0);
-    image.blendMode = Phaser.blendModes.MULTIPLY;
-    image.fixedToCamera = true;
-    parent.addChild(image);
-
-    this._bitmap = bitmap;
-    this._image = image;
-    this._walls = walls;
-
-    this._debugBitmap = this.game.add.bitmapData(game.width, game.height);
-    this._debugImage = this._debugBitmap.addToWorld(0, 0);
-    parent.addChild(this._debugImage);
-    this._debugImage.fixedToCamera = true;
-    this._debugImage.visible = false;
   }
 
   update() {
@@ -139,8 +147,8 @@ export default class LightingPlugin extends Phaser.Plugin {
         const lightPoint = this._convertWorldPointToLocal(light.position);
         for (let k = 0; k < localPoints.length; k++) {
           const p = localPoints[k];
-          this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y, "rgb(255, 255, 255)", 1);
-          this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 255, 255)");
+          this._debugBitmap.line(lightPoint.x, lightPoint.y, p.x, p.y, "rgb(255, 0, 255)", 1);
+          this._debugBitmap.circle(p.x, p.y, 2, "rgb(255, 0, 255)");
         }
       }
     }
@@ -150,7 +158,7 @@ export default class LightingPlugin extends Phaser.Plugin {
       for (let w = 0; w < this._walls.length; w++) {
         const mp = this._convertWorldPointToLocal(this._walls[w].midpoint);
         const norm = this._walls[w].normal.setMagnitude(10);
-        this._debugBitmap.line(mp.x, mp.y, mp.x + norm.x, mp.y + norm.y, "rgb(255, 255, 255)", 3);
+        this._debugBitmap.line(mp.x, mp.y, mp.x + norm.x, mp.y + norm.y, "rgb(255, 0, 255)", 3);
       }
     }
 
@@ -158,8 +166,9 @@ export default class LightingPlugin extends Phaser.Plugin {
     this._bitmap.dirty = true;
     if (this._debugEnabled) this._debugBitmap.dirty = true;
 
-    // Update the bitmap so that pixels are available
-    this._bitmap.update();
+    // Update the bitmap so that pixels are available. This is expensive, but necessary if you want
+    // to pixel test shadows.
+    if (this.shouldUpdateImageData) this._bitmap.update();
   }
 
   _castLight(light) {
