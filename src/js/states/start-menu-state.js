@@ -4,7 +4,7 @@
 
 import Color from "../helpers/color";
 import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
-import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
+import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import { GAME_STATE_NAMES } from "./index";
 import { MENU_STATE_NAMES } from "../menu";
@@ -48,11 +48,13 @@ export default class StartMenu extends Phaser.State {
     globals.mapManager = mapManager;
 
     // Lighting plugin - needs to be set up after level manager
-    this.lighting = globals.plugins.lighting = game.plugins.add(
-      LightingPlugin,
-      groups.foreground,
-      mapManager.walls
-    );
+    this.lighting = globals.plugins.lighting = game.plugins.add(LightingPlugin, {
+      parent: groups.foreground,
+      walls: mapManager.walls,
+      shouldUpdateImageData: false,
+      shadowOpacity: 1,
+      debugEnabled: false
+    });
     const shape = new Phaser.Circle(0, 0, 625);
     const light = globals.plugins.lighting.addLight(
       new Phaser.Point(game.width / 2, game.height / 2),
