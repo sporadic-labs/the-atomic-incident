@@ -99,7 +99,7 @@ export default class PlayState extends Phaser.State {
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
-    new Radar(game, groups.hud, player, this.game.globals.groups.enemies, weaponSpawner);
+    new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
     const combo = new Combo(game, groups.hud, player, weaponSpawner);
     combo.position.set(this.game.width - 18, 45);
     const score = new Score(game, groups.hud, globals.groups.enemies, combo);
