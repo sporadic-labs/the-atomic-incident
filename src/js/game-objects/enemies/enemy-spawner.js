@@ -23,7 +23,12 @@ const COMPOSITIONS = [
   {
     enemies: { [ENEMY_TYPES.VIRUS]: 2 },
     weight: 2,
-    name: "Beetle Wave"
+    name: "Virus Wave"
+  },
+  {
+    enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
+    weight: 1,
+    name: "AMOEBA Wave"
   }
 ];
 

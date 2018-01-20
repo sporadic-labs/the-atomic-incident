@@ -69,6 +69,12 @@ export default class Enemy extends Phaser.Sprite {
         this._components.push(targeting, projectile);
         break;
       }
+      case ENEMY_TYPES.AMOEBA: {
+        const targeting = new TargetingComp(this, speed, visionRadius);
+        // const projectile = new ProjectileAttackComponent(this, targeting);
+        this._components.push(targeting);
+        break;
+      }
       default: {
         console.log("Invalid enemy type specified, using default Targeting Component!");
         this._components.push(new TargetingComp(this, speed, visionRadius));
