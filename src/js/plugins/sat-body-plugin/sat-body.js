@@ -205,7 +205,8 @@ export default class SatBody {
       this._lastBodySize = newBodySize;
       if (this._bodyType === SatBody.BODY_TYPE.BOX) this.initBox();
       else if (this._bodyType === SatBody.BODY_TYPE.CIRCLE) this.initCircle();
-      else this.initPolygon();
+      // Hack for now: disable polygon scaling. This wasn't properly implemented this first time.
+      // else this.initPolygon();
     }
     // Render is going to be called next, so update the debug
     if (this._isDebug) this._updateDebug();
