@@ -46,5 +46,6 @@ export default class Radar extends Phaser.Group {
     for (const enemyIndicator of this._enemyIndicators) {
       enemyIndicator.updatePlacement(5);
     }
+    super.update();
   }
 }
