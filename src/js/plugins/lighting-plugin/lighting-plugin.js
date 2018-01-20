@@ -104,8 +104,8 @@ export default class LightingPlugin extends Phaser.Plugin {
   destroy() {
     this._bitmap.destroy();
     this._image.destroy();
-    this._debugBitmap.destroy();
-    this._debugImage.destroy();
+    if (this._debugBitmap) this._debugBitmap.destroy();
+    if (this._debugImage) this._debugImage.destroy();
     Phaser.Plugin.prototype.destroy.apply(this, arguments);
   }
 
