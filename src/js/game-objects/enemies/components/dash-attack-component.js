@@ -48,7 +48,7 @@ export default class DashAttackComponent {
       // Only switch to targeting if enemy isn't already committed to a dash attack
       this._state = STATES.FOLLOWING;
     } else if (inLight && this._state === STATES.FOLLOWING) {
-      this.startCharing();
+      this.startCharging();
     }
 
     // Update the targing component & escape early if following
@@ -60,7 +60,7 @@ export default class DashAttackComponent {
     }
 
     this.game.physics.arcade.collide(this.parent, this._mapManager.wallLayer, () => {
-      this.startCharing();
+      this.startCharging();
     });
 
     if (this._state === STATES.DASHING) {
@@ -73,7 +73,7 @@ export default class DashAttackComponent {
     }
   }
 
-  startCharing() {
+  startCharging() {
     this._state = STATES.CHARGING_UP;
     this._timer.removeAll();
     this._timer.add(this._chargeUpTime, this.startDash, this);
@@ -85,7 +85,7 @@ export default class DashAttackComponent {
     this._state = STATES.DASHING;
 
     this._timer.removeAll();
-    this._timer.add(this._dashDuration, this.startCharing, this);
+    this._timer.add(this._dashDuration, this.startCharging, this);
   }
 
   destroy() {
