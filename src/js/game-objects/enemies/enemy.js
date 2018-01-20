@@ -76,6 +76,8 @@ export default class Enemy extends Phaser.Sprite {
       }
     }
 
+    this.frameName = "enemies/enemy-spawn-indicator";
+
     const colorObj = color instanceof Color ? color : new Color(color);
     this.tint = colorObj.getRgbColorInt();
 
@@ -111,8 +113,18 @@ export default class Enemy extends Phaser.Sprite {
       .to({ alpha: 0.25 }, 200, "Quad.easeInOut", true, 0, 2, true);
     // When tween is over, set the spawning flag to false
     tween.onComplete.add(() => {
+      this.scale.setTo(0.75, 0.75);
       this._spawned = true;
       this.animations.play(ANIM.MOVE);
+      const scaleUp = this.game.make
+        .tween(this.scale)
+        .to({ x: 1.3, y: 1.3 }, 100, Phaser.Easing.Bounce.In);
+      const scaleDown = this.game.make
+        .tween(this.scale)
+        .to({ x: 1, y: 1 }, 300, Phaser.Easing.Quadratic.Out);
+
+      scaleUp.chain(scaleDown);
+      scaleUp.start();
     });
 
     // Config arcade and SAT body physics
@@ -183,6 +195,7 @@ export default class Enemy extends Phaser.Sprite {
 
   destroy(...args) {
     this.game.tweens.removeFrom(this);
+    this.game.tweens.removeFrom(this.scale);
     this._healthBar.destroy();
     for (const component of this._components) component.destroy();
     super.destroy(...args);
