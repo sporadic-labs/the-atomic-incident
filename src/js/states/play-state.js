@@ -220,7 +220,9 @@ export default class PlayState extends Phaser.State {
       groups.hud.add(this._fpsText);
 
       // this._inLightText = game.make.text(
-      //   game.width - 25, game.height - 100, "Is Mouse In Light: ",
+      //   game.width - 25,
+      //   game.height - 100,
+      //   "Is Mouse In Light: ",
       //   { font: "18px 'Alfa Slab One'", fill: "#9C9C9C" }
       // );
       // this._inLightText.anchor.set(1, 1);
@@ -235,7 +237,7 @@ export default class PlayState extends Phaser.State {
 
     if (this._inLightText) {
       const isMouseInShadow = this.game.globals.player._playerLight.isPointInShadow(
-        this.input.mousePointer.position
+        Phaser.Point.add(this.camera.position, this.input.mousePointer.position)
       );
       this._inLightText.setText("Is Mouse In Light: " + (isMouseInShadow ? "No" : "Yes"));
     }
