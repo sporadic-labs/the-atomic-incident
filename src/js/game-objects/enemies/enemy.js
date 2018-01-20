@@ -163,6 +163,7 @@ export default class Enemy extends Phaser.Sprite {
     if (this.isDead) return false;
     const newHealth = this._healthBar.incrementHealth(-damage);
     // this._flashFilter.startFlash();
+    // TODO(rex): Play the flash animation frames.
     if (newHealth <= 0) {
       if (projectile && projectile.body) {
         // TODO: handle player dash
