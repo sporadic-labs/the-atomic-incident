@@ -110,7 +110,7 @@ export default class PlayState extends Phaser.State {
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {
       const location = Phaser.Point.add(pickup, new Phaser.Point(0, -30));
-      new PopUpText(game, globals.groups.hud, `${combo.getCombo()}x combo`, location);
+      new PopUpText(game, globals.groups.foreground, `${combo.getCombo()}x combo`, location);
     });
 
     // Keep track of what wave the player is on using the globals object.
