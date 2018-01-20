@@ -90,6 +90,9 @@ export default class PlayState extends Phaser.State {
     this.camera.follow(player);
     globals.player = player;
 
+    game.world.setBounds(0, 0, mapManager.tilemap.widthInPixels, mapManager.tilemap.heightInPixels);
+    game.camera.follow(player);
+
     // Waves of pickups and enemies
     new PickupSpawner(game);
     new EnemySpawner(game, player);
