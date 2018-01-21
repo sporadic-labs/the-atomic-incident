@@ -172,6 +172,7 @@ export default class Player extends Phaser.Sprite {
     // If player is already taking damage, nothing else to do
     if (this._isTakingDamage) return;
 
+    this._postProcessor.onPlayerDamage();
     this.game.globals.audioProcessor.runLowPassFilter(500);
 
     if (this._playerLight.getLightRemaining() <= 0) {
@@ -223,7 +224,6 @@ export default class Player extends Phaser.Sprite {
   _onCollideWithEnemy(self, enemy) {
     if (!this._invulnerable && !this._isTakingDamage) {
       this.takeDamage();
-      this._postProcessor.onPlayerDamage();
     }
   }
 
