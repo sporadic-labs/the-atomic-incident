@@ -30,8 +30,8 @@ export default class LightingPlugin extends Phaser.Plugin {
     const bitmap = this.game.add.bitmapData(this.game.width, this.game.height);
     bitmap.fill(0, 0, 0, this.shadowOpacity);
     const image = bitmap.addToWorld(0, 0);
-    image.blendMode = Phaser.blendModes.MULTIPLY;
     image.fixedToCamera = true;
+    image.blendMode = Phaser.blendModes.MULTIPLY;
     parent.addChild(image);
     this._bitmap = bitmap;
     this._image = image;
@@ -119,7 +119,9 @@ export default class LightingPlugin extends Phaser.Plugin {
     Phaser.Plugin.prototype.destroy.apply(this, arguments);
   }
 
-  update() {
+  // Use postUpdate so that camera's position has a chance to update before we try to calculate
+  // local screen coordinates for light rays.
+  postUpdate() {
     // Clear and draw a shadow everywhere
     this._bitmap.blendSourceOver();
     this._bitmap.cls(); // Clear so shadow opacity works again
@@ -244,11 +246,9 @@ export default class LightingPlugin extends Phaser.Plugin {
   }
 
   _convertWorldPointToLocal(point) {
-    // image.world is the position of the top left of the image (and hence the
-    // lighting bitmap) in world coordinates. To get from a world coordinate to
-    // a coordinate relative to the bitmap's top left, just subract the
-    // image.world.
-    return Phaser.Point.subtract(point, this._image.world);
+    // Find the local, screen coordinates of a point. We used to use the image's world position
+    // here, but that does not appear to be properly synced in Phaser - it's one frame behind.
+    return Phaser.Point.subtract(point, this.game.camera);
   }
 
   _sortPoints(points, target) {
