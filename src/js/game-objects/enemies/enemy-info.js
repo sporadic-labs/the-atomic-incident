@@ -2,6 +2,7 @@ import physicsShapes from "./physics";
 
 export const ENEMY_TYPES = {
   AMOEBA: "AMOEBA",
+  AMOEBA_SMALL: "AMOEBA_SMALL",
   BACTERIA: "BACTERIA",
   BEETLE: "BEETLE",
   // TURTLE: "TURTLE",
@@ -16,6 +17,12 @@ export const ENEMY_TYPES = {
  */
 export const ENEMY_INFO = {
   AMOEBA: {
+    animated: true,
+    key: "enemies/amoeba",
+    collisionPoints: physicsShapes["bacteria"] // TODO(rex): Get the actual physics shape of this sprite...
+  },
+  AMOEBA_SMALL: {
+    animated: true,
     key: "enemies/amoeba",
     collisionPoints: physicsShapes["bacteria"] // TODO(rex): Get the actual physics shape of this sprite...
   },

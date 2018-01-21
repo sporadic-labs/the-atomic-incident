@@ -6,6 +6,7 @@ import { debugShape } from "../../helpers/sprite-utilities";
 import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO, ENEMY_TYPES } from "./enemy-info";
 import ProjectileAttackComponent from "./components/projectile-attack-component";
+import SplitOnDeathComponent from "./components/split-on-death-component";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -70,9 +71,16 @@ export default class Enemy extends Phaser.Sprite {
         break;
       }
       case ENEMY_TYPES.AMOEBA: {
+        const targeting = new TargetingComp(this, speed * 3 / 4, visionRadius);
+        const splitOnDeath = new SplitOnDeathComponent(this, targeting);
+        this._components.push(targeting, splitOnDeath);
+        this.scale.setTo(1.25, 1.25);
+        break;
+      }
+      case ENEMY_TYPES.AMOEBA_SMALL: {
         const targeting = new TargetingComp(this, speed, visionRadius);
-        // const projectile = new ProjectileAttackComponent(this, targeting);
         this._components.push(targeting);
+        this.scale.setTo(0.75, 0.75);
         break;
       }
       default: {
@@ -83,6 +91,12 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     this.frameName = "enemies/enemy-spawn-indicator";
+    // Add this enemy to the Enemies group.
+    enemyGroup.addEnemy(this);
+    this.enemyGroup = enemyGroup;
+
+    // Store the ref to the game.
+    this.game = game;
 
     const colorObj = color instanceof Color ? color : new Color(color);
     this.tint = colorObj.getRgbColorInt();
@@ -109,8 +123,6 @@ export default class Enemy extends Phaser.Sprite {
     // Sound fx
     this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
     this._deathSound = this.game.globals.soundManager.add("squish");
-    enemyGroup.addEnemy(this);
-    this.enemyGroup = enemyGroup;
 
     // Spawn animation
     this._spawned = false; // use check if the enemy is fully spawned!
@@ -156,6 +168,7 @@ export default class Enemy extends Phaser.Sprite {
     // this._flashFilter = new FlashSilhouetteFilter(game);
     // this.filters = [this._flashFilter];
 
+    // Set the isDead flag.
     this.isDead = false;
   }
 
@@ -188,6 +201,13 @@ export default class Enemy extends Phaser.Sprite {
 
   die() {
     this.isDead = true;
+    // If this is an Amoeba, with a SplitOnDeath component, activate the splitOnDeath method.
+    if (this.type === ENEMY_TYPES.AMOEBA) {
+      const splitComponent = this._components.find(c => {
+        return c instanceof SplitOnDeathComponent;
+      });
+      if (splitComponent) splitComponent.splitOnDeath();
+    }
     this.satBody.destroy();
     this.body.destroy();
   }
