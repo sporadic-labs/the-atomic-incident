@@ -7,6 +7,7 @@ import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO, ENEMY_TYPES } from "./enemy-info";
 import ProjectileAttackComponent from "./components/projectile-attack-component";
 import SplitOnDeathComponent from "./components/split-on-death-component";
+import EnemySpawnIndicator from "./enemy-spawn-indicator";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -26,6 +27,12 @@ export default class Enemy extends Phaser.Sprite {
       animated: info.animated
     });
     return enemy;
+  }
+
+  static SpawnWithIndicator(game, type, position, enemyGroup, spawnTime = 3000) {
+    const indicator = new EnemySpawnIndicator(game, position.x, position.y, spawnTime);
+    enemyGroup.add(indicator);
+    indicator.onFinished.addOnce(() => Enemy.MakeEnemyType(game, type, position, enemyGroup));
   }
 
   constructor(
@@ -88,13 +95,9 @@ export default class Enemy extends Phaser.Sprite {
       }
     }
 
-    this.frameName = "enemies/enemy-spawn-indicator";
     // Add this enemy to the Enemies group.
     enemyGroup.addEnemy(this);
     this.enemyGroup = enemyGroup;
-
-    // Store the ref to the game.
-    this.game = game;
 
     const colorObj = color instanceof Color ? color : new Color(color);
     this.tint = colorObj.getRgbColorInt();
@@ -122,27 +125,6 @@ export default class Enemy extends Phaser.Sprite {
     this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
     this._deathSound = this.game.globals.soundManager.add("squish");
 
-    // Spawn animation
-    this._spawned = false; // use check if the enemy is fully spawned!
-    const tween = this.game.make
-      .tween(this)
-      .to({ alpha: 0.25 }, 200, "Quad.easeInOut", true, 0, 2, true);
-    // When tween is over, set the spawning flag to false
-    tween.onComplete.add(() => {
-      this.scale.setTo(0.75, 0.75);
-      this._spawned = true;
-      this.animations.play(ANIM.MOVE);
-      const scaleUp = this.game.make
-        .tween(this.scale)
-        .to({ x: 1.3, y: 1.3 }, 100, Phaser.Easing.Bounce.In);
-      const scaleDown = this.game.make
-        .tween(this.scale)
-        .to({ x: 1, y: 1 }, 300, Phaser.Easing.Quadratic.Out);
-
-      scaleUp.chain(scaleDown);
-      scaleUp.start();
-    });
-
     // Config arcade and SAT body physics
     // - Arcade physics hitbox is small. It is used to allow enemies to move without jostling one
     //   another and to be conservative when checking if enemy has reached the player.
@@ -160,6 +142,15 @@ export default class Enemy extends Phaser.Sprite {
       y: (p[1] - 0.5) * this.height
     }));
     this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
+
+    // Spawn animation
+    this.scale.setTo(0.5, 0.5);
+    this.animations.play(ANIM.MOVE);
+    this.game.make
+      .tween(this.scale)
+      .to({ x: 1.4, y: 1.4 }, 100, Phaser.Easing.Bounce.In)
+      .to({ x: 1, y: 1 }, 150, Phaser.Easing.Quadratic.Out)
+      .start();
 
     // Disabling the hit flash filter. It really tanks performance. When we have this effect baked
     // into enemy hit animation, it's safe to remove this code.
@@ -192,7 +183,7 @@ export default class Enemy extends Phaser.Sprite {
   }
 
   update() {
-    if (!this._spawned || this.isDead) return;
+    if (this.isDead) return;
     for (const component of this._components) component.update();
     super.update();
   }

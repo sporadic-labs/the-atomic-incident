@@ -14,7 +14,7 @@ export class CollisionLogic {
   }
 
   onCollideWithEnemy(enemy) {
-    if (enemy._spawned) enemy.takeDamage(this.damage, this.projectile);
+    enemy.takeDamage(this.damage, this.projectile);
     this.projectile.destroy();
     return true; // Don't check against any other enemies within this frame
   }
@@ -38,7 +38,7 @@ export class PiercingCollisionLogic extends CollisionLogic {
   }
 
   onCollideWithEnemy(enemy) {
-    if (enemy._spawned && !this._enemiesDamaged.includes(enemy)) {
+    if (!this._enemiesDamaged.includes(enemy)) {
       enemy.takeDamage(this.damage, this.projectile);
       this._enemiesDamaged.push(enemy);
     }
@@ -68,12 +68,10 @@ export class ExplodingCollisionLogic extends CollisionLogic {
 
   onCollideWithEnemy(enemy) {
     if (this.hasExploded) return true;
-    if (enemy._spawned) {
-      const p = this.projectile;
-      new Explosion(p.game, p.x, p.y, p.parent, this.damage);
-      p.destroy();
-      this.hasExploded = true;
-      return true; // Don't check against any other enemies within this frame
-    }
+    const p = this.projectile;
+    new Explosion(p.game, p.x, p.y, p.parent, this.damage);
+    p.destroy();
+    this.hasExploded = true;
+    return true; // Don't check against any other enemies within this frame
   }
 }

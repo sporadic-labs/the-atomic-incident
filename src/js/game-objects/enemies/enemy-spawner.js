@@ -115,7 +115,7 @@ export default class EnemySpawner {
 
   spawnWithDelay(delay, enemyType, position) {
     this._timer.add(delay, () =>
-      Enemy.MakeEnemyType(this.game, enemyType, position, this._enemies)
+      Enemy.SpawnWithIndicator(this.game, enemyType, position, this._enemies, 3000)
     );
   }
 

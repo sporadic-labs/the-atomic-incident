@@ -221,7 +221,7 @@ export default class Player extends Phaser.Sprite {
   }
 
   _onCollideWithEnemy(self, enemy) {
-    if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
+    if (!this._invulnerable && !this._isTakingDamage) {
       this.takeDamage();
       this._postProcessor.onPlayerDamage();
     }
