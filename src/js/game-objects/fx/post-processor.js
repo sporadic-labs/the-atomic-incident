@@ -19,6 +19,8 @@ export default class PostProcessor extends Phaser.Sprite {
     this.rgbSplitFilter = new RgbSplitFilter(game);
 
     this.filters = [this.rgbSplitFilter, this.vignetteFilter];
+
+    this.fixedToCamera = true;
   }
 
   onPlayerDamage() {
@@ -66,13 +68,21 @@ export default class PostProcessor extends Phaser.Sprite {
       if (filter.update) filter.update();
     }
 
-    this.vignetteFilter.radius(1.5 * this.game.globals.player.getLightRadius());
-    this.vignetteFilter.center(this.game.globals.player.position);
+    const player = this.game.globals.player;
+    this.vignetteFilter.radius(1.5 * player.getLightRadius());
+    // Center on player position relative to screen
+    this.vignetteFilter.center(Phaser.Point.subtract(player.position, this.game.camera));
 
-    // Draw severything that is targeted. Screen shake is baked into Phaser's rendering process,
-    // so in order to preserve it, we need to offset the target by the shake amount.
+    // Draws everything that is targeted. Screen shake is baked into Phaser's rendering process,
+    // so in order to preserve it, we need to offset the target by the shake amount. Offset by the
+    // game's camera position since this render texture is fixed to the screen.
     const shake = this.game.camera._shake || { x: 0, y: 0 };
-    this.renderTexture.renderXY(this.postTarget, shake.x, shake.y, true);
+    this.renderTexture.renderXY(
+      this.postTarget,
+      -this.game.camera.x + shake.x,
+      -this.game.camera.y + shake.y,
+      true
+    );
   }
 
   // This was used to force a screen clear on the render texture before drawing, but I don't
