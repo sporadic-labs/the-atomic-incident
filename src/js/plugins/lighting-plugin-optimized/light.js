@@ -21,7 +21,7 @@ export default class Light {
      * @param {Phaser.Game} game
      * @param {Phaser.Group} parent
      * @param {Phaser.Point} position
-     * @param {Phaser.Circle|Phaser.Polygon} shape
+     * @param {Phaser.Circle} shape
      * @param {Color|hex} color
      *
      * @memberof Light
@@ -41,10 +41,8 @@ export default class Light {
     this.shouldUpdateImageData = false;
     this._debugEnabled = false;
 
-    this.rotation = 0;
     this.intersectingWalls = this._recalculateWalls();
     this.shape = null;
-    this._lastRotation = this.rotation;
     this._lastPosition = position.clone();
     this._lastColor = this.color.clone();
     this._bitmap = null;
@@ -72,7 +70,7 @@ export default class Light {
      * Set the shape of the Light. Optionally, force the bitmap's size to match the new shape. Note:
      * for performance reasons, this defaults to false.
      * 
-     * @param {Phaser.Circle|Phaser.Polygon} shape 
+     * @param {Phaser.Circle} shape 
      * @param {boolean} [forceBitmapResize=false] 
      * @memberof Light
      */
@@ -85,20 +83,6 @@ export default class Light {
     let boundingRadius = 0;
     if (shape instanceof Phaser.Circle) {
       boundingRadius = shape.radius;
-    } else if (shape instanceof Phaser.Polygon) {
-      const points = shape.toNumberArray();
-      // Cache the original shape for the purposes of rotating
-      this._originalShape = shape.clone();
-      this._originalPoints = [];
-      const center = new Phaser.Point(0, 0); // Points are relative to (0, 0)
-      // Convert the points to Phaser.Point and find the bounding radius
-      for (let i = 0; i < points.length; i += 2) {
-        const p = new Phaser.Point(points[i], points[i + 1]);
-        this._originalPoints.push(p);
-        const d = center.distance(p);
-        if (d > boundingRadius) boundingRadius = d;
-      }
-      this._setRotation(0);
     } else {
       throw Error("Unsupported shape used with Light");
     }
@@ -131,11 +115,6 @@ export default class Light {
     if (!this.enabled) return; // Exit if light is disabled
 
     // Check for changes that require a redraw
-    if (this._lastRotation !== this.rotation) {
-      this._setRotation(this.rotation);
-      this._lastRotation = this.rotation;
-      this.needsRedraw = true;
-    }
     if (!this._lastPosition.equals(this.position)) {
       this._lastPosition.copyFrom(this.position);
       this.needsRedraw = true;
@@ -207,16 +186,8 @@ export default class Light {
         this.position.x + Math.cos(angle) * this.shape.radius,
         this.position.y + Math.sin(angle) * this.shape.radius
       );
-      return ray;
-    } else if (this.shape instanceof Phaser.Polygon) {
-      // Hacky for now: cast the ray beyond the polygon's shape. See logic from old rectangle shape
-      // code in this commit: e7063dc40a5afe5fef0167a7f14ed30d4ccbf45a
-      ray.end.setTo(
-        this.position.x + Math.cos(angle) * this._boundingRadius,
-        this.position.y + Math.sin(angle) * this._boundingRadius
-      );
-      return ray;
     }
+    return ray;
   }
 
   redraw(points) {
@@ -264,18 +235,6 @@ export default class Light {
     if (this.shape instanceof Phaser.Circle) {
       // Light as a simple circle centered in the bitmap
       this._bitmap.circle(cx, cy, this.shape.radius, this.color.getWebColor());
-    } else if (this.shape instanceof Phaser.Polygon) {
-      // Draw the polygon using the underlying bitmap. The points are relative to the center of the
-      // bitmap (light.position is the center of the bitmap). The center of the bitmap is at the
-      // location (boundingRadius, boundingRadius), so shift each point by the radius
-      this._bitmap.ctx.fillStyle = this.color.getWebColor();
-      this._bitmap.ctx.beginPath();
-      this._bitmap.ctx.moveTo(cx + this._points[0].x, cy + this._points[0].y);
-      for (let i = 1; i < this._points.length; i += 1) {
-        this._bitmap.ctx.lineTo(cx + this._points[i].x, cy + this._points[i].y);
-      }
-      this._bitmap.ctx.closePath();
-      this._bitmap.ctx.fill();
     }
   }
 
@@ -311,10 +270,6 @@ export default class Light {
     this._debugGraphics.drawCircle(0, 0, 2);
     if (this.shape instanceof Phaser.Circle) {
       this._debugGraphics.drawCircle(0, 0, 2 * this.shape.radius);
-    } else if (this.shape instanceof Phaser.Polygon) {
-      const points = this._points.slice(0);
-      points.push(points[0]);
-      this._debugGraphics.drawPolygon(points);
     }
   }
 
@@ -351,23 +306,5 @@ export default class Light {
     }
 
     return intersectingWalls;
-  }
-
-  /**
-     * Rotates the light if the shape is a polygon
-     *
-     * @param {number} angle Angle in radians
-     *
-     * @memberof Light
-     */
-  _setRotation(angle) {
-    this.rotation = angle;
-    if (!(this.shape instanceof Phaser.Polygon)) return;
-    this._points = [];
-    for (let i = 0; i < this._originalPoints.length; i++) {
-      const newPoint = this._originalPoints[i].clone().rotate(0, 0, angle);
-      this._points.push(newPoint);
-    }
-    this.shape = new Phaser.Polygon(this._points);
   }
 }
