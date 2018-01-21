@@ -74,13 +74,11 @@ export default class Enemy extends Phaser.Sprite {
         const targeting = new TargetingComp(this, speed * 3 / 4, visionRadius);
         const splitOnDeath = new SplitOnDeathComponent(this, targeting);
         this._components.push(targeting, splitOnDeath);
-        this.scale.setTo(1.25, 1.25);
         break;
       }
       case ENEMY_TYPES.AMOEBA_SMALL: {
         const targeting = new TargetingComp(this, speed, visionRadius);
         this._components.push(targeting);
-        this.scale.setTo(0.75, 0.75);
         break;
       }
       default: {
