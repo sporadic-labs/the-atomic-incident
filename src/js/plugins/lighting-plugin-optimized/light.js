@@ -147,27 +147,6 @@ export default class Light {
     if (!inShape) return false;
 
     return inside([lightRelativePos.x, lightRelativePos.y], this._shadowPoints);
-
-    // Expensive original pixel check for shadows:
-    // // If position is in the shape, do the more detailed work of checking the
-    // // appropriate pixel in the light's bitmap
-    // const bitmapPos = this.getTopLeft();
-    // const bitmapRelativePos = Phaser.Point.subtract(worldPosition, bitmapPos);
-    // // Round to pixel position
-    // bitmapRelativePos.x = Math.round(bitmapRelativePos.x);
-    // bitmapRelativePos.y = Math.round(bitmapRelativePos.y);
-    // // If point is outside of light's bitmap, return false
-    // if (
-    //   bitmapRelativePos.x < 0 ||
-    //   bitmapRelativePos.y < 0 ||
-    //   bitmapRelativePos.x > this._bitmap.width ||
-    //   bitmapRelativePos.y > this._bitmap.height
-    // ) {
-    //   return false;
-    // }
-    // const color = this._bitmap.getPixel(bitmapRelativePos.x, bitmapRelativePos.y);
-    // if (color.r !== 0 || color.g !== 0 || color.b !== 0) return true;
-    // return false;
   }
 
   /**
