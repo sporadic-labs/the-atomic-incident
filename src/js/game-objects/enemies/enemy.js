@@ -56,6 +56,7 @@ export default class Enemy extends Phaser.Sprite {
 
     this._components = [];
     this.type = type;
+    this._baseScale = 1;
     switch (this.type) {
       case ENEMY_TYPES.BACTERIA: {
         this._components.push(new TargetingComp(this, speed, visionRadius));
@@ -81,11 +82,13 @@ export default class Enemy extends Phaser.Sprite {
         const targeting = new TargetingComp(this, speed * 3 / 4, visionRadius);
         const splitOnDeath = new SplitOnDeathComponent(this, targeting);
         this._components.push(targeting, splitOnDeath);
+        this._baseScale = 1.25;
         break;
       }
       case ENEMY_TYPES.AMOEBA_SMALL: {
         const targeting = new TargetingComp(this, speed, visionRadius);
         this._components.push(targeting);
+        this._baseScale = 0.75;
         break;
       }
       default: {
@@ -94,6 +97,8 @@ export default class Enemy extends Phaser.Sprite {
         break;
       }
     }
+
+    this.scale.setTo(this._baseScale);
 
     // Add this enemy to the Enemies group.
     enemyGroup.addEnemy(this);
@@ -144,12 +149,12 @@ export default class Enemy extends Phaser.Sprite {
     this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
 
     // Spawn animation
-    this.scale.setTo(0.5, 0.5);
+    this.scale.setTo(this._baseScale * 0.5, this._baseScale * 0.5);
     this.animations.play(ANIM.MOVE);
     this.game.make
       .tween(this.scale)
-      .to({ x: 1.4, y: 1.4 }, 100, Phaser.Easing.Bounce.In)
-      .to({ x: 1, y: 1 }, 150, Phaser.Easing.Quadratic.Out)
+      .to({ x: this._baseScale * 1.4, y: this._baseScale * 1.4 }, 100, Phaser.Easing.Bounce.In)
+      .to({ x: this._baseScale, y: this._baseScale }, 150, Phaser.Easing.Quadratic.Out)
       .start();
 
     // Disabling the hit flash filter. It really tanks performance. When we have this effect baked
