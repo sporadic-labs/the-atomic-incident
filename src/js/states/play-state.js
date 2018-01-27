@@ -183,31 +183,37 @@ export default class PlayState extends Phaser.State {
       game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.SCATTERSHOT);
+          ammo.updateWeapon();
         }
       });
       game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.RAPID_FIRE);
+          ammo.updateWeapon();
         }
       });
       game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.HOMING_SHOT);
+          ammo.updateWeapon();
         }
       });
       game.input.keyboard.addKey(Phaser.Keyboard.FOUR).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.PIERCING_SHOT);
+          ammo.updateWeapon();
         }
       });
       game.input.keyboard.addKey(Phaser.Keyboard.FIVE).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.ROCKET_LAUNCHER);
+          ammo.updateWeapon();
         }
       });
       game.input.keyboard.addKey(Phaser.Keyboard.SIX).onDown.add(() => {
         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
           player.weaponManager.switchWeapon(WEAPON_TYPES.FLAMETHROWER);
+          ammo.updateWeapon();
         }
       });
 

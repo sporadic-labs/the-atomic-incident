@@ -17,7 +17,7 @@ export default class Ammo extends Phaser.Group {
     this._ammoText.anchor.setTo(0, 0);
     this.add(this._ammoText);
 
-    weaponSpawner.onPickupCollected.add(this._updateWeapon, this);
+    weaponSpawner.onPickupCollected.add(this.updateWeapon, this);
   }
 
   update() {
@@ -26,7 +26,7 @@ export default class Ammo extends Phaser.Group {
     super.update();
   }
 
-  _updateWeapon() {
+  updateWeapon() {
     const w = this._player.weaponManager.getActiveWeapon();
     this._nameText.setText(w.getName());
   }
