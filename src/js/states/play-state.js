@@ -103,7 +103,7 @@ export default class PlayState extends Phaser.State {
     combo.position.set(this.game.width - 18, 50);
     const score = new Score(game, groups.hud, globals.groups.enemies, combo);
     score.position.set(this.game.width - 18, 13);
-    const ammo = new Ammo(game, groups.hud, player);
+    const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
     ammo.position.set(18, 13);
 
     // Combo "toast" messages

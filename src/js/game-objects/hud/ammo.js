@@ -3,25 +3,32 @@ const style = {
   fill: "#ffd800"
 };
 export default class Ammo extends Phaser.Group {
-  constructor(game, parentGroup, player) {
+  constructor(game, parentGroup, player, weaponSpawner) {
     super(game, parentGroup, "ammo");
 
     this._player = player;
 
-    this._nameText = game.make.text(0, 0, "", style);
+    const w = this._player.weaponManager.getActiveWeapon();
+    this._nameText = game.make.text(0, 0, w.getName(), style);
     this._nameText.anchor.setTo(0, 0);
     this.add(this._nameText);
 
     this._ammoText = game.make.text(0, 32, "", style);
     this._ammoText.anchor.setTo(0, 0);
     this.add(this._ammoText);
+
+    weaponSpawner.onPickupCollected.add(this._updateWeapon, this);
   }
 
   update() {
     const w = this._player.weaponManager.getActiveWeapon();
-    this._nameText.setText(w.getName());
     this._ammoText.setText(w.isReloading() ? `Reloading...` : `${w.getAmmo()} / ${w.getMaxAmmo()}`);
     super.update();
+  }
+
+  _updateWeapon() {
+    const w = this._player.weaponManager.getActiveWeapon();
+    this._nameText.setText(w.getName());
   }
 
   // /**
