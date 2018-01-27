@@ -79,6 +79,10 @@ class WeaponPickup extends Phaser.Sprite {
     this.satBody = game.globals.plugins.satBody.addBoxBody(this);
   }
 
+  getType() {
+    return this._type;
+  }
+
   pickUp() {
     this._pickupSound.play();
     this._player.weaponManager.switchWeapon(this._type);
