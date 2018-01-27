@@ -21,7 +21,7 @@ export default class Flamethrower extends BaseWeapon {
         this._startCooldown(this._cooldownTime);
       } else {
         this._reloadSound.play();
-        this._reload();
+        // this._reload();
       }
     }
   }

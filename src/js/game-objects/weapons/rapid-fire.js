@@ -5,7 +5,7 @@ import WEAPON_TYPES from "./weapon-types";
 export default class RapidFire extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.RAPID_FIRE, 100, 50, 1800);
-    this._damage = 10;
+    this._damage = 12;
     this._speed = 500;
 
     this._fireSound = game.globals.soundManager.add("rapid-shot-2", 10);
@@ -22,7 +22,7 @@ export default class RapidFire extends BaseWeapon {
         this._startCooldown(this._cooldownTime);
       } else {
         this._reloadSound.play();
-        this._reload();
+        // this._reload();
       }
     }
   }
