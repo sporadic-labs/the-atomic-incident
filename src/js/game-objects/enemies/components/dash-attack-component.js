@@ -7,7 +7,12 @@ const STATES = {
 };
 
 export default class DashAttackComponent {
-  constructor(parent, attackSpeed, targetingComponent) {
+  constructor(
+    parent,
+    attackSpeed,
+    targetingComponent,
+    { dashDuration = 800, chargeUpTime = 1000 } = {}
+  ) {
     this.game = parent.game;
     this.parent = parent;
     this.attackSpeed = attackSpeed;
@@ -18,8 +23,8 @@ export default class DashAttackComponent {
     this._timer = this.game.time.create(false);
     this._timer.start();
     this._isDashing = false;
-    this._chargeUpTime = 1000;
-    this._dashDuration = 800;
+    this._chargeUpTime = chargeUpTime;
+    this._dashDuration = dashDuration;
     this._canDash = true;
     this._dashAngle = null;
     this._state = STATES.FOLLOWING;
