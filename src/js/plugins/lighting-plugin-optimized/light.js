@@ -8,24 +8,24 @@ let instances = 0;
  * this light's contribution to the rest of the world's lighting. Light/shadow is calculated using
  * "destination-in" canvas blending mode. Draw the light without shadows, then draw a mask that
  * keeps only the regions within the bounds of the light rays that were cast.
- * 
+ *
  * The light's bitmap is centered over this.position. The light's shape can either be a circle or a
  * polygon. When the light is first initialized, a bitmap is created that matches the light's shape.
  * For performance reasons, that bitmap will not change size unless explicitly told to do so.
- * 
+ *
  * @class Light
  */
 export default class Light {
   /**
-     * Creates an instance of Light.
-     * @param {Phaser.Game} game
-     * @param {Phaser.Group} parent
-     * @param {Phaser.Point} position
-     * @param {Phaser.Circle} shape
-     * @param {Color|hex} color
-     *
-     * @memberof Light
-     */
+   * Creates an instance of Light.
+   * @param {Phaser.Game} game
+   * @param {Phaser.Group} parent
+   * @param {Phaser.Point} position
+   * @param {Phaser.Circle} shape
+   * @param {Color|hex} color
+   *
+   * @memberof Light
+   */
   constructor(game, parent, position, shape, color) {
     this.game = game;
     this.parent = parent;
@@ -53,13 +53,13 @@ export default class Light {
   }
 
   /**
-     * Set the underlying bitmap to a specified size, or create one at the specified size if there
-     * isn't one yet.
-     * 
-     * @param {Number} width 
-     * @param {Number} height 
-     * @memberof Light
-     */
+   * Set the underlying bitmap to a specified size, or create one at the specified size if there
+   * isn't one yet.
+   *
+   * @param {Number} width
+   * @param {Number} height
+   * @memberof Light
+   */
   resizeBitmap(width, height) {
     if (this._bitmap) this._bitmap.resize(width, height);
     else this._bitmap = this.game.add.bitmapData(width, height);
@@ -67,13 +67,13 @@ export default class Light {
   }
 
   /**
-     * Set the shape of the Light. Optionally, force the bitmap's size to match the new shape. Note:
-     * for performance reasons, this defaults to false.
-     * 
-     * @param {Phaser.Circle} shape 
-     * @param {boolean} [forceBitmapResize=false] 
-     * @memberof Light
-     */
+   * Set the shape of the Light. Optionally, force the bitmap's size to match the new shape. Note:
+   * for performance reasons, this defaults to false.
+   *
+   * @param {Phaser.Circle} shape
+   * @param {boolean} [forceBitmapResize=false]
+   * @memberof Light
+   */
   setShape(shape, forceBitmapResize = false) {
     this.shape = shape;
     this.needsRedraw = true;
@@ -131,13 +131,13 @@ export default class Light {
   }
 
   /**
-     * Check if a given world point is in the light cast by this light.
-     *
-     * @param {Phaser.Point} worldPosition World point to check
-     * @returns {boolean}
-     *
-     * @memberof Light
-     */
+   * Check if a given world point is in the light cast by this light.
+   *
+   * @param {Phaser.Point} worldPosition World point to check
+   * @returns {boolean}
+   *
+   * @memberof Light
+   */
   isPointInLight(worldPosition) {
     if (!this.enabled) return false; // Exit if light is disabled
 
@@ -150,14 +150,14 @@ export default class Light {
   }
 
   /**
-     * Get a ray that starts at the position of the light and terminates at the edge
-     * of the light's shape.
-     *
-     * @param {number} angle Angle in radians to cast the light
-     * @returns {Phaser.Line} Line representing the ray
-     *
-     * @memberof Light
-     */
+   * Get a ray that starts at the position of the light and terminates at the edge
+   * of the light's shape.
+   *
+   * @param {number} angle Angle in radians to cast the light
+   * @returns {Phaser.Line} Line representing the ray
+   *
+   * @memberof Light
+   */
   getLightRay(angle) {
     const ray = new Phaser.Line(this.position.x, this.position.y, 0, 0);
     if (this.shape instanceof Phaser.Circle) {
@@ -185,12 +185,12 @@ export default class Light {
   }
 
   /**
-     * Return the world coordinate of the top left corner of the bitmap.
-     *
-     * @returns {Phaser.Point} Top left of the bitmap
-     *
-     * @memberof Light
-     */
+   * Return the world coordinate of the top left corner of the bitmap.
+   *
+   * @returns {Phaser.Point} Top left of the bitmap
+   *
+   * @memberof Light
+   */
   getTopLeft() {
     return new Phaser.Point(
       this.position.x - this._bitmap.width / 2,

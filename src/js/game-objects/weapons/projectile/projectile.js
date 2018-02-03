@@ -177,8 +177,8 @@ export default class Projectile extends Phaser.Sprite {
 
   /**
    * Initialize the logic and ensure the projectile isn't inside a wall to start
-   * 
-   * @param {any} logic 
+   *
+   * @param {any} logic
    * @memberof Projectile
    */
   init(logic) {

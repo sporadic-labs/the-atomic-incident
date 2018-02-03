@@ -61,7 +61,7 @@ export default class CooldownAbility {
 
   /**
    * Returns a number between 0 (cooldown hasn't started) and 1 (cooldown complete)
-   * 
+   *
    * @returns {number}
    * @memberof CooldownAbility
    */

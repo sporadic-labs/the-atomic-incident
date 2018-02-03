@@ -37,7 +37,7 @@ export default class PickupSpawner extends Phaser.Group {
 
   /**
    * Returns an empty, valid spawn point, or null if none found
-   * 
+   *
    * @returns {Phaser.Point|null}
    * @memberof PickupSpawner
    */

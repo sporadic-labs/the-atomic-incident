@@ -9,9 +9,9 @@ export function pointFromAngle(angle, isDegrees = false) {
   return new Phaser.Point(Math.cos(radians), Math.sin(radians));
 }
 
-/** 
- * Fisher-Yates algorithm to shuffle an array in place. 
- * Source: https://bost.ocks.org/mike/shuffle/ 
+/**
+ * Fisher-Yates algorithm to shuffle an array in place.
+ * Source: https://bost.ocks.org/mike/shuffle/
  * */
 export function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i -= 1) {
@@ -32,7 +32,7 @@ export function shuffleArray(array) {
  *  { fruit: "Banana", weight: 5.5 },
  *  { fruit: "Guava", weight: 4 }
  * ]
- * @param {objects[]} objects 
+ * @param {objects[]} objects
  * @param {number} [weightTotal=null] - The sum of all the weights, if known ahead of time.
  * @param {string} [weightProperty="weight"] - The property name under an object's weight is stored
  * @returns {object} One of the objects from the given array.
@@ -58,8 +58,8 @@ export function weightedPick(objects, weightTotal = null, weightProperty = "weig
 /**
  * Check whether a circle overlaps an axis-aligned rectangle (e.g. unrotated)
  * Ref: https://yal.cc/rectangle-circle-intersection-test/
- * @param {Phaser.Circle} circle 
- * @param {Phaser.Rectangle} rectangle 
+ * @param {Phaser.Circle} circle
+ * @param {Phaser.Rectangle} rectangle
  * @returns {boolean}
  */
 export function circleVsRectangle(circle, rect) {

@@ -168,7 +168,6 @@ export default class EnemySpawner {
 
     if (scheduleNext) {
       const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
-      console.log(this._waveDifficulty);
       if (this._waveDifficulty % 2 === 0) {
         // If the next wave difficulty is an multiple of 5, it is a special wave.
         this._timer.add(nextWaveDelay, this._spawnSpecialWave, this);
@@ -177,8 +176,6 @@ export default class EnemySpawner {
         this._timer.add(nextWaveDelay, this._spawnWave, this);
       }
     }
-
-    // this._waveDifficulty += this._waveDifficultyIncrement;
   }
 
   _spawnSpecialWave(scheduleNext = true) {

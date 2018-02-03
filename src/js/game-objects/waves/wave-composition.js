@@ -15,7 +15,7 @@ export default class WaveComposition {
    * @param {number} [options.blue = 0] The number of green enemies
    * @param {boolean} [options.randomize = false] Whether or not to shuffle the enemy types
    * @param {Color|null} [options.shield = null] The color of the shield
-   * 
+   *
    * @memberof WaveComposition
    */
   constructor({ red = 0, green = 0, blue = 0, randomize = false, shield = null } = {}) {
@@ -27,10 +27,10 @@ export default class WaveComposition {
 
   /**
    * Rescales the composition so that there are exactly enough enemies to match the newTotal.
-   * 
-   * @param {number} newTotal 
+   *
+   * @param {number} newTotal
    * @returns {this} For chaining
-   * 
+   *
    * @memberof WaveComposition
    */
   setTotal(newTotal) {
@@ -53,9 +53,9 @@ export default class WaveComposition {
 
   /**
    * Get the total number of enemies in the wave
-   * 
+   *
    * @returns {number}
-   * 
+   *
    * @memberof WaveComposition
    */
   getTotal() {
@@ -64,9 +64,9 @@ export default class WaveComposition {
 
   /**
    * Get the color of the shield, or null if there is no shield
-   * 
+   *
    * @returns {Color|null}
-   * 
+   *
    * @memberof WaveComposition
    */
   getShield() {
@@ -75,9 +75,9 @@ export default class WaveComposition {
 
   /**
    * Get the color of this wave (assumes that the wave can only contain a single type)
-   * 
+   *
    * @returns {Color}
-   * 
+   *
    * @memberof WaveComposition
    */
   getColor() {

@@ -138,13 +138,13 @@ export default class Light {
   }
 
   /**
-     * Check if a given world point is in the light cast by this light.
-     *
-     * @param {Phaser.Point} worldPosition World point to check
-     * @returns {boolean}
-     *
-     * @memberof Light
-     */
+   * Check if a given world point is in the light cast by this light.
+   *
+   * @param {Phaser.Point} worldPosition World point to check
+   * @returns {boolean}
+   *
+   * @memberof Light
+   */
   isPointInLight(worldPosition) {
     if (!this.enabled) return false; // Exit if light is disabled
     // Check if the position is within range of the light's shape
@@ -174,22 +174,22 @@ export default class Light {
   }
 
   /**
-     * Returns whether or not a pulse is currently running
-     *
-     * @returns {boolean}
-     *
-     * @memberof Light
-     */
+   * Returns whether or not a pulse is currently running
+   *
+   * @returns {boolean}
+   *
+   * @memberof Light
+   */
   isPulseActive() {
     return this._pulseTween && this._pulseTween.isRunning;
   }
 
   /**
-     * Check if a point is in the pulse of the current light.
-     *
-     * @param {Phaser.Point} worldPosition World point to check
-     * @returns {boolean}
-     */
+   * Check if a point is in the pulse of the current light.
+   *
+   * @param {Phaser.Point} worldPosition World point to check
+   * @returns {boolean}
+   */
   isPointInPulse(worldPosition) {
     // Exit if light is disabled or there is no pulse
     if (!this.enabled || !this._pulseTween) return false;
@@ -203,13 +203,13 @@ export default class Light {
   }
 
   /**
-     *
-     *
-     * @param {number} [speed=400] Speed of the pulse expansion in pixels/second
-     * @param {number} [width=75] Width of the pulse band in pixels
-     *
-     * @memberof Light
-     */
+   *
+   *
+   * @param {number} [speed=400] Speed of the pulse expansion in pixels/second
+   * @param {number} [width=75] Width of the pulse band in pixels
+   *
+   * @memberof Light
+   */
   startPulse(speed = 400, width = 75) {
     if (this._pulseTween) this._pulseTween.stop();
     this._pulse = {
@@ -230,14 +230,14 @@ export default class Light {
   }
 
   /**
-     * Get a ray that starts at the position of the light and terminates at the edge
-     * of the light's shape.
-     *
-     * @param {number} angle Angle in radians to cast the light
-     * @returns {Phaser.Line} Line representing the ray
-     *
-     * @memberof Light
-     */
+   * Get a ray that starts at the position of the light and terminates at the edge
+   * of the light's shape.
+   *
+   * @param {number} angle Angle in radians to cast the light
+   * @returns {Phaser.Line} Line representing the ray
+   *
+   * @memberof Light
+   */
   getLightRay(angle) {
     const ray = new Phaser.Line(this.position.x, this.position.y, 0, 0);
     if (this.shape instanceof Phaser.Circle) {
@@ -270,12 +270,12 @@ export default class Light {
   }
 
   /**
-     * Return the world coordinate of the top left corner of the bitmap.
-     *
-     * @returns {Phaser.Point} Top left of the bitmap
-     *
-     * @memberof Light
-     */
+   * Return the world coordinate of the top left corner of the bitmap.
+   *
+   * @returns {Phaser.Point} Top left of the bitmap
+   *
+   * @memberof Light
+   */
   getTopLeft() {
     if (this.shape instanceof Phaser.Circle) {
       return new Phaser.Point(
@@ -379,12 +379,12 @@ export default class Light {
   }
 
   /**
-     * Rotates the light if the shape is a polygon
-     *
-     * @param {number} angle Angle in radians
-     *
-     * @memberof Light
-     */
+   * Rotates the light if the shape is a polygon
+   *
+   * @param {number} angle Angle in radians
+   *
+   * @memberof Light
+   */
   _setRotation(angle) {
     this.rotation = angle;
     if (!(this.shape instanceof Phaser.Polygon)) return;

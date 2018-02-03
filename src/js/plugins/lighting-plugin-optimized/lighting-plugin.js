@@ -11,15 +11,13 @@ export default class LightingPlugin extends Phaser.Plugin {
     this._pluginManager = pluginManager;
   }
 
-  init(
-    {
-      walls = [],
-      parent = this.game.world,
-      debugEnabled = false,
-      shouldUpdateImageData = false,
-      shadowOpacity = 1
-    } = {}
-  ) {
+  init({
+    walls = [],
+    parent = this.game.world,
+    debugEnabled = false,
+    shouldUpdateImageData = false,
+    shadowOpacity = 1
+  } = {}) {
     this.parent = parent;
     this.shouldUpdateImageData = shouldUpdateImageData;
     this.shadowOpacity = shadowOpacity;

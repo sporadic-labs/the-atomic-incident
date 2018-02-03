@@ -25,13 +25,13 @@ export default class Level {
   }
 
   /**
-     * @param {object} param Wave parameters
-     * @param {string} [param.mapName=null] Name of the map to load for the wave
-     * @param {number} [param.lightRadius=350] Size of the player's light for the wave
-     * @param {object[]} [param.ammoDrops=[]] Array describing when ammo pickups should drop
-     * @param {object[]} [param.enemyGroups=[]] Array describing when groups of enemies should spawn
-     * @memberof WaveData
-     */
+   * @param {object} param Wave parameters
+   * @param {string} [param.mapName=null] Name of the map to load for the wave
+   * @param {number} [param.lightRadius=350] Size of the player's light for the wave
+   * @param {object[]} [param.ammoDrops=[]] Array describing when ammo pickups should drop
+   * @param {object[]} [param.enemyGroups=[]] Array describing when groups of enemies should spawn
+   * @memberof WaveData
+   */
   addWave({ mapName = null, lightRadius = 350, ammoDrops = [], enemyGroups = [] }) {
     // Start time of the wave
     const startTime = this.totalTime;

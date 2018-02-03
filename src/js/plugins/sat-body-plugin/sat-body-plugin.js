@@ -12,8 +12,8 @@ export default class SatBodyPlugin extends Phaser.Plugin {
   /**
    * Creates a SAT box for the sprite based on an underlying arcade body. The SAT body is placed at
    * the position of the body and given a width and height that match the body. See SatBody:initBox.
-   * 
-   * @param {Sprite} sprite The sprite to add the body to 
+   *
+   * @param {Sprite} sprite The sprite to add the body to
    * @returns {SatBody}
    */
   addBoxBody(sprite) {
@@ -26,7 +26,7 @@ export default class SatBodyPlugin extends Phaser.Plugin {
   /**
    * Creates a SAT circle for the sprite based on an underlying arcade body. The SAT body is placed
    * at the position of the body and given a radius that matches the body. See SatBody:initCircle.
-   * 
+   *
    * @param {Sprite} sprite The sprite to add the body to
    * @returns {SatBody}
    */
@@ -64,7 +64,7 @@ export default class SatBodyPlugin extends Phaser.Plugin {
     this._bodies.forEach(body => body.disableDebug());
   }
 
-  /** 
+  /**
    * Update the SAT bodies after the final arcade physics calculations are run (which happens in
    * stage.postUpdate). This is automatically called by the plugin manager. See
    * Phaser/core/Game#updateLogic for the lifecycle.

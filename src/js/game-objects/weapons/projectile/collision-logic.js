@@ -2,8 +2,8 @@ import Explosion from "../explosion";
 
 /**
  * Base class for handling projectile collision with enemies and walls. The default logic is that a
- * projectile is destroyed on colliding with something. 
- * 
+ * projectile is destroyed on colliding with something.
+ *
  * @class CollisionLogic
  */
 export class CollisionLogic {
@@ -27,8 +27,8 @@ export class CollisionLogic {
 }
 
 /**
- * Piercing projectiles damage an enemy but are not destroyed on contact. 
- * 
+ * Piercing projectiles damage an enemy but are not destroyed on contact.
+ *
  * @class PiercingCollisionLogic
  */
 export class PiercingCollisionLogic extends CollisionLogic {
@@ -49,7 +49,7 @@ export class PiercingCollisionLogic extends CollisionLogic {
 /**
  * Exploding projectiles don't do damage themselves, but cause an explosion on contact with a wall
  * or enemy
- * 
+ *
  * @class ExplodingCollisionLogic
  */
 export class ExplodingCollisionLogic extends CollisionLogic {

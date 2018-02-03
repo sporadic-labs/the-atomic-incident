@@ -45,9 +45,9 @@ export default class TargetingComponent {
       for (const enemy of this.enemies.children) {
         const d = this.parent.position.distance(enemy.position);
         if (d < desiredSeparation) {
-          const offset = Phaser.Point
-            .subtract(this.parent.position, enemy.position)
-            .setMagnitude(desiredSeparation - d);
+          const offset = Phaser.Point.subtract(this.parent.position, enemy.position).setMagnitude(
+            desiredSeparation - d
+          );
           separationForce.add(offset.x, offset.y);
           neighbors++;
         }

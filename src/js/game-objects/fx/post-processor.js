@@ -29,11 +29,11 @@ export default class PostProcessor extends Phaser.Sprite {
   }
 
   /**
-     * Set the level of the various post processing effects
-     * 
-     * @param {any} strength 
-     * @memberof PostProcessor
-     */
+   * Set the level of the various post processing effects
+   *
+   * @param {any} strength
+   * @memberof PostProcessor
+   */
   onHealthUpdate(health = 0) {
     // RGB split
     if (health <= 0) {

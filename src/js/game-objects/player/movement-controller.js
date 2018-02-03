@@ -39,7 +39,7 @@ export default class MovementContoller {
 
   /**
    * Invoke this once per frame to move the controller's body based on the current contol input
-   * 
+   *
    * @memberof MovementContoller
    */
   update() {

@@ -1,6 +1,6 @@
 /**
  * MH: now that our use case for SATs has converged, this API could be cleaned up and simplified.
- * 
+ *
  * TODO:
  * - Do we need to worry problems with coordinate systems not matching for collisions? If so,
  *   overlap should happen with world coordinates.

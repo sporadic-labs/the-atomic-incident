@@ -4,7 +4,7 @@ import { EnemyIndicator, GoalIndicator } from "./radar-indicator";
  * Player Radar. Keep track of enemy position.  Display an arrow pointing in their general
  * direction, relative to the player light. If the enemy is in light, no need for the arrow.  Use
  * your eyes!
- * 
+ *
  * @class Radar
  */
 export default class Radar extends Phaser.Group {

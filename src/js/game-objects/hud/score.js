@@ -6,7 +6,7 @@ const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#a0976a" });
 
 /**
  * Listens to the gameStore and updates the score UI. Anchored from (1, 0)
- * 
+ *
  * @export
  * @class Score
  * @extends {Phaser.Group}

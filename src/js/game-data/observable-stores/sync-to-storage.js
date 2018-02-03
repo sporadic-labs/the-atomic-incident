@@ -6,10 +6,10 @@ import storage from "store/dist/store.modern";
  * process is controlled via the object's toJSON method. Override that to control what gets synced.
  * This function also sets up an observer that will re-sync the observable store to storage whenever
  * the store is changed.
- * 
+ *
  * @export
  * @param {string} gameDataName Key to use for storage
- * @param {object} gameDataStore 
+ * @param {object} gameDataStore
  */
 export default function autoSync(gameDataName, gameDataStore) {
   const storedData = storage.get(gameDataName);

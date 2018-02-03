@@ -76,7 +76,7 @@ export default class Controller {
    * @param {string}          controlName The name of the control, e.g. "jump" or
    *                                      "left".
    * @param {number[]|number} keyCodes    The key code or an array of key codes to
-   *                                      register under the specified control 
+   *                                      register under the specified control
    *                                      name, e.g. Phaser.Keyboard.SPACEBAR
    */
   addKeyboardControl(controlName, keyCodes) {
