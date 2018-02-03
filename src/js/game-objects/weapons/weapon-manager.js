@@ -5,10 +5,12 @@ import HomingShot from "./homing-shot";
 import RocketLauncher from "./rocket-launcher";
 import Flamethrower from "./flamethrower";
 import WEAPON_TYPES from "./weapon-types";
+import MountedGun from "./mounted-gun";
 
 export default class WeaponManager extends Phaser.Group {
   constructor(game, parent, player, enemies) {
     super(game, parent, "WeaponManager");
+    this._game = game;
     this._player = player;
     this._enemies = enemies;
 
@@ -18,7 +20,13 @@ export default class WeaponManager extends Phaser.Group {
     this._homingShot = new HomingShot(game, this, player, enemies);
     this._rocketLauncher = new RocketLauncher(game, this, player, enemies);
     this._flamethrower = new Flamethrower(game, this, player, enemies);
-    this.switchWeapon(this.game.rnd.pick(Object.values(WEAPON_TYPES)));
+
+    const x = this._player.position.x;
+    const y = this._player.position.y;
+    const randomWeaponType = this.game.rnd.pick(Object.values(WEAPON_TYPES));
+    this._mountedGun = new MountedGun(game, x, y, this, player, randomWeaponType);
+
+    this.switchWeapon(randomWeaponType);
   }
 
   getActiveWeapon() {
@@ -43,6 +51,12 @@ export default class WeaponManager extends Phaser.Group {
     else if (type === WEAPON_TYPES.FLAMETHROWER) this._activeWeapon = this._flamethrower;
     // New weapons should start with full ammo.
     this._activeWeapon.fillAmmo();
+
+    this._mountedGun.destroy();
+    this._mountedGun = null;
+    const x = this._player.position.x;
+    const y = this._player.position.y;
+    this._mountedGun = new MountedGun(this._game, x, y, this, this._player, type);
   }
 
   fire() {
