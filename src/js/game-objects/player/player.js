@@ -183,6 +183,7 @@ export default class Player extends Phaser.Sprite {
       this.isDead = true;
       this.satBody.destroy();
       this.body.destroy();
+      this.weaponManager.destroy();
     } else {
       this._playerLight.incrementRadius(-50);
       this._hitSound.play();

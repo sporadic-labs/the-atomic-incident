@@ -64,4 +64,11 @@ export default class WeaponManager extends Phaser.Group {
     const angle = this._player.position.angle(mousePos);
     this._activeWeapon.fire(angle);
   }
+
+  destroy(...args) {
+    // TODO(rex): Should I destroy the other weapons as well...?
+    this._mountedGun.destroy();
+    this._mountedGun = null;
+    super.destroy(...args);
+  }
 }
