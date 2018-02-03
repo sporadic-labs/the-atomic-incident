@@ -10,7 +10,9 @@
   "main": "gulpfile.js",
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
   "dependencies": {
-    "point-in-polygon": "^1.0.1"
+    "point-in-polygon": "^1.0.1",
+    "typeface-alfa-slab-one": "0.0.54",
+    "typeface-saira": "0.0.54"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
