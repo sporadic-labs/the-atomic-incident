@@ -489,6 +489,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/enemies/particle-tank/particle-tank.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>19,19,38,38</rect>
+                <key>scale9Paddings</key>
+                <rect>19,19,38,38</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/enemies/virus/virus-bullet.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
