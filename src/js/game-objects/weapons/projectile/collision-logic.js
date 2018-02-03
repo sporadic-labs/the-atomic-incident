@@ -14,7 +14,7 @@ export class CollisionLogic {
   }
 
   onCollideWithEnemy(enemy) {
-    enemy.takeDamage(this.damage, this.projectile);
+    enemy.attemptHit(this.projectile, this.damage);
     this.projectile.destroy();
     return true; // Don't check against any other enemies within this frame
   }
@@ -39,8 +39,8 @@ export class PiercingCollisionLogic extends CollisionLogic {
 
   onCollideWithEnemy(enemy) {
     if (!this._enemiesDamaged.includes(enemy)) {
-      enemy.takeDamage(this.damage, this.projectile);
-      this._enemiesDamaged.push(enemy);
+      const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
+      if (hitEnemy) this._enemiesDamaged.push(enemy);
     }
     return false; // Allow collision against multiple enemies within this frame
   }
