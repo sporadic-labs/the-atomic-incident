@@ -23,7 +23,7 @@ export default class SatBody {
 
   constructor(plugin, sprite) {
     this.game = sprite.game;
-    this._sprite = sprite;
+    this.sprite = sprite;
     this._plugin = plugin;
     const b = sprite.body ? sprite.body : sprite;
     this._lastBodySize = { w: b.width, h: b.height };
@@ -35,7 +35,7 @@ export default class SatBody {
   // MH: Needs better testing before being used widely!
   initPolygon(points) {
     this._bodyType = SatBody.BODY_TYPE.POLYGON;
-    const b = this._sprite.body ? this._sprite.body : this._sprite;
+    const b = this.sprite.body ? this.sprite.body : this.sprite;
     this._body = polygon(vec(b.x, b.y), points.map(p => vec(p.x, p.y)));
     return this;
   }
@@ -50,17 +50,17 @@ export default class SatBody {
    */
   initBox() {
     this._bodyType = SatBody.BODY_TYPE.BOX;
-    const b = this._sprite.body ? this._sprite.body : this._sprite;
+    const b = this.sprite.body ? this.sprite.body : this.sprite;
     this._boxBody = box(vec(b.x, b.y), b.width, b.height);
     this._body = this._boxBody.toPolygon();
     // Update position of sat body differently based on whether there is an arcade body or not.
-    if (this._sprite.body) {
+    if (this.sprite.body) {
       // SAT body is currently at arcade body position, which is anchored at (0, 0). To ensure that
       // rotation works, use SAT.js offset to shift the SAT points to the center before rotation is
       // applied.
       this._body.setOffset(vec(-b.width / 2, -b.height / 2));
     } else {
-      const anchor = this._sprite.anchor;
+      const anchor = this.sprite.anchor;
       this._body.translate(-anchor.x, -anchor.y * (b.height / 2));
     }
     // Arcade body is anchored at (0, 0). To ensure that rotation works, use SAT.js offset to shift
@@ -77,7 +77,7 @@ export default class SatBody {
    */
   initCircle() {
     this._bodyType = SatBody.BODY_TYPE.CIRCLE;
-    const b = this._sprite.body ? this._sprite.body : this._sprite;
+    const b = this.sprite.body ? this.sprite.body : this.sprite;
     const r = b.radius ? b.radius : b.width / 2;
     this._body = circle(vec(b.x, b.y), r);
     return this;
@@ -170,10 +170,9 @@ export default class SatBody {
     return this.testOverlap(satRect);
   }
 
-  collideVsRectangle(rect) {
+  collideVsRectangle(rect, response = new SAT.Response()) {
     // Convert rectangle to a SAT body
     const satRect = box(vec(rect.x, rect.y), rect.width, rect.height).toPolygon();
-    const response = new SAT.Response();
 
     // Determine the appropriate collision body comparison
     let isCollision;
@@ -187,10 +186,44 @@ export default class SatBody {
     else return false;
   }
 
+  collideVsTilemapLayer(tilemapLayer, callback, context, resolveCollisions = true) {
+    let collisionDetected = false;
+    const response = new SAT.Response();
+    const target = this.sprite.body || this.sprite;
+    const b = this.getAxisAlignedBounds();
+    const tiles = tilemapLayer.getTiles(b.x, b.y, b.width, b.height, true);
+    const rect = { x: 0, y: 0, width: 0, height: 0 };
+
+    for (let i = 0; i < tiles.length; i++) {
+      const tile = tiles[i];
+      rect.x = tile.worldX;
+      rect.y = tile.worldY;
+      rect.width = tile.width;
+      rect.height = tile.height;
+      const collides = this.collideVsRectangle(rect, response);
+
+      if (collides) {
+        if (resolveCollisions) {
+          target.x -= response.overlapV.x;
+          target.y -= response.overlapV.y;
+        }
+
+        collisionDetected = true;
+        if (callback && callback.call(context, this, tile, response)) return true;
+      }
+    }
+
+    return collisionDetected;
+  }
+
+  overlapVsTilemapLayer(tilemapLayer, callback, context) {
+    return this.collideVsTilemapLayer(tilemapLayer, callback, context, false);
+  }
+
   postUpdate() {
     // Update the position of the sat body differently based on whether an arcade body exists or
     // not.
-    if (this._sprite.body) {
+    if (this.sprite.body) {
       // Update the body based on the latest arcade body physics
       this.updateFromArcadeBody();
     } else {
@@ -199,7 +232,7 @@ export default class SatBody {
     }
     // Check the sprite's body (or the sprite itself), to see if the scale has changed, and if so,
     // update the SAT body to match
-    const b = this._sprite.body ? this._sprite.body : this._sprite;
+    const b = this.sprite.body ? this.sprite.body : this.sprite;
     const newBodySize = { w: b.width, h: b.height };
     if (this._lastBodySize.w !== newBodySize.w || this._lastBodySize.h !== newBodySize.h) {
       this._lastBodySize = newBodySize;
@@ -223,7 +256,7 @@ export default class SatBody {
   updateFromArcadeBody() {
     // Update the position of the SAT body using the arcade body. Arcade bodies are positions are
     // relative to the top left of the body.
-    const arcadeBody = this._sprite.body;
+    const arcadeBody = this.sprite.body;
     if (this._bodyType === SatBody.BODY_TYPE.CIRCLE) {
       // The arcade body position for a circle is anchored at the top left, but SAT circles are
       // anchored at the center, so shift the position.
@@ -237,12 +270,12 @@ export default class SatBody {
       // apply the positive offset internally).
       this._body.pos.x = arcadeBody.x + -this._body.offset.x;
       this._body.pos.y = arcadeBody.y + -this._body.offset.y;
-      this._body.setAngle(this._sprite.rotation); // MH: World rotation?
+      this._body.setAngle(this.sprite.rotation); // MH: World rotation?
     } else if (this._bodyType === SatBody.BODY_TYPE.POLYGON) {
       // MH: Not yet sure what needs to happen here
       this._body.pos.x = arcadeBody.x + arcadeBody.halfWidth + -this._body.offset.x;
       this._body.pos.y = arcadeBody.y + arcadeBody.halfHeight + -this._body.offset.y;
-      this._body.setAngle(this._sprite.rotation); // MH: World rotation?
+      this._body.setAngle(this.sprite.rotation); // MH: World rotation?
     }
   }
 
@@ -253,18 +286,18 @@ export default class SatBody {
   updateFromSprite() {
     // Update the position of the colliding body
     if (this._bodyType === SatBody.BODY_TYPE.CIRCLE) {
-      this._body.pos.x = this._sprite.world.x;
-      this._body.pos.y = this._sprite.world.y;
+      this._body.pos.x = this.sprite.world.x;
+      this._body.pos.y = this.sprite.world.y;
     } else if (this._bodyType === SatBody.BODY_TYPE.BOX) {
-      this._body.pos.x = this._sprite.world.x;
-      this._body.pos.y = this._sprite.world.y;
-      this._body.setAngle(this._sprite.rotation);
+      this._body.pos.x = this.sprite.world.x;
+      this._body.pos.y = this.sprite.world.y;
+      this._body.setAngle(this.sprite.rotation);
       // Rotation should probably be world rotation...or something?
     } else if (this._bodyType === SatBody.BODY_TYPE.POLYGON) {
       // MH: Not yet sure what needs to happen here
-      this._body.pos.x = this._sprite.world.x;
-      this._body.pos.y = this._sprite.world.y;
-      this._body.setAngle(this._sprite.rotation);
+      this._body.pos.x = this.sprite.world.x;
+      this._body.pos.y = this.sprite.world.y;
+      this._body.setAngle(this.sprite.rotation);
       // Rotation should probably be world rotation...or something?
     }
 
