@@ -63,14 +63,10 @@ export default class MountedGun extends Phaser.Sprite {
     this._deathSound = this.game.globals.soundManager.add("chiptone/player-death", 0.03);
   }
 
-  update() {
-    // Update the rotation of the player based on the mouse
-    this.position.copyFrom(this._player.position);
-    this.rotation = this._player.rotation;
-  }
-
   postUpdate(...args) {
     // Update components after the player
+    this.position.copyFrom(this._player.position);
+    this.rotation = this._player.rotation;
     super.postUpdate(...args);
   }
 
