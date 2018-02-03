@@ -26,9 +26,14 @@ const COMPOSITIONS = [
     name: "Virus Wave"
   },
   {
+    enemies: { [ENEMY_TYPES.PARTICLE_TANK]: 3 },
+    weight: 1,
+    name: "Particle Tank Wave"
+  },
+  {
     enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
     weight: 1,
-    name: "AMOEBA Wave"
+    name: "Amoeba Wave"
   }
 ];
 
