@@ -58,6 +58,14 @@ export default class MountedGun extends Phaser.Sprite {
     //   2
     // );
 
+    // const death = Phaser.Animation.generateFrameNames(
+    //   `${mountedGunKey}_death_`,
+    //   0,
+    //   15,
+    //   "",
+    //   2
+    // );
+
     // Player Sound fx
     this._hitSound = this.game.globals.soundManager.add("chiptone/player-hit", 0.03);
     this._deathSound = this.game.globals.soundManager.add("chiptone/player-death", 0.03);
