@@ -111,7 +111,7 @@ export default class PlayState extends Phaser.State {
     const score = new Score(game, groups.hud, globals.groups.enemies, combo);
     score.position.set(this.game.width - 15, 15);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
-    ammo.position.set(18, 13);
+    ammo.position.set(game.width - 15, game.height - 15);
     const playerHealth = new Bar(game, 15, 22, 200, 25, { minValue: 0, maxValue: 1 });
     player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
     groups.hud.add(playerHealth);
