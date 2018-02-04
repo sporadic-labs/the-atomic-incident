@@ -26,6 +26,7 @@ import Ammo from "../game-objects/hud/ammo";
 import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
+import Bar from "../game-objects/hud/bar";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -106,11 +107,14 @@ export default class PlayState extends Phaser.State {
     // HUD
     new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
     const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
-    combo.position.set(this.game.width - 18, 50);
+    combo.position.set(this.game.width - 15, 52);
     const score = new Score(game, groups.hud, globals.groups.enemies, combo);
-    score.position.set(this.game.width - 18, 13);
+    score.position.set(this.game.width - 15, 15);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
     ammo.position.set(18, 13);
+    const playerHealth = new Bar(game, 15, 22, 200, 25, { minValue: 0, maxValue: 1 });
+    player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
+    groups.hud.add(playerHealth);
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {

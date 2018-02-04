@@ -25,6 +25,7 @@ export default class Player extends Phaser.Sprite {
     parentGroup.add(this);
 
     this.onDamage = new Phaser.Signal();
+    this.onHealthChange = new Phaser.Signal();
 
     this._compass = new Compass(game, parentGroup, this.width * 0.6);
     this._compass.visible = false;
@@ -176,6 +177,8 @@ export default class Player extends Phaser.Sprite {
     this.game.globals.audioProcessor.runLowPassFilter(500);
 
     this._playerLight.incrementRadius(-50);
+    this.onHealthChange.dispatch(this.getHealth());
+
     if (this._playerLight.getLightRemaining() <= 0) {
       // If the player has died, play the death sound/animation.
       // The onGameOver callback will be called once the sound/animation has completed.
@@ -231,6 +234,7 @@ export default class Player extends Phaser.Sprite {
   _onCollideWithPickup(self, pickup) {
     if (pickup instanceof EnergyPickup) {
       this._playerLight.incrementRadius(pickup.getEnergy());
+      this.onHealthChange.dispatch(this.getHealth());
     }
     pickup.pickUp();
   }
