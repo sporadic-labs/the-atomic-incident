@@ -87,7 +87,12 @@ export default class PlayState extends Phaser.State {
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
-    const player = new Player(game, game.width / 2, game.height / 2, groups.foreground);
+    const spawnObjects = mapManager.tilemap.objects["player-spawn"] || [];
+    const spawnPoint =
+      spawnObjects.length > 0
+        ? { x: spawnObjects[0].x, y: spawnObjects[0].y }
+        : { x: this.world.width / 2, y: this.world.height / 2 };
+    const player = new Player(game, spawnPoint.x, spawnPoint.y, groups.foreground);
     globals.player = player;
 
     game.world.setBounds(0, 0, mapManager.tilemap.widthInPixels, mapManager.tilemap.heightInPixels);
