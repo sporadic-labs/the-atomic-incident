@@ -147,17 +147,8 @@ export default class PlayState extends Phaser.State {
     this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
     this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
 
-    /* If 'enableDebug' flag is set, add debug menu, pause w/o menus,
-     * switch weapons, fps text.
-     */
+    // Optional debug menu, pause w/o menus, switch weapons and fps text
     if (!this.game.debug.isDisabled) {
-      // Debug menu
-      const debugText = game.make.text(15, game.height - 5, "Debug ('E' key)", {
-        font: "18px 'Alfa Slab One'",
-        fill: "#9C9C9C"
-      });
-      debugText.anchor.set(0, 1);
-      groups.hud.add(debugText);
       game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
         gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
         gameStore.pause();
@@ -219,9 +210,9 @@ export default class PlayState extends Phaser.State {
       });
 
       // FPS
-      this._fpsText = game.make.text(15, game.height - 25, "60", {
-        font: getFontString("Alfa Slab One", { size: "18px" }),
-        fill: "#9C9C9C"
+      this._fpsText = game.make.text(15, game.height - 50, "60", {
+        font: getFontString("Montserrat", { size: "12px", weight: 300 }),
+        fill: "#ffffff"
       });
       this._fpsText.anchor.set(0, 1);
       groups.hud.add(this._fpsText);
