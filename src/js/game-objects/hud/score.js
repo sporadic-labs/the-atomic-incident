@@ -1,8 +1,16 @@
 import { gameStore } from "../../game-data/observable-stores";
+import getFontString from "../../fonts/get-font-string";
 
-const baseTextStyle = { font: "30px 'Alfa Slab One'", fill: "#ffd800" };
-const toastTextStyle = { font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center" };
-const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#a0976a" });
+const baseTextStyle = {
+  font: getFontString("Montserrat", { size: "35px", weight: 300 }),
+  fill: "#ffffff"
+};
+const toastTextStyle = {
+  font: getFontString("Montserrat", { size: "24px", weight: 300 }),
+  fill: "#ffd800",
+  align: "center"
+};
+const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#ffffff" });
 
 /**
  * Listens to the gameStore and updates the score UI. Anchored from (1, 0)
@@ -24,6 +32,7 @@ export default class Score extends Phaser.Group {
 
     this._scorePadText = game.make.text(-this._scoreText.width, 0, "", dimTextStyle);
     this._scorePadText.anchor.setTo(1, 0);
+    this._scorePadText.alpha = 0.5;
     this.add(this._scorePadText);
 
     this._highScoreMsgText = game.make.text(-game.width / 2, 0, "New high score!", toastTextStyle);

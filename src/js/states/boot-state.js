@@ -9,9 +9,6 @@ import { gameStore } from "../game-data/observable-stores";
 
 export default class BootState extends Phaser.State {
   create() {
-    // For whatever reason, this hack helps CSS fonts load before the JS runs
-    this.add.text(0, 0, "a", { font: "1px 'Alfa Slab One'", fill: "#FFF" });
-
     // Take care of any global game settings that need to be set up
     this.game.renderer.renderSession.roundPixels = false;
 

@@ -25,6 +25,7 @@ import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
 import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
+import getFontString from "../fonts/get-font-string";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -219,7 +220,7 @@ export default class PlayState extends Phaser.State {
 
       // FPS
       this._fpsText = game.make.text(15, game.height - 25, "60", {
-        font: "18px 'Alfa Slab One'",
+        font: getFontString("Alfa Slab One", { size: "18px" }),
         fill: "#9C9C9C"
       });
       this._fpsText.anchor.set(0, 1);

@@ -1,5 +1,7 @@
+import getFontString from "../../fonts/get-font-string";
+
 const style = {
-  font: "20px 'Alfa Slab One'",
+  font: getFontString("Alfa Slab One", { size: "20px" }),
   fill: "#ffd800",
   stroke: "#b37511",
   strokeThickness: 1

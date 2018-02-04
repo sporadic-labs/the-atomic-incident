@@ -1,4 +1,9 @@
-const baseTextStyle = { font: "30px 'Alfa Slab One'", fill: "#ffd800" };
+import getFontString from "../../fonts/get-font-string";
+
+const baseTextStyle = {
+  font: getFontString("Montserrat", { size: "35px", weight: 300 }),
+  fill: "#ffd800"
+};
 
 export default class Score extends Phaser.Group {
   constructor(game, parent, player, enemyGroup) {

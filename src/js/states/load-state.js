@@ -4,9 +4,20 @@
 
 import { GAME_STATE_NAMES } from "./index.js";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
+import loadFonts from "../fonts/font-loader";
 
 export default class LoadState extends Phaser.State {
   preload() {
+    // Fonts
+    this.fontsLoaded = false;
+    this.fontsErrored = false;
+    loadFonts(3000)
+      .then(() => (this.fontsLoaded = true))
+      .catch(error => {
+        this.fontsErrored = true;
+        console.error(`Fonts unable to load! Error ${error}`);
+      });
+
     // Images
     const atlasPath = `resources/atlases`;
     this.load.atlasJSONHash("assets", `${atlasPath}/assets.png`, `${atlasPath}/assets.json`);
@@ -78,8 +89,13 @@ export default class LoadState extends Phaser.State {
   create() {
     // Since load progress might not reach 100 in the load loop, manually do it
     this.loadingText.setText("100%");
+  }
 
-    if (preferencesStore.skipMenu) gameStore.setGameState(GAME_STATE_NAMES.PLAY);
-    else gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
+  update() {
+    // To fail gracefully, allow the game to load if the fonts errored
+    if (this.fontsLoaded || this.fontsErrored) {
+      if (preferencesStore.skipMenu) gameStore.setGameState(GAME_STATE_NAMES.PLAY);
+      else gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
+    }
   }
 }

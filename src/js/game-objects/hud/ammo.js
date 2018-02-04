@@ -1,7 +1,10 @@
+import getFontString from "../../fonts/get-font-string";
+
 const style = {
-  font: "24px 'Alfa Slab One'",
+  font: getFontString("Alfa Slab One", { size: "24px" }),
   fill: "#ffd800"
 };
+
 export default class Ammo extends Phaser.Group {
   constructor(game, parentGroup, player, weaponSpawner) {
     super(game, parentGroup, "ammo");
