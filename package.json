@@ -69,14 +69,7 @@
     "deploy": "gh-pages --dist public --dest .",
     "deploy:legacy": "npm run predeploy && gh-pages --dist public --dest ./shrinking-version --repo https://github.com/retwedt/octo-chainsaw.git",
     "deploy:version": "npm run predeploy && cross-env-shell gh-pages --dist public --dest ./$npm_package_version",
-    "precommit": "lint-staged",
     "prettier": "prettier --write ./src/js/**/*.{js,jsx,json}"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
-    ]
   },
   "repository": {
     "type": "git",
