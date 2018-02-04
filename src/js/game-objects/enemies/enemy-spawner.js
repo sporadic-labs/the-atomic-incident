@@ -45,6 +45,7 @@ export default class EnemySpawner {
     this._enemies = game.globals.groups.enemies;
 
     this._waveDifficulty = 1;
+    this._waveDifficultyIncrement = 1 / 3;
     this._waveInterval = 5000;
     this._waveletInterval = 750;
 
@@ -151,7 +152,7 @@ export default class EnemySpawner {
 
     const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
     this._timer.add(nextWaveDelay, this._spawnTesterWave, this);
-    this._waveDifficulty += 1 / 3;
+    this._waveDifficulty += this._waveDifficultyIncrement;
   }
 
   _spawnWave(scheduleNext = true) {
@@ -163,11 +164,38 @@ export default class EnemySpawner {
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
 
+    this._waveDifficulty += this._waveDifficultyIncrement;
+
+    if (scheduleNext) {
+      const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
+      console.log(this._waveDifficulty);
+      if (this._waveDifficulty % 2 === 0) {
+        // If the next wave difficulty is an multiple of 5, it is a special wave.
+        this._timer.add(nextWaveDelay, this._spawnSpecialWave, this);
+      } else {
+        // Otherwise, it is a normal wave.
+        this._timer.add(nextWaveDelay, this._spawnWave, this);
+      }
+    }
+
+    // this._waveDifficulty += this._waveDifficultyIncrement;
+  }
+
+  _spawnSpecialWave(scheduleNext = true) {
+    console.log("a very special wave!");
+    const numWavelets = Math.floor(this._waveDifficulty);
+
+    for (let i = 0; i < numWavelets; i++) {
+      const comp = weightedPick(COMPOSITIONS);
+      const order = this._generateEnemyOrder(comp);
+      this._timer.add(this._waveletInterval * i / 4, () => this._spawnWavelet(order));
+    }
+
+    this._waveDifficulty += this._waveDifficultyIncrement;
+
     if (scheduleNext) {
       const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
       this._timer.add(nextWaveDelay, this._spawnWave, this);
     }
-
-    this._waveDifficulty += 1 / 3;
   }
 }
