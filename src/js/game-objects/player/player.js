@@ -175,6 +175,7 @@ export default class Player extends Phaser.Sprite {
     this._postProcessor.onPlayerDamage();
     this.game.globals.audioProcessor.runLowPassFilter(500);
 
+    this._playerLight.incrementRadius(-50);
     if (this._playerLight.getLightRemaining() <= 0) {
       // If the player has died, play the death sound/animation.
       // The onGameOver callback will be called once the sound/animation has completed.
@@ -185,7 +186,6 @@ export default class Player extends Phaser.Sprite {
       this.body.destroy();
       this.weaponManager.destroy();
     } else {
-      this._playerLight.incrementRadius(-50);
       this._hitSound.play();
     }
 
