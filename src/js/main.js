@@ -5,7 +5,7 @@ import "phaser-ce/build/custom/p2";
 import "phaser-ce/build/custom/phaser-split";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
-import { Boot, Load, StartMenu, Play, LightingPerf, GAME_STATE_NAMES } from "./states";
+import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, GAME_STATE_NAMES } from "./states";
 
 // Enable/disable Debug.
 const enableDebug = true;
@@ -50,6 +50,7 @@ game.state.add(GAME_STATE_NAMES.LOAD, Load);
 game.state.add(GAME_STATE_NAMES.START_MENU, StartMenu);
 game.state.add(GAME_STATE_NAMES.PLAY, Play);
 game.state.add(GAME_STATE_NAMES.LIGHTING_PERF, LightingPerf);
+game.state.add(GAME_STATE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
 gameStore.setGameState(GAME_STATE_NAMES.BOOT);
 
