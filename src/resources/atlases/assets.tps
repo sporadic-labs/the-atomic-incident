@@ -391,6 +391,7 @@
             <key type="filename">asset-frames/enemies/worm/move_13.png</key>
             <key type="filename">asset-frames/enemies/worm/move_14.png</key>
             <key type="filename">asset-frames/enemies/worm/move_15.png</key>
+            <key type="filename">asset-frames/physics-test/box.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -594,6 +595,19 @@
                 <rect>3,2,6,3</rect>
                 <key>scale9Paddings</key>
                 <rect>3,2,6,3</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/physics-test/box1x2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,25,25,50</rect>
+                <key>scale9Paddings</key>
+                <rect>13,25,25,50</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
