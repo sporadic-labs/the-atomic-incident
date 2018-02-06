@@ -49,11 +49,7 @@ export default class World {
   disable() {}
   pause() {}
   resume() {}
-  addCollider() {}
   addOverlap() {}
-  removeCollider() {}
-  update() {}
-  collider() {}
 
   add(body) {
     if (body.bodyType === BODY_TYPES.STATIC) this.staticBodies.add(body);
@@ -63,6 +59,16 @@ export default class World {
 
   remove(body) {
     this.bodies.delete(body);
+    return this;
+  }
+
+  addCollider(collider) {
+    this.colliders.push(collider);
+    return this;
+  }
+
+  removeCollider(collider) {
+    this.colliders = this.colliders.filter(c => c !== collider);
     return this;
   }
 
@@ -136,6 +142,10 @@ export default class World {
     for (const body of this.bodies) if (body.enabled) enabledBodies.push(body);
     this.tree.clear();
     this.tree.load(enabledBodies);
+  }
+
+  update() {
+    this.colliders.forEach(collider => collider.update());
   }
 
   postUpdate() {
@@ -368,6 +378,7 @@ export default class World {
     if (this.topWall) this.topWall.destroy();
     if (this.bottomWall) this.bottomWall.destroy();
     if (this.debugGraphics) this.debugGraphics.destroy();
+    this.colliders.forEach(collider => collider.destroy());
     this.bodies.clear();
     this.staticBodies.clear();
   }

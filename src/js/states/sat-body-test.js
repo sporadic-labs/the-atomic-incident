@@ -120,6 +120,10 @@ export default class LightingPerf extends Phaser.State {
     }
     this.group = group;
 
+    this.physics.sat.add.collider(circleBody, group);
+    this.physics.sat.add.collider(circleBody, this.game.globals.mapManager.wallLayer);
+    this.physics.sat.add.collider(this.game.globals.mapManager.wallLayer, group);
+
     // this.input.onDown.add(() => {
     //   const x = this.input.x;
     //   const y = this.input.y;
@@ -195,14 +199,6 @@ export default class LightingPerf extends Phaser.State {
     // this.b1.gameObject.rotation += 0.005;
 
     // this.body2.position.copyFrom(this.input.position);
-    let collides;
-    collides = this.physics.sat.world.collide(
-      this.circleBody,
-      this.game.globals.mapManager.wallLayer
-    );
-    collides = this.physics.sat.world.collide(this.group, this.circleBody);
-    collides = this.physics.sat.world.collide(this.game.globals.mapManager.wallLayer, this.group);
-    // this.body2.debugSettings.fillColor = collides ? 0xff00ff : 0xff0000;
 
     if (this._fpsText) {
       this._fpsText.setText(this.game.time.fps);
