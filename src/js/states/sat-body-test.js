@@ -65,14 +65,61 @@ export default class LightingPerf extends Phaser.State {
     groups.hud.add(this._fpsText);
 
     // --- TESTING ---
-    const newSatBody = (globals.plugins.newSatBody = game.plugins.add(NewSatBodyPlugin));
+    globals.plugins.newSatBody = game.plugins.add(NewSatBodyPlugin);
     const sat = this.physics.sat;
     sat.world.enableDebug(this.game.add.graphics(0, 0, globals.groups.hud));
 
     const sprite1 = game.add.sprite(200, 250, "assets", "physics-test/box", globals.groups.game);
-    const body1 = sat.add.body().setRectangle(50, 50);
+    const body1 = this.physics.sat.add
+      .gameObject(sprite1, { shape: "rectangle" })
+      .setVelocity(100, 25);
     this.body1 = body1;
-    this.sprite1 = sprite1;
+    this.physics.sat.add.collider(sprite1, this.game.globals.mapManager.wallLayer);
+
+    const sprite2 = game.add.sprite(250, 200, "assets", "physics-test/box", globals.groups.game);
+    const body2 = sat.add.body({ gameObject: sprite2, shape: { type: "circle", radius: 40 } });
+    this.body2 = body2;
+    this.physics.sat.add.collider(sprite2, this.game.globals.mapManager.wallLayer);
+
+    const circleBody = sat.add
+      .body({ shape: { type: "circle", radius: 25 } })
+      .setPosition(250, 300)
+      .setVelocity(-200, 150);
+    this.circleBody = circleBody;
+    this.physics.sat.add.collider(circleBody, this.game.globals.mapManager.wallLayer);
+
+    const group = this.game.add.group();
+    for (let i = 0; i < 8; i++) {
+      const x = this.game.rnd.integerInRange(200, 400);
+      const y = this.game.rnd.integerInRange(200, 400);
+      const body = sat.add
+        .body({
+          gameObject: game.add.sprite(x, y, "assets", "physics-test/box", globals.groups.game)
+        })
+        .setRectangle(50, 50)
+        .setVelocity(
+          this.game.rnd.integerInRange(-400, 400),
+          this.game.rnd.integerInRange(-400, 400)
+        );
+      group.add(body.gameObject);
+    }
+    this.group = group;
+    this.physics.sat.add.collider(group, this.game.globals.mapManager.wallLayer);
+
+    const key = "enemies/particle-tank/particle-tank";
+    const polySprite = game.add.sprite(500, 300, "assets", key, globals.groups.game);
+    const points = [[10, 31], [37, 2], [64, 29], [72, 55], [11, 58], [3, 51.2]].map(p => ({
+      x: p[0] - 75 / 2,
+      y: p[1] - 75 / 2
+    }));
+    const polyBody = this.physics.sat.add
+      .gameObject(polySprite)
+      .setPolygon(points)
+      .setVelocity(-100, 25);
+    polyBody.gameObject.anchor.set(0.5);
+
+    this.physics.sat.add.collider(group, polySprite);
+    this.physics.sat.add.collider(polySprite, this.game.globals.mapManager.wallLayer);
 
     // Extend right check:
     // sprite1.position.setTo(200, 250);
@@ -88,42 +135,6 @@ export default class LightingPerf extends Phaser.State {
     //   .setVelocity(-250, -100)
     //   .setBounce(1);
 
-    const circleBody = sat.add
-      .body({ shapeInfo: { shape: "circle", radius: 25 } })
-      .setPosition(250, 300)
-      .setBounce(1)
-      .setVelocity(-200, 150);
-    this.circleBody = circleBody;
-
-    // const body2 = sat.add
-    //   .body({
-    //     gameObject: game.add.sprite(250, 200, "assets", "physics-test/box", globals.groups.game)
-    //   })
-    //   .setRectangle(50, 50);
-    // this.body2 = body2;
-
-    const group = this.game.add.group();
-    for (let i = 0; i < 10; i++) {
-      const x = this.game.rnd.integerInRange(200, 600);
-      const y = this.game.rnd.integerInRange(200, 600);
-      const body = sat.add
-        .body({
-          gameObject: game.add.sprite(x, y, "assets", "physics-test/box", globals.groups.game)
-        })
-        .setRectangle(50, 50)
-        .setVelocity(
-          this.game.rnd.integerInRange(-400, 400),
-          this.game.rnd.integerInRange(-400, 400)
-        );
-      // .setBounce(1);
-      group.add(body.gameObject);
-    }
-    this.group = group;
-
-    this.physics.sat.add.collider(circleBody, group);
-    this.physics.sat.add.collider(circleBody, this.game.globals.mapManager.wallLayer);
-    this.physics.sat.add.collider(this.game.globals.mapManager.wallLayer, group);
-
     // this.input.onDown.add(() => {
     //   const x = this.input.x;
     //   const y = this.input.y;
@@ -133,35 +144,6 @@ export default class LightingPerf extends Phaser.State {
     //     .setBounce(1);
     //   console.log(x, y);
     // });
-
-    // const shrink = 100;
-    // satWorld.setBounds(shrink, shrink, game.width - 2 * shrink, game.height - 2 * shrink, shrink);
-    // // satWorld.gravity.y = 10;
-
-    // const b = new Body(satWorld, {
-    //   gameObject: game.add.sprite(150, 200, "assets", "physics-test/box", globals.groups.game)
-    // });
-    // b.gameObject.anchor.setTo(0, 1);
-    // b.setRectangle(50, 50).setOffset(0, -50);
-    // // b.gameObject.rotation = Math.PI / 4;
-    // satWorld.add(b);
-    // b.bounce = 1;
-    // b.velocity.setTo(-200, 300);
-    // const b1 = new Body(satWorld, {
-    //   gameObject: game.add.sprite(300, 200, "assets", "physics-test/box1x2", globals.groups.game)
-    // });
-    // b1.setRectangle(50, 100);
-    // b1.gameObject.rotation = -Math.PI / 4;
-    // b1.velocity.setTo(300, 200);
-    // b1.bounce = 1;
-    // satWorld.add(b1);
-    // this.b1 = b1;
-    // // const b2 = new Body(satWorld).setCircle(50);
-    // // b2.position.set(200, 300);
-    // // this.body1 = b;
-    // // satWorld.add(b2);
-    // // this.body2 = b2;
-    // // this.satWorld = satWorld;
 
     // this.input.onDown.add(() => {
     //   const b = new Body(satWorld, {
@@ -178,26 +160,10 @@ export default class LightingPerf extends Phaser.State {
     //   b.bounce = 1;
     //   b.velocity.setTo(this.game.rnd.between(-200, 200), this.game.rnd.between(-200, 200));
     // });
-
-    // // const key = "enemies/particle-tank/particle-tank";
-    // // const polyBody = new Body(satWorld, {
-    // //   gameObject: game.add.sprite(600, 200, "assets", key, globals.groups.game)
-    // // });
-    // // polyBody.gameObject.anchor.set(0.5);
-    // // const points = [[10, 31], [37, 2], [64, 29], [72, 55], [11, 58], [3, 51.2]];
-    // // polyBody.setPolygon(points.map(p => ({ x: p[0] - 75 / 2, y: p[1] - 75 / 2 })));
-    // // // satWorld.add(polyBody);
-    // // this.body1 = polyBody;
-    // // polyBody.velocity.y = 100;
-
-    // const b3 = new Body(satWorld).setRectangle(100, 200).setPosition(500, 200);
-    // satWorld.add(b3);
-    // b3.enabled = false;
   }
 
   update() {
     // this.b1.gameObject.rotation += 0.005;
-
     // this.body2.position.copyFrom(this.input.position);
 
     if (this._fpsText) {
