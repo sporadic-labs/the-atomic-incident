@@ -3,13 +3,12 @@ import BODY_TYPES from "./body-types";
 import { vec, circle, box, polygon } from "./sat-factories";
 
 const P = Phaser.Point;
-const defaultShape = { shape: "rectangle" };
 const applyDefault = (value, defaultValue) => (value !== undefined ? value : defaultValue);
 
 export default class Body {
   constructor(
     world,
-    { bodyType = BODY_TYPES.DYNAMIC, gameObject, shapeInfo = defaultShape, debugSettings = {} } = {}
+    { bodyType = BODY_TYPES.DYNAMIC, gameObject, shape = "rectangle", debugSettings = {} } = {}
   ) {
     this.world = world;
     this.game = this.world.game;
@@ -63,7 +62,7 @@ export default class Body {
     }
 
     this.satBody;
-    this.setShape(shapeInfo);
+    this.setShape(shape);
 
     // TODO features
     // - friction (number)
@@ -80,19 +79,22 @@ export default class Body {
   }
 
   // Supported formats:
-  // { shape: "rectangle", width: 50, height: 50 }
-  // { shape: "circle", radius: 50  }
-  // { shape: "polygon", points: []  }
-  setShape(shapeInfo) {
-    const shape = shapeInfo.shape.toLowerCase();
-    if (shape === "rectangle") {
-      this.setRectangle(shapeInfo.width, shapeInfo.height);
-    } else if (shape === "circle") {
-      this.setCircle(shapeInfo.radius);
-    } else if (shape === "polygon") {
-      this.setPolygon(shapeInfo.points);
+  // "rectangle",
+  // "circle",
+  // { type: "rectangle", width: 50, height: 50 }
+  // { type: "circle", radius: 50  }
+  // { type: "polygon", points: []  }
+  setShape(shape) {
+    if (typeof shape === "string") shape = { type: shape };
+    const type = shape.type.toLowerCase();
+    if (type === "rectangle") {
+      this.setRectangle(shape.width, shape.height);
+    } else if (type === "circle") {
+      this.setCircle(shape.radius);
+    } else if (type === "polygon") {
+      this.setPolygon(shape.points);
     } else {
-      console.warn(`Invalid shape name: ${shapeInfo.shape}.`);
+      console.warn(`Invalid shape name: ${shape.type}.`);
     }
     return this;
   }
