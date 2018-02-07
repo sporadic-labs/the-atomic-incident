@@ -13,9 +13,21 @@ export default class Factory {
     return body;
   }
 
+  gameObject(gameObject, options = {}) {
+    options.gameObject = gameObject;
+    const body = new Body(this.world, options);
+    this.world.add(body);
+    return body;
+  }
+
   collider(object1, object2, options) {
     const collider = new Collider(this.world, object1, object2, options);
     this.world.addCollider(collider);
     return collider;
+  }
+
+  overlap(object1, object2, options = {}) {
+    options.separate = false;
+    return this.collider(object1, object2, options);
   }
 }
