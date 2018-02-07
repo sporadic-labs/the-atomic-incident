@@ -7,6 +7,10 @@ import Body from "./body";
 const P = Phaser.Point;
 const globalResponse = new SAT.Response();
 const globalTreeSearch = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+const reverseCallback = (cb, context) => {
+  if (!cb) return null;
+  else return (arg1, arg2) => cb.call(context, arg2, arg1);
+};
 
 export default class World {
   /**
@@ -167,90 +171,99 @@ export default class World {
     this.bodies.forEach(body => body.drawDebug(graphics));
   }
 
-  collide(object1, object2) {
-    // Strip away some of the branching logic by extracting the body from the objects
-    if (object1.physicsType === Phaser.SPRITE) object1 = object1.body;
-    if (object2.physicsType === Phaser.SPRITE) object2 = object2.body;
+  // Sprite|Body|Group|TilemapLayer vs Sprite|Body|Group|TilemapLayer
+  // Options: onCollide, context, separateBodies
+  collide(object1, object2, { onCollide, context, separate = true } = {}) {
+    const object1IsObject = object1.isSatBody || object1.physicsType === Phaser.SPRITE;
+    const object2IsObject = object2.isSatBody || object2.physicsType === Phaser.SPRITE;
 
-    if (object1.isSatBody) {
-      if (object2.isSatBody) {
-        this.collideBodyVsBody(object1, object2);
+    if (object1IsObject) {
+      if (object2IsObject) {
+        this.collideObjectVsObject(object1, object2, onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
-        this.collideBodyVsGroup(object1, object2);
+        this.collideObjectVsGroup(object1, object2, onCollide, context, separate);
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
-        this.collideBodyVsTilemapLayer(object1, object2);
+        this.collideObjectVsTilemapLayer(object1, object2, onCollide, context, separate);
       }
     } else if (object1.physicsType === Phaser.GROUP) {
-      if (object2.isSatBody) {
-        this.collideBodyVsGroup(object2, object1);
+      if (object2IsObject) {
+        const _onCollide = reverseCallback(onCollide, context);
+        this.collideObjectVsGroup(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
         console.warn("Colliding group vs group is not supported yet!");
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
-        this.collideGroupVsTilemapLayer(object1, object2);
+        this.collideGroupVsTilemapLayer(object1, object2, onCollide, context, separate);
       }
     } else if (object1.physicsType === Phaser.TILEMAPLAYER) {
-      if (object2.isSatBody) {
-        this.collideBodyVsGroup(object2, object1);
+      if (object2IsObject) {
+        const _onCollide = reverseCallback(onCollide, context);
+        this.collideObjectVsTilemapLayer(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
-        this.collideGroupVsTilemapLayer(object2, object1);
+        const _onCollide = reverseCallback(onCollide, context);
+        this.collideGroupVsTilemapLayer(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
         console.warn("Colliding group vs tilemap layer is not supported!");
       }
     }
   }
 
-  collideSpriteVsTilemapLayer(sprite, tilemapLayer) {
-    if (!sprite.body) return false;
-    return this.collideBodyVsTilemapLayer(sprite.body, tilemapLayer);
-  }
+  // Body||Sprite vs Body||Sprite
+  collideObjectVsObject(object1, object2, onCollide, context, separate = true) {
+    const body1 = object1.isSatBody ? object1 : object1.body;
+    const body2 = object2.isSatBody ? object2 : object2.body;
 
-  collideGroupVsTilemapLayer(group, tilemapLayer) {
-    let collides = false;
-    group.children.forEach(child => {
-      if (child.body && this.collideSpriteVsTilemapLayer(child, tilemapLayer)) collides = true;
-    });
-    return collides;
-  }
+    // Bodies may get destroyed by the user mid-collisions
+    if (!body1 || !body2) return false;
 
-  collideSpriteVsSprite(sprite1, sprite2) {
-    if (!sprite1.body || !sprite2.body) return false;
-    const collides = this.checkBodyCollide(sprite1.body, sprite2.body, globalResponse);
-    if (collides) this.separateBodies(sprite1.body, sprite2.body, globalResponse);
-    return collides;
-  }
-
-  // Not recursive! Assumes the group only has SAT bodies
-  collideSpriteVsGroup(sprite, group) {
-    if (!sprite.body || group.length === 0) return false;
-    return this.collideBodyVsGroup(sprite.body, group);
-  }
-
-  collideBodyVsBody(body1, body2) {
     const collides = this.checkBodyCollide(body1, body2, globalResponse);
-    if (collides) this.separateBodies(body1, body2, globalResponse);
+    if (collides) {
+      if (separate) this.separateBodies(body1, body2, globalResponse);
+      if (onCollide) onCollide.call(context, object1, object2);
+    }
     return collides;
   }
 
   // Not recursive! Assumes the group only has SAT bodies
-  collideBodyVsGroup(body, group) {
-    globalTreeSearch.minX = body.left;
-    globalTreeSearch.minY = body.top;
-    globalTreeSearch.maxX = body.right;
-    globalTreeSearch.maxY = body.bottom;
+  // Body||Sprite vs Group
+  collideObjectVsGroup(object, group, onCollide, context, separate = true) {
+    if (group.length === 0) return false;
+
+    const body1 = object.isSatBody ? object : object.body;
+
+    // Bodies may get destroyed by the dev mid-collisions
+    if (!body1) return false;
+
+    globalTreeSearch.minX = body1.left;
+    globalTreeSearch.minY = body1.top;
+    globalTreeSearch.maxX = body1.right;
+    globalTreeSearch.maxY = body1.bottom;
 
     const results = this.tree.search(globalTreeSearch);
     if (results.length === 0) return false;
 
-    let collides = false;
+    let collisionDetected = false;
     group.children.forEach(child => {
-      if (!child.body || body === child.body || !results.includes(child.body)) return;
-      if (this.collideBodyVsBody(body, child.body)) collides = true;
+      const body2 = child.body;
+      if (!body2 || !body2.isSatBody || body1 === body2 || !results.includes(body2)) return;
+
+      const collides = this.checkBodyCollide(body1, body2, globalResponse);
+      if (collides) {
+        collisionDetected = true;
+        if (separate) this.separateBodies(body1, body2, globalResponse);
+        if (onCollide) onCollide.call(context, object, child);
+      }
     });
 
-    return collides;
+    return collisionDetected;
   }
 
-  collideBodyVsTilemapLayer(body, tilemapLayer) {
+  // Body||Sprite vs TilemapLayer
+  collideObjectVsTilemapLayer(object, tilemapLayer, onCollide, context, separate = true) {
+    const body = object.isSatBody ? object : object.body;
+
+    // Bodies may get destroyed by the dev mid-collisions
+    if (!body) return false;
+
     const layerOffsetX = tilemapLayer.getTileOffsetX();
     const layerOffsetY = tilemapLayer.getTileOffsetY();
     const tiles = tilemapLayer.getTiles(
@@ -273,16 +286,27 @@ export default class World {
     );
 
     let collides = false;
-
     tiles.map(tile => {
       tileBody.setPosition(layerOffsetX + tile.worldX, layerOffsetY + tile.worldY);
       const tileCollides = this.checkBodyCollide(body, tileBody, globalResponse);
       if (tileCollides) {
-        this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
         collides = true;
+        if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+        if (onCollide) onCollide.call(context, object, tile);
       }
     });
 
+    return collides;
+  }
+
+  collideGroupVsTilemapLayer(group, tilemapLayer, onCollide, context, separate = true) {
+    let collides = false;
+    group.children.forEach(child => {
+      if (!child.body || !child.body.isSatBody) return;
+      if (this.collideObjectVsTilemapLayer(child, tilemapLayer, onCollide, context, separate)) {
+        collides = true;
+      }
+    });
     return collides;
   }
 

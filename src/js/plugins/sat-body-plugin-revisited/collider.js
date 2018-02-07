@@ -1,31 +1,15 @@
 export default class Collider {
-  constructor(
-    world,
-    object1,
-    object2,
-    { overlapOnly = false, collideCallback, processCallback, callbackContext } = {}
-  ) {
+  // Options: onCollide, context, separate
+  constructor(world, object1, object2, options) {
     this.world = world;
 
     this.object1 = object1;
     this.object2 = object2;
-
-    this.overlapOnly = overlapOnly;
-
-    this.collideCallback = collideCallback;
-    this.processCallback = processCallback;
-    this.callbackContext = callbackContext;
+    this.options = options;
   }
 
   update() {
-    this.world.collide(
-      this.object1,
-      this.object2,
-      this.collideCallback,
-      this.processCallback,
-      this.callbackContext,
-      this.overlapOnly
-    );
+    this.world.collide(this.object1, this.object2, this.options);
   }
 
   destroy() {
