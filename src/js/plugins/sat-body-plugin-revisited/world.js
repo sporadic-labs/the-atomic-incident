@@ -179,32 +179,34 @@ export default class World {
 
     if (object1IsObject) {
       if (object2IsObject) {
-        this.collideObjectVsObject(object1, object2, onCollide, context, separate);
+        return this.collideObjectVsObject(object1, object2, onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
-        this.collideObjectVsGroup(object1, object2, onCollide, context, separate);
+        return this.collideObjectVsGroup(object1, object2, onCollide, context, separate);
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
-        this.collideObjectVsTilemapLayer(object1, object2, onCollide, context, separate);
+        return this.collideObjectVsTilemapLayer(object1, object2, onCollide, context, separate);
       }
     } else if (object1.physicsType === Phaser.GROUP) {
       if (object2IsObject) {
         const _onCollide = reverseCallback(onCollide, context);
-        this.collideObjectVsGroup(object2, object1, _onCollide, context, separate);
+        return this.collideObjectVsGroup(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
         console.warn("Colliding group vs group is not supported yet!");
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
-        this.collideGroupVsTilemapLayer(object1, object2, onCollide, context, separate);
+        return this.collideGroupVsTilemapLayer(object1, object2, onCollide, context, separate);
       }
     } else if (object1.physicsType === Phaser.TILEMAPLAYER) {
       if (object2IsObject) {
         const _onCollide = reverseCallback(onCollide, context);
-        this.collideObjectVsTilemapLayer(object2, object1, _onCollide, context, separate);
+        return this.collideObjectVsTilemapLayer(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
         const _onCollide = reverseCallback(onCollide, context);
-        this.collideGroupVsTilemapLayer(object2, object1, _onCollide, context, separate);
+        return this.collideGroupVsTilemapLayer(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
         console.warn("Colliding group vs tilemap layer is not supported!");
       }
     }
+
+    return false;
   }
 
   // Body||Sprite vs Body||Sprite
