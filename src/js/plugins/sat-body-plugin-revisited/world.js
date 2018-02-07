@@ -171,6 +171,11 @@ export default class World {
     this.bodies.forEach(body => body.drawDebug(graphics));
   }
 
+  overlap(object1, object2, options = {}) {
+    options.separate = false;
+    return this.collide(object1, object2, options);
+  }
+
   // Sprite|Body|Group|TilemapLayer vs Sprite|Body|Group|TilemapLayer
   // Options: onCollide, context, separateBodies
   collide(object1, object2, { onCollide, context, separate = true } = {}) {
