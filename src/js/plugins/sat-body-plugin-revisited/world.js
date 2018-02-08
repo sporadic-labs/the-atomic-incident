@@ -79,7 +79,16 @@ export default class World {
 
   enableDebug(graphics) {
     this.drawDebug = true;
-    this.debugGraphics = graphics ? graphics : this.game.add.graphics(0, 0);
+    if (this.debugGraphics) {
+      if (graphics) {
+        this.debugGraphics.destroy();
+        this.debugGraphics = graphics;
+      } else {
+        // Noop - we're all good to reuse this.debugGraphics
+      }
+    } else {
+      this.debugGraphics = graphics ? graphics : this.game.add.graphics(0, 0);
+    }
     return this;
   }
 
