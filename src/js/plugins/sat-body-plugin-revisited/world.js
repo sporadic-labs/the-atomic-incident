@@ -401,9 +401,9 @@ export default class World {
     body1.position.y -= response.overlap * response.overlapN.y;
     body1.updateSatBodyPosition();
 
-    // Adjust velocity
-    if (Math.abs(response.overlapN.x) > 0) body1.velocity.x *= -body1.bounce;
-    if (Math.abs(response.overlapN.y) > 0) body1.velocity.y *= -body1.bounce;
+    // Adjust velocity - disabling until we have proper bounce...
+    // if (Math.abs(response.overlapN.x) > 0) body1.velocity.x *= -body1.bounce;
+    // if (Math.abs(response.overlapN.y) > 0) body1.velocity.y *= -body1.bounce;
   }
 
   separateBodiesStaticVsDynamic(body1, body2, response) {
@@ -411,9 +411,9 @@ export default class World {
     body2.position.x += response.overlap * response.overlapN.x;
     body2.position.y += response.overlap * response.overlapN.y;
 
-    // Adjust velocity
-    if (Math.abs(response.overlapN.x) > 0) body2.velocity.x *= -body2.bounce;
-    if (Math.abs(response.overlapN.y) > 0) body2.velocity.y *= -body2.bounce;
+    // Adjust velocity - disabling until we have proper bounce...
+    // if (Math.abs(response.overlapN.x) > 0) body2.velocity.x *= -body2.bounce;
+    // if (Math.abs(response.overlapN.y) > 0) body2.velocity.y *= -body2.bounce;
   }
 
   destroy() {
