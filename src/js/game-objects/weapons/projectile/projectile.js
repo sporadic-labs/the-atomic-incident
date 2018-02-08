@@ -24,7 +24,7 @@ export default class Projectile extends Phaser.Sprite {
     if (bullet.game) {
       bullet.body.velocity.setTo(Math.cos(angle) * speed / 10, Math.sin(angle) * speed / 10);
       bullet.body.acceleration.setTo(Math.cos(angle) * 1000, Math.sin(angle) * 1000);
-      bullet.body.maxVelocity.setTo(speed);
+      bullet.body.setMaxSpeed(speed);
     }
     return bullet;
   }
@@ -49,7 +49,7 @@ export default class Projectile extends Phaser.Sprite {
     bullet._setDeathTimer(maxAge);
     if (bullet.game) {
       // Flames get a randomized drag to slow the bullets over time.
-      bullet.body.drag.setTo(game.rnd.integerInRange(460, 600));
+      bullet.body.setDrag(game.rnd.realInRange(0.5, 0.99));
     }
     return bullet;
   }
@@ -169,10 +169,10 @@ export default class Projectile extends Phaser.Sprite {
 
     this.deathTimer;
 
-    this.game.physics.arcade.enable(this);
-    this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, speed, this.body.velocity);
-
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+    game.physics.sat.add
+      .gameObject(this)
+      .setCircle(this.width / 2)
+      .setVelocity(speed * Math.cos(angle), speed * Math.sin(angle));
   }
 
   /**
@@ -183,13 +183,15 @@ export default class Projectile extends Phaser.Sprite {
    */
   init(logic) {
     this.collisionLogic = logic;
-    satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
+    this.game.physics.sat.add.overlap(this, this.game.globals.mapManager.wallLayer, {
+      onCollide: () => logic.onCollideWithWall()
+    });
+    this.game.physics.sat.add.overlap(this, this._enemies, {
+      onCollide: (_, enemy) => logic.onCollideWithEnemy(enemy)
+    });
   }
 
   update() {
-    const logic = this.collisionLogic;
-    satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
-
     // If the bullet isn't moving, destroy it.
     if (this.body && this.body.velocity.getMagnitude() <= 0) {
       this.destroy();
@@ -198,14 +200,6 @@ export default class Projectile extends Phaser.Sprite {
 
   postUpdate(...args) {
     super.postUpdate(...args); // Update arcade physics
-
-    // Not a complete fix, but cap the xy velocity by magnitude to achieve consistent speed
-    if (this.body.velocity.getMagnitude() > this.body.maxVelocity.x) {
-      this.body.velocity.setMagnitude(this.body.maxVelocity.x);
-    }
-
-    const logic = this.collisionLogic;
-    checkSatOverlapWithGroup(this, this._enemies, (_, enemy) => logic.onCollideWithEnemy(enemy));
 
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
     if (this._player._playerLight.isPointInShadow(this.position)) this.destroy();
