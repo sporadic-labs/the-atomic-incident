@@ -62,7 +62,8 @@ export default class World {
   }
 
   remove(body) {
-    this.bodies.delete(body);
+    if (body.bodyType === BODY_TYPES.STATIC) this.staticBodies.delete(body);
+    else if (body.bodyType === BODY_TYPES.DYNAMIC) this.bodies.delete(body);
     return this;
   }
 
