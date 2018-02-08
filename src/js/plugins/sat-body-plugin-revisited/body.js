@@ -156,8 +156,18 @@ export default class Body {
     return this;
   }
 
+  setDrag(drag) {
+    this.drag = drag;
+    return this;
+  }
+
   setMaxSpeed(maxSpeed) {
     this.maxSpeed = Math.max(maxSpeed, 0);
+    return this;
+  }
+
+  copyPosition(obj) {
+    this.setPosition(obj.x, obj.y);
     return this;
   }
 
