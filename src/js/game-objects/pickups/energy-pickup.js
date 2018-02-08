@@ -15,8 +15,7 @@ export default class EnergyPickup extends Phaser.Sprite {
     this._pickupSound = game.globals.soundManager.add("fire-whoosh-1");
 
     // Configure physics
-    game.physics.arcade.enable(this);
-    this.satBody = game.globals.plugins.satBody.addBoxBody(this);
+    game.physics.sat.add.gameObject(this).setCircle(this.width / 2);
   }
 
   getEnergy() {
@@ -32,13 +31,13 @@ export default class EnergyPickup extends Phaser.Sprite {
       this._tween.onComplete.add(() => this.destroy());
     }
 
-    const dist = this.position.distance(this._player.position);
-    if (this.position.distance(this._player.position) < PICKUP_RANGE) {
+    const dist = this.body.position.distance(this._player.position);
+    if (this.body.position.distance(this._player.position) < PICKUP_RANGE) {
       // Move pickup towards player slowly when far and quickly when close
       const lerpFactor = Phaser.Math.mapLinear(dist / PICKUP_RANGE, 0, 1, 0.5, 0);
-      this.position.setTo(
-        (1 - lerpFactor) * this.position.x + lerpFactor * this._player.position.x,
-        (1 - lerpFactor) * this.position.y + lerpFactor * this._player.position.y
+      this.body.setPosition(
+        (1 - lerpFactor) * this.body.position.x + lerpFactor * this._player.position.x,
+        (1 - lerpFactor) * this.body.position.y + lerpFactor * this._player.position.y
       );
     }
   }
