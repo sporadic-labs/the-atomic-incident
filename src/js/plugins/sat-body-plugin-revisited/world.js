@@ -397,8 +397,8 @@ export default class World {
 
   separateBodiesDynamicVsStatic(body1, body2, response) {
     // Resolve overlap
-    body1.position.x -= (2 + response.overlap) * response.overlapN.x;
-    body1.position.y -= (2 + response.overlap) * response.overlapN.y;
+    body1.position.x -= response.overlap * response.overlapN.x;
+    body1.position.y -= response.overlap * response.overlapN.y;
     body1.updateSatBodyPosition();
 
     // Adjust velocity
