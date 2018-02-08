@@ -10,6 +10,9 @@ export class EnemyHitLogic {
     this.enemy = enemy;
   }
 
+  /** Noop in base class, but can be used by derived classes */
+  update() {}
+
   /**
    * Returns whether or not the projectile successfully hit the enemy
    */
@@ -25,14 +28,21 @@ export class WeakSpotHitLogic {
     // Hard coded to match tank for now
     const weakPoints = [[21, 66], [15, 55], [58, 55], [53, 66], [37, 72]];
     const mappedPoints = weakPoints.map(p => ({ x: p[0] - 75 / 2, y: p[1] - 75 / 2 }));
-    this._weakSpotBody = enemy.game.globals.plugins.satBody.addPolygonBody(enemy, mappedPoints);
+    this.weakSpot = enemy.game.physics.sat.add.staticBody().setPolygon(mappedPoints);
+
+    this.enemy.events.onDestroy.add(() => this.weakSpot.destroy());
+  }
+
+  update() {
+    this.weakSpot.copyPosition(this.enemy.body.position);
+    this.weakSpot.setRotation(this.enemy.body.rotation);
   }
 
   /**
    * Returns whether or not the projectile successfully hit the enemy
    */
   attemptHit(projectile) {
-    if (!this._weakSpotBody.testOverlap(projectile.satBody)) return false;
+    if (!this.enemy.game.physics.sat.world.overlap(this.weakSpot, projectile)) return false;
     else return true;
   }
 }

@@ -64,9 +64,8 @@ export default class DashAttackComponent {
       this._targetingComponent.isActive = false;
     }
 
-    this.game.physics.arcade.collide(this.parent, this._mapManager.wallLayer, () => {
-      this.startCharging();
-    });
+    const tilemapLayer = this._mapManager.wallLayer;
+    this.game.physics.sat.world.collide(this.parent, tilemapLayer, this.startCharging, this);
 
     if (this._state === STATES.DASHING) {
       this.parent.body.velocity.x = this.attackSpeed * Math.cos(this._dashAngle);
