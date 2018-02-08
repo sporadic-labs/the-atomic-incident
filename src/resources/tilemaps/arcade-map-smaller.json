@@ -24,6 +24,159 @@
         }, 
         {
          "draworder":"topdown",
+         "name":"collision-map",
+         "objects":[
+                {
+                 "height":125,
+                 "id":481,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":325,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "height":75,
+                 "id":482,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":425,
+                 "x":325,
+                 "y":0
+                }, 
+                {
+                 "height":50,
+                 "id":483,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":225,
+                 "x":525,
+                 "y":75
+                }, 
+                {
+                 "height":325,
+                 "id":484,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":150,
+                 "x":600,
+                 "y":125
+                }, 
+                {
+                 "height":300,
+                 "id":485,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":650,
+                 "y":450
+                }, 
+                {
+                 "height":200,
+                 "id":486,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":275,
+                 "x":375,
+                 "y":550
+                }, 
+                {
+                 "height":125,
+                 "id":487,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":375,
+                 "x":0,
+                 "y":625
+                }, 
+                {
+                 "height":75,
+                 "id":488,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":250,
+                 "x":0,
+                 "y":550
+                }, 
+                {
+                 "height":100,
+                 "id":489,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":125,
+                 "x":0,
+                 "y":450
+                }, 
+                {
+                 "height":225,
+                 "id":490,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":175,
+                 "x":0,
+                 "y":225
+                }, 
+                {
+                 "height":100,
+                 "id":491,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":0,
+                 "y":125
+                }, 
+                {
+                 "height":50,
+                 "id":492,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":175,
+                 "x":350,
+                 "y":200
+                }, 
+                {
+                 "height":50,
+                 "id":493,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":200,
+                 "x":250,
+                 "y":400
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "name":"navmesh-shrunken",
          "objects":[
                 {
@@ -138,7 +291,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -214,11 +367,11 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }],
- "nextobjectid":478,
+ "nextobjectid":494,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
