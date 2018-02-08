@@ -1,5 +1,6 @@
 import Body from "./body";
 import Collider from "./collider";
+import BODY_TYPES from "./body-types";
 
 export default class Factory {
   constructor(world) {
@@ -8,6 +9,13 @@ export default class Factory {
   }
 
   body(options) {
+    const body = new Body(this.world, options);
+    this.world.add(body);
+    return body;
+  }
+
+  staticBody(options = {}) {
+    options.bodyType = BODY_TYPES.STATIC;
     const body = new Body(this.world, options);
     this.world.add(body);
     return body;
