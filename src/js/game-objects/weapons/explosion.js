@@ -1,5 +1,3 @@
-import { checkSatOverlapWithGroup } from "../../helpers/sprite-utilities";
-
 const prefix = "weapons/explosion/explosion-";
 
 export default class Explosion extends Phaser.Sprite {
@@ -25,16 +23,16 @@ export default class Explosion extends Phaser.Sprite {
     this.animations.add("explode", frames, 24, false).onComplete.add(() => this.destroy());
     this.animations.play("explode");
 
-    this.game.physics.arcade.enable(this);
-
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
-    this.satBody.setCircleRadius(0);
+    game.physics.sat.add.gameObject(this).setCircle(0);
+    game.physics.sat.add.overlap(this, this.enemies, {
+      onCollide: (_, enemy) => this.onCollideWithEnemy(enemy)
+    });
 
     const tweenTarget = { radius: 0 };
     game.tweens
       .create(tweenTarget)
       .to({ radius: this.width / 2 }, 10 / 24 * 1000)
-      .onUpdateCallback(() => this.satBody.setCircleRadius(tweenTarget.radius))
+      .onUpdateCallback(() => this.body.setCircle(tweenTarget.radius))
       .start();
 
     this.alpha = 0.9;
@@ -42,12 +40,10 @@ export default class Explosion extends Phaser.Sprite {
     this.enemiesDamaged = [];
   }
 
-  update() {
-    checkSatOverlapWithGroup(this, this.enemies, (_, enemy) => {
-      if (!this.enemiesDamaged.includes(enemy)) {
-        enemy.takeDamage(this.damage, this);
-        this.enemiesDamaged.push(enemy);
-      }
-    });
+  onCollideWithEnemy(enemy) {
+    if (!this.enemiesDamaged.includes(enemy)) {
+      enemy.takeDamage(this.damage, this);
+      this.enemiesDamaged.push(enemy);
+    }
   }
 }
