@@ -7,9 +7,7 @@ import Compass from "./compass";
 import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
-import MOVEMENT_TYPES from "./movement-types";
 import SmokeTrail from "./smoke-trail";
-import CooldownAbility from "./cooldown-ability";
 
 const ANIM = {
   MOVE: "MOVE",
