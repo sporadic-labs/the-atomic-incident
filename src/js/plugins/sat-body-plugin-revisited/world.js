@@ -240,8 +240,7 @@ export default class World {
     return collides;
   }
 
-  // Not recursive! Assumes the group only has SAT bodies
-  // Body||Sprite vs Group
+  // Body||Sprite vs Group, careful this can be recursive if a group contains a group!
   collideObjectVsGroup(object, group, onCollide, context, separate = true) {
     if (group.length === 0) return false;
 
@@ -260,6 +259,10 @@ export default class World {
 
     let collisionDetected = false;
     group.children.forEach(child => {
+      if (child.physicsType === Phaser.GROUP) {
+        return this.collideObjectVsGroup(object, child, onCollide, context, separate);
+      }
+
       const body2 = child.body;
       if (!body2 || !body2.isSatBody || body1 === body2 || !results.includes(body2)) return;
 
