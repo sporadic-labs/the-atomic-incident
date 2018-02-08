@@ -230,8 +230,8 @@ export default class Body {
     if (!this.enabled || this.bodyType === BODY_TYPES.STATIC) return;
 
     if (this.gameObject) {
-      this.gameObject.position.x += this.position.x - this.previousPosition.x;
-      this.gameObject.position.y += this.position.y - this.previousPosition.y;
+      this.gameObject.position.x = this.position.x;
+      this.gameObject.position.y = this.position.y;
     }
   }
 
