@@ -39,8 +39,9 @@ const globals = (game.globals = {});
 globals.tilemapNames = [
   // "dungeon-arcade-1",
   // "arcade-map-3",
-  "arcade-map-larger"
+  // "arcade-map-larger"
   // "arcade-map-smaller"
+  "arcade-map-larger-T"
   // "arcade-map-2",
   // "puzzle-map-1",
   // "pacman"
