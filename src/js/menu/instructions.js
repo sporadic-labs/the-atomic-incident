@@ -1,5 +1,7 @@
 import { h, Component } from "preact";
+import WEAPON_TYPES, { getFormattedType } from "../game-objects/weapons/weapon-types";
 
+const formattedWeaponNames = Object.values(WEAPON_TYPES).map(type => getFormattedType(type));
 const style = {
   position: "fixed",
   top: 0,
@@ -51,12 +53,7 @@ export default class Instructions extends Component {
 
           <p>Manually Switch Weapons</p>
           <ol style={{ marginLeft: "20px" }}>
-            <li>Scattershot</li>
-            <li>Rapid Shot</li>
-            <li>Homing Shot</li>
-            <li>Piercing Shot</li>
-            <li>Rocket Launcher</li>
-            <li>Flamethrower</li>
+            {formattedWeaponNames.map(name => <li key={name}>{name}</li>)}
           </ol>
         </div>
       </div>
