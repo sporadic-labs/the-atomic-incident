@@ -171,9 +171,7 @@ export default class Enemy extends Phaser.Sprite {
   }
 
   attemptHit(projectile, damage) {
-    const wasHit = this._hitLogic.attemptHit(projectile);
-    if (wasHit) this.takeDamage(damage, projectile);
-    return wasHit;
+    return this._hitLogic.attemptHit(damage, projectile);
   }
 
   takeDamage(damage, projectile) {

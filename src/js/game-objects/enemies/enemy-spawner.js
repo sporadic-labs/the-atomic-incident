@@ -5,36 +5,36 @@ import { shuffleArray, weightedPick } from "../../helpers/utilities";
 // will cycle through the types from last key through first when spawning.
 const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
-  {
-    enemies: { [ENEMY_TYPES.BACTERIA]: 3 },
-    weight: 1,
-    name: "Bacteria Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.WORM]: 3 },
-    weight: 2,
-    name: "Worm Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.BEETLE]: 3 },
-    weight: 1,
-    name: "Beetle Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.VIRUS]: 2 },
-    weight: 2,
-    name: "Virus Wave"
-  },
+  // {
+  //   enemies: { [ENEMY_TYPES.BACTERIA]: 3 },
+  //   weight: 1,
+  //   name: "Bacteria Wave"
+  // },
+  // {
+  //   enemies: { [ENEMY_TYPES.WORM]: 3 },
+  //   weight: 2,
+  //   name: "Worm Wave"
+  // },
+  // {
+  //   enemies: { [ENEMY_TYPES.BEETLE]: 3 },
+  //   weight: 1,
+  //   name: "Beetle Wave"
+  // },
+  // {
+  //   enemies: { [ENEMY_TYPES.VIRUS]: 2 },
+  //   weight: 2,
+  //   name: "Virus Wave"
+  // },
   {
     enemies: { [ENEMY_TYPES.PARTICLE_TANK]: 3 },
     weight: 1,
     name: "Particle Tank Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
-    weight: 1,
-    name: "Amoeba Wave"
   }
+  // {
+  //   enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
+  //   weight: 1,
+  //   name: "Amoeba Wave"
+  // }
 ];
 
 export default class EnemySpawner {

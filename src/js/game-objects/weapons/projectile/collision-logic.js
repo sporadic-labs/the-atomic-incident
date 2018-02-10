@@ -1,5 +1,10 @@
 import Explosion from "../explosion";
 
+export const COLLISION_SURFACE = {
+  DESTRUCTIBLE: "destructible",
+  INDESTRUCTIBLE: "indestructible"
+};
+
 /**
  * Base class for handling projectile collision with enemies and walls. The default logic is that a
  * projectile is destroyed on colliding with something.
@@ -17,11 +22,13 @@ export class CollisionLogic {
   onBeforeCollisions() {}
   onAfterCollisions() {}
 
+  // Destroy no matter what
   onCollideWithEnemy(enemy) {
     enemy.attemptHit(this.projectile, this.damage);
     this.projectile.destroy();
   }
 
+  // Destroy no matter what
   onCollideWithWall() {
     this.wallHitSound.play();
     this.projectile.destroy();
@@ -41,8 +48,9 @@ export class PiercingCollisionLogic extends CollisionLogic {
 
   onCollideWithEnemy(enemy) {
     if (!this._enemiesDamaged.includes(enemy)) {
-      const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
-      if (hitEnemy) this._enemiesDamaged.push(enemy);
+      const surfaceHit = enemy.attemptHit(this.projectile, this.damage);
+      if (surfaceHit === COLLISION_SURFACE.DESTRUCTIBLE) this._enemiesDamaged.push(enemy);
+      else if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) this.projectile.destroy();
     }
   }
 }
