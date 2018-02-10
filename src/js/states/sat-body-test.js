@@ -82,11 +82,12 @@ export default class LightingPerf extends Phaser.State {
     // this.body2 = body2;
     // this.physics.sat.add.collider(sprite2, this.game.globals.mapManager.wallLayer);
 
-    // const circleBody = sat.add
-    //   .body({ shape: { type: "circle", radius: 25 } })
-    //   .setPosition(250, 300)
-    //   .setVelocity(-200, 150);
-    // this.circleBody = circleBody;
+    const circleBody = sat.add
+      .body({ shape: { type: "circle", radius: 25 } })
+      .setPosition(250, 300)
+      .setVelocity(-200, 150)
+      .setBounce(1);
+    this.circleBody = circleBody;
     // this.physics.sat.add.collider(circleBody, this.game.globals.mapManager.wallLayer);
 
     // const group = this.game.add.group();
@@ -124,14 +125,14 @@ export default class LightingPerf extends Phaser.State {
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
-    const spawnObjects = mapManager.tilemap.objects["player-spawn"] || [];
-    const spawnPoint =
-      spawnObjects.length > 0
-        ? { x: spawnObjects[0].x, y: spawnObjects[0].y }
-        : { x: this.world.width / 2, y: this.world.height / 2 };
-    const player = new Player(game, spawnPoint.x, spawnPoint.y, groups.foreground);
-    globals.player = player;
-    this.player = player;
+    // const spawnObjects = mapManager.tilemap.objects["player-spawn"] || [];
+    // const spawnPoint =
+    //   spawnObjects.length > 0
+    //     ? { x: spawnObjects[0].x, y: spawnObjects[0].y }
+    //     : { x: this.world.width / 2, y: this.world.height / 2 };
+    // const player = new Player(game, spawnPoint.x, spawnPoint.y, groups.foreground);
+    // globals.player = player;
+    // this.player = player;
 
     const tileCollisionMap = mapManager.tilemap.objects["collision-map"] || [];
     this._tileRects = tileCollisionMap.map(r =>
@@ -144,14 +145,14 @@ export default class LightingPerf extends Phaser.State {
     );
 
     game.world.setBounds(0, 0, mapManager.tilemap.widthInPixels, mapManager.tilemap.heightInPixels);
-    game.camera.follow(player);
+    // game.camera.follow(player);
   }
 
   update() {
     // this.b1.gameObject.rotation += 0.005;
     // this.body2.position.copyFrom(this.input.position);
 
-    this._tileRects.forEach(tb => this.physics.sat.world.collide(this.player, tb));
+    this._tileRects.forEach(tb => this.physics.sat.world.collide(this.circleBody, tb));
 
     if (this._fpsText) {
       this._fpsText.setText(this.game.time.fps);
