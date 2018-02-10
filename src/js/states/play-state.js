@@ -22,6 +22,7 @@ import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
+import DashIcon from "../game-objects/hud/dash-icon";
 import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
@@ -112,6 +113,8 @@ export default class PlayState extends Phaser.State {
     const playerHealth = new Bar(game, 15, 22, 200, 25, { minValue: 0, maxValue: 1 });
     player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
     groups.hud.add(playerHealth);
+    const dashIcon = new DashIcon(game, groups.hud, player);
+    dashIcon.position.set(15, 55);
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {
