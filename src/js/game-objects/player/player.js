@@ -152,7 +152,7 @@ export default class Player extends Phaser.Sprite {
   }
 
   getVelocity() {
-    return this.body.velocity;
+    return this.body ? this.body.velocity : 0;
   }
 
   postUpdate(...args) {
