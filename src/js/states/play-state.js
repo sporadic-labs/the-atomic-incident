@@ -3,7 +3,6 @@
  */
 
 import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
-import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
 // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
 import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
 import Player from "../game-objects/player";
@@ -27,7 +26,7 @@ import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
 import Bar from "../game-objects/hud/bar";
-import NewSatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
+import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -58,7 +57,6 @@ export default class PlayState extends Phaser.State {
     // Plugins
     global.plugins = global.plugins !== undefined ? global.plugins : {};
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
-    globals.plugins.newSatBody = game.plugins.add(NewSatBodyPlugin);
     globals.plugins.effects = game.plugins.add(EffectsPlugin);
 
     // Level manager
@@ -147,13 +145,8 @@ export default class PlayState extends Phaser.State {
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
       this.lighting.setOpacity(preferencesStore.shadowOpacity);
-      if (preferencesStore.physicsDebug) {
-        globals.plugins.satBody.enableDebugAll(0x00ff00, groups.foreground);
-        this.physics.sat.world.enableDebug();
-      } else {
-        globals.plugins.satBody.disableDebugAll();
-        this.physics.sat.world.disableDebug();
-      }
+      if (preferencesStore.physicsDebug) this.physics.sat.world.enableDebug();
+      else this.physics.sat.world.disableDebug();
       globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
     });

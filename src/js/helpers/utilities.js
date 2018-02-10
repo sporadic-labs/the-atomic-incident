@@ -1,5 +1,3 @@
-import { circle } from "../plugins/sat-body-plugin/sat-factories";
-
 export function randomBoolean() {
   return Boolean(Math.floor(Math.random() * 2));
 }

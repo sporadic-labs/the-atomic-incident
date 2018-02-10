@@ -3,10 +3,9 @@
  */
 
 import Color from "../helpers/color";
-import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
 import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
 import LightingPluginOptimized from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
-import NewSatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
+import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import { GAME_STATE_NAMES } from "./index";
 import { MENU_STATE_NAMES } from "../menu";
@@ -66,7 +65,7 @@ export default class LightingPerf extends Phaser.State {
     groups.hud.add(this._fpsText);
 
     // --- TESTING ---
-    globals.plugins.newSatBody = game.plugins.add(NewSatBodyPlugin);
+    globals.plugins.newSatBody = game.plugins.add(SatBodyPlugin);
     const sat = this.physics.sat;
     sat.world.enableDebug(this.game.add.graphics(0, 0, globals.groups.hud));
 
