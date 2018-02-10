@@ -55,34 +55,6 @@ export class PiercingCollisionLogic extends CollisionLogic {
 export class BouncingCollisionLogic extends CollisionLogic {
   constructor(projectile, damage) {
     super(projectile, damage);
-    this._enemiesHit = [];
-    this._enemiesOverlapping = [];
-  }
-
-  onBeforeCollisions() {
-    this._enemiesOverlapping = [];
-  }
-
-  onCollideWithEnemy(enemy) {
-    if (!this._enemiesOverlapping.includes(enemy)) this._enemiesOverlapping.push(enemy);
-  }
-
-  onAfterCollisions() {
-    // Attempt to hit any newly overlapping enemies that weren't already hit
-    for (const enemy of this._enemiesOverlapping) {
-      if (!this._enemiesHit.includes(enemy)) {
-        const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
-        if (hitEnemy) this._enemiesHit.push(enemy);
-      }
-    }
-
-    // If the projectile has left an overlapping enemy, time to reset it so that it can be hit again
-    for (let i = this._enemiesHit.length - 1; i >= 0; i--) {
-      const enemy = this._enemiesHit[i];
-      if (!this._enemiesOverlapping.includes(enemy)) {
-        this._enemiesHit.splice(i, 1);
-      }
-    }
   }
 
   // Noop
