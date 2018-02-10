@@ -1,6 +1,8 @@
 import WEAPON_TYPES from "../weapons/weapon-types";
 import { shuffleArray } from "../../helpers/utilities";
 
+const PICKUP_RANGE = 75;
+
 export default class PickupSpawner extends Phaser.Group {
   constructor(game, parent, player, levelManager) {
     super(game, parent, "pickup-spawner");
@@ -26,6 +28,7 @@ export default class PickupSpawner extends Phaser.Group {
       const type = this.game.rnd.pick(possibleTypes);
       this.spawnPickup(type);
     }
+    super.update();
   }
 
   destroy(...args) {
@@ -80,6 +83,18 @@ class WeaponPickup extends Phaser.Sprite {
 
   getType() {
     return this._type;
+  }
+
+  update() {
+    const dist = this.body.position.distance(this._player.position);
+    if (this.body.position.distance(this._player.position) < PICKUP_RANGE) {
+      // Move pickup towards player slowly when far and quickly when close
+      const lerpFactor = Phaser.Math.mapLinear(dist / PICKUP_RANGE, 0, 1, 0.2, 0);
+      this.body.setPosition(
+        (1 - lerpFactor) * this.body.position.x + lerpFactor * this._player.position.x,
+        (1 - lerpFactor) * this.body.position.y + lerpFactor * this._player.position.y
+      );
+    }
   }
 
   pickUp() {
