@@ -306,13 +306,101 @@ export default class World {
     );
 
     let collides = false;
+    const allTiles = tilemapLayer.layer.data;
+    let tileBodyX, tileBodyY, tileBodyWidth, tileBodyHeight;
+    const spriteWidthInTiles = Math.ceil(body.width / tileWidth);
+    const spriteHeightInTiles = Math.ceil(body.height / tileHeight);
+
     tiles.map(tile => {
-      tileBody.setPosition(layerOffsetX + tile.worldX, layerOffsetY + tile.worldY);
-      const tileCollides = this.checkBodyCollide(body, tileBody, globalResponse);
-      if (tileCollides) {
+      tileBodyX = layerOffsetX + tile.worldX;
+      tileBodyY = layerOffsetY + tile.worldY;
+      tileBodyWidth = tile.width;
+      tileBodyHeight = tile.height;
+
+      tileBody.setPosition(tileBodyX, tileBodyY);
+      tileBody.setRectangle(tileBodyWidth, tileBodyHeight);
+
+      if (this.checkBodyCollide(body, tileBody, globalResponse)) {
         collides = true;
-        if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
-        if (onCollide) onCollide.call(context, object, tile);
+
+        // Check if collision has already been resolved by a previous collision
+        if (globalResponse.overlap === 0) return;
+
+        const absOverlapX = Math.abs(globalResponse.overlapN.x);
+        const absOverlapY = Math.abs(globalResponse.overlapN.y);
+        let extended = false;
+
+        // If there's any horizontal collision detected, attempt to extend the tile body left &
+        // right to prevent a body from colliding with an internal edge within a wall.
+        if (absOverlapX > 0) {
+          let extendedTileBodyX = tileBodyX;
+          let extendedTileBodyWidth = tileBodyWidth;
+          for (let x = tile.x + 1; x <= tile.x + spriteWidthInTiles; x++) {
+            if (allTiles[tile.y][x] && allTiles[tile.y][x].collides) {
+              extendedTileBodyWidth += tile.width;
+            } else {
+              break;
+            }
+          }
+          for (let x = tile.x - 1; x >= tile.x - spriteWidthInTiles; x--) {
+            if (allTiles[tile.y][x] && allTiles[tile.y][x].collides) {
+              extendedTileBodyX -= tile.width;
+              extendedTileBodyWidth += tile.width;
+            } else {
+              break;
+            }
+          }
+
+          if (extendedTileBodyWidth !== tileBodyWidth) {
+            extended = true;
+            tileBody.setPosition(extendedTileBodyX, tileBodyY);
+            tileBody.setRectangle(extendedTileBodyWidth, tileBodyHeight);
+
+            if (this.checkBodyCollide(body, tileBody, globalResponse)) {
+              if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+              if (onCollide) onCollide.call(context, object, tile);
+            }
+          }
+        }
+
+        // Attempt the same tile extension up & down
+        if (absOverlapY > 0) {
+          let extendedTileBodyY = tileBodyY;
+          let extendedTileBodyHeight = tileBodyHeight;
+          for (let y = tile.y + 1; y <= tile.y + spriteHeightInTiles; y++) {
+            if (allTiles[y][tile.x] && allTiles[y][tile.x].collides) {
+              extendedTileBodyHeight += tile.height;
+            } else {
+              break;
+            }
+          }
+          for (let y = tile.y - 1; y >= tile.y - spriteHeightInTiles; y--) {
+            if (allTiles[y][tile.x] && allTiles[y][tile.x].collides) {
+              extendedTileBodyY -= tile.height;
+              extendedTileBodyHeight += tile.height;
+            } else {
+              break;
+            }
+          }
+
+          if (extendedTileBodyHeight !== tileBodyHeight) {
+            extended = true;
+            tileBody.setPosition(tileBodyX, extendedTileBodyY);
+            tileBody.setRectangle(tileBodyWidth, extendedTileBodyHeight);
+
+            if (this.checkBodyCollide(body, tileBody, globalResponse)) {
+              if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+              if (onCollide) onCollide.call(context, object, tile);
+            }
+          }
+        }
+
+        // If the extensions failed, fall back to separating against the original tile body (which
+        // has not been modified if no extensions were made).
+        if (!extended) {
+          if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+          if (onCollide) onCollide.call(context, object, tile);
+        }
       }
     });
 
