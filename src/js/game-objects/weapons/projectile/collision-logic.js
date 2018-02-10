@@ -20,13 +20,11 @@ export class CollisionLogic {
   onCollideWithEnemy(enemy) {
     enemy.attemptHit(this.projectile, this.damage);
     this.projectile.destroy();
-    return true; // Don't check against any other enemies within this frame
   }
 
   onCollideWithWall() {
     this.wallHitSound.play();
     this.projectile.destroy();
-    return true; // Don't check against any other walls within this frame
   }
 }
 
@@ -46,7 +44,6 @@ export class PiercingCollisionLogic extends CollisionLogic {
       const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
       if (hitEnemy) this._enemiesDamaged.push(enemy);
     }
-    return false; // Allow collision against multiple enemies within this frame
   }
 }
 
@@ -118,6 +115,5 @@ export class ExplodingCollisionLogic extends CollisionLogic {
     new Explosion(p.game, p.x, p.y, p.parent, this.damage);
     p.destroy();
     this.hasExploded = true;
-    return true; // Don't check against any other enemies within this frame
   }
 }
