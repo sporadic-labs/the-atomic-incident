@@ -4,7 +4,7 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class RocketLauncher extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.ROCKET_LAUNCHER, 3, 1000, 3000);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.ROCKET_LAUNCHER, 8, 1000, 3000);
     this._damage = 200;
     this._speed = 320;
 
@@ -21,7 +21,7 @@ export default class RocketLauncher extends BaseWeapon {
         this._startCooldown(this._cooldownTime);
       } else {
         this._reloadSound.play();
-        this._reload();
+        // this._reload();
       }
     }
   }

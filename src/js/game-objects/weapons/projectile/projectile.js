@@ -1,5 +1,9 @@
-import { satSpriteVsTilemap, checkSatOverlapWithGroup } from "../../../helpers/sprite-utilities";
-import { CollisionLogic, ExplodingCollisionLogic, PiercingCollisionLogic } from "./collision-logic";
+import {
+  CollisionLogic,
+  ExplodingCollisionLogic,
+  PiercingCollisionLogic,
+  BouncingCollisionLogic
+} from "./collision-logic";
 
 /**
  * @class Projectile
@@ -24,8 +28,31 @@ export default class Projectile extends Phaser.Sprite {
     if (bullet.game) {
       bullet.body.velocity.setTo(Math.cos(angle) * speed / 10, Math.sin(angle) * speed / 10);
       bullet.body.acceleration.setTo(Math.cos(angle) * 1000, Math.sin(angle) * 1000);
-      bullet.body.maxVelocity.setTo(speed);
+      bullet.body.setMaxSpeed(speed);
     }
+    return bullet;
+  }
+
+  /**
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
+  static makeFlame(game, x, y, parent, player, damage, angle, speed, maxAge, color) {
+    const key = "assets";
+    const frame = "weapons/tracking_15";
+    const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
+    bullet.tint = color;
+    bullet._setDeathTimer(maxAge);
+    // Flames get a randomized drag to slow the bullets over time.
+    bullet.body.setDrag(game.rnd.realInRange(0.5, 0.99));
+    bullet.init(new PiercingCollisionLogic(bullet, damage));
     return bullet;
   }
 
@@ -45,6 +72,26 @@ export default class Projectile extends Phaser.Sprite {
     const frame = "weapons/machine_gun_15";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.init(new PiercingCollisionLogic(bullet, damage));
+    return bullet;
+  }
+
+  /**
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
+  static makeBouncing(game, x, y, parent, player, damage, angle, speed) {
+    const key = "assets";
+    const frame = "weapons/shotgun_15";
+    const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
+    bullet.body.setBounce(1);
+    bullet.init(new BouncingCollisionLogic(bullet, damage));
     return bullet;
   }
 
@@ -142,40 +189,66 @@ export default class Projectile extends Phaser.Sprite {
 
     this.rotation = angle + Math.PI / 2;
 
-    this.game.physics.arcade.enable(this);
-    this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, speed, this.body.velocity);
+    this.deathTimer;
 
-    this.satBody = this.game.globals.plugins.satBody.addBoxBody(this);
+    game.physics.sat.add
+      .gameObject(this)
+      .setCircle(this.width / 2)
+      .setVelocity(speed * Math.cos(angle), speed * Math.sin(angle));
   }
 
   /**
    * Initialize the logic and ensure the projectile isn't inside a wall to start
-   * 
-   * @param {any} logic 
+   *
+   * @param {any} logic
    * @memberof Projectile
    */
   init(logic) {
     this.collisionLogic = logic;
-    satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
+    if (this.game.physics.sat.world.collide(this, this._wallLayer)) this.destroy();
   }
 
   update() {
-    const logic = this.collisionLogic;
-    satSpriteVsTilemap(this, this._wallLayer, logic.onCollideWithWall, logic, 6);
+    this.collisionLogic.onBeforeCollisions();
+
+    this.game.physics.sat.world.collide(this, this._wallLayer, {
+      onCollide: () => this.collisionLogic.onCollideWithWall()
+    });
+    if (!this.game) return;
+
+    this.game.physics.sat.world.overlap(this, this._enemies, {
+      onCollide: (_, enemy) => this.collisionLogic.onCollideWithEnemy(enemy)
+    });
+    if (!this.game) return;
+
+    this.collisionLogic.onAfterCollisions();
+
+    // If the bullet isn't moving, destroy it.
+    if (this.body && this.body.velocity.getMagnitude() <= 0) {
+      this.destroy();
+    }
   }
 
   postUpdate(...args) {
     super.postUpdate(...args); // Update arcade physics
 
-    // Not a complete fix, but cap the xy velocity by magnitude to achieve consistent speed
-    if (this.body.velocity.getMagnitude() > this.body.maxVelocity.x) {
-      this.body.velocity.setMagnitude(this.body.maxVelocity.x);
-    }
-
-    const logic = this.collisionLogic;
-    checkSatOverlapWithGroup(this, this._enemies, (_, enemy) => logic.onCollideWithEnemy(enemy));
-
     // If bullet is in shadow, or has travelled beyond the radius it was allowed, destroy it.
     if (this._player._playerLight.isPointInShadow(this.position)) this.destroy();
+  }
+
+  _setDeathTimer(maxAge) {
+    this.deathTimer = setTimeout(() => {
+      this.destroy();
+    }, maxAge);
+  }
+
+  /**
+   * Cleanup functions for this Sprite.
+   */
+  destroy() {
+    if (this.deathTimer) {
+      clearTimeout(this.deathTimer);
+    }
+    super.destroy();
   }
 }

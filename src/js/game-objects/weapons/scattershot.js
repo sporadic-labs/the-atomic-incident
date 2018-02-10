@@ -4,8 +4,8 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class Scattershot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 5, 480, 1800);
-    this._damage = 20;
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 16, 480, 1800);
+    this._damage = 24;
 
     this._fireSound = game.globals.soundManager.add("multishot", null, 0.1);
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
@@ -30,7 +30,7 @@ export default class Scattershot extends BaseWeapon {
         this._startCooldown(this._cooldownTime);
       } else {
         this._reloadSound.play();
-        this._reload();
+        // this._reload();
       }
     }
   }

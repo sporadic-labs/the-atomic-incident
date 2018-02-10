@@ -293,6 +293,7 @@
             <key type="filename">asset-frames/enemies/beetle/move_13.png</key>
             <key type="filename">asset-frames/enemies/beetle/move_14.png</key>
             <key type="filename">asset-frames/enemies/beetle/move_15.png</key>
+            <key type="filename">asset-frames/enemies/enemy-spawn-indicator.png</key>
             <key type="filename">asset-frames/enemies/turtle/death_00.png</key>
             <key type="filename">asset-frames/enemies/turtle/death_01.png</key>
             <key type="filename">asset-frames/enemies/turtle/death_02.png</key>
@@ -341,6 +342,7 @@
             <key type="filename">asset-frames/enemies/turtle/move_13.png</key>
             <key type="filename">asset-frames/enemies/turtle/move_14.png</key>
             <key type="filename">asset-frames/enemies/turtle/move_15.png</key>
+            <key type="filename">asset-frames/enemies/virus/virus-dark.png</key>
             <key type="filename">asset-frames/enemies/worm/death_00.png</key>
             <key type="filename">asset-frames/enemies/worm/death_01.png</key>
             <key type="filename">asset-frames/enemies/worm/death_02.png</key>
@@ -389,6 +391,7 @@
             <key type="filename">asset-frames/enemies/worm/move_13.png</key>
             <key type="filename">asset-frames/enemies/worm/move_14.png</key>
             <key type="filename">asset-frames/enemies/worm/move_15.png</key>
+            <key type="filename">asset-frames/physics-test/box.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -487,38 +490,29 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemies/weapons/dash_60.png</key>
-            <key type="filename">asset-frames/weapons/dash_60.png</key>
+            <key type="filename">asset-frames/enemies/particle-tank/particle-tank.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>15,15,30,30</rect>
+                <rect>19,19,38,38</rect>
                 <key>scale9Paddings</key>
-                <rect>15,15,30,30</rect>
+                <rect>19,19,38,38</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemies/weapons/machine_gun_15.png</key>
-            <key type="filename">asset-frames/enemies/weapons/rocket_15.png</key>
-            <key type="filename">asset-frames/enemies/weapons/shotgun_15.png</key>
-            <key type="filename">asset-frames/enemies/weapons/tracking_15.png</key>
-            <key type="filename">asset-frames/pickups/energy-pickup.png</key>
-            <key type="filename">asset-frames/weapons/machine_gun_15.png</key>
-            <key type="filename">asset-frames/weapons/rocket_15.png</key>
-            <key type="filename">asset-frames/weapons/shotgun_15.png</key>
-            <key type="filename">asset-frames/weapons/tracking_15.png</key>
+            <key type="filename">asset-frames/enemies/virus/virus-bullet.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
+                <rect>1,1,3,3</rect>
                 <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
+                <rect>1,1,3,3</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -604,6 +598,36 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/physics-test/box1x2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,25,25,50</rect>
+                <key>scale9Paddings</key>
+                <rect>13,25,25,50</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/pickups/energy-pickup.png</key>
+            <key type="filename">asset-frames/weapons/machine_gun_15.png</key>
+            <key type="filename">asset-frames/weapons/rocket_15.png</key>
+            <key type="filename">asset-frames/weapons/shotgun_15.png</key>
+            <key type="filename">asset-frames/weapons/tracking_15.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9Paddings</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/player/death_00.png</key>
             <key type="filename">asset-frames/player/death_01.png</key>
             <key type="filename">asset-frames/player/death_02.png</key>
@@ -647,6 +671,19 @@
                 <rect>9,9,18,18</rect>
                 <key>scale9Paddings</key>
                 <rect>9,9,18,18</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/weapons/dash_60.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>15,15,30,30</rect>
+                <key>scale9Paddings</key>
+                <rect>15,15,30,30</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

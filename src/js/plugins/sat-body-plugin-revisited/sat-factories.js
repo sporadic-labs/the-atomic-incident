@@ -1,9 +1,11 @@
-// Shorthand factory functions
-
 import SAT from "sat";
 
 export function vec(x, y) {
   return new SAT.Vector(x, y);
+}
+
+export function pointToVec(p) {
+  return new SAT.Vector(p.x, p.y);
 }
 
 export function box(pos, w, h) {

@@ -10,7 +10,7 @@ const lightRadius = 200;
 /**
  * This function returns a Level object
  * @export
- * @param {Phaser.Game} g 
+ * @param {Phaser.Game} g
  * @returns {Level}
  */
 export function makeLevel(game) {
@@ -20,8 +20,8 @@ export function makeLevel(game) {
 }
 
 /**
- * @param {Phaser.Game} g 
- * @param {Level} level 
+ * @param {Phaser.Game} g
+ * @param {Level} level
  */
 function addWaves(g, level) {
   level

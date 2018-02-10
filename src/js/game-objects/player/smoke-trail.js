@@ -21,6 +21,10 @@ export default class SmokeTrail extends Phaser.Particles.Arcade.Emitter {
     if (rate === 0) this._elapsedSeconds = 0;
   }
 
+  getRate() {
+    return this._rate;
+  }
+
   setEmitPosition(x, y) {
     this.emitX = x;
     this.emitY = y;

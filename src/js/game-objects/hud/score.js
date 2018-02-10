@@ -1,12 +1,20 @@
 import { gameStore } from "../../game-data/observable-stores";
+import getFontString from "../../fonts/get-font-string";
 
-const baseTextStyle = { font: "30px 'Alfa Slab One'", fill: "#ffd800" };
-const toastTextStyle = { font: "24px 'Alfa Slab One'", fill: "#ffd800", align: "center" };
-const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#a0976a" });
+const baseTextStyle = {
+  font: getFontString("Montserrat", { size: "35px", weight: 300 }),
+  fill: "#ffffff"
+};
+const toastTextStyle = {
+  font: getFontString("Montserrat", { size: "24px", weight: 300 }),
+  fill: "#ffd800",
+  align: "center"
+};
+const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#ffffff" });
 
 /**
  * Listens to the gameStore and updates the score UI. Anchored from (1, 0)
- * 
+ *
  * @export
  * @class Score
  * @extends {Phaser.Group}
@@ -15,7 +23,7 @@ export default class Score extends Phaser.Group {
   constructor(game, parent, enemies, combo) {
     super(game, parent, "score");
 
-    this._score = 0;
+    this._rawScore = this._score = 0;
     this._hasSetNewHighScore = false;
 
     this._scoreText = game.make.text(0, 0, "0", baseTextStyle);
@@ -24,6 +32,7 @@ export default class Score extends Phaser.Group {
 
     this._scorePadText = game.make.text(-this._scoreText.width, 0, "", dimTextStyle);
     this._scorePadText.anchor.setTo(1, 0);
+    this._scorePadText.alpha = 0.5;
     this.add(this._scorePadText);
 
     this._highScoreMsgText = game.make.text(-game.width / 2, 0, "New high score!", toastTextStyle);
@@ -37,11 +46,16 @@ export default class Score extends Phaser.Group {
   }
 
   incrementScore(delta) {
-    this._setScore(this._score + delta);
+    this._setScore(this._rawScore + delta);
   }
 
-  _setScore(score) {
-    this._score = score;
+  getScore() {
+    return this._score;
+  }
+
+  _setScore(newScore) {
+    this._rawScore = newScore;
+    this._score = Math.round(this._rawScore);
     gameStore.setScore(this._score);
     this._updateDisplay();
     if (!this._hasSetNewHighScore && this._score > gameStore.highScore) {
@@ -51,11 +65,11 @@ export default class Score extends Phaser.Group {
   }
 
   _updateDisplay() {
-    this._scoreText.setText(this._score);
+    const stringScore = String(this._score);
+    const paddedScore = stringScore.length <= 6 ? "0".repeat(6 - stringScore.length) : "";
+    this._scoreText.setText(stringScore);
     this._scorePadText.x = this._scoreText.x - this._scoreText.width;
-    const scoreDigits = String(this._score).length;
-    const padText = scoreDigits <= 6 ? "0".repeat(6 - scoreDigits) : "";
-    this._scorePadText.setText(padText);
+    this._scorePadText.setText(paddedScore);
   }
 
   _onNewHighScore() {

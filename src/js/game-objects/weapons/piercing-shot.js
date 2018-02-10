@@ -4,8 +4,8 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class PiercingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.PIERCING_SHOT, 15, 300, 1000);
-    this._damage = 40;
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.PIERCING_SHOT, 24, 300, 1000);
+    this._damage = 46;
     this._speed = 320;
 
     this._fireSound = game.globals.soundManager.add("chiptone/piercing-fire");
@@ -21,7 +21,7 @@ export default class PiercingShot extends BaseWeapon {
         this._startCooldown(this._cooldownTime);
       } else {
         this._reloadSound.play();
-        this._reload();
+        // this._reload();
       }
     }
   }

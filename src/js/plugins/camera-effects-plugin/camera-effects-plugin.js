@@ -1,11 +1,11 @@
 export default class Effects extends Phaser.Plugin {
   /**
-     * Creates an instance of Effects.
-     * @param {Phaser.Game} game 
-     * @param {Phaser.PluginManager} manager 
-     * 
-     * @memberOf Effects
-     */
+   * Creates an instance of Effects.
+   * @param {Phaser.Game} game
+   * @param {Phaser.PluginManager} manager
+   *
+   * @memberOf Effects
+   */
   constructor(game, manager) {
     super(game, manager);
     this.game = game;
@@ -17,12 +17,12 @@ export default class Effects extends Phaser.Plugin {
   }
 
   /**
-     * Animates a full screen overlay that flashing in & out (via alpha)
-     * 
-     * @param {number} color The color to use for the flash overlay
-     * 
-     * @memberOf Effects
-     */
+   * Animates a full screen overlay that flashing in & out (via alpha)
+   *
+   * @param {number} color The color to use for the flash overlay
+   *
+   * @memberOf Effects
+   */
   lightFlash(color) {
     this._fxGraphics.clear();
     this._fxGraphics.beginFill(color);

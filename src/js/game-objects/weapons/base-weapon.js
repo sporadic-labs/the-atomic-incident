@@ -1,4 +1,5 @@
 import { getFormattedType } from "./weapon-types";
+// import MountedGun from "./mounted-gun";
 
 export default class BaseWeapon extends Phaser.Group {
   constructor(game, parentGroup, player, enemies, weaponType, totalAmmo, cooldownTime, reloadTime) {

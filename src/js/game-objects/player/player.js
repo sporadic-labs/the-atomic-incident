@@ -7,7 +7,6 @@ import Compass from "./compass";
 import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
-import MOVEMENT_TYPES from "./movement-types";
 import SmokeTrail from "./smoke-trail";
 
 const ANIM = {
@@ -24,6 +23,7 @@ export default class Player extends Phaser.Sprite {
     parentGroup.add(this);
 
     this.onDamage = new Phaser.Signal();
+    this.onHealthChange = new Phaser.Signal();
 
     this._compass = new Compass(game, parentGroup, this.width * 0.6);
     this._compass.visible = false;
@@ -35,9 +35,6 @@ export default class Player extends Phaser.Sprite {
     this._timer = this.game.time.create(false);
     this._timer.start();
 
-    // NOTE(rex): Not quite sure if this should be a part of the player or not...
-    this.damage = 10000;
-
     // Shorthand
     const globals = this.game.globals;
     this._enemies = globals.groups.enemies;
@@ -48,16 +45,26 @@ export default class Player extends Phaser.Sprite {
     this.weaponManager = new WeaponManager(game, parentGroup, this, this._enemies);
 
     // Configure player physics
-    game.physics.arcade.enable(this);
-    this.body.collideWorldBounds = true;
-    const diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
-    this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
-    this.satBody = globals.plugins.satBody.addCircleBody(this);
+    const points = [[18, 7], [30, 27], [5, 27]].map(p => ({
+      x: p[0] - this.width / 2,
+      y: p[1] - this.height / 2
+    }));
+    game.physics.sat.add.gameObject(this).setPolygon(points);
+    this.body.collisionAffectsVelocity = false;
+    game.physics.sat.add.collider(this, this.game.globals.mapManager.wallLayer);
+    this.game.physics.sat.add.overlap(this, this._enemies, {
+      onCollide: this._onCollideWithEnemy,
+      context: this
+    });
+    this.game.physics.sat.add.overlap(this, this._pickups, {
+      onCollide: this._onCollideWithPickup,
+      context: this
+    });
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, {
-      startRadius: 300,
-      minRadius: 100,
+      startRadius: 350,
+      minRadius: 175,
       shrinkSpeed: 0
     });
 
@@ -108,12 +115,7 @@ export default class Player extends Phaser.Sprite {
     this._movementController.update();
     this._attackControls.update();
 
-    // Check collisions with Tilemap.
-    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
-
-    // Update velocity after collision
-    Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
-    this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
+    this.setInvulnerability(this._movementController.isDashing());
 
     // Update the rotation of the player based on the mouse
     let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
@@ -128,20 +130,15 @@ export default class Player extends Phaser.Sprite {
     }
 
     // "Engine" position trail
+    const mc = this._movementController;
     const angleToEngine = this.rotation + Math.PI / 2;
     const offset = 10 * this.scale.x;
     const enginePosition = this.position
       .clone()
       .add(Math.cos(angleToEngine) * offset, Math.sin(angleToEngine) * offset);
+    let newRate = mc.isDashing() ? 300 : mc.getSpeedFraction() * 30;
     this._trail.setEmitPosition(enginePosition.x, enginePosition.y);
-    // Hacky for now:
-    this._trail.setRate(this._movementController._accelerationFraction * 30);
-
-    // Enemy collisions
-    checkSatOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
-
-    // Light pickups
-    checkSatOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
+    this._trail.setRate(newRate);
 
     const health = this._playerLight.getLightRemaining();
     this._postProcessor.onHealthUpdate(health);
@@ -156,7 +153,7 @@ export default class Player extends Phaser.Sprite {
   }
 
   getVelocity() {
-    return this._velocity;
+    return this.body ? this.body.velocity : new Phaser.Point(0, 0);
   }
 
   postUpdate(...args) {
@@ -171,7 +168,11 @@ export default class Player extends Phaser.Sprite {
     // If player is already taking damage, nothing else to do
     if (this._isTakingDamage) return;
 
+    this._postProcessor.onPlayerDamage();
     this.game.globals.audioProcessor.runLowPassFilter(500);
+
+    this._playerLight.incrementRadius(-50);
+    this.onHealthChange.dispatch(this.getHealth());
 
     if (this._playerLight.getLightRemaining() <= 0) {
       // If the player has died, play the death sound/animation.
@@ -179,10 +180,9 @@ export default class Player extends Phaser.Sprite {
       this._deathSound.play();
       this.animations.play(ANIM.DEATH);
       this.isDead = true;
-      this.satBody.destroy();
       this.body.destroy();
+      this.weaponManager.destroy();
     } else {
-      this._playerLight.incrementRadius(-50);
       this._hitSound.play();
     }
 
@@ -214,31 +214,21 @@ export default class Player extends Phaser.Sprite {
     gameStore.pause();
   }
 
-  startDash(angle) {
-    this._movementController.setMovementType(MOVEMENT_TYPES.DASH);
-    this._movementController.setFixedAngle(angle);
-    this._isDashing = true;
-  }
-
-  endDash() {
-    this._movementController.setMovementType(MOVEMENT_TYPES.WALK);
-    this._movementController.removeFixedAngle();
-    this._isDashing = false;
+  setInvulnerability(invulnerableState) {
+    this._invulnerable = invulnerableState;
+    this.alpha = invulnerableState ? 0.25 : 1;
   }
 
   _onCollideWithEnemy(self, enemy) {
-    if (this._isDashing) {
-      const damage = this.weaponManager.getActiveWeapon()._damage;
-      if (enemy._spawned) enemy.takeDamage(damage);
-    } else if (!this._invulnerable && enemy._spawned && !this._isTakingDamage) {
+    if (!this._invulnerable && !this._isTakingDamage) {
       this.takeDamage();
-      this._postProcessor.onPlayerDamage();
     }
   }
 
   _onCollideWithPickup(self, pickup) {
     if (pickup instanceof EnergyPickup) {
       this._playerLight.incrementRadius(pickup.getEnergy());
+      this.onHealthChange.dispatch(this.getHealth());
     }
     pickup.pickUp();
   }

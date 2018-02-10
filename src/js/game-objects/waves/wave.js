@@ -1,8 +1,8 @@
 export default class Wave {
   /**
    * Creates an instance of Wave.
-   * @param {Phaser.Game} game 
-   * 
+   * @param {Phaser.Game} game
+   *
    * @memberof Wave
    */
   constructor(game) {
@@ -12,9 +12,9 @@ export default class Wave {
     this._enemies = game.globals.groups.enemies;
   }
 
-  /** 
+  /**
    * @param {WaveComposition} composition The composition to use when spawning
-   * 
+   *
    * @memberof Wave
    */
   // eslint-disable-next-line no-unused-vars

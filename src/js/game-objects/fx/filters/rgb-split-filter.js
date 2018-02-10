@@ -19,35 +19,35 @@ export default class RgbSplitFilter extends Phaser.Filter {
   }
 
   /**
-     * Set the strength of the next RGB displacement in pixels
-     * 
-     * @param {any} pixels Size of displacement in pixels
-     * @returns {this}
-     * @memberof RgbSplitFilter
-     */
+   * Set the strength of the next RGB displacement in pixels
+   *
+   * @param {any} pixels Size of displacement in pixels
+   * @returns {this}
+   * @memberof RgbSplitFilter
+   */
   setDisplacement(pixels) {
     this._currentDisplacement = pixels;
     return this;
   }
 
   /**
-     * Sets the ms delay between RGB split animations, when looping
-     * 
-     * @param {any} msInterval 
-     * @returns {this}
-     * @memberof RgbSplitFilter
-     */
+   * Sets the ms delay between RGB split animations, when looping
+   *
+   * @param {any} msInterval
+   * @returns {this}
+   * @memberof RgbSplitFilter
+   */
   setLoopInterval(msInterval) {
     this._msInterval = msInterval;
     return this;
   }
 
   /**
-     * Trigger a single RGB split animation.
-     * 
-     * @returns {this}
-     * @memberof RgbSplitFilter
-     */
+   * Trigger a single RGB split animation.
+   *
+   * @returns {this}
+   * @memberof RgbSplitFilter
+   */
   triggerSplit() {
     this._destroyTween();
     const duration = this._currentDisplacement / this._msSpeed;
@@ -60,12 +60,12 @@ export default class RgbSplitFilter extends Phaser.Filter {
   }
 
   /**
-     * Trigger an RGB split animation immediately and set it to loop indefinitely. It's safe to call
-     * this function repeatedly, becuase if the filter is already looping, this won't do anything.
-     * 
-     * @returns {this}
-     * @memberof RgbSplitFilter
-     */
+   * Trigger an RGB split animation immediately and set it to loop indefinitely. It's safe to call
+   * this function repeatedly, becuase if the filter is already looping, this won't do anything.
+   *
+   * @returns {this}
+   * @memberof RgbSplitFilter
+   */
   loopSplit() {
     if (!this._looping) {
       this._looping = true;
@@ -76,11 +76,11 @@ export default class RgbSplitFilter extends Phaser.Filter {
   }
 
   /**
-     * Stop any running RGB split animation and stop looping
-     * 
-     * @returns {this}
-     * @memberof RgbSplitFilter
-     */
+   * Stop any running RGB split animation and stop looping
+   *
+   * @returns {this}
+   * @memberof RgbSplitFilter
+   */
   stopSplit() {
     this._destroyTween();
     this._looping = false;

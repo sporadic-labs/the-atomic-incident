@@ -1,4 +1,5 @@
 import DeathParticles from "./components/death-particles";
+import EnemySpawnIndicator from "./enemy-spawn-indicator";
 
 export default class EnemyGroup extends Phaser.Group {
   constructor(game, parent = undefined) {

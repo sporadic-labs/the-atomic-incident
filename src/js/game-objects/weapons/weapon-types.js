@@ -4,7 +4,8 @@ export default {
   PIERCING_SHOT: "PIERCING_SHOT",
   HOMING_SHOT: "HOMING_SHOT",
   ROCKET_LAUNCHER: "ROCKET_LAUNCHER",
-  DASH: "DASH"
+  FLAMETHROWER: "FLAMETHROWER",
+  BOUNCING: "BOUNCING"
 };
 
 export function getFormattedType(type) {

@@ -14,8 +14,8 @@ export function applyRandomLightnessTint(sprite, h, s, l) {
 }
 
 /**
- * Check a sprite's overlap against a group using SAT bodies. 
- * 
+ * Check a sprite's overlap against a group using SAT bodies.
+ *
  * @param {Phaser.Sprite} sprite The sprite with the SAT body
  * @param {Phaser.Group} group The group to check overlap against.
  * @param {function} [callback] Function to run on overlap. This gets passed the original sprite and

@@ -7,7 +7,7 @@ module.exports = {
   rules: {
     "no-var": 1,
     "brace-style": ["warn", "1tbs"],
-    "no-unused-vars": ["error", { args: "after-used" }],
+    "no-unused-vars": ["error", { args: "none" }],
     indent: ["warn", 2, { SwitchCase: 1 }],
     "max-len": ["warn", 100, { ignoreUrls: true, ignoreTemplateLiterals: true }],
     "no-console": "off",

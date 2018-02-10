@@ -47,10 +47,10 @@ export default class Color {
   /**
    * Light-weight RGBA color class based on Phaser.Color utils. Channels are in
    * the range 0 - 255.
-   * 
+   *
    * @param {r,g,b,a|integer color|hex color string|CSS color string} arguments If
-   * 3 or more arguments are passed, they are interpreted as: r, g, b, a. If 1 
-   * argument is passed, it is interpreted as an int, hex or css color 
+   * 3 or more arguments are passed, they are interpreted as: r, g, b, a. If 1
+   * argument is passed, it is interpreted as an int, hex or css color
    * representation.
    */
   constructor(color) {

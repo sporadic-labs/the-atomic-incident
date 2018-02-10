@@ -3,8 +3,8 @@ const DISABLED_FREQUENCY = 5000;
 export default class AudioProcessor {
   /**
    * Creates an instance of AudioProcessor.
-   * @param {Phaser.Game} game 
-   * 
+   * @param {Phaser.Game} game
+   *
    * @memberOf AudioProcessor
    */
   constructor(game) {
@@ -28,7 +28,7 @@ export default class AudioProcessor {
   /**
    * Fade the low pass filter effect in quickly, hold for the specified duration and then fade the
    * filter out quickly.
-   * 
+   *
    * @param {number} [duration=2000] Duration in milliseconds
    * @memberof AudioProcessor
    */
@@ -42,9 +42,9 @@ export default class AudioProcessor {
    * Fade in the low pass filter effect using an exponential tween. For more information on the
    * timeConstant, see: https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime.
    * Connects the filter to the audio context if it is not currently connected.
-   * 
+   *
    * @param {number} [timeConstant=0.1] Time constant of exponential curve in seconds
-   * @param {number} [targetFrequency=350] 
+   * @param {number} [targetFrequency=350]
    * @memberof AudioProcessor
    */
   fadeInLowPassFilter(timeConstant = 0.1, targetFrequency = 150) {
@@ -60,9 +60,9 @@ export default class AudioProcessor {
    * Fade out the low pass filter effect using an exponential tween. For more information on the
    * timeConstant, see: https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime.
    * Disconnects the filter from the audio context after the fade is mostly done.
-   * 
+   *
    * @param {number} [timeConstant=0.1] Time constant of exponential curve in seconds
-   * @param {number} [targetFrequency=DISABLED_FREQUENCY] 
+   * @param {number} [targetFrequency=DISABLED_FREQUENCY]
    * @memberof AudioProcessor
    */
   fadeOutLowPassFilter(timeConstant = 0.1, targetFrequency = DISABLED_FREQUENCY) {

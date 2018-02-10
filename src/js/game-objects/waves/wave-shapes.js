@@ -77,15 +77,15 @@ export class LineWave {
   }
 
   /**
-     * Generator that yields an object representing the enemy in the form:
-     * {type: string name of color from WaveComposition, position}
-     *
-     * @param {WaveComposition} waveComposition The types of enemies to use for generation
-     * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
-     * new set of enemies from the WaveComposition.
-     *
-     * @memberOf LineWave
-     */
+   * Generator that yields an object representing the enemy in the form:
+   * {type: string name of color from WaveComposition, position}
+   *
+   * @param {WaveComposition} waveComposition The types of enemies to use for generation
+   * @param {boolean} [regenerateEnemies=true] Whether or not to generate a
+   * new set of enemies from the WaveComposition.
+   *
+   * @memberOf LineWave
+   */
   *enemies(waveComposition, regenerateEnemies = true) {
     // Find position of the center of the line. Start at the player and move
     // in the direction of the line's tangent.

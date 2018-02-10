@@ -37,7 +37,7 @@ export default class PickupSpawner extends Phaser.Group {
 
   /**
    * Returns an empty, valid spawn point, or null if none found
-   * 
+   *
    * @returns {Phaser.Point|null}
    * @memberof PickupSpawner
    */
@@ -75,19 +75,22 @@ class WeaponPickup extends Phaser.Sprite {
 
     this._pickupSound = game.globals.soundManager.add("crate-pickup");
 
-    game.physics.arcade.enable(this);
-    this.satBody = game.globals.plugins.satBody.addBoxBody(this);
+    game.physics.sat.add.gameObject(this).setOffset(-this.width / 2, -this.height / 2);
+  }
+
+  getType() {
+    return this._type;
   }
 
   pickUp() {
     this._pickupSound.play();
-    this._onPickupCollected.dispatch();
     this._player.weaponManager.switchWeapon(this._type);
+    this._onPickupCollected.dispatch(this);
     this.destroy();
   }
 
   destroy(...args) {
-    this._onPickupDestroyed.dispatch();
+    this._onPickupDestroyed.dispatch(this);
     super.destroy(...args);
   }
 }

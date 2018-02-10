@@ -4,8 +4,8 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class HomingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 35, 200, 1500);
-    this._damage = 28;
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 36, 200, 1500);
+    this._damage = 24;
     this._speed = 180;
 
     this._fireSound = game.globals.soundManager.add("missile");
@@ -32,7 +32,7 @@ export default class HomingShot extends BaseWeapon {
         this._startCooldown(this._cooldownTime);
       } else {
         this._reloadSound.play();
-        this._reload();
+        // this._reload();
       }
     }
   }
