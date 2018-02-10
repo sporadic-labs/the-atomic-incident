@@ -6,12 +6,15 @@ const MOVEMENT_TYPES = {
   DASH: "DASH"
 };
 
-export default class MovementContoller {
-  constructor(body) {
-    this.body = body;
-    this.game = body.game;
+const dashExtraInvincibilityTime = 150;
 
-    body.setDrag(0.99);
+export default class MovementContoller {
+  constructor(player) {
+    this.body = player.body;
+    this.player = player;
+    this.game = this.body.game;
+
+    this.body.setDrag(0.99);
 
     this._dashAngle = null;
 
@@ -25,7 +28,12 @@ export default class MovementContoller {
     this._controls.addKeyboardControl("move-down", [Kb.S, Kb.DOWN]);
     this._controls.addKeyboardControl("dash", Phaser.Keyboard.SPACEBAR);
 
-    this._dashCooldown = new CooldownAbility(body.game, 2000, 400, "dash");
+    const game = this.player.game;
+    this._dashCooldown = new CooldownAbility(game, 2000, 400, "dash");
+    this._timer = game.time.create(false);
+    this._timer.start();
+
+    this.player.events.onDestroy.addOnce(this.destroy, this);
   }
 
   /**
@@ -38,12 +46,15 @@ export default class MovementContoller {
 
     if (this._controls.isControlActive("dash") && this._dashCooldown.isReady()) {
       this._dashCooldown.activate();
+      this.player.setInvulnerability(true);
       const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
       this._dashAngle = this.body.position.angle(mousePos);
       this.setMovementType(MOVEMENT_TYPES.DASH);
       this._dashCooldown.onDeactivation.addOnce(() => {
         this.setMovementType(MOVEMENT_TYPES.WALK);
         this._dashAngle = null;
+
+        this._timer.add(dashExtraInvincibilityTime, () => this.player.setInvulnerability(false));
       }, this);
     }
 
@@ -113,5 +124,10 @@ export default class MovementContoller {
     acceleration.x = Math.cos(angle) * 12000;
     acceleration.y = Math.sin(angle) * 12000;
     return acceleration;
+  }
+
+  destroy() {
+    this._timer.destroy();
+    this._dashCooldown.destroy();
   }
 }

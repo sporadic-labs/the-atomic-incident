@@ -69,7 +69,7 @@ export default class Player extends Phaser.Sprite {
     });
 
     // Controls
-    this._movementController = new MovementController(this.body, 50, 5000, 300);
+    this._movementController = new MovementController(this);
     this._attackControls = new Controller(this.game.input);
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
@@ -114,8 +114,6 @@ export default class Player extends Phaser.Sprite {
     this._playerLight.update();
     this._movementController.update();
     this._attackControls.update();
-
-    this.setInvulnerability(this._movementController.isDashing());
 
     // Update the rotation of the player based on the mouse
     let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
