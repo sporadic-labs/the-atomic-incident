@@ -32,7 +32,6 @@ export default class Instructions extends Component {
 
   render() {
     const { show } = this.state;
-    console.log(show);
 
     if (!show) return null;
 
