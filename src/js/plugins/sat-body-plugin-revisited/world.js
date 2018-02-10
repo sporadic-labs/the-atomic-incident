@@ -362,7 +362,9 @@ export default class World {
     } else if (body1.bodyType === BODY_TYPES.DYNAMIC && body2.bodyType === BODY_TYPES.STATIC) {
       this.separateBodiesDynamicVsStatic(body1, body2, response);
     } else if (body1.bodyType === BODY_TYPES.STATIC && body2.bodyType === BODY_TYPES.DYNAMIC) {
-      this.separateBodiesStaticVsDynamic(body1, body2, response);
+      response.overlapN.reverse();
+      response.overlapV.reverse();
+      this.separateBodiesDynamicVsStatic(body1, body2, response);
     }
   }
 
@@ -406,14 +408,7 @@ export default class World {
     // if (Math.abs(response.overlapN.y) > 0) body1.velocity.y *= -body1.bounce;
   }
 
-  separateBodiesStaticVsDynamic(body1, body2, response) {
-    // Resolve overlap
-    body2.position.x += response.overlap * response.overlapN.x;
-    body2.position.y += response.overlap * response.overlapN.y;
 
-    // Adjust velocity - disabling until we have proper bounce...
-    // if (Math.abs(response.overlapN.x) > 0) body2.velocity.x *= -body2.bounce;
-    // if (Math.abs(response.overlapN.y) > 0) body2.velocity.y *= -body2.bounce;
   }
 
   destroy() {
