@@ -50,6 +50,7 @@ export default class Player extends Phaser.Sprite {
       y: p[1] - this.height / 2
     }));
     game.physics.sat.add.gameObject(this).setPolygon(points);
+    this.body.collisionAffectsVelocity = false;
     game.physics.sat.add.collider(this, this.game.globals.mapManager.wallLayer);
     this.game.physics.sat.add.overlap(this, this._enemies, {
       onCollide: this._onCollideWithEnemy,

@@ -41,6 +41,10 @@ export default class Body {
     this.maxSpeed = null;
     this.mass = 1;
 
+    // A flag to prevent collisions from altering a body's velocity. This is useful if a sprite is
+    // controlled by the player and shouldn't get caught on corners.
+    this.collisionAffectsVelocity = true;
+
     // If the body is moving, this will be its angular heading
     this.heading = 0;
 

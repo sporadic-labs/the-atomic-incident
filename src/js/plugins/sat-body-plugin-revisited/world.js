@@ -481,8 +481,9 @@ export default class World {
     const vyAve = (vx1New + vx2New) / 2;
     vx1New -= vxAve;
     vx2New -= vxAve;
-    body1.velocity.y = vyAve + vy1New * body1.bounce;
-    body2.velocity.y = vyAve + vy2New * body2.bounce;
+
+    if (body1.collisionAffectsVelocity) body1.velocity.y = vyAve + vy1New * body1.bounce;
+    if (body2.collisionAffectsVelocity) body2.velocity.y = vyAve + vy2New * body2.bounce;
   }
 
   separateBodiesDynamicVsStatic(body1, body2, response) {
@@ -490,6 +491,8 @@ export default class World {
     body1.position.x -= response.overlap * response.overlapN.x;
     body1.position.y -= response.overlap * response.overlapN.y;
     body1.updateSatBodyPosition();
+
+    if (!body1.collisionAffectsVelocity) return;
 
     // Use AABB vs AABB reflection as the default
     const newVelocity = new Phaser.Point(
