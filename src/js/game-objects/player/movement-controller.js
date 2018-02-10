@@ -25,7 +25,7 @@ export default class MovementContoller {
     this._controls.addKeyboardControl("move-down", [Kb.S, Kb.DOWN]);
     this._controls.addKeyboardControl("dash", Phaser.Keyboard.SPACEBAR);
 
-    this._dashCooldown = new CooldownAbility(body.game, 2000, 200, "dash");
+    this._dashCooldown = new CooldownAbility(body.game, 2000, 400, "dash");
   }
 
   /**
@@ -62,14 +62,14 @@ export default class MovementContoller {
 
     switch (type) {
       case MOVEMENT_TYPES.WALK:
-        this.body.setMaxSpeed(200);
+        this.body.setMaxSpeed(250);
         break;
       case MOVEMENT_TYPES.DASH:
         this.body.setMaxSpeed(600);
         break;
       default:
         console.log("No movement type by that name!");
-        this.body.setMaxSpeed(200);
+        this.body.setMaxSpeed(250);
         this._movementType = MOVEMENT_TYPES.WALK;
         break;
     }
