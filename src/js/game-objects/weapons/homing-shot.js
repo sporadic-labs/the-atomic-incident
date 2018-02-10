@@ -1,6 +1,7 @@
 import BaseWeapon from "./base-weapon";
 import Projectile from "./projectile/";
 import WEAPON_TYPES from "./weapon-types";
+import Enemy from "../enemies/enemy";
 
 export default class HomingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
@@ -71,11 +72,12 @@ export default class HomingShot extends BaseWeapon {
     if (!target || !light.isPointInLight(target.position)) {
       target = this._player;
     }
-    for (const enemy of this._enemies.children) {
-      const d = target.position.distance(enemy.position);
+    for (const child of this._enemies.children) {
+      if (!(child instanceof Enemy)) continue;
+      const d = target.position.distance(child.position);
       if (d <= r && d < closestDistance) {
         closestDistance = d;
-        closestEnemy = enemy;
+        closestEnemy = child;
       }
     }
     return closestEnemy;
