@@ -14,7 +14,7 @@ const gameDimensions = 750;
 const game = new Phaser.Game({
   width: gameDimensions,
   height: gameDimensions,
-  renderer: Phaser.WEBGL,
+  renderer: Phaser.CANVAS,
   enableDebug: enableDebug, // We can turn off debug when deploying - using debug causes a hit on webgl
   parent: "game-container"
 });
@@ -39,8 +39,9 @@ const globals = (game.globals = {});
 globals.tilemapNames = [
   // "dungeon-arcade-1",
   // "arcade-map-3",
-  "arcade-map-larger"
+  // "arcade-map-larger"
   // "arcade-map-smaller"
+  "arcade-map-larger-T"
   // "arcade-map-2",
   // "puzzle-map-1",
   // "pacman"
