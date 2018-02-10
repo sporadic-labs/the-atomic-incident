@@ -41,6 +41,9 @@ export default class Body {
     this.maxSpeed = null;
     this.mass = 1;
 
+    // If the body is moving, this will be its angular heading
+    this.heading = 0;
+
     // A number between 0 and 1 which determines how quickly the velocity falls to zero. With a
     // value of 1, velocity will drop to zero instantly.
     this.drag = 0;
@@ -217,6 +220,9 @@ export default class Body {
     // Apply movement
     this.position.x += this.velocity.x * delta;
     this.position.y += this.velocity.y * delta;
+
+    // Update heading
+    if (!this.velocity.isZero()) this.heading = Math.atan2(this.velocity.y, this.velocity.x);
 
     this.updateSatBodyPosition();
     this.updateBounds();
