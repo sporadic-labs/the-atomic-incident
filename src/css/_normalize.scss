@@ -10,6 +10,15 @@ body {
   padding: 0;
 }
 
+ul {
+  list-style: none;
+}
+
+ul, ol, li {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
 // Button reset
 button {
   background: none;

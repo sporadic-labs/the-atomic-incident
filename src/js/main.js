@@ -20,8 +20,9 @@ const game = new Phaser.Game({
 });
 
 // Set up the menu system
-import { MenuApp } from "./menu";
+import { MenuApp, Instructions } from "./menu";
 import { h, render } from "preact";
+
 render(
   <MenuApp
     gameStore={gameStore}
@@ -31,6 +32,7 @@ render(
   />,
   document.body
 );
+if (enableDebug) render(<Instructions />, document.body);
 
 // Create the space for globals on the game object
 const globals = (game.globals = {});
@@ -53,12 +55,6 @@ game.state.add(GAME_STATE_NAMES.LIGHTING_PERF, LightingPerf);
 game.state.add(GAME_STATE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
 gameStore.setGameState(GAME_STATE_NAMES.BOOT);
-
-// If the game isn't in debug mode, remove the instructions from the dom.
-if (!enableDebug) {
-  const debugInstructionsElement = document.getElementById("debug-instructions");
-  debugInstructionsElement.innerHTML = "";
-}
 
 autorun(() => {
   game.state.start(gameStore.gameState);

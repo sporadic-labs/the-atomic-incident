@@ -51,9 +51,6 @@ export default class PlayState extends Phaser.State {
     groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding");
     globals.groups = groups;
 
-    // Initializing the world
-    this.stage.backgroundColor = "#FFF";
-
     // Plugins
     global.plugins = global.plugins !== undefined ? global.plugins : {};
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);

@@ -34,9 +34,6 @@ export default class LightingPerf extends Phaser.State {
     groups.pickups = game.add.group(groups.foreground, "pickups");
     globals.groups = groups;
 
-    // Initializing the world
-    this.stage.backgroundColor = "#FFF";
-
     // Plugins
     global.plugins = global.plugins !== undefined ? global.plugins : {};
 

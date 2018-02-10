@@ -15,7 +15,7 @@ export default class BootState extends Phaser.State {
     // Disable the built-in pausing. This is useful for debugging, but may also
     // be useful for the game logic
     this.stage.disableVisibilityChange = true;
-    this.stage.backgroundColor = "#F9F9F9";
+    this.stage.backgroundColor = "#000000";
 
     // Disable right click menu
     this.game.canvas.addEventListener("contextmenu", e => {

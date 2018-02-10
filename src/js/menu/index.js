@@ -1,4 +1,5 @@
 import MenuApp from "./menu-app";
+import Instructions from "./instructions";
 
 const MENU_STATE_NAMES = {
   CLOSED: "CLOSED",
@@ -9,4 +10,4 @@ const MENU_STATE_NAMES = {
   GAME_OVER: "GAME_OVER"
 };
 
-export { MenuApp, MENU_STATE_NAMES };
+export { MenuApp, MENU_STATE_NAMES, Instructions };
