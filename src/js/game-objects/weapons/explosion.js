@@ -42,7 +42,11 @@ export default class Explosion extends Phaser.Sprite {
 
   onCollideWithEnemy(enemy) {
     if (!this.enemiesDamaged.includes(enemy)) {
-      enemy.takeDamage(this.damage, this);
+      const d = this.position.distance(enemy.position);
+      // MH: this is scaling by distance to center of enemy, that's not exactly what we want, but
+      // close enough for now.
+      const scaledDamage = Phaser.Math.mapLinear(d, 0, this.width / 2, this.damage, 0);
+      enemy.takeDamage(scaledDamage, this);
       this.enemiesDamaged.push(enemy);
     }
   }
