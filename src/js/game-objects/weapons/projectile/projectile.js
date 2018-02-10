@@ -48,13 +48,11 @@ export default class Projectile extends Phaser.Sprite {
     const key = "assets";
     const frame = "weapons/tracking_15";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
-    bullet.init(new PiercingCollisionLogic(bullet, damage));
     bullet.tint = color;
     bullet._setDeathTimer(maxAge);
-    if (bullet.game) {
-      // Flames get a randomized drag to slow the bullets over time.
-      bullet.body.setDrag(game.rnd.realInRange(0.5, 0.99));
-    }
+    // Flames get a randomized drag to slow the bullets over time.
+    bullet.body.setDrag(game.rnd.realInRange(0.5, 0.99));
+    bullet.init(new PiercingCollisionLogic(bullet, damage));
     return bullet;
   }
 
@@ -92,8 +90,8 @@ export default class Projectile extends Phaser.Sprite {
     const key = "assets";
     const frame = "weapons/shotgun_15";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
-    bullet.init(new BouncingCollisionLogic(bullet, damage));
     bullet.body.setBounce(1);
+    bullet.init(new BouncingCollisionLogic(bullet, damage));
     return bullet;
   }
 
@@ -207,12 +205,13 @@ export default class Projectile extends Phaser.Sprite {
    */
   init(logic) {
     this.collisionLogic = logic;
+    if (this.game.physics.sat.world.collide(this, this._wallLayer)) this.destroy();
   }
 
   update() {
     this.collisionLogic.onBeforeCollisions();
 
-    this.game.physics.sat.world.collide(this, this.game.globals.mapManager.wallLayer, {
+    this.game.physics.sat.world.collide(this, this._wallLayer, {
       onCollide: () => this.collisionLogic.onCollideWithWall()
     });
     if (!this.game) return;
