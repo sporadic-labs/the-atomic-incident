@@ -26,32 +26,28 @@ export default class EnemyProjectile extends Phaser.Sprite {
 
     this.rotation = angle + Math.PI / 2;
 
-    this.game.physics.arcade.enable(this);
-    this.body.setCircle(2.5, 0, 0);
-    this.game.physics.arcade.velocityFromAngle(angle * 180 / Math.PI, speed, this.body.velocity);
+    game.physics.sat.add
+      .gameObject(this)
+      .setCircle(this.width / 2)
+      .setVelocity(speed * Math.cos(angle), speed * Math.sin(angle));
 
-    this.satBody = this.game.globals.plugins.satBody.addCircleBody(this);
-  }
+    game.physics.sat.add.overlap(this, this._wallLayer, {
+      onCollide: this.onCollideWithWall,
+      context: this
+    });
 
-  update() {
-    satSpriteVsTilemap(this, this._wallLayer, () => {
-      this.destroy();
-      // Wall sound goes here
-      return true; // Don't check against any other walls within this frame
+    game.physics.sat.add.overlap(this, this._player, {
+      onCollide: this.onCollideWithPlayer,
+      context: this
     });
   }
 
-  postUpdate(...args) {
-    super.postUpdate(...args); // Update arcade physics
+  onCollideWithWall() {
+    this.destroy();
+  }
 
-    // Not a complete fix, but cap the xy velocity by magnitude to achieve consistent speed
-    if (this.body.velocity.getMagnitude() > this.body.maxVelocity.x) {
-      this.body.velocity.setMagnitude(this.body.maxVelocity.x);
-    }
-
-    if (this.satBody.testOverlap(this._player.satBody)) {
-      this._player.takeDamage();
-      this.destroy();
-    }
+  onCollideWithPlayer() {
+    this._player.takeDamage();
+    this.destroy();
   }
 }

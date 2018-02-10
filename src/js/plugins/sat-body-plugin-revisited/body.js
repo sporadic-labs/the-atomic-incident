@@ -41,6 +41,13 @@ export default class Body {
     this.maxSpeed = null;
     this.mass = 1;
 
+    // A flag to prevent collisions from altering a body's velocity. This is useful if a sprite is
+    // controlled by the player and shouldn't get caught on corners.
+    this.collisionAffectsVelocity = true;
+
+    // If the body is moving, this will be its angular heading
+    this.heading = 0;
+
     // A number between 0 and 1 which determines how quickly the velocity falls to zero. With a
     // value of 1, velocity will drop to zero instantly.
     this.drag = 0;
@@ -156,8 +163,18 @@ export default class Body {
     return this;
   }
 
+  setDrag(drag) {
+    this.drag = drag;
+    return this;
+  }
+
   setMaxSpeed(maxSpeed) {
     this.maxSpeed = Math.max(maxSpeed, 0);
+    return this;
+  }
+
+  copyPosition(obj) {
+    this.setPosition(obj.x, obj.y);
     return this;
   }
 
@@ -208,6 +225,9 @@ export default class Body {
     this.position.x += this.velocity.x * delta;
     this.position.y += this.velocity.y * delta;
 
+    // Update heading
+    if (!this.velocity.isZero()) this.heading = Math.atan2(this.velocity.y, this.velocity.x);
+
     this.updateSatBodyPosition();
     this.updateBounds();
 
@@ -220,8 +240,8 @@ export default class Body {
     if (!this.enabled || this.bodyType === BODY_TYPES.STATIC) return;
 
     if (this.gameObject) {
-      this.gameObject.position.x += this.position.x - this.previousPosition.x;
-      this.gameObject.position.y += this.position.y - this.previousPosition.y;
+      this.gameObject.position.x = this.position.x;
+      this.gameObject.position.y = this.position.y;
     }
   }
 

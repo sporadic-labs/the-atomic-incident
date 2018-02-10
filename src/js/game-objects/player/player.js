@@ -7,9 +7,7 @@ import Compass from "./compass";
 import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
-import MOVEMENT_TYPES from "./movement-types";
 import SmokeTrail from "./smoke-trail";
-import CooldownAbility from "./cooldown-ability";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -47,11 +45,21 @@ export default class Player extends Phaser.Sprite {
     this.weaponManager = new WeaponManager(game, parentGroup, this, this._enemies);
 
     // Configure player physics
-    game.physics.arcade.enable(this);
-    this.body.collideWorldBounds = true;
-    const diameter = 0.7 * this.width; // Fudge factor - body smaller than sprite
-    this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
-    this.satBody = globals.plugins.satBody.addCircleBody(this);
+    const points = [[18, 7], [30, 27], [5, 27]].map(p => ({
+      x: p[0] - this.width / 2,
+      y: p[1] - this.height / 2
+    }));
+    game.physics.sat.add.gameObject(this).setPolygon(points);
+    this.body.collisionAffectsVelocity = false;
+    game.physics.sat.add.collider(this, this.game.globals.mapManager.wallLayer);
+    this.game.physics.sat.add.overlap(this, this._enemies, {
+      onCollide: this._onCollideWithEnemy,
+      context: this
+    });
+    this.game.physics.sat.add.overlap(this, this._pickups, {
+      onCollide: this._onCollideWithPickup,
+      context: this
+    });
 
     // Lighting for player
     this._playerLight = new PlayerLight(game, this, {
@@ -109,13 +117,6 @@ export default class Player extends Phaser.Sprite {
 
     this.setInvulnerability(this._movementController.isDashing());
 
-    // Check collisions with Tilemap.
-    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
-
-    // Update velocity after collision
-    Phaser.Point.subtract(this.body.position, this.body.prev, this._velocity);
-    this._velocity.divide(this.game.time.physicsElapsed, this.game.time.physicsElapsed);
-
     // Update the rotation of the player based on the mouse
     let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
     if (this._movementController._fixedAngle) {
@@ -139,12 +140,6 @@ export default class Player extends Phaser.Sprite {
     this._trail.setEmitPosition(enginePosition.x, enginePosition.y);
     this._trail.setRate(newRate);
 
-    // Enemy collisions
-    checkSatOverlapWithGroup(this, this._enemies, this._onCollideWithEnemy, this);
-
-    // Light pickups
-    checkSatOverlapWithGroup(this, this._pickups, this._onCollideWithPickup, this);
-
     const health = this._playerLight.getLightRemaining();
     this._postProcessor.onHealthUpdate(health);
   }
@@ -158,7 +153,7 @@ export default class Player extends Phaser.Sprite {
   }
 
   getVelocity() {
-    return this._velocity;
+    return this.body ? this.body.velocity : new Phaser.Point(0, 0);
   }
 
   postUpdate(...args) {
@@ -185,7 +180,6 @@ export default class Player extends Phaser.Sprite {
       this._deathSound.play();
       this.animations.play(ANIM.DEATH);
       this.isDead = true;
-      this.satBody.destroy();
       this.body.destroy();
       this.weaponManager.destroy();
     } else {

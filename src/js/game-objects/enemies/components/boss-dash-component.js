@@ -34,13 +34,16 @@ export default class BossDashComponent {
     this._isInLight = false;
     this._enteredLightAt = 0;
 
-    // Counter-clockwise points (in range [0, 1]) need to be shifted so that the center is in the
-    // middle of the graphic and then scaled to match sprite's scale.
-    const points = collisionPoints.map(p => ({
-      x: (p[0] - 0.5) * this.parent.width * 0.9,
-      y: (p[1] - 0.5) * this.parent.height * 0.9
-    }));
-    this.shrunkenSatBody = this.game.globals.plugins.satBody.addPolygonBody(this.parent, points);
+    // // Counter-clockwise points (in range [0, 1]) need to be shifted so that the center is in the
+    // // middle of the graphic and then scaled to match sprite's scale.
+    // const points = collisionPoints.map(p => ({
+    //   x: (p[0] - 0.5) * this.parent.width * 0.9,
+    //   y: (p[1] - 0.5) * this.parent.height * 0.9
+    // }));
+    // this.shrunkenSatBody = this.game.globals.plugins.satBody.addPolygonBody(this.parent, points);
+    // this.weakPointBody = this.game.physics.sat.add.body({
+    //   shape: { type: "polygon", points }
+    // });
   }
 
   /**
@@ -71,15 +74,12 @@ export default class BossDashComponent {
 
     // Collide with AP regardless of state
     const wallLayer = this._mapManager.wallLayer;
-    if (this.game.physics.arcade.collide(this.parent, wallLayer)) this.switchState(STATES.STUNNED);
+    if (this.game.physics.sat.world.collide(this.parent, wallLayer)) {
+      // if (this.checkSatbody) this.switchState(STATES.STUNNED);
+    }
 
     switch (this._state) {
       case STATES.DASHING: {
-        // Collide on SAT only on dashing to prevent enemy from embedding itself in a wall. This is
-        // problematic for charging though, since an enemy could rotate itself into a collision.
-        if (this.checkSatbody && this.shrunkenSatBody.collideVsTilemapLayer(wallLayer)) {
-          this.switchState(STATES.STUNNED);
-        }
         this.parent.body.velocity.x = this.attackSpeed * Math.cos(this._dashAngle);
         this.parent.body.velocity.y = this.attackSpeed * Math.sin(this._dashAngle);
         this.parent.rotation = this._dashAngle + Math.PI / 2;

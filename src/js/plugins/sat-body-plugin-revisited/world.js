@@ -62,7 +62,8 @@ export default class World {
   }
 
   remove(body) {
-    this.bodies.delete(body);
+    if (body.bodyType === BODY_TYPES.STATIC) this.staticBodies.delete(body);
+    else if (body.bodyType === BODY_TYPES.DYNAMIC) this.bodies.delete(body);
     return this;
   }
 
@@ -78,7 +79,16 @@ export default class World {
 
   enableDebug(graphics) {
     this.drawDebug = true;
-    this.debugGraphics = graphics ? graphics : this.game.add.graphics(0, 0);
+    if (this.debugGraphics) {
+      if (graphics) {
+        this.debugGraphics.destroy();
+        this.debugGraphics = graphics;
+      } else {
+        // Noop - we're all good to reuse this.debugGraphics
+      }
+    } else {
+      this.debugGraphics = graphics ? graphics : this.game.add.graphics(0, 0);
+    }
     return this;
   }
 
@@ -230,8 +240,7 @@ export default class World {
     return collides;
   }
 
-  // Not recursive! Assumes the group only has SAT bodies
-  // Body||Sprite vs Group
+  // Body||Sprite vs Group, careful this can be recursive if a group contains a group!
   collideObjectVsGroup(object, group, onCollide, context, separate = true) {
     if (group.length === 0) return false;
 
@@ -250,6 +259,10 @@ export default class World {
 
     let collisionDetected = false;
     group.children.forEach(child => {
+      if (child.physicsType === Phaser.GROUP) {
+        return this.collideObjectVsGroup(object, child, onCollide, context, separate);
+      }
+
       const body2 = child.body;
       if (!body2 || !body2.isSatBody || body1 === body2 || !results.includes(body2)) return;
 
@@ -293,13 +306,101 @@ export default class World {
     );
 
     let collides = false;
+    const allTiles = tilemapLayer.layer.data;
+    let tileBodyX, tileBodyY, tileBodyWidth, tileBodyHeight;
+    const spriteWidthInTiles = Math.ceil(body.width / tileWidth);
+    const spriteHeightInTiles = Math.ceil(body.height / tileHeight);
+
     tiles.map(tile => {
-      tileBody.setPosition(layerOffsetX + tile.worldX, layerOffsetY + tile.worldY);
-      const tileCollides = this.checkBodyCollide(body, tileBody, globalResponse);
-      if (tileCollides) {
+      tileBodyX = layerOffsetX + tile.worldX;
+      tileBodyY = layerOffsetY + tile.worldY;
+      tileBodyWidth = tile.width;
+      tileBodyHeight = tile.height;
+
+      tileBody.setPosition(tileBodyX, tileBodyY);
+      tileBody.setRectangle(tileBodyWidth, tileBodyHeight);
+
+      if (this.checkBodyCollide(body, tileBody, globalResponse)) {
         collides = true;
-        if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
-        if (onCollide) onCollide.call(context, object, tile);
+
+        // Check if collision has already been resolved by a previous collision
+        if (globalResponse.overlap === 0) return;
+
+        const absOverlapX = Math.abs(globalResponse.overlapN.x);
+        const absOverlapY = Math.abs(globalResponse.overlapN.y);
+        let extended = false;
+
+        // If there's any horizontal collision detected, attempt to extend the tile body left &
+        // right to prevent a body from colliding with an internal edge within a wall.
+        if (absOverlapX > 0) {
+          let extendedTileBodyX = tileBodyX;
+          let extendedTileBodyWidth = tileBodyWidth;
+          for (let x = tile.x + 1; x <= tile.x + spriteWidthInTiles; x++) {
+            if (allTiles[tile.y][x] && allTiles[tile.y][x].collides) {
+              extendedTileBodyWidth += tile.width;
+            } else {
+              break;
+            }
+          }
+          for (let x = tile.x - 1; x >= tile.x - spriteWidthInTiles; x--) {
+            if (allTiles[tile.y][x] && allTiles[tile.y][x].collides) {
+              extendedTileBodyX -= tile.width;
+              extendedTileBodyWidth += tile.width;
+            } else {
+              break;
+            }
+          }
+
+          if (extendedTileBodyWidth !== tileBodyWidth) {
+            extended = true;
+            tileBody.setPosition(extendedTileBodyX, tileBodyY);
+            tileBody.setRectangle(extendedTileBodyWidth, tileBodyHeight);
+
+            if (this.checkBodyCollide(body, tileBody, globalResponse)) {
+              if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+              if (onCollide) onCollide.call(context, object, tile);
+            }
+          }
+        }
+
+        // Attempt the same tile extension up & down
+        if (absOverlapY > 0) {
+          let extendedTileBodyY = tileBodyY;
+          let extendedTileBodyHeight = tileBodyHeight;
+          for (let y = tile.y + 1; y <= tile.y + spriteHeightInTiles; y++) {
+            if (allTiles[y][tile.x] && allTiles[y][tile.x].collides) {
+              extendedTileBodyHeight += tile.height;
+            } else {
+              break;
+            }
+          }
+          for (let y = tile.y - 1; y >= tile.y - spriteHeightInTiles; y--) {
+            if (allTiles[y][tile.x] && allTiles[y][tile.x].collides) {
+              extendedTileBodyY -= tile.height;
+              extendedTileBodyHeight += tile.height;
+            } else {
+              break;
+            }
+          }
+
+          if (extendedTileBodyHeight !== tileBodyHeight) {
+            extended = true;
+            tileBody.setPosition(tileBodyX, extendedTileBodyY);
+            tileBody.setRectangle(tileBodyWidth, extendedTileBodyHeight);
+
+            if (this.checkBodyCollide(body, tileBody, globalResponse)) {
+              if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+              if (onCollide) onCollide.call(context, object, tile);
+            }
+          }
+        }
+
+        // If the extensions failed, fall back to separating against the original tile body (which
+        // has not been modified if no extensions were made).
+        if (!extended) {
+          if (separate) this.separateBodiesDynamicVsStatic(body, tileBody, globalResponse);
+          if (onCollide) onCollide.call(context, object, tile);
+        }
       }
     });
 
@@ -349,7 +450,9 @@ export default class World {
     } else if (body1.bodyType === BODY_TYPES.DYNAMIC && body2.bodyType === BODY_TYPES.STATIC) {
       this.separateBodiesDynamicVsStatic(body1, body2, response);
     } else if (body1.bodyType === BODY_TYPES.STATIC && body2.bodyType === BODY_TYPES.DYNAMIC) {
-      this.separateBodiesStaticVsDynamic(body1, body2, response);
+      response.overlapN.reverse();
+      response.overlapV.reverse();
+      this.separateBodiesDynamicVsStatic(body1, body2, response);
     }
   }
 
@@ -378,29 +481,59 @@ export default class World {
     const vyAve = (vx1New + vx2New) / 2;
     vx1New -= vxAve;
     vx2New -= vxAve;
-    body1.velocity.y = vyAve + vy1New * body1.bounce;
-    body2.velocity.y = vyAve + vy2New * body2.bounce;
+
+    if (body1.collisionAffectsVelocity) body1.velocity.y = vyAve + vy1New * body1.bounce;
+    if (body2.collisionAffectsVelocity) body2.velocity.y = vyAve + vy2New * body2.bounce;
   }
 
   separateBodiesDynamicVsStatic(body1, body2, response) {
     // Resolve overlap
-    body1.position.x -= (2 + response.overlap) * response.overlapN.x;
-    body1.position.y -= (2 + response.overlap) * response.overlapN.y;
+    body1.position.x -= response.overlap * response.overlapN.x;
+    body1.position.y -= response.overlap * response.overlapN.y;
     body1.updateSatBodyPosition();
 
-    // Adjust velocity
-    if (Math.abs(response.overlapN.x) > 0) body1.velocity.x *= -body1.bounce;
-    if (Math.abs(response.overlapN.y) > 0) body1.velocity.y *= -body1.bounce;
-  }
+    if (!body1.collisionAffectsVelocity) return;
 
-  separateBodiesStaticVsDynamic(body1, body2, response) {
-    // Resolve overlap
-    body2.position.x += response.overlap * response.overlapN.x;
-    body2.position.y += response.overlap * response.overlapN.y;
+    // Use AABB vs AABB reflection as the default
+    const newVelocity = new Phaser.Point(
+      Math.abs(response.overlapN.x) > 0 ? -body1.bounce * body1.velocity.x : body1.velocity.x,
+      Math.abs(response.overlapN.y) > 0 ? -body1.bounce * body1.velocity.y : body1.velocity.y
+    );
 
-    // Adjust velocity
-    if (Math.abs(response.overlapN.x) > 0) body2.velocity.x *= -body2.bounce;
-    if (Math.abs(response.overlapN.y) > 0) body2.velocity.y *= -body2.bounce;
+    // Special circle vs AABB reflection logic. The above reflection is fine as long as we aren't
+    // hitting a corner. If we are, then we need to reflect based on response normal.
+    if (body1.bounce !== 0 && body1.bodyShape === BODY_SHAPES.CIRCLE) {
+      const cx = body1.satBody.pos.x;
+      const cy = body1.satBody.pos.y;
+      const r = body1.satBody.r;
+      if (body2.bodyShape !== BODY_SHAPES.CIRCLE) {
+        let closestDistance = Number.MAX_VALUE;
+        let normal = new Phaser.Point();
+        for (let { x, y } of body2.satBody.calcPoints) {
+          x += body2.satBody.pos.x;
+          y += body2.satBody.pos.y;
+          const d = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
+          if ((d < r || Phaser.Math.fuzzyEqual(d, r)) && d < closestDistance) {
+            closestDistance = d;
+            normal.setTo(cx - x, cy - y);
+          }
+        }
+        if (closestDistance !== Number.MAX_VALUE) {
+          // Reflection logic: http://www.3dkingdoms.com/weekly/weekly.php?a=2
+          normal.normalize();
+          const vNormalLength = -2 * body1.velocity.dot(normal);
+          const vNormal = normal.multiply(vNormalLength, vNormalLength);
+          Phaser.Point.add(body1.velocity, vNormal, newVelocity);
+          newVelocity.multiply(body1.bounce, body1.bounce);
+        }
+      }
+    }
+
+    body1.velocity.x = newVelocity.x;
+    body1.velocity.y = newVelocity.y;
+
+    // TODO: find contact points. Further reading:
+    // http://www.dyn4j.org/2011/11/contact-points-using-clipping/
   }
 
   destroy() {

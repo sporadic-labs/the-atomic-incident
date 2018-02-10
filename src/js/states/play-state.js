@@ -3,7 +3,6 @@
  */
 
 import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
-import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
 // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
 import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
 import Player from "../game-objects/player";
@@ -27,6 +26,7 @@ import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
 import Bar from "../game-objects/hud/bar";
+import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -145,9 +145,8 @@ export default class PlayState extends Phaser.State {
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
       this.lighting.setOpacity(preferencesStore.shadowOpacity);
-      if (preferencesStore.physicsDebug)
-        globals.plugins.satBody.enableDebugAll(0x00ff00, groups.foreground);
-      else globals.plugins.satBody.disableDebugAll();
+      if (preferencesStore.physicsDebug) this.physics.sat.world.enableDebug();
+      else this.physics.sat.world.disableDebug();
       globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
     });
@@ -174,49 +173,19 @@ export default class PlayState extends Phaser.State {
       });
 
       /* Manually switch weapons with the number keys.
-       * NOTE(rex): Only allowed when menus are closed.
-       * 1 - Scattershot
-       * 2 - Rapid fire
-       * 3 - Homing Shot
-       * 4 - Piercing Shot
-       * 5 - Dash
        */
-      game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.SCATTERSHOT);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.RAPID_FIRE);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.HOMING_SHOT);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.FOUR).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.PIERCING_SHOT);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.FIVE).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.ROCKET_LAUNCHER);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.SIX).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.FLAMETHROWER);
-          ammo.updateWeapon();
-        }
-      });
+      const keys = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
+      const weapons = Object.values(WEAPON_TYPES);
+      for (let i = 0; i < Math.min(keys.length, weapons.length); i++) {
+        const key = Phaser.Keyboard[keys[i]];
+        const weaponType = weapons[i];
+        game.input.keyboard.addKey(key).onDown.add(() => {
+          if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+            player.weaponManager.switchWeapon(weaponType);
+            ammo.updateWeapon();
+          }
+        });
+      }
 
       // FPS
       this._fpsText = game.make.text(15, game.height - 50, "60", {

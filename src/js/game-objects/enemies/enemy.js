@@ -146,23 +146,11 @@ export default class Enemy extends Phaser.Sprite {
     this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
     this._deathSound = this.game.globals.soundManager.add("squish");
 
-    // Config arcade and SAT body physics
-    // - Arcade physics hitbox is small. It is used to allow enemies to move without jostling one
-    //   another and to be conservative when checking if enemy has reached the player.
-    // - SAT body hitbox is used for the bullet to be liberal with determining when a bullet has hit
-    //   an enemy
-    game.physics.arcade.enable(this);
-    // const diameter = 0.2 * this.width; // Fudge factor - body smaller than sprite
-    const diameter = 0.05 * this.width; // Temp
-    this.body.setCircle(diameter / 2, (this.width - diameter) / 2, (this.height - diameter) / 2);
-    this.body.collideWorldBounds = true;
-    // Counter-clockwise points (in range [0, 1]) need to be shifted so that the center is in the
-    // middle of the graphic and then scaled to match sprite's scale.
     const points = collisionPoints.map(p => ({
       x: (p[0] - 0.5) * this.width,
       y: (p[1] - 0.5) * this.height
     }));
-    this.satBody = this.game.globals.plugins.satBody.addPolygonBody(this, points);
+    game.physics.sat.add.gameObject(this).setPolygon(points);
 
     // Spawn animation
     this.scale.setTo(this.baseScale * 0.5, this.baseScale * 0.5);
@@ -212,6 +200,7 @@ export default class Enemy extends Phaser.Sprite {
 
   update() {
     if (this.isDead) return;
+    this._hitLogic.update();
     for (const component of this._components) component.update();
     super.update();
   }
@@ -225,7 +214,6 @@ export default class Enemy extends Phaser.Sprite {
       });
       if (splitComponent) splitComponent.splitOnDeath();
     }
-    this.satBody.destroy();
     this.body.destroy();
   }
 

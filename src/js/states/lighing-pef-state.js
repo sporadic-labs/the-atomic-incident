@@ -3,7 +3,6 @@
  */
 
 import Color from "../helpers/color";
-import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
 import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
 import LightingPluginOptimized from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
@@ -38,7 +37,6 @@ export default class LightingPerf extends Phaser.State {
 
     // Plugins
     global.plugins = global.plugins !== undefined ? global.plugins : {};
-    globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
     globals.plugins.effects = game.plugins.add(EffectsPlugin);
 
     // Level manager
@@ -94,8 +92,6 @@ export default class LightingPerf extends Phaser.State {
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
       this.lighting.setOpacity(preferencesStore.shadowOpacity);
-      if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
-      else globals.plugins.satBody.disableDebugAll();
       // globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
     });

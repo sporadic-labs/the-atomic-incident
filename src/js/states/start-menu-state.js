@@ -3,7 +3,7 @@
  */
 
 import Color from "../helpers/color";
-import SatBodyPlugin from "../plugins/sat-body-plugin/sat-body-plugin.js";
+import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 import { GAME_STATE_NAMES } from "./index";

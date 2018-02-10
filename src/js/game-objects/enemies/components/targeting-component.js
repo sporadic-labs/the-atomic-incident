@@ -21,8 +21,7 @@ export default class TargetingComponent {
       return null;
     }
 
-    this.game.physics.arcade.collide(this, this._mapManager.wallLayer);
-    // arcadeRecursiveCollide(this.parent, this.game.globals.groups.enemies);
+    this.game.physics.sat.world.collide(this.parent, this._mapManager.wallLayer);
 
     // Stop moving
     this.parent.body.velocity.set(0);
@@ -45,9 +44,9 @@ export default class TargetingComponent {
       for (const enemy of this.enemies.children) {
         const d = this.parent.position.distance(enemy.position);
         if (d < desiredSeparation) {
-          const offset = Phaser.Point.subtract(this.parent.position, enemy.position).setMagnitude(
-            desiredSeparation - d
-          );
+          const offset = Phaser.Point
+            .subtract(this.parent.position, enemy.position)
+            .setMagnitude(desiredSeparation - d);
           separationForce.add(offset.x, offset.y);
           neighbors++;
         }
