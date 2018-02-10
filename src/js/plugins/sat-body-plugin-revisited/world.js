@@ -403,12 +403,46 @@ export default class World {
     body1.position.y -= response.overlap * response.overlapN.y;
     body1.updateSatBodyPosition();
 
-    // Adjust velocity - disabling until we have proper bounce...
-    // if (Math.abs(response.overlapN.x) > 0) body1.velocity.x *= -body1.bounce;
-    // if (Math.abs(response.overlapN.y) > 0) body1.velocity.y *= -body1.bounce;
-  }
+    // Use AABB vs AABB reflection as the default
+    const newVelocity = new Phaser.Point(
+      Math.abs(response.overlapN.x) > 0 ? -body1.bounce * body1.velocity.x : body1.velocity.x,
+      Math.abs(response.overlapN.y) > 0 ? -body1.bounce * body1.velocity.y : body1.velocity.y
+    );
 
+    // Special circle vs AABB reflection logic. The above reflection is fine as long as we aren't
+    // hitting a corner. If we are, then we need to reflect based on response normal.
+    if (body1.bounce !== 0 && body1.bodyShape === BODY_SHAPES.CIRCLE) {
+      const cx = body1.satBody.pos.x;
+      const cy = body1.satBody.pos.y;
+      const r = body1.satBody.r;
+      if (body2.bodyShape !== BODY_SHAPES.CIRCLE) {
+        let closestDistance = Number.MAX_VALUE;
+        let normal = new Phaser.Point();
+        for (let { x, y } of body2.satBody.calcPoints) {
+          x += body2.satBody.pos.x;
+          y += body2.satBody.pos.y;
+          const d = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
+          if ((d < r || Phaser.Math.fuzzyEqual(d, r)) && d < closestDistance) {
+            closestDistance = d;
+            normal.setTo(cx - x, cy - y);
+          }
+        }
+        if (closestDistance !== Number.MAX_VALUE) {
+          // Reflection logic: http://www.3dkingdoms.com/weekly/weekly.php?a=2
+          normal.normalize();
+          const vNormalLength = -2 * body1.velocity.dot(normal);
+          const vNormal = normal.multiply(vNormalLength, vNormalLength);
+          Phaser.Point.add(body1.velocity, vNormal, newVelocity);
+          newVelocity.multiply(body1.bounce, body1.bounce);
+        }
+      }
+    }
 
+    body1.velocity.x = newVelocity.x;
+    body1.velocity.y = newVelocity.y;
+
+    // TODO: find contact points. Further reading:
+    // http://www.dyn4j.org/2011/11/contact-points-using-clipping/
   }
 
   destroy() {
