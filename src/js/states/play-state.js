@@ -180,49 +180,19 @@ export default class PlayState extends Phaser.State {
       });
 
       /* Manually switch weapons with the number keys.
-       * NOTE(rex): Only allowed when menus are closed.
-       * 1 - Scattershot
-       * 2 - Rapid fire
-       * 3 - Homing Shot
-       * 4 - Piercing Shot
-       * 5 - Dash
        */
-      game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.SCATTERSHOT);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.RAPID_FIRE);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.HOMING_SHOT);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.FOUR).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.PIERCING_SHOT);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.FIVE).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.ROCKET_LAUNCHER);
-          ammo.updateWeapon();
-        }
-      });
-      game.input.keyboard.addKey(Phaser.Keyboard.SIX).onDown.add(() => {
-        if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-          player.weaponManager.switchWeapon(WEAPON_TYPES.FLAMETHROWER);
-          ammo.updateWeapon();
-        }
-      });
+      const keys = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
+      const weapons = Object.values(WEAPON_TYPES);
+      for (let i = 0; i < Math.min(keys.length, weapons.length); i++) {
+        const key = Phaser.Keyboard[keys[i]];
+        const weaponType = weapons[i];
+        game.input.keyboard.addKey(key).onDown.add(() => {
+          if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+            player.weaponManager.switchWeapon(weaponType);
+            ammo.updateWeapon();
+          }
+        });
+      }
 
       // FPS
       this._fpsText = game.make.text(15, game.height - 50, "60", {
