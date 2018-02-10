@@ -1,5 +1,9 @@
-import { satSpriteVsTilemap, checkSatOverlapWithGroup } from "../../../helpers/sprite-utilities";
-import { CollisionLogic, ExplodingCollisionLogic, PiercingCollisionLogic } from "./collision-logic";
+import {
+  CollisionLogic,
+  ExplodingCollisionLogic,
+  PiercingCollisionLogic,
+  BouncingCollisionLogic
+} from "./collision-logic";
 
 /**
  * @class Projectile
@@ -70,6 +74,26 @@ export default class Projectile extends Phaser.Sprite {
     const frame = "weapons/machine_gun_15";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.init(new PiercingCollisionLogic(bullet, damage));
+    return bullet;
+  }
+
+  /**
+   * @param {Phaser.Game} game - Reference to Phaser.Game.
+   * @param {number} x - X coordinate in world position.
+   * @param {number} y - Y coordinate in world position.
+   * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
+   * @param {Player} player - Reference to Player.
+   * @param {number} damage - Damage value.
+   * @param {number} angle - Angle in radians.
+   * @param {number} speed - Speed.
+   * @static
+   */
+  static makeBouncing(game, x, y, parent, player, damage, angle, speed) {
+    const key = "assets";
+    const frame = "weapons/shotgun_15";
+    const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
+    bullet.init(new BouncingCollisionLogic(bullet, damage));
+    bullet.body.setBounce(1);
     return bullet;
   }
 
@@ -183,15 +207,23 @@ export default class Projectile extends Phaser.Sprite {
    */
   init(logic) {
     this.collisionLogic = logic;
-    this.game.physics.sat.add.overlap(this, this.game.globals.mapManager.wallLayer, {
-      onCollide: () => logic.onCollideWithWall()
-    });
-    this.game.physics.sat.add.overlap(this, this._enemies, {
-      onCollide: (_, enemy) => logic.onCollideWithEnemy(enemy)
-    });
   }
 
   update() {
+    this.collisionLogic.onBeforeCollisions();
+
+    this.game.physics.sat.world.collide(this, this.game.globals.mapManager.wallLayer, {
+      onCollide: () => this.collisionLogic.onCollideWithWall()
+    });
+    if (!this.game) return;
+
+    this.game.physics.sat.world.overlap(this, this._enemies, {
+      onCollide: (_, enemy) => this.collisionLogic.onCollideWithEnemy(enemy)
+    });
+    if (!this.game) return;
+
+    this.collisionLogic.onAfterCollisions();
+
     // If the bullet isn't moving, destroy it.
     if (this.body && this.body.velocity.getMagnitude() <= 0) {
       this.destroy();

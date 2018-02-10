@@ -13,6 +13,10 @@ export class CollisionLogic {
     this.wallHitSound = projectile.game.globals.soundManager.add("wall-hit", 3);
   }
 
+  /** Noop on base class, but can be used in derived classes */
+  onBeforeCollisions() {}
+  onAfterCollisions() {}
+
   onCollideWithEnemy(enemy) {
     enemy.attemptHit(this.projectile, this.damage);
     this.projectile.destroy();
@@ -44,6 +48,48 @@ export class PiercingCollisionLogic extends CollisionLogic {
     }
     return false; // Allow collision against multiple enemies within this frame
   }
+}
+
+/**
+ * Bouncing projectiles damage an enemy but are not destroyed on contact.
+ *
+ * @class BouncingCollisionLogic
+ */
+export class BouncingCollisionLogic extends CollisionLogic {
+  constructor(projectile, damage) {
+    super(projectile, damage);
+    this._enemiesHit = [];
+    this._enemiesOverlapping = [];
+  }
+
+  onBeforeCollisions() {
+    this._enemiesOverlapping = [];
+  }
+
+  onCollideWithEnemy(enemy) {
+    if (!this._enemiesOverlapping.includes(enemy)) this._enemiesOverlapping.push(enemy);
+  }
+
+  onAfterCollisions() {
+    // Attempt to hit any newly overlapping enemies that weren't already hit
+    for (const enemy of this._enemiesOverlapping) {
+      if (!this._enemiesHit.includes(enemy)) {
+        const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
+        if (hitEnemy) this._enemiesHit.push(enemy);
+      }
+    }
+
+    // If the projectile has left an overlapping enemy, time to reset it so that it can be hit again
+    for (let i = this._enemiesHit.length - 1; i >= 0; i--) {
+      const enemy = this._enemiesHit[i];
+      if (!this._enemiesOverlapping.includes(enemy)) {
+        this._enemiesHit.splice(i, 1);
+      }
+    }
+  }
+
+  // Noop
+  onCollideWithWall() {}
 }
 
 /**
