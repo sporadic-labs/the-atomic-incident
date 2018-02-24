@@ -51,7 +51,7 @@ export const ENEMY_INFO = {
   // },
   PARTICLE_TANK: {
     animated: false,
-    health: 400,
+    health: 150,
     speed: 100,
     key: "enemies/particle-tank/particle-tank",
     collisionPoints: physicsShapes["particle-tank"]
