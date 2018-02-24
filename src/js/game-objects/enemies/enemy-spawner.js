@@ -52,8 +52,7 @@ export default class EnemySpawner {
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._waveDifficulty = 1;
-    this._waveDifficultyIncrement = 1 / 3;
+    this._numWavesSpawned = 0;
     this._waveInterval = 5000;
     this._waveletInterval = 750;
     this._remainingWavelets = 0;
@@ -172,20 +171,22 @@ export default class EnemySpawner {
    * Schedule the next wave
    */
   _scheduleNextWave() {
-    if (this._waveDifficulty % 2 === 0) {
+    if (this._numWavesSpawned !== 0 && this._numWavesSpawned % 4 === 0) {
       // If the next wave difficulty is an multiple of 5, it is a special wave.
       this._timer.add(this._waveInterval, this._spawnSpecialWave, this);
     } else {
       // Otherwise, it is a normal wave.
       this._timer.add(this._waveInterval, this._spawnWave, this);
     }
+
+    this._numWavesSpawned++;
   }
 
   /**
    * Generate and spawn a wave of enemies, and increment the difficulty.
    */
   _spawnWave() {
-    const numWavelets = Math.floor(this._waveDifficulty);
+    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 3), 1);
     this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
@@ -193,8 +194,6 @@ export default class EnemySpawner {
       const order = this._generateEnemyOrder(comp);
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
-
-    this._waveDifficulty += this._waveDifficultyIncrement;
   }
 
   /**
@@ -205,15 +204,13 @@ export default class EnemySpawner {
 
     spawnBattalionWave(this._player, this._mapManager, this._enemies);
 
-    const numWavelets = Math.floor(this._waveDifficulty);
-    this._remainingWavelets = numWavelets;
+    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 3), 1);
+    this._remainingWavelets = 0;
 
     // for (let i = 0; i < numWavelets; i++) {
     //   const comp = weightedPick(COMPOSITIONS);
     //   const order = this._generateEnemyOrder(comp);
     //   this._timer.add(this._waveletInterval * i / 4, () => this._spawnWavelet(order));
     // }
-
-    this._waveDifficulty += this._waveDifficultyIncrement;
   }
 }
