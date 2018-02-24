@@ -167,12 +167,10 @@ export default class PlayState extends Phaser.State {
       });
 
       // Force spawning waves
-      game.input.keyboard
-        .addKey(Phaser.Keyboard.K)
-        .onDown.add(() => enemySpawner._spawnWave(false));
+      game.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(() => enemySpawner._spawnWave());
       game.input.keyboard
         .addKey(Phaser.Keyboard.L)
-        .onDown.add(() => enemySpawner._spawnSpecialWave(false));
+        .onDown.add(() => enemySpawner._spawnSpecialWave());
 
       // Pause without menus showing up.
       game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => {

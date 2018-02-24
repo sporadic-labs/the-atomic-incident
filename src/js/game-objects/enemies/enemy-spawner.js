@@ -1,5 +1,6 @@
 import Enemy from "./enemy";
 import { shuffleArray, weightedPick } from "../../helpers/utilities";
+import spawnBattalionWave from "./spawner/spawn-battalion-wave";
 
 // Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
 // will cycle through the types from last key through first when spawning.
@@ -200,14 +201,18 @@ export default class EnemySpawner {
    * Generate and spawn a special 'boss' wave, and increment the difficulty.
    */
   _spawnSpecialWave() {
+    console.log("a very special wave!");
+
+    spawnBattalionWave(this._player, this._mapManager, this._enemies);
+
     const numWavelets = Math.floor(this._waveDifficulty);
     this._remainingWavelets = numWavelets;
 
-    for (let i = 0; i < numWavelets; i++) {
-      const comp = weightedPick(COMPOSITIONS);
-      const order = this._generateEnemyOrder(comp);
-      this._timer.add(this._waveletInterval * i / 4, () => this._spawnWavelet(order));
-    }
+    // for (let i = 0; i < numWavelets; i++) {
+    //   const comp = weightedPick(COMPOSITIONS);
+    //   const order = this._generateEnemyOrder(comp);
+    //   this._timer.add(this._waveletInterval * i / 4, () => this._spawnWavelet(order));
+    // }
 
     this._waveDifficulty += this._waveDifficultyIncrement;
   }
