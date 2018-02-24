@@ -35,7 +35,7 @@ export default class PickupSpawner extends Phaser.Group {
     setTimeout(() => {
       const type = this.choosePickupType();
       this.spawnPickup(type);
-    }, 0.1);
+    }, 0);
   }
 
   /**
