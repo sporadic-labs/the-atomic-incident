@@ -14,7 +14,7 @@ const gameDimensions = 750;
 const game = new Phaser.Game({
   width: gameDimensions,
   height: gameDimensions,
-  renderer: Phaser.WEBGL,
+  renderer: Phaser.CANVAS,
   enableDebug: enableDebug, // We can turn off debug when deploying - using debug causes a hit on webgl
   parent: "game-container"
 });
