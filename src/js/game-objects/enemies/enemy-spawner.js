@@ -202,15 +202,14 @@ export default class EnemySpawner {
   _spawnSpecialWave() {
     console.log("a very special wave!");
 
-    spawnBattalionWave(this._player, this._mapManager, this._enemies);
+    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 6), 1);
+    this._remainingWavelets = numWavelets;
 
-    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 3), 1);
-    this._remainingWavelets = 0;
-
-    // for (let i = 0; i < numWavelets; i++) {
-    //   const comp = weightedPick(COMPOSITIONS);
-    //   const order = this._generateEnemyOrder(comp);
-    //   this._timer.add(this._waveletInterval * i / 4, () => this._spawnWavelet(order));
-    // }
+    for (let i = 0; i < numWavelets; i++) {
+      this._timer.add(this._waveletInterval * i, () => {
+        spawnBattalionWave(this._player, this._mapManager, this._enemies);
+        this._remainingWavelets--;
+      });
+    }
   }
 }
