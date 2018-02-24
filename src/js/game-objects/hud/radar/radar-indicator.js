@@ -15,7 +15,7 @@ export class RadarIndicator extends Phaser.Group {
 
   updatePlacement(radiusOffset = 5) {
     const playerLight = this._player._playerLight;
-    if (playerLight._light.isPointInLight(this._target.position)) {
+    if (!this._player._playerLight.isPointInShadow(this._target.position)) {
       this.visible = false;
     } else {
       this.visible = true;
