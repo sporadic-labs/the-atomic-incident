@@ -19,7 +19,7 @@ export default class Bar extends Phaser.Graphics {
       minValue = 0,
       maxValue = 1,
       borderColor = 0xffffff,
-      borderWidth = 4,
+      borderWidth = 3,
       barColor = 0x00c9c9,
       fillDirection = DIRECTIONS.AUTO
     } = {}

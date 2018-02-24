@@ -5,7 +5,7 @@ export default class DashIcon extends Phaser.Group {
   constructor(game, parentGroup, player) {
     super(game, parentGroup, "dash");
 
-    this._dashCooldownBar = new Bar(game, 0, 0, 25, 25, {
+    this._dashCooldownBar = new Bar(game, 0, 0, 80, 20, {
       barColor: 0xe2df2b,
       minValue: 0,
       maxValue: 1
