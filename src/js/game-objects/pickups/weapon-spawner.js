@@ -4,6 +4,14 @@ import { shuffleArray } from "../../helpers/utilities";
 const PICKUP_RANGE = 75;
 
 export default class PickupSpawner extends Phaser.Group {
+  /**
+   * Factory for generating and spawning new Weapon Pickups.
+   *
+   * @param {Phaser.Game} game
+   * @param {Phaser.Group} parent
+   * @param {Player} player
+   * @param {LevelManager} levelManager
+   */
   constructor(game, parent, player, levelManager) {
     super(game, parent, "pickup-spawner");
     this._spawnLocations = levelManager.getPickupLocations();
@@ -12,23 +20,42 @@ export default class PickupSpawner extends Phaser.Group {
     this.onPickupCollected = new Phaser.Signal();
     this.onPickupSpawned = new Phaser.Signal();
     this.onPickupDestroyed = new Phaser.Signal();
+
+    this.onPickupDestroyed.add(() => {
+      const type = this.choosePickupType();
+      this.spawnPickup(type);
+    });
+
+    /* Choose a random type for the first pickup, and kick things off by spawning one!
+     * NOTE(rex): This is a hack to get around a race condition.  The radar is created after
+     * the weapon spawner, but creates the goal indicator to show weapon position.
+     * The first WeaponPickup is created here, before the radar is created.  SetTimeout
+     * will get around this for the moment, but we probably should organize the code better instead!
+     */
+    setTimeout(() => {
+      const type = this.choosePickupType();
+      this.spawnPickup(type);
+    }, 0.1);
   }
 
+  /**
+   * Choose a random pickup type that the player isn't using.
+   */
+  choosePickupType() {
+    const activeType = this._player.weaponManager.getActiveType();
+    const possibleTypes = Object.values(WEAPON_TYPES).filter(t => t !== activeType);
+    return this.game.rnd.pick(possibleTypes);
+  }
+
+  /**
+   *
+   * @param {WEAPON_TYPES} type - Weapon type this pickup will
+   */
   spawnPickup(type) {
     const point = this._getSpawnPoint(this._spawnLocations);
     const pickup = new WeaponPickup(this.game, point.x, point.y, this._player, type, this);
     this.add(pickup);
     this.onPickupSpawned.dispatch(pickup);
-  }
-
-  update() {
-    if (this.children.length === 0) {
-      const activeType = this._player.weaponManager.getActiveType();
-      const possibleTypes = Object.values(WEAPON_TYPES).filter(t => t !== activeType);
-      const type = this.game.rnd.pick(possibleTypes);
-      this.spawnPickup(type);
-    }
-    super.update();
   }
 
   destroy(...args) {

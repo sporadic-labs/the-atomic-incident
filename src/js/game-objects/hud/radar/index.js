@@ -20,9 +20,11 @@ export default class Radar extends Phaser.Group {
     pickupSpawner.onPickupSpawned.add(pickup => {
       this._weaponIndicator = new GoalIndicator(game, this, player, pickup);
     });
-    pickupSpawner.onPickupDestroyed.add(() => {
-      this._weaponIndicator.destroy();
-      this._weaponIndicator = null;
+    pickupSpawner.onPickupCollected.add(() => {
+      if (this._weaponIndicator) {
+        this._weaponIndicator.destroy();
+        this._weaponIndicator = null;
+      }
     });
 
     this._enemyIndicators = [];
