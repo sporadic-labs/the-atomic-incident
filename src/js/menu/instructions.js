@@ -48,7 +48,8 @@ export default class Instructions extends Component {
           <ul>
             <li>E to open debug menu</li>
             <li>O to pause w/o menus</li>
-            <li>L to spawn enemies</li>
+            <li>K to spawn a normal wave</li>
+            <li>L to spawn a special wave</li>
           </ul>
 
           <p>Manually Switch Weapons</p>

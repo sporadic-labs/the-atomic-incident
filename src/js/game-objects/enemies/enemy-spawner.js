@@ -69,9 +69,6 @@ export default class EnemySpawner {
     });
 
     // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
-
-    // Use the 'L' button to force a wavelet to spawn.
-    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => this._spawnWave(false));
   }
 
   /**

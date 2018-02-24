@@ -99,7 +99,7 @@ export default class PlayState extends Phaser.State {
 
     // Waves of pickups and enemies
     new PickupSpawner(game);
-    new EnemySpawner(game, player);
+    const enemySpawner = new EnemySpawner(game, player);
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
@@ -161,6 +161,14 @@ export default class PlayState extends Phaser.State {
         gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
         gameStore.pause();
       });
+
+      // Force spawning waves
+      game.input.keyboard
+        .addKey(Phaser.Keyboard.K)
+        .onDown.add(() => enemySpawner._spawnWave(false));
+      game.input.keyboard
+        .addKey(Phaser.Keyboard.L)
+        .onDown.add(() => enemySpawner._spawnSpecialWave(false));
 
       // Pause without menus showing up.
       game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => {
