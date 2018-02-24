@@ -162,6 +162,10 @@ export default class PlayState extends Phaser.State {
         gameStore.pause();
       });
 
+      game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(() => {
+        groups.enemies.killAll();
+      });
+
       // Force spawning waves
       game.input.keyboard
         .addKey(Phaser.Keyboard.K)

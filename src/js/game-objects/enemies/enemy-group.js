@@ -57,6 +57,12 @@ export default class EnemyGroup extends Phaser.Group {
     return numEnemiesAlive;
   }
 
+  killAll() {
+    for (let i = this.children.length - 1; i >= 0; i--) {
+      if (this.children[i] !== this.deathParticles) this.children[i].destroy();
+    }
+  }
+
   /**
    * Clean up signals when this group is destroyed.
    *
