@@ -27,11 +27,6 @@ const COMPOSITIONS = [
     name: "Virus Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.PARTICLE_TANK]: 3 },
-    weight: 1,
-    name: "Particle Tank Wave"
-  },
-  {
     enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
     weight: 1,
     name: "Amoeba Wave"
@@ -52,7 +47,7 @@ export default class EnemySpawner {
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._numWavesSpawned = 0;
+    this._numWavesSpawned = 25;
     this._waveInterval = 5000;
     this._waveletInterval = 750;
     this._remainingWavelets = 0;
