@@ -7,29 +7,24 @@ import spawnBattalionWave from "./spawner/spawn-battalion-wave";
 const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
   {
-    enemies: { [ENEMY_TYPES.BACTERIA]: 3 },
+    enemies: { [ENEMY_TYPES.FOLLOWING]: 3 },
     weight: 1,
-    name: "Bacteria Wave"
+    name: "Following Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.WORM]: 3 },
+    enemies: { [ENEMY_TYPES.DASHING]: 3 },
+    weight: 1,
+    name: "Dashing Wave"
+  },
+  {
+    enemies: { [ENEMY_TYPES.PROJECTILE]: 2 },
     weight: 2,
-    name: "Worm Wave"
+    name: "Projectile Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.BEETLE]: 3 },
+    enemies: { [ENEMY_TYPES.DIVIDING]: 1 },
     weight: 1,
-    name: "Beetle Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.VIRUS]: 2 },
-    weight: 2,
-    name: "Virus Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
-    weight: 1,
-    name: "Amoeba Wave"
+    name: "Dividing Wave"
   }
 ];
 
@@ -47,9 +42,9 @@ export default class EnemySpawner {
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._numWavesSpawned = 25;
+    this._numWavesSpawned = 50;
     this._waveInterval = 5000;
-    this._waveletInterval = 750;
+    this._waveletInterval = 1500;
     this._remainingWavelets = 0;
 
     this._timer = this.game.time.create(false);

@@ -1,7 +1,7 @@
 import Enemy from "../enemy";
 
 const { ENEMY_TYPES } = require("../../enemies/enemy-info");
-const { PARTICLE_TANK, VIRUS } = ENEMY_TYPES;
+const { TANK, PROJECTILE } = ENEMY_TYPES;
 
 /*
     Tank (T) and Virus (V) in this formation around the player (p):
@@ -75,9 +75,9 @@ export default function spawnBattalionWave(player, mapManager, enemyGroup, maxAt
     return;
   }
 
-  Enemy.SpawnWithIndicator(game, PARTICLE_TANK, tank1Pos, enemyGroup, 3000);
-  Enemy.SpawnWithIndicator(game, PARTICLE_TANK, tank2Pos, enemyGroup, 3000);
-  Enemy.SpawnWithIndicator(game, PARTICLE_TANK, tank3Pos, enemyGroup, 3000);
-  Enemy.SpawnWithIndicator(game, VIRUS, virus1Pos, enemyGroup, 3000);
-  Enemy.SpawnWithIndicator(game, VIRUS, virus2Pos, enemyGroup, 3000);
+  Enemy.SpawnWithIndicator(game, TANK, tank1Pos, enemyGroup, 3000);
+  Enemy.SpawnWithIndicator(game, TANK, tank2Pos, enemyGroup, 3000);
+  Enemy.SpawnWithIndicator(game, TANK, tank3Pos, enemyGroup, 3000);
+  Enemy.SpawnWithIndicator(game, PROJECTILE, virus1Pos, enemyGroup, 3000);
+  Enemy.SpawnWithIndicator(game, PROJECTILE, virus2Pos, enemyGroup, 3000);
 }
