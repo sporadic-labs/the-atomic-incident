@@ -7,22 +7,22 @@ import spawnBattalionWave from "./spawner/spawn-battalion-wave";
 const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
   {
-    enemies: { [ENEMY_TYPES.FOLLOWING]: 3 },
+    enemies: { [ENEMY_TYPES.FOLLOWING]: 6 },
     weight: 1,
     name: "Following Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.DASHING]: 3 },
+    enemies: { [ENEMY_TYPES.DASHING]: 4 },
     weight: 1,
     name: "Dashing Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.PROJECTILE]: 2 },
-    weight: 2,
+    enemies: { [ENEMY_TYPES.PROJECTILE]: 3 },
+    weight: 1,
     name: "Projectile Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.DIVIDING]: 1 },
+    enemies: { [ENEMY_TYPES.DIVIDING]: 2 },
     weight: 1,
     name: "Dividing Wave"
   }
@@ -42,9 +42,9 @@ export default class EnemySpawner {
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._numWavesSpawned = 50;
+    this._numWavesSpawned = 30;
     this._waveInterval = 5000;
-    this._waveletInterval = 1500;
+    this._waveletInterval = 1750;
     this._remainingWavelets = 0;
 
     this._timer = this.game.time.create(false);
@@ -68,7 +68,7 @@ export default class EnemySpawner {
    * @param {*} enemyOrder
    * @param {number} spawnDelay - Time delay between wavelets (in ms).
    */
-  _spawnWavelet(enemyOrder, spawnDelay = 250) {
+  _spawnWavelet(enemyOrder, spawnDelay = 50) {
     // Determine the wave positioning
     const radius = this._player.getLightRadius() - 25;
 
