@@ -18,42 +18,42 @@ export const ENEMY_INFO = {
   DIVIDING: {
     animated: true,
     health: 100,
-    speed: 160,
+    speed: 175,
     key: "enemies/amoeba",
     collisionPoints: physicsShapes["amoeba"]
   },
   DIVIDING_SMALL: {
     animated: true,
     health: 100,
-    speed: 160,
+    speed: 175,
     key: "enemies/amoeba",
     collisionPoints: physicsShapes["amoeba"]
   },
   FOLLOWING: {
     animated: true,
     health: 100,
-    speed: 160,
+    speed: 175,
     key: "enemies/beetle",
     collisionPoints: physicsShapes["beetle"]
   },
   TANK: {
     animated: false,
     health: 150,
-    speed: 100,
+    speed: 150,
     key: "enemies/particle-tank/particle-tank",
     collisionPoints: physicsShapes["particle-tank"]
   },
   DASHING: {
     animated: true,
     health: 100,
-    speed: 160,
+    speed: 175,
     key: "enemies/worm",
     collisionPoints: physicsShapes["worm"]
   },
   PROJECTILE: {
     animated: false,
     health: 100,
-    speed: 160,
+    speed: 175,
     key: "enemies/virus/virus-dark",
     collisionPoints: physicsShapes["virus-dark"]
   }
