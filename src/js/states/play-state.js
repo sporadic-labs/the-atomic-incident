@@ -110,11 +110,12 @@ export default class PlayState extends Phaser.State {
     score.position.set(this.game.width - 15, 15);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
     ammo.position.set(game.width - 15, game.height - 15);
-    const playerHealth = new Bar(game, 15, 22, 200, 25, { minValue: 0, maxValue: 1 });
+    const playerHealth = new Bar(game, 45, 20, 200, 20, { minValue: 0, maxValue: 1 });
     player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
     groups.hud.add(playerHealth);
+    this.add.sprite(14, 18, "assets", "hud/health-icon", groups.hud);
     const dashIcon = new DashIcon(game, groups.hud, player);
-    dashIcon.position.set(15, 55);
+    dashIcon.position.set(14, 50);
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {

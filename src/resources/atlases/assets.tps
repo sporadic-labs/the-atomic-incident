@@ -516,7 +516,9 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/hud/dash-icon.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
+            <key type="filename">asset-frames/hud/health-icon.png</key>
             <key type="filename">asset-frames/pickups/box.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
