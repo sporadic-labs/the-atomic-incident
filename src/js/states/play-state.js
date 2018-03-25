@@ -142,7 +142,7 @@ export default class PlayState extends Phaser.State {
     globals.waveNum = waveNum;
 
     globals.groups.enemies.onEnemyKilled.add(enemy => {
-      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player, 15, 3);
+      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player, 15);
     });
 
     // Use the 'P' button to pause/unpause, as well as the button on the HUD.
