@@ -6,6 +6,10 @@ import "phaser-ce/build/custom/phaser-split";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, GAME_STATE_NAMES } from "./states";
+import initializeAnalytics from "./analytics";
+
+const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+initializeAnalytics(isLocalhost);
 
 // Enable/disable Debug.
 const enableDebug = true;
@@ -62,4 +66,7 @@ autorun(() => {
   game.state.start(gameStore.gameState);
   if (gameStore.pendingGameRestart) game.state.start(gameStore.gameState);
 });
-game.state.onStateChange.add(() => gameStore.markRestartComplete());
+game.state.onStateChange.add(() => {
+  gameStore.markRestartComplete();
+  ga("send", "event", "Game", "State Started", game.state.getCurrentState().key);
+});

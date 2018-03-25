@@ -32,6 +32,8 @@ import DifficultyModifier from "../game-objects/difficulty-modifier";
 
 export default class PlayState extends Phaser.State {
   create() {
+    ga("send", "event", "Game", "New Game Started");
+
     gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
 
     // Shorthands
