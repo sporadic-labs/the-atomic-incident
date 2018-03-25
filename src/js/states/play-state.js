@@ -28,6 +28,7 @@ import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
 import Bar from "../game-objects/hud/bar";
 import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
+import DifficultyModifier from "../game-objects/difficulty-modifier";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -74,6 +75,18 @@ export default class PlayState extends Phaser.State {
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
+
+    // Difficulty
+    globals.difficultyModifier = new DifficultyModifier();
+    // Just for debugging:
+    game.input.keyboard.addKey(Phaser.Keyboard.PERIOD).onDown.add(() => {
+      globals.difficultyModifier.incrementDifficulty(0.1);
+      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
+    });
+    game.input.keyboard.addKey(Phaser.Keyboard.COMMA).onDown.add(() => {
+      globals.difficultyModifier.incrementDifficulty(-0.1);
+      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
+    });
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
