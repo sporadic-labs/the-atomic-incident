@@ -75,7 +75,7 @@ export default class PickupSpawner extends Phaser.Group {
     const possiblePoints = shuffleArray(this._spawnLocations.slice());
     for (const point of possiblePoints) {
       // Make sure pickup is not underneath player
-      if (point.distance(this._player.position) <= 30) continue;
+      if (point.distance(this._player.position) <= 200) continue;
 
       // Make sure pick is not underneath an existing pickup
       let overlapExisting = false;
