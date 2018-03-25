@@ -15,6 +15,14 @@ export default class DifficultyModifier {
     this.setDifficulty(this.difficulty + delta);
   }
 
+  getDifficulty() {
+    return this.difficulty;
+  }
+
+  getDifficultyFraction() {
+    return Phaser.Math.mapLinear(this.difficulty, this.minDifficulty, this.maxDifficulty, 0, 1);
+  }
+
   // This could also modify damage, health, pickups, etc. based on current difficulty level
 
   getSpeedMultiplier() {

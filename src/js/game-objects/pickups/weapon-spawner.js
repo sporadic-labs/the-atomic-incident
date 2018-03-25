@@ -102,6 +102,7 @@ class WeaponPickup extends Phaser.Sprite {
     this._type = type;
     this._onPickupCollected = pickupSpawner.onPickupCollected;
     this._onPickupDestroyed = pickupSpawner.onPickupDestroyed;
+    this._difficultyModifier = this.game.globals.difficultyModifier;
 
     this._pickupSound = game.globals.soundManager.add("crate-pickup");
 
@@ -114,9 +115,10 @@ class WeaponPickup extends Phaser.Sprite {
 
   update() {
     const dist = this.body.position.distance(this._player.position);
-    if (this.body.position.distance(this._player.position) < PICKUP_RANGE) {
+    const range = (1 + this._difficultyModifier.getDifficultyFraction()) * PICKUP_RANGE;
+    if (this.body.position.distance(this._player.position) < range) {
       // Move pickup towards player slowly when far and quickly when close
-      const lerpFactor = Phaser.Math.mapLinear(dist / PICKUP_RANGE, 0, 1, 0.2, 0);
+      const lerpFactor = Phaser.Math.mapLinear(dist / range, 0, 1, 0.2, 0);
       this.body.setPosition(
         (1 - lerpFactor) * this.body.position.x + lerpFactor * this._player.position.x,
         (1 - lerpFactor) * this.body.position.y + lerpFactor * this._player.position.y
