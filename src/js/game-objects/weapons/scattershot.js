@@ -9,6 +9,8 @@ export default class Scattershot extends BaseWeapon {
 
     this._fireSound = game.globals.soundManager.add("multishot", null, 0.1);
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+
+    this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
   fire(angle) {
@@ -17,10 +19,11 @@ export default class Scattershot extends BaseWeapon {
       const pelletNum = this.game.rnd.integerInRange(14, 20);
 
       // randomize the trajectory of every bulconst in the shotgun blast
+      const multiplier = this._difficultyModifier.getSpeedMultiplier();
       for (let i = 0; i < pelletNum; i++) {
         const mod = this.game.rnd.integerInRange(0, 30) * (Math.PI / 180) * this.game.rnd.sign();
         const rndAngle = angle + mod;
-        const speed = this.game.rnd.integerInRange(350, 400);
+        const speed = multiplier * this.game.rnd.integerInRange(350, 400);
         this._createProjectile(rndAngle, 18, speed);
       }
 

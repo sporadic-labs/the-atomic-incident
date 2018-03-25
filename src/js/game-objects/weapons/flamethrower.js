@@ -7,6 +7,7 @@ export default class Flamethrower extends BaseWeapon {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.FLAMETHROWER, 96, 24, 2800);
     this._damage = 14;
     this._speed = 320;
+    this._difficultyModifier = this.game.globals.difficultyModifier;
 
     this._fireSound = game.globals.soundManager.add("missile");
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
@@ -14,7 +15,8 @@ export default class Flamethrower extends BaseWeapon {
 
   fire(angle) {
     if (this.isAbleToAttack()) {
-      this._createProjectile(angle, 24, this._speed);
+      const speed = this._difficultyModifier.getSpeedMultiplier() * this._speed;
+      this._createProjectile(angle, 24, speed);
       this.incrementAmmo(-1);
       if (this.getAmmo() > 0) {
         this._fireSound.play();
