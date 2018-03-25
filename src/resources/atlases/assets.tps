@@ -393,12 +393,16 @@
             <key type="filename">asset-frames/enemies/worm/move_13.png</key>
             <key type="filename">asset-frames/enemies/worm/move_14.png</key>
             <key type="filename">asset-frames/enemies/worm/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/charging_enemy_50_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/shooting_enemy_50_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/splitting_enemy_large_50_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/splitting_enemy_small_50_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/tracking_enemy_small_50_0.png</key>
             <key type="filename">asset-frames/physics-test/box.png</key>
+            <key type="filename">asset-frames/test/enemy_charging/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_exploding_large/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_exploding_small/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_shooting/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_splitting_large/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_splitting_small/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_tracking_large/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_tracking_medium/test_0.png</key>
+            <key type="filename">asset-frames/test/enemy_tracking_small/test_0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -498,7 +502,7 @@
                 <false/>
             </struct>
             <key type="filename">asset-frames/enemies/particle-tank/particle-tank.png</key>
-            <key type="filename">asset-frames/enemies_v2/charging_mini_boss_50_0.png</key>
+            <key type="filename">asset-frames/test/mini_boss_charging/test_0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -672,6 +676,7 @@
             <key type="filename">asset-frames/player/hit_15.png</key>
             <key type="filename">asset-frames/player/move.png</key>
             <key type="filename">asset-frames/player/player-trail.png</key>
+            <key type="filename">asset-frames/test/player/test_0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
