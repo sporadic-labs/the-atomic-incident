@@ -72,10 +72,6 @@ export default class StartMenu extends Phaser.State {
 
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
-      this.lighting.setOpacity(preferencesStore.shadowOpacity);
-      if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
-      else globals.plugins.satBody.disableDebugAll();
-      // globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
     });
     // Note: pausing and unpausing mutes/unmutes Phaser's sound manager. Changing the volume while
