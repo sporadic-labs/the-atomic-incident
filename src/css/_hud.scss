@@ -6,7 +6,7 @@
   transform: translate(-50%, -50%);
   border-radius: 3px;
   z-index: 1000;
-  font-family: "Alfa Slab One", serif;
+  font-family: "Cherry Cream Soda", serif;
   color: white;
   display: flex;
   align-items: center;
@@ -32,11 +32,12 @@
   }
 
   button {
+    // font-family: "Unica One", serif;
     display: block;
     margin: 24px auto;
     padding: 16px;
     width: 50%;
-    color: #3c98f0;
+    color: #82b9af;
     background-color: white;
     border-radius: 5px;
 
@@ -59,7 +60,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #3c98f0;
+    background-color: #82b9af;
     color: white;
     transition: all 0.1s ease;
 
@@ -68,7 +69,7 @@
     }
 
     &:hover {
-      background-color: darken(#3c98f0, 10%);
+      background-color: darken(#82b9af, 10%);
       color: darken(white, 10%);
     }
   }
@@ -80,7 +81,7 @@
     border-radius: 10px;
     pointer-events: initial;
     cursor: default;
-    background-color: #3c98f0;
+    background-color: #82b9af;
 
     .menu-title {
       margin: 0 auto 20px auto;
@@ -91,6 +92,7 @@
     }
 
     .final-score {
+      // font-family: "Unica One", serif;
       margin: 6px auto;
       padding: 6px;
       font-size: 24px;
@@ -99,22 +101,22 @@
 
     .btn-close {
       position: absolute;
-      top: 3%;
-      right: 3%;
+      top: 8px;
+      right: 8px;
       font-size: 14px;
       margin: 0;
       padding: 0;
-      border-radius: 50%;
       width: 24px;
       height: 24px;
-      color: #3c98f0;
+      border-radius: 50%;
+      color: #82b9af;
       background-color: white;
       display: flex;
       align-items: center;
       justify-content: center;
 
       &:hover {
-        color: black;
+        color: darken(#82b9af, 10%);
       }
     }
   }
