@@ -17,7 +17,7 @@ export default class Ammo extends Phaser.Group {
 
     this._player = player;
 
-    this._ammoBar = new Bar(game, 0, 0, 20, 115, { barColor: 0xdf403c, minValue: 0, maxValue: 1 });
+    this._ammoBar = new Bar(game, 0, 0, 20, 115, { barColor: 0xf48337, minValue: 0, maxValue: 1 });
     this._ammoBar.position.setTo(-this._ammoBar.width, -this._ammoBar.height);
     this.add(this._ammoBar);
 

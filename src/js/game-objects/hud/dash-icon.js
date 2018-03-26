@@ -9,7 +9,7 @@ export default class DashIcon extends Phaser.Group {
     this.add(this._icon);
 
     this._dashCooldownBar = new Bar(game, 31, 2, 80, 20, {
-      barColor: 0xe2df2b,
+      barColor: 0xffeb6e,
       minValue: 0,
       maxValue: 1
     });
