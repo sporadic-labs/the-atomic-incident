@@ -6,7 +6,7 @@ import "phaser-ce/build/custom/phaser-split";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, GAME_STATE_NAMES } from "./states";
-import initializeAnalytics from "./analytics";
+import initializeAnalytics, { registerStateChange } from "./analytics";
 
 const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
 initializeAnalytics(isLocalhost);
@@ -68,5 +68,5 @@ autorun(() => {
 });
 game.state.onStateChange.add(() => {
   gameStore.markRestartComplete();
-  ga("send", "event", "Game", "State Started", game.state.getCurrentState().key);
+  registerStateChange(game.state.getCurrentState().key);
 });

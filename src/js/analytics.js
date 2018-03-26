@@ -2,7 +2,7 @@ export default function initalize(useMock) {
   // Mock analytics on localhost & real analytics on server
   if (useMock) {
     console.log("Mock Google analytics installed");
-    window.ga = (...args) => console.log("GA:", ...args.map(arg => arg + " /"));
+    window.ga = (...args) => console.log("GA:", ...args.map(arg => JSON.stringify(arg, null, 2)));
   } else {
     (function(i, s, o, g, r, a, m) {
       i["GoogleAnalyticsObject"] = r;
@@ -22,4 +22,29 @@ export default function initalize(useMock) {
   const ga = window.ga;
   ga("create", "UA-116363382-2", "auto");
   ga("send", "pageview");
+}
+
+export function registerStateChange(stateName) {
+  ga("send", {
+    hitType: "event",
+    eventCategory: "State Started",
+    eventAction: "State: " + stateName
+  });
+}
+
+export function registerGameStart() {
+  ga("send", {
+    hitType: "event",
+    eventCategory: "Game",
+    eventAction: "Game Started"
+  });
+}
+
+export function registerGameOver(score) {
+  ga("send", {
+    hitType: "event",
+    eventCategory: "Game",
+    eventAction: "Game Over",
+    eventValue: score
+  });
 }

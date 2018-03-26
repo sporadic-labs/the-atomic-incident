@@ -29,10 +29,11 @@ import getFontString from "../fonts/get-font-string";
 import Bar from "../game-objects/hud/bar";
 import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import DifficultyModifier from "../game-objects/difficulty-modifier";
+import { registerGameStart } from "../analytics";
 
 export default class PlayState extends Phaser.State {
   create() {
-    ga("send", "event", "Game", "New Game Started");
+    registerGameStart();
 
     gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
 

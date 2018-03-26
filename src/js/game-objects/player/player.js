@@ -8,6 +8,7 @@ import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
 import SmokeTrail from "./smoke-trail";
+import { registerGameOver } from "../../analytics";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -208,7 +209,7 @@ export default class Player extends Phaser.Sprite {
     this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
     gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
     gameStore.updateHighScore();
-    ga("send", "event", "Game", "Game Over", gameStore.score);
+    registerGameOver(gameStore.score);
     // TODO(rex): Player death animation and something interactive, instead of just pausing the game...
     gameStore.pause();
   }
