@@ -81,7 +81,7 @@ export class GoalIndicator extends RadarIndicator {
     this.add(pointer);
     this._pointer = pointer;
 
-    const box = this.game.make.sprite(0, 0, "assets", "pickups/box");
+    const box = this.game.make.sprite(0, 0, "assets", "pickups/weapon_pickup");
     box.scale.set(16 / 25); // Scale expressed as fraction of image size
     box.anchor.set(0.5);
     this.add(box);

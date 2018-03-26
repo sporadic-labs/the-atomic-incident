@@ -95,7 +95,7 @@ export default class PickupSpawner extends Phaser.Group {
 
 class WeaponPickup extends Phaser.Sprite {
   constructor(game, x, y, player, type, pickupSpawner) {
-    super(game, x, y, "assets", "pickups/box");
+    super(game, x, y, "assets", "pickups/weapon_pickup");
     this.anchor.set(0.5);
 
     this._player = player;
