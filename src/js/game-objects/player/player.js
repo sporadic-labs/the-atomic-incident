@@ -8,6 +8,7 @@ import { MENU_STATE_NAMES } from "../../menu";
 import { gameStore } from "../../game-data/observable-stores";
 import WeaponManager from "../weapons/weapon-manager";
 import SmokeTrail from "./smoke-trail";
+import { registerGameOver } from "../../analytics";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -69,7 +70,7 @@ export default class Player extends Phaser.Sprite {
     });
 
     // Controls
-    this._movementController = new MovementController(this.body, 50, 5000, 300);
+    this._movementController = new MovementController(this);
     this._attackControls = new Controller(this.game.input);
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
@@ -114,8 +115,6 @@ export default class Player extends Phaser.Sprite {
     this._playerLight.update();
     this._movementController.update();
     this._attackControls.update();
-
-    this.setInvulnerability(this._movementController.isDashing());
 
     // Update the rotation of the player based on the mouse
     let mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
@@ -210,6 +209,7 @@ export default class Player extends Phaser.Sprite {
     this.game.camera.reset(); // Kill camera shake to prevent restarting with partial shake
     gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
     gameStore.updateHighScore();
+    registerGameOver(gameStore.score);
     // TODO(rex): Player death animation and something interactive, instead of just pausing the game...
     gameStore.pause();
   }

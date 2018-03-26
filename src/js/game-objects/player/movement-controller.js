@@ -6,16 +6,20 @@ const MOVEMENT_TYPES = {
   DASH: "DASH"
 };
 
-export default class MovementContoller {
-  constructor(body) {
-    this.body = body;
-    this.game = body.game;
+const dashExtraInvincibilityTime = 150;
 
-    body.setDrag(0.99);
+export default class MovementContoller {
+  constructor(player) {
+    this.body = player.body;
+    this.player = player;
+    this.game = this.body.game;
+    this.difficultyModifier = this.game.globals.difficultyModifier;
+
+    this.body.setDrag(0.99);
 
     this._dashAngle = null;
 
-    this.setMovementType(MOVEMENT_TYPES.WALK);
+    this._movementType = MOVEMENT_TYPES.WALK;
 
     const Kb = Phaser.Keyboard;
     this._controls = new Controller(this.game.input);
@@ -25,7 +29,12 @@ export default class MovementContoller {
     this._controls.addKeyboardControl("move-down", [Kb.S, Kb.DOWN]);
     this._controls.addKeyboardControl("dash", Phaser.Keyboard.SPACEBAR);
 
-    this._dashCooldown = new CooldownAbility(body.game, 2000, 200, "dash");
+    const game = this.player.game;
+    this._dashCooldown = new CooldownAbility(game, 2000, 400, "dash");
+    this._timer = game.time.create(false);
+    this._timer.start();
+
+    this.player.events.onDestroy.addOnce(this.destroy, this);
   }
 
   /**
@@ -38,41 +47,29 @@ export default class MovementContoller {
 
     if (this._controls.isControlActive("dash") && this._dashCooldown.isReady()) {
       this._dashCooldown.activate();
+      this.player.setInvulnerability(true);
       const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
       this._dashAngle = this.body.position.angle(mousePos);
-      this.setMovementType(MOVEMENT_TYPES.DASH);
+      this._movementType = MOVEMENT_TYPES.DASH;
       this._dashCooldown.onDeactivation.addOnce(() => {
-        this.setMovementType(MOVEMENT_TYPES.WALK);
+        this._movementType = MOVEMENT_TYPES.WALK;
         this._dashAngle = null;
+        this._timer.add(dashExtraInvincibilityTime, () => this.player.setInvulnerability(false));
       }, this);
     }
+
+    const multiplier = this.difficultyModifier.getSpeedMultiplier();
 
     // Calculate the acceleration and heading from the keyboard input
     let acceleration = new Phaser.Point(0, 0);
     if (this._movementType === MOVEMENT_TYPES.WALK) {
-      this._calculateWalkAcceleration(acceleration);
+      this.body.setMaxSpeed(250 * multiplier);
+      this._calculateWalkAcceleration(acceleration, 3000 * multiplier);
     } else if (this._movementType === MOVEMENT_TYPES.DASH) {
-      this._calculateDashAcceleration(this._dashAngle, acceleration, this._maxAcceleration);
+      this.body.setMaxSpeed(600 * multiplier);
+      this._calculateDashAcceleration(this._dashAngle, acceleration, 12000 * multiplier);
     }
     this.body.acceleration.copyFrom(acceleration);
-  }
-
-  setMovementType(type) {
-    this._movementType = type;
-
-    switch (type) {
-      case MOVEMENT_TYPES.WALK:
-        this.body.setMaxSpeed(200);
-        break;
-      case MOVEMENT_TYPES.DASH:
-        this.body.setMaxSpeed(600);
-        break;
-      default:
-        console.log("No movement type by that name!");
-        this.body.setMaxSpeed(200);
-        this._movementType = MOVEMENT_TYPES.WALK;
-        break;
-    }
   }
 
   isMoving() {
@@ -105,13 +102,18 @@ export default class MovementContoller {
       acceleration.y = 1;
     }
 
-    acceleration = acceleration.setMagnitude(3000);
+    acceleration = acceleration.setMagnitude(accelerationMagnitude);
     return acceleration;
   }
 
-  _calculateDashAcceleration(angle, acceleration = new Phaser.Point(0, 0)) {
-    acceleration.x = Math.cos(angle) * 12000;
-    acceleration.y = Math.sin(angle) * 12000;
+  _calculateDashAcceleration(angle, acceleration = new Phaser.Point(0, 0), accelerationMagnitude) {
+    acceleration.x = Math.cos(angle) * accelerationMagnitude;
+    acceleration.y = Math.sin(angle) * accelerationMagnitude;
     return acceleration;
+  }
+
+  destroy() {
+    this._timer.destroy();
+    this._dashCooldown.destroy();
   }
 }

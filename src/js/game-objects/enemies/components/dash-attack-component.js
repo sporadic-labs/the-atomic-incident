@@ -19,6 +19,7 @@ export default class DashAttackComponent {
 
     this._targetingComponent = targetingComponent;
     this._mapManager = this.game.globals.mapManager;
+    this._difficultyModifier = this.game.globals.difficultyModifier;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
@@ -67,9 +68,10 @@ export default class DashAttackComponent {
     const tilemapLayer = this._mapManager.wallLayer;
     this.game.physics.sat.world.collide(this.parent, tilemapLayer, this.startCharging, this);
 
+    const multiplier = this._difficultyModifier.getSpeedMultiplier();
     if (this._state === STATES.DASHING) {
-      this.parent.body.velocity.x = this.attackSpeed * Math.cos(this._dashAngle);
-      this.parent.body.velocity.y = this.attackSpeed * Math.sin(this._dashAngle);
+      this.parent.body.velocity.x = multiplier * this.attackSpeed * Math.cos(this._dashAngle);
+      this.parent.body.velocity.y = multiplier * this.attackSpeed * Math.sin(this._dashAngle);
       this.parent.rotation = this._dashAngle + Math.PI / 2;
     } else if (this._state === STATES.CHARGING_UP) {
       // This should animate slowly vs immediately jump to the target rotation

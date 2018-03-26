@@ -60,31 +60,26 @@ export default class Enemy extends Phaser.Sprite {
     this.type = type;
     this.baseScale = 1;
     switch (this.type) {
-      case ENEMY_TYPES.BACTERIA: {
+      case ENEMY_TYPES.FOLLOWING: {
         this._hitLogic = new EnemyHitLogic(this);
         this._components.push(new TargetingComp(this, speed, visionRadius));
         break;
       }
-      case ENEMY_TYPES.BEETLE: {
-        this._hitLogic = new EnemyHitLogic(this);
-        this._components.push(new TargetingComp(this, speed, visionRadius));
-        break;
-      }
-      case ENEMY_TYPES.WORM: {
+      case ENEMY_TYPES.DASHING: {
         this._hitLogic = new EnemyHitLogic(this);
         const targeting = new TargetingComp(this, speed, visionRadius);
         const dash = new DashAttackComp(this, 2 * speed, targeting);
         this._components.push(targeting, dash);
         break;
       }
-      case ENEMY_TYPES.VIRUS: {
+      case ENEMY_TYPES.PROJECTILE: {
         this._hitLogic = new EnemyHitLogic(this);
         const targeting = new TargetingComp(this, speed, visionRadius);
         const projectile = new ProjectileAttackComponent(this, targeting);
         this._components.push(targeting, projectile);
         break;
       }
-      case ENEMY_TYPES.AMOEBA: {
+      case ENEMY_TYPES.DIVIDING: {
         this._hitLogic = new EnemyHitLogic(this);
         const targeting = new TargetingComp(this, speed * 3 / 4, visionRadius);
         const splitOnDeath = new SplitOnDeathComponent(this, targeting, this.onDie);
@@ -92,14 +87,14 @@ export default class Enemy extends Phaser.Sprite {
         this.baseScale = 1.25;
         break;
       }
-      case ENEMY_TYPES.AMOEBA_SMALL: {
+      case ENEMY_TYPES.DIVIDING_SMALL: {
         this._hitLogic = new EnemyHitLogic(this);
         const targeting = new TargetingComp(this, speed, visionRadius);
         this._components.push(targeting);
         this.baseScale = 0.75;
         break;
       }
-      case ENEMY_TYPES.PARTICLE_TANK: {
+      case ENEMY_TYPES.TANK: {
         this._hitLogic = new WeakSpotHitLogic(this);
         const targeting = new TargetingComp(this, speed, visionRadius);
         const dash = new BossDashComponent(this, 2 * speed, targeting, collisionPoints);
@@ -171,9 +166,7 @@ export default class Enemy extends Phaser.Sprite {
   }
 
   attemptHit(projectile, damage) {
-    const wasHit = this._hitLogic.attemptHit(projectile);
-    if (wasHit) this.takeDamage(damage, projectile);
-    return wasHit;
+    return this._hitLogic.attemptHit(damage, projectile);
   }
 
   takeDamage(damage, projectile) {
@@ -208,7 +201,7 @@ export default class Enemy extends Phaser.Sprite {
   die() {
     this.isDead = true;
     // If this is an Amoeba, with a SplitOnDeath component, activate the splitOnDeath method.
-    if (this.type === ENEMY_TYPES.AMOEBA) {
+    if (this.type === ENEMY_TYPES.DIVIDING) {
       const splitComponent = this._components.find(c => {
         return c instanceof SplitOnDeathComponent;
       });

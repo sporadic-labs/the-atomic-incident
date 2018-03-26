@@ -1,5 +1,10 @@
 import Explosion from "../explosion";
 
+export const COLLISION_SURFACE = {
+  DESTRUCTIBLE: "destructible",
+  INDESTRUCTIBLE: "indestructible"
+};
+
 /**
  * Base class for handling projectile collision with enemies and walls. The default logic is that a
  * projectile is destroyed on colliding with something.
@@ -17,16 +22,16 @@ export class CollisionLogic {
   onBeforeCollisions() {}
   onAfterCollisions() {}
 
+  // Destroy no matter what
   onCollideWithEnemy(enemy) {
     enemy.attemptHit(this.projectile, this.damage);
     this.projectile.destroy();
-    return true; // Don't check against any other enemies within this frame
   }
 
+  // Destroy no matter what
   onCollideWithWall() {
     this.wallHitSound.play();
     this.projectile.destroy();
-    return true; // Don't check against any other walls within this frame
   }
 }
 
@@ -43,10 +48,10 @@ export class PiercingCollisionLogic extends CollisionLogic {
 
   onCollideWithEnemy(enemy) {
     if (!this._enemiesDamaged.includes(enemy)) {
-      const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
-      if (hitEnemy) this._enemiesDamaged.push(enemy);
+      const surfaceHit = enemy.attemptHit(this.projectile, this.damage);
+      if (surfaceHit === COLLISION_SURFACE.DESTRUCTIBLE) this._enemiesDamaged.push(enemy);
+      else if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) this.projectile.destroy();
     }
-    return false; // Allow collision against multiple enemies within this frame
   }
 }
 
@@ -58,34 +63,6 @@ export class PiercingCollisionLogic extends CollisionLogic {
 export class BouncingCollisionLogic extends CollisionLogic {
   constructor(projectile, damage) {
     super(projectile, damage);
-    this._enemiesHit = [];
-    this._enemiesOverlapping = [];
-  }
-
-  onBeforeCollisions() {
-    this._enemiesOverlapping = [];
-  }
-
-  onCollideWithEnemy(enemy) {
-    if (!this._enemiesOverlapping.includes(enemy)) this._enemiesOverlapping.push(enemy);
-  }
-
-  onAfterCollisions() {
-    // Attempt to hit any newly overlapping enemies that weren't already hit
-    for (const enemy of this._enemiesOverlapping) {
-      if (!this._enemiesHit.includes(enemy)) {
-        const hitEnemy = enemy.attemptHit(this.projectile, this.damage);
-        if (hitEnemy) this._enemiesHit.push(enemy);
-      }
-    }
-
-    // If the projectile has left an overlapping enemy, time to reset it so that it can be hit again
-    for (let i = this._enemiesHit.length - 1; i >= 0; i--) {
-      const enemy = this._enemiesHit[i];
-      if (!this._enemiesOverlapping.includes(enemy)) {
-        this._enemiesHit.splice(i, 1);
-      }
-    }
   }
 
   // Noop
@@ -118,6 +95,5 @@ export class ExplodingCollisionLogic extends CollisionLogic {
     new Explosion(p.game, p.x, p.y, p.parent, this.damage);
     p.destroy();
     this.hasExploded = true;
-    return true; // Don't check against any other enemies within this frame
   }
 }

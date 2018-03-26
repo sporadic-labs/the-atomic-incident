@@ -1,65 +1,74 @@
 import Enemy from "./enemy";
 import { shuffleArray, weightedPick } from "../../helpers/utilities";
+import spawnBattalionWave from "./spawner/spawn-battalion-wave";
 
 // Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
 // will cycle through the types from last key through first when spawning.
 const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
   {
-    enemies: { [ENEMY_TYPES.BACTERIA]: 3 },
+    enemies: { [ENEMY_TYPES.FOLLOWING]: 6 },
     weight: 1,
-    name: "Bacteria Wave"
+    name: "Following Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.WORM]: 3 },
-    weight: 2,
-    name: "Worm Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.BEETLE]: 3 },
+    enemies: { [ENEMY_TYPES.DASHING]: 4 },
     weight: 1,
-    name: "Beetle Wave"
+    name: "Dashing Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.VIRUS]: 2 },
-    weight: 2,
-    name: "Virus Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.PARTICLE_TANK]: 3 },
+    enemies: { [ENEMY_TYPES.PROJECTILE]: 3 },
     weight: 1,
-    name: "Particle Tank Wave"
+    name: "Projectile Wave"
   },
   {
-    enemies: { [ENEMY_TYPES.AMOEBA]: 1 },
+    enemies: { [ENEMY_TYPES.DIVIDING]: 2 },
     weight: 1,
-    name: "Amoeba Wave"
+    name: "Dividing Wave"
   }
 ];
 
 export default class EnemySpawner {
+  /**
+   * Factory for scheduling and creating enemy groups.
+   *
+   * @constructor
+   * @param {Phaser.Game} game  - Phaser Game instance.
+   * @param {Player} player     - Player instance.
+   */
   constructor(game, player) {
     this.game = game;
     this._player = player;
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._waveDifficulty = 1;
-    this._waveDifficultyIncrement = 1 / 3;
+    this._numWavesSpawned = 30;
     this._waveInterval = 5000;
-    this._waveletInterval = 750;
+    this._waveletInterval = 1750;
+    this._remainingWavelets = 0;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
     this._timer.add(500, this._spawnWave, this);
 
-    // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
+    // If the last enemy in a wave has been killed, schedule the next wave.
+    this._enemies.onEnemyKilled.add(() => {
+      if (this._remainingWavelets <= 0 && this._enemies.numberEnemiesAlive() === 0) {
+        this._scheduleNextWave();
+      }
+    });
 
-    // Use the 'L' button to force a wavelet to spawn.
-    game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => this._spawnWave(false));
+    // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
   }
 
-  _spawnWavelet(enemyOrder, spawnDelay = 250) {
+  /**
+   * Find a position for the next wavelet, choose the next enemy type,
+   * spawn a wavelet, and schedule the next wavelet.
+   *
+   * @param {*} enemyOrder
+   * @param {number} spawnDelay - Time delay between wavelets (in ms).
+   */
+  _spawnWavelet(enemyOrder, spawnDelay = 50) {
     // Determine the wave positioning
     const radius = this._player.getLightRadius() - 25;
 
@@ -117,14 +126,28 @@ export default class EnemySpawner {
         console.warn(`Unknown enemy type: ${enemyType}`);
       }
     }
+
+    // Decrease number of remaining wavelets.
+    this._remainingWavelets--;
   }
 
+  /**
+   * Spawn an enemy
+   *
+   * @param {number} delay          - Time to wait before spawning the enemy (in ms).
+   * @param {ENEMY_TYPES} enemyType - Enemy type to spawn.
+   * @param {Phaser.Point} position - World location to spawn the enemy at.
+   */
   spawnWithDelay(delay, enemyType, position) {
-    this._timer.add(delay, () =>
-      Enemy.SpawnWithIndicator(this.game, enemyType, position, this._enemies, 3000)
-    );
+    this._timer.add(delay, () => {
+      Enemy.SpawnWithIndicator(this.game, enemyType, position, this._enemies, 3000);
+    });
   }
 
+  /**
+   *
+   * @param {*} composition
+   */
   _generateEnemyOrder(composition) {
     const enemies = [];
     for (const [typeName, numType] of Object.entries(composition.enemies)) {
@@ -134,65 +157,49 @@ export default class EnemySpawner {
     return enemies;
   }
 
-  _scheduleTesterWavelet(numEnemies, time) {
-    if (!this._testerTypePool) this._testerTypePool = Object.keys(ENEMY_TYPES);
-    const order = [];
-    for (let j = 0; j < numEnemies; j++) {
-      if (this._testerTypePool.length === 0) this._testerTypePool = Object.keys(ENEMY_TYPES);
-      const type = this._testerTypePool.pop();
-      order.push(type);
+  /**
+   * Schedule the next wave
+   */
+  _scheduleNextWave() {
+    if (this._numWavesSpawned !== 0 && this._numWavesSpawned % 4 === 0) {
+      // If the next wave difficulty is an multiple of 5, it is a special wave.
+      this._timer.add(this._waveInterval, this._spawnSpecialWave, this);
+    } else {
+      // Otherwise, it is a normal wave.
+      this._timer.add(this._waveInterval, this._spawnWave, this);
     }
-    this._timer.add(time, () => this._spawnWavelet(order));
+
+    this._numWavesSpawned++;
   }
 
-  _spawnTesterWave() {
-    const numWavelets = Math.floor(this._waveDifficulty);
-
-    for (let i = 0; i < numWavelets; i++) this._scheduleTesterWavelet(5, this._waveletInterval * i);
-
-    const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
-    this._timer.add(nextWaveDelay, this._spawnTesterWave, this);
-    this._waveDifficulty += this._waveDifficultyIncrement;
-  }
-
-  _spawnWave(scheduleNext = true) {
-    const numWavelets = Math.floor(this._waveDifficulty);
+  /**
+   * Generate and spawn a wave of enemies, and increment the difficulty.
+   */
+  _spawnWave() {
+    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 3), 1);
+    this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
       const comp = weightedPick(COMPOSITIONS);
       const order = this._generateEnemyOrder(comp);
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
-
-    this._waveDifficulty += this._waveDifficultyIncrement;
-
-    if (scheduleNext) {
-      const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
-      if (this._waveDifficulty % 2 === 0) {
-        // If the next wave difficulty is an multiple of 5, it is a special wave.
-        this._timer.add(nextWaveDelay, this._spawnSpecialWave, this);
-      } else {
-        // Otherwise, it is a normal wave.
-        this._timer.add(nextWaveDelay, this._spawnWave, this);
-      }
-    }
   }
 
-  _spawnSpecialWave(scheduleNext = true) {
+  /**
+   * Generate and spawn a special 'boss' wave, and increment the difficulty.
+   */
+  _spawnSpecialWave() {
     console.log("a very special wave!");
-    const numWavelets = Math.floor(this._waveDifficulty);
+
+    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 6), 1);
+    this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
-      const comp = weightedPick(COMPOSITIONS);
-      const order = this._generateEnemyOrder(comp);
-      this._timer.add(this._waveletInterval * i / 4, () => this._spawnWavelet(order));
-    }
-
-    this._waveDifficulty += this._waveDifficultyIncrement;
-
-    if (scheduleNext) {
-      const nextWaveDelay = this._waveletInterval * numWavelets + this._waveInterval;
-      this._timer.add(nextWaveDelay, this._spawnWave, this);
+      this._timer.add(this._waveletInterval * i, () => {
+        spawnBattalionWave(this._player, this._mapManager, this._enemies);
+        this._remainingWavelets--;
+      });
     }
   }
 }

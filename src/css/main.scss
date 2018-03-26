@@ -1,6 +1,8 @@
 @import "../../node_modules/typeface-saira/index.css";
 @import "../../node_modules/typeface-alfa-slab-one/index.css";
 @import "../../node_modules/typeface-montserrat/index.css";
+@import "../../node_modules/typeface-unica-one/index.css";
+@import "../../node_modules/typeface-cherry-cream-soda/index.css";
 
 @import "font-awesome";
 @import "normalize";
@@ -8,3 +10,8 @@
 @import "game";
 @import "hud";
 // @import "css-atlas";
+
+body {
+  background-color: black;
+  color: white;
+}

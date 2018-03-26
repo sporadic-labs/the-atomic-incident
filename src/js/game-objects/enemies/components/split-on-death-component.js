@@ -20,7 +20,7 @@ export default class SplitOnDeathComponent {
     for (let i = 0; i < num; i++) {
       const mod = 16 * i * this.game.rnd.sign();
       const position = new Phaser.Point(this.parent.position.x + mod, this.parent.position.y + mod);
-      Enemy.MakeEnemyType(this.game, ENEMY_TYPES.AMOEBA_SMALL, position, this.parent.enemyGroup);
+      Enemy.MakeEnemyType(this.game, ENEMY_TYPES.DIVIDING_SMALL, position, this.parent.enemyGroup);
     }
   }
 

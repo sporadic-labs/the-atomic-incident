@@ -1,9 +1,9 @@
 import getFontString from "../../fonts/get-font-string";
 
 const style = {
-  font: getFontString("Alfa Slab One", { size: "20px" }),
-  fill: "#ffd800",
-  stroke: "#b37511",
+  font: getFontString("Cherry Cream Soda", { size: "20px" }),
+  fill: "#82b9af",
+  stroke: "#6b948c",
   strokeThickness: 1
 };
 

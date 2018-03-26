@@ -4,9 +4,10 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class Flamethrower extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.FLAMETHROWER, 96, 24, 2800);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.FLAMETHROWER, 124, 24, 2800);
     this._damage = 14;
     this._speed = 320;
+    this._difficultyModifier = this.game.globals.difficultyModifier;
 
     this._fireSound = game.globals.soundManager.add("missile");
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
@@ -14,7 +15,8 @@ export default class Flamethrower extends BaseWeapon {
 
   fire(angle) {
     if (this.isAbleToAttack()) {
-      this._createProjectile(angle, 24, this._speed);
+      const speed = this._difficultyModifier.getSpeedMultiplier() * this._speed;
+      this._createProjectile(angle, 24, speed);
       this.incrementAmmo(-1);
       if (this.getAmmo() > 0) {
         this._fireSound.play();
@@ -39,8 +41,8 @@ export default class Flamethrower extends BaseWeapon {
     const maxAge = this.game.rnd.integerInRange(520, 640);
 
     // Randomize the color of each flame.
-    const r = this.game.rnd.integerInRange(0, 255);
-    const color = Phaser.Color.getColor(r, 255, 255);
+    const r = this.game.rnd.integerInRange(200, 255);
+    const color = Phaser.Color.getColor(r, r, r);
 
     Projectile.makeFlame(this.game, x, y, this, player, this._damage, angle, speed, maxAge, color);
   }

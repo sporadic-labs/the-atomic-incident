@@ -13,6 +13,7 @@ export default class TargetingComponent {
     this.enemies = this.game.globals.groups.enemies;
     this._visionRadius = visionRadius;
     this._mapManager = this.game.globals.mapManager;
+    this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
   update() {
@@ -70,7 +71,8 @@ export default class TargetingComponent {
       // that the max speed isn't exceeded & separation force shouldn't push the enemy into a
       // wall...
       const body = this.parent.body;
-      const pathVelocity = this.getVelocityTo(targetPoint);
+      const multiplier = this._difficultyModifier.getSpeedMultiplier();
+      const pathVelocity = this.getVelocityTo(targetPoint).multiply(multiplier, multiplier);
       body.velocity.setTo(
         pathVelocity.x + 4 * separationForce.x,
         pathVelocity.y + 4 * separationForce.y

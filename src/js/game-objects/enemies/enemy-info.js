@@ -1,14 +1,12 @@
 import physicsShapes from "./physics";
 
 export const ENEMY_TYPES = {
-  AMOEBA: "AMOEBA",
-  AMOEBA_SMALL: "AMOEBA_SMALL",
-  BACTERIA: "BACTERIA",
-  BEETLE: "BEETLE",
-  PARTICLE_TANK: "PARTICLE_TANK",
-  // TURTLE: "TURTLE",
-  WORM: "WORM",
-  VIRUS: "VIRUS"
+  DIVIDING: "DIVIDING",
+  DIVIDING_SMALL: "DIVIDING_SMALL",
+  FOLLOWING: "FOLLOWING",
+  DASHING: "DASHING",
+  TANK: "TANK",
+  PROJECTILE: "PROJECTILE"
 };
 
 /**
@@ -17,57 +15,46 @@ export const ENEMY_TYPES = {
  * order (as viewed in photoshop).
  */
 export const ENEMY_INFO = {
-  AMOEBA: {
+  DIVIDING: {
     animated: true,
     health: 100,
     speed: 160,
-    key: "enemies/amoeba",
+    key: "enemies_v2/enemy_splitting_large",
     collisionPoints: physicsShapes["amoeba"]
   },
-  AMOEBA_SMALL: {
+  DIVIDING_SMALL: {
     animated: true,
     health: 100,
     speed: 160,
-    key: "enemies/amoeba",
+    key: "enemies_v2/enemy_splitting_small",
     collisionPoints: physicsShapes["amoeba"]
   },
-  BACTERIA: {
+  FOLLOWING: {
     animated: true,
     health: 100,
     speed: 160,
-    key: "enemies/bacteria",
-    collisionPoints: physicsShapes["bacteria"]
-  },
-  BEETLE: {
-    animated: true,
-    health: 100,
-    speed: 160,
-    key: "enemies/beetle",
+    key: "enemies_v2/enemy_tracking_small",
     collisionPoints: physicsShapes["beetle"]
   },
-  // TURTLE: {
-  //   key: "enemies/turtle",
-  //   collisionPoints: physicsShapes["turtle"]
-  // },
-  PARTICLE_TANK: {
-    animated: false,
-    health: 400,
+  TANK: {
+    animated: true,
+    health: 150,
     speed: 100,
-    key: "enemies/particle-tank/particle-tank",
+    key: "enemies_v2/mini_boss_charging",
     collisionPoints: physicsShapes["particle-tank"]
   },
-  WORM: {
+  DASHING: {
     animated: true,
     health: 100,
     speed: 160,
-    key: "enemies/worm",
+    key: "enemies_v2/enemy_charging",
     collisionPoints: physicsShapes["worm"]
   },
-  VIRUS: {
-    animated: false,
+  PROJECTILE: {
+    animated: true,
     health: 100,
     speed: 160,
-    key: "enemies/virus/virus-dark",
+    key: "enemies_v2/enemy_shooting",
     collisionPoints: physicsShapes["virus-dark"]
   }
 };

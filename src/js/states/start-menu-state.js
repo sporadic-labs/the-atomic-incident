@@ -34,9 +34,6 @@ export default class StartMenu extends Phaser.State {
     groups.pickups = game.add.group(groups.foreground, "pickups");
     globals.groups = groups;
 
-    // Initializing the world
-    this.stage.backgroundColor = "#FFF";
-
     // Plugins
     global.plugins = global.plugins !== undefined ? global.plugins : {};
     globals.plugins.satBody = game.plugins.add(SatBodyPlugin);
@@ -45,7 +42,15 @@ export default class StartMenu extends Phaser.State {
     // Level manager
     const mapName = globals.tilemapNames[0];
     const mapManager = new MapManager(game, mapName, groups.background, groups.foreground);
+    game.world.setBounds(0, 0, mapManager.tilemap.widthInPixels, mapManager.tilemap.heightInPixels);
     globals.mapManager = mapManager;
+
+    const spawnObjects = mapManager.tilemap.objects["player-spawn"] || [];
+    const spawnPoint =
+      spawnObjects.length > 0
+        ? { x: spawnObjects[0].x, y: spawnObjects[0].y }
+        : { x: this.world.width / 2, y: this.world.height / 2 };
+    game.camera.focusOnXY(spawnPoint.x, spawnPoint.y);
 
     // Lighting plugin - needs to be set up after level manager
     this.lighting = globals.plugins.lighting = game.plugins.add(LightingPlugin, {
@@ -57,7 +62,7 @@ export default class StartMenu extends Phaser.State {
     });
     const shape = new Phaser.Circle(0, 0, 625);
     const light = globals.plugins.lighting.addLight(
-      new Phaser.Point(game.width / 2, game.height / 2),
+      new Phaser.Point(spawnPoint.x, spawnPoint.y),
       shape,
       Color.white(),
       Color.white()
@@ -75,10 +80,6 @@ export default class StartMenu extends Phaser.State {
 
     // Subscribe to the debug settings
     this.storeUnsubscribe = autorun(() => {
-      this.lighting.setOpacity(preferencesStore.shadowOpacity);
-      if (preferencesStore.physicsDebug) globals.plugins.satBody.enableDebugAll();
-      else globals.plugins.satBody.disableDebugAll();
-      // globals.postProcessor.visible = preferencesStore.shadersEnabled;
       game.paused = gameStore.isPaused;
     });
     // Note: pausing and unpausing mutes/unmutes Phaser's sound manager. Changing the volume while

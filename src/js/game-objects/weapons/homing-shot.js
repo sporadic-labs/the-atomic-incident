@@ -1,6 +1,7 @@
 import BaseWeapon from "./base-weapon";
 import Projectile from "./projectile/";
 import WEAPON_TYPES from "./weapon-types";
+import Enemy from "../enemies/enemy";
 
 export default class HomingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
@@ -10,20 +11,22 @@ export default class HomingShot extends BaseWeapon {
 
     this._fireSound = game.globals.soundManager.add("missile");
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
   fire(angle) {
     if (this.isAbleToAttack()) {
+      const speed = this._difficultyModifier.getSpeedMultiplier() * this._speed;
       const closestEnemy = this._getClosestEnemy();
       const offset = 20 * Math.PI / 180;
       const targetAcquisitionDelay = 260; // ms
-      const p1 = this._createProjectile(angle - offset, 24, this._speed);
+      const p1 = this._createProjectile(angle - offset, 24, speed);
       p1._target = closestEnemy;
       p1._targetAcquisitionDelayTime = this.game.time.now + targetAcquisitionDelay;
-      const p2 = this._createProjectile(angle, 24, this._speed);
+      const p2 = this._createProjectile(angle, 24, speed);
       p2._target = closestEnemy;
       p2._targetAcquisitionDelayTime = this.game.time.now + targetAcquisitionDelay;
-      const p3 = this._createProjectile(angle + offset, 24, this._speed);
+      const p3 = this._createProjectile(angle + offset, 24, speed);
       p3._target = closestEnemy;
       p3._targetAcquisitionDelayTime = this.game.time.now + targetAcquisitionDelay;
       this.incrementAmmo(-1);
@@ -71,11 +74,12 @@ export default class HomingShot extends BaseWeapon {
     if (!target || !light.isPointInLight(target.position)) {
       target = this._player;
     }
-    for (const enemy of this._enemies.children) {
-      const d = target.position.distance(enemy.position);
+    for (const child of this._enemies.children) {
+      if (!(child instanceof Enemy)) continue;
+      const d = target.position.distance(child.position);
       if (d <= r && d < closestDistance) {
         closestDistance = d;
-        closestEnemy = enemy;
+        closestEnemy = child;
       }
     }
     return closestEnemy;

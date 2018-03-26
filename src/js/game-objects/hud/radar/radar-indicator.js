@@ -15,7 +15,7 @@ export class RadarIndicator extends Phaser.Group {
 
   updatePlacement(radiusOffset = 5) {
     const playerLight = this._player._playerLight;
-    if (playerLight._light.isPointInLight(this._target.position)) {
+    if (!this._player._playerLight.isPointInShadow(this._target.position)) {
       this.visible = false;
     } else {
       this.visible = true;
@@ -81,7 +81,7 @@ export class GoalIndicator extends RadarIndicator {
     this.add(pointer);
     this._pointer = pointer;
 
-    const box = this.game.make.sprite(0, 0, "assets", "pickups/box");
+    const box = this.game.make.sprite(0, 0, "assets", "pickups/weapon_pickup");
     box.scale.set(16 / 25); // Scale expressed as fraction of image size
     box.anchor.set(0.5);
     this.add(box);

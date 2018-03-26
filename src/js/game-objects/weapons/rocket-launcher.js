@@ -10,11 +10,14 @@ export default class RocketLauncher extends BaseWeapon {
 
     this._fireSound = game.globals.soundManager.add("missile");
     this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+
+    this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
   fire(angle) {
     if (this.isAbleToAttack()) {
-      this._createProjectile(angle, 24, this._speed);
+      const speed = this._difficultyModifier.getSpeedMultiplier() * this._speed;
+      this._createProjectile(angle, 24, speed);
       this.incrementAmmo(-1);
       if (this.getAmmo() > 0) {
         this._fireSound.play();

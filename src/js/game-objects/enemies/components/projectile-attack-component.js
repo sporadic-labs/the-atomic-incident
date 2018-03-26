@@ -6,6 +6,7 @@ export default class ProjectileAttackComponent {
     this.parent = parent;
     this.projectileGroup = this.game.add.group(this.game.globals.groups.midground);
     this._targetingComponent = targetingComponent;
+    this._difficultyModifier = this.game.globals.difficultyModifier;
 
     this._timer = this.game.time.create(false);
     this._timer.start();
@@ -39,7 +40,8 @@ export default class ProjectileAttackComponent {
     if (this._canFire) {
       const angle = this.parent.position.angle(player.position);
       const { game, parent, projectileGroup } = this;
-      new EnemyProjectile(game, parent.x, parent.y, projectileGroup, player, angle, 300);
+      const speed = 300 * this._difficultyModifier.getSpeedMultiplier();
+      new EnemyProjectile(game, parent.x, parent.y, projectileGroup, player, angle, speed);
       this._canFire = false;
       this._timer.add(this._fireDelay, () => {
         this._canFire = true;

@@ -10,12 +10,15 @@ export default class RapidFire extends BaseWeapon {
 
     this._fireSound = game.globals.soundManager.add("rapid-shot-2", 10);
     this._reloadSound = game.globals.soundManager.add("rapidshot-reload");
+
+    this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
   fire(angle) {
     if (this.isAbleToAttack()) {
+      const speed = this._difficultyModifier.getSpeedMultiplier() * this._speed;
       const randomAngle = this.game.rnd.realInRange(-3, 3) * (Math.PI / 180);
-      this._createProjectile(angle + randomAngle, 24, this._speed);
+      this._createProjectile(angle + randomAngle, 24, speed);
       this.incrementAmmo(-1);
       if (this.getAmmo() > 0) {
         this._fireSound.play();

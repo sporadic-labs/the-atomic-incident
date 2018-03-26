@@ -2,7 +2,7 @@ import getFontString from "../../fonts/get-font-string";
 
 const baseTextStyle = {
   font: getFontString("Montserrat", { size: "35px", weight: 300 }),
-  fill: "#ffd800"
+  fill: "#FFEB6E"
 };
 
 export default class Score extends Phaser.Group {

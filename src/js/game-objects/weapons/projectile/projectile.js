@@ -46,7 +46,7 @@ export default class Projectile extends Phaser.Sprite {
    */
   static makeFlame(game, x, y, parent, player, damage, angle, speed, maxAge, color) {
     const key = "assets";
-    const frame = "weapons/tracking_15";
+    const frame = "weapons/flame";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.tint = color;
     bullet._setDeathTimer(maxAge);
@@ -88,7 +88,7 @@ export default class Projectile extends Phaser.Sprite {
    */
   static makeBouncing(game, x, y, parent, player, damage, angle, speed) {
     const key = "assets";
-    const frame = "weapons/shotgun_15";
+    const frame = "weapons/bouncing";
     const bullet = new Projectile(game, x, y, key, frame, parent, player, angle, speed);
     bullet.body.setBounce(1);
     bullet.init(new BouncingCollisionLogic(bullet, damage));

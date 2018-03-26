@@ -1,11 +1,12 @@
 const PICKUP_RANGE = 50;
 
 export default class EnergyPickup extends Phaser.Sprite {
-  constructor(game, x, y, parentGroup, player, energyValue, durationSeconds = 10) {
+  constructor(game, x, y, parentGroup, player, energyValue, durationSeconds = 15) {
     super(game, x, y, "assets", "pickups/energy-pickup");
     this.anchor.set(0.5);
     parentGroup.add(this);
 
+    this._difficultyModifier = this.game.globals.difficultyModifier;
     this._player = player;
     this._energyValue = energyValue;
     this._durationMs = durationSeconds * 1000;
@@ -32,9 +33,10 @@ export default class EnergyPickup extends Phaser.Sprite {
     }
 
     const dist = this.body.position.distance(this._player.position);
-    if (this.body.position.distance(this._player.position) < PICKUP_RANGE) {
+    const range = (1 + this._difficultyModifier.getDifficultyFraction()) * PICKUP_RANGE;
+    if (this.body.position.distance(this._player.position) < range) {
       // Move pickup towards player slowly when far and quickly when close
-      const lerpFactor = Phaser.Math.mapLinear(dist / PICKUP_RANGE, 0, 1, 0.5, 0);
+      const lerpFactor = Phaser.Math.mapLinear(dist / range, 0, 1, 0.5, 0);
       this.body.setPosition(
         (1 - lerpFactor) * this.body.position.x + lerpFactor * this._player.position.x,
         (1 - lerpFactor) * this.body.position.y + lerpFactor * this._player.position.y

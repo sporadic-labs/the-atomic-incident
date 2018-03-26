@@ -6,6 +6,10 @@ import "phaser-ce/build/custom/phaser-split";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, GAME_STATE_NAMES } from "./states";
+import initializeAnalytics, { registerStateChange } from "./analytics";
+
+const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+initializeAnalytics(isLocalhost);
 
 // Enable/disable Debug.
 const enableDebug = true;
@@ -14,14 +18,15 @@ const gameDimensions = 750;
 const game = new Phaser.Game({
   width: gameDimensions,
   height: gameDimensions,
-  renderer: Phaser.WEBGL,
+  renderer: Phaser.CANVAS,
   enableDebug: enableDebug, // We can turn off debug when deploying - using debug causes a hit on webgl
   parent: "game-container"
 });
 
 // Set up the menu system
-import { MenuApp } from "./menu";
+import { MenuApp, Instructions } from "./menu";
 import { h, render } from "preact";
+
 render(
   <MenuApp
     gameStore={gameStore}
@@ -31,14 +36,17 @@ render(
   />,
   document.body
 );
+if (enableDebug) render(<Instructions />, document.body);
 
 // Create the space for globals on the game object
 const globals = (game.globals = {});
 globals.tilemapNames = [
   // "dungeon-arcade-1",
   // "arcade-map-3",
-  "arcade-map-larger"
+  // "arcade-map-larger",
+  "arcade-map-larger-brown"
   // "arcade-map-smaller"
+  // "arcade-map-larger-T"
   // "arcade-map-2",
   // "puzzle-map-1",
   // "pacman"
@@ -54,14 +62,11 @@ game.state.add(GAME_STATE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
 gameStore.setGameState(GAME_STATE_NAMES.BOOT);
 
-// If the game isn't in debug mode, remove the instructions from the dom.
-if (!enableDebug) {
-  const debugInstructionsElement = document.getElementById("debug-instructions");
-  debugInstructionsElement.innerHTML = "";
-}
-
 autorun(() => {
   game.state.start(gameStore.gameState);
   if (gameStore.pendingGameRestart) game.state.start(gameStore.gameState);
 });
-game.state.onStateChange.add(() => gameStore.markRestartComplete());
+game.state.onStateChange.add(() => {
+  gameStore.markRestartComplete();
+  registerStateChange(game.state.getCurrentState().key);
+});

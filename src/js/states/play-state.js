@@ -22,14 +22,19 @@ import Score from "../game-objects/hud/score";
 import Combo from "../game-objects/hud/combo";
 import Radar from "../game-objects/hud/radar/";
 import Ammo from "../game-objects/hud/ammo";
+import DashIcon from "../game-objects/hud/dash-icon";
 import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
 import Bar from "../game-objects/hud/bar";
 import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
+import DifficultyModifier from "../game-objects/difficulty-modifier";
+import { registerGameStart } from "../analytics";
 
 export default class PlayState extends Phaser.State {
   create() {
+    registerGameStart();
+
     gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
 
     // Shorthands
@@ -50,9 +55,6 @@ export default class PlayState extends Phaser.State {
     groups.enemies = new EnemyGroup(game, groups.midground);
     groups.nonCollidingGroup = game.add.group(groups.midground, "non-colliding");
     globals.groups = groups;
-
-    // Initializing the world
-    this.stage.backgroundColor = "#FFF";
 
     // Plugins
     global.plugins = global.plugins !== undefined ? global.plugins : {};
@@ -76,6 +78,18 @@ export default class PlayState extends Phaser.State {
 
     // Sound manager
     globals.soundManager = new SoundEffectManager(this.game);
+
+    // Difficulty
+    globals.difficultyModifier = new DifficultyModifier();
+    // Just for debugging:
+    game.input.keyboard.addKey(Phaser.Keyboard.PERIOD).onDown.add(() => {
+      globals.difficultyModifier.incrementDifficulty(0.1);
+      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
+    });
+    game.input.keyboard.addKey(Phaser.Keyboard.COMMA).onDown.add(() => {
+      globals.difficultyModifier.incrementDifficulty(-0.1);
+      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
+    });
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -101,7 +115,7 @@ export default class PlayState extends Phaser.State {
 
     // Waves of pickups and enemies
     new PickupSpawner(game);
-    new EnemySpawner(game, player);
+    const enemySpawner = new EnemySpawner(game, player);
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
@@ -112,9 +126,12 @@ export default class PlayState extends Phaser.State {
     score.position.set(this.game.width - 15, 15);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
     ammo.position.set(game.width - 15, game.height - 15);
-    const playerHealth = new Bar(game, 15, 22, 200, 25, { minValue: 0, maxValue: 1 });
+    const playerHealth = new Bar(game, 45, 20, 200, 20, { minValue: 0, maxValue: 1 });
     player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
     groups.hud.add(playerHealth);
+    this.add.sprite(14, 18, "assets", "hud/health-icon", groups.hud);
+    const dashIcon = new DashIcon(game, groups.hud, player);
+    dashIcon.position.set(14, 50);
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {
@@ -128,7 +145,7 @@ export default class PlayState extends Phaser.State {
     globals.waveNum = waveNum;
 
     globals.groups.enemies.onEnemyKilled.add(enemy => {
-      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player, 15, 3);
+      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player, 15);
     });
 
     // Use the 'P' button to pause/unpause, as well as the button on the HUD.
@@ -162,6 +179,16 @@ export default class PlayState extends Phaser.State {
         gameStore.pause();
       });
 
+      game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(() => {
+        groups.enemies.killAll();
+      });
+
+      // Force spawning waves
+      game.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(() => enemySpawner._spawnWave());
+      game.input.keyboard
+        .addKey(Phaser.Keyboard.L)
+        .onDown.add(() => enemySpawner._spawnSpecialWave());
+
       // Pause without menus showing up.
       game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => {
         // NOTE(rex): Only allowed if all menus are closed already.
@@ -190,7 +217,7 @@ export default class PlayState extends Phaser.State {
       // FPS
       this._fpsText = game.make.text(15, game.height - 50, "60", {
         font: getFontString("Montserrat", { size: "12px", weight: 300 }),
-        fill: "#ffffff"
+        fill: "#00ffff"
       });
       this._fpsText.anchor.set(0, 1);
       groups.hud.add(this._fpsText);

@@ -1,3 +1,5 @@
+import { COLLISION_SURFACE } from "../weapons/projectile/collision-logic";
+
 /**
  * Base class for handling the logic for enemies getting hit by an attack. This allows us to have
  * special logic for projectiles against different enemy types. The default logic is that a
@@ -14,10 +16,11 @@ export class EnemyHitLogic {
   update() {}
 
   /**
-   * Returns whether or not the projectile successfully hit the enemy
+   * Returns what type of surface the projectile hit
    */
-  attemptHit(projectile) {
-    return true;
+  attemptHit(damage, projectile) {
+    this.enemy.takeDamage(damage, projectile);
+    return COLLISION_SURFACE.DESTRUCTIBLE;
   }
 }
 
@@ -41,8 +44,12 @@ export class WeakSpotHitLogic {
   /**
    * Returns whether or not the projectile successfully hit the enemy
    */
-  attemptHit(projectile) {
-    if (!this.enemy.game.physics.sat.world.overlap(this.weakSpot, projectile)) return false;
-    else return true;
+  attemptHit(damage, projectile) {
+    if (!this.enemy.game.physics.sat.world.overlap(this.weakSpot, projectile)) {
+      return COLLISION_SURFACE.INDESTRUCTIBLE;
+    } else {
+      this.enemy.takeDamage(damage, projectile);
+      return COLLISION_SURFACE.DESTRUCTIBLE;
+    }
   }
 }
