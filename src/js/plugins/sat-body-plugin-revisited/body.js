@@ -37,6 +37,7 @@ export default class Body {
     this.previousRotation = this.rotation;
     this.velocity = new P(0, 0);
     this.acceleration = new P(0, 0);
+    this.angularVelocity = 0;
     this.bounce = 0;
     this.maxSpeed = null;
     this.mass = 1;
@@ -178,6 +179,8 @@ export default class Body {
     return this;
   }
 
+  // If driven by Sprite, this is called by the Sprite, before Sprite's preUpdate in
+  // gameobjects/Sprite.js
   preUpdate() {
     // TODO: copy scale
 
@@ -192,6 +195,7 @@ export default class Body {
       const obj = this.gameObject;
 
       this.rotation = obj.rotation;
+      this.previousRotation = this.rotation;
 
       this.position.x = obj.world.x + obj.scale.x * this.offset.x;
       this.position.x -= obj.scale.x < 0 ? this.width : 0;
@@ -225,6 +229,9 @@ export default class Body {
     this.position.x += this.velocity.x * delta;
     this.position.y += this.velocity.y * delta;
 
+    // Update angular position
+    this.rotation += this.angularVelocity * delta;
+
     // Update heading
     if (!this.velocity.isZero()) this.heading = Math.atan2(this.velocity.y, this.velocity.x);
 
@@ -234,14 +241,17 @@ export default class Body {
     this.setRotation(this.rotation);
   }
 
+  // If driven by Sprite, this is called by Sprite, in component/core.js postUpdate
   postUpdate() {
-    // TODO: apply rotation
-
     if (!this.enabled || this.bodyType === BODY_TYPES.STATIC) return;
 
     if (this.gameObject) {
       this.gameObject.position.x = this.position.x;
       this.gameObject.position.y = this.position.y;
+
+      // Apply delta rotation in order to allow rotation to be set manually in Sprite#update, which
+      // is in-between the body's preUpdate and postUpdate
+      this.gameObject.rotation += this.rotation - this.previousRotation;
     }
   }
 
