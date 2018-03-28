@@ -44,6 +44,15 @@ export default class Flamethrower extends BaseWeapon {
     const r = this.game.rnd.integerInRange(200, 255);
     const color = Phaser.Color.getColor(r, r, r);
 
-    Projectile.makeFlame(this.game, x, y, this, player, this._damage, angle, speed, maxAge, color);
+    const { game, _damage } = this;
+    const p = Projectile.makeFlame(game, x, y, this, player, _damage, angle, speed, maxAge, color);
+    if (p.body) {
+      p.body.angularVelocity = this.game.rnd.sign() * this.game.rnd.integerInRange(5, 8);
+
+      // Sprite body won't follow this scaling yet, so make the change in scale small.
+      this.game.make
+        .tween(p.scale)
+        .to({ x: 0.75, y: 0.75 }, maxAge, Phaser.Easing.Elastic.InOut, true);
+    }
   }
 }
