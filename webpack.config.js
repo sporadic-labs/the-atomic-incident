@@ -1,12 +1,14 @@
 /* eslint-env node */
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
+  mode: "development",
   context: path.resolve(__dirname, "src"),
   entry: "./js/main.js",
+  cache: true,
   output: {
     path: path.resolve(__dirname, "public"),
     filename: "main.js"
@@ -17,13 +19,11 @@ module.exports = {
 
       {
         test: /\.(scss|sass)$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: [
-            { loader: "css-loader", options: { sourceMap: true } },
-            { loader: "sass-loader", options: { sourceMap: true } }
-          ]
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          { loader: "css-loader", options: { sourceMap: true } },
+          { loader: "sass-loader", options: { sourceMap: true } }
+        ]
       },
 
       //   Ensure that urls in scss are loaded correctly
@@ -38,7 +38,7 @@ module.exports = {
       },
 
       // Allow shaders to be loaded via glslify
-      { test: /\.(glsl|frag|vert)$/, use: ["raw-loader", "glslify"] },
+      { test: /\.(glsl|frag|vert)$/, use: ["raw-loader", "glslify"], exclude: /node_modules/ },
 
       // Load Phaser and deps as globals (required for Phaser v2)
       { test: /pixi\.js/, use: { loader: "expose-loader", options: "PIXI" } },
@@ -57,7 +57,8 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({ template: "./index.html" }),
-    new ExtractTextPlugin({ filename: "[name].[contenthash].css", allChunks: true }),
+
+    new MiniCssExtractPlugin({ filename: "[name].css", chunkFilename: "[id].css" }),
 
     // Instead of using imports & file loader for Phaser assets, just copy over all resources
     new CopyWebpackPlugin([
@@ -68,5 +69,5 @@ module.exports = {
       }
     ])
   ],
-  devtool: "source-map"
+  devtool: "eval"
 };
