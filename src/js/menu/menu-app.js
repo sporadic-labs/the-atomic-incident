@@ -42,7 +42,7 @@ const Menu = observer(
       );
     }
 
-    goBackOneState() {
+    goBackOneState = () => {
       // Update the internal component state and then register the change with the gameStore
       if (this.state.menuHistory.length === 0) return;
       this.setState(
@@ -56,46 +56,46 @@ const Menu = observer(
         },
         () => this.props.gameStore.setMenuState(this.state.currentMenuState)
       );
-    }
+    };
 
-    startGame() {
+    startGame = () => {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
       this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
-    }
+    };
 
-    restartGame() {
+    restartGame = () => {
       this.props.gameStore.unpause();
       this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
       this.props.gameStore.restartGame();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
-    }
+    };
 
-    goToStartMenu() {
+    goToStartMenu = () => {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
       this.props.gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
-    }
+    };
 
-    goToOptionsMenu() {
+    goToOptionsMenu = () => {
       this.props.gameStore.pause();
       this.addMenuState(MENU_STATE_NAMES.OPTIONS);
-    }
+    };
 
-    gameOver() {
+    gameOver = () => {
       this.props.gameStore.pause();
       this.addMenuState(MENU_STATE_NAMES.GAME_OVER);
-    }
+    };
 
-    resume() {
+    resume = () => {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
-    }
+    };
 
-    pause() {
+    pause = () => {
       this.props.gameStore.pause();
       this.addMenuState(MENU_STATE_NAMES.PAUSE);
-    }
+    };
 
     // From observer: when mobx re-renders, update the component's internal state to match
     componentWillReact() {
@@ -113,42 +113,42 @@ const Menu = observer(
             <StartMenu
               menuName={MENU_STATE_NAMES.START_MENU}
               gameStore={gameStore}
-              onOptions={() => this.goToOptionsMenu()}
-              onStart={() => this.startGame()}
+              onOptions={this.goToOptionsMenu}
+              onStart={this.startGame}
             />
             <PauseMenu
               menuName={MENU_STATE_NAMES.PAUSE}
               gameStore={gameStore}
-              onMainMenu={() => this.goToStartMenu()}
-              onOptions={() => this.goToOptionsMenu()}
-              onResume={() => this.resume()}
+              onMainMenu={this.goToStartMenu}
+              onOptions={this.goToOptionsMenu}
+              onResume={this.resume}
             />
             <DebugMenu
               menuName={MENU_STATE_NAMES.DEBUG}
               preferencesStore={preferencesStore}
               gameStore={gameStore}
-              onResume={() => this.resume()}
+              onResume={this.resume}
             />
             <OptionsMenu
               menuName={MENU_STATE_NAMES.OPTIONS}
               isClosable={isGameRunning}
               preferencesStore={preferencesStore}
-              onResume={() => this.resume()}
-              onBack={() => this.goBackOneState()}
+              onResume={this.resume}
+              onBack={this.goBackOneState}
             />
             <GameOverMenu
               menuName={MENU_STATE_NAMES.GAME_OVER}
               gameStore={gameStore}
-              onMainMenu={() => this.goToStartMenu()}
-              onRestart={() => this.restartGame()}
+              onMainMenu={this.goToStartMenu}
+              onRestart={this.restartGame}
             />
           </Switch>
 
           {isGameRunning ? (
             <PlayPauseToggle
               isPaused={gameStore.isPaused}
-              onPause={() => this.pause()}
-              onResume={() => this.resume()}
+              onPause={this.pause}
+              onResume={this.resume}
             />
           ) : (
             ""
