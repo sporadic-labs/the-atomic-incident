@@ -7,7 +7,6 @@ import PauseMenu from "./components/pause-menu";
 import DebugMenu from "./components/debug-menu";
 import OptionsMenu from "./components/options-menu";
 import GameOverMenu from "./components/game-over-menu";
-import Switch from "./components/switch";
 import PlayPauseToggle from "./components/play-pause-toggle";
 
 const maxStoredHistory = 3;
@@ -107,51 +106,61 @@ const Menu = observer(
     render() {
       const { gameStore, preferencesStore, width, height } = this.props;
       const isGameRunning = gameStore.gameState === GAME_STATE_NAMES.PLAY;
+
+      let activeMenu;
+      if (gameStore.menuState === MENU_STATE_NAMES.START_MENU) {
+        activeMenu = (
+          <StartMenu
+            gameStore={gameStore}
+            onOptions={this.goToOptionsMenu}
+            onStart={this.startGame}
+          />
+        );
+      } else if (gameStore.menuState === MENU_STATE_NAMES.PAUSE) {
+        activeMenu = (
+          <PauseMenu
+            gameStore={gameStore}
+            onMainMenu={this.goToStartMenu}
+            onOptions={this.goToOptionsMenu}
+            onResume={this.resume}
+          />
+        );
+      } else if (gameStore.menuState === MENU_STATE_NAMES.DEBUG) {
+        activeMenu = (
+          <DebugMenu
+            preferencesStore={preferencesStore}
+            gameStore={gameStore}
+            onResume={this.resume}
+          />
+        );
+      } else if (gameStore.menuState === MENU_STATE_NAMES.OPTIONS) {
+        activeMenu = (
+          <OptionsMenu
+            isClosable={isGameRunning}
+            preferencesStore={preferencesStore}
+            onResume={this.resume}
+            onBack={this.goBackOneState}
+          />
+        );
+      } else if (gameStore.menuState === MENU_STATE_NAMES.GAME_OVER) {
+        activeMenu = (
+          <GameOverMenu
+            gameStore={gameStore}
+            onMainMenu={this.goToStartMenu}
+            onRestart={this.restartGame}
+          />
+        );
+      }
+
       return (
         <div id="hud" style={{ width: `${width}px`, height: `${height}px` }}>
-          <Switch menuName={gameStore.menuState}>
-            <StartMenu
-              menuName={MENU_STATE_NAMES.START_MENU}
-              gameStore={gameStore}
-              onOptions={this.goToOptionsMenu}
-              onStart={this.startGame}
-            />
-            <PauseMenu
-              menuName={MENU_STATE_NAMES.PAUSE}
-              gameStore={gameStore}
-              onMainMenu={this.goToStartMenu}
-              onOptions={this.goToOptionsMenu}
-              onResume={this.resume}
-            />
-            <DebugMenu
-              menuName={MENU_STATE_NAMES.DEBUG}
-              preferencesStore={preferencesStore}
-              gameStore={gameStore}
-              onResume={this.resume}
-            />
-            <OptionsMenu
-              menuName={MENU_STATE_NAMES.OPTIONS}
-              isClosable={isGameRunning}
-              preferencesStore={preferencesStore}
-              onResume={this.resume}
-              onBack={this.goBackOneState}
-            />
-            <GameOverMenu
-              menuName={MENU_STATE_NAMES.GAME_OVER}
-              gameStore={gameStore}
-              onMainMenu={this.goToStartMenu}
-              onRestart={this.restartGame}
-            />
-          </Switch>
-
-          {isGameRunning ? (
+          {activeMenu}
+          {isGameRunning && (
             <PlayPauseToggle
               isPaused={gameStore.isPaused}
               onPause={this.pause}
               onResume={this.resume}
             />
-          ) : (
-            ""
           )}
         </div>
       );
