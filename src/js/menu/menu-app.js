@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import { observer } from "mobx-react";
+import { observer } from "mobx-preact";
 import { MENU_STATE_NAMES } from "./index";
 import { GAME_STATE_NAMES } from "../states";
 import StartMenu from "./components/start-menu";
