@@ -164,7 +164,7 @@ export default class Player extends Phaser.Sprite {
 
   takeDamage() {
     // If player is already taking damage, nothing else to do
-    if (this._isTakingDamage) return;
+    if (this._isTakingDamage || this.isDead) return;
 
     this._postProcessor.onPlayerDamage();
     this.game.globals.audioProcessor.runLowPassFilter(500);

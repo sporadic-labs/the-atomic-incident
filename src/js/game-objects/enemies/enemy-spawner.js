@@ -42,7 +42,7 @@ export default class EnemySpawner {
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
 
-    this._numWavesSpawned = 30;
+    this._numWavesSpawned = 10;
     this._waveInterval = 5000;
     this._waveletInterval = 1750;
     this._remainingWavelets = 0;
