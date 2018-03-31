@@ -75,6 +75,10 @@ export default class BaseWeapon extends Phaser.Group {
     return this._currentAmmo <= 0;
   }
 
+  getType() {
+    return this._type;
+  }
+
   destroy(...args) {
     this._cooldownTimer.destroy();
     super.destroy(...args);
