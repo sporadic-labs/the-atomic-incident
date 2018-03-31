@@ -183,7 +183,7 @@ export default class Player extends Phaser.Sprite {
     } else {
       this._hitSound.play();
 
-      // Speed boost on damage
+      // Speed boost on damage - not working currently
       const originalSpeed = this._maxSpeed;
       this._maxSpeed = 2 * this._maxSpeed;
       this._isTakingDamage = true;
@@ -194,18 +194,6 @@ export default class Player extends Phaser.Sprite {
         this.animations.play(ANIM.MOVE);
       });
     }
-
-    // // Flicker tween to indicate when player is invulnerable
-    // this._isTakingDamage = true;
-    // const tween = this.game.make
-    //   .tween(this)
-    //   .to({ alpha: 0.25 }, 100, "Quad.easeInOut", true, 0, 5, true);
-
-    // // When tween is over, reset
-    // tween.onComplete.add(function() {
-    //   this._isTakingDamage = false;
-    //   this._maxSpeed = originalSpeed;
-    // }, this);
 
     this.onDamage.dispatch();
   }
