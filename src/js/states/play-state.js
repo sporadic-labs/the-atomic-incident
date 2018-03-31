@@ -81,15 +81,6 @@ export default class PlayState extends Phaser.State {
 
     // Difficulty
     globals.difficultyModifier = new DifficultyModifier();
-    // Just for debugging:
-    game.input.keyboard.addKey(Phaser.Keyboard.PERIOD).onDown.add(() => {
-      globals.difficultyModifier.incrementDifficulty(0.1);
-      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
-    });
-    game.input.keyboard.addKey(Phaser.Keyboard.COMMA).onDown.add(() => {
-      globals.difficultyModifier.incrementDifficulty(-0.1);
-      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
-    });
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
