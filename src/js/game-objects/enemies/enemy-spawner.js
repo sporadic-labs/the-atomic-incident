@@ -1,6 +1,7 @@
 import Enemy from "./enemy";
 import { shuffleArray, weightedPick } from "../../helpers/utilities";
 import spawnBattalionWave from "./spawner/spawn-battalion-wave";
+import Wave from "../waves/wave";
 
 // Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
 // will cycle through the types from last key through first when spawning.
@@ -28,6 +29,24 @@ const COMPOSITIONS = [
   }
 ];
 
+class WaveDifficulty {
+  constructor(minWavelets, maxWavelets, waveletIncrement = 1) {
+    this.min = minWavelets;
+    this.max = maxWavelets;
+    this.current = this.min;
+    this.increment = waveletIncrement;
+  }
+
+  getCurrentWavelets() {
+    return Math.floor(this.current);
+  }
+
+  incrementWavelets() {
+    this.current += this.increment;
+    if (this.current > this.max) this.current = this.max;
+  }
+}
+
 export default class EnemySpawner {
   /**
    * Factory for scheduling and creating enemy groups.
@@ -43,10 +62,10 @@ export default class EnemySpawner {
     this._enemies = game.globals.groups.enemies;
     this._difficultyModifier = game.globals.difficultyModifier;
 
-    this._minNumWaves = 5;
-    this._maxNumWaves = 30;
+    this._normalWaveDifficulty = new WaveDifficulty(5, 30, 2);
+    this._specialWaveDifficulty = new WaveDifficulty(1, 10, 1);
 
-    this._numWavesSpawned = this._minNumWaves;
+    this._numWavesSpawned = 0;
     this._waveInterval = 5000;
     this._waveletInterval = 1750;
     this._remainingWavelets = 0;
@@ -66,7 +85,7 @@ export default class EnemySpawner {
   }
 
   _getDifficultyFraction() {
-    return Phaser.Math.mapLinear(this._numWavesSpawned, this._minNumWaves, this._maxNumWaves, 0, 1);
+    return Phaser.Math.mapLinear(this._numWavesSpawned, 0, 20, 0, 1);
   }
 
   /**
@@ -185,7 +204,7 @@ export default class EnemySpawner {
    * Generate and spawn a wave of enemies, and increment the difficulty.
    */
   _spawnWave() {
-    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 3), 1);
+    const numWavelets = this._normalWaveDifficulty.getCurrentWavelets();
     this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
@@ -193,13 +212,15 @@ export default class EnemySpawner {
       const order = this._generateEnemyOrder(comp);
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
+
+    this._normalWaveDifficulty.incrementWavelets();
   }
 
   /**
    * Generate and spawn a special 'boss' wave, and increment the difficulty.
    */
   _spawnSpecialWave() {
-    const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 6), 1);
+    const numWavelets = this._specialWaveDifficulty.getCurrentWavelets();
     this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
@@ -208,5 +229,7 @@ export default class EnemySpawner {
         this._remainingWavelets--;
       });
     }
+
+    this._specialWaveDifficulty.incrementWavelets();
   }
 }
