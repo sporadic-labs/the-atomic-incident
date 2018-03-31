@@ -1,7 +1,7 @@
 const PICKUP_RANGE = 50;
 
 export default class EnergyPickup extends Phaser.Sprite {
-  constructor(game, x, y, parentGroup, player, energyValue, durationSeconds = 15) {
+  constructor(game, x, y, parentGroup, player, energyValue = 10, durationSeconds = 15) {
     super(game, x, y, "assets", "pickups/energy-pickup");
     this.anchor.set(0.5);
     parentGroup.add(this);
