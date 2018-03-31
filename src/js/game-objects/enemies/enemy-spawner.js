@@ -41,8 +41,12 @@ export default class EnemySpawner {
     this._player = player;
     this._mapManager = game.globals.mapManager;
     this._enemies = game.globals.groups.enemies;
+    this._difficultyModifier = game.globals.difficultyModifier;
 
-    this._numWavesSpawned = 10;
+    this._minNumWaves = 5;
+    this._maxNumWaves = 30;
+
+    this._numWavesSpawned = this._minNumWaves;
     this._waveInterval = 5000;
     this._waveletInterval = 1750;
     this._remainingWavelets = 0;
@@ -59,6 +63,10 @@ export default class EnemySpawner {
     });
 
     // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
+  }
+
+  _getDifficultyFraction() {
+    return Phaser.Math.mapLinear(this._numWavesSpawned, this._minNumWaves, this._maxNumWaves, 0, 1);
   }
 
   /**
@@ -170,6 +178,7 @@ export default class EnemySpawner {
     }
 
     this._numWavesSpawned++;
+    this._difficultyModifier.setDifficultyByFraction(this._getDifficultyFraction());
   }
 
   /**

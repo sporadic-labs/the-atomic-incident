@@ -82,6 +82,18 @@ export default class PlayState extends Phaser.State {
     // Difficulty
     globals.difficultyModifier = new DifficultyModifier();
 
+    // Difficulty toast messages
+    globals.difficultyModifier.onDifficultyChange.add((previousDifficulty, difficulty) => {
+      const truncatedPreviousDifficulty = Math.floor(previousDifficulty * 10) / 10;
+      const truncatedDifficulty = Math.floor(difficulty * 10) / 10;
+      if (truncatedDifficulty > truncatedPreviousDifficulty) {
+        // Difficulty has changed in the 10s decimal place
+        const location = Phaser.Point.add(globals.player.position, new Phaser.Point(0, -30));
+        const message = `${truncatedDifficulty.toFixed(2)}x speed`;
+        new PopUpText(game, globals.groups.foreground, message, location);
+      }
+    });
+
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
