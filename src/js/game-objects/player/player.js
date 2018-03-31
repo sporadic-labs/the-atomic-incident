@@ -75,11 +75,10 @@ export default class Player extends Phaser.Sprite {
     this._attackControls.addMouseDownControl("attack", Phaser.Pointer.LEFT_BUTTON);
 
     // Animations
-    const hitFrames = Phaser.Animation.generateFrameNames(`player/hit_`, 0, 15, "", 2);
+    const hitFrames = Phaser.Animation.generateFrameNames(`player/hit-flash_`, 0, 29, "", 2);
     const deathFrames = Phaser.Animation.generateFrameNames(`player/death_`, 0, 15, "", 2);
-    this.animations.add(ANIM.HIT, hitFrames, 64, false).onComplete.add(() => {
-      this.animations.play(ANIM.MOVE);
-    }, this);
+    this.animations.add(ANIM.MOVE, ["player/move"], 0, true);
+    this.animations.add(ANIM.HIT, hitFrames, 60, false);
     this.animations.add(ANIM.DEATH, deathFrames, 64, false).onComplete.add(() => {
       if (this._gameOverFxComplete) {
         this.onGameOver();
@@ -183,23 +182,30 @@ export default class Player extends Phaser.Sprite {
       this.weaponManager.destroy();
     } else {
       this._hitSound.play();
+
+      // Speed boost on damage
+      const originalSpeed = this._maxSpeed;
+      this._maxSpeed = 2 * this._maxSpeed;
+      this._isTakingDamage = true;
+
+      this.animations.play(ANIM.HIT).onComplete.addOnce(() => {
+        this._isTakingDamage = false;
+        this._maxSpeed = originalSpeed;
+        this.animations.play(ANIM.MOVE);
+      });
     }
 
-    // Speed boost on damage
-    const originalSpeed = this._maxSpeed;
-    this._maxSpeed = 2 * this._maxSpeed;
+    // // Flicker tween to indicate when player is invulnerable
+    // this._isTakingDamage = true;
+    // const tween = this.game.make
+    //   .tween(this)
+    //   .to({ alpha: 0.25 }, 100, "Quad.easeInOut", true, 0, 5, true);
 
-    // Flicker tween to indicate when player is invulnerable
-    this._isTakingDamage = true;
-    const tween = this.game.make
-      .tween(this)
-      .to({ alpha: 0.25 }, 100, "Quad.easeInOut", true, 0, 5, true);
-
-    // When tween is over, reset
-    tween.onComplete.add(function() {
-      this._isTakingDamage = false;
-      this._maxSpeed = originalSpeed;
-    }, this);
+    // // When tween is over, reset
+    // tween.onComplete.add(function() {
+    //   this._isTakingDamage = false;
+    //   this._maxSpeed = originalSpeed;
+    // }, this);
 
     this.onDamage.dispatch();
   }
