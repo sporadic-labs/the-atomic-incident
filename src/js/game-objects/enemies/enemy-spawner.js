@@ -190,8 +190,6 @@ export default class EnemySpawner {
    * Generate and spawn a special 'boss' wave, and increment the difficulty.
    */
   _spawnSpecialWave() {
-    console.log("a very special wave!");
-
     const numWavelets = Math.max(Math.floor(this._numWavesSpawned / 6), 1);
     this._remainingWavelets = numWavelets;
 
