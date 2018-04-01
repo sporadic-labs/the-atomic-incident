@@ -182,15 +182,12 @@ export default class Player extends Phaser.Sprite {
       this.weaponManager.destroy();
     } else {
       this._hitSound.play();
-
-      // Speed boost on damage - not working currently
-      const originalSpeed = this._maxSpeed;
-      this._maxSpeed = 2 * this._maxSpeed;
       this._isTakingDamage = true;
+      this._movementController.startBoost();
 
       this.animations.play(ANIM.HIT).onComplete.addOnce(() => {
         this._isTakingDamage = false;
-        this._maxSpeed = originalSpeed;
+        this._movementController.stopBoost();
         this.animations.play(ANIM.MOVE);
       });
     }

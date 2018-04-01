@@ -3,6 +3,7 @@ import CooldownAbility from "./cooldown-ability";
 
 const MOVEMENT_TYPES = {
   WALK: "WALK",
+  BOOST: "BOOST",
   DASH: "DASH"
 };
 
@@ -65,11 +66,27 @@ export default class MovementContoller {
     if (this._movementType === MOVEMENT_TYPES.WALK) {
       this.body.setMaxSpeed(250 * multiplier);
       this._calculateWalkAcceleration(acceleration, 3000 * multiplier);
+    } else if (this._movementType === MOVEMENT_TYPES.BOOST) {
+      this.body.setMaxSpeed(400 * multiplier);
+      this._calculateWalkAcceleration(acceleration, 10000 * multiplier);
     } else if (this._movementType === MOVEMENT_TYPES.DASH) {
       this.body.setMaxSpeed(600 * multiplier);
       this._calculateDashAcceleration(this._dashAngle, acceleration, 12000 * multiplier);
     }
     this.body.acceleration.copyFrom(acceleration);
+  }
+
+  startBoost(duration) {
+    if (this._movementType === MOVEMENT_TYPES.WALK) {
+      this._movementType = MOVEMENT_TYPES.BOOST;
+      if (duration !== undefined) this._timer.add(duration, this.stopBoost, this);
+    }
+  }
+
+  stopBoost() {
+    if (this._movementType === MOVEMENT_TYPES.BOOST) {
+      this._movementType = MOVEMENT_TYPES.WALK;
+    }
   }
 
   isMoving() {
