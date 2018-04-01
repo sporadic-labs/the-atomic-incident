@@ -24,6 +24,10 @@ class IncrementableValue {
     if (newValue < this.min) newValue = this.min;
     this.value = newValue;
   }
+
+  resetValue() {
+    this.value = this.min;
+  }
 }
 
 // Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
@@ -32,30 +36,31 @@ const { ENEMY_TYPES } = require("../enemies/enemy-info");
 const COMPOSITIONS = [
   {
     type: ENEMY_TYPES.FOLLOWING,
-    number: new IncrementableValue(3, 8, 1),
+    number: new IncrementableValue(3, 10, 1),
     weight: 1,
     name: "Following Wave"
   },
   {
     type: ENEMY_TYPES.DASHING,
-    number: new IncrementableValue(2, 4, 1),
+    number: new IncrementableValue(2, 5, 0.75),
     weight: 1,
     name: "Dashing Wave"
   },
   {
     type: ENEMY_TYPES.PROJECTILE,
-    number: new IncrementableValue(1, 4, 1),
+    number: new IncrementableValue(1, 4, 0.75),
     weight: 1,
     name: "Projectile Wave"
   },
   {
     type: ENEMY_TYPES.DIVIDING,
-    number: new IncrementableValue(1, 2, 0.5),
+    number: new IncrementableValue(1, 3, 0.5),
     weight: 1,
     name: "Dividing Wave"
   }
 ];
 const incrementCompositions = () => COMPOSITIONS.forEach(elem => elem.number.incrementValue());
+const resetCompositions = () => COMPOSITIONS.forEach(elem => elem.number.resetValue());
 
 export default class EnemySpawner {
   /**
@@ -72,7 +77,7 @@ export default class EnemySpawner {
     this._enemies = game.globals.groups.enemies;
     this._difficultyModifier = game.globals.difficultyModifier;
 
-    this._numNormalWavelets = new IncrementableValue(2, 30, 2);
+    this._numNormalWavelets = new IncrementableValue(1, 30, 1);
     this._numSpecialWavelets = new IncrementableValue(1, 10, 1);
 
     this._numWavesSpawned = 0;
@@ -90,6 +95,8 @@ export default class EnemySpawner {
         this._scheduleNextWave();
       }
     });
+
+    resetCompositions();
 
     // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
   }
