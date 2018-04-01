@@ -582,22 +582,6 @@
             <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_13.png</key>
             <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_14.png</key>
             <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_16.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_17.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_18.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_19.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_20.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_21.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_22.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_23.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_24.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_25.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_26.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_27.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_28.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_29.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_30.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_31.png</key>
             <key type="filename">asset-frames/enemies_v2/mini_boss_charging/test_0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
