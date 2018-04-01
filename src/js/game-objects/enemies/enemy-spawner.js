@@ -3,32 +3,6 @@ import { shuffleArray, weightedPick } from "../../helpers/utilities";
 import spawnBattalionWave from "./spawner/spawn-battalion-wave";
 import Wave from "../waves/wave";
 
-// Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
-// will cycle through the types from last key through first when spawning.
-const { ENEMY_TYPES } = require("../enemies/enemy-info");
-const COMPOSITIONS = [
-  {
-    enemies: { [ENEMY_TYPES.FOLLOWING]: 6 },
-    weight: 1,
-    name: "Following Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.DASHING]: 4 },
-    weight: 1,
-    name: "Dashing Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.PROJECTILE]: 3 },
-    weight: 1,
-    name: "Projectile Wave"
-  },
-  {
-    enemies: { [ENEMY_TYPES.DIVIDING]: 2 },
-    weight: 1,
-    name: "Dividing Wave"
-  }
-];
-
 class IncrementableValue {
   constructor(min, max, increment) {
     this.min = min;
@@ -52,6 +26,37 @@ class IncrementableValue {
   }
 }
 
+// Testing modification: add the type here & define how to spawn it in _spawnWavelet. The spawner
+// will cycle through the types from last key through first when spawning.
+const { ENEMY_TYPES } = require("../enemies/enemy-info");
+const COMPOSITIONS = [
+  {
+    type: ENEMY_TYPES.FOLLOWING,
+    number: new IncrementableValue(3, 8, 1),
+    weight: 1,
+    name: "Following Wave"
+  },
+  {
+    type: ENEMY_TYPES.DASHING,
+    number: new IncrementableValue(2, 4, 1),
+    weight: 1,
+    name: "Dashing Wave"
+  },
+  {
+    type: ENEMY_TYPES.PROJECTILE,
+    number: new IncrementableValue(1, 4, 1),
+    weight: 1,
+    name: "Projectile Wave"
+  },
+  {
+    type: ENEMY_TYPES.DIVIDING,
+    number: new IncrementableValue(1, 2, 0.5),
+    weight: 1,
+    name: "Dividing Wave"
+  }
+];
+const incrementCompositions = () => COMPOSITIONS.forEach(elem => elem.number.incrementValue());
+
 export default class EnemySpawner {
   /**
    * Factory for scheduling and creating enemy groups.
@@ -67,7 +72,7 @@ export default class EnemySpawner {
     this._enemies = game.globals.groups.enemies;
     this._difficultyModifier = game.globals.difficultyModifier;
 
-    this._numNormalWavelets = new IncrementableValue(5, 30, 2);
+    this._numNormalWavelets = new IncrementableValue(2, 30, 2);
     this._numSpecialWavelets = new IncrementableValue(1, 10, 1);
 
     this._numWavesSpawned = 0;
@@ -203,6 +208,7 @@ export default class EnemySpawner {
       this._timer.add(this._waveInterval, this._spawnWave, this);
     }
 
+    incrementCompositions();
     this._difficultyModifier.setDifficultyByFraction(this._getDifficultyFraction());
   }
 
@@ -215,8 +221,9 @@ export default class EnemySpawner {
 
     for (let i = 0; i < numWavelets; i++) {
       const comp = weightedPick(COMPOSITIONS);
-      const order = this._generateEnemyOrder(comp);
-      this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
+      const num = Math.floor(comp.number.getValue());
+      const enemies = Array(num).fill(comp.type);
+      this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(enemies));
     }
 
     this._numNormalWavelets.incrementValue();
