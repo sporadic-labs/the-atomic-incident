@@ -1,13 +1,14 @@
 import { h } from "preact";
 
 import InputFix from "./input-fix";
+import CloseSvg from "../../../images/close.svg";
 
 export default function DebugMenu({ preferencesStore, gameStore, onResume }) {
   const { volume, shadowOpacity, shadersEnabled, physicsDebug, skipMenu } = preferencesStore;
   return (
     <div id="debug-menu" class="menu">
       <button class="btn-close" onClick={onResume}>
-        <i class="fa fa-times" aria-hidden="true" />
+        <CloseSvg />
       </button>
       <div class="menu-title">Debug Menu</div>
       <div>

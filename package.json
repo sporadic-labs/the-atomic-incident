@@ -48,6 +48,7 @@
     "point-in-polygon": "^1.0.1",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
+    "preact-svg-loader": "^0.2.0",
     "prettier": "^1.6.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",

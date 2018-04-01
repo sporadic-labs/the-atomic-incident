@@ -57,20 +57,30 @@
     border-radius: 4px;
     width: 38px;
     height: 38px;
+    padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #82b9af;
     color: white;
-    transition: all 0.1s ease;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
-    .fa-play {
-      margin-left: 2px;
+    svg {
+      width: 100%;
+      height: 100%;
+
+      * {
+        color: white;
+      }
     }
 
     &:hover {
       background-color: darken(#82b9af, 10%);
-      color: darken(white, 10%);
+      
+      svg * {
+        color: darken(white, 10%);
+      }
     }
   }
 
@@ -103,45 +113,31 @@
       position: absolute;
       top: 3%;
       right: 3%;
-      font-size: 14px;
       margin: 0;
-      padding: 0;
-      width: 24px;
-      height: 24px;
+      padding: 6px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      color: #82b9af;
       background-color: white;
       display: flex;
       align-items: center;
       justify-content: center;
 
-      &:hover {
-        color: darken(#82b9af, 10%);
+      svg {
+        width: 100%;
+        height: 100%;
+
+        * {
+          fill: #5a867e;
+        }
       }
-
-      i {
-        position: absolute;
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
-      }
-    }
-  }
-
-  #debug-menu {
-    button {
-      font-size: 14px;
-      padding: 6px;
-    }
-
-    .text-btn {
-      background: none;
-      color: #fff;
-      margin: 0px auto;
-      padding: 0px;
-
+      
       &:hover {
-        color: #e6e6e6;
+        background-color: #5a867e; 
+
+        svg * {
+          fill: white;
+        }
       }
     }
   }

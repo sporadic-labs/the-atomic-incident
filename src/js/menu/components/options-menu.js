@@ -1,6 +1,7 @@
 import { h } from "preact";
 
 import InputFix from "./input-fix";
+import CloseSvg from "../../../images/close.svg";
 
 export default function OptionsMenu({ preferencesStore, onResume, onBack, isClosable }) {
   const { volume } = preferencesStore;
@@ -8,7 +9,7 @@ export default function OptionsMenu({ preferencesStore, onResume, onBack, isClos
     <div id="debug-menu" class="menu">
       {isClosable ? (
         <button class="btn-close" onClick={onResume}>
-          <i class="fa fa-times" aria-hidden="true" />
+          <CloseSvg />
         </button>
       ) : (
         ""

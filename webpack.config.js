@@ -26,9 +26,14 @@ module.exports = {
         ]
       },
 
+      {
+        test: /\.svg$/,
+        use: { loader: "preact-svg-loader" }
+      },
+
       //   Ensure that urls in scss are loaded correctly
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg)$/,
+        test: /\.(eot|ttf|woff|woff2|png|jpg)$/,
         use: {
           loader: "file-loader",
           options: {
