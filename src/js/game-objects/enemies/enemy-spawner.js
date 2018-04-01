@@ -29,21 +29,26 @@ const COMPOSITIONS = [
   }
 ];
 
-class WaveDifficulty {
-  constructor(minWavelets, maxWavelets, waveletIncrement = 1) {
-    this.min = minWavelets;
-    this.max = maxWavelets;
-    this.current = this.min;
-    this.increment = waveletIncrement;
+class IncrementableValue {
+  constructor(min, max, increment) {
+    this.min = min;
+    this.max = max;
+    this.increment = increment;
+    this.value = this.min;
   }
 
-  getCurrentWavelets() {
-    return Math.floor(this.current);
+  getValue() {
+    return this.value;
   }
 
-  incrementWavelets() {
-    this.current += this.increment;
-    if (this.current > this.max) this.current = this.max;
+  incrementValue() {
+    this.setValue(this.value + this.increment);
+  }
+
+  setValue(newValue) {
+    if (newValue > this.max) newValue = this.max;
+    if (newValue < this.min) newValue = this.min;
+    this.value = newValue;
   }
 }
 
@@ -62,8 +67,8 @@ export default class EnemySpawner {
     this._enemies = game.globals.groups.enemies;
     this._difficultyModifier = game.globals.difficultyModifier;
 
-    this._normalWaveDifficulty = new WaveDifficulty(5, 30, 2);
-    this._specialWaveDifficulty = new WaveDifficulty(1, 10, 1);
+    this._numNormalWavelets = new IncrementableValue(5, 30, 2);
+    this._numSpecialWavelets = new IncrementableValue(1, 10, 1);
 
     this._numWavesSpawned = 0;
     this._waveInterval = 5000;
@@ -188,7 +193,9 @@ export default class EnemySpawner {
    * Schedule the next wave
    */
   _scheduleNextWave() {
-    if (this._numWavesSpawned !== 0 && this._numWavesSpawned % 4 === 0) {
+    this._numWavesSpawned++;
+
+    if (this._numWavesSpawned % 4 === 0) {
       // If the next wave difficulty is an multiple of 5, it is a special wave.
       this._timer.add(this._waveInterval, this._spawnSpecialWave, this);
     } else {
@@ -196,7 +203,6 @@ export default class EnemySpawner {
       this._timer.add(this._waveInterval, this._spawnWave, this);
     }
 
-    this._numWavesSpawned++;
     this._difficultyModifier.setDifficultyByFraction(this._getDifficultyFraction());
   }
 
@@ -204,7 +210,7 @@ export default class EnemySpawner {
    * Generate and spawn a wave of enemies, and increment the difficulty.
    */
   _spawnWave() {
-    const numWavelets = this._normalWaveDifficulty.getCurrentWavelets();
+    const numWavelets = Math.floor(this._numNormalWavelets.getValue());
     this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
@@ -213,14 +219,14 @@ export default class EnemySpawner {
       this._timer.add(this._waveletInterval * i, () => this._spawnWavelet(order));
     }
 
-    this._normalWaveDifficulty.incrementWavelets();
+    this._numNormalWavelets.incrementValue();
   }
 
   /**
    * Generate and spawn a special 'boss' wave, and increment the difficulty.
    */
   _spawnSpecialWave() {
-    const numWavelets = this._specialWaveDifficulty.getCurrentWavelets();
+    const numWavelets = Math.floor(this._numSpecialWavelets.getValue());
     this._remainingWavelets = numWavelets;
 
     for (let i = 0; i < numWavelets; i++) {
@@ -230,6 +236,6 @@ export default class EnemySpawner {
       });
     }
 
-    this._specialWaveDifficulty.incrementWavelets();
+    this._numSpecialWavelets.incrementValue();
   }
 }
