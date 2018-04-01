@@ -19,6 +19,7 @@ export const ENEMY_INFO = {
     animated: true,
     health: 100,
     speed: 160,
+    moveFrames: 16,
     key: "enemies_v2/enemy_splitting_large",
     collisionPoints: physicsShapes["amoeba"]
   },
@@ -26,6 +27,7 @@ export const ENEMY_INFO = {
     animated: true,
     health: 100,
     speed: 160,
+    moveFrames: 16,
     key: "enemies_v2/enemy_splitting_small",
     collisionPoints: physicsShapes["amoeba"]
   },
@@ -33,6 +35,7 @@ export const ENEMY_INFO = {
     animated: true,
     health: 100,
     speed: 160,
+    moveFrames: 16,
     key: "enemies_v2/enemy_tracking_small",
     collisionPoints: physicsShapes["beetle"]
   },
@@ -40,6 +43,7 @@ export const ENEMY_INFO = {
     animated: true,
     health: 150,
     speed: 100,
+    moveFrames: 16,
     key: "enemies_v2/mini_boss_charging",
     collisionPoints: physicsShapes["particle-tank"]
   },
@@ -47,6 +51,7 @@ export const ENEMY_INFO = {
     animated: true,
     health: 100,
     speed: 160,
+    moveFrames: 16,
     key: "enemies_v2/enemy_charging",
     collisionPoints: physicsShapes["worm"]
   },
@@ -54,6 +59,7 @@ export const ENEMY_INFO = {
     animated: true,
     health: 100,
     speed: 160,
+    moveFrames: 16,
     key: "enemies_v2/enemy_shooting",
     collisionPoints: physicsShapes["virus-dark"]
   }

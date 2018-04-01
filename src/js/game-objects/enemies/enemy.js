@@ -26,7 +26,8 @@ export default class Enemy extends Phaser.Sprite {
       speed: info.speed,
       visionRadius: null,
       collisionPoints: info.collisionPoints || [],
-      animated: info.animated
+      animated: info.animated,
+      numMoveFrames: info.moveFrames
     });
     return enemy;
   }
@@ -50,7 +51,8 @@ export default class Enemy extends Phaser.Sprite {
       color = 0xffffff,
       speed = 100,
       visionRadius = 200,
-      collisionPoints = []
+      collisionPoints = [],
+      numMoveFrames = 16
     } = {}
   ) {
     super(game, position.x, position.y, key, animated ? `${frame}/move_00` : frame);
@@ -126,7 +128,9 @@ export default class Enemy extends Phaser.Sprite {
 
     // Animations
     const genFrameNames = Phaser.Animation.generateFrameNames;
-    const moveFrames = animated ? genFrameNames(`${frame}/move_`, 0, 15, "", 2) : [frame];
+    const moveFrames = animated
+      ? genFrameNames(`${frame}/move_`, 0, numMoveFrames - 1, "", 2)
+      : [frame];
     const hitFrames = animated ? genFrameNames(`${frame}/hit_`, 0, 15, "", 2) : [frame];
     const deathFrames = animated ? genFrameNames(`${frame}/death_`, 0, 15, "", 2) : [frame];
     this.animations.add(ANIM.MOVE, moveFrames, 24, true);
