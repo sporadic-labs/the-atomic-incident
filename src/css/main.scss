@@ -2,6 +2,7 @@
 @import "../../node_modules/typeface-montserrat/index.css";
 @import "../../node_modules/typeface-unica-one/index.css";
 @import "../../node_modules/typeface-cherry-cream-soda/index.css";
+@import "../fonts/Johnyokonysm/index.css";
 
 @import "font-awesome";
 @import "normalize";
@@ -10,7 +11,13 @@
 @import "hud";
 // @import "css-atlas";
 
+html {
+  font-size: 100%;
+}
+
 body {
   background-color: black;
   color: white;
+  font-family: "Johnyokonysm", sans-serif;
 }
+
