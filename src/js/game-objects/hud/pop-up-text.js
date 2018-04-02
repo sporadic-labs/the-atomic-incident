@@ -1,7 +1,7 @@
 import getFontString from "../../fonts/get-font-string";
 
 const style = {
-  font: getFontString("Cherry Cream Soda", { size: "22px" }),
+  font: getFontString("Johnyokonysm", { size: "22px" }),
   fill: "#F4823A",
   stroke: "#ffffff",
   strokeThickness: 2
