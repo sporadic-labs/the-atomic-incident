@@ -183,11 +183,11 @@ export default class Player extends Phaser.Sprite {
     } else {
       this._hitSound.play();
       this._isTakingDamage = true;
-      this._movementController.startBoost();
+      // this._movementController.startBoost();
 
       this.animations.play(ANIM.HIT).onComplete.addOnce(() => {
         this._isTakingDamage = false;
-        this._movementController.stopBoost();
+        // this._movementController.stopBoost();
         this.animations.play(ANIM.MOVE);
       });
     }
