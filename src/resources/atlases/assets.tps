@@ -672,6 +672,36 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/hud/ammo-bar-interior.png</key>
+            <key type="filename">asset-frames/hud/ammo-bar-outline.png</key>
+            <key type="filename">asset-frames/hud/health-bar-interior.png</key>
+            <key type="filename">asset-frames/hud/health-bar-outline.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>39,6,77,12</rect>
+                <key>scale9Paddings</key>
+                <rect>39,6,77,12</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/hud/dash-bar-interior.png</key>
+            <key type="filename">asset-frames/hud/dash-bar-outline.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>18,6,36,12</rect>
+                <key>scale9Paddings</key>
+                <rect>18,6,36,12</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/hud/dash-icon.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
             <key type="filename">asset-frames/hud/health-icon.png</key>
