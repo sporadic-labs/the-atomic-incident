@@ -2,15 +2,16 @@ import { gameStore } from "../../game-data/observable-stores";
 import getFontString from "../../fonts/get-font-string";
 
 const baseTextStyle = {
-  font: getFontString("Montserrat", { size: "35px", weight: 300 }),
+  font: getFontString("Montserrat", { size: "26px", weight: 800 }),
   fill: "#ffffff"
 };
 const toastTextStyle = {
-  font: getFontString("Montserrat", { size: "24px", weight: 300 }),
+  font: getFontString("Montserrat", { size: "26px", weight: 800 }),
   fill: "#ffd800",
   align: "center"
 };
 const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#ffffff" });
+const numDigits = 7;
 
 /**
  * Listens to the gameStore and updates the score UI. Anchored from (1, 0)
@@ -66,7 +67,8 @@ export default class Score extends Phaser.Group {
 
   _updateDisplay() {
     const stringScore = String(this._score);
-    const paddedScore = stringScore.length <= 6 ? "0".repeat(6 - stringScore.length) : "";
+    const paddedScore =
+      stringScore.length <= numDigits ? "0".repeat(numDigits - stringScore.length) : "";
     this._scoreText.setText(stringScore);
     this._scorePadText.x = this._scoreText.x - this._scoreText.width;
     this._scorePadText.setText(paddedScore);

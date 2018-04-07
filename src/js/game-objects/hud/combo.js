@@ -1,7 +1,7 @@
 import getFontString from "../../fonts/get-font-string";
 
 const baseTextStyle = {
-  font: getFontString("Montserrat", { size: "35px", weight: 300 }),
+  font: getFontString("Montserrat", { size: "26px", weight: 800 }),
   fill: "#FFEB6E"
 };
 
