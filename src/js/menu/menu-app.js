@@ -6,6 +6,7 @@ import StartMenu from "./components/start-menu";
 import PauseMenu from "./components/pause-menu";
 import DebugMenu from "./components/debug-menu";
 import OptionsMenu from "./components/options-menu";
+import InstructionsMenu from "./components/instructions-menu";
 import GameOverMenu from "./components/game-over-menu";
 import PlayPauseToggle from "./components/play-pause-toggle";
 
@@ -81,6 +82,10 @@ const Menu = observer(
       this.addMenuState(MENU_STATE_NAMES.OPTIONS);
     };
 
+    goToInstructionsMenu = () => {
+      this.addMenuState(MENU_STATE_NAMES.INSTRUCTIONS);
+    };
+
     gameOver = () => {
       this.props.gameStore.pause();
       this.addMenuState(MENU_STATE_NAMES.GAME_OVER);
@@ -114,6 +119,7 @@ const Menu = observer(
             gameStore={gameStore}
             onOptions={this.goToOptionsMenu}
             onStart={this.startGame}
+            goToInstructionsMenu={this.goToInstructionsMenu}
           />
         );
       } else if (gameStore.menuState === MENU_STATE_NAMES.PAUSE) {
@@ -134,6 +140,17 @@ const Menu = observer(
           />
         );
       } else if (gameStore.menuState === MENU_STATE_NAMES.OPTIONS) {
+        activeMenu = (
+          <OptionsMenu
+            isClosable={isGameRunning}
+            preferencesStore={preferencesStore}
+            onResume={this.resume}
+            onBack={this.goBackOneState}
+          />
+        );
+      } else if (gameStore.menuState === MENU_STATE_NAMES.INSTRUCTIONS) {
+        activeMenu = <InstructionsMenu gameStore={gameStore} onBack={this.goBackOneState} />;
+      } else if (gameStore.menuState === MENU_STATE_NAMES.INFO) {
         activeMenu = (
           <OptionsMenu
             isClosable={isGameRunning}
