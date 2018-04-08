@@ -1,4 +1,4 @@
-import Bar from "./bar";
+import ImageBar from "./image-bar";
 import getFontString from "../../fonts/get-font-string";
 import WEAPON_TYPES from "../weapons/weapon-types";
 
@@ -19,8 +19,11 @@ export default class Ammo extends Phaser.Group {
 
     this._player = player;
 
-    this._ammoBar = new Bar(game, 0, 0, 20, 115, { barColor: 0xf48337, minValue: 0, maxValue: 1 });
-    this._ammoBar.position.setTo(-this._ammoBar.width, -this._ammoBar.height);
+    this._ammoBar = new ImageBar(game, parentGroup, {
+      interiorKey: "hud/ammo-bar-interior",
+      outlineKey: "hud/ammo-bar-outline"
+    });
+    this._ammoBar.position.set(-this._ammoBar.width, -this._ammoBar.height);
     this.add(this._ammoBar);
 
     const w = this._player.weaponManager.getActiveWeapon();

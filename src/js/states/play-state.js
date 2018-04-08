@@ -26,10 +26,10 @@ import DashIcon from "../game-objects/hud/dash-icon";
 import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
-import Bar from "../game-objects/hud/bar";
 import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import DifficultyModifier from "../game-objects/difficulty-modifier";
 import { registerGameStart } from "../analytics";
+import ImageBar from "../game-objects/hud/image-bar";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -129,12 +129,17 @@ export default class PlayState extends Phaser.State {
     score.position.set(this.game.width - 15, 15);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
     ammo.position.set(game.width - 15, game.height - 15);
-    const playerHealth = new Bar(game, 45, 20, 200, 20, { minValue: 0, maxValue: 1 });
-    player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
-    groups.hud.add(playerHealth);
-    this.add.sprite(14, 18, "assets", "hud/health-icon", groups.hud);
+    this.add.sprite(14, 14, "assets", "hud/health-icon", groups.hud);
     const dashIcon = new DashIcon(game, groups.hud, player);
-    dashIcon.position.set(14, 50);
+    dashIcon.position.set(14, 46);
+
+    const playerHealth = new ImageBar(game, groups.hud, {
+      x: 45,
+      y: 17,
+      interiorKey: "hud/health-bar-interior",
+      outlineKey: "hud/health-bar-outline"
+    });
+    player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {
@@ -219,7 +224,7 @@ export default class PlayState extends Phaser.State {
 
       // FPS
       this._fpsText = game.make.text(15, game.height - 50, "60", {
-        font: getFontString("Montserrat", { size: "12px", weight: 300 }),
+        font: getFontString("Unica One", { size: "12px", weight: 400 }),
         fill: "#00ffff"
       });
       this._fpsText.anchor.set(0, 1);
