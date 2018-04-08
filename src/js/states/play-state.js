@@ -224,7 +224,7 @@ export default class PlayState extends Phaser.State {
 
       // FPS
       this._fpsText = game.make.text(15, game.height - 50, "60", {
-        font: getFontString("Unica One", { size: "12px", weight: 400 }),
+        font: getFontString("Montserrat", { size: "12px", weight: 400 }),
         fill: "#00ffff"
       });
       this._fpsText.anchor.set(0, 1);
