@@ -5,78 +5,75 @@ const style = {
   fill: "#FFEB6E"
 };
 
-// Move to util since this is now used in multiple places:
-const scaleTween = (game, scale, initialValue, maxValue, finalValue) => {
-  scale.set(initialValue);
-  game.tweens.removeFrom(scale);
-  game.make
-    .tween(scale)
-    .to({ y: maxValue }, 200, Phaser.Easing.Bounce.Out)
-    .start();
-  const xTween = game.make
-    .tween(scale)
-    .to({ x: maxValue }, 400, Phaser.Easing.Bounce.Out)
-    .start();
-  xTween.onComplete.addOnce(() => {
-    game.make
-      .tween(scale)
-      .to({ y: finalValue }, 200, Phaser.Easing.Bounce.Out)
-      .start();
-    game.make
-      .tween(scale)
-      .to({ x: finalValue }, 400, Phaser.Easing.Bounce.Out)
-      .start();
-  });
-};
-
 export default class Wave extends Phaser.Group {
   constructor(game, parent, onWaveSpawn) {
     super(game, parent, "wave-indicator");
 
-    this._waveText = game.make.text(this.game.width / 2, 25, "", style);
+    this._waveText = game.make.text(0, 20, "Wave ", style);
     this._waveText.anchor.set(0.5, 0.5);
     this.add(this._waveText);
 
+    this._waveNumText = game.make.text(0, 20, "", style);
+    this._waveNumText.anchor.set(0.5, 0.5);
+    this.add(this._waveNumText);
+
+    // Non-monospace font, so approximate fixed spacing using a fat digit ("0")
+    this._waveNumText.setText("0", true);
+    this._singleDigitWidth = this._waveNumText.width * 0.9;
+
+    this._centerText(1);
+
+    this._waveNumText.setText("1");
     onWaveSpawn.add(this.onWaveSpawn);
   }
 
   onWaveSpawn = waveNum => {
-    this._waveText.setText(`Wave ${waveNum}`);
-    scaleTween(this.game, this._waveText.scale, 1, 1.5, 1);
-  };
+    if (waveNum === 1) return;
 
-  _updateDisplay() {
-    this._comboModifierText.visible = this._comboMultiplier > 1;
-    this._comboModifierText.setText(`${this._comboMultiplier.toFixed(1)}x`);
+    const scale = this._waveNumText.scale;
+    scale.set(1);
+    this.game.tweens.removeFrom(scale);
+    const delay = 1000;
 
-    // Combo text is anchored at (0.5, 0.5) for a scaling tween, but we want to position the group
-    // via an anchor of (1, 0) so that we can align it against the right edge of the screen.
-    this._comboModifierText.x = -0.5 * this._comboModifierText.width;
-    this._comboModifierText.y = 0.5 * this._comboModifierText.height;
-
-    this.game.tweens.removeFrom(this._comboModifierText.scale);
+    const yTween = this.game.make
+      .tween(scale)
+      .to({ y: 0 }, 200, Phaser.Easing.Cubic.In, false, delay)
+      .start();
     this.game.make
-      .tween(this._comboModifierText.scale)
-      .to({ y: 1.1 }, 100, Phaser.Easing.Bounce.Out)
+      .tween(scale)
+      .to({ x: 0 }, 400, Phaser.Easing.Cubic.Out, false, delay)
       .start();
-    const xTween = this.game.make
-      .tween(this._comboModifierText.scale)
-      .to({ x: 1.1 }, 200, Phaser.Easing.Bounce.Out)
-      .start();
-    xTween.onComplete.addOnce(() => {
+    yTween.onComplete.addOnce(() => {
+      this.setWaveNumber(waveNum);
       this.game.make
-        .tween(this._comboModifierText.scale)
-        .to({ y: 1 }, 100, Phaser.Easing.Bounce.Out)
+        .tween(scale)
+        .to({ y: 1 }, 200, Phaser.Easing.Cubic.Out)
         .start();
       this.game.make
-        .tween(this._comboModifierText.scale)
-        .to({ x: 1 }, 200, Phaser.Easing.Bounce.Out)
+        .tween(scale)
+        .to({ x: 1 }, 400, Phaser.Easing.Cubic.Out)
         .start();
     });
+  };
+
+  setWaveNumber(waveNumber) {
+    const numDigits = waveNumber.toString().length;
+    this._waveNumText.setText(waveNumber);
+    this._centerText(numDigits);
+  }
+
+  _centerText(numDigits) {
+    // Since text is positioned via a center anchor for scale tweening, center the text on the
+    // screen manually.
+    const gameCenterX = this.game.width / 2;
+    const waveNumTextWidth = numDigits * this._singleDigitWidth;
+    const totalTextWidth = this._waveText.width + waveNumTextWidth;
+    this._waveText.x = gameCenterX - totalTextWidth / 2 + this._waveText.width / 2;
+    this._waveNumText.x = this._waveText.right + waveNumTextWidth / 2;
   }
 
   destroy(...args) {
-    // this._comboTimer.destroy();
+    this.game.tweens.removeFrom(this._waveNumText.scale);
     super.destroy(...args);
   }
 }
