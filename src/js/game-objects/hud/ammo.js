@@ -7,6 +7,30 @@ const style = {
   fill: "#ffffff"
 };
 
+// Move to util since this is now used in multiple places:
+const scaleTween = (game, scale, initialValue, maxValue, finalValue) => {
+  scale.set(initialValue);
+  game.tweens.removeFrom(scale);
+  game.make
+    .tween(scale)
+    .to({ y: maxValue }, 100, Phaser.Easing.Bounce.Out)
+    .start();
+  const xTween = game.make
+    .tween(scale)
+    .to({ x: maxValue }, 200, Phaser.Easing.Bounce.Out)
+    .start();
+  xTween.onComplete.addOnce(() => {
+    game.make
+      .tween(scale)
+      .to({ y: finalValue }, 100, Phaser.Easing.Bounce.Out)
+      .start();
+    game.make
+      .tween(scale)
+      .to({ x: finalValue }, 200, Phaser.Easing.Bounce.Out)
+      .start();
+  });
+};
+
 /**
  * Ammo HUD group, positioned via "anchor" at (1, 1) so it can be easily placed at the bottom right
  * of the screen.
@@ -73,6 +97,7 @@ export default class Ammo extends Phaser.Group {
     const w = this._player.weaponManager.getActiveWeapon();
     const newFrame = this.getWeaponFrame(w);
     this._ammoSprite.frameName = newFrame;
+    scaleTween(this.game, this._ammoSprite.scale, 0.5, 2, 1.5);
   }
 
   getWeaponFrame(weapon) {
@@ -106,5 +131,10 @@ export default class Ammo extends Phaser.Group {
     }
 
     return frame;
+  }
+
+  destroy(...args) {
+    this.game.tweens.fromFrom(this._ammoSprite.scale);
+    super.destroy(...args);
   }
 }
