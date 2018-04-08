@@ -87,7 +87,9 @@ export default class EnemySpawner {
 
     this._timer = this.game.time.create(false);
     this._timer.start();
-    this._timer.add(500, this._spawnWave, this);
+    this._timer.add(500, this._scheduleNextWave, this);
+
+    this.onWaveSpawn = new Phaser.Signal();
 
     // If the last enemy in a wave has been killed, schedule the next wave.
     this._enemies.onEnemyKilled.add(() => {
@@ -206,6 +208,7 @@ export default class EnemySpawner {
    */
   _scheduleNextWave() {
     this._numWavesSpawned++;
+    this.onWaveSpawn.dispatch(this._numWavesSpawned);
 
     if (this._numWavesSpawned % 4 === 0) {
       // If the next wave difficulty is an multiple of 5, it is a special wave.
@@ -251,5 +254,9 @@ export default class EnemySpawner {
     }
 
     this._numSpecialWavelets.incrementValue();
+  }
+
+  destroy() {
+    this.onWaveSpawn.dispose();
   }
 }

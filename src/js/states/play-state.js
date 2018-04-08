@@ -30,6 +30,7 @@ import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import DifficultyModifier from "../game-objects/difficulty-modifier";
 import { registerGameStart } from "../analytics";
 import ImageBar from "../game-objects/hud/image-bar";
+import WaveHud from "../game-objects/hud/wave";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -119,6 +120,7 @@ export default class PlayState extends Phaser.State {
     // Waves of pickups and enemies
     new PickupSpawner(game);
     const enemySpawner = new EnemySpawner(game, player);
+    this.enemySpawner = enemySpawner;
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
@@ -132,7 +134,6 @@ export default class PlayState extends Phaser.State {
     this.add.sprite(14, 14, "assets", "hud/health-icon", groups.hud);
     const dashIcon = new DashIcon(game, groups.hud, player);
     dashIcon.position.set(14, 46);
-
     const playerHealth = new ImageBar(game, groups.hud, {
       x: 45,
       y: 17,
@@ -140,6 +141,7 @@ export default class PlayState extends Phaser.State {
       outlineKey: "hud/health-bar-outline"
     });
     player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
+    new WaveHud(game, groups.hud, enemySpawner.onWaveSpawn);
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {
@@ -147,10 +149,6 @@ export default class PlayState extends Phaser.State {
       const w = player.weaponManager.getActiveWeapon();
       new PopUpText(game, globals.groups.foreground, w.getName(), location);
     });
-
-    // Keep track of what wave the player is on using the globals object.
-    const waveNum = 0;
-    globals.waveNum = waveNum;
 
     globals.groups.enemies.onEnemyKilled.add(enemy => {
       new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player);
@@ -255,6 +253,7 @@ export default class PlayState extends Phaser.State {
   }
 
   shutdown() {
+    this.enemySpawner.destroy();
     this.storeUnsubscribe();
     // Destroy all plugins (MH: should we be doing this or more selectively removing plugins?)
     this.game.plugins.removeAll();
