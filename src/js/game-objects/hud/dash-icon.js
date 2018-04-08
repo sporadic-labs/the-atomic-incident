@@ -9,8 +9,8 @@ export default class DashIcon extends Phaser.Group {
     this.add(this._icon);
 
     this._dashCooldownBar = new ImageBar(game, parentGroup, {
-      x: 45,
-      y: 47,
+      x: 35,
+      y: 37,
       interiorKey: "hud/dash-bar-interior",
       outlineKey: "hud/dash-bar-outline"
     });

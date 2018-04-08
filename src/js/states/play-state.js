@@ -126,17 +126,17 @@ export default class PlayState extends Phaser.State {
     // HUD
     new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
     const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
-    combo.position.set(this.game.width - 15, 42);
+    combo.position.set(this.game.width - 5, 32);
     const score = new Score(game, groups.hud, globals.groups.enemies, combo);
-    score.position.set(this.game.width - 15, 15);
+    score.position.set(this.game.width - 5, 5);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
-    ammo.position.set(game.width - 15, game.height - 15);
-    this.add.sprite(14, 14, "assets", "hud/health-icon", groups.hud);
+    ammo.position.set(game.width - 5, game.height - 5);
+    this.add.sprite(4, 4, "assets", "hud/health-icon", groups.hud);
     const dashIcon = new DashIcon(game, groups.hud, player);
-    dashIcon.position.set(14, 46);
+    dashIcon.position.set(4, 36);
     const playerHealth = new ImageBar(game, groups.hud, {
-      x: 45,
-      y: 17,
+      x: 35,
+      y: 7,
       interiorKey: "hud/health-bar-interior",
       outlineKey: "hud/health-bar-outline"
     });
@@ -221,7 +221,7 @@ export default class PlayState extends Phaser.State {
       }
 
       // FPS
-      this._fpsText = game.make.text(15, game.height - 50, "60", {
+      this._fpsText = game.make.text(5, game.height - 38, "60", {
         font: getFontString("Montserrat", { size: "12px", weight: 400 }),
         fill: "#00ffff"
       });

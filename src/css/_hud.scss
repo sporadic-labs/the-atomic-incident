@@ -51,8 +51,8 @@
 
   #pause-controls {
     position: absolute;
-    bottom: 15px;
-    left: 15px;
+    bottom: 5px;
+    left: 5px;
     font-size: 24px;
     border-radius: 4px;
     width: 38px;
@@ -77,7 +77,7 @@
 
     &:hover {
       background-color: darken(#82b9af, 10%);
-      
+
       svg * {
         color: darken(white, 10%);
       }
@@ -131,9 +131,9 @@
           fill: #5a867e;
         }
       }
-      
+
       &:hover {
-        background-color: #5a867e; 
+        background-color: #5a867e;
 
         svg * {
           fill: white;
