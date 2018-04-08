@@ -134,7 +134,7 @@ export default class Ammo extends Phaser.Group {
   }
 
   destroy(...args) {
-    this.game.tweens.from(this._ammoSprite.scale);
+    this.game.tweens.removeFrom(this._ammoSprite.scale);
     super.destroy(...args);
   }
 }
