@@ -7,7 +7,7 @@ const baseTextStyle = {
 };
 const toastTextStyle = {
   font: getFontString("Montserrat", { size: "26px", weight: 800 }),
-  fill: "#ffd800",
+  fill: "#FFEB6E",
   align: "center"
 };
 const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#ffffff" });
@@ -36,8 +36,13 @@ export default class Score extends Phaser.Group {
     this._scorePadText.alpha = 0.5;
     this.add(this._scorePadText);
 
-    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "New high score!", toastTextStyle);
-    this._highScoreMsgText.anchor.setTo(0.5, 0);
+    this._highScoreMsgText = game.make.text(
+      -game.width / 2,
+      game.height - 5,
+      "New high score!",
+      toastTextStyle
+    );
+    this._highScoreMsgText.anchor.setTo(0.5, 1);
     this._highScoreMsgText.visible = false;
     this.add(this._highScoreMsgText);
 
