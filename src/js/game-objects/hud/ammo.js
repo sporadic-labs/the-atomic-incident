@@ -3,11 +3,9 @@ import getFontString from "../../fonts/get-font-string";
 import WEAPON_TYPES from "../weapons/weapon-types";
 
 const style = {
-  font: getFontString("Montserrat", { size: "15px", weight: 300 }),
+  font: getFontString("Montserrat", { size: "15px", weight: 800, align: "right" }),
   fill: "#ffffff"
 };
-const centeredStyle = Object.assign({}, style, { align: "center" });
-const rightAlignedStyle = Object.assign({}, style, { align: "right" });
 
 /**
  * Ammo HUD group, positioned via "anchor" at (1, 1) so it can be easily placed at the bottom right
@@ -28,30 +26,46 @@ export default class Ammo extends Phaser.Group {
 
     const w = this._player.weaponManager.getActiveWeapon();
 
-    this._ammoText = game.make.text(0, 0, "", rightAlignedStyle);
-    this._ammoText.anchor.setTo(1, 1);
-    this._ammoText.position.setTo(this._ammoBar.x - 30, -60);
-    this.add(this._ammoText);
+    const ammoOutline = game.add.sprite(this._ammoBar.x - 56, -46, "assets", "hud/ammo-outline");
+    this.add(ammoOutline);
 
     const frame = this.getWeaponFrame(w);
     this._ammoSprite = new Phaser.Sprite(game, 0, 0, "assets", frame);
-    this._ammoSprite.anchor.setTo(1, 1);
-    this._ammoSprite.position.setTo(this._ammoBar.x - 30, -28);
-    this._ammoSprite.scale.setTo(2);
+    this._ammoSprite.anchor.setTo(0.5, 0.5);
+    this._ammoSprite.position.setTo(
+      ammoOutline.x + ammoOutline.width / 2,
+      ammoOutline.y + ammoOutline.height / 2
+    );
+    this._ammoSprite.scale.setTo(1.2);
     this.add(this._ammoSprite);
 
-    this._nameText = game.make.text(0, 0, w.getName(), rightAlignedStyle);
+    this._nameText = game.make.text(0, 0, w.getName(), style);
     this._nameText.anchor.setTo(1, 1);
-    this._nameText.position.setTo(this._ammoBar.x - 30, 0);
+    this._nameText.position.setTo(ammoOutline.x - 10, 7);
     this.add(this._nameText);
+
+    this._ammoText = game.make.text(0, 0, "", style);
+    this._ammoText.anchor.setTo(1, 1);
+    this._ammoText.position.setTo(ammoOutline.x - 10, -12);
+    this.add(this._ammoText);
 
     weaponSpawner.onPickupCollected.add(this.updateWeapon, this);
   }
 
   update() {
     const w = this._player.weaponManager.getActiveWeapon();
-    this._ammoText.setText(w.isReloading() ? `Reloading...` : `${w.getAmmo()} / ${w.getMaxAmmo()}`);
-    this._ammoBar.setValue(w.getAmmo() / w.getMaxAmmo());
+    if (w.isAmmoEmpty()) {
+      this._nameText.setText("Empty!");
+      this._ammoText.setText("");
+      this._ammoBar.setValue(0);
+      this._ammoSprite.visible = false;
+    } else {
+      this._nameText.setText(w.getName());
+      this._ammoSprite.visible = true;
+      this._ammoText.setText(`${w.getAmmo()} / ${w.getMaxAmmo()}`);
+      this._ammoBar.setValue(w.getAmmo() / w.getMaxAmmo());
+    }
+
     super.update();
   }
 
@@ -59,7 +73,6 @@ export default class Ammo extends Phaser.Group {
     const w = this._player.weaponManager.getActiveWeapon();
     const newFrame = this.getWeaponFrame(w);
     this._ammoSprite.frameName = newFrame;
-    this._nameText.setText(w.getName());
   }
 
   getWeaponFrame(weapon) {
