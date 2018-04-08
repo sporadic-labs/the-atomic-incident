@@ -8,11 +8,14 @@ export default class ImageBar extends Phaser.Group {
   constructor(
     game,
     parentGroup,
-    { minValue = 0, maxValue = 1, interiorKey = "", outlineKey = "" } = {}
+    { x = 0, y = 0, minValue = 0, maxValue = 1, interiorKey = "", outlineKey = "" } = {}
   ) {
     super(game, parentGroup, "image-bar");
+    this.position.set(x, y);
 
     this.setRange(minValue, maxValue);
+    this.value = maxValue;
+    this.tweenValue = maxValue;
 
     this.interiorImage = game.make.image(0, 0, "assets", interiorKey);
     this.outlineImage = game.make.image(0, 0, "assets", outlineKey);
@@ -34,19 +37,30 @@ export default class ImageBar extends Phaser.Group {
     return this;
   }
 
-  setValue(value) {
-    this.value = Phaser.Math.clamp(value, this.minValue, this.maxValue);
+  setValue(value, duration = 100) {
+    const lastValue = this.value;
+    const nextValue = Phaser.Math.clamp(value, this.minValue, this.maxValue);
+
+    this.tweenValue = lastValue;
+    this.value = nextValue;
     this.updateGraphics();
+
+    this.game.tweens.removeFrom(this);
+    this.game.add
+      .tween(this)
+      .to({ tweenValue: this.value }, duration, Phaser.Easing.Cubic.In, true)
+      .onUpdateCallback(this.updateGraphics);
+
     return this;
   }
 
-  getValue(value) {
-    return value;
+  getValue() {
+    return this.value;
   }
 
-  updateGraphics() {
+  updateGraphics = () => {
     const cropSize = Phaser.Math.mapLinear(
-      this.value,
+      this.tweenValue,
       this.minValue,
       this.maxValue,
       0,
@@ -66,5 +80,10 @@ export default class ImageBar extends Phaser.Group {
     this.interiorImage.crop(this.cropRect);
 
     return this;
+  };
+
+  destroy(...args) {
+    this.game.tweens.removeFrom(this);
+    super.destroy(...args);
   }
 }
