@@ -29,7 +29,7 @@ export default class Explosion extends Phaser.Sprite {
     });
 
     const tweenTarget = { radius: 0 };
-    game.tweens
+    this.tween = game.tweens
       .create(tweenTarget)
       .to({ radius: this.width / 2 }, 10 / 24 * 1000)
       .onUpdateCallback(() => this.body.setCircle(tweenTarget.radius))
@@ -49,5 +49,10 @@ export default class Explosion extends Phaser.Sprite {
       enemy.takeDamage(scaledDamage, this);
       this.enemiesDamaged.push(enemy);
     }
+  }
+
+  destroy(...args) {
+    this.game.tweens.remove(this.tween);
+    super.destroy(...args);
   }
 }
