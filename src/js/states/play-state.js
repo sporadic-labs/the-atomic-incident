@@ -31,6 +31,7 @@ import DifficultyModifier from "../game-objects/difficulty-modifier";
 import { registerGameStart } from "../analytics";
 import ImageBar from "../game-objects/hud/image-bar";
 import WaveHud from "../game-objects/hud/wave";
+import HudMessageDisplay from "../game-objects/hud/hud-message-display";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -83,18 +84,6 @@ export default class PlayState extends Phaser.State {
     // Difficulty
     globals.difficultyModifier = new DifficultyModifier();
 
-    // Difficulty toast messages
-    globals.difficultyModifier.onDifficultyChange.add((previousDifficulty, difficulty) => {
-      const truncatedPreviousDifficulty = Math.floor(previousDifficulty * 10) / 10;
-      const truncatedDifficulty = Math.floor(difficulty * 10) / 10;
-      if (truncatedDifficulty > truncatedPreviousDifficulty) {
-        // Difficulty has changed in the 10s decimal place
-        const location = Phaser.Point.add(globals.player.position, new Phaser.Point(0, -30));
-        const message = `${truncatedDifficulty.toFixed(2)}x speed`;
-        new PopUpText(game, globals.groups.foreground, message, location);
-      }
-    });
-
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.physics.arcade.gravity.set(0);
@@ -124,10 +113,11 @@ export default class PlayState extends Phaser.State {
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
+    const hudMessageDisplay = new HudMessageDisplay(game, groups.hud);
     new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
     const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
     combo.position.set(this.game.width - 5, 32);
-    const score = new Score(game, groups.hud, globals.groups.enemies, combo);
+    const score = new Score(game, groups.hud, globals.groups.enemies, combo, hudMessageDisplay);
     score.position.set(this.game.width - 5, 5);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
     ammo.position.set(game.width - 5, game.height - 5);
@@ -142,6 +132,16 @@ export default class PlayState extends Phaser.State {
     });
     player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
     new WaveHud(game, groups.hud, enemySpawner.onWaveSpawn);
+
+    // Difficulty toast messages
+    globals.difficultyModifier.onDifficultyChange.add((previousDifficulty, difficulty) => {
+      const truncatedPreviousDifficulty = Math.floor(previousDifficulty * 10) / 10;
+      const truncatedDifficulty = Math.floor(difficulty * 10) / 10;
+      if (truncatedDifficulty > truncatedPreviousDifficulty) {
+        // Difficulty has changed in the 10s decimal place
+        hudMessageDisplay.setMessage(`${truncatedDifficulty.toFixed(2)}x speed`);
+      }
+    });
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {

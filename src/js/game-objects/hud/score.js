@@ -21,7 +21,7 @@ const numDigits = 7;
  * @extends {Phaser.Group}
  */
 export default class Score extends Phaser.Group {
-  constructor(game, parent, enemies, combo) {
+  constructor(game, parent, enemies, combo, hudMessageDisplay) {
     super(game, parent, "score");
 
     this._rawScore = this._score = 0;
@@ -36,15 +36,7 @@ export default class Score extends Phaser.Group {
     this._scorePadText.alpha = 0.5;
     this.add(this._scorePadText);
 
-    this._highScoreMsgText = game.make.text(
-      -game.width / 2,
-      game.height - 5,
-      "New high score!",
-      toastTextStyle
-    );
-    this._highScoreMsgText.anchor.setTo(0.5, 1);
-    this._highScoreMsgText.visible = false;
-    this.add(this._highScoreMsgText);
+    this._hudMessageDisplay = hudMessageDisplay;
 
     enemies.onEnemyKilled.add(() => this.incrementScore(combo.getCombo()));
 
@@ -66,7 +58,7 @@ export default class Score extends Phaser.Group {
     this._updateDisplay();
     if (!this._hasSetNewHighScore && this._score > gameStore.highScore) {
       this._hasSetNewHighScore = true;
-      this._onNewHighScore();
+      this._hudMessageDisplay.setMessage("New high score!");
     }
   }
 
@@ -77,13 +69,5 @@ export default class Score extends Phaser.Group {
     this._scoreText.setText(stringScore);
     this._scorePadText.x = this._scoreText.x - this._scoreText.width;
     this._scorePadText.setText(paddedScore);
-  }
-
-  _onNewHighScore() {
-    this._highScoreMsgText.visible = true;
-    const timer = this.game.time.create(true);
-    timer.add(3000, () => (this._highScoreMsgText.visible = false));
-    timer.start();
-    // TODO: Show some icon as well
   }
 }
