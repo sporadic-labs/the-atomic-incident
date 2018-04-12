@@ -21,7 +21,7 @@ export const ENEMY_INFO = {
     speed: 160,
     moveFrames: 16,
     key: "enemies_v2/enemy_splitting_large",
-    collisionPoints: physicsShapes["amoeba"]
+    collisionPoints: physicsShapes["DIVIDING"]
   },
   DIVIDING_SMALL: {
     animated: true,
@@ -29,7 +29,7 @@ export const ENEMY_INFO = {
     speed: 160,
     moveFrames: 16,
     key: "enemies_v2/enemy_splitting_small",
-    collisionPoints: physicsShapes["amoeba"]
+    collisionPoints: physicsShapes["DIVIDING_SMALL"]
   },
   FOLLOWING: {
     animated: true,
@@ -37,7 +37,7 @@ export const ENEMY_INFO = {
     speed: 160,
     moveFrames: 16,
     key: "enemies_v2/enemy_tracking_small",
-    collisionPoints: physicsShapes["beetle"]
+    collisionPoints: physicsShapes["FOLLOWING"]
   },
   TANK: {
     animated: true,
@@ -45,7 +45,7 @@ export const ENEMY_INFO = {
     speed: 100,
     moveFrames: 16,
     key: "enemies_v2/mini_boss_charging",
-    collisionPoints: physicsShapes["particle-tank"]
+    collisionPoints: physicsShapes["TANK"]
   },
   DASHING: {
     animated: true,
@@ -53,7 +53,7 @@ export const ENEMY_INFO = {
     speed: 160,
     moveFrames: 16,
     key: "enemies_v2/enemy_charging",
-    collisionPoints: physicsShapes["worm"]
+    collisionPoints: physicsShapes["DASHING"]
   },
   PROJECTILE: {
     animated: true,
@@ -61,6 +61,6 @@ export const ENEMY_INFO = {
     speed: 160,
     moveFrames: 16,
     key: "enemies_v2/enemy_shooting",
-    collisionPoints: physicsShapes["virus-dark"]
+    collisionPoints: physicsShapes["PROJECTILE"]
   }
 };
