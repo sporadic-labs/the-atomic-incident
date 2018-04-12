@@ -2,9 +2,7 @@ import getFontString from "../../fonts/get-font-string";
 
 const style = {
   font: getFontString("Johnyokonysm", { size: "22px" }),
-  fill: "#F4823A",
-  stroke: "#ffffff",
-  strokeThickness: 2
+  fill: "#81B8AE"
 };
 
 export default class PopUpText extends Phaser.Group {
