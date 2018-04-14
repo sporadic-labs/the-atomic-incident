@@ -8,6 +8,8 @@ export default class ProjectileAttackComponent {
     this._targetingComponent = targetingComponent;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
+    this._fireSound = this.game.globals.soundManager.add("enemy-fire", 24, 0.85);
+
     this._timer = this.game.time.create(false);
     this._timer.start();
     this._fireDelay = 1000;
@@ -41,6 +43,7 @@ export default class ProjectileAttackComponent {
       const angle = this.parent.position.angle(player.position);
       const { game, parent, projectileGroup } = this;
       const speed = 300 * this._difficultyModifier.getSpeedMultiplier();
+      this._fireSound.play();
       new EnemyProjectile(game, parent.x, parent.y, projectileGroup, player, angle, speed);
       this._canFire = false;
       this._timer.add(this._fireDelay, () => {
