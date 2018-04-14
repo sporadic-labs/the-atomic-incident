@@ -23,9 +23,14 @@ export default class WeaponManager extends Phaser.Group {
     this._rocketLauncher = new RocketLauncher(game, this, player, enemies);
     this._flamethrower = new Flamethrower(game, this, player, enemies);
 
+    this._emptyAmmoSound = game.globals.soundManager.add("out-of-ammo");
+    this._allowEmptyAmmoSound = true;
+    this._emptyAmmoCooldownTimer = game.time.create(false);
+    this._emptyAmmoCooldownTimer.start();
+
     const x = this._player.position.x;
     const y = this._player.position.y;
-    const randomWeaponType = this.game.rnd.pick(Object.values(WEAPON_TYPES));
+    const randomWeaponType = game.rnd.pick(Object.values(WEAPON_TYPES));
     this._mountedGun = new MountedGun(game, x, y, this, player, randomWeaponType);
 
     this.switchWeapon(randomWeaponType);
@@ -63,16 +68,35 @@ export default class WeaponManager extends Phaser.Group {
     this._mountedGun.visible = false;
   }
 
-  fire() {
-    const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
-    const angle = this._player.position.angle(mousePos);
-    this._activeWeapon.fire(angle);
+  fire(angle = 0) {
+    if (this.isAbleToAttack()) {
+      this._activeWeapon.fire(angle);
+    } else if (this.getActiveWeapon().isAmmoEmpty()) {
+      this.outOfAmmo();
+    }
+  }
+
+  outOfAmmo(time = 500) {
+    if (!this._allowEmptyAmmoSound) return;
+    this._allowEmptyAmmoSound = false;
+    this._emptyAmmoSound.play();
+    this._emptyAmmoCooldownTimer.add(time, () => (this._allowEmptyAmmoSound = true), this);
   }
 
   destroy(...args) {
-    // TODO(rex): Should I destroy the other weapons as well...?
+    // destroy the weapons.
+    this._scattershot.destroy();
+    this._rapidFire.destroy();
+    this._piercingShot.destroy();
+    this._bouncingShot.destroy();
+    this._homingShot.destroy();
+    this._rocketLauncher.destroy();
+    this._flamethrower.destroy();
+
+    // destroy the rest of the crap.
     this._mountedGun.destroy();
     this._mountedGun = null;
+    this._emptyAmmoCooldownTimer.destroy();
     super.destroy(...args);
   }
 }

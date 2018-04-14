@@ -48,6 +48,7 @@ export default class LoadState extends Phaser.State {
       "fire-whoosh-1.wav",
       "fire-whoosh-2.wav",
       "multishot.wav",
+      "out-of-ammo.wav",
       "rapidshot-reload.wav",
       "rapid-shot-2.wav",
       "wall-hit.wav",

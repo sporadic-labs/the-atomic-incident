@@ -123,7 +123,8 @@ export default class Player extends Phaser.Sprite {
       this.rotation = this.position.angle(mousePos) + Math.PI / 2;
     }
 
-    if (this._attackControls.isControlActive("attack") && this.weaponManager.isAbleToAttack()) {
+    // Shoot.
+    if (this._attackControls.isControlActive("attack")) {
       this.weaponManager.fire(this.position.angle(mousePos));
     }
 
