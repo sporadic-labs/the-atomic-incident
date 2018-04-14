@@ -91,8 +91,6 @@ export default class PlayState extends Phaser.State {
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
     globals.audioProcessor = new AudioProcessor(game);
 
-    this.sound.play("music/hate-bay", 0.09, true);
-
     // Player
     // Setup a new player, and attach it to the global variabls object.
     const spawnObjects = mapManager.tilemap.objects["player-spawn"] || [];
