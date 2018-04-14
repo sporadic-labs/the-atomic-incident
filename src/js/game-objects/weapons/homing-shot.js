@@ -9,13 +9,8 @@ export default class HomingShot extends BaseWeapon {
     this._damage = 24;
     this._speed = 180;
 
-<<<<<<< HEAD
-    this._fireSound = game.globals.soundManager.add("missile");
-
-=======
     this._fireSound = game.globals.soundManager.add("missile", 30, 0.4);
-    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
->>>>>>> Updated missile sound effect with added homing attack cooldown delay
+
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
