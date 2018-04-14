@@ -12,7 +12,7 @@ const isLocalhost = location.hostname === "localhost" || location.hostname === "
 initializeAnalytics(isLocalhost);
 
 // Enable/disable Debug.
-const enableDebug = true;
+const enableDebug = !PRODUCTION;
 const gameDimensions = 750;
 // Keep this on CANVAS until Phaser 3 for performance reasons?
 const game = new Phaser.Game({
