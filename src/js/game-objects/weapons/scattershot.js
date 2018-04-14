@@ -8,7 +8,6 @@ export default class Scattershot extends BaseWeapon {
     this._damage = 24;
 
     this._fireSound = game.globals.soundManager.add("multishot", null, 0.1);
-    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
@@ -31,9 +30,6 @@ export default class Scattershot extends BaseWeapon {
       if (this.getAmmo() > 0) {
         this._fireSound.play();
         this._startCooldown(this._cooldownTime);
-      } else {
-        this._reloadSound.play();
-        // this._reload();
       }
     }
   }

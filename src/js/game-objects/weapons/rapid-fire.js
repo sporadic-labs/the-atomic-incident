@@ -8,8 +8,7 @@ export default class RapidFire extends BaseWeapon {
     this._damage = 12;
     this._speed = 500;
 
-    this._fireSound = game.globals.soundManager.add("rapid-shot-2", 10);
-    this._reloadSound = game.globals.soundManager.add("rapidshot-reload");
+    this._fireSound = game.globals.soundManager.add("rapid-shot-2", 42);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
@@ -23,9 +22,6 @@ export default class RapidFire extends BaseWeapon {
       if (this.getAmmo() > 0) {
         this._fireSound.play();
         this._startCooldown(this._cooldownTime);
-      } else {
-        this._reloadSound.play();
-        // this._reload();
       }
     }
   }
