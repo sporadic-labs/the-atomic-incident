@@ -67,6 +67,7 @@ export default class LoadState extends Phaser.State {
       "chiptone/player-hit.mp3",
       "chiptone/shotgun-fire.mp3",
       "chiptone/weapon-box-pickup.mp3",
+      "explosion.wav",
       "music/hate-bay.wav"
     ];
     audioFiles.forEach(filename => {
