@@ -3,7 +3,6 @@ import HealthBar from "./components/health-bar.js";
 import TargetingComp from "./components/targeting-component";
 import DashAttackComp from "./components/dash-attack-component";
 import { debugShape } from "../../helpers/sprite-utilities";
-import FlashSilhouetteFilter from "./components/flash-silhouette-filter";
 import { ENEMY_INFO, ENEMY_TYPES } from "./enemy-info";
 import ProjectileAttackComponent from "./components/projectile-attack-component";
 import SplitOnDeathComponent from "./components/split-on-death-component";
@@ -159,11 +158,6 @@ export default class Enemy extends Phaser.Sprite {
       .to({ x: this.baseScale * 1.4, y: this.baseScale * 1.4 }, 100, Phaser.Easing.Bounce.In)
       .to({ x: this.baseScale, y: this.baseScale }, 150, Phaser.Easing.Quadratic.Out)
       .start();
-
-    // Disabling the hit flash filter. It really tanks performance. When we have this effect baked
-    // into enemy hit animation, it's safe to remove this code.
-    // this._flashFilter = new FlashSilhouetteFilter(game);
-    // this.filters = [this._flashFilter];
 
     // Set the isDead flag.
     this.isDead = false;
