@@ -22,6 +22,8 @@ export default class MovementContoller {
 
     this._movementType = MOVEMENT_TYPES.WALK;
 
+    this.dashSound = this.game.globals.soundManager.add("warp");
+
     const Kb = Phaser.Keyboard;
     this._controls = new Controller(this.game.input);
     this._controls.addKeyboardControl("move-up", [Kb.W, Kb.UP]);
@@ -48,6 +50,7 @@ export default class MovementContoller {
 
     if (this._controls.isControlActive("dash") && this._dashCooldown.isReady()) {
       this._dashCooldown.activate();
+      this.dashSound.play();
       this.player.setInvulnerability(true);
       const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
       this._dashAngle = this.body.position.angle(mousePos);
