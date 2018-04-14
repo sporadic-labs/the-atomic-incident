@@ -15,7 +15,7 @@ export class CollisionLogic {
   constructor(projectile, damage) {
     this.projectile = projectile;
     this.damage = damage;
-    this.wallHitSound = projectile.game.globals.soundManager.add("wall-hit", 3);
+    this.wallHitSound = projectile.game.globals.soundManager.add("wall-hit", 10);
   }
 
   /** Noop on base class, but can be used in derived classes */
@@ -24,7 +24,8 @@ export class CollisionLogic {
 
   // Destroy no matter what
   onCollideWithEnemy(enemy) {
-    enemy.attemptHit(this.projectile, this.damage);
+    const surfaceHit = enemy.attemptHit(this.projectile, this.damage);
+    if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) this.wallHitSound.play();
     this.projectile.destroy();
   }
 
@@ -50,7 +51,10 @@ export class PiercingCollisionLogic extends CollisionLogic {
     if (!this._enemiesDamaged.includes(enemy)) {
       const surfaceHit = enemy.attemptHit(this.projectile, this.damage);
       if (surfaceHit === COLLISION_SURFACE.DESTRUCTIBLE) this._enemiesDamaged.push(enemy);
-      else if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) this.projectile.destroy();
+      else if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) {
+        this.wallHitSound.play();
+        this.projectile.destroy();
+      }
     }
   }
 }
@@ -66,7 +70,9 @@ export class BouncingCollisionLogic extends CollisionLogic {
   }
 
   // Noop
-  onCollideWithWall() {}
+  onCollideWithWall() {
+    this.wallHitSound.play();
+  }
 }
 
 /**
