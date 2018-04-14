@@ -5,11 +5,11 @@ import Enemy from "../enemies/enemy";
 
 export default class HomingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 36, 200, 1500);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 36, 350, 1500);
     this._damage = 24;
     this._speed = 180;
 
-    this._fireSound = game.globals.soundManager.add("missile");
+    this._fireSound = game.globals.soundManager.add("missile", 30, 0.4);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
