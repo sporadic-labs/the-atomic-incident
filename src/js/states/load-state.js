@@ -94,7 +94,13 @@ export default class LoadState extends Phaser.State {
   update() {
     // To fail gracefully, allow the game to load if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
-      this.sound.play("music/hate-bay", 0.09, true);
+      this.game.globals.musicSound = this.sound.play("music/hate-bay", 0.09, true);
+      if (preferencesStore.musicMuted) {
+        // Phaser bug - don't use pause for this since it won't work with the state being switched
+        // immediately after pausing
+        this.game.globals.musicSound.mute = true;
+      }
+
       if (preferencesStore.skipMenu) gameStore.setGameState(GAME_STATE_NAMES.PLAY);
       else gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
     }

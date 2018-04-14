@@ -52,6 +52,7 @@ globals.tilemapNames = [
   // "pacman"
 ];
 globals.plugins = {};
+globals.musicSound = null;
 
 game.state.add(GAME_STATE_NAMES.BOOT, Boot);
 game.state.add(GAME_STATE_NAMES.LOAD, Load);
@@ -63,6 +64,10 @@ game.state.add(GAME_STATE_NAMES.SAT_BODY_TEST, SatBodyTest);
 gameStore.setGameState(GAME_STATE_NAMES.BOOT);
 
 autorun(() => {
+  // Control sound here so it changes regardless of the current phaser state loaded
+  const musicSound = globals.musicSound;
+  if (musicSound) musicSound.mute = preferencesStore.musicMuted;
+
   game.state.start(gameStore.gameState);
   if (gameStore.pendingGameRestart) game.state.start(gameStore.gameState);
 });

@@ -10,6 +10,7 @@ class PreferencesStore {
       shadersEnabled: true,
       physicsDebug: false,
       skipMenu: false,
+      musicMuted: false,
 
       // Actions - these mutate the state
       setVolume: action(function(newVolume) {
@@ -26,6 +27,9 @@ class PreferencesStore {
       }),
       setSkipMenu: action(function(skipMenu) {
         this.skipMenu = skipMenu;
+      }),
+      setMusicMuted: action(function(shouldMute) {
+        this.musicMuted = shouldMute;
       })
     });
   }
