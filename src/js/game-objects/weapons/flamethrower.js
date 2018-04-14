@@ -9,7 +9,7 @@ export default class Flamethrower extends BaseWeapon {
     this._speed = 320;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._fireSound = game.globals.soundManager.add("fire-whoosh-2", 64);
+    this._fireSound = game.globals.soundManager.add("fire-whoosh-2", 64, 0.85);
   }
 
   fire(angle) {

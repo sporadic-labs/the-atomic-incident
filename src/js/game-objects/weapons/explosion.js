@@ -23,7 +23,7 @@ export default class Explosion extends Phaser.Sprite {
     this.animations.add("explode", frames, 24, false).onComplete.add(() => this.destroy());
     this.animations.play("explode");
 
-    this._explosionSound = game.globals.soundManager.add("explosion");
+    this._explosionSound = game.globals.soundManager.add("explosion", null, 0.65);
     this._explosionSound.play();
 
     game.physics.sat.add.gameObject(this).setCircle(0);
