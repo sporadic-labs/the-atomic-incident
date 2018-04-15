@@ -9,7 +9,7 @@ export default class HomingShot extends BaseWeapon {
     this._damage = 24;
     this._speed = 180;
 
-    this._fireSound = game.globals.soundManager.add("missile", 30, 0.4);
+    this._fireSound = game.globals.soundManager.add("homing-missile", null, 0.6);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
