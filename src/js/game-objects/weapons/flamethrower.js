@@ -4,12 +4,12 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class Flamethrower extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.FLAMETHROWER, 124, 24, 2800);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.FLAMETHROWER, 124, 40, 2800);
     this._damage = 14;
     this._speed = 320;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._fireSound = game.globals.soundManager.add("fire-whoosh-2", 64, 0.85);
+    this._fireSound = game.globals.soundManager.add("fire-whoosh-2", null, 0.5);
   }
 
   fire(angle) {
