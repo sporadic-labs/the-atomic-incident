@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.3</string>
+        <string>4.5.0</string>
         <key>fileName</key>
-        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,6 +172,8 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
+        <key>autodetectAnimations</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -197,6 +199,300 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">asset-frames/enemies/charging/charge_00.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_01.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_02.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_03.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_04.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_05.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_06.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_07.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_08.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_09.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_10.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_11.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_12.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_13.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_14.png</key>
+            <key type="filename">asset-frames/enemies/charging/charge_15.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_00.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_01.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_02.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_03.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_04.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_05.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_06.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_07.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_08.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_09.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_10.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_11.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_12.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_13.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_14.png</key>
+            <key type="filename">asset-frames/enemies/charging/death_15.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/charging/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_00.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_01.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_02.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_03.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_04.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_05.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_06.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_07.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_08.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_09.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_10.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_11.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_12.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_13.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_14.png</key>
+            <key type="filename">asset-frames/enemies/charging/move_15.png</key>
+            <key type="filename">asset-frames/enemies/charging/test_0.png</key>
+            <key type="filename">asset-frames/enemies/exploding_large/test_0.png</key>
+            <key type="filename">asset-frames/enemies/exploding_small/test_0.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_00.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_01.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_02.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_03.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_04.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_05.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_06.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_07.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_08.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_09.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_10.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_11.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_12.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_13.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_14.png</key>
+            <key type="filename">asset-frames/enemies/shooting/death_15.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/shooting/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_00.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_01.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_02.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_03.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_04.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_05.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_06.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_07.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_08.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_09.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_10.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_11.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_12.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_13.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_14.png</key>
+            <key type="filename">asset-frames/enemies/shooting/move_15.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_00.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_01.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_02.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_03.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_04.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_05.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_06.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_07.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_08.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_09.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_10.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_11.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_12.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_13.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_14.png</key>
+            <key type="filename">asset-frames/enemies/shooting/shoot_15.png</key>
+            <key type="filename">asset-frames/enemies/shooting/test_0.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_00.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_01.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_02.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_03.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_04.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_05.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_06.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_07.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_08.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_09.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_10.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_11.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_12.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_13.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_14.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/death_15.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_00.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_01.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_02.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_03.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_04.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_05.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_06.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_07.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_08.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_09.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_10.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_11.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_12.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_13.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_14.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/move_15.png</key>
+            <key type="filename">asset-frames/enemies/splitting_large/test_0.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_00.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_01.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_02.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_03.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_04.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_05.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_06.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_07.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_08.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_09.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_10.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_11.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_12.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_13.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_14.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/death_15.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_00.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_01.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_02.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_03.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_04.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_05.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_06.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_07.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_08.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_09.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_10.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_11.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_12.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_13.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_14.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/move_15.png</key>
+            <key type="filename">asset-frames/enemies/splitting_small/test_0.png</key>
+            <key type="filename">asset-frames/enemies/tracking_large/test_0.png</key>
+            <key type="filename">asset-frames/enemies/tracking_medium/test_0.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_00.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_01.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_02.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_03.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_04.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_05.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_06.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_07.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_08.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_09.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_10.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_11.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_12.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_13.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_14.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/death_15.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_00.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_01.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_02.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_03.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_04.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_05.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_06.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_07.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_08.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_09.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_10.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_11.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_12.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_13.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_14.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/move_15.png</key>
+            <key type="filename">asset-frames/enemies/tracking_small/test_0.png</key>
+            <key type="filename">asset-frames/hud/enemy-spawn-indicator.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,13,25,25</rect>
+                <key>scale9Paddings</key>
+                <rect>13,13,25,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/enemies/death-particles.png</key>
             <key type="filename">asset-frames/player/death-particles.png</key>
             <key type="filename">asset-frames/weapons/bouncing.png</key>
@@ -213,298 +509,64 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemies/enemy-spawn-indicator.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/charge_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/death_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/hit_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_charging/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_exploding_large/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_exploding_small/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/death_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/hit_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/shoot_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_shooting/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/death_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/hit_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_large/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/death_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/hit_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_splitting_small/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_large/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_medium/test_0.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/death_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/hit_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/enemy_tracking_small/test_0.png</key>
-            <key type="filename">asset-frames/physics-test/box.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_00.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_01.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_02.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_03.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_04.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_05.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_06.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_07.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_08.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_09.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_10.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_11.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_12.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_13.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_14.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/death_15.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_00.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_01.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_02.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_03.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_04.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_05.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_06.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_07.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_08.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_09.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_10.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_11.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_12.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_13.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_14.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/hit_15.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_00.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_01.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_02.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_03.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_04.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_05.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_06.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_07.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_08.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_09.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_10.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_11.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_12.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_13.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_14.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/move_15.png</key>
+            <key type="filename">asset-frames/enemies/mini_boss_charging/test_0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>13,13,25,25</rect>
+                <rect>19,19,38,38</rect>
                 <key>scale9Paddings</key>
-                <rect>13,13,25,25</rect>
+                <rect>19,19,38,38</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -521,7 +583,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/enemies/virus/virus-bullet.png</key>
+            <key type="filename">asset-frames/enemies/shooting/bullet.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -531,144 +593,6 @@
                 <rect>2,2,5,5</rect>
                 <key>scale9Paddings</key>
                 <rect>2,2,5,5</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/death_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/hit_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_00.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_01.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_02.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_03.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_04.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_05.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_06.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_07.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_08.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_09.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_10.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_11.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_12.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_13.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_14.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/move_15.png</key>
-            <key type="filename">asset-frames/enemies_v2/mini_boss_charging/test_0.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>19,19,38,38</rect>
-                <key>scale9Paddings</key>
-                <rect>19,19,38,38</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/enemies_v2/player/test_0.png</key>
-            <key type="filename">asset-frames/player/death_00.png</key>
-            <key type="filename">asset-frames/player/death_01.png</key>
-            <key type="filename">asset-frames/player/death_02.png</key>
-            <key type="filename">asset-frames/player/death_03.png</key>
-            <key type="filename">asset-frames/player/death_04.png</key>
-            <key type="filename">asset-frames/player/death_05.png</key>
-            <key type="filename">asset-frames/player/death_06.png</key>
-            <key type="filename">asset-frames/player/death_07.png</key>
-            <key type="filename">asset-frames/player/death_08.png</key>
-            <key type="filename">asset-frames/player/death_09.png</key>
-            <key type="filename">asset-frames/player/death_10.png</key>
-            <key type="filename">asset-frames/player/death_11.png</key>
-            <key type="filename">asset-frames/player/death_12.png</key>
-            <key type="filename">asset-frames/player/death_13.png</key>
-            <key type="filename">asset-frames/player/death_14.png</key>
-            <key type="filename">asset-frames/player/death_15.png</key>
-            <key type="filename">asset-frames/player/hit-flash_00.png</key>
-            <key type="filename">asset-frames/player/hit-flash_01.png</key>
-            <key type="filename">asset-frames/player/hit-flash_02.png</key>
-            <key type="filename">asset-frames/player/hit-flash_03.png</key>
-            <key type="filename">asset-frames/player/hit-flash_04.png</key>
-            <key type="filename">asset-frames/player/hit-flash_05.png</key>
-            <key type="filename">asset-frames/player/hit-flash_06.png</key>
-            <key type="filename">asset-frames/player/hit-flash_07.png</key>
-            <key type="filename">asset-frames/player/hit-flash_08.png</key>
-            <key type="filename">asset-frames/player/hit-flash_09.png</key>
-            <key type="filename">asset-frames/player/hit-flash_10.png</key>
-            <key type="filename">asset-frames/player/hit-flash_11.png</key>
-            <key type="filename">asset-frames/player/hit-flash_12.png</key>
-            <key type="filename">asset-frames/player/hit-flash_13.png</key>
-            <key type="filename">asset-frames/player/hit-flash_14.png</key>
-            <key type="filename">asset-frames/player/hit-flash_15.png</key>
-            <key type="filename">asset-frames/player/hit-flash_16.png</key>
-            <key type="filename">asset-frames/player/hit-flash_17.png</key>
-            <key type="filename">asset-frames/player/hit-flash_18.png</key>
-            <key type="filename">asset-frames/player/hit-flash_19.png</key>
-            <key type="filename">asset-frames/player/hit-flash_20.png</key>
-            <key type="filename">asset-frames/player/hit-flash_21.png</key>
-            <key type="filename">asset-frames/player/hit-flash_22.png</key>
-            <key type="filename">asset-frames/player/hit-flash_23.png</key>
-            <key type="filename">asset-frames/player/hit-flash_24.png</key>
-            <key type="filename">asset-frames/player/hit-flash_25.png</key>
-            <key type="filename">asset-frames/player/hit-flash_26.png</key>
-            <key type="filename">asset-frames/player/hit-flash_27.png</key>
-            <key type="filename">asset-frames/player/hit-flash_28.png</key>
-            <key type="filename">asset-frames/player/hit-flash_29.png</key>
-            <key type="filename">asset-frames/player/hit_00.png</key>
-            <key type="filename">asset-frames/player/hit_01.png</key>
-            <key type="filename">asset-frames/player/hit_02.png</key>
-            <key type="filename">asset-frames/player/hit_03.png</key>
-            <key type="filename">asset-frames/player/hit_04.png</key>
-            <key type="filename">asset-frames/player/hit_05.png</key>
-            <key type="filename">asset-frames/player/hit_06.png</key>
-            <key type="filename">asset-frames/player/hit_07.png</key>
-            <key type="filename">asset-frames/player/hit_08.png</key>
-            <key type="filename">asset-frames/player/hit_09.png</key>
-            <key type="filename">asset-frames/player/hit_10.png</key>
-            <key type="filename">asset-frames/player/hit_11.png</key>
-            <key type="filename">asset-frames/player/hit_12.png</key>
-            <key type="filename">asset-frames/player/hit_13.png</key>
-            <key type="filename">asset-frames/player/hit_14.png</key>
-            <key type="filename">asset-frames/player/hit_15.png</key>
-            <key type="filename">asset-frames/player/move.png</key>
-            <key type="filename">asset-frames/player/player-trail.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>9,9,18,18</rect>
-                <key>scale9Paddings</key>
-                <rect>9,9,18,18</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -718,7 +642,6 @@
             <key type="filename">asset-frames/hud/dash-icon.png</key>
             <key type="filename">asset-frames/hud/goal-indicator.png</key>
             <key type="filename">asset-frames/hud/health-icon.png</key>
-            <key type="filename">asset-frames/pickups/box.png</key>
             <key type="filename">asset-frames/pickups/weapon_pickup.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -800,19 +723,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/physics-test/box1x2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>13,25,25,50</rect>
-                <key>scale9Paddings</key>
-                <rect>13,25,25,50</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">asset-frames/pickups/energy-pickup.png</key>
             <key type="filename">asset-frames/weapons/machine_gun_15.png</key>
             <key type="filename">asset-frames/weapons/rocket_15.png</key>
@@ -830,6 +740,94 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">asset-frames/player/death_00.png</key>
+            <key type="filename">asset-frames/player/death_01.png</key>
+            <key type="filename">asset-frames/player/death_02.png</key>
+            <key type="filename">asset-frames/player/death_03.png</key>
+            <key type="filename">asset-frames/player/death_04.png</key>
+            <key type="filename">asset-frames/player/death_05.png</key>
+            <key type="filename">asset-frames/player/death_06.png</key>
+            <key type="filename">asset-frames/player/death_07.png</key>
+            <key type="filename">asset-frames/player/death_08.png</key>
+            <key type="filename">asset-frames/player/death_09.png</key>
+            <key type="filename">asset-frames/player/death_10.png</key>
+            <key type="filename">asset-frames/player/death_11.png</key>
+            <key type="filename">asset-frames/player/death_12.png</key>
+            <key type="filename">asset-frames/player/death_13.png</key>
+            <key type="filename">asset-frames/player/death_14.png</key>
+            <key type="filename">asset-frames/player/death_15.png</key>
+            <key type="filename">asset-frames/player/hit-flash_00.png</key>
+            <key type="filename">asset-frames/player/hit-flash_01.png</key>
+            <key type="filename">asset-frames/player/hit-flash_02.png</key>
+            <key type="filename">asset-frames/player/hit-flash_03.png</key>
+            <key type="filename">asset-frames/player/hit-flash_04.png</key>
+            <key type="filename">asset-frames/player/hit-flash_05.png</key>
+            <key type="filename">asset-frames/player/hit-flash_06.png</key>
+            <key type="filename">asset-frames/player/hit-flash_07.png</key>
+            <key type="filename">asset-frames/player/hit-flash_08.png</key>
+            <key type="filename">asset-frames/player/hit-flash_09.png</key>
+            <key type="filename">asset-frames/player/hit-flash_10.png</key>
+            <key type="filename">asset-frames/player/hit-flash_11.png</key>
+            <key type="filename">asset-frames/player/hit-flash_12.png</key>
+            <key type="filename">asset-frames/player/hit-flash_13.png</key>
+            <key type="filename">asset-frames/player/hit-flash_14.png</key>
+            <key type="filename">asset-frames/player/hit-flash_15.png</key>
+            <key type="filename">asset-frames/player/hit-flash_16.png</key>
+            <key type="filename">asset-frames/player/hit-flash_17.png</key>
+            <key type="filename">asset-frames/player/hit-flash_18.png</key>
+            <key type="filename">asset-frames/player/hit-flash_19.png</key>
+            <key type="filename">asset-frames/player/hit-flash_20.png</key>
+            <key type="filename">asset-frames/player/hit-flash_21.png</key>
+            <key type="filename">asset-frames/player/hit-flash_22.png</key>
+            <key type="filename">asset-frames/player/hit-flash_23.png</key>
+            <key type="filename">asset-frames/player/hit-flash_24.png</key>
+            <key type="filename">asset-frames/player/hit-flash_25.png</key>
+            <key type="filename">asset-frames/player/hit-flash_26.png</key>
+            <key type="filename">asset-frames/player/hit-flash_27.png</key>
+            <key type="filename">asset-frames/player/hit-flash_28.png</key>
+            <key type="filename">asset-frames/player/hit-flash_29.png</key>
+            <key type="filename">asset-frames/player/hit_00.png</key>
+            <key type="filename">asset-frames/player/hit_01.png</key>
+            <key type="filename">asset-frames/player/hit_02.png</key>
+            <key type="filename">asset-frames/player/hit_03.png</key>
+            <key type="filename">asset-frames/player/hit_04.png</key>
+            <key type="filename">asset-frames/player/hit_05.png</key>
+            <key type="filename">asset-frames/player/hit_06.png</key>
+            <key type="filename">asset-frames/player/hit_07.png</key>
+            <key type="filename">asset-frames/player/hit_08.png</key>
+            <key type="filename">asset-frames/player/hit_09.png</key>
+            <key type="filename">asset-frames/player/hit_10.png</key>
+            <key type="filename">asset-frames/player/hit_11.png</key>
+            <key type="filename">asset-frames/player/hit_12.png</key>
+            <key type="filename">asset-frames/player/hit_13.png</key>
+            <key type="filename">asset-frames/player/hit_14.png</key>
+            <key type="filename">asset-frames/player/hit_15.png</key>
+            <key type="filename">asset-frames/player/move.png</key>
+            <key type="filename">asset-frames/player/player-trail.png</key>
+            <key type="filename">asset-frames/weapons/hit/00.png</key>
+            <key type="filename">asset-frames/weapons/hit/01.png</key>
+            <key type="filename">asset-frames/weapons/hit/02.png</key>
+            <key type="filename">asset-frames/weapons/hit/03.png</key>
+            <key type="filename">asset-frames/weapons/hit/04.png</key>
+            <key type="filename">asset-frames/weapons/hit/05.png</key>
+            <key type="filename">asset-frames/weapons/hit/06.png</key>
+            <key type="filename">asset-frames/weapons/hit/07.png</key>
+            <key type="filename">asset-frames/weapons/hit/08.png</key>
+            <key type="filename">asset-frames/weapons/hit/09.png</key>
+            <key type="filename">asset-frames/weapons/hit/10.png</key>
+            <key type="filename">asset-frames/weapons/hit/11.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,9,18,18</rect>
+                <key>scale9Paddings</key>
+                <rect>9,9,18,18</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">asset-frames/weapons/dash_60.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -843,24 +841,24 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00000.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00001.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00002.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00003.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00004.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00005.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00006.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00007.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00008.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00009.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00010.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00011.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00012.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00013.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00014.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00015.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00016.png</key>
-            <key type="filename">asset-frames/weapons/explosion/explosion-00017.png</key>
+            <key type="filename">asset-frames/weapons/explosion/00.png</key>
+            <key type="filename">asset-frames/weapons/explosion/01.png</key>
+            <key type="filename">asset-frames/weapons/explosion/02.png</key>
+            <key type="filename">asset-frames/weapons/explosion/03.png</key>
+            <key type="filename">asset-frames/weapons/explosion/04.png</key>
+            <key type="filename">asset-frames/weapons/explosion/05.png</key>
+            <key type="filename">asset-frames/weapons/explosion/06.png</key>
+            <key type="filename">asset-frames/weapons/explosion/07.png</key>
+            <key type="filename">asset-frames/weapons/explosion/08.png</key>
+            <key type="filename">asset-frames/weapons/explosion/09.png</key>
+            <key type="filename">asset-frames/weapons/explosion/10.png</key>
+            <key type="filename">asset-frames/weapons/explosion/11.png</key>
+            <key type="filename">asset-frames/weapons/explosion/12.png</key>
+            <key type="filename">asset-frames/weapons/explosion/13.png</key>
+            <key type="filename">asset-frames/weapons/explosion/14.png</key>
+            <key type="filename">asset-frames/weapons/explosion/15.png</key>
+            <key type="filename">asset-frames/weapons/explosion/16.png</key>
+            <key type="filename">asset-frames/weapons/explosion/17.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -883,19 +881,6 @@
                 <rect>4,5,8,10</rect>
                 <key>scale9Paddings</key>
                 <rect>4,5,8,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">asset-frames/weapons/square-flame.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,8,24,16</rect>
-                <key>scale9Paddings</key>
-                <rect>12,8,24,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

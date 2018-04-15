@@ -163,6 +163,9 @@
       }
       .img-wrap {
         width: 45px;
+        height: 45px;
+        background-color: #fff;
+        border-radius: 4px;
       }
     }
     .mouse {
@@ -170,7 +173,7 @@
     }
     .pickup {
       width: 82%;
-      margin: auto;
+      margin: 12px auto;
     }
   }
 }

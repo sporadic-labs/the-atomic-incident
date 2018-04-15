@@ -1,4 +1,4 @@
-const prefix = "weapons/explosion/explosion-";
+const prefix = "weapons/explosion/";
 
 export default class Explosion extends Phaser.Sprite {
   /**
@@ -11,7 +11,7 @@ export default class Explosion extends Phaser.Sprite {
    * @constructor
    */
   constructor(game, x, y, parent, damage) {
-    super(game, x, y, "assets", `${prefix}00000`);
+    super(game, x, y, "assets", `${prefix}00`);
     this.anchor.set(0.5);
     parent.add(this);
 
@@ -19,7 +19,7 @@ export default class Explosion extends Phaser.Sprite {
 
     this.enemies = game.globals.groups.enemies;
 
-    const frames = Phaser.Animation.generateFrameNames(prefix, 0, 17, "", 5);
+    const frames = Phaser.Animation.generateFrameNames(prefix, 0, 17, "", 2);
     this.animations.add("explode", frames, 24, false).onComplete.add(() => this.destroy());
     this.animations.play("explode");
 

@@ -16,7 +16,7 @@ export default class EnemyProjectile extends Phaser.Sprite {
    * @constructor
    */
   constructor(game, x, y, parent, player, angle, speed) {
-    super(game, x, y, "assets", "enemies/virus/virus-bullet");
+    super(game, x, y, "assets", "enemies/shooting/bullet");
     this.anchor.set(0.5);
     parent.add(this);
 

@@ -20,7 +20,7 @@ export const ENEMY_INFO = {
     health: 100,
     speed: 160,
     moveFrames: 16,
-    key: "enemies_v2/enemy_splitting_large",
+    key: "enemies/splitting_large",
     collisionPoints: physicsShapes["DIVIDING"]
   },
   DIVIDING_SMALL: {
@@ -28,7 +28,7 @@ export const ENEMY_INFO = {
     health: 100,
     speed: 160,
     moveFrames: 16,
-    key: "enemies_v2/enemy_splitting_small",
+    key: "enemies/splitting_small",
     collisionPoints: physicsShapes["DIVIDING_SMALL"]
   },
   FOLLOWING: {
@@ -36,7 +36,7 @@ export const ENEMY_INFO = {
     health: 100,
     speed: 160,
     moveFrames: 16,
-    key: "enemies_v2/enemy_tracking_small",
+    key: "enemies/tracking_small",
     collisionPoints: physicsShapes["FOLLOWING"]
   },
   TANK: {
@@ -44,7 +44,7 @@ export const ENEMY_INFO = {
     health: 150,
     speed: 100,
     moveFrames: 16,
-    key: "enemies_v2/mini_boss_charging",
+    key: "enemies/mini_boss_charging",
     collisionPoints: physicsShapes["TANK"]
   },
   DASHING: {
@@ -52,7 +52,7 @@ export const ENEMY_INFO = {
     health: 100,
     speed: 160,
     moveFrames: 16,
-    key: "enemies_v2/enemy_charging",
+    key: "enemies/charging",
     collisionPoints: physicsShapes["DASHING"]
   },
   PROJECTILE: {
@@ -60,7 +60,7 @@ export const ENEMY_INFO = {
     health: 100,
     speed: 160,
     moveFrames: 16,
-    key: "enemies_v2/enemy_shooting",
+    key: "enemies/shooting",
     collisionPoints: physicsShapes["PROJECTILE"]
   }
 };

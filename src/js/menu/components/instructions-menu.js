@@ -26,13 +26,13 @@ export default function InstructionsMenu({ gameStore, onBack }) {
         <div class="img-wrap">
           <img src={WeaponPickup} />
         </div>
-        <span> to pickup a new weapon.</span>
+        <span class="label"> to pickup a new weapon.</span>
       </div>
       <div class="instruction-wrap pickup">
         <div class="img-wrap">
           <img src={EnergyPickup} />
         </div>
-        <span> to pickup health.</span>
+        <span class="label"> to pickup health.</span>
       </div>
       <button onClick={onBack}>Back</button>
     </div>
