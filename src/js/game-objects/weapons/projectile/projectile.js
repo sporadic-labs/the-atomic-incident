@@ -185,7 +185,7 @@ export default class Projectile extends Phaser.Sprite {
 
     this._player = player;
     this._enemies = game.globals.groups.enemies;
-    this._wallLayer = this.game.globals.mapManager.wallLayer;
+    this._wallLayer = game.globals.mapManager.wallLayer;
 
     this.rotation = angle + Math.PI / 2;
 

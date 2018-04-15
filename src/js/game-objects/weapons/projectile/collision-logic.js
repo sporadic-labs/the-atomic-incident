@@ -1,4 +1,5 @@
 import Explosion from "../explosion";
+import ProjectileHit from "../projectile/projectile-hit";
 
 export const COLLISION_SURFACE = {
   DESTRUCTIBLE: "destructible",
@@ -32,7 +33,9 @@ export class CollisionLogic {
   // Destroy no matter what
   onCollideWithWall() {
     this.wallHitSound.play();
-    this.projectile.destroy();
+    const p = this.projectile;
+    new ProjectileHit(p.game, p.x, p.y, p.parent);
+    p.destroy();
   }
 }
 
@@ -53,7 +56,8 @@ export class PiercingCollisionLogic extends CollisionLogic {
       if (surfaceHit === COLLISION_SURFACE.DESTRUCTIBLE) this._enemiesDamaged.push(enemy);
       else if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) {
         this.wallHitSound.play();
-        this.projectile.destroy();
+        const p = this.projectile;
+        new ProjectileHit(p.game, p.x, p.y, p.parent);
       }
     }
   }
