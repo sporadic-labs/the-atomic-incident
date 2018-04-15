@@ -56,6 +56,7 @@ export default class LoadState extends Phaser.State {
       "missile.wav",
       "piercing-shot.wav",
       "homing-missile.wav",
+      "rocket-explosion.wav",
       "bubble-bouncing-projectile.wav",
       "squish-impact-faster.wav",
       "chiptone/dash-melee-fire.mp3",
