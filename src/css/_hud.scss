@@ -141,4 +141,36 @@
       }
     }
   }
+
+  #instructions-menu {
+    // Override default title margins.
+    .menu-title {
+      margin: auto;
+    }
+    .instruction-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      svg,
+      .label {
+        flex-grow: 1;
+      }
+      .label,
+      .img-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .img-wrap {
+        width: 45px;
+      }
+    }
+    .mouse {
+      height: 100px;
+    }
+    .pickup {
+      width: 82%;
+      margin: auto;
+    }
+  }
 }

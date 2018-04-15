@@ -8,29 +8,32 @@ import EnergyPickup from "../../../images/energy-pickup.png";
 
 export default function InstructionsMenu({ gameStore, onBack }) {
   return (
-    <div id="pause-menu" class="menu">
+    <div id="instructions-menu" class="menu">
       <div class="menu-title">Instructions</div>
-      <div>
+      <div class="instruction-wrap">
         <WasdSvg width="150px" />
-        <span> - to move!</span>
+        <span class="label">W A S D to move!</span>
       </div>
-      <div>
+      <div class="instruction-wrap mouse">
         <MouseSvg width="100px" />
-        <span> - to shoot!</span>
+        <span class="label">LEFT CLICK to shoot!</span>
       </div>
-      <div>
+      <div class="instruction-wrap">
         <SpaceSvg width="150px" />
-        <span> - to dash!</span>
+        <span class="label">SPACE to dash!</span>
       </div>
-      <div>
-        <img src={WeaponPickup} />
-        <span> - to pickup a new weapon.</span>
+      <div class="instruction-wrap pickup">
+        <div class="img-wrap">
+          <img src={WeaponPickup} />
+        </div>
+        <span> to pickup a new weapon.</span>
       </div>
-      <div>
-        <img src={EnergyPickup} />
-        <span> - to pickup health.</span>
+      <div class="instruction-wrap pickup">
+        <div class="img-wrap">
+          <img src={EnergyPickup} />
+        </div>
+        <span> to pickup health.</span>
       </div>
-      <div>Good luck!</div>
       <button onClick={onBack}>Back</button>
     </div>
   );
