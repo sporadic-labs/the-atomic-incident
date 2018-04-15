@@ -11,15 +11,15 @@ export default function InstructionsMenu({ gameStore, onBack }) {
     <div id="instructions-menu" class="menu">
       <div class="menu-title">Instructions</div>
       <div class="instruction-wrap">
-        <WasdSvg width="150px" />
+        <WasdSvg width="120px" />
         <span class="label">W A S D to move!</span>
       </div>
       <div class="instruction-wrap mouse">
-        <MouseSvg width="100px" />
+        <MouseSvg width="80px" />
         <span class="label">LEFT CLICK to shoot!</span>
       </div>
       <div class="instruction-wrap">
-        <SpaceSvg width="150px" />
+        <SpaceSvg width="120px" />
         <span class="label">SPACE to dash!</span>
       </div>
       <div class="instruction-wrap pickup">
