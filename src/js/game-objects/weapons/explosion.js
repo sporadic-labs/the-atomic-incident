@@ -39,8 +39,9 @@ export default class Explosion extends Phaser.Sprite {
       .start();
 
     this.alpha = 0.9;
-
     this.enemiesDamaged = [];
+
+    this.game.camera.shake(0.005, 250);
   }
 
   onCollideWithEnemy(enemy) {
