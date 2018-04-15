@@ -8,7 +8,7 @@ export default class RocketLauncher extends BaseWeapon {
     this._damage = 200;
     this._speed = 320;
 
-    this._fireSound = game.globals.soundManager.add("missile");
+    this._fireSound = game.globals.soundManager.add("missile", null, 0.4);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
