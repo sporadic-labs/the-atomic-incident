@@ -41,15 +41,9 @@ if (enableDebug) render(<Instructions />, document.body);
 // Create the space for globals on the game object
 const globals = (game.globals = {});
 globals.tilemapNames = [
-  // "dungeon-arcade-1",
-  // "arcade-map-3",
-  // "arcade-map-larger",
-  "arcade-map-larger-brown"
-  // "arcade-map-smaller"
-  // "arcade-map-larger-T"
-  // "arcade-map-2",
-  // "puzzle-map-1",
-  // "pacman"
+  "horizontal-1"
+  // "diagonal-1"
+  // "t-1"
 ];
 globals.plugins = {};
 globals.musicSound = null;
