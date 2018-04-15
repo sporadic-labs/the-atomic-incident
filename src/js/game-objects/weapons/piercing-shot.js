@@ -9,7 +9,7 @@ export default class PiercingShot extends BaseWeapon {
     this._speed = 320;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._fireSound = game.globals.soundManager.add("chiptone/piercing-fire");
+    this._fireSound = game.globals.soundManager.add("piercing-shot", null, 0.2);
   }
 
   fire(angle) {
