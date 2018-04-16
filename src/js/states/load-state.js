@@ -48,10 +48,18 @@ export default class LoadState extends Phaser.State {
       "fire-whoosh-1.wav",
       "fire-whoosh-2.wav",
       "multishot.wav",
+      "out-of-ammo.wav",
       "rapidshot-reload.wav",
       "rapid-shot-2.wav",
       "wall-hit.wav",
+      "enemy-fire.wav",
       "missile.wav",
+      "piercing-shot.wav",
+      "homing-missile.wav",
+      "rocket-explosion.wav",
+      "dash.wav",
+      "empty-ammo-dry-fire.wav",
+      "bubble-bouncing-projectile.wav",
       "squish-impact-faster.wav",
       "chiptone/dash-melee-fire.mp3",
       "chiptone/enemy-death.mp3",
@@ -66,6 +74,7 @@ export default class LoadState extends Phaser.State {
       "chiptone/player-hit.mp3",
       "chiptone/shotgun-fire.mp3",
       "chiptone/weapon-box-pickup.mp3",
+      "explosion.wav",
       "music/hate-bay.wav"
     ];
     audioFiles.forEach(filename => {
@@ -94,6 +103,13 @@ export default class LoadState extends Phaser.State {
   update() {
     // To fail gracefully, allow the game to load if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
+      this.game.globals.musicSound = this.sound.play("music/hate-bay", 0.09, true);
+      if (preferencesStore.musicMuted) {
+        // Phaser bug - don't use pause for this since it won't work with the state being switched
+        // immediately after pausing
+        this.game.globals.musicSound.mute = true;
+      }
+
       if (preferencesStore.skipMenu) gameStore.setGameState(GAME_STATE_NAMES.PLAY);
       else gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
     }

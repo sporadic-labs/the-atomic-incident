@@ -2,15 +2,16 @@ import { gameStore } from "../../game-data/observable-stores";
 import getFontString from "../../fonts/get-font-string";
 
 const baseTextStyle = {
-  font: getFontString("Montserrat", { size: "35px", weight: 300 }),
+  font: getFontString("Montserrat", { size: "26px", weight: 800 }),
   fill: "#ffffff"
 };
 const toastTextStyle = {
-  font: getFontString("Montserrat", { size: "24px", weight: 300 }),
-  fill: "#ffd800",
+  font: getFontString("Montserrat", { size: "26px", weight: 800 }),
+  fill: "#FFEB6E",
   align: "center"
 };
 const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#ffffff" });
+const numDigits = 7;
 
 /**
  * Listens to the gameStore and updates the score UI. Anchored from (1, 0)
@@ -20,7 +21,7 @@ const dimTextStyle = Object.assign({}, baseTextStyle, { fill: "#ffffff" });
  * @extends {Phaser.Group}
  */
 export default class Score extends Phaser.Group {
-  constructor(game, parent, enemies, combo) {
+  constructor(game, parent, enemies, combo, hudMessageDisplay) {
     super(game, parent, "score");
 
     this._rawScore = this._score = 0;
@@ -35,10 +36,7 @@ export default class Score extends Phaser.Group {
     this._scorePadText.alpha = 0.5;
     this.add(this._scorePadText);
 
-    this._highScoreMsgText = game.make.text(-game.width / 2, 0, "New high score!", toastTextStyle);
-    this._highScoreMsgText.anchor.setTo(0.5, 0);
-    this._highScoreMsgText.visible = false;
-    this.add(this._highScoreMsgText);
+    this._hudMessageDisplay = hudMessageDisplay;
 
     enemies.onEnemyKilled.add(() => this.incrementScore(combo.getCombo()));
 
@@ -60,23 +58,16 @@ export default class Score extends Phaser.Group {
     this._updateDisplay();
     if (!this._hasSetNewHighScore && this._score > gameStore.highScore) {
       this._hasSetNewHighScore = true;
-      this._onNewHighScore();
+      this._hudMessageDisplay.setMessage("New high score!");
     }
   }
 
   _updateDisplay() {
     const stringScore = String(this._score);
-    const paddedScore = stringScore.length <= 6 ? "0".repeat(6 - stringScore.length) : "";
+    const paddedScore =
+      stringScore.length <= numDigits ? "0".repeat(numDigits - stringScore.length) : "";
     this._scoreText.setText(stringScore);
     this._scorePadText.x = this._scoreText.x - this._scoreText.width;
     this._scorePadText.setText(paddedScore);
-  }
-
-  _onNewHighScore() {
-    this._highScoreMsgText.visible = true;
-    const timer = this.game.time.create(true);
-    timer.add(3000, () => (this._highScoreMsgText.visible = false));
-    timer.start();
-    // TODO: Show some icon as well
   }
 }

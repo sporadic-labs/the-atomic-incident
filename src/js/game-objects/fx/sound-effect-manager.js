@@ -3,9 +3,11 @@ class PooledSound extends Phaser.Sound {
     super(game, key, volume, loop, connect);
     this.game.sound._sounds.push(this);
     this.allowMultiple = true;
-    this.maxSimultaneous = maxSimultaneous;
     this.numPlaying = 0;
     this.onStop.add(this._onStop, this);
+
+    // Temp fix: onStop isn't reliably fired on allowMultiple Phaser.Sounds. Remove pooling:
+    this.maxSimultaneous = null;
   }
 
   _onStop() {
@@ -13,10 +15,10 @@ class PooledSound extends Phaser.Sound {
     if (this.numPlaying < 0) this.numPlaying = 0;
   }
 
-  play(marker, position, volume, loop, forceRestart) {
+  play(marker, position, volume, loop = false, forceRestart = false) {
     if (this.maxSimultaneous === null || this.numPlaying < this.maxSimultaneous) {
       this.numPlaying += 1;
-      return super.play(marker, position, volume, loop, forceRestart);
+      super.play(marker, position, volume, loop, forceRestart);
     }
     return null;
   }

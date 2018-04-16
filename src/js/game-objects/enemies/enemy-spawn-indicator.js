@@ -1,6 +1,6 @@
 export default class EnemySpawnIndicator extends Phaser.Sprite {
   constructor(game, x, y, duration) {
-    super(game, x, y, "assets", "enemies/enemy-spawn-indicator");
+    super(game, x, y, "assets", "hud/enemy-spawn-indicator");
 
     this.anchor.setTo(0.5, 0.5);
     this.scale.setTo(0);

@@ -8,8 +8,7 @@ export default class RocketLauncher extends BaseWeapon {
     this._damage = 200;
     this._speed = 320;
 
-    this._fireSound = game.globals.soundManager.add("missile");
-    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._fireSound = game.globals.soundManager.add("missile", null, 0.4);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
@@ -22,9 +21,6 @@ export default class RocketLauncher extends BaseWeapon {
       if (this.getAmmo() > 0) {
         this._fireSound.play();
         this._startCooldown(this._cooldownTime);
-      } else {
-        this._reloadSound.play();
-        // this._reload();
       }
     }
   }

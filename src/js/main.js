@@ -12,7 +12,7 @@ const isLocalhost = location.hostname === "localhost" || location.hostname === "
 initializeAnalytics(isLocalhost);
 
 // Enable/disable Debug.
-const enableDebug = true;
+const enableDebug = !PRODUCTION;
 const gameDimensions = 750;
 // Keep this on CANVAS until Phaser 3 for performance reasons?
 const game = new Phaser.Game({
@@ -41,17 +41,12 @@ if (enableDebug) render(<Instructions />, document.body);
 // Create the space for globals on the game object
 const globals = (game.globals = {});
 globals.tilemapNames = [
-  // "dungeon-arcade-1",
-  // "arcade-map-3",
-  // "arcade-map-larger",
-  "arcade-map-larger-brown"
-  // "arcade-map-smaller"
-  // "arcade-map-larger-T"
-  // "arcade-map-2",
-  // "puzzle-map-1",
-  // "pacman"
+  "horizontal-1"
+  // "diagonal-1"
+  // "t-1"
 ];
 globals.plugins = {};
+globals.musicSound = null;
 
 game.state.add(GAME_STATE_NAMES.BOOT, Boot);
 game.state.add(GAME_STATE_NAMES.LOAD, Load);
@@ -63,6 +58,10 @@ game.state.add(GAME_STATE_NAMES.SAT_BODY_TEST, SatBodyTest);
 gameStore.setGameState(GAME_STATE_NAMES.BOOT);
 
 autorun(() => {
+  // Control sound here so it changes regardless of the current phaser state loaded
+  const musicSound = globals.musicSound;
+  if (musicSound) musicSound.mute = preferencesStore.musicMuted;
+
   game.state.start(gameStore.gameState);
   if (gameStore.pendingGameRestart) game.state.start(gameStore.gameState);
 });

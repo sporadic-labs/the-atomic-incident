@@ -9,8 +9,7 @@ export default class BouncingShot extends BaseWeapon {
     this._speed = 320;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._fireSound = game.globals.soundManager.add("chiptone/piercing-fire");
-    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._fireSound = game.globals.soundManager.add("bubble-bouncing-projectile");
   }
 
   fire(angle) {
@@ -21,9 +20,6 @@ export default class BouncingShot extends BaseWeapon {
       if (this.getAmmo() > 0) {
         this._fireSound.play();
         this._startCooldown(this._cooldownTime);
-      } else {
-        this._reloadSound.play();
-        // this._reload();
       }
     }
   }

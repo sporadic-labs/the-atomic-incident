@@ -4,12 +4,11 @@ import WEAPON_TYPES from "./weapon-types";
 
 export default class RapidFire extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.RAPID_FIRE, 100, 50, 1800);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.RAPID_FIRE, 100, 75, 1800);
     this._damage = 12;
     this._speed = 500;
 
-    this._fireSound = game.globals.soundManager.add("rapid-shot-2", 10);
-    this._reloadSound = game.globals.soundManager.add("rapidshot-reload");
+    this._fireSound = game.globals.soundManager.add("rapid-shot-2", null, 0.4);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
@@ -23,9 +22,6 @@ export default class RapidFire extends BaseWeapon {
       if (this.getAmmo() > 0) {
         this._fireSound.play();
         this._startCooldown(this._cooldownTime);
-      } else {
-        this._reloadSound.play();
-        // this._reload();
       }
     }
   }

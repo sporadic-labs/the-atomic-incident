@@ -5,12 +5,12 @@ import Enemy from "../enemies/enemy";
 
 export default class HomingShot extends BaseWeapon {
   constructor(game, parentGroup, player, enemies) {
-    super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 36, 200, 1500);
+    super(game, parentGroup, player, enemies, WEAPON_TYPES.HOMING_SHOT, 36, 350, 1500);
     this._damage = 24;
     this._speed = 180;
 
-    this._fireSound = game.globals.soundManager.add("missile");
-    this._reloadSound = game.globals.soundManager.add("chiptone/reload");
+    this._fireSound = game.globals.soundManager.add("homing-missile", null, 0.6);
+
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
 
@@ -33,9 +33,6 @@ export default class HomingShot extends BaseWeapon {
       if (this.getAmmo() > 0) {
         this._fireSound.play();
         this._startCooldown(this._cooldownTime);
-      } else {
-        this._reloadSound.play();
-        // this._reload();
       }
     }
   }

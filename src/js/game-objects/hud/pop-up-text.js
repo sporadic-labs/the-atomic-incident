@@ -1,10 +1,8 @@
 import getFontString from "../../fonts/get-font-string";
 
 const style = {
-  font: getFontString("Cherry Cream Soda", { size: "20px" }),
-  fill: "#82b9af",
-  stroke: "#6b948c",
-  strokeThickness: 1
+  font: getFontString("Johnyokonysm", { size: "22px" }),
+  fill: "#81B8AE"
 };
 
 export default class PopUpText extends Phaser.Group {
@@ -19,12 +17,12 @@ export default class PopUpText extends Phaser.Group {
 
     this._posTween = this.game.tweens
       .create(this.position)
-      .to({ y: this.position.y - 30 }, 1000, Phaser.Easing.Quadratic.In, false)
+      .to({ y: this.position.y - 30 }, 1200, Phaser.Easing.Quadratic.In, false, 100)
       .start();
 
     this._fadeTween = this.game.tweens
       .create(this)
-      .to({ alpha: 0 }, 1000, Phaser.Easing.Quadratic.In, false)
+      .to({ alpha: 0 }, 1300, Phaser.Easing.Quadratic.In, false)
       .start();
 
     this._fadeTween.onComplete.add(() => this.destroy());

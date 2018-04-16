@@ -29,7 +29,7 @@ export class WeakSpotHitLogic {
     this.enemy = enemy;
 
     // Hard coded to match tank for now
-    const weakPoints = [[21, 66], [15, 55], [58, 55], [53, 66], [37, 72]];
+    const weakPoints = [[20, 47], [56, 47], [51, 58], [44, 64], [32, 64], [24, 57]];
     const mappedPoints = weakPoints.map(p => ({ x: p[0] - 75 / 2, y: p[1] - 75 / 2 }));
     this.weakSpot = enemy.game.physics.sat.add.staticBody().setPolygon(mappedPoints);
 

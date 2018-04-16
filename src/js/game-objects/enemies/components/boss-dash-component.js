@@ -185,7 +185,9 @@ export default class BossDashComponent {
   }
 
   startCharging() {
-    this.parent.body.velocity.set(0);
+    if (this.parent && this.parent.body) {
+      this.parent.body.velocity.set(0);
+    }
     this._timer.add(this._chargeUpTime, () => this.switchState(STATES.DASHING), this);
 
     this._turnSpeed = 0.1;

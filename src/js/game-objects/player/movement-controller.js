@@ -3,6 +3,7 @@ import CooldownAbility from "./cooldown-ability";
 
 const MOVEMENT_TYPES = {
   WALK: "WALK",
+  BOOST: "BOOST",
   DASH: "DASH"
 };
 
@@ -20,6 +21,8 @@ export default class MovementContoller {
     this._dashAngle = null;
 
     this._movementType = MOVEMENT_TYPES.WALK;
+
+    this.dashSound = this.game.globals.soundManager.add("dash", null, 0.5);
 
     const Kb = Phaser.Keyboard;
     this._controls = new Controller(this.game.input);
@@ -47,6 +50,7 @@ export default class MovementContoller {
 
     if (this._controls.isControlActive("dash") && this._dashCooldown.isReady()) {
       this._dashCooldown.activate();
+      this.dashSound.play();
       this.player.setInvulnerability(true);
       const mousePos = Phaser.Point.add(this.game.camera.position, this.game.input.activePointer);
       this._dashAngle = this.body.position.angle(mousePos);
@@ -65,11 +69,27 @@ export default class MovementContoller {
     if (this._movementType === MOVEMENT_TYPES.WALK) {
       this.body.setMaxSpeed(250 * multiplier);
       this._calculateWalkAcceleration(acceleration, 3000 * multiplier);
+    } else if (this._movementType === MOVEMENT_TYPES.BOOST) {
+      this.body.setMaxSpeed(400 * multiplier);
+      this._calculateWalkAcceleration(acceleration, 10000 * multiplier);
     } else if (this._movementType === MOVEMENT_TYPES.DASH) {
       this.body.setMaxSpeed(600 * multiplier);
       this._calculateDashAcceleration(this._dashAngle, acceleration, 12000 * multiplier);
     }
     this.body.acceleration.copyFrom(acceleration);
+  }
+
+  startBoost(duration) {
+    if (this._movementType === MOVEMENT_TYPES.WALK) {
+      this._movementType = MOVEMENT_TYPES.BOOST;
+      if (duration !== undefined) this._timer.add(duration, this.stopBoost, this);
+    }
+  }
+
+  stopBoost() {
+    if (this._movementType === MOVEMENT_TYPES.BOOST) {
+      this._movementType = MOVEMENT_TYPES.WALK;
+    }
   }
 
   isMoving() {

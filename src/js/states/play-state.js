@@ -26,10 +26,12 @@ import DashIcon from "../game-objects/hud/dash-icon";
 import AudioProcessor from "../game-objects/fx/audio-processor";
 import PopUpText from "../game-objects/hud/pop-up-text";
 import getFontString from "../fonts/get-font-string";
-import Bar from "../game-objects/hud/bar";
 import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import DifficultyModifier from "../game-objects/difficulty-modifier";
 import { registerGameStart } from "../analytics";
+import ImageBar from "../game-objects/hud/image-bar";
+import WaveHud from "../game-objects/hud/wave";
+import HudMessageDisplay from "../game-objects/hud/hud-message-display";
 
 export default class PlayState extends Phaser.State {
   create() {
@@ -81,15 +83,6 @@ export default class PlayState extends Phaser.State {
 
     // Difficulty
     globals.difficultyModifier = new DifficultyModifier();
-    // Just for debugging:
-    game.input.keyboard.addKey(Phaser.Keyboard.PERIOD).onDown.add(() => {
-      globals.difficultyModifier.incrementDifficulty(0.1);
-      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
-    });
-    game.input.keyboard.addKey(Phaser.Keyboard.COMMA).onDown.add(() => {
-      globals.difficultyModifier.incrementDifficulty(-0.1);
-      console.log("New speed modifier: " + globals.difficultyModifier.getSpeedMultiplier());
-    });
 
     // Physics
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -97,8 +90,6 @@ export default class PlayState extends Phaser.State {
 
     globals.postProcessor = new PostProcessor(game, globals.groups.game);
     globals.audioProcessor = new AudioProcessor(game);
-
-    this.sound.play("music/hate-bay", 0.09, true);
 
     // Player
     // Setup a new player, and attach it to the global variabls object.
@@ -116,22 +107,39 @@ export default class PlayState extends Phaser.State {
     // Waves of pickups and enemies
     new PickupSpawner(game);
     const enemySpawner = new EnemySpawner(game, player);
+    this.enemySpawner = enemySpawner;
     const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
 
     // HUD
+    const hudMessageDisplay = new HudMessageDisplay(game, groups.hud);
     new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
     const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
-    combo.position.set(this.game.width - 15, 52);
-    const score = new Score(game, groups.hud, globals.groups.enemies, combo);
-    score.position.set(this.game.width - 15, 15);
+    combo.position.set(this.game.width - 5, 32);
+    const score = new Score(game, groups.hud, globals.groups.enemies, combo, hudMessageDisplay);
+    score.position.set(this.game.width - 5, 5);
     const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
-    ammo.position.set(game.width - 15, game.height - 15);
-    const playerHealth = new Bar(game, 45, 20, 200, 20, { minValue: 0, maxValue: 1 });
-    player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
-    groups.hud.add(playerHealth);
-    this.add.sprite(14, 18, "assets", "hud/health-icon", groups.hud);
+    ammo.position.set(game.width - 5, game.height - 5);
+    this.add.sprite(4, 4, "assets", "hud/health-icon", groups.hud);
     const dashIcon = new DashIcon(game, groups.hud, player);
-    dashIcon.position.set(14, 50);
+    dashIcon.position.set(4, 36);
+    const playerHealth = new ImageBar(game, groups.hud, {
+      x: 35,
+      y: 7,
+      interiorKey: "hud/health-bar-interior",
+      outlineKey: "hud/health-bar-outline"
+    });
+    player.onHealthChange.add(newHealth => playerHealth.setValue(newHealth));
+    new WaveHud(game, groups.hud, enemySpawner.onWaveSpawn);
+
+    // Difficulty toast messages
+    globals.difficultyModifier.onDifficultyChange.add((previousDifficulty, difficulty) => {
+      const truncatedPreviousDifficulty = Math.floor(previousDifficulty * 10) / 10;
+      const truncatedDifficulty = Math.floor(difficulty * 10) / 10;
+      if (truncatedDifficulty > truncatedPreviousDifficulty) {
+        // Difficulty has changed in the 10s decimal place
+        hudMessageDisplay.setMessage(`${truncatedDifficulty.toFixed(2)}x speed`);
+      }
+    });
 
     // Combo "toast" messages
     weaponSpawner.onPickupCollected.add(pickup => {
@@ -140,12 +148,8 @@ export default class PlayState extends Phaser.State {
       new PopUpText(game, globals.groups.foreground, w.getName(), location);
     });
 
-    // Keep track of what wave the player is on using the globals object.
-    const waveNum = 0;
-    globals.waveNum = waveNum;
-
     globals.groups.enemies.onEnemyKilled.add(enemy => {
-      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player, 15);
+      new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player);
     });
 
     // Use the 'P' button to pause/unpause, as well as the button on the HUD.
@@ -215,8 +219,8 @@ export default class PlayState extends Phaser.State {
       }
 
       // FPS
-      this._fpsText = game.make.text(15, game.height - 50, "60", {
-        font: getFontString("Montserrat", { size: "12px", weight: 300 }),
+      this._fpsText = game.make.text(5, game.height - 38, "60", {
+        font: getFontString("Montserrat", { size: "12px", weight: 400 }),
         fill: "#00ffff"
       });
       this._fpsText.anchor.set(0, 1);
@@ -247,6 +251,7 @@ export default class PlayState extends Phaser.State {
   }
 
   shutdown() {
+    this.enemySpawner.destroy();
     this.storeUnsubscribe();
     // Destroy all plugins (MH: should we be doing this or more selectively removing plugins?)
     this.game.plugins.removeAll();

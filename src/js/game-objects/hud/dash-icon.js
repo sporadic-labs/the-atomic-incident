@@ -1,4 +1,4 @@
-import Bar from "./bar";
+import ImageBar from "./image-bar";
 
 /** HUD element for Dash ability.  Show energy available with Bar. */
 export default class DashIcon extends Phaser.Group {
@@ -8,19 +8,18 @@ export default class DashIcon extends Phaser.Group {
     this._icon = game.make.sprite(0, 0, "assets", "hud/dash-icon", parentGroup);
     this.add(this._icon);
 
-    this._dashCooldownBar = new Bar(game, 31, 2, 80, 20, {
-      barColor: 0xffeb6e,
-      minValue: 0,
-      maxValue: 1
+    this._dashCooldownBar = new ImageBar(game, parentGroup, {
+      x: 35,
+      y: 37,
+      interiorKey: "hud/dash-bar-interior",
+      outlineKey: "hud/dash-bar-outline"
     });
-    this._dashCooldownBar.setValue(1.0);
-    this.add(this._dashCooldownBar);
 
     this._dashCooldownAnimationActive = false;
 
     this._dashCooldown = player._movementController._dashCooldown;
     this._dashCooldown.onActivation.add(x => {
-      this._dashCooldownBar.setValue(0);
+      this._dashCooldownBar.setValue(0, 0);
     });
 
     this._dashCooldown.onDeactivation.add(x => {

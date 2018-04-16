@@ -185,7 +185,7 @@ export default class Projectile extends Phaser.Sprite {
 
     this._player = player;
     this._enemies = game.globals.groups.enemies;
-    this._wallLayer = this.game.globals.mapManager.wallLayer;
+    this._wallLayer = game.globals.mapManager.wallLayer;
 
     this.rotation = angle + Math.PI / 2;
 
@@ -212,13 +212,19 @@ export default class Projectile extends Phaser.Sprite {
     this.collisionLogic.onBeforeCollisions();
 
     this.game.physics.sat.world.collide(this, this._wallLayer, {
-      onCollide: () => this.collisionLogic.onCollideWithWall()
+      onCollide: () => {
+        if (this.game) this.collisionLogic.onCollideWithWall();
+      }
     });
+
     if (!this.game) return;
 
     this.game.physics.sat.world.overlap(this, this._enemies, {
-      onCollide: (_, enemy) => this.collisionLogic.onCollideWithEnemy(enemy)
+      onCollide: (_, enemy) => {
+        if (this.game) this.collisionLogic.onCollideWithEnemy(enemy);
+      }
     });
+
     if (!this.game) return;
 
     this.collisionLogic.onAfterCollisions();

@@ -99,7 +99,7 @@ export default class LightingPerf extends Phaser.State {
 
     // FPS
     this._fpsText = game.make.text(15, game.height - 25, "60", {
-      font: "18px 'Alfa Slab One'",
+      font: "18px 'Montserrat'",
       fill: "#ff8000"
     });
     this._fpsText.anchor.set(0, 1);
