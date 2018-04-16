@@ -140,6 +140,19 @@
         }
       }
     }
+
+    #about {
+      text-align: center;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      transition: all 0.1s ease-in-out;
+      &:hover {
+        cursor: pointer;
+        color: #5a867e;
+        transition: all 0.1s ease-in-out;
+      }
+    }
   }
 
   #instructions-menu {
@@ -174,6 +187,65 @@
     .pickup {
       width: 80%;
       margin: 12px auto;
+    }
+  }
+
+  #about-menu {
+    padding: 36px;
+
+    .brand {
+      width: 100%;
+      .created-by {
+        font-size: 10px;
+      }
+      .logo-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          margin: 12px;
+          border-radius: 12px;
+        }
+        .logo-text {
+          font-size: 32px;
+        }
+      }
+    }
+
+    #credits-wrap {
+      width: 80%;
+      margin: auto;
+      text-align: center;
+
+      #credits-title {
+        font-size: 16px;
+      }
+      a {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          color: #5a867e;
+          transition: all 0.1s ease-in-out;
+        }
+      }
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      a {
+        margin: 12px;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          opacity: 0.5;
+          cursor: pointer;
+          transition: all 0.1s ease-in-out;
+        }
+      }
     }
   }
 }

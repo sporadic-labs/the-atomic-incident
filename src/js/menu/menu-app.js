@@ -5,6 +5,7 @@ import { GAME_STATE_NAMES } from "../states";
 import StartMenu from "./components/start-menu";
 import PauseMenu from "./components/pause-menu";
 import DebugMenu from "./components/debug-menu";
+import AboutMenu from "./components/about-menu";
 import OptionsMenu from "./components/options-menu";
 import InstructionsMenu from "./components/instructions-menu";
 import GameOverMenu from "./components/game-over-menu";
@@ -82,6 +83,10 @@ const Menu = observer(
       this.addMenuState(MENU_STATE_NAMES.OPTIONS);
     };
 
+    goToAboutMenu = () => {
+      this.addMenuState(MENU_STATE_NAMES.ABOUT);
+    };
+
     goToInstructionsMenu = () => {
       this.addMenuState(MENU_STATE_NAMES.INSTRUCTIONS);
     };
@@ -119,6 +124,7 @@ const Menu = observer(
             gameStore={gameStore}
             onOptions={this.goToOptionsMenu}
             onStart={this.startGame}
+            onAbout={this.goToAboutMenu}
             goToInstructionsMenu={this.goToInstructionsMenu}
           />
         );
@@ -148,6 +154,8 @@ const Menu = observer(
             onBack={this.goBackOneState}
           />
         );
+      } else if (gameStore.menuState === MENU_STATE_NAMES.ABOUT) {
+        activeMenu = <AboutMenu gameStore={gameStore} onBack={this.goBackOneState} />;
       } else if (gameStore.menuState === MENU_STATE_NAMES.INSTRUCTIONS) {
         activeMenu = <InstructionsMenu gameStore={gameStore} onBack={this.goBackOneState} />;
       } else if (gameStore.menuState === MENU_STATE_NAMES.INFO) {
