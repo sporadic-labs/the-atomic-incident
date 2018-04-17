@@ -1,4 +1,18 @@
-const prefix = "weapons/hit/";
+import WEAPON_TYPES from "../weapon-types";
+
+const prefix = "weapons/hit/hit_";
+
+const colorMap = {
+  [WEAPON_TYPES.SCATTERSHOT]: 0xe3b0bf,
+  [WEAPON_TYPES.RAPID_FIRE]: 0xa3bac1,
+  [WEAPON_TYPES.PIERCING_SHOT]: 0x79a491,
+  [WEAPON_TYPES.HOMING_SHOT]: 0xd2b6dd,
+  [WEAPON_TYPES.ROCKET_LAUNCHER]: 0xc4b090,
+  [WEAPON_TYPES.FLAMETHROWER]: 0xf3ce98,
+  [WEAPON_TYPES.BOUNCING]: 0xbfccde
+};
+
+const getColorFromType = type => colorMap[type] || 0xffffff;
 
 // TODO(rex): Make this more flexible.
 export default class ProjectileHit extends Phaser.Sprite {
@@ -11,12 +25,14 @@ export default class ProjectileHit extends Phaser.Sprite {
    * @param {Phaser.Group} parent - Phaser.Group that stores this projectile.
    * @constructor
    */
-  constructor(game, x, y, parent) {
+  constructor(game, x, y, parent, projectile) {
     super(game, x, y, "assets", `${prefix}00`);
     this.anchor.set(0.5);
     parent.add(this);
 
-    const frames = Phaser.Animation.generateFrameNames(prefix, 0, 11, "", 2);
+    this.tint = getColorFromType(projectile.parent._type);
+
+    const frames = Phaser.Animation.generateFrameNames(prefix, 0, 8, "", 2);
     this.animations.add("bullet-hit", frames, 30, false).onComplete.add(() => this.destroy());
     this.animations.play("bullet-hit");
 

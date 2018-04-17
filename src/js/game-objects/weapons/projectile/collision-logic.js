@@ -34,7 +34,7 @@ export class CollisionLogic {
   onCollideWithWall() {
     this.wallHitSound.play();
     const p = this.projectile;
-    new ProjectileHit(p.game, p.x, p.y, p.parent);
+    new ProjectileHit(p.game, p.x, p.y, p.parent, p);
     p.destroy();
   }
 }
@@ -57,7 +57,7 @@ export class PiercingCollisionLogic extends CollisionLogic {
       else if (surfaceHit === COLLISION_SURFACE.INDESTRUCTIBLE) {
         this.wallHitSound.play();
         const p = this.projectile;
-        new ProjectileHit(p.game, p.x, p.y, p.parent);
+        new ProjectileHit(p.game, p.x, p.y, p.parent, p);
       }
     }
   }
