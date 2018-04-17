@@ -29,6 +29,7 @@ export default class ProjectileHit extends Phaser.Sprite {
     super(game, x, y, "assets", `${prefix}00`);
     this.anchor.set(0.5);
     parent.add(this);
+    this.sendToBack();
 
     this.tint = getColorFromType(projectile.parent._type);
 
