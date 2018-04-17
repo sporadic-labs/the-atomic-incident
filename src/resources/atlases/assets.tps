@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.5.0</string>
+        <string>4.3.3</string>
         <key>fileName</key>
-        <string>C:/Users/rex/Documents/GitHub/octo-chainsaw/src/resources/atlases/assets.tps</string>
+        <string>E:/Github/octo-chainsaw/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,8 +172,6 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
-        <key>autodetectAnimations</key>
-        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -804,18 +802,6 @@
             <key type="filename">asset-frames/player/hit_15.png</key>
             <key type="filename">asset-frames/player/move.png</key>
             <key type="filename">asset-frames/player/player-trail.png</key>
-            <key type="filename">asset-frames/weapons/hit/00.png</key>
-            <key type="filename">asset-frames/weapons/hit/01.png</key>
-            <key type="filename">asset-frames/weapons/hit/02.png</key>
-            <key type="filename">asset-frames/weapons/hit/03.png</key>
-            <key type="filename">asset-frames/weapons/hit/04.png</key>
-            <key type="filename">asset-frames/weapons/hit/05.png</key>
-            <key type="filename">asset-frames/weapons/hit/06.png</key>
-            <key type="filename">asset-frames/weapons/hit/07.png</key>
-            <key type="filename">asset-frames/weapons/hit/08.png</key>
-            <key type="filename">asset-frames/weapons/hit/09.png</key>
-            <key type="filename">asset-frames/weapons/hit/10.png</key>
-            <key type="filename">asset-frames/weapons/hit/11.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -868,6 +854,27 @@
                 <rect>38,38,75,75</rect>
                 <key>scale9Paddings</key>
                 <rect>38,38,75,75</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asset-frames/weapons/hit/hit_00.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_01.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_02.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_03.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_04.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_05.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_06.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_07.png</key>
+            <key type="filename">asset-frames/weapons/hit/hit_08.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,7,13,13</rect>
+                <key>scale9Paddings</key>
+                <rect>7,7,13,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
