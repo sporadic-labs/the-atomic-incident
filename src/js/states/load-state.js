@@ -54,6 +54,7 @@ export default class LoadState extends Phaser.State {
       "rapid-shot-2.wav",
       "wall-hit.wav",
       "enemy-fire.wav",
+      "enemy-shoot.wav",
       "missile.wav",
       "piercing-shot.wav",
       "homing-missile.wav",

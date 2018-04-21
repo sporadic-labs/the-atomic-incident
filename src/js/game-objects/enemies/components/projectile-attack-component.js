@@ -8,7 +8,7 @@ export default class ProjectileAttackComponent {
     this._targetingComponent = targetingComponent;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._fireSound = this.game.globals.soundManager.add("enemy-fire", 24, 0.15);
+    this._fireSound = this.game.globals.soundManager.add("enemy-shoot", null, 1);
 
     this._timer = this.game.time.create(false);
     this._timer.start();

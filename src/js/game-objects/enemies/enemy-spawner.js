@@ -50,7 +50,7 @@ const COMPOSITIONS = [
   {
     type: ENEMY_TYPES.PROJECTILE,
     number: new IncrementableValue(1, 4, 0.75),
-    weight: 1,
+    weight: 10000,
     name: "Projectile Wave"
   },
   {
