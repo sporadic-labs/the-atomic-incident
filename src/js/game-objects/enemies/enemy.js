@@ -142,8 +142,8 @@ export default class Enemy extends Phaser.Sprite {
     });
 
     // Sound fx
-    this._hitSound = this.game.globals.soundManager.add("squish-impact-faster", 5);
-    this._deathSound = this.game.globals.soundManager.add("squish");
+    this._hitSound = this.game.globals.soundManager.add("fx/squish-impact-faster", 5);
+    this._deathSound = this.game.globals.soundManager.add("fx/squish");
 
     const points = collisionPoints.map(p => ({
       x: (p[0] - 0.5) * this.width,

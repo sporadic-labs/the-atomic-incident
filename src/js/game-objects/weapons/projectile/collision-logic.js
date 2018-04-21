@@ -16,7 +16,7 @@ export class CollisionLogic {
   constructor(projectile, damage) {
     this.projectile = projectile;
     this.damage = damage;
-    this.wallHitSound = projectile.game.globals.soundManager.add("wall-hit", 10);
+    this.wallHitSound = projectile.game.globals.soundManager.add("fx/wall-hit", 10);
   }
 
   /** Noop on base class, but can be used in derived classes */
