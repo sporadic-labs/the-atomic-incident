@@ -9,6 +9,7 @@ import SplitOnDeathComponent from "./components/split-on-death-component";
 import EnemySpawnIndicator from "./enemy-spawn-indicator";
 import BossDashComponent from "./components/boss-dash-component";
 import { EnemyHitLogic, WeakSpotHitLogic } from "./enemy-hit-logic";
+import logger from "../../helpers/logger";
 
 const ANIM = {
   MOVE: "MOVE",
@@ -103,7 +104,7 @@ export default class Enemy extends Phaser.Sprite {
         break;
       }
       default: {
-        console.log("Invalid enemy type specified, using default Targeting Component!");
+        logger.log("Invalid enemy type specified, using default Targeting Component!");
         this._hitLogic = new EnemyHitLogic(this);
         this._components.push(new TargetingComp(this, speed, visionRadius));
         break;

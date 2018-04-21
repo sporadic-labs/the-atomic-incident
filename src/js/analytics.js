@@ -1,8 +1,10 @@
+import logger from "./helpers/logger";
+
 export default function initalize(useMock) {
   // Mock analytics on localhost & real analytics on server
   if (useMock) {
-    console.log("Mock Google analytics installed");
-    window.ga = (...args) => console.log("GA:", ...args.map(arg => JSON.stringify(arg, null, 2)));
+    logger.log("Mock Google analytics installed");
+    window.ga = (...args) => logger.log("GA:", ...args.map(arg => JSON.stringify(arg, null, 2)));
   } else {
     (function(i, s, o, g, r, a, m) {
       i["GoogleAnalyticsObject"] = r;

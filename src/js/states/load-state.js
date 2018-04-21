@@ -5,6 +5,7 @@
 import { GAME_STATE_NAMES } from "./index.js";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import loadFonts from "../fonts/font-loader";
+import logger from "../helpers/logger";
 
 export default class LoadState extends Phaser.State {
   preload() {
@@ -15,7 +16,7 @@ export default class LoadState extends Phaser.State {
       .then(() => (this.fontsLoaded = true))
       .catch(error => {
         this.fontsErrored = true;
-        console.error(`Fonts unable to load! Error ${error}`);
+        logger.error(`Fonts unable to load! Error ${error}`);
       });
 
     // Images
