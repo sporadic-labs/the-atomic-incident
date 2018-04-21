@@ -100,8 +100,6 @@ export default class EnemySpawner {
     });
 
     resetCompositions();
-
-    // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
   }
 
   _getDifficultyFraction() {
@@ -140,9 +138,6 @@ export default class EnemySpawner {
       logger.warn("No valid spawn point found");
       return;
     }
-
-    // Play the enemy spawn sound.
-    // this._spawnSound.play();
 
     // Spawn in cluster around spawn point
     const spawnRadius = 50;
