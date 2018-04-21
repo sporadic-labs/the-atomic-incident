@@ -9,7 +9,7 @@ export default class BouncingShot extends BaseWeapon {
     this._speed = 320;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._fireSound = game.globals.soundManager.add("bubble-bouncing-projectile");
+    this._fireSound = game.globals.soundManager.add("fx/bubble-bouncing-projectile");
   }
 
   fire(angle) {

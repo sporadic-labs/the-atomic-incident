@@ -1,4 +1,5 @@
 import EnergyPickup from "./energy-pickup";
+import logger from "../../helpers/logger";
 
 export default class PickupSpawner extends Phaser.Group {
   constructor(game) {
@@ -44,6 +45,6 @@ export default class PickupSpawner extends Phaser.Group {
       if (overlapExisting) continue;
       return point; // Valid point found
     }
-    console.warn("Not enough places found to spawn pickups.");
+    logger.warn("Not enough places found to spawn pickups.");
   }
 }

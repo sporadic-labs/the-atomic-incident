@@ -1,6 +1,7 @@
 import ImageBar from "./image-bar";
 import getFontString from "../../fonts/get-font-string";
 import WEAPON_TYPES from "../weapons/weapon-types";
+import logger from "../../helpers/logger";
 
 const style = {
   font: getFontString("Montserrat", { size: "15px", weight: 800, align: "right" }),
@@ -126,7 +127,7 @@ export default class Ammo extends Phaser.Group {
         frame = "weapons/tracking_15";
         break;
       default:
-        console.error("invalid weapon type!");
+        logger.error("invalid weapon type!");
         break;
     }
 

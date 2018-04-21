@@ -22,7 +22,7 @@ export default class MovementContoller {
 
     this._movementType = MOVEMENT_TYPES.WALK;
 
-    this.dashSound = this.game.globals.soundManager.add("dash", null, 0.5);
+    this.dashSound = this.game.globals.soundManager.add("fx/dash", null, 0.5);
 
     const Kb = Phaser.Keyboard;
     this._controls = new Controller(this.game.input);

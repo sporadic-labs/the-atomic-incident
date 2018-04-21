@@ -1,6 +1,7 @@
 import BODY_SHAPES from "./body-shapes";
 import BODY_TYPES from "./body-types";
 import { vec, circle, box, polygon } from "./sat-factories";
+import logger from "../../helpers/logger";
 
 const P = Phaser.Point;
 const applyDefault = (value, defaultValue) => (value !== undefined ? value : defaultValue);
@@ -102,7 +103,7 @@ export default class Body {
     } else if (type === "polygon") {
       this.setPolygon(shape.points);
     } else {
-      console.warn(`Invalid shape name: ${shape.type}.`);
+      logger.warn(`Invalid shape name: ${shape.type}.`);
     }
     return this;
   }

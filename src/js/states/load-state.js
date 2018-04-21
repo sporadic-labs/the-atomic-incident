@@ -5,6 +5,7 @@
 import { GAME_STATE_NAMES } from "./index.js";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import loadFonts from "../fonts/font-loader";
+import logger from "../helpers/logger";
 
 export default class LoadState extends Phaser.State {
   preload() {
@@ -15,7 +16,7 @@ export default class LoadState extends Phaser.State {
       .then(() => (this.fontsLoaded = true))
       .catch(error => {
         this.fontsErrored = true;
-        console.error(`Fonts unable to load! Error ${error}`);
+        logger.error(`Fonts unable to load! Error ${error}`);
       });
 
     // Images
@@ -33,49 +34,25 @@ export default class LoadState extends Phaser.State {
     // Sounds
     const audioPath = "resources/audio";
     const audioFiles = [
-      "pop.mp3",
-      "whoosh.mp3",
-      "whoosh-2.mp3",
-      "warp.mp3",
-      "warp-2.mp3",
-      "impact.mp3",
-      "impact-2.mp3",
-      "smash.mp3",
-      "squish.wav",
-      "light-powerup.wav",
-      "crate-pickup.wav",
-      "splatshot.wav",
-      "fire-whoosh-1.wav",
-      "fire-whoosh-2.wav",
-      "multishot.wav",
-      "out-of-ammo.wav",
-      "rapidshot-reload.wav",
-      "rapid-shot-2.wav",
-      "wall-hit.wav",
-      "enemy-fire.wav",
-      "missile.wav",
-      "piercing-shot.wav",
-      "homing-missile.wav",
-      "rocket-explosion.wav",
-      "dash.wav",
-      "empty-ammo-dry-fire.wav",
-      "bubble-bouncing-projectile.wav",
-      "squish-impact-faster.wav",
-      "chiptone/dash-melee-fire.mp3",
-      "chiptone/enemy-death.mp3",
-      "chiptone/enemy-hit.mp3",
-      "chiptone/enemy-spawn.mp3",
-      "chiptone/energy-pickup.mp3",
-      "chiptone/piercing-fire.mp3",
-      "chiptone/homing-fire.mp3",
-      "chiptone/rapid-fire.mp3",
-      "chiptone/reload.mp3",
-      "chiptone/player-death.mp3",
-      "chiptone/player-hit.mp3",
-      "chiptone/shotgun-fire.mp3",
-      "chiptone/weapon-box-pickup.mp3",
-      "explosion.wav",
-      "music/hate-bay.wav"
+      "fx/squish.mp3",
+      "fx/squish-impact-faster.mp3",
+      "fx/light-powerup.mp3",
+      "fx/crate-pickup.mp3",
+      "fx/fire-whoosh-2.mp3",
+      "fx/multishot.mp3",
+      "fx/rapid-shot-2.mp3",
+      "fx/wall-hit.mp3",
+      "fx/enemy-shoot.mp3",
+      "fx/missile.mp3",
+      "fx/piercing-shot.mp3",
+      "fx/homing-missile.mp3",
+      "fx/rocket-explosion.mp3",
+      "fx/dash.mp3",
+      "fx/empty-ammo-dry-fire.mp3",
+      "fx/bubble-bouncing-projectile.mp3",
+      "fx/player-death.mp3",
+      "fx/player-hit.mp3",
+      "music/hate-bay.mp3"
     ];
     audioFiles.forEach(filename => {
       const name = filename.slice(0, -4); // Remove extension

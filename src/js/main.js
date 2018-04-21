@@ -8,6 +8,9 @@ import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, GAME_STATE_NAMES } from "./states";
 import initializeAnalytics, { registerStateChange } from "./analytics";
 
+import logger, { LOG_LEVEL } from "./helpers/logger";
+logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
+
 const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
 initializeAnalytics(isLocalhost);
 

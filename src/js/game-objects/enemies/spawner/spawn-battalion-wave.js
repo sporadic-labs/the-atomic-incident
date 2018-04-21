@@ -1,4 +1,5 @@
 import Enemy from "../enemy";
+import logger from "../../../helpers/logger";
 
 const { ENEMY_TYPES } = require("../../enemies/enemy-info");
 const { TANK, PROJECTILE } = ENEMY_TYPES;
@@ -71,7 +72,7 @@ export default function spawnBattalionWave(player, mapManager, enemyGroup, maxAt
   }
 
   if (!validSpawnFound) {
-    console.warn("No valid spawn point found");
+    logger.warn("No valid spawn point found");
     return;
   }
 

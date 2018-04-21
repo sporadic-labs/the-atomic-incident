@@ -23,7 +23,7 @@ export default class WeaponManager extends Phaser.Group {
     this._rocketLauncher = new RocketLauncher(game, this, player, enemies);
     this._flamethrower = new Flamethrower(game, this, player, enemies);
 
-    this._emptyAmmoSound = game.globals.soundManager.add("empty-ammo-dry-fire", null, 0.5);
+    this._emptyAmmoSound = game.globals.soundManager.add("fx/empty-ammo-dry-fire", null, 0.5);
     this._allowEmptyAmmoSound = true;
     this._emptyAmmoCooldownTimer = game.time.create(false);
     this._emptyAmmoCooldownTimer.start();

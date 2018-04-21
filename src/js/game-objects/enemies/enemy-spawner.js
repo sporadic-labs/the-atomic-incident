@@ -2,6 +2,7 @@ import Enemy from "./enemy";
 import { shuffleArray, weightedPick } from "../../helpers/utilities";
 import spawnBattalionWave from "./spawner/spawn-battalion-wave";
 import Wave from "../waves/wave";
+import logger from "../../helpers/logger";
 
 class IncrementableValue {
   constructor(min, max, increment) {
@@ -99,8 +100,6 @@ export default class EnemySpawner {
     });
 
     resetCompositions();
-
-    // this._spawnSound = this.game.globals.soundManager.add("chiptone/enemy-spawn");
   }
 
   _getDifficultyFraction() {
@@ -136,12 +135,9 @@ export default class EnemySpawner {
       attempts++;
     }
     if (attempts >= 25) {
-      console.warn("No valid spawn point found");
+      logger.warn("No valid spawn point found");
       return;
     }
-
-    // Play the enemy spawn sound.
-    // this._spawnSound.play();
 
     // Spawn in cluster around spawn point
     const spawnRadius = 50;
@@ -162,14 +158,14 @@ export default class EnemySpawner {
       );
 
       if (attempts >= 25) {
-        console.warn("Unable to place enemy near spawn point");
+        logger.warn("Unable to place enemy near spawn point");
         continue;
       }
 
       if (enemyType in ENEMY_TYPES) {
         this.spawnWithDelay(i * spawnDelay, enemyType, enemyPosition);
       } else {
-        console.warn(`Unknown enemy type: ${enemyType}`);
+        logger.warn(`Unknown enemy type: ${enemyType}`);
       }
     }
 

@@ -104,7 +104,7 @@ class WeaponPickup extends Phaser.Sprite {
     this._onPickupDestroyed = pickupSpawner.onPickupDestroyed;
     this._difficultyModifier = this.game.globals.difficultyModifier;
 
-    this._pickupSound = game.globals.soundManager.add("crate-pickup");
+    this._pickupSound = game.globals.soundManager.add("fx/crate-pickup");
 
     game.physics.sat.add.gameObject(this).setOffset(-this.width / 2, -this.height / 2);
   }

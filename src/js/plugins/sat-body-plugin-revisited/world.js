@@ -3,6 +3,7 @@ import BODY_SHAPES from "./body-shapes";
 import BODY_TYPES from "./body-types";
 import SAT from "sat";
 import Body from "./body";
+import logger from "../../helpers/logger";
 
 const P = Phaser.Point;
 const globalResponse = new SAT.Response();
@@ -14,9 +15,9 @@ const reverseCallback = (cb, context) => {
 
 export default class World {
   /**
-   * 
-   * @param {Phaser.Game} game 
-   * @param {*} satPlugin 
+   *
+   * @param {Phaser.Game} game
+   * @param {*} satPlugin
    */
   constructor(game, satPlugin) {
     this.game = game;
@@ -205,7 +206,7 @@ export default class World {
         const _onCollide = reverseCallback(onCollide, context);
         return this.collideObjectVsGroup(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.GROUP) {
-        console.warn("Colliding group vs group is not supported yet!");
+        logger.warn("Colliding group vs group is not supported yet!");
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
         return this.collideGroupVsTilemapLayer(object1, object2, onCollide, context, separate);
       }
@@ -217,7 +218,7 @@ export default class World {
         const _onCollide = reverseCallback(onCollide, context);
         return this.collideGroupVsTilemapLayer(object2, object1, _onCollide, context, separate);
       } else if (object2.physicsType === Phaser.TILEMAPLAYER) {
-        console.warn("Colliding group vs tilemap layer is not supported!");
+        logger.warn("Colliding group vs tilemap layer is not supported!");
       }
     }
 

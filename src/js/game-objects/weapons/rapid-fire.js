@@ -8,7 +8,7 @@ export default class RapidFire extends BaseWeapon {
     this._damage = 12;
     this._speed = 500;
 
-    this._fireSound = game.globals.soundManager.add("rapid-shot-2", null, 0.4);
+    this._fireSound = game.globals.soundManager.add("fx/rapid-shot-2", null, 0.3);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }

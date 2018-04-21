@@ -7,7 +7,7 @@ export default class Scattershot extends BaseWeapon {
     super(game, parentGroup, player, enemies, WEAPON_TYPES.SCATTERSHOT, 16, 480, 1800);
     this._damage = 24;
 
-    this._fireSound = game.globals.soundManager.add("multishot", null, 0.4);
+    this._fireSound = game.globals.soundManager.add("fx/multishot", null, 0.4);
 
     this._difficultyModifier = this.game.globals.difficultyModifier;
   }
