@@ -6,6 +6,8 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = function(env, argv) {
+  const isDev = argv.mode !== "development";
+
   return {
     mode: "development",
     context: path.resolve(__dirname, "src"),
@@ -81,6 +83,6 @@ module.exports = function(env, argv) {
         }
       ])
     ],
-    devtool: "eval"
+    devtool: isDev ? "eval-source-map" : "source-map"
   };
 };
