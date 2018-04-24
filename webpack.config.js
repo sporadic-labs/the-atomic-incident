@@ -6,10 +6,10 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = function(env, argv) {
-  const isDev = argv.mode !== "development";
+  const isDev = argv.mode === "development";
 
   return {
-    mode: "development",
+    mode: isDev ? "development" : "production",
     context: path.resolve(__dirname, "src"),
     entry: "./js/main.js",
     cache: true,
