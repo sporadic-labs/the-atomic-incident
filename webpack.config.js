@@ -43,7 +43,9 @@ module.exports = function(env, argv) {
           use: {
             loader: "file-loader",
             options: {
-              name: "[path][name].[ext]"
+              // Default is node_modules -> _/node_modules, which doesn't work with gh-pages.
+              // Instead, don't use [path], just use a [hash] to make file paths unique.
+              name: "static/[name].[hash:8].[ext]"
             }
           }
         },
