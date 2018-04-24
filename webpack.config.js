@@ -24,8 +24,9 @@ module.exports = function(env, argv) {
         {
           test: /\.(scss|sass)$/,
           use: [
-            // MiniCssExtractPlugin.loader,
-            { loader: "style-loader", options: { sourceMap: true } },
+            isDev
+              ? { loader: "style-loader", options: { sourceMap: true } }
+              : MiniCssExtractPlugin.loader,
             { loader: "css-loader", options: { sourceMap: true } },
             { loader: "sass-loader", options: { sourceMap: true } }
           ]
@@ -72,7 +73,7 @@ module.exports = function(env, argv) {
 
       new HTMLWebpackPlugin({ template: "./index.html" }),
 
-      new MiniCssExtractPlugin({ filename: "[name].css", chunkFilename: "[id].css" }),
+      new MiniCssExtractPlugin({ filename: "[name].[hash].css", chunkFilename: "[id].[hash].css" }),
 
       // Instead of using imports & file loader for Phaser assets, just copy over all resources
       new CopyWebpackPlugin([
