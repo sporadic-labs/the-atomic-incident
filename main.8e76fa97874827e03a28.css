@@ -1,0 +1,555 @@
+/* montserrat-100normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100;
+  src:
+    local('Montserrat Thin '),
+    local('Montserrat-Thin'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-100.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-100.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-100italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100;
+  src:
+    local('Montserrat Thin italic'),
+    local('Montserrat-Thinitalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-100italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-100italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-200normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200;
+  src:
+    local('Montserrat Extra Light '),
+    local('Montserrat-Extra Light'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-200.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-200.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-200italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200;
+  src:
+    local('Montserrat Extra Light italic'),
+    local('Montserrat-Extra Lightitalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-200italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-200italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-300normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src:
+    local('Montserrat Light '),
+    local('Montserrat-Light'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-300.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-300.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-300italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300;
+  src:
+    local('Montserrat Light italic'),
+    local('Montserrat-Lightitalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-300italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-300italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-400normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    local('Montserrat Regular '),
+    local('Montserrat-Regular'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-400.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-400.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-400italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    local('Montserrat Regular italic'),
+    local('Montserrat-Regularitalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-400italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-400italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-500normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src:
+    local('Montserrat Medium '),
+    local('Montserrat-Medium'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-500.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-500.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-500italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 500;
+  src:
+    local('Montserrat Medium italic'),
+    local('Montserrat-Mediumitalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-500italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-500italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-600normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src:
+    local('Montserrat SemiBold '),
+    local('Montserrat-SemiBold'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-600.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-600.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-600italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 600;
+  src:
+    local('Montserrat SemiBold italic'),
+    local('Montserrat-SemiBolditalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-600italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-600italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-700normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:
+    local('Montserrat Bold '),
+    local('Montserrat-Bold'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-700.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-700.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-700italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 700;
+  src:
+    local('Montserrat Bold italic'),
+    local('Montserrat-Bolditalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-700italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-700italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-800normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 800;
+  src:
+    local('Montserrat ExtraBold '),
+    local('Montserrat-ExtraBold'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-800.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-800.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-800italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 800;
+  src:
+    local('Montserrat ExtraBold italic'),
+    local('Montserrat-ExtraBolditalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-800italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-800italic.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-900normal - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 900;
+  src:
+    local('Montserrat Black '),
+    local('Montserrat-Black'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-900.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-900.woff) format('woff'); /* Modern Browsers */
+}
+
+/* montserrat-900italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 900;
+  src:
+    local('Montserrat Black italic'),
+    local('Montserrat-Blackitalic'),
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-900italic.woff2) format('woff2'), 
+    url(_/node_modules/typeface-montserrat/files/montserrat-latin-900italic.woff) format('woff'); /* Modern Browsers */
+}
+
+
+@font-face {
+    font-family: 'Johnyokonysm';
+    src: url(fonts/Johnyokonysm/johnyokonysm-webfont.woff2) format('woff2'),
+         url(fonts/Johnyokonysm/johnyokonysm-webfont.woff) format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+* {
+  box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+ul {
+  list-style: none; }
+
+ul, ol, li {
+  margin-left: 0px;
+  padding-left: 0px; }
+
+button {
+  background: none;
+  border: 0;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  overflow: visible;
+  padding: 0; }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important; }
+
+input[type="range"].slider {
+  -webkit-appearance: none; }
+
+input[type="range"].slider:focus {
+  outline: none; }
+
+input[type="range"].slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 21.1px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0);
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 1.8px;
+  border: 0.1px solid #000101; }
+
+input[type="range"].slider::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px rgba(103, 0, 0, 0), 0px 0px 0px rgba(129, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  height: 27px;
+  width: 20px;
+  border-radius: 1px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -3.05px; }
+
+input[type="range"].slider:focus::-webkit-slider-runnable-track {
+  background: rgba(13, 13, 13, 0.21); }
+
+input[type="range"].slider::-moz-range-track {
+  width: 100%;
+  height: 21.1px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0);
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 1.8px;
+  border: 0.1px solid #000101; }
+
+input[type="range"].slider::-moz-range-thumb {
+  box-shadow: 0px 0px 0px rgba(103, 0, 0, 0), 0px 0px 0px rgba(129, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  height: 27px;
+  width: 20px;
+  border-radius: 1px;
+  background: #ffffff;
+  cursor: pointer; }
+
+input[type="range"].slider::-ms-track {
+  width: 100%;
+  height: 21.1px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent; }
+
+input[type="range"].slider::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.21);
+  border: 0.1px solid #000101;
+  border-radius: 3.6px;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0); }
+
+input[type="range"].slider::-ms-fill-upper {
+  background: rgba(0, 0, 0, 0.21);
+  border: 0.1px solid #000101;
+  border-radius: 3.6px;
+  box-shadow: 1px 1px 1px transparent, 0px 0px 1px rgba(13, 13, 13, 0); }
+
+input[type="range"].slider::-ms-thumb {
+  box-shadow: 0px 0px 0px rgba(103, 0, 0, 0), 0px 0px 0px rgba(129, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  height: 27px;
+  width: 20px;
+  border-radius: 1px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 21.1px; }
+
+input[type="range"].slider:focus::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.21); }
+
+input[type="range"].slider:focus::-ms-fill-upper {
+  background: rgba(13, 13, 13, 0.21); }
+
+#game-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%; }
+
+#hud {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 3px;
+  z-index: 1000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; }
+  #hud > * {
+    pointer-events: initial; }
+  #hud label {
+    text-align: center;
+    display: block;
+    margin-bottom: 20px;
+    text-align: center; }
+  #hud .slider {
+    width: 60%;
+    display: block;
+    margin: 10px auto 0 auto; }
+  #hud button {
+    display: block;
+    margin: 24px auto;
+    padding: 16px 30px;
+    color: #5a867e;
+    background-color: white;
+    border-radius: 5px;
+    font-weight: 900;
+    font-size: 0.95rem;
+    letter-spacing: 0.075rem;
+    cursor: pointer;
+    transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out; }
+    #hud button:hover {
+      color: white;
+      background-color: #5a867e; }
+  #hud #pause-controls {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    font-size: 24px;
+    border-radius: 4px;
+    width: 38px;
+    height: 38px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #82b9af;
+    color: white;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer; }
+    #hud #pause-controls svg {
+      width: 100%;
+      height: 100%; }
+      #hud #pause-controls svg * {
+        color: white; }
+    #hud #pause-controls:hover {
+      background-color: #61a79a; }
+      #hud #pause-controls:hover svg * {
+        color: #e6e6e6; }
+  #hud .menu {
+    min-width: 65%;
+    padding: 20px;
+    position: relative;
+    border-radius: 10px;
+    pointer-events: initial;
+    cursor: default;
+    background-color: #82b9af; }
+    #hud .menu .menu-title {
+      margin: 0 auto 20px auto;
+      padding: 12px 50px;
+      font-size: 32px;
+      font-weight: 600;
+      text-align: center;
+      text-shadow: 2px 2px #404040; }
+    #hud .menu .final-score {
+      margin: 6px auto;
+      padding: 6px;
+      font-size: 24px;
+      text-align: center; }
+    #hud .menu .btn-close {
+      position: absolute;
+      top: 3%;
+      right: 3%;
+      margin: 0;
+      padding: 6px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center; }
+      #hud .menu .btn-close svg {
+        width: 100%;
+        height: 100%; }
+        #hud .menu .btn-close svg * {
+          fill: #5a867e; }
+      #hud .menu .btn-close:hover {
+        background-color: #5a867e; }
+        #hud .menu .btn-close:hover svg * {
+          fill: white; }
+    #hud .menu #about {
+      text-align: center;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      transition: all 0.1s ease-in-out; }
+      #hud .menu #about:hover {
+        cursor: pointer;
+        color: #5a867e;
+        transition: all 0.1s ease-in-out; }
+  #hud #instructions-menu .menu-title {
+    margin: auto; }
+  #hud #instructions-menu .instruction-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: row; }
+    #hud #instructions-menu .instruction-wrap svg,
+    #hud #instructions-menu .instruction-wrap .label {
+      flex-grow: 1; }
+    #hud #instructions-menu .instruction-wrap .label,
+    #hud #instructions-menu .instruction-wrap .img-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+    #hud #instructions-menu .instruction-wrap .img-wrap {
+      width: 48px;
+      height: 48px;
+      background-color: #fff;
+      border-radius: 6px; }
+  #hud #instructions-menu .mouse {
+    height: 80px; }
+  #hud #instructions-menu .pickup {
+    width: 80%;
+    margin: 12px auto; }
+  #hud #about-menu {
+    padding: 36px; }
+    #hud #about-menu .brand {
+      width: 100%; }
+      #hud #about-menu .brand .created-by {
+        font-size: 10px; }
+      #hud #about-menu .brand .logo-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        #hud #about-menu .brand .logo-wrap img {
+          margin: 12px;
+          border-radius: 12px; }
+        #hud #about-menu .brand .logo-wrap .logo-text {
+          font-size: 32px; }
+    #hud #about-menu #credits-wrap {
+      width: 80%;
+      margin: auto;
+      text-align: center; }
+      #hud #about-menu #credits-wrap #credits-title {
+        font-size: 16px; }
+      #hud #about-menu #credits-wrap a {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.1s ease-in-out; }
+        #hud #about-menu #credits-wrap a:hover {
+          color: #5a867e;
+          transition: all 0.1s ease-in-out; }
+    #hud #about-menu .links {
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      #hud #about-menu .links a {
+        margin: 12px;
+        transition: all 0.1s ease-in-out; }
+        #hud #about-menu .links a:hover {
+          opacity: 0.5;
+          cursor: pointer;
+          transition: all 0.1s ease-in-out; }
+
+html {
+  font-size: 100%; }
+
+body {
+  background-color: black;
+  color: white;
+  font-family: "Johnyokonysm", sans-serif; }
+
+
+/*# sourceMappingURL=main.8e76fa97874827e03a28.css.map*/
