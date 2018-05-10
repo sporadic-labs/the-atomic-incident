@@ -11,7 +11,7 @@ class GameStore {
       highScore: 0,
       isPaused: false,
       menuState: MENU_STATE_NAMES.CLOSED,
-      gameState: SCENE_NAMES.BOOT,
+      gameState: SCENE_NAMES.LOAD,
       pendingGameRestart: false,
 
       // Actions - these mutate the state

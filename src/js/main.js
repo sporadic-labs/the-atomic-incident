@@ -49,14 +49,13 @@ globals.tilemapNames = [
 globals.plugins = {};
 globals.musicSound = null;
 
-game.state.add(SCENE_NAMES.BOOT, Boot);
 game.state.add(SCENE_NAMES.LOAD, Load);
 game.state.add(SCENE_NAMES.START_MENU, StartMenu);
 game.state.add(SCENE_NAMES.PLAY, Play);
 game.state.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
 game.state.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
-gameStore.setGameState(SCENE_NAMES.BOOT);
+gameStore.setGameState(SCENE_NAMES.LOAD);
 
 autorun(() => {
   // Control sound here so it changes regardless of the current phaser state loaded
