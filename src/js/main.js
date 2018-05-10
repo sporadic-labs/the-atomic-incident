@@ -3,7 +3,7 @@ import "babel-polyfill";
 import "phaser";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
-import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, SCENE_NAMES } from "./scenes";
+import { Load, StartMenu, Play, LightingPerf, SatBodyTest, SCENE_NAMES } from "./scenes";
 import initializeAnalytics, { registerStateChange } from "./analytics";
 
 import logger, { LOG_LEVEL } from "./helpers/logger";
