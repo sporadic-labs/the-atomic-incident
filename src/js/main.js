@@ -22,6 +22,10 @@ const game = new Phaser.Game({
   renderer: Phaser.CANVAS,
   enableDebug: enableDebug, // We can turn off debug when deploying - using debug causes a hit on webgl
   parent: "game-container"
+// Disable right click menu
+document.getElementById("game-container").addEventListener("contextmenu", e => {
+  e.preventDefault();
+  return false;
 });
 
 // Set up the menu system
