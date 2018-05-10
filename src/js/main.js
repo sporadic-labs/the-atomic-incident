@@ -15,13 +15,15 @@ initializeAnalytics(isLocalhost);
 // Enable/disable Debug.
 const enableDebug = !PRODUCTION;
 const gameDimensions = 750;
-// Keep this on CANVAS until Phaser 3 for performance reasons?
 const game = new Phaser.Game({
-  width: gameDimensions,
-  height: gameDimensions,
-  renderer: Phaser.CANVAS,
-  enableDebug: enableDebug, // We can turn off debug when deploying - using debug causes a hit on webgl
-  parent: "game-container"
+  type: Phaser.AUTO,
+  parent: "game-container",
+  width: 750,
+  height: 750,
+  backgroundColor: "#000",
+  pixelArt: false
+});
+
 // Disable right click menu
 document.getElementById("game-container").addEventListener("contextmenu", e => {
   e.preventDefault();
