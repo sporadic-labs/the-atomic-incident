@@ -53,11 +53,11 @@ globals.tilemapNames = [
 globals.plugins = {};
 globals.musicSound = null;
 
-game.state.add(SCENE_NAMES.LOAD, Load);
-game.state.add(SCENE_NAMES.START_MENU, StartMenu);
-game.state.add(SCENE_NAMES.PLAY, Play);
-game.state.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
-game.state.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
+game.scene.add(SCENE_NAMES.LOAD, Load);
+game.scene.add(SCENE_NAMES.START_MENU, StartMenu);
+game.scene.add(SCENE_NAMES.PLAY, Play);
+game.scene.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
+game.scene.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
 gameStore.setGameState(SCENE_NAMES.LOAD);
 
