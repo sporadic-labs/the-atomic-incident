@@ -12,9 +12,6 @@ logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
 const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
 initializeAnalytics(isLocalhost);
 
-// Enable/disable Debug.
-const enableDebug = !PRODUCTION;
-const gameDimensions = 750;
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: "game-container",
@@ -43,7 +40,7 @@ render(
   />,
   document.body
 );
-if (enableDebug) render(<Instructions />, document.body);
+if (!PRODUCTION) render(<Instructions />, document.body);
 
 // Create the space for globals on the game object
 const globals = (game.globals = {});
