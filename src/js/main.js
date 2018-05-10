@@ -12,11 +12,12 @@ logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
 const isLocalhost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
 initializeAnalytics(isLocalhost);
 
+const gameSize = 750;
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: "game-container",
-  width: 750,
-  height: 750,
+  width: gameSize,
+  height: gameSize,
   backgroundColor: "#000",
   pixelArt: false
 });
@@ -35,8 +36,8 @@ render(
   <MenuApp
     gameStore={gameStore}
     preferencesStore={preferencesStore}
-    width={gameDimensions}
-    height={gameDimensions}
+    width={gameSize}
+    height={gameSize}
   />,
   document.body
 );
