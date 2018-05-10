@@ -7,7 +7,7 @@ import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
 import LightingPluginOptimized from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
 import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
-import { GAME_STATE_NAMES } from "./index";
+import { SCENE_NAMES } from "./index";
 import { MENU_STATE_NAMES } from "../menu";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { autorun } from "mobx";

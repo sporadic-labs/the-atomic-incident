@@ -1,7 +1,7 @@
 import { extendObservable, action } from "mobx";
 import storageAutosync from "./sync-to-storage";
 import { MENU_STATE_NAMES } from "../../menu";
-import { GAME_STATE_NAMES } from "../../states";
+import { SCENE_NAMES } from "../../scenes";
 
 class GameStore {
   constructor() {
@@ -11,7 +11,7 @@ class GameStore {
       highScore: 0,
       isPaused: false,
       menuState: MENU_STATE_NAMES.CLOSED,
-      gameState: GAME_STATE_NAMES.BOOT,
+      gameState: SCENE_NAMES.BOOT,
       pendingGameRestart: false,
 
       // Actions - these mutate the state

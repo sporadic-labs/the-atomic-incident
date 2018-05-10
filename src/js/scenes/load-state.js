@@ -2,7 +2,7 @@
  * LoadState - this is the loading screen
  */
 
-import { GAME_STATE_NAMES } from "./index.js";
+import { SCENE_NAMES } from "./index.js";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import loadFonts from "../fonts/font-loader";
 import logger from "../helpers/logger";
@@ -87,8 +87,8 @@ export default class LoadState extends Phaser.State {
         this.game.globals.musicSound.mute = true;
       }
 
-      if (preferencesStore.skipMenu) gameStore.setGameState(GAME_STATE_NAMES.PLAY);
-      else gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
+      if (preferencesStore.skipMenu) gameStore.setGameState(SCENE_NAMES.PLAY);
+      else gameStore.setGameState(SCENE_NAMES.START_MENU);
     }
   }
 }

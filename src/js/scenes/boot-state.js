@@ -4,7 +4,7 @@
  * - Loads only the assets needed for the LoadState
  */
 
-import { GAME_STATE_NAMES } from "./index.js";
+import { SCENE_NAMES } from "./index.js";
 import { gameStore } from "../game-data/observable-stores";
 
 export default class BootState extends Phaser.State {
@@ -26,7 +26,7 @@ export default class BootState extends Phaser.State {
     // Debugging FPS
     this.game.time.advancedTiming = true;
 
-    // this.game.state.start(GAME_STATE_NAMES.LOAD);
-    gameStore.setGameState(GAME_STATE_NAMES.LOAD);
+    // this.game.state.start(SCENE_NAMES.LOAD);
+    gameStore.setGameState(SCENE_NAMES.LOAD);
   }
 }

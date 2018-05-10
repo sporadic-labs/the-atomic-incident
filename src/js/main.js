@@ -1,11 +1,9 @@
 import "../css/main.scss";
 import "babel-polyfill";
-import "phaser-ce/build/custom/pixi";
-import "phaser-ce/build/custom/p2";
-import "phaser-ce/build/custom/phaser-split";
+import "phaser";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
-import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, GAME_STATE_NAMES } from "./states";
+import { Boot, Load, StartMenu, Play, LightingPerf, SatBodyTest, SCENE_NAMES } from "./scenes";
 import initializeAnalytics, { registerStateChange } from "./analytics";
 
 import logger, { LOG_LEVEL } from "./helpers/logger";
@@ -51,14 +49,14 @@ globals.tilemapNames = [
 globals.plugins = {};
 globals.musicSound = null;
 
-game.state.add(GAME_STATE_NAMES.BOOT, Boot);
-game.state.add(GAME_STATE_NAMES.LOAD, Load);
-game.state.add(GAME_STATE_NAMES.START_MENU, StartMenu);
-game.state.add(GAME_STATE_NAMES.PLAY, Play);
-game.state.add(GAME_STATE_NAMES.LIGHTING_PERF, LightingPerf);
-game.state.add(GAME_STATE_NAMES.SAT_BODY_TEST, SatBodyTest);
+game.state.add(SCENE_NAMES.BOOT, Boot);
+game.state.add(SCENE_NAMES.LOAD, Load);
+game.state.add(SCENE_NAMES.START_MENU, StartMenu);
+game.state.add(SCENE_NAMES.PLAY, Play);
+game.state.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
+game.state.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
-gameStore.setGameState(GAME_STATE_NAMES.BOOT);
+gameStore.setGameState(SCENE_NAMES.BOOT);
 
 autorun(() => {
   // Control sound here so it changes regardless of the current phaser state loaded

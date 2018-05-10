@@ -1,7 +1,7 @@
 import { h, Component } from "preact";
 import { observer } from "mobx-preact";
 import { MENU_STATE_NAMES } from "./index";
-import { GAME_STATE_NAMES } from "../states";
+import { SCENE_NAMES } from "../scenes";
 import StartMenu from "./components/start-menu";
 import PauseMenu from "./components/pause-menu";
 import DebugMenu from "./components/debug-menu";
@@ -62,12 +62,12 @@ const Menu = observer(
     startGame = () => {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
-      this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
+      this.props.gameStore.setGameState(SCENE_NAMES.PLAY);
     };
 
     restartGame = () => {
       this.props.gameStore.unpause();
-      this.props.gameStore.setGameState(GAME_STATE_NAMES.PLAY);
+      this.props.gameStore.setGameState(SCENE_NAMES.PLAY);
       this.props.gameStore.restartGame();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
     };
@@ -75,7 +75,7 @@ const Menu = observer(
     goToStartMenu = () => {
       this.props.gameStore.unpause();
       this.addMenuState(MENU_STATE_NAMES.CLOSED);
-      this.props.gameStore.setGameState(GAME_STATE_NAMES.START_MENU);
+      this.props.gameStore.setGameState(SCENE_NAMES.START_MENU);
     };
 
     goToOptionsMenu = () => {
@@ -115,7 +115,7 @@ const Menu = observer(
 
     render() {
       const { gameStore, preferencesStore, width, height } = this.props;
-      const isGameRunning = gameStore.gameState === GAME_STATE_NAMES.PLAY;
+      const isGameRunning = gameStore.gameState === SCENE_NAMES.PLAY;
 
       let activeMenu;
       if (gameStore.menuState === MENU_STATE_NAMES.START_MENU) {

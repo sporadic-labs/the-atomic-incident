@@ -5,7 +5,7 @@ import LightingPerf from "./lighing-pef-state";
 import StartMenu from "./start-menu-state";
 import SatBodyTest from "./sat-body-test";
 
-const GAME_STATE_NAMES = {
+const SCENE_NAMES = {
   BOOT: "BOOT",
   LOAD: "LOAD",
   PLAY: "PLAY",
@@ -14,4 +14,4 @@ const GAME_STATE_NAMES = {
   SAT_BODY_TEST: "SAT_BODY_TEST"
 };
 
-export { Boot, Load, Play, StartMenu, LightingPerf, SatBodyTest, GAME_STATE_NAMES };
+export { Boot, Load, Play, StartMenu, LightingPerf, SatBodyTest, SCENE_NAMES };
