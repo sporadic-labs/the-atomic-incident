@@ -4,6 +4,7 @@ const webpack = require("webpack");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyWebpackPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = function(env, argv) {
   const isDev = argv.mode === "development";
@@ -74,6 +75,8 @@ module.exports = function(env, argv) {
       }),
 
       new HTMLWebpackPlugin({ template: "./index.html" }),
+
+      new UglifyWebpackPlugin({ sourceMap: true, extractComments: !isDev }),
 
       new MiniCssExtractPlugin({ filename: "[name].[hash].css", chunkFilename: "[id].[hash].css" }),
 
