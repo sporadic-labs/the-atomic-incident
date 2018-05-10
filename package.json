@@ -10,6 +10,7 @@
   "main": "gulpfile.js",
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
   "dependencies": {
+    "phaser": "^3.7.1",
     "rbush": "^2.0.2"
   },
   "devDependencies": {
@@ -42,7 +43,6 @@
     "mobx": "^4.2.0",
     "mobx-preact": "^2.0.0",
     "node-sass": "^4.9.0",
-    "phaser-ce": "^2.10.3",
     "phaser-navmesh": "^1.1.1",
     "phaser-tiled-hull": "^1.0.2",
     "point-in-polygon": "^1.0.1",
