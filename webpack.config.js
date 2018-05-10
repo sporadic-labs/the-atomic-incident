@@ -71,7 +71,9 @@ module.exports = function(env, argv) {
     },
     plugins: [
       new webpack.DefinePlugin({
-        PRODUCTION: argv.mode !== "development"
+        "typeof CANVAS_RENDERER": JSON.stringify(true),
+        "typeof WEBGL_RENDERER": JSON.stringify(true),
+        PRODUCTION: !isDev
       }),
 
       new HTMLWebpackPlugin({ template: "./index.html" }),
