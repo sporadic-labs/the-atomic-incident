@@ -3,7 +3,7 @@ import "babel-polyfill";
 import "phaser";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
-import { Load, StartMenu, Play, LightingPerf, SatBodyTest, SCENE_NAMES } from "./scenes";
+import { Load, StartMenu, SCENE_NAMES } from "./scenes";
 import initializeAnalytics, { registerStateChange } from "./analytics";
 
 import logger, { LOG_LEVEL } from "./helpers/logger";
@@ -55,9 +55,9 @@ globals.musicSound = null;
 
 game.scene.add(SCENE_NAMES.LOAD, Load);
 game.scene.add(SCENE_NAMES.START_MENU, StartMenu);
-game.scene.add(SCENE_NAMES.PLAY, Play);
-game.scene.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
-game.scene.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
+// game.scene.add(SCENE_NAMES.PLAY, Play);
+// game.scene.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
+// game.scene.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
 gameStore.setGameState(SCENE_NAMES.LOAD);
 
@@ -66,10 +66,10 @@ autorun(() => {
   const musicSound = globals.musicSound;
   if (musicSound) musicSound.mute = preferencesStore.musicMuted;
 
-  game.state.start(gameStore.gameState);
-  if (gameStore.pendingGameRestart) game.state.start(gameStore.gameState);
+  game.scene.start(gameStore.gameState);
+  if (gameStore.pendingGameRestart) game.scene.start(gameStore.gameState);
 });
-game.state.onStateChange.add(() => {
-  gameStore.markRestartComplete();
-  registerStateChange(game.state.getCurrentState().key);
-});
+// game.scene.onStateChange.add(() => {
+//   gameStore.markRestartComplete();
+//   registerStateChange(game.state.getCurrentState().key);
+// });

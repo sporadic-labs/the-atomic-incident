@@ -1,14 +1,17 @@
 /**
- * LoadState - this is the loading screen
+ * LoadScene - this is the loading screen
  */
 
+import Phaser from "phaser";
 import { SCENE_NAMES } from "./index.js";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import loadFonts from "../fonts/font-loader";
 import logger from "../helpers/logger";
 
-export default class LoadState extends Phaser.State {
+export default class LoadScene extends Phaser.Scene {
   preload() {
+    const globals = this.registry.parent.globals;
+
     // Fonts
     this.fontsLoaded = false;
     this.fontsErrored = false;
@@ -21,13 +24,13 @@ export default class LoadState extends Phaser.State {
 
     // Images
     const atlasPath = `resources/atlases`;
-    this.load.atlasJSONHash("assets", `${atlasPath}/assets.png`, `${atlasPath}/assets.json`);
+    this.load.atlas("assets", `${atlasPath}/assets.png`, `${atlasPath}/assets.json`);
 
     // Tilemap
-    for (const tilemapName of this.game.globals.tilemapNames) {
+    for (const tilemapName of globals.tilemapNames) {
       const path = `resources/tilemaps/${tilemapName}.json`;
       const key = tilemapName.split(".")[0];
-      this.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
+      this.load.tilemapTiledJSON(key, path);
     }
     this.load.image("tiles", "resources/tilemaps/tiles.png");
 
@@ -60,34 +63,28 @@ export default class LoadState extends Phaser.State {
     });
 
     // Stand-in for a loading bar
-    this.loadingText = this.add.text(this.world.centerX, this.world.centerY, "0%", {
-      font: "200px Arial",
-      fill: "#000",
-      align: "center"
+    const loadingBar = this.add.graphics();
+    this.load.on("progress", value => {
+      loadingBar.clear();
+      loadingBar.fillStyle(0xffffff, 1);
+      loadingBar.fillRect(0, 750 / 2 - 25, 750 * value, 50);
     });
-    this.loadingText.anchor.set(0.5);
-  }
-
-  loadRender() {
-    this.loadingText.setText(this.load.progress + "%");
-  }
-
-  create() {
-    // Since load progress might not reach 100 in the load loop, manually do it
-    this.loadingText.setText("100%");
+    this.load.on("complete", () => loadingBar.destroy());
   }
 
   update() {
+    const globals = this.registry.parent.globals;
+
     // To fail gracefully, allow the game to load if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
-      this.game.globals.musicSound = this.sound.play("music/hate-bay", 0.09, true);
-      if (preferencesStore.musicMuted) {
-        // Phaser bug - don't use pause for this since it won't work with the state being switched
-        // immediately after pausing
-        this.game.globals.musicSound.mute = true;
-      }
+      // globals.musicSound = this.sound.play("music/hate-bay", 0.09, true);
+      // if (preferencesStore.musicMuted) {
+      //   // Phaser bug - don't use pause for this since it won't work with the state being switched
+      //   // immediately after pausing
+      //   globals.musicSound.mute = true;
+      // }
 
-      if (preferencesStore.skipMenu) gameStore.setGameState(SCENE_NAMES.PLAY);
+      if (preferencesStore.skipMenu) gameStore.setGameState(SCENE_NAMES.START_MENU);
       else gameStore.setGameState(SCENE_NAMES.START_MENU);
     }
   }
