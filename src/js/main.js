@@ -1,7 +1,7 @@
 import "../css/main.scss";
 import "babel-polyfill";
 import "phaser";
-import { autorun } from "mobx";
+import { observe, autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Play, Load, StartMenu, SCENE_NAMES } from "./scenes";
 import initializeAnalytics, { registerStateChange } from "./analytics";
@@ -60,12 +60,11 @@ game.scene.add(SCENE_NAMES.PLAY, Play);
 // game.scene.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
 // game.scene.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
 
-gameStore.setGameState(SCENE_NAMES.LOAD);
-
-autorun(() => {
-  // Control sound here so it changes regardless of the current phaser state loaded
-  const musicSound = globals.musicSound;
-  if (musicSound) musicSound.mute = preferencesStore.musicMuted;
+observe(gameStore, "gameState", change => {
+  const { newValue, oldValue } = change;
+  if (game.scene.getScene(oldValue)) game.scene.stop(oldValue);
+  game.scene.start(newValue);
+});
 
   game.scene.start(gameStore.gameState);
   if (gameStore.pendingGameRestart) game.scene.start(gameStore.gameState);
@@ -74,3 +73,10 @@ autorun(() => {
 //   gameStore.markRestartComplete();
 //   registerStateChange(game.state.getCurrentState().key);
 // });
+// TODO: observe sound
+
+//   // Control sound here so it changes regardless of the current phaser state loaded
+//   const musicSound = globals.musicSound;
+//   if (musicSound) musicSound.mute = preferencesStore.musicMuted;
+
+gameStore.setGameState(SCENE_NAMES.LOAD);
