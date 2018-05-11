@@ -1,14 +1,10 @@
-/**
- * LoadScene - this is the loading screen
- */
-
 import Phaser from "phaser";
 import { SCENE_NAMES } from "./index.js";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import loadFonts from "../fonts/font-loader";
 import logger from "../helpers/logger";
 
-export default class LoadScene extends Phaser.Scene {
+export default class Load extends Phaser.Scene {
   preload() {
     const globals = this.registry.parent.globals;
 
