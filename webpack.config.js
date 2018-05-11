@@ -6,10 +6,13 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyWebpackPlugin = require("uglifyjs-webpack-plugin");
 
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const smp = new SpeedMeasurePlugin();
+
 module.exports = function(env, argv) {
   const isDev = argv.mode === "development";
 
-  return {
+  return smp.wrap({
     mode: isDev ? "development" : "production",
     context: path.resolve(__dirname, "src"),
     entry: "./js/main.js",
@@ -92,5 +95,5 @@ module.exports = function(env, argv) {
       ])
     ],
     devtool: isDev ? "eval-source-map" : "source-map"
-  };
+  });
 };
