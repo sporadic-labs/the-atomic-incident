@@ -81,7 +81,8 @@ module.exports = function(env, argv) {
 
       new HTMLWebpackPlugin({ template: "./index.html" }),
 
-      new UglifyWebpackPlugin({ sourceMap: true, extractComments: !isDev }),
+      // Slows down build. TODO: move to separate config.
+      // new UglifyWebpackPlugin({ sourceMap: true, parallel: true, extractComments: true }),
 
       new MiniCssExtractPlugin({ filename: "[name].[hash].css", chunkFilename: "[id].[hash].css" }),
 
