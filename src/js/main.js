@@ -3,7 +3,7 @@ import "babel-polyfill";
 import "phaser";
 import { autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
-import { Load, StartMenu, SCENE_NAMES } from "./scenes";
+import { Play, Load, StartMenu, SCENE_NAMES } from "./scenes";
 import initializeAnalytics, { registerStateChange } from "./analytics";
 
 import logger, { LOG_LEVEL } from "./helpers/logger";
@@ -55,6 +55,7 @@ globals.musicSound = null;
 
 game.scene.add(SCENE_NAMES.LOAD, Load);
 game.scene.add(SCENE_NAMES.START_MENU, StartMenu);
+game.scene.add(SCENE_NAMES.PLAY, Play);
 // game.scene.add(SCENE_NAMES.PLAY, Play);
 // game.scene.add(SCENE_NAMES.LIGHTING_PERF, LightingPerf);
 // game.scene.add(SCENE_NAMES.SAT_BODY_TEST, SatBodyTest);
