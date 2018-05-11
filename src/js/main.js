@@ -66,13 +66,15 @@ observe(gameStore, "gameState", change => {
   game.scene.start(newValue);
 });
 
-  game.scene.start(gameStore.gameState);
-  if (gameStore.pendingGameRestart) game.scene.start(gameStore.gameState);
+// TODO: figure out a better way to do this now that we are upgrading the codebase
+autorun(change => {
+  if (gameStore.pendingGameRestart === true) {
+    if (game.scene.getScene(gameStore.gameState)) game.scene.stop(gameStore.gameState);
+    game.scene.start(gameStore.gameState);
+    gameStore.markRestartComplete();
+  }
 });
-// game.scene.onStateChange.add(() => {
-//   gameStore.markRestartComplete();
-//   registerStateChange(game.state.getCurrentState().key);
-// });
+
 // TODO: observe sound
 
 //   // Control sound here so it changes regardless of the current phaser state loaded
