@@ -1,7 +1,7 @@
-import Load from "./load-scene";
-// import Play from "./play-state";
+import Load from "./load";
+import Play from "./play";
+import StartMenu from "./start-menu";
 // import LightingPerf from "./lighing-pef-state";
-// import StartMenu from "./start-menu-state";
 // import SatBodyTest from "./sat-body-test";
 
 const SCENE_NAMES = {
@@ -12,4 +12,4 @@ const SCENE_NAMES = {
   SAT_BODY_TEST: "SAT_BODY_TEST"
 };
 
-export { Load, SCENE_NAMES };
+export { Load, Play, StartMenu, SCENE_NAMES };
