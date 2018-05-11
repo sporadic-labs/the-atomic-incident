@@ -73,6 +73,7 @@ export default class Load extends Phaser.Scene {
 
     // To fail gracefully, allow the game to load if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
+      // TODO: sort out how to handle global music
       // globals.musicSound = this.sound.play("music/hate-bay", 0.09, true);
       // if (preferencesStore.musicMuted) {
       //   // Phaser bug - don't use pause for this since it won't work with the state being switched
