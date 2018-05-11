@@ -5,6 +5,7 @@ import StartMenu from "./start-menu";
 // import SatBodyTest from "./sat-body-test";
 
 const SCENE_NAMES = {
+  NO_SCENE: "NO_SCENE",
   LOAD: "LOAD",
   PLAY: "PLAY",
   START_MENU: "START_MENU",
