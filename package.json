@@ -11,7 +11,8 @@
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
   "dependencies": {
     "phaser": "^3.7.1",
-    "rbush": "^2.0.2"
+    "rbush": "^2.0.2",
+    "webpack-merge": "^4.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -67,8 +68,8 @@
   },
   "scripts": {
     "postinstall": "typings install",
-    "build": "webpack --mode production",
-    "dev": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production --config ./config/webpack.config.js",
+    "dev": "webpack-dev-server --mode development --open --config ./config/webpack.config.js",
     "serve:production": "webpack-dev-server --mode production --open",
     "clean": "rm -rf ./public",
     "predeploy": "npm run clean && npm run build",
