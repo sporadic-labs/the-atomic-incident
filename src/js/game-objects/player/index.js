@@ -1,4 +1,5 @@
 import LifeCycleObject from "../lifecycle-object";
+import MovementController from "./movement-controller";
 
 const ANIM = {
   HIT: "PLAYER_HIT",
@@ -21,7 +22,6 @@ export default class Player extends LifeCycleObject {
       }),
       frameRate: 30
     });
-    scene.anims.create({ key: ANIM.MOVE, frames: "player/move", repeat: -1 });
     scene.anims.create({
       key: ANIM.DIE,
       frames: scene.anims.generateFrameNames("assets", {
@@ -33,20 +33,27 @@ export default class Player extends LifeCycleObject {
     });
 
     // Just for the moment, set the animations to cycle to verify settings
-    this.sprite.play(ANIM.HIT);
-    this.sprite.on("animationcomplete", currentAnim => {
-      const transitions = {
-        [ANIM.HIT]: ANIM.DIE,
-        [ANIM.DIE]: ANIM.HIT
-      };
-      this.sprite.play(transitions[currentAnim.key]);
-    });
+    // this.sprite.play(ANIM.HIT);
+    // this.sprite.on("animationcomplete", currentAnim => {
+    //   const transitions = {
+    //     [ANIM.HIT]: ANIM.DIE,
+    //     [ANIM.DIE]: ANIM.HIT
+    //   };
+    //   this.sprite.play(transitions[currentAnim.key]);
+    // });
+
+    scene.physics.world.enable(this.sprite);
+
+    this.movementController = new MovementController(this, this.sprite.body, scene);
   }
 
-  update(time, delta) {}
+  update(time, delta) {
+    this.movementController.update(time, delta);
+  }
 
   destroy() {
     this.sprite.destroy();
+    this.movementController.destroy();
     super.destroy();
   }
 }

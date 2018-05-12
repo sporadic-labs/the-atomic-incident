@@ -19,7 +19,13 @@ const game = new Phaser.Game({
   width: gameSize,
   height: gameSize,
   backgroundColor: "#000",
-  pixelArt: false
+  pixelArt: false,
+  physics: {
+    default: "arcade",
+    arcade: {
+      debug: false
+    }
+  }
 });
 
 // Disable right click menu
