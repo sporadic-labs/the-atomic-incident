@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 
+import Player from "../game-objects/player";
+
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
 // import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin.js";
@@ -34,6 +36,8 @@ import Phaser from "phaser";
 export default class Play extends Phaser.Scene {
   create() {
     console.log("loaded play");
+
+    new Player(this, 100, 100);
   }
 
   // create() {
