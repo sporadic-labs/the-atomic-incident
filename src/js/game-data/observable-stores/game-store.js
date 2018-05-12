@@ -79,7 +79,4 @@ class GameStore {
 const gameStore = new GameStore();
 storageAutosync("game-store", gameStore);
 
-autorun(() => {
-  console.log(gameStore.menuState);
-});
 export default gameStore;
