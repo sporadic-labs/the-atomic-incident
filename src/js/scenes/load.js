@@ -81,7 +81,7 @@ export default class Load extends Phaser.Scene {
       //   globals.musicSound.mute = true;
       // }
 
-      if (preferencesStore.skipMenu) gameStore.setGameState(SCENE_NAMES.START_MENU);
+      if (preferencesStore.skipMenu) gameStore.setGameState(SCENE_NAMES.PLAY);
       else gameStore.setGameState(SCENE_NAMES.START_MENU);
     }
   }
