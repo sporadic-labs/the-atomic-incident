@@ -1,7 +1,9 @@
-import { extendObservable, action } from "mobx";
+import { extendObservable, action, autorun } from "mobx";
 import storageAutosync from "./sync-to-storage";
 import { MENU_STATE_NAMES } from "../../menu";
 import { SCENE_NAMES } from "../../scenes";
+
+const maxMenuHistory = 3;
 
 class GameStore {
   constructor() {
@@ -10,9 +12,14 @@ class GameStore {
       score: 0,
       highScore: 0,
       isPaused: false,
-      menuState: MENU_STATE_NAMES.CLOSED,
+      menuStateHistory: [MENU_STATE_NAMES.CLOSED],
       gameState: SCENE_NAMES.NO_SCENE,
       pendingGameRestart: false,
+
+      // Computed properties
+      get menuState() {
+        return this.menuStateHistory[this.menuStateHistory.length - 1];
+      },
 
       // Actions - these mutate the state
       setScore: action(function(score) {
@@ -39,7 +46,15 @@ class GameStore {
         this.isPaused = false;
       }),
       setMenuState: action(function(newMenuState) {
-        this.menuState = newMenuState;
+        if (newMenuState !== this.menuStateHistory[this.menuStateHistory.length - 1]) {
+          this.menuStateHistory = [
+            ...this.menuStateHistory.slice(0, maxMenuHistory - 1),
+            newMenuState
+          ];
+        }
+      }),
+      goBackOneMenuState: action(function() {
+        if (this.menuStateHistory.length > 0) this.menuStateHistory.pop();
       }),
       setGameState: action(function(newGameState) {
         this.gameState = newGameState;
@@ -64,4 +79,7 @@ class GameStore {
 const gameStore = new GameStore();
 storageAutosync("game-store", gameStore);
 
+autorun(() => {
+  console.log(gameStore.menuState);
+});
 export default gameStore;

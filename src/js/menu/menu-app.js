@@ -11,107 +11,60 @@ import InstructionsMenu from "./components/instructions-menu";
 import GameOverMenu from "./components/game-over-menu";
 import PlayPauseToggle from "./components/play-pause-toggle";
 
-const maxStoredHistory = 3;
-const limitArrayToRecent = (arr, numRecent) =>
-  arr.length > numRecent ? arr.slice(arr.length - numRecent) : arr;
-
 const Menu = observer(
   class Menu extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        menuHistory: [],
-        currentMenuState: this.props.gameStore.menuState
-      };
-    }
-
-    addMenuState(newState) {
-      // Update the internal component state and then register the change with the gameStore
-      if (newState === this.state.currentMenuState) return;
-      this.setState(
-        prev => {
-          const newHistory = limitArrayToRecent(
-            [...prev.menuHistory, prev.currentMenuState],
-            maxStoredHistory
-          );
-          return {
-            menuHistory: newHistory,
-            currentMenuState: newState
-          };
-        },
-        () => this.props.gameStore.setMenuState(this.state.currentMenuState)
-      );
-    }
-
     goBackOneState = () => {
-      // Update the internal component state and then register the change with the gameStore
-      if (this.state.menuHistory.length === 0) return;
-      this.setState(
-        prev => {
-          const history = prev.menuHistory.slice();
-          const newState = history.pop();
-          return {
-            menuHistory: history,
-            currentMenuState: newState
-          };
-        },
-        () => this.props.gameStore.setMenuState(this.state.currentMenuState)
-      );
+      this.props.gameStore.goBackOneMenuState();
     };
 
     startGame = () => {
       this.props.gameStore.unpause();
-      this.addMenuState(MENU_STATE_NAMES.CLOSED);
       this.props.gameStore.setGameState(SCENE_NAMES.PLAY);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
     };
 
     restartGame = () => {
       this.props.gameStore.unpause();
       this.props.gameStore.setGameState(SCENE_NAMES.PLAY);
       this.props.gameStore.restartGame();
-      this.addMenuState(MENU_STATE_NAMES.CLOSED);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
     };
 
     goToStartMenu = () => {
       this.props.gameStore.unpause();
-      this.addMenuState(MENU_STATE_NAMES.CLOSED);
+      // TODO: this seems wrong, but was how the previous version was written. Double check when the
+      // play scene is updated to v3.
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
       this.props.gameStore.setGameState(SCENE_NAMES.START_MENU);
     };
 
     goToOptionsMenu = () => {
       this.props.gameStore.pause();
-      this.addMenuState(MENU_STATE_NAMES.OPTIONS);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.OPTIONS);
     };
 
     goToAboutMenu = () => {
-      this.addMenuState(MENU_STATE_NAMES.ABOUT);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.ABOUT);
     };
 
     goToInstructionsMenu = () => {
-      this.addMenuState(MENU_STATE_NAMES.INSTRUCTIONS);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.INSTRUCTIONS);
     };
 
     gameOver = () => {
       this.props.gameStore.pause();
-      this.addMenuState(MENU_STATE_NAMES.GAME_OVER);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.GAME_OVER);
     };
 
     resume = () => {
       this.props.gameStore.unpause();
-      this.addMenuState(MENU_STATE_NAMES.CLOSED);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
     };
 
     pause = () => {
       this.props.gameStore.pause();
-      this.addMenuState(MENU_STATE_NAMES.PAUSE);
+      this.props.gameStore.setMenuState(MENU_STATE_NAMES.PAUSE);
     };
-
-    // From observer: when mobx re-renders, update the component's internal state to match
-    componentWillReact() {
-      if (this.state.currentMenuState !== this.props.gameStore.menuState) {
-        this.addMenuState(this.props.gameStore.menuState);
-      }
-    }
 
     render() {
       const { gameStore, preferencesStore, width, height } = this.props;
