@@ -1,22 +1,21 @@
 import Phaser from "phaser";
+import { MENU_STATE_NAMES } from "../menu";
+import { gameStore, preferencesStore } from "../game-data/observable-stores";
 
 // import Color from "../helpers/color";
 // import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 // import LightingPlugin from "../plugins/lighting-plugin-optimized/lighting-plugin";
 // import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 // import { SCENE_NAMES } from "./index";
-// import { MENU_STATE_NAMES } from "../menu";
-// import { gameStore, preferencesStore } from "../game-data/observable-stores";
 // import { autorun } from "mobx";
 // import MapManager from "../game-objects/level-manager";
 
 export default class StartMenu extends Phaser.Scene {
   create() {
-    console.log("loaded menu");
+    gameStore.setMenuState(MENU_STATE_NAMES.START_MENU);
   }
 
   // create() {
-  //   gameStore.setMenuState(MENU_STATE_NAMES.START_MENU);
   //   // Shorthands
   //   const game = this.game;
   //   const globals = game.globals;
@@ -82,6 +81,7 @@ export default class StartMenu extends Phaser.Scene {
   //   this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
   //   this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
   // }
+
   // shutdown() {
   //   this.storeUnsubscribe();
   //   this.tween.stop();
