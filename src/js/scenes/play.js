@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import get from "lodash.get";
 import Player from "../game-objects/player";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { MENU_STATE_NAMES } from "../menu";
@@ -43,13 +44,10 @@ export default class Play extends Phaser.Scene {
     const wallLayer = tilemap.createStaticLayer("walls", tileset);
     wallLayer.setCollisionByProperty({ collides: true });
 
-    const spawnLayer = tilemap.getObjectLayer("player-spawn");
-    let spawnPoint;
-    if (spawnLayer && spawnLayer.objects.length > 0) {
-      spawnPoint = { x: spawnLayer.objects[0].x, y: spawnLayer.objects[0].y };
-    } else {
-      spawnPoint = { x: tilemap.widthInPixels / 2, y: tilemap.heightInPixels / 2 };
-    }
+    const spawnObject = get(tilemap.getObjectLayer("player-spawn"), "objects[0]", null);
+    const spawnPoint = spawnObject
+      ? { x: spawnObject.x, y: spawnObject.y }
+      : { x: tilemap.widthInPixels / 2, y: tilemap.heightInPixels / 2 };
     const player = new Player(this, spawnPoint.x, spawnPoint.y); // TODO: player goes in FG
     this.cameras.main.startFollow(player.sprite);
 
@@ -57,6 +55,10 @@ export default class Play extends Phaser.Scene {
 
     this.hud = this.add.container().setScrollFactor(0); // TODO: add to FG
 
+    // const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
+    //   pickup => new Phaser.Math.Vector2(pickup.x + pickup.width / 2, pickup.y + pickup.height / 2)
+    // );
+    // new PickupSpawner(this, pickups, pickupLocations, player);
     // Use the 'P' button to pause/unpause, as well as the button on the HUD.
     this.input.keyboard.on("keydown_P", () => {
       if (gameStore.isPaused) {
