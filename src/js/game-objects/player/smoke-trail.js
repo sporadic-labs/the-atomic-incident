@@ -1,45 +1,46 @@
-export default class SmokeTrail extends Phaser.Particles.Arcade.Emitter {
-  constructor(game, parent) {
-    super(game, 0, 0, 1000);
-    parent.add(this);
+export default class SmokeTrail {
+  constructor(scene, sprite) {
+    // Particle manager - responsible for multiple emitters & setting particle texture for emitters
+    this.particles = scene.add.particles("assets", "player/player-trail");
 
-    this._rate = 0;
-    this._elapsedSeconds = 0;
+    this.emitter = this.particles.createEmitter({
+      speed: { min: 0, max: 75 },
+      alpha: { start: 0.7, end: 0, ease: "Linear" },
+      scale: { start: 0.5, end: 1, ease: "Quad.easeIn" },
+      lifespan: 500,
+      on: false // Manual control of particle emission
+    });
 
-    this.makeParticles("assets", "player/player-trail");
-    this.lifespan = 500;
-    this.gravity = 0;
-    this.setRotation(180, 180);
-    this.setScale(0.5, 1, 0.5, 1, this.lifespan, Phaser.Easing.Quadratic.In);
-    this.setAlpha(0.7, 0.4, this.lifespan, Phaser.Easing.Linear.None);
-    this.setXSpeed(-50, 50);
-    this.setYSpeed(-50, 50);
+    this.sprite = sprite;
+    this.elapsedSeconds = 0;
+    this.rate = 0;
   }
 
-  setRate(rate) {
-    this._rate = rate;
-    if (rate === 0) this._elapsedSeconds = 0;
+  setStrength(fraction) {
+    this.rate = Phaser.Math.Linear(0, 200, fraction);
   }
 
-  getRate() {
-    return this._rate;
-  }
+  update(time, delta) {
+    // Offset engine from sprite
+    const engineOffset = new Phaser.Math.Vector2().setToPolar(
+      this.sprite.rotation + Math.PI / 2,
+      10
+    );
+    this.emitter.setPosition(this.sprite.x + engineOffset.x, this.sprite.y + engineOffset.y);
 
-  setEmitPosition(x, y) {
-    this.emitX = x;
-    this.emitY = y;
-  }
-
-  update() {
-    if (this._rate > 0) {
-      this._elapsedSeconds += this.game.time.physicsElapsed;
-      const numberToSpawn = Math.floor(this._rate * this._elapsedSeconds);
-      this._elapsedSeconds -= numberToSpawn * (1 / this._rate);
-      for (let i = 0; i < numberToSpawn; i += 1) {
-        this.emitParticle();
+    // Phaser emitters don't do rate over time well. It uses specific discrete quantity at
+    // "frequency" (delay between particles), so roll our own smoother particle flow
+    if (this.rate > 0) {
+      this.elapsedSeconds += delta / 1000;
+      const numberToSpawn = Math.floor(this.rate * this.elapsedSeconds);
+      if (numberToSpawn > 0) {
+        this.elapsedSeconds -= numberToSpawn * (1 / this.rate);
+        this.emitter.emitParticle(numberToSpawn);
       }
     }
+  }
 
-    super.update();
+  destroy() {
+    this.particles.destroy();
   }
 }

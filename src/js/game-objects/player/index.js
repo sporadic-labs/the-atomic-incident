@@ -1,5 +1,6 @@
 import LifeCycleObject from "../lifecycle-object";
 import MovementController from "./movement-controller";
+import SmokeTrail from "./smoke-trail";
 
 const ANIM = {
   HIT: "PLAYER_HIT",
@@ -45,6 +46,8 @@ export default class Player extends LifeCycleObject {
     scene.physics.world.enable(this.sprite);
 
     this.movementController = new MovementController(this, this.sprite.body, scene);
+
+    this.trail = new SmokeTrail(scene, this.sprite);
   }
 
   /**
@@ -59,11 +62,17 @@ export default class Player extends LifeCycleObject {
 
   update(time, delta) {
     this.movementController.update(time, delta);
+    this.trail.update(time, delta);
+
+    const speed = this.sprite.body.velocity.length();
+    const engineStrength = speed > 1000 ? 1 : speed / 1000;
+    this.trail.setStrength(engineStrength);
   }
 
   destroy() {
     this.sprite.destroy();
     this.movementController.destroy();
+    this.trail.destroy();
     super.destroy();
   }
 }
