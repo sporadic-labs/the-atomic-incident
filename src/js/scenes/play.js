@@ -115,24 +115,15 @@ export default class Play extends Phaser.Scene {
   }
 
   update(time, delta) {
-    if (this.fpsText) {
-      this.fpsText.setText(`FPS: ${(1000 / delta).toFixed(2)}`);
-    }
+    if (this.fpsText) this.fpsText.setText(`FPS: ${(1000 / delta).toFixed(2)}`);
   }
 
   // create() {
-  //   registerGameStart();
-  //   gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
-  //   // Shorthands
-  //   const game = this.game;
-  //   const globals = game.globals;
   //   // Groups for z-index sorting and for collisions
   //   const groups = {
   //     game: game.add.group(this.world, "game"),
-  //     gameOverlay: game.add.group(this.world, "game-overlay"),
-  //     hud: game.add.group(this.world, "hud")
+  //     gameOverlay: game.add.group(this.world, "game-overlay")
   //   };
-  //   groups.hud.fixedToCamera = true;
   //   groups.background = game.add.group(groups.game, "background");
   //   groups.midground = game.add.group(groups.game, "midground");
   //   groups.foreground = game.add.group(groups.game, "foreground");
@@ -161,9 +152,6 @@ export default class Play extends Phaser.Scene {
   //   globals.soundManager = new SoundEffectManager(this.game);
   //   // Difficulty
   //   globals.difficultyModifier = new DifficultyModifier();
-  //   // Physics
-  //   this.physics.startSystem(Phaser.Physics.ARCADE);
-  //   this.physics.arcade.gravity.set(0);
   //   globals.postProcessor = new PostProcessor(game, globals.groups.game);
   //   globals.audioProcessor = new AudioProcessor(game);
   //   // Waves of pickups and enemies
