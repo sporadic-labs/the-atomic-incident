@@ -12,13 +12,13 @@ class GameStore {
       score: 0,
       highScore: 0,
       isPaused: false,
-      menuStateHistory: [MENU_STATE_NAMES.CLOSED],
+      menuStateHistory: [MENU_STATE_NAMES.CLOSED], // Reverse chronological order
       gameState: SCENE_NAMES.NO_SCENE,
       pendingGameRestart: false,
 
       // Computed properties
       get menuState() {
-        return this.menuStateHistory[this.menuStateHistory.length - 1];
+        return this.menuStateHistory[0];
       },
 
       // Actions - these mutate the state
@@ -46,15 +46,15 @@ class GameStore {
         this.isPaused = false;
       }),
       setMenuState: action(function(newMenuState) {
-        if (newMenuState !== this.menuStateHistory[this.menuStateHistory.length - 1]) {
+        if (newMenuState !== this.menuStateHistory[0]) {
           this.menuStateHistory = [
-            ...this.menuStateHistory.slice(0, maxMenuHistory - 1),
-            newMenuState
+            newMenuState,
+            ...this.menuStateHistory.slice(0, maxMenuHistory - 1)
           ];
         }
       }),
       goBackOneMenuState: action(function() {
-        if (this.menuStateHistory.length > 0) this.menuStateHistory.pop();
+        if (this.menuStateHistory.length > 0) this.menuStateHistory.shift();
       }),
       setGameState: action(function(newGameState) {
         this.gameState = newGameState;
