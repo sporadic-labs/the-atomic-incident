@@ -1,6 +1,7 @@
 import Phaser from "phaser";
-
 import Player from "../game-objects/player";
+import { gameStore, preferencesStore } from "../game-data/observable-stores";
+import { MENU_STATE_NAMES } from "../menu";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -9,8 +10,6 @@ import Player from "../game-objects/player";
 // import SoundEffectManager from "../game-objects/fx/sound-effect-manager.js";
 // import EffectsPlugin from "../plugins/camera-effects-plugin/camera-effects-plugin.js";
 // import PostProcessor from "../game-objects/fx/post-processor.js";
-// import { MENU_STATE_NAMES } from "../menu";
-// import { gameStore, preferencesStore } from "../game-data/observable-stores";
 // import { autorun } from "mobx";
 // import MapManager from "../game-objects/level-manager";
 // import EnemySpawner from "../game-objects/enemies/enemy-spawner";
@@ -55,6 +54,17 @@ export default class Play extends Phaser.Scene {
     this.cameras.main.startFollow(player.sprite);
 
     this.physics.add.collider(player.sprite, wallLayer);
+
+    // Use the 'P' button to pause/unpause, as well as the button on the HUD.
+    this.input.keyboard.on("keydown_P", () => {
+      if (gameStore.isPaused) {
+        gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
+        gameStore.unpause();
+      } else {
+        gameStore.setMenuState(MENU_STATE_NAMES.PAUSE);
+        gameStore.pause();
+      }
+    });
   }
 
   // create() {
@@ -145,16 +155,6 @@ export default class Play extends Phaser.Scene {
   //   });
   //   globals.groups.enemies.onEnemyKilled.add(enemy => {
   //     new EnergyPickup(this.game, enemy.x, enemy.y, globals.groups.pickups, player);
-  //   });
-  //   // Use the 'P' button to pause/unpause, as well as the button on the HUD.
-  //   game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
-  //     if (gameStore.isPaused) {
-  //       gameStore.setMenuState(MENU_STATE_NAMES.CLOSED);
-  //       gameStore.unpause();
-  //     } else {
-  //       gameStore.setMenuState(MENU_STATE_NAMES.PAUSE);
-  //       gameStore.pause();
-  //     }
   //   });
   //   // Subscribe to the debug settings
   //   this.storeUnsubscribe = autorun(() => {
