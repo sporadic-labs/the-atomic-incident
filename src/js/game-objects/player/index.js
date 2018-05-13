@@ -9,7 +9,7 @@ const ANIM = {
 };
 
 export default class Player extends LifeCycleObject {
-  constructor(scene, x, y) {
+  constructor(scene, x, y, pickups) {
     super(scene);
 
     this.sprite = scene.add.sprite(x, y, "assets", "player/move");
@@ -40,9 +40,22 @@ export default class Player extends LifeCycleObject {
 
     scene.physics.world.enable(this.sprite);
 
+    // Unsatisfying overlap where you are locked into overlapping Phaser GOs - make sure our physics
+    // has body vs body
+    scene.physics.world.addOverlap(this.sprite, pickups, (_, pickup) =>
+      this.onCollideWithPickup(pickup.owner)
+    );
+
     this.movementController = new MovementController(this, this.sprite.body, scene);
 
     this.trail = new SmokeTrail(scene, this.sprite);
+  }
+
+  onCollideWithPickup(pickup) {
+    // TODO
+    // this._playerLight.incrementRadius(pickup.getEnergy());
+    // this.onHealthChange.dispatch(this.getHealth());
+    pickup.pickUp();
   }
 
   /**

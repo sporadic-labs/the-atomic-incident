@@ -37,6 +37,9 @@ export default class Play extends Phaser.Scene {
   create() {
     console.log("loaded play");
 
+    const enemies = this.add.group();
+    const pickups = this.add.group();
+
     // Load the map from the Phaser cache
     const tilemap = this.add.tilemap("horizontal-1");
     const tileset = tilemap.addTilesetImage("tiles");
@@ -48,15 +51,12 @@ export default class Play extends Phaser.Scene {
     const spawnPoint = spawnObject
       ? { x: spawnObject.x, y: spawnObject.y }
       : { x: tilemap.widthInPixels / 2, y: tilemap.heightInPixels / 2 };
-    const player = new Player(this, spawnPoint.x, spawnPoint.y); // TODO: player goes in FG
+    const player = new Player(this, spawnPoint.x, spawnPoint.y, pickups); // TODO: player goes in FG
     this.cameras.main.startFollow(player.sprite);
 
     this.physics.add.collider(player.sprite, wallLayer);
 
     this.hud = this.add.container().setScrollFactor(0); // TODO: add to FG
-
-    const enemies = this.add.group();
-    const pickups = this.add.group();
 
     // const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
     //   pickup => new Phaser.Math.Vector2(pickup.x + pickup.width / 2, pickup.y + pickup.height / 2)

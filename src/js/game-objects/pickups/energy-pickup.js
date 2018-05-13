@@ -8,8 +8,7 @@ export default class EnergyPickup extends LifecycleObjects {
 
     this.sprite = scene.add.sprite(x, y, "assets", "pickups/energy-pickup");
     pickupGroup.add(this.sprite);
-
-    console.log(this.sprite.origin);
+    this.sprite.owner = this;
 
     this.player = player;
     this.energyValue = energyValue;
@@ -69,7 +68,7 @@ export default class EnergyPickup extends LifecycleObjects {
 
   pickUp() {
     // this._pickupSound.play();
-    this.destroy();
+    this.destroyFlag = true;
   }
 
   destroy() {
