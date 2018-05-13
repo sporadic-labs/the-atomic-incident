@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Player from "../game-objects/player";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { MENU_STATE_NAMES } from "../menu";
+import getFontString from "../fonts/get-font-string";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -24,7 +25,6 @@ import { MENU_STATE_NAMES } from "../menu";
 // import DashIcon from "../game-objects/hud/dash-icon";
 // import AudioProcessor from "../game-objects/fx/audio-processor";
 // import PopUpText from "../game-objects/hud/pop-up-text";
-// import getFontString from "../fonts/get-font-string";
 // import SatBodyPlugin from "../plugins/sat-body-plugin-revisited/plugin";
 // import DifficultyModifier from "../game-objects/difficulty-modifier";
 // import { registerGameStart } from "../analytics";
@@ -55,6 +55,8 @@ export default class Play extends Phaser.Scene {
 
     this.physics.add.collider(player.sprite, wallLayer);
 
+    this.hud = this.add.container().setScrollFactor(0); // TODO: add to FG
+
     // Use the 'P' button to pause/unpause, as well as the button on the HUD.
     this.input.keyboard.on("keydown_P", () => {
       if (gameStore.isPaused) {
@@ -65,6 +67,63 @@ export default class Play extends Phaser.Scene {
         gameStore.pause();
       }
     });
+
+    // Optional debug menu, pause w/o menus, switch weapons and fps text
+    if (!PRODUCTION) {
+      this.input.keyboard.on("keydown_E", () => {
+        gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
+        gameStore.pause();
+      });
+      this.input.keyboard.on("keydown_O", () => {
+        if (!gameStore.menuState === MENU_STATE_NAMES.CLOSED) return;
+        if (gameStore.isPaused) gameStore.unpause();
+        else gameStore.pause();
+      });
+      this.fpsText = this.add.text(5, 750 - 45, "", {
+        font: getFontString("Montserrat", { size: "12px", weight: 400 }),
+        color: "#00ffff"
+      });
+      this.fpsText.setOrigin(0, 1);
+      this.hud.add(this.fpsText);
+      //     game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(() => {
+      //       groups.enemies.killAll();
+      //     });
+      //     // Force spawning waves
+      //     game.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(() => enemySpawner._spawnWave());
+      //     game.input.keyboard
+      //       .addKey(Phaser.Keyboard.L)
+      //       .onDown.add(() => enemySpawner._spawnSpecialWave());
+      //     // Pause without menus showing up.
+      //     /* Manually switch weapons with the number keys.
+      //      */
+      //     const keys = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
+      //     const weapons = Object.values(WEAPON_TYPES);
+      //     for (let i = 0; i < Math.min(keys.length, weapons.length); i++) {
+      //       const key = Phaser.Keyboard[keys[i]];
+      //       const weaponType = weapons[i];
+      //       game.input.keyboard.addKey(key).onDown.add(() => {
+      //         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+      //           player.weaponManager.switchWeapon(weaponType);
+      //           ammo.updateWeapon();
+      //         }
+      //       });
+      //     }
+      //     // this._inLightText = game.make.text(
+      //     //   game.width - 25,
+      //     //   game.height - 100,
+      //     //   "Is Mouse In Light: ",
+      //     //   { font: "18px 'Alfa Slab One'", fill: "#9C9C9C" }
+      //     // );
+      //     // this._inLightText.anchor.set(1, 1);
+      //     // groups.hud.add(this._inLightText);
+      //   }
+    }
+  }
+
+  update(time, delta) {
+    if (this.fpsText) {
+      this.fpsText.setText(`FPS: ${(1000 / delta).toFixed(2)}`);
+    }
   }
 
   // create() {
@@ -168,59 +227,6 @@ export default class Play extends Phaser.Scene {
   //   // muted will be ignored. Instead, sync volume any time the game is unmuted.
   //   this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
   //   this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
-  //   // Optional debug menu, pause w/o menus, switch weapons and fps text
-  //   if (!this.game.debug.isDisabled) {
-  //     game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => {
-  //       gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
-  //       gameStore.pause();
-  //     });
-  //     game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(() => {
-  //       groups.enemies.killAll();
-  //     });
-  //     // Force spawning waves
-  //     game.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(() => enemySpawner._spawnWave());
-  //     game.input.keyboard
-  //       .addKey(Phaser.Keyboard.L)
-  //       .onDown.add(() => enemySpawner._spawnSpecialWave());
-  //     // Pause without menus showing up.
-  //     game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => {
-  //       // NOTE(rex): Only allowed if all menus are closed already.
-  //       if (gameStore.menuState === MENU_STATE_NAMES.CLOSED && gameStore.isPaused) {
-  //         gameStore.unpause();
-  //       } else if (gameStore.menuState === MENU_STATE_NAMES.CLOSED && !gameStore.isPaused) {
-  //         gameStore.pause();
-  //       }
-  //     });
-  //     /* Manually switch weapons with the number keys.
-  //      */
-  //     const keys = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
-  //     const weapons = Object.values(WEAPON_TYPES);
-  //     for (let i = 0; i < Math.min(keys.length, weapons.length); i++) {
-  //       const key = Phaser.Keyboard[keys[i]];
-  //       const weaponType = weapons[i];
-  //       game.input.keyboard.addKey(key).onDown.add(() => {
-  //         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-  //           player.weaponManager.switchWeapon(weaponType);
-  //           ammo.updateWeapon();
-  //         }
-  //       });
-  //     }
-  //     // FPS
-  //     this._fpsText = game.make.text(5, game.height - 38, "60", {
-  //       font: getFontString("Montserrat", { size: "12px", weight: 400 }),
-  //       fill: "#00ffff"
-  //     });
-  //     this._fpsText.anchor.set(0, 1);
-  //     groups.hud.add(this._fpsText);
-  //     // this._inLightText = game.make.text(
-  //     //   game.width - 25,
-  //     //   game.height - 100,
-  //     //   "Is Mouse In Light: ",
-  //     //   { font: "18px 'Alfa Slab One'", fill: "#9C9C9C" }
-  //     // );
-  //     // this._inLightText.anchor.set(1, 1);
-  //     // groups.hud.add(this._inLightText);
-  //   }
   // }
   // update() {
   //   if (this._fpsText) {
