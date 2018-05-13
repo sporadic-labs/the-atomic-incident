@@ -16,7 +16,7 @@ export default class MovementContoller {
     const body = this.physicsBody;
     body.acceleration.x = this.moveControls.getXAxis();
     body.acceleration.y = this.moveControls.getYAxis();
-    body.acceleration.normalize().scale(3000);
+    body.acceleration.normalize().scale(1000);
 
     const worldMouse = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main);
     const heading = Math.atan2(worldMouse.y - body.y, worldMouse.x - body.x);

@@ -37,7 +37,24 @@ export default class Play extends Phaser.Scene {
   create() {
     console.log("loaded play");
 
-    new Player(this, 100, 100);
+    // Load the map from the Phaser cache
+    const tilemap = this.add.tilemap("horizontal-1");
+    const tileset = tilemap.addTilesetImage("tiles");
+    tilemap.createStaticLayer("bg", tileset);
+    const wallLayer = tilemap.createStaticLayer("walls", tileset);
+    wallLayer.setCollisionByProperty({ collides: true });
+
+    const spawnLayer = tilemap.getObjectLayer("player-spawn");
+    let spawnPoint;
+    if (spawnLayer && spawnLayer.objects.length > 0) {
+      spawnPoint = { x: spawnLayer.objects[0].x, y: spawnLayer.objects[0].y };
+    } else {
+      spawnPoint = { x: tilemap.widthInPixels / 2, y: tilemap.heightInPixels / 2 };
+    }
+    const player = new Player(this, spawnPoint.x, spawnPoint.y);
+    this.cameras.main.startFollow(player.sprite);
+
+    this.physics.add.collider(player.sprite, wallLayer);
   }
 
   // create() {
