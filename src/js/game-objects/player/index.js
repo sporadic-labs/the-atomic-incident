@@ -33,14 +33,9 @@ export default class Player extends LifeCycleObject {
       frameRate: 30
     });
 
-    // Just for the moment, set the animations to cycle to verify settings
-    // this.sprite.play(ANIM.HIT);
+    // Test code: saving for when we need to register when an animation is done
     // this.sprite.on("animationcomplete", currentAnim => {
-    //   const transitions = {
-    //     [ANIM.HIT]: ANIM.DIE,
-    //     [ANIM.DIE]: ANIM.HIT
-    //   };
-    //   this.sprite.play(transitions[currentAnim.key]);
+    //  if (currentAnim.key === ANIM.DIE) // Do stuff
     // });
 
     scene.physics.world.enable(this.sprite);
