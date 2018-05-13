@@ -47,6 +47,16 @@ export default class Player extends LifeCycleObject {
     this.movementController = new MovementController(this, this.sprite.body, scene);
   }
 
+  /**
+   * Returns the position of the center of the player.
+   *
+   * @returns Phaser.Math.Vector2
+   * @memberof Player
+   */
+  getPosition() {
+    return this.sprite.body.center;
+  }
+
   update(time, delta) {
     this.movementController.update(time, delta);
   }

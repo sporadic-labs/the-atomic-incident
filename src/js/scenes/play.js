@@ -5,6 +5,7 @@ import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { MENU_STATE_NAMES } from "../menu";
 import getFontString from "../fonts/get-font-string";
 import WEAPON_TYPES from "../game-objects/weapons/weapon-types";
+import EnergyPickup from "../game-objects/pickups/energy-pickup";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -17,7 +18,6 @@ import WEAPON_TYPES from "../game-objects/weapons/weapon-types";
 // import MapManager from "../game-objects/level-manager";
 // import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 // import EnemyGroup from "../game-objects/enemies/enemy-group";
-// import EnergyPickup from "../game-objects/pickups/energy-pickup";
 // import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
 // import Score from "../game-objects/hud/score";
 // import Combo from "../game-objects/hud/combo";
@@ -55,10 +55,16 @@ export default class Play extends Phaser.Scene {
 
     this.hud = this.add.container().setScrollFactor(0); // TODO: add to FG
 
+    const enemies = this.add.group();
+    const pickups = this.add.group();
+
     // const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
     //   pickup => new Phaser.Math.Vector2(pickup.x + pickup.width / 2, pickup.y + pickup.height / 2)
     // );
     // new PickupSpawner(this, pickups, pickupLocations, player);
+
+    new EnergyPickup(this, 800, 800, pickups, player);
+
     // Use the 'P' button to pause/unpause, as well as the button on the HUD.
     this.input.keyboard.on("keydown_P", () => {
       if (gameStore.isPaused) {
