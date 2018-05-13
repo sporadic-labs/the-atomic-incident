@@ -18,6 +18,10 @@ export default class MovementContoller {
     body.acceleration.y = this.moveControls.getYAxis();
     body.acceleration.normalize().scale(3000);
 
+    const worldMouse = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main);
+    const heading = Math.atan2(worldMouse.y - body.y, worldMouse.x - body.x);
+    body.rotation = heading * (180 / Math.PI) + 90;
+
     // maxVelocity = 250
   }
 
