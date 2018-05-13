@@ -4,7 +4,7 @@ import Player from "../game-objects/player";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { MENU_STATE_NAMES } from "../menu";
 import getFontString from "../fonts/get-font-string";
-import WEAPON_TYPES from "../game-objects/weapons/weapon-types";
+import { WEAPON_TYPES } from "../game-objects/weapons/";
 import EnergyPickup from "../game-objects/pickups/energy-pickup";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";

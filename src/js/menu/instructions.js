@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import WEAPON_TYPES, { getFormattedType } from "../game-objects/weapons/weapon-types";
+import { WEAPON_TYPES, getFormattedType } from "../game-objects/weapons/";
 
 const formattedWeaponNames = Object.values(WEAPON_TYPES).map(type => getFormattedType(type));
 const style = {
