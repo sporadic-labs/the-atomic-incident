@@ -5,7 +5,7 @@ import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { MENU_STATE_NAMES } from "../menu";
 import getFontString from "../fonts/get-font-string";
 import { WEAPON_TYPES } from "../game-objects/weapons/";
-import EnergyPickup from "../game-objects/pickups/energy-pickup";
+import { EnergyPickup, WeaponSpawner } from "../game-objects/pickups/";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -18,7 +18,6 @@ import EnergyPickup from "../game-objects/pickups/energy-pickup";
 // import MapManager from "../game-objects/level-manager";
 // import EnemySpawner from "../game-objects/enemies/enemy-spawner";
 // import EnemyGroup from "../game-objects/enemies/enemy-group";
-// import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
 // import Score from "../game-objects/hud/score";
 // import Combo from "../game-objects/hud/combo";
 // import Radar from "../game-objects/hud/radar/";
@@ -58,10 +57,10 @@ export default class Play extends Phaser.Scene {
 
     this.hud = this.add.container().setScrollFactor(0); // TODO: add to FG
 
-    // const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
-    //   pickup => new Phaser.Math.Vector2(pickup.x + pickup.width / 2, pickup.y + pickup.height / 2)
-    // );
-    // new PickupSpawner(this, pickups, pickupLocations, player);
+    const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
+      obj => new Phaser.Math.Vector2(obj.x + obj.width / 2, obj.y + obj.height / 2)
+    );
+    const weaponSpawner = new WeaponSpawner(this, pickups, player, pickupLocations);
 
     new EnergyPickup(this, 800, 800, pickups, player);
 
@@ -163,10 +162,8 @@ export default class Play extends Phaser.Scene {
   //   globals.postProcessor = new PostProcessor(game, globals.groups.game);
   //   globals.audioProcessor = new AudioProcessor(game);
   //   // Waves of pickups and enemies
-  //   new PickupSpawner(game);
   //   const enemySpawner = new EnemySpawner(game, player);
   //   this.enemySpawner = enemySpawner;
-  //   const weaponSpawner = new WeaponSpawner(game, groups.pickups, player, mapManager);
   //   // HUD
   //   const hudMessageDisplay = new HudMessageDisplay(game, groups.hud);
   //   new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);

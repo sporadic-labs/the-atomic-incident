@@ -1,6 +1,7 @@
 import LifeCycleObject from "../lifecycle-object";
 import MovementController from "./movement-controller";
 import SmokeTrail from "./smoke-trail";
+import EnergyPickup from "../pickups/energy-pickup";
 
 const ANIM = {
   HIT: "PLAYER_HIT",
@@ -53,8 +54,10 @@ export default class Player extends LifeCycleObject {
 
   onCollideWithPickup(pickup) {
     // TODO
-    // this._playerLight.incrementRadius(pickup.getEnergy());
-    // this.onHealthChange.dispatch(this.getHealth());
+    if (pickup instanceof EnergyPickup) {
+      // this._playerLight.incrementRadius(pickup.getEnergy());
+      // this.onHealthChange.dispatch(this.getHealth());
+    }
     pickup.pickUp();
   }
 
