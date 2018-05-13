@@ -51,7 +51,7 @@ export default class Play extends Phaser.Scene {
     } else {
       spawnPoint = { x: tilemap.widthInPixels / 2, y: tilemap.heightInPixels / 2 };
     }
-    const player = new Player(this, spawnPoint.x, spawnPoint.y);
+    const player = new Player(this, spawnPoint.x, spawnPoint.y); // TODO: player goes in FG
     this.cameras.main.startFollow(player.sprite);
 
     this.physics.add.collider(player.sprite, wallLayer);
@@ -103,17 +103,6 @@ export default class Play extends Phaser.Scene {
   //   this.physics.arcade.gravity.set(0);
   //   globals.postProcessor = new PostProcessor(game, globals.groups.game);
   //   globals.audioProcessor = new AudioProcessor(game);
-  //   // Player
-  //   // Setup a new player, and attach it to the global variabls object.
-  //   const spawnObjects = mapManager.tilemap.objects["player-spawn"] || [];
-  //   const spawnPoint =
-  //     spawnObjects.length > 0
-  //       ? { x: spawnObjects[0].x, y: spawnObjects[0].y }
-  //       : { x: this.world.width / 2, y: this.world.height / 2 };
-  //   const player = new Player(game, spawnPoint.x, spawnPoint.y, groups.foreground);
-  //   globals.player = player;
-  //   game.world.setBounds(0, 0, mapManager.tilemap.widthInPixels, mapManager.tilemap.heightInPixels);
-  //   game.camera.follow(player);
   //   // Waves of pickups and enemies
   //   new PickupSpawner(game);
   //   const enemySpawner = new EnemySpawner(game, player);
