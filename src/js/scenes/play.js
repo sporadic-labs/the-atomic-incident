@@ -3,6 +3,7 @@ import Player from "../game-objects/player";
 import { gameStore, preferencesStore } from "../game-data/observable-stores";
 import { MENU_STATE_NAMES } from "../menu";
 import getFontString from "../fonts/get-font-string";
+import WEAPON_TYPES from "../game-objects/weapons/weapon-types";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -17,7 +18,6 @@ import getFontString from "../fonts/get-font-string";
 // import EnemyGroup from "../game-objects/enemies/enemy-group";
 // import EnergyPickup from "../game-objects/pickups/energy-pickup";
 // import WeaponSpawner from "../game-objects/pickups/weapon-spawner";
-// import WEAPON_TYPES from "../game-objects/weapons/weapon-types";
 // import Score from "../game-objects/hud/score";
 // import Combo from "../game-objects/hud/combo";
 // import Radar from "../game-objects/hud/radar/";
@@ -74,49 +74,43 @@ export default class Play extends Phaser.Scene {
         gameStore.setMenuState(MENU_STATE_NAMES.DEBUG);
         gameStore.pause();
       });
+
       this.input.keyboard.on("keydown_O", () => {
         if (!gameStore.menuState === MENU_STATE_NAMES.CLOSED) return;
         if (gameStore.isPaused) gameStore.unpause();
         else gameStore.pause();
       });
+
+      this.input.keyboard.on("keydown_R", () => {
+        // groups.enemies.killAll(); // TODO: kill all enemies
+      });
+
+      this.input.keyboard.on("keydown_K", () => {
+        // enemySpawner._spawnWave(); // TODO: Spawn normal wave
+      });
+
+      this.input.keyboard.on("keydown_L", () => {
+        // enemySpawner._spawnSpecialWave(); // TODO: Spawn special wave
+      });
+
+      // TODO: Manually switch weapons with the number keys
+      const keys = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
+      const weapons = Object.values(WEAPON_TYPES);
+      for (let i = 0; i < Math.min(keys.length, weapons.length); i++) {
+        this.input.keyboard.on(`keydown_${keys[i]}`, () => {
+          if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
+            // player.weaponManager.switchWeapon(weapons[i]);
+            // ammo.updateWeapon();
+          }
+        });
+      }
+
       this.fpsText = this.add.text(5, 750 - 45, "", {
         font: getFontString("Montserrat", { size: "12px", weight: 400 }),
         color: "#00ffff"
       });
       this.fpsText.setOrigin(0, 1);
       this.hud.add(this.fpsText);
-      //     game.input.keyboard.addKey(Phaser.Keyboard.R).onDown.add(() => {
-      //       groups.enemies.killAll();
-      //     });
-      //     // Force spawning waves
-      //     game.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(() => enemySpawner._spawnWave());
-      //     game.input.keyboard
-      //       .addKey(Phaser.Keyboard.L)
-      //       .onDown.add(() => enemySpawner._spawnSpecialWave());
-      //     // Pause without menus showing up.
-      //     /* Manually switch weapons with the number keys.
-      //      */
-      //     const keys = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"];
-      //     const weapons = Object.values(WEAPON_TYPES);
-      //     for (let i = 0; i < Math.min(keys.length, weapons.length); i++) {
-      //       const key = Phaser.Keyboard[keys[i]];
-      //       const weaponType = weapons[i];
-      //       game.input.keyboard.addKey(key).onDown.add(() => {
-      //         if (gameStore.menuState === MENU_STATE_NAMES.CLOSED) {
-      //           player.weaponManager.switchWeapon(weaponType);
-      //           ammo.updateWeapon();
-      //         }
-      //       });
-      //     }
-      //     // this._inLightText = game.make.text(
-      //     //   game.width - 25,
-      //     //   game.height - 100,
-      //     //   "Is Mouse In Light: ",
-      //     //   { font: "18px 'Alfa Slab One'", fill: "#9C9C9C" }
-      //     // );
-      //     // this._inLightText.anchor.set(1, 1);
-      //     // groups.hud.add(this._inLightText);
-      //   }
     }
   }
 
@@ -227,17 +221,6 @@ export default class Play extends Phaser.Scene {
   //   // muted will be ignored. Instead, sync volume any time the game is unmuted.
   //   this.game.sound.onUnMute.add(() => (this.game.sound.volume = preferencesStore.volume));
   //   this.game.sound.volume = preferencesStore.volume; // Sync volume on first load
-  // }
-  // update() {
-  //   if (this._fpsText) {
-  //     this._fpsText.setText(this.game.time.fps);
-  //   }
-  //   if (this._inLightText) {
-  //     const isMouseInShadow = this.game.globals.player._playerLight.isPointInShadow(
-  //       Phaser.Point.add(this.camera.position, this.input.mousePointer.position)
-  //     );
-  //     this._inLightText.setText("Is Mouse In Light: " + (isMouseInShadow ? "No" : "Yes"));
-  //   }
   // }
   // shutdown() {
   //   this.enemySpawner.destroy();
