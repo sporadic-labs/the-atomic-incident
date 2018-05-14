@@ -28,7 +28,7 @@ export default class Load extends Phaser.Scene {
       const key = tilemapName.split(".")[0];
       this.load.tilemapTiledJSON(key, path);
     }
-    this.load.image("tiles", "resources/tilemaps/tiles.png");
+    this.load.image("tiles", "resources/tilemaps/tiles-extruded.png");
 
     // Sounds
     const audioPath = "resources/audio";
