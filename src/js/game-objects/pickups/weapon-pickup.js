@@ -46,22 +46,11 @@ export default class WeaponPickup extends LifecycleObjects {
     }
   }
 
-  postUpdate() {
-    // EventEmitter3 doesn't allow for listeners to be removed while emit is running. The tween
-    // manager update happens BEFORE this class's update method, so even if tween.onComplete
-    // destroys the class and unsubs from the event, it will still get one last update call.
-    // Relevant code:
-    //  https://github.com/primus/eventemitter3/blob/master/index.js#L171
-    // TODO:
-    //  Submit PR to EventEmitter, or update LifecycleObject to insulate us from this problem
-    if (this.destroyFlag) this.destroy();
-  }
-
   pickUp() {
     // this._pickupSound.play();
     // this._player.weaponManager.switchWeapon(this._type);
     this.events.emit(PICKUP_EVENTS.COLLECTED, this);
-    this.destroyFlag = true;
+    this.destroy();
   }
 
   destroy() {
