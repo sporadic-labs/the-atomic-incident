@@ -6,6 +6,7 @@ import { MENU_STATE_NAMES } from "../menu";
 import getFontString from "../fonts/get-font-string";
 import { WEAPON_TYPES } from "../game-objects/weapons/";
 import { EnergyPickup, WeaponSpawner } from "../game-objects/pickups/";
+import HudMessageDisplay from "../game-objects/hud/hud-message-display";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -30,12 +31,9 @@ import { EnergyPickup, WeaponSpawner } from "../game-objects/pickups/";
 // import { registerGameStart } from "../analytics";
 // import ImageBar from "../game-objects/hud/image-bar";
 // import WaveHud from "../game-objects/hud/wave";
-// import HudMessageDisplay from "../game-objects/hud/hud-message-display";
 
 export default class Play extends Phaser.Scene {
   create() {
-    console.log("loaded play");
-
     const enemies = this.add.group();
     const pickups = this.add.group();
 
@@ -56,6 +54,11 @@ export default class Play extends Phaser.Scene {
     this.physics.add.collider(player.sprite, wallLayer);
 
     this.hud = this.add.container().setScrollFactor(0); // TODO: add to FG
+
+    // HUD
+    const hudMessageDisplay = new HudMessageDisplay(this, this.hud);
+    hudMessageDisplay.setMessage("Hi there!");
+    hudMessageDisplay.setMessage("Back-to-back toasts!");
 
     const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
       obj => new Phaser.Math.Vector2(obj.x + obj.width / 2, obj.y + obj.height / 2)
