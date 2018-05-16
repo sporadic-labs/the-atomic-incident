@@ -6,9 +6,7 @@ import { MENU_STATE_NAMES } from "../menu";
 import getFontString from "../fonts/get-font-string";
 import { WEAPON_TYPES } from "../game-objects/weapons/";
 import { EnergyPickup, WeaponSpawner } from "../game-objects/pickups/";
-import HudMessageDisplay from "../game-objects/hud/hud-message-display";
-import Combo from "../game-objects/hud/combo";
-import Score from "../game-objects/hud/score";
+import { HudMessageDisplay, Combo, Score } from "../game-objects/hud/";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
