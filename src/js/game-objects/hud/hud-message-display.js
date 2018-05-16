@@ -9,7 +9,8 @@ export default class HudMessageDisplay {
   constructor(scene, hudContainer) {
     this.scene = scene;
 
-    this.text = scene.add.text(750 / 2, 750, "", style);
+    const { width, height } = scene.sys.game.config;
+    this.text = scene.add.text(width / 2, height, "", style);
     this.text.setOrigin(0.5, 1);
     hudContainer.add(this.text);
 
