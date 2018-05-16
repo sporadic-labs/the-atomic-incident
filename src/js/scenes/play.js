@@ -8,6 +8,7 @@ import { WEAPON_TYPES } from "../game-objects/weapons/";
 import { EnergyPickup, WeaponSpawner } from "../game-objects/pickups/";
 import HudMessageDisplay from "../game-objects/hud/hud-message-display";
 import Combo from "../game-objects/hud/combo";
+import Score from "../game-objects/hud/score";
 
 // import PickupSpawner from "../game-objects/pickups/pickup-spawner.js";
 // // import LightingPlugin from "../plugins/lighting-plugin/lighting-plugin.js";
@@ -61,6 +62,9 @@ export default class Play extends Phaser.Scene {
     hudMessageDisplay.setMessage("Back-to-back toasts!");
     const combo = new Combo(this, this.hud, player, {});
     combo.incrementCombo(1);
+    setTimeout(() => combo.incrementCombo(10), 1000);
+    const score = new Score(this, this.hud, {}, combo, hudMessageDisplay);
+    score.incrementScore(10.5);
 
     const pickupLocations = get(tilemap.getObjectLayer("pickups"), "objects", []).map(
       obj => new Phaser.Math.Vector2(obj.x + obj.width / 2, obj.y + obj.height / 2)
@@ -170,10 +174,7 @@ export default class Play extends Phaser.Scene {
   //   const enemySpawner = new EnemySpawner(game, player);
   //   this.enemySpawner = enemySpawner;
   //   // HUD
-  //   const hudMessageDisplay = new HudMessageDisplay(game, groups.hud);
   //   new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
-  //   const score = new Score(game, groups.hud, globals.groups.enemies, combo, hudMessageDisplay);
-  //   score.position.set(this.game.width - 5, 5);
   //   const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
   //   ammo.position.set(game.width - 5, game.height - 5);
   //   this.add.sprite(4, 4, "assets", "hud/health-icon", groups.hud);
