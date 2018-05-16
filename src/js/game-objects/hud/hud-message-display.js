@@ -54,5 +54,6 @@ export default class HudMessageDisplay {
 
   destroy() {
     if (this.timeline) this.timeline.destroy();
+    this.text.destroy();
   }
 }
