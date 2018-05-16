@@ -172,8 +172,6 @@ export default class Play extends Phaser.Scene {
   //   // HUD
   //   const hudMessageDisplay = new HudMessageDisplay(game, groups.hud);
   //   new Radar(game, groups.foreground, player, this.game.globals.groups.enemies, weaponSpawner);
-  //   const combo = new Combo(game, groups.hud, player, globals.groups.enemies);
-  //   combo.position.set(this.game.width - 5, 32);
   //   const score = new Score(game, groups.hud, globals.groups.enemies, combo, hudMessageDisplay);
   //   score.position.set(this.game.width - 5, 5);
   //   const ammo = new Ammo(game, groups.hud, player, weaponSpawner);
