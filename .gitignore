@@ -1,15 +1,7 @@
 types
 
-# Ignore sublime workspace
-*.sublime-workspace
-
-# Assets created during development
-_assets
-
-# Server-side dependencies
 node_modules
 
-# Ignore the built version of the site
 public
 
 # Ignore files used for publishing to gh-pages!
