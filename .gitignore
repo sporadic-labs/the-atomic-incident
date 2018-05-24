@@ -1,5 +1,4 @@
-# Compiled typings
-typings
+types
 
 # Ignore sublime workspace
 *.sublime-workspace
