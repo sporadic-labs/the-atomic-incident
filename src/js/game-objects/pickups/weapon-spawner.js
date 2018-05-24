@@ -12,7 +12,7 @@ export default class WeaponSpawner {
     this.player = player;
     this.pickupLocations = pickupLocations;
 
-    this.events = new Phaser.EventEmitter();
+    this.events = new Phaser.Events.EventEmitter();
 
     this.events.on(PICKUP_EVENTS.DESTROYED, () => this.spawnPickup());
 
