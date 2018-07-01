@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*", "types/**/*"]
 }
