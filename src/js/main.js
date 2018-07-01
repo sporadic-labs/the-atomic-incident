@@ -1,6 +1,6 @@
 import "../css/main.scss";
 import "babel-polyfill";
-import "phaser";
+import Phaser from "phaser";
 import { observe, autorun } from "mobx";
 import { gameStore, preferencesStore } from "./game-data/observable-stores";
 import { Play, Load, StartMenu, SCENE_NAMES } from "./scenes";
