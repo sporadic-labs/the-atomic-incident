@@ -1,5 +1,5 @@
 import phaserTiledHull from "phaser-tiled-hull/src/library"; // Allows us to babelify ourselves
-import PhaserNavmesh from "phaser-navmesh/src/library";
+import NavMeshPlugin from "phaser2-navmesh/src";
 
 /**
  * A class parsing a map and exposing a navmesh, tilemap, wall layer and array of walls for the rest
@@ -25,7 +25,7 @@ export default class MapManager {
    */
   constructor(game, tilemapKey, bgGroup, fgGroup) {
     this.game = game;
-    this._navMeshPlugin = game.plugins.add(PhaserNavmesh);
+    this._navMeshPlugin = game.plugins.add(NavMeshPlugin);
 
     // Load the map from the Phaser cache
     const tilemap = game.add.tilemap(tilemapKey);
@@ -49,8 +49,11 @@ export default class MapManager {
     this.tilemap = tilemap;
     this.wallLayer = wallLayer;
     this.walls = this._calculateWalls(wallLayer);
-    // Load the navmesh from the tilemap object layer "navmesh"
-    this.navMesh = this._navMeshPlugin.buildMeshFromTiled(tilemap, "navmesh-shrunken", 12.5);
+    this.navMesh = this._navMeshPlugin.buildMeshFromTiled(
+      "walls-mesh",
+      tilemap.objects["navmesh-shrunken"],
+      12.5
+    );
   }
 
   /**

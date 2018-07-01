@@ -2,11 +2,15 @@
   "name": "octo-chainsaw",
   "description": "Octo-Chainsaw, a Game-in-Progress",
   "version": "0.1.0",
-  "authors": ["Rex Twedt", "Mike Hadley"],
+  "authors": [
+    "Rex Twedt",
+    "Mike Hadley"
+  ],
   "license": "MIT",
   "main": "gulpfile.js",
   "homepage": "https://github.com/retwedt/octo-chainsaw.git#readme.md",
   "dependencies": {
+    "phaser2-navmesh": "^2.0.3",
     "rbush": "^2.0.2"
   },
   "devDependencies": {
@@ -40,7 +44,6 @@
     "mobx-preact": "^2.0.0",
     "node-sass": "^4.5.3",
     "phaser-ce": "^2.10.0",
-    "phaser-navmesh": "^1.1.0",
     "phaser-tiled-hull": "^1.0.2",
     "point-in-polygon": "^1.0.1",
     "preact": "^8.2.5",
@@ -69,10 +72,8 @@
     "clean": "rm -rf ./public",
     "predeploy": "npm run clean && npm run build",
     "deploy": "gh-pages --dist public --dest .",
-    "deploy:legacy":
-      "npm run predeploy && gh-pages --dist public --dest ./shrinking-version --repo https://github.com/retwedt/octo-chainsaw.git",
-    "deploy:version":
-      "npm run predeploy && cross-env-shell gh-pages --dist public --dest ./$npm_package_version",
+    "deploy:legacy": "npm run predeploy && gh-pages --dist public --dest ./shrinking-version --repo https://github.com/retwedt/octo-chainsaw.git",
+    "deploy:version": "npm run predeploy && cross-env-shell gh-pages --dist public --dest ./$npm_package_version",
     "prettier": "prettier --write ./src/js/**/*.{js,jsx,json}"
   },
   "repository": {
